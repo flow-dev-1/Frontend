@@ -1,38 +1,160 @@
-.App {
-  text-align: center;
+@import url('https://fonts.cdnfonts.com/css/poppins');
+
+@import url('https://fonts.cdnfonts.com/css/good-unicorn');
+
+
+:root {
+  --paragraph-font-family: 'Poppins', sans-serif;
+  --headings-font-family: 'Good Unicorn', sans-serif;
+  ;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+
+/* Global styles for all elements */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Body styles */
+body {
+  font-family: var(--paragraph-font-family);
+  line-height: 1.5;
+  color: #5B616A;
+  overflow-x: hidden;
+  /* Prevent horizontal scrollbar */
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* HTML styles */
+html {
+  scroll-behavior: smooth;
+  /* Smooth scrolling behavior */
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--headings-font-family);
+  font-weight: 400;
+  line-height: normal;
+}
+
+p,
+span,
+a {
+  font-family: var(--paragraph-font-family);
+  margin-bottom: 0;
+  font-weight: 400;
+}
+
+a, a:hover {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+ul,
+ol {
+  padding-left: 0;
+}
+
+/* Remove default list styles from list items */
+li {
+  list-style: none;
+}
+
+
+input:focus,
+select:focus {
+  outline: none;
+  /* border: none; */
+  
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+  
+  background-color: #F8F8F8 !important;
+    -webkit-box-shadow: 0 0 0 30px #F8F8F8 inset !important;
+}
+
+.root-layout {
+  background-image: url('./assets/Hero.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+
+
+
+
+.custom-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* padding: 20px; */
+  border-radius: 22px;
+  z-index: 2000;
+}
+
+.ReactModal__Overlay.custom-overlay {
+  width: 100%;
+  height: 100vh;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.98) !important;
+  /* transition: all .3s ease-out; */
+  z-index: 999;
+  border: none;
 }
 
-.App-link {
-  color: #61dafb;
+.modal-base_after-open {
+  width: fit-content;
+  background-color: rgba(0, 0, 0, 0.98) !important;
+  opacity: 0.8;
+  border: none;
+}
+.modal-content {
+  width: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fefefe;
+  margin: 0 auto;
+  border-radius: 22px;
+  padding: 30px 60px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.modal-content h2 {
+  font-size: 40px;
+  text-align: center;
+
 }

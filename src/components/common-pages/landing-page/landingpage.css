@@ -1,0 +1,31 @@
+.landing-page{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+margin: 60px 0 0 0;
+}
+
+
+.landing-page .hero-image img{
+    width: 80%;
+}
+
+.landing-page-text{
+    color: #fff;
+    text-align: center;
+}
+
+.landing-page-text h1{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 80px;
+}
+
+.landing-page-text p{
+    font-size: 25px;
+    
+}
+.landing-page-text .play-icon{
+    font-size: 50px;
+    margin-top: 20px;
+}
