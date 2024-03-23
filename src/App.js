@@ -8,7 +8,7 @@ import RegistrationForm from './components/onboarding/registration/RegistrationF
 import SignIn from './components/onboarding/login/SignIn';
 import ForgotPassword from './components/onboarding/login/ForgotPassword';
 import ResetPassword from './components/onboarding/login/ResetPassword';
-
+import { ToastContainer } from 'react-toastify'
 function App() {
   return (
 
@@ -27,6 +27,7 @@ function App() {
           {/*<Route path="/dashboard" element={<Dashboard />} /> */}
         </Route>
       </Routes>
+      <ToastContainer position='top-center' />
     </BrowserRouter>
   );
 }
