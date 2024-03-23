@@ -4,13 +4,23 @@ class UserOBJ {
     //auths reg
     register = async (data) => {
         try {
-            //check if data is empty
-            if (data) {
-                const response = await api.post('api/users/', data)
-                return response.data
-            } else {
-                throw new Error('please fill in the fields')
-            }
+
+            const response = await api.post('api/users/register', data)
+            return response.data
+
+        } catch (err) {
+            throw err?.response?.data
+        }
+    }
+
+    // confirm token
+    verifyAccount = async (data) => {
+        try {
+
+            const response = await api.patch('/api/users/verify-account', data)
+            console.log(response)
+            return response
+
         } catch (err) {
             throw err?.response?.data
         }
@@ -54,11 +64,7 @@ class UserOBJ {
         try {
             //check if data is empty
             if (data) {
-                const response = await api.post('/api/users/verify-token', data, {
-                    headers: {
-                        Authorization: `Bearer ${data.auth_token}`,
-                    },
-                })
+                const response = await api.post('/api/users/verify-token', data)
                 console.log(response)
                 return response
                 //store res data

@@ -9,6 +9,7 @@ import SignIn from './components/onboarding/login/SignIn';
 import ForgotPassword from './components/onboarding/login/ForgotPassword';
 import ResetPassword from './components/onboarding/login/ResetPassword';
 import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 function App() {
   return (
 
@@ -27,7 +28,7 @@ function App() {
           {/*<Route path="/dashboard" element={<Dashboard />} /> */}
         </Route>
       </Routes>
-      <ToastContainer position='top-center' />
+      <ToastContainer position='top-right' />
     </BrowserRouter>
   );
 }
