@@ -16,7 +16,8 @@ export default function EmailVerificationSuccessful({ from }) {
                     <Icon icon="octicon:check-circle-fill-16" className="rounded-icon" />
                 </div>
 
-                {from === "otp" && from === "resetPassword" ? (<h2>Successful!</h2>) : (<h2>Email Sent!</h2>)}
+                {from === "otp" ? (<h2>Successful!</h2>) : (<h2>Email Sent!</h2>)}
+                {/* // && from === "resetPassword" ? */}
 
                 {from === "otp" ? (
                     <p className="">You have successfully created your account.</p>

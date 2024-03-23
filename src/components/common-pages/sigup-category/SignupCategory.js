@@ -11,7 +11,7 @@ import schoolImage from '../../../assets/onboarding-school.png'
 
 
 
-export default function SignupCategory ()  {
+export default function SignupCategory() {
 
 
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ export default function SignupCategory ()  {
           <img src={schoolImage} alt="School" className="card-image" />
           <div className="card-content">
             <h2> For Schools</h2>
-            <button className="btn signup-button" onClick={() => { navigate("/signup/registration"); }}>Register Now</button>
+            <button className="btn signup-button" >Register Now</button>
           </div>
         </div>
 
@@ -42,7 +42,7 @@ export default function SignupCategory ()  {
           <img src={individualImage} alt="School" className="card-image" />
           <div className="card-content">
             <h2> For Individuals</h2>
-            <button className="btn signup-button" >Register Now</button>
+            <button className="btn signup-button" onClick={() => navigate("/signup/registration")}>Register Now</button>
           </div>
         </div>
 
