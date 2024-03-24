@@ -1,13 +1,19 @@
-
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import userService from '../../../services/api/users';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
+import { RotatingLines } from 'react-loader-spinner';
+import { useDispatch } from "react-redux";
+import { setToken } from "../../../redux/reducers/jwtReducer";
 
 export default function SignIn() {
-
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordError, setShowPasswordError] = useState(false);
 
@@ -15,24 +21,44 @@ export default function SignIn() {
     setShowPassword(!showPassword);
   };
 
+  const schema = yup.object().shape({
+    email: yup.string().required('Your Full Name is Required!'),
+    password: yup
+      .string()
+      .min(6, 'Password must be at least 6 characters')
+      .max(20, 'Password must not exceed 20 characters')
+      .required('Password is required'),
+  })
 
-  const examplePassword = '1234';
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  })
 
+  const onSubmit = (data) => {
+    // Call the mutate function to trigger the login mutation
+    mutation.mutate(data)
+  }
 
-  const handleSignIn = (e) => {
-    const newPassword = e.target.value;
-    setShowPasswordError(newPassword);
+  const mutation = useMutation({
+    mutationFn: userService.login, // Assuming userService.register is your API call function
+    onSuccess: (data) => {
+      console.log('Login successful:', data);
+      toast.success(data.message);
+      dispatch(setToken(data?.token));
+      navigate("", { replace: true })
 
-    if (newPassword === examplePassword) {
-      console.log('Sign up successful');
-    } else {
-      setShowPasswordError(true);
-      console.log('Password Incorrect!');
-    }
-
-
-  };
-
+    },
+    onError: (error) => {
+      console.error('Registration error:', error);
+      toast.dismiss()
+      toast.error(error?.message);
+      toast.error(error || 'Registration failed');
+    },
+  });
 
   return (
     <div>
@@ -40,30 +66,20 @@ export default function SignIn() {
         <h2 className='text-center'>Sign In</h2>
         <p className='text-center'>Enter your details to explore our offerings.</p>
 
-        <form className=''>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-section d-flex flex-column align-items-center ">
             <div className="form-group">
               <label>Email *</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+              <input type="email" {...register('email', { required: true })} />
+              {errors.email && <p className="error-message">Email is required</p>}
             </div>
-            <div className="form-group my-3">
-              <div className="d-flex align-items-center justify-content-between">
-                <label>Create Password *</label>
-                <Link to="/forgot-password" className='forgot-password'>Forgot Password?</Link>
-              </div>
-
+            <div className="form-group">
+              <label>Password *</label>
               <div className="d-flex align-items-center input-with-icon">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Type here..."
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="new password"
-                  required
+                  {...register('password', { required: true })}
                 />
                 <div
                   className="password-toggle float-right"
@@ -72,29 +88,21 @@ export default function SignIn() {
                   <Icon icon={showPassword ? "mdi:eye-off" : "mdi:eye"} className='eye-icon' />
                 </div>
               </div>
-              {showPasswordError && (
-                <p className="password-error">
-                  Incorrect email or password
-                </p>
-              )}
+              {errors.password && <p className="error-message">Password is required</p>}
+              {showPasswordError && <p className="error-message">Incorrect email or password</p>}
             </div>
-
-            <div className='d-flex align-items-center mb-2 me-auto rember-me'>
-              <input type="checkbox" name="" id="" className='mx-2' />
-              Remember Me
-            </div>
-
-            <button className='btn submit-btn' onClick={handleSignIn}>Sign In</button>
-
+            <button className='btn submit-btn' type="submit" disabled={mutation.isPending}>
+              {
+                mutation.isPending ? <RotatingLines type='Oval' style={{ color: '#FFF' }} height={20} width={20} /> :
+                  "Sign In"
+              }
+            </button>
           </div>
         </form>
-
         <p className='text-center'>
           Don’t have an account? <Link to="/signup">Sign Up</Link>
         </p>
       </div>
-
     </div>
   );
 }
-

@@ -91,8 +91,6 @@ export default function RegistrationForm() {
       setFormData(formData)
       mutation.mutate(formData);
     }
-
-
   };
 
   function openModal() {
