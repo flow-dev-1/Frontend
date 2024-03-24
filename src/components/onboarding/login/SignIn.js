@@ -73,8 +73,12 @@ export default function SignIn() {
               <input type="email" {...register('email', { required: true })} />
               {errors.email && <p className="error-message">Email is required</p>}
             </div>
-            <div className="form-group">
-              <label>Password *</label>
+            <div className="form-group my-3">
+              <div className="d-flex align-items-center justify-content-between">
+                <label>Create Password *</label>
+                <Link to="/forgot-password" className='forgot-password'>Forgot Password?</Link>
+              </div>
+
               <div className="d-flex align-items-center input-with-icon">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -90,6 +94,10 @@ export default function SignIn() {
               </div>
               {errors.password && <p className="error-message">Password is required</p>}
               {showPasswordError && <p className="error-message">Incorrect email or password</p>}
+            </div>
+            <div className='d-flex align-items-center mb-2 me-auto rember-me'>
+              <input type="checkbox" name="" id="" className='mx-2' />
+              Remember Me
             </div>
             <button className='btn submit-btn' type="submit" disabled={mutation.isPending}>
               {
