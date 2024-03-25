@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import Modal from 'react-modal';
+
+
+import '../onboarding.css';
+import OtpModal from '../../modals-pages/onboarding-modals/OTP';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import userService from '../../../services/api/users';
-import OtpModal from '../onboarding-modals/OTP';
-import '../onboarding.css';
 import { states } from '../../states';
 import { RotatingLines } from 'react-loader-spinner';
 import { useDispatch } from "react-redux";

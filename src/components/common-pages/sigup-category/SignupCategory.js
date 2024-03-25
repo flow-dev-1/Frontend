@@ -42,7 +42,7 @@ export default function SignupCategory() {
           <img src={individualImage} alt="School" className="card-image" />
           <div className="card-content">
             <h2> For Individuals</h2>
-            <button className="btn signup-button" onClick={() => navigate("/signup/registration")}>Register Now</button>
+            <button className="btn signup-button" onClick={() => { navigate("/signup/registration"); }}>Register Now</button>
           </div>
         </div>
 

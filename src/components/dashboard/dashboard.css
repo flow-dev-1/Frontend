@@ -1,0 +1,14 @@
+/* src/App.css */
+
+.dashboard {
+    display: flex;
+  }
+  
+ 
+  
+  .dashboard-content {
+    flex-grow: 1;
+  }
+  
+ 
+  

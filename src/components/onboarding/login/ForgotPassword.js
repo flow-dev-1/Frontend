@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
-import EmailVerificationSuccessful from '../onboarding-modals/EmailVerificationSuccessful';
+import EmailVerificationSuccessful from '../../modals-pages/onboarding-modals/EmailVerificationSuccessful';
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
