@@ -20,7 +20,6 @@ Modal.setAppElement('#root'); // Set the root element for the modal
 export default function RegistrationForm() {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const [password, setPassword] = useState('');
   const [showPasswordError, setShowPasswordError] = useState(false);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [FormData, setFormData] = useState(null);
@@ -196,7 +195,7 @@ export default function RegistrationForm() {
           <hr className='my-0' />
           <div className="bottom-section">
             <p>
-              Already have an account? <Link to="/signin">Sign In</Link>
+              Already have an account? <Link to="/login">Sign In</Link>
             </p>
 
             <button className='btn submit-btn' type="submit" disabled={mutation.isPending}>

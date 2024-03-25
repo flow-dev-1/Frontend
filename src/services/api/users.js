@@ -18,7 +18,6 @@ class UserOBJ {
         try {
 
             const response = await api.patch('/api/users/verify-account', data)
-            console.log(response)
             return response
 
         } catch (err) {
@@ -46,15 +45,16 @@ class UserOBJ {
     //auths forgot password
     forgotPassword = async (data) => {
         try {
-            //check if data is empty
-            if (data) {
-                const response = await api.post('api/users/forgot-password', data)
-                return response
-                //store res data
-            } else {
-                throw new Error('please fill in the fields')
-            }
+
+            const response = await api.post('api/users/forgot-password', data)
+            return response
+            //store res data
+
         } catch (err) {
+
+            if (err?.message == "Network Error") {
+                throw err?.message
+            }
             throw err?.response?.data
         }
     }
@@ -96,21 +96,6 @@ class UserOBJ {
         }
     }
 
-    //auths password reset
-    resetPassword = async (data) => {
-        try {
-            //check if data is empty
-            if (data) {
-                const response = await api.post('api/users/forgot-password', data)
-                console.log(response)
-                return response
-            } else {
-                throw new Error('please fill in the fields')
-            }
-        } catch (err) {
-            throw err?.response?.data
-        }
-    }
     //update profile
     updateProfile = async (data) => {
         try {

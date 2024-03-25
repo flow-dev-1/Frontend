@@ -22,10 +22,10 @@ function App() {
           <Route path="/signup" element={<SignupCategory />} />
           <Route path="/signup/registration" element={<RegistrationForm />} />
 
-          <Route path="/signin" element={<SignIn />} />
+          <Route path="/login" element={<SignIn />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          {/*<Route path="/dashboard" element={<Dashboard />} /> */}
+          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
         </Route>
       </Routes>
       <ToastContainer position='top-right' />
