@@ -58,7 +58,7 @@ function Sidebar() {
         setActiveIndex(null);
     };
 
-  
+
 
     //Hamburger Toggling
     const [clicked, setClicked] = useState(false);
@@ -73,59 +73,59 @@ function Sidebar() {
     return (
         <div className={`sidebar-user mt-5 ${clicked ? "open" : ""}`}>
             {/* <div className='mt-5 sidebar-user-content'> */}
-                <ul className="sidebar-user-menu mt-5 desktop">
-                    <li onClick={() => closeDropdown()}>
-                        <NavLink className="link active-link dashboard" to="/dashboard" >
-                            <Icon icon="ic:round-space-dashboard" className='sidebar-icon' />
+            <ul className="sidebar-user-menu mt-5 desktop">
+                <li onClick={() => closeDropdown()}>
+                    <NavLink className="link active-link dashboard" to="/dashboard" >
+                        <Icon icon="ic:round-space-dashboard" className='sidebar-icon' />
+                        Overview
+                    </NavLink>
+                </li>
+
+                <li onClick={() => closeDropdown()}>
+                    <NavLink className="link" to="" >
+                        <Icon icon="iconamoon:profile-fill" className='sidebar-icon' />
+                        Profile
+                    </NavLink>
+                </li>
+                <li onClick={() => closeDropdown()}>
+                    <NavLink className="link" to="" >
+                        <Icon icon="fa:book" className='sidebar-icon' />
+                        My Courses
+                    </NavLink>
+                </li>
+            </ul>
+
+            <div className=" hamburger-icon" onClick={handleClick}>
+                <Icon
+                    icon={clicked ? "jam:close" : "ci:menu-alt-03"}
+                    className={clicked ? "close" : "bar"}
+                />
+            </div>
+
+
+            {clicked ? (
+
+                <ul className="sidebar-user-menu p-0 mobile" >
+                    <li onClick={closeSidebar}>
+                        <NavLink className="link active-link dashboard " to="/dashboard/home" >
                             Overview
                         </NavLink>
                     </li>
 
-                    <li onClick={() => closeDropdown()}>
-                        <NavLink className="link" to="/dashboard/profile" >
-                            <Icon icon="iconamoon:profile-fill" className='sidebar-icon' />
+                    <li onClick={closeSidebar}>
+                        <NavLink className="link " to="/dashboard/profile">
                             Profile
                         </NavLink>
                     </li>
-                    <li onClick={() => closeDropdown()}>
-                        <NavLink className="link" to="/dashboard/mycourses" >
-                            <Icon icon="fa:book" className='sidebar-icon' />
-                            My Courses
+                    <li onClick={closeSidebar}>
+                        <NavLink className="link " to="/dashboard">
+
+                            Saving Withdrawal
                         </NavLink>
                     </li>
+
                 </ul>
-
-                <div className=" hamburger-icon" onClick={handleClick}>
-                    <Icon
-                        icon={clicked ? "jam:close" : "ci:menu-alt-03"}
-                        className={clicked ? "close" : "bar"}
-                    />
-                </div>
-
-
-                {clicked ? (
-
-                    <ul className="sidebar-user-menu p-0 mobile" >
-                        <li onClick={closeSidebar}>
-                            <NavLink className="link active-link dashboard " to="/dashboard/home" >
-                                Overview
-                            </NavLink>
-                        </li>                       
-                       
-                        <li onClick={closeSidebar}>
-                            <NavLink className="link " to="/dashboard/profile">
-                                Profile
-                            </NavLink>
-                        </li>
-                        <li onClick={closeSidebar}>
-                            <NavLink className="link " to="/dashboard">
-
-                                Saving Withdrawal
-                            </NavLink>
-                        </li>
-                      
-                    </ul>
-                ) : null}
+            ) : null}
 
 
 

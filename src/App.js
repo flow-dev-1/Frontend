@@ -30,6 +30,7 @@ function App() {
           <Route path="/login" element={<SignIn />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+
           <Route path="/dashboard" element={<Dashboard />} >
             <Route index element={<IndividualOverview />} />
             <Route path="/dashboard/profile" element={<IndividualProfile />} />

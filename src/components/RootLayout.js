@@ -6,9 +6,6 @@ export default function RootLayout() {
     const location = useLocation();
     return (
         <div className={location.pathname !== '/dashboard' ? "root-layout" : ""}>
-
-
-
             <Navbar />
             <Outlet />
         </div>
