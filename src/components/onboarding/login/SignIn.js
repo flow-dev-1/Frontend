@@ -51,7 +51,7 @@ export default function SignIn() {
       console.log('Login successful:', data);
       toast.success(data.message);
       dispatch(setToken(data?.token));
-      navigate("", { replace: true })
+      navigate("/dashboard", { replace: true })
 
     },
     onError: (error) => {
