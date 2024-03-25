@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Modal from 'react-modal';
 import EmailVerificationSuccessful from "./EmailVerificationSuccessful";
-
-
-export default function OtpModal() {
+import { useMutation } from '@tanstack/react-query';
+import userService from '../../../services/api/users';
+import { useDispatch } from "react-redux";
+import { clearToken } from "../../../redux/reducers/jwtReducer";
+import { toast } from "react-toastify";
+export default function OtpModal({ email, resendOTP }) {
+    const dispatch = useDispatch();
     const [modalIsOpen, setIsOpen] = useState(false);
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
 
@@ -25,8 +29,10 @@ export default function OtpModal() {
         setIsOpen(true);
     }
 
-     function handleSubmit() {
-        openModal()
+    function handleSubmit() {
+        console.log(otp.join(""), "OTP")
+        mutation.mutate({ code: otp.join("") })
+
     }
 
     const [countdown, setCountdown] = useState(0);
@@ -45,20 +51,38 @@ export default function OtpModal() {
     }, [countdown]);
 
     const handleResendOTP = () => {
-        setCountdown(94);
+        setCountdown(600);
+        resendOTP()
     };
+
+
+    const mutation = useMutation({
+        mutationFn: userService.verifyAccount, // Assuming userService.register is your API call function
+        onSuccess: (data) => {
+            console.log('OTP Verification:', data);
+            toast.success(data.message);
+            dispatch(clearToken());
+            openModal();
+
+        },
+        onError: (error) => {
+            console.error('Registration error:', error);
+            toast.dismiss()
+            toast.error(error?.message || error || 'Registration failed');
+        },
+    });
 
     return (
         <div className='otp-modal modal-content'>
             <div className="d-flex flex-column align-items-center ">
                 <h2>Verify your email account!</h2>
                 <p className="my-2">
-                    Kindly enter the OTP sent to <span>Morayo@flow.ng</span>
+                    Kindly enter the OTP sent to <span>{email}</span>
                 </p>
                 <div className="otp-input my-4">
                     {otp.map((digit, index) => (
                         <input
-                            type="number"
+                            type="text"
                             key={index}
                             value={digit}
                             onChange={(e) => handleChange(e, index)}
@@ -80,7 +104,7 @@ export default function OtpModal() {
                             {Math.floor(countdown % 60).toString().padStart(2, '0')})
                         </span>
                     ) : (
-                        <span href="#" onClick={handleResendOTP}>
+                        <span href="#" onClick={handleResendOTP} style={{ cursor: 'pointer' }}>
                             {' '}
                             Resend OTP
                         </span>

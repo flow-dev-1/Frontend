@@ -164,8 +164,13 @@ input[type=text]::-webkit-input-placeholder:-webkit-autofill {
 
 }
 
+.error-message {
+  color: #FD483D !important;
+  font-size: 12px !important;
+}
 
-.bottom-section p, .rember-me {
+.bottom-section p,
+.rember-me {
   font-size: 14px;
   text-align: center;
   line-height: normal;
@@ -173,7 +178,8 @@ input[type=text]::-webkit-input-placeholder:-webkit-autofill {
 }
 
 p a,
-p span, .registration-page .forgot-password {
+p span,
+.registration-page .forgot-password {
   color: #275DAD;
 }
 
@@ -188,6 +194,7 @@ p span, .registration-page .forgot-password {
   border: 2px solid #275DAD;
   font-size: 14px;
 }
+
 .registration-page.sign-in .submit-btn,
 .registration-page.sign-in .submit-btn:hover {
   width: 300px;

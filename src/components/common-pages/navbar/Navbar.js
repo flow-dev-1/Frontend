@@ -36,7 +36,7 @@ export default function Navbar() {
                         <Link to="" className="nav-link">Contact Us</Link>
                     </li>
                     <li className="nav-item ">
-                        <button className="btn navbar-btn light-btn" onClick={() => { navigate("/signin"); }}>Sign In</button>
+                        <button className="btn navbar-btn light-btn" onClick={() => { navigate("/login"); }}>Sign In</button>
                     </li>
                     <li className="nav-item ">
                         <button className="btn navbar-btn dark-btn" onClick={() => { navigate("/signup"); }}>Sign Up</button>

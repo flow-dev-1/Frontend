@@ -5,12 +5,12 @@ import '../modals.css'
 export default function CourseInfoModal({ course, onClose }) {
     return (
         <div className="course-info-modal modal-content">
-            <div className="p-4">
+            <div className="py-2 px-4">
                 <div className="course-info-modal-header ">
                     <h2 className='mb-0'>{course.title} Course Guide</h2>
                     <button className="close-btn" onClick={onClose}><Icon icon="mingcute:close-fill" /></button>
                 </div>
-                <hr className='w-100 h-auto mb-0' />
+                <hr className='w-100 h-auto my-0' />
                 <div className="course-info-modal-body ">
                     <h3>Course Overview</h3>
                     <p>{course.description}</p>

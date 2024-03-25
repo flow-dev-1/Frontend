@@ -13,6 +13,8 @@ import IndividualOverview from './components/dashboard/pages/overview/Overview';
 import IndividualProfile from './components/dashboard/pages/profile/IndividualProfile';
 import MyCourses from './components/dashboard/pages/my-courses/MyCourses';
 
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 function App() {
   return (
 
@@ -25,7 +27,7 @@ function App() {
           <Route path="/signup" element={<SignupCategory />} />
           <Route path="/signup/registration" element={<RegistrationForm />} />
 
-          <Route path="/signin" element={<SignIn />} />
+          <Route path="/login" element={<SignIn />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/dashboard" element={<Dashboard />} >
@@ -34,8 +36,10 @@ function App() {
           <Route path="/dashboard/mycourses" element={<MyCourses />} />
           
           </Route>
+          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
         </Route>
       </Routes>
+      <ToastContainer position='top-right' />
     </BrowserRouter>
   );
 }

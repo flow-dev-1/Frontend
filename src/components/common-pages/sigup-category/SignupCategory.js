@@ -11,7 +11,7 @@ import schoolImage from '../../../assets/onboarding-school.png'
 
 
 
-export default function SignupCategory ()  {
+export default function SignupCategory() {
 
 
   const navigate = useNavigate();
