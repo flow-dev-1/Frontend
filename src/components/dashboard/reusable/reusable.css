@@ -1,0 +1,92 @@
+.reusable-course-card {
+    display: flex;
+}
+.course-card {
+
+    width: 300px;
+    border-radius: 20px ;
+    padding: 5px;
+    background: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
+}
+.reusable-course-card img {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 20px 20px 0 0px;
+}
+
+
+
+.course-details {
+    padding: 10px;
+}
+
+.course-details h3 {
+    margin-top: 0;
+    font-size: 30px;
+}
+
+.course-details h4 {
+    margin-top: 5px;
+    color: #666;
+    font-size: 24px;
+    color: #00BCC3;
+}
+
+.course-details p {
+    font-size: 12px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.reusable-course-card .course-card span {
+    display: flex;
+    align-items: center;
+    margin-right: 30px;
+    font-size: 12px;
+}
+
+.reusable-course-card .course-card span .iconify{
+    color: #275DAD;
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+.course-card-btn {
+    display: flex;
+    justify-content: space-between;
+    
+}
+.course-card-btn .card-btn {
+
+    font-size: 14px;
+    margin-top: 15px;
+}
+.course-card-btn .card-btn .iconify {
+
+    font-size: 20px;
+}
+.course-card-btn .card-btn.preview{
+    background-color: #F8F8F8;
+    color: #275DAD;
+}
+
+.course-card-btn .card-btn.cart{
+    background-color: #275DAD;
+    color: #FFFFFF;
+    
+}
+
+/* Add more styles as needed */
+
+

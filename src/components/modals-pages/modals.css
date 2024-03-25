@@ -1,0 +1,73 @@
+
+.course-info-modal{
+    width: 1100px;
+  padding: 0px;
+
+}
+
+
+.course-info-modal p{
+  font-size: 14px;
+}
+
+.course-info-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* align-items: center; */
+  }
+  .course-info-modal-header h2{
+    text-align: left;
+  }
+  .course-info-modal-body {
+    margin-top: 10px;
+  }
+  
+  .course-info-modal-footer {
+    display: flex;
+    background-color: #275DAD;
+    color: #fff;
+    text-align: center;
+    justify-content: space-around;
+    text-align: center;
+    border-radius: 0 0 20px 20px;
+  }
+  
+  .course-info-modal .close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #aaa;
+  }
+  
+  .course-info-modal .objectives {
+    max-height: 180px;
+    overflow-y: auto;
+    border: 0.5px solid #aaa;
+    padding: 10px;
+  }
+  .course-info-modal .objectives::-webkit-scrollbar {
+    width: 0;  /* Remove scrollbar width */
+    height: 0; /* Remove scrollbar height */
+  }
+  .course-info-modal .objectives ul {
+    list-style-type: disc;
+    padding-left: 0;
+  }
+  
+ .course-info-modal .objectives ul li {
+    margin-bottom: 10px;
+  }
+
+  .course-info-modal-footer p{
+
+    color: #fff;
+    margin-bottom: 0;
+  }
+  .course-info-modal-footer .modal-btn.cart{
+    background-color: #5CE1E6;
+    color: #275DAD;
+    font-size: 16px;
+    border-radius: 30px;
+}

@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 
 
 import '../onboarding.css';
-import OtpModal from '../onboarding-modals/OTP';
+import OtpModal from '../../modals-pages/onboarding-modals/OTP';
 
 
 

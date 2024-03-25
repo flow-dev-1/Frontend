@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
 import Modal from 'react-modal';
-import EmailVerificationSuccessful from '../onboarding-modals/EmailVerificationSuccessful';
+import EmailVerificationSuccessful from '../../modals-pages/onboarding-modals/EmailVerificationSuccessful';
+
 
 export default function ResetPassword() {
     const [modalIsOpen, setModalIsOpen] = useState(false);

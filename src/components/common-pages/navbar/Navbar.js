@@ -1,7 +1,7 @@
 // src/components/common/Navbar.js
 
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 
 import logo from '../../../assets/logo.png'
@@ -13,6 +13,7 @@ import './navbar.css'
 export default function Navbar() {
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     return (
         <nav className="navbar">
@@ -20,6 +21,7 @@ export default function Navbar() {
                 <Link to="/" className="navbar-logo">
                     <img src={logo} alt="" />
                 </Link>
+                {location.pathname !== '/dashboard' &&
                 <ul className="navbar-nav">
                     <li className="nav-item">
                         <Link to="" className="nav-link">Schools</Link>
@@ -40,6 +42,7 @@ export default function Navbar() {
                         <button className="btn navbar-btn dark-btn" onClick={() => { navigate("/signup"); }}>Sign Up</button>
                     </li>
                 </ul>
+}
             </div>
         </nav>
     )

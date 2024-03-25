@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 
 export default function SignIn() {
@@ -11,6 +11,8 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordError, setShowPasswordError] = useState(false);
 
+  const navigate = useNavigate();
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -20,15 +22,18 @@ export default function SignIn() {
 
 
   const handleSignIn = (e) => {
-    const newPassword = e.target.value;
-    setShowPasswordError(newPassword);
+    // const newPassword = e.target.value;
+    // setShowPasswordError(false);
 
-    if (newPassword === examplePassword) {
-      console.log('Sign up successful');
-    } else {
-      setShowPasswordError(true);
-      console.log('Password Incorrect!');
-    }
+    // if (newPassword === examplePassword) {
+    //   console.log('Sign up successful');
+    //   navigate('/dashboard');
+    // } else {
+    //   setShowPasswordError(true);
+    //   console.log('Password Incorrect!');
+    // }
+
+    navigate('/dashboard');
 
 
   };
