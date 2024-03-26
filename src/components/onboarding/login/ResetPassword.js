@@ -61,7 +61,7 @@ export default function ResetPassword() {
     const schema = yup.object().shape({
         password: yup
             .string()
-            .min(6, 'Password must be at least 6 characters')
+            .min(8, 'Password must be at least 8 characters')
             .max(20, 'Password must not exceed 20 characters')
             .required('Password is required'),
         confirmPassword: yup
@@ -84,7 +84,6 @@ export default function ResetPassword() {
         onSuccess: (data) => {
             // Handle successful login
             openModal()
-            console.log(data.data.message)
         },
         onError: (error) => {
             // Handle login error

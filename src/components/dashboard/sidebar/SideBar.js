@@ -49,6 +49,7 @@ function Sidebar() {
                             My Courses
                         </NavLink>
                     </li>
+
                 </ul>
 
                 <div className="hamburger-icon" onClick={handleClick}>

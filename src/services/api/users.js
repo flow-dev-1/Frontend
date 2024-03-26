@@ -76,6 +76,8 @@ class UserOBJ {
         }
     }
 
+
+
     //auths password reset otp
     newPassword = async (data) => {
         try {
@@ -91,6 +93,18 @@ class UserOBJ {
             } else {
                 throw new Error('please fill in the fields')
             }
+        } catch (err) {
+            throw err?.response?.data
+        }
+    }
+
+    // confirm token
+    currentUser = async () => {
+        try {
+            const response = await api.get('/api/users/me')
+            console.log(response)
+            return response.data
+
         } catch (err) {
             throw err?.response?.data
         }

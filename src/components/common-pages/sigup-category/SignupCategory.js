@@ -34,7 +34,7 @@ export default function SignupCategory() {
           <img src={schoolImage} alt="School" className="card-image" />
           <div className="card-content">
             <h2> For Schools</h2>
-            <button className="btn signup-button" >Register Now</button>
+            <button className="btn signup-button" onClick={() => { navigate("/dashboard"); }}>Coming Soon</button>
           </div>
         </div>
 
