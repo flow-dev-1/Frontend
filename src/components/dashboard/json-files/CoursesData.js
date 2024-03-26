@@ -43,7 +43,8 @@ const courses = [
         title: "Reflective Evaluation",
         description: "By the end of the course, students will reflect on their learning journey, recognizing their development, and identifying areas for future growth."
       }
-    ]
+    ],
+    enrolled: true,
     },
     {
       id: 2,
@@ -83,7 +84,8 @@ const courses = [
         title: "By the end of the FLOW Club",
         description: "Values and Goals program, students will have a clear understanding of their personal values and aspirations and be well-equipped with the necessary tools and strategies to set and achieve meaningful goals, fostering a strong foundation for personal growth and success."
       }
-    ]
+    ],
+    enrolled: false,
     },
     {
       id: 2,
@@ -123,8 +125,10 @@ const courses = [
         title: "Reflective Evaluation",
         description: "By the end of the course, students will reflect on their learning journey, recognizing their development, and identifying areas for future growth."
       }
-    ]
+    ], 
+    enrolled: false,
     },
+    
     // Add more courses as needed
   ];
   

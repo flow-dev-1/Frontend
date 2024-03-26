@@ -1,16 +1,25 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import './dashboard.css'
 import Sidebar from "./sidebar/SideBar";
+import logo from '../../assets/logo.png'
+// import './navbar.css'
 
 export default function Dashboard() {
     return (
         <div className="dashboard">
-<div className="dashboard">
-      <Sidebar />
-      <div className="dashboard-content mt-5 p-4" style={{marginLeft: "250px", }}>
-       <Outlet />
-      </div>
-    </div>
+            <nav className="navbar">
+                <div className="container">
+                    <Link to="/dashboard" className="navbar-logo">
+                        <img src={logo} alt="" />
+                    </Link>
+                </div>
+            </nav>
+            <div className="dashboard">
+                <Sidebar className="sidebar-content" />
+                <div className="dashboard-content " >
+                    <Outlet />
+                </div>
+            </div>
         </div>
     )
 }

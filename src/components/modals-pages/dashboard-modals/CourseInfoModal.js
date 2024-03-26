@@ -1,8 +1,24 @@
 import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
+import Modal from 'react-modal';
+
 import '../modals.css'
+import PaymentModal from './PaymentModal';
 
 export default function CourseInfoModal({ course, onClose }) {
+
+    const [modalIsOpen, setIsOpen] = useState(false);
+
+
+    function openModal () {
+        setIsOpen(true);
+      };
+    function closeModal() {
+        setIsOpen(false);
+      }
+
+
+
     return (
         <div className="course-info-modal modal-content">
             <div className="py-2 px-4">
@@ -30,11 +46,29 @@ export default function CourseInfoModal({ course, onClose }) {
                 </div>
             </div>
 
-
-            <div className="course-info-modal-footer container-fluid py-2 px-4">
+            {!course.enrolled && (
+        <div className="course-info-modal-footer container-fluid py-2 px-4">
+          <p>For more details, enroll in the course now!</p>
+          <button className="btn modal-btn cart" onClick={openModal}><Icon icon="f7:cart" /> N{course.amount}</button>
+        </div>
+      )}
+            {/* <div className="course-info-modal-footer container-fluid py-2 px-4">
                 <p>For more details, enroll in the course now!</p>
-                <button className="btn modal-btn cart"><Icon icon="f7:cart" /> N{course.amount}</button>
-            </div>
+                <button className="btn modal-btn cart"  onClick={openModal}><Icon icon="f7:cart" /> N{course.amount}</button>
+            </div> */}
+
+
+            <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        className="custom-modal"
+        overlayClassName="custom-overlay"
+        contentLabel="Example Modal"
+        shouldCloseOnOverlayClick={true}
+      > <PaymentModal
+          course={course} onClose={closeModal}
+        />
+      </Modal>
         </div>
     );
 }

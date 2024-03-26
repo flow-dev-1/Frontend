@@ -1,8 +1,9 @@
 .overview {
-    padding: 20px;
+    /* padding: 20px; */
   }
 
   .browse-all-courses-text{
+    width: 950px;
     background-color:  #275DAD;
     padding: 10px ;
     color: #fff;

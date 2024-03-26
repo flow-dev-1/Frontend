@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Icon } from '@iconify/react';
 import { useNavigate } from "react-router-dom";
 
 import courses from '../../json-files/CoursesData'
@@ -19,18 +17,18 @@ export default function IndividualOverview() {
   return (
     <div className="overview">
 
-      
+
       <div className="d-flex align-items-center justify-content-between">
         <div>
           <h2>Hi Morayo! </h2>
           <p>Welcome back to Flow!</p>
         </div>
-        
+
         <img src={profileImage} alt="user Pprofile image" />
       </div>
-      
+
       <div className="browse-all-courses-text container-fluid">
-<p>Browse through all the courses currently available on FLOW.</p>
+        <p>Browse through all the courses currently available on FLOW.</p>
       </div>
       <div className="courses-list row row-cols-1 row-cols-md-3 g-4 mt-3">
         {courses.map(course => (

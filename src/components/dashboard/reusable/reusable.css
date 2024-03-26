@@ -65,6 +65,7 @@
 .course-card-btn {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     
 }
 .course-card-btn .card-btn {

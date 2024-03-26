@@ -1,0 +1,77 @@
+
+/* Third section */
+.third-section {
+    display: flex;
+    padding: 20px;
+}
+
+.course-links {
+    flex: 1;
+    padding: 15px;
+    background-color: #FBFBFB;
+
+    border-radius: 10px;
+}
+
+.course-links ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-links ul li.active {
+    background-color: #00BCC3;
+
+
+}
+
+.course-links ul li {
+    
+    margin: 10px 0;
+    padding: 10px 5px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+}
+.course-links ul li {
+    color: #00BCC3 ;
+
+}
+
+
+.course-links ul li.active .iconify {
+    color: #ffff;
+    font-size: 25px;
+    margin: 0 5px 0 0;
+}
+
+.course-links ul li .iconify {
+    color: #fff;
+    font-size: 25px;
+    margin: 0 5px 0 0;
+}
+
+.course-links ul li {
+    text-decoration: none;
+    color: #fff;
+    text-wrap: nowrap;
+    font-size: 18px;
+}
+
+.course-links ul li.active {
+    color: #fff;
+}
+
+.course-sidebar-content{
+    flex: 4;
+    background: #FBFBFB;
+    border-radius: 10px;
+    padding: 20px 30px;
+}
+
+
+
+
