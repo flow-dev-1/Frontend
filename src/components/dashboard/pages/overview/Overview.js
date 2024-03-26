@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Icon } from '@iconify/react';
 import { useNavigate } from "react-router-dom";
 
 import courses from '../../json-files/CoursesData'

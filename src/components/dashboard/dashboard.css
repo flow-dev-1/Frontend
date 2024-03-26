@@ -5,9 +5,13 @@
   }
   
  
-  
+  .sidebar-content{
+flex: 2;
+  }
   .dashboard-content {
-    flex-grow: 1;
+    flex: 4;
+    padding: 40px 20px;
+    margin: 50px 0 0 250px ;
   }
   
  

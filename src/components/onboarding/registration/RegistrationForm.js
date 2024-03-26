@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import Modal from 'react-modal';
 
-
 import '../onboarding.css';
 import OtpModal from '../../modals-pages/onboarding-modals/OTP';
 import { useForm } from 'react-hook-form';
