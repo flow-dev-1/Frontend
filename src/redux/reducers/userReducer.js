@@ -17,7 +17,7 @@ const userSlice = createSlice({
             return {
                 ...state,
                 user: null,
-                connections: []
+
             };
         },
 

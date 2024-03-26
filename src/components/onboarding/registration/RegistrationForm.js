@@ -78,8 +78,8 @@ export default function RegistrationForm() {
       mutation.mutate(data);
     } else {
       const formData = {
-        first_name: data.firstName,
-        last_name: data.lastName,
+        first_name: data?.firstName?.trim(),
+        last_name: data.lastName?.trim(),
         email: data.guardianEmail,
         phone: data.phoneNumber,
         password: data.password,
