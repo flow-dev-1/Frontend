@@ -5,6 +5,7 @@ import './sidebar.css';
 
 function Sidebar() {
     const [clicked, setClicked] = useState("");
+    const [activeLink, setActiveLink] = useState("overview");
 
     const handleClick = () => {
         setClicked(!clicked);
@@ -13,43 +14,57 @@ function Sidebar() {
     const closeSidebar = () => {
         setClicked(false);
     };
+    const handleLinkClick = (linkName) => {
+        setActiveLink(linkName);
+    };
 
     return (
         <div className={`sidebar-user  ${clicked ? 'open' : ''}`}>
             <div className="mt-5 sidebar-user-content">
-                <ul className="sidebar-user-menu mt-5 desktop">
-                    <li>
+            <ul className="sidebar-user-menu mt-5 desktop">
+                    <li className={activeLink === "overview" ? "active" : ""}>
                         <NavLink
                             className="link"
                             activeClassName="active"
                             to="/dashboard"
-                            onClick={() => closeSidebar()}>
+                            onClick={() => {
+                                closeSidebar();
+                                handleLinkClick("overview");
+                            }}
+                        >
                             <Icon icon="ic:round-space-dashboard" className="sidebar-icon" />
                             Overview
                         </NavLink>
                     </li>
 
-                    <li>
+                    <li className={activeLink === "profile" ? "active" : ""}>
                         <NavLink
                             className="link"
                             activeClassName="active"
                             to="/dashboard/profile"
-                            onClick={() => closeSidebar()}>
+                            onClick={() => {
+                                closeSidebar();
+                                handleLinkClick("profile");
+                            }}
+                        >
                             <Icon icon="iconamoon:profile-fill" className="sidebar-icon" />
                             Profile
                         </NavLink>
                     </li>
-                    <li>
+                    <li className={activeLink === "my-courses" ? "active" : ""}>
                         <NavLink
                             className="link"
                             activeClassName="active"
                             to="/dashboard/my-courses"
-                            onClick={() => closeSidebar()}>
+                            onClick={() => {
+                                closeSidebar();
+                                handleLinkClick("my-courses");
+                            }}
+                        >
                             <Icon icon="fa:book" className="sidebar-icon" />
                             My Courses
                         </NavLink>
                     </li>
-
                 </ul>
 
                 <div className="hamburger-icon" onClick={handleClick}>

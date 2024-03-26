@@ -16,7 +16,7 @@ import MyCourses from './components/dashboard/pages/my-courses/MyCourses';
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import OnboardingRootLayout from './components/onboarding/OnboardingRootLayout';
-// import SingleCoursePage from './components/dashboard/pages/my-courses/single-course-page/SingleCoursePage';
+import SingleCoursePage from './components/dashboard/pages/my-courses/single-course-page/SingleCoursePage';
 function App() {
   return (
 
@@ -42,7 +42,7 @@ function App() {
             <Route index element={<IndividualOverview />} />
             <Route path="/dashboard/profile" element={<IndividualProfile />} />
             <Route path="/dashboard/my-courses" element={<MyCourses />} />
-            {/* <Route path="/dashboard/my-courses/:id" element={<SingleCoursePage />} /> */}
+            <Route path="/dashboard/my-courses/:id" element={<SingleCoursePage />} />
           </Route>
         </Route>
 

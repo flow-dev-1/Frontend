@@ -19,7 +19,7 @@ export default function IndividualOverview() {
 
       <div className="d-flex align-items-center justify-content-between">
         <div>
-          <h2>Hi {user?.first_name}! </h2>
+          <h2>Hi, {user?.first_name}! </h2>
           <p>Welcome back to Flow!</p>
         </div>
 

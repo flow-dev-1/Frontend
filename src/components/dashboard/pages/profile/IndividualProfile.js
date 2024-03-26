@@ -50,7 +50,7 @@ export default function IndividualProfile() {
                 </div>
 
                 <div className="green-spring-div mx-2">
-                  Greenspring Montessori
+                  Individual
                 </div>
               </div>
 

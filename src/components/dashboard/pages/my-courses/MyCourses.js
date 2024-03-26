@@ -10,15 +10,13 @@ export default function MyCourses() {
 
 
   return (
-    <div className="overview">
+    <div className="course-page">
       <div className="courses-list">
-        <div className="overview">
-
 
           <div className="browse-all-courses-text container-fluid">
             <p>Enrolled Courses</p>
           </div>
-          <div className="courses-list row g-4 mt-3">
+          <div className="courses-list row g-4 ">
             {/* {courses.map(course => (
               <CourseCard key={course.id} course={course} />
             ))} */}
@@ -26,7 +24,6 @@ export default function MyCourses() {
               <CourseCard key={course.id} course={course} enrolled={true} />
             ))}
           </div>
-        </div>
       </div>
     </div>
   )

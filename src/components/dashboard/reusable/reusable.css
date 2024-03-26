@@ -5,12 +5,12 @@
 
     width: 300px;
     border-radius: 20px ;
-    padding: 5px;
+    /* padding: 5px; */
     background: #FFFFFF;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    /* align-items: center; */
+    justify-content: space-between;
     overflow: hidden;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 
@@ -19,12 +19,13 @@
     width: 100%;
     object-fit: cover;
     border-radius: 20px 20px 0 0px;
+    
 }
 
 
 
 .course-details {
-    padding: 10px;
+    /* padding: 10px; */
 }
 
 .course-details h3 {
@@ -47,6 +48,7 @@
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+    text-align: justify;
 }
 
 .reusable-course-card .course-card span {
@@ -66,12 +68,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding:  15px;
     
 }
 .course-card-btn .card-btn {
 
     font-size: 14px;
-    margin-top: 15px;
+    /* margin-top: 15px; */
 }
 .course-card-btn .card-btn .iconify {
 
