@@ -20,7 +20,7 @@ export default function CourseInfoModal({ course, onClose }) {
 
 
     return (
-        <div className="course-info-modal modal-content">
+        <div className="course-info-modal">
             <div className="py-2 px-4">
                 <div className="course-info-modal-header ">
                     <h2 className='mb-0'>{course.title} Course Guide</h2>

@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import courses from '../../json-files/CoursesData'
 import CourseCard from '../../reusable/CourseCard';
 
-import profileImage from '../../../../assets/user-profile-image.png';
+import femaleprofileImage from '../../../../assets/user-profile-image.png';
+import maleprofileImage from '../../../../assets/male-profile-image.png';
 import './overview.css'
 
 import { useDispatch, useSelector } from "react-redux";
@@ -22,8 +23,12 @@ export default function IndividualOverview() {
           <h2>Hi, {user?.first_name}! </h2>
           <p>Welcome back to Flow!</p>
         </div>
+        {/* {user?.gender === "female" && <img src={femaleprofileImage} alt="user Profile image" />}
+        {user?.gender === "male" && <img src={maleprofileImage} alt="user Profile image" />} */}
 
-        <img src={profileImage} alt="user Pprofile image" />
+        {user?.gender === "male" ? <img src={maleprofileImage} alt="user Profile image" /> : <img src={femaleprofileImage} alt="user Profile image" />}
+      
+
       </div>
 
       <div className="browse-all-courses-text container-fluid">

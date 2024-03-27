@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import '../course.css'
+import CourseProgessionOne from "./CourseProgessionOne";
 
 function SingleCoursePage() {
 
@@ -11,7 +12,7 @@ function SingleCoursePage() {
     const course = location?.state?.course;
     const navigate = useNavigate();
 
-    const [activeLink, setActiveLink] = React.useState("profile");
+    const [activeLink, setActiveLink] = React.useState("weekone");
 
 
 
@@ -25,10 +26,9 @@ function SingleCoursePage() {
 
     const renderSidebarContent = () => {
         switch (activeLink) {
-            case 'profile':
-                return <div>hello profile {course?.id} {course?.description}</div>;
-            case 'earnings':
-                return <div>hello earning</div>;
+            case 'weekone':
+                return <CourseProgessionOne course={course} /> ;
+            
             default:
                 return null;
         }
@@ -46,7 +46,7 @@ function SingleCoursePage() {
 
                 <div className="about-courses-menu mt-5">
 
-                    <p className="back-to-course-list " onClick={() => navigate('/dashboard/my-courses', { state: { course: course } })}>
+                    <p className="back-to-course-list " onClick={() => navigate('/dashboard/my-courses')}>
                         <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
                         back to course
                     </p>
@@ -62,9 +62,10 @@ function SingleCoursePage() {
                                 <p key={index}>{week}</p>
                             ))}
                         </li> */}
+
                         <ul className="sub-courses mt-2">
                             {course?.catalogue?.map((week, index) => (
-                                <li key={index} className={index === 0 && activeLink === "profile" ? "active" : ""} onClick={() => handleLinkClick("profile")}>
+                                <li key={index} className={index === 0 && activeLink === "weekone" ? "active" : ""} onClick={() => handleLinkClick("profile")}>
                                     <div>
                                         <Icon icon="icon-park-outline:check-one" className="course-list-icon" />
                                     </div>

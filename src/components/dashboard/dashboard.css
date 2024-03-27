@@ -5,14 +5,14 @@
   
 }
 
-/* .course-page {
+.course-page {
   background-image: url('../../assets/course-bg.png');
   background-position: right;
   background-repeat: no-repeat;
   background-size: cover;
-  height: 100vh;
+  /* height: 100vh; */
   
-} */
+}
 .sidebar-content {
   flex: 2;
 }

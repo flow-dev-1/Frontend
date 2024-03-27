@@ -87,7 +87,8 @@ export default function Dashboard() {
 
 
     return (
-        <div className="dashboard">
+        // <div className="dashboard">
+        <div className={location.pathname === '/dashboard/my-courses' ? "course-page" : "dashboard"}>
             <nav className="navbar">
                 <div className="container">
                     <Link to="/dashboard" className="navbar-logo">
@@ -107,15 +108,15 @@ export default function Dashboard() {
                 </div>
             </div>} */}
             {location.pathname.startsWith('/dashboard/my-courses/') ? (
-            <SingleCoursePage />
-        ) : (
-            <div className="dashboard">
-                <Sidebar className="sidebar-content" />
-                <div className="dashboard-content">
-                    <Outlet />
+                <SingleCoursePage />
+            ) : (
+                <div className="dashboard">
+                    <Sidebar className="sidebar-content" />
+                    <div className="dashboard-content">
+                        <Outlet />
+                    </div>
                 </div>
-            </div>
-        )}
+            )}
 
             {/* <div className="dashboard">
                 <Sidebar className="sidebar-content" />
