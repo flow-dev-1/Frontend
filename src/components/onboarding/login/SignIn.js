@@ -103,7 +103,7 @@ export default function SignIn() {
             </div>
             <button className='btn submit-btn' type="submit" disabled={mutation.isPending}>
               {
-                mutation.isPending ? <RotatingLines type='Oval' style={{ color: '#FFF' }} height={20} width={20} /> :
+                mutation.isPending ? <RotatingLines type='Oval' style={{ color: '#FFF', backgroundColor: "#275DAD" }} height={20} width={20} /> :
                   "Sign In"
               }
             </button>

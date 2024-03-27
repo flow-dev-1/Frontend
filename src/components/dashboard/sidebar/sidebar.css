@@ -66,19 +66,19 @@
   cursor: pointer;
 }
 
-.sidebar-user .sidebar-user-menu .link.active {
+.sidebar-user .sidebar-user-menu .active .link {
   background: #FFFFFF;
   color: #00BCC3;
   /* padding-left: 1.2rem ; */
 }
 
-.sidebar-user .sidebar-user-menu.mobile a.active {
+/* .sidebar-user .sidebar-user-menu.mobile a.active {
   background: transparent;
   font-weight: 600;
   color: #00BCC3;
   border: 0;
   padding-left: 0 !important;
-}
+} */
 
 
 .sidebar-user-menu .sidebar-icon {

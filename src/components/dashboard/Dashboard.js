@@ -1,4 +1,4 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useLocation } from "react-router-dom";
 import './dashboard.css'
 import Sidebar from "./sidebar/SideBar";
 
@@ -11,8 +11,11 @@ import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import logo from '../../assets/logo.png'
 import { loginSuccess } from "../../redux/reducers/userReducer";
+import SingleCoursePage from "./pages/my-courses/single-course-page/SingleCoursePage";
 export default function Dashboard() {
     const dispatch = useDispatch();
+
+    const location = useLocation();
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ['user'],
@@ -82,21 +85,45 @@ export default function Dashboard() {
         return <Navigate to='/login' />;
     }
 
+
     return (
-        <div className="dashboard">
+        // <div className="dashboard">
+        <div className={location.pathname === '/dashboard/my-courses' ? "course-page" : "dashboard"}>
             <nav className="navbar">
                 <div className="container">
                     <Link to="/dashboard" className="navbar-logo">
                         <img src={logo} alt="" />
                     </Link>
+                    <Link to="/login" className="navbar-logo">
+                        Logout
+                    </Link>
                 </div>
             </nav>
-            <div className="dashboard">
+
+            {/* {location.pathname === '/dashboard/my-courses/:id' && <SingleCoursePage />}
+            {location.pathname !== '/dashboard/my-courses/:id' && <div className="dashboard">
                 <Sidebar className="sidebar-content" />
                 <div className="dashboard-content " >
                     <Outlet />
                 </div>
-            </div>
+            </div>} */}
+            {location.pathname.startsWith('/dashboard/my-courses/') ? (
+                <SingleCoursePage />
+            ) : (
+                <div className="dashboard">
+                    <Sidebar className="sidebar-content" />
+                    <div className="dashboard-content">
+                        <Outlet />
+                    </div>
+                </div>
+            )}
+
+            {/* <div className="dashboard">
+                <Sidebar className="sidebar-content" />
+                <div className="dashboard-content " >
+                    <Outlet />
+                </div>
+            </div> */}
         </div>
     )
 }

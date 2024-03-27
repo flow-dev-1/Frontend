@@ -20,6 +20,14 @@ justify-content: space-around;
 
 }
 
+.about-user-info h2{
+  font-size: 45px;
+}
+
+.about-user-info p{
+  font-size: 18px;
+}
+
 .user-basic-info .about-user .flag{
   height: auto;
   width: 25px;
