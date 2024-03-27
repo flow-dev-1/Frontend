@@ -1,26 +1,26 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
 import './dashboard.css'
 import Sidebar from "./sidebar/SideBar";
-
-// import './navbar.css'
-
 import userService from '../../services/api/users';
 import { useQuery } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png'
-import { loginSuccess } from "../../redux/reducers/userReducer";
+import { loginSuccess, logoutSuccess } from "../../redux/reducers/userReducer";
 import SingleCoursePage from "./pages/my-courses/single-course-page/SingleCoursePage";
+import { clearToken } from "../../redux/reducers/jwtReducer";
 export default function Dashboard() {
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
     const location = useLocation();
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ['user'],
         queryFn: userService.currentUser,
-        staleTime: Infinity
+        staleTime: Infinity,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false
     });
 
     useEffect(() => {
@@ -85,6 +85,13 @@ export default function Dashboard() {
         return <Navigate to='/login' />;
     }
 
+    const logOut = () => {
+        localStorage.removeItem('FLOW');
+        dispatch(logoutSuccess());
+        dispatch(clearToken())
+        navigate('/login', { replace: true })
+    };
+
 
     return (
         // <div className="dashboard">
@@ -94,9 +101,9 @@ export default function Dashboard() {
                     <Link to="/dashboard" className="navbar-logo">
                         <img src={logo} alt="" />
                     </Link>
-                    <Link to="/login" className="navbar-logo">
+                    <div onClick={logOut} className="navbar-logo" style={{ cursor: 'pointer' }}>
                         Logout
-                    </Link>
+                    </div>
                 </div>
             </nav>
 

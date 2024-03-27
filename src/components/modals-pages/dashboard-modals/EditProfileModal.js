@@ -10,10 +10,13 @@ import { loginSuccess } from "../../../redux/reducers/userReducer";
 import userService from '../../../services/api/users';
 import { states } from '../../states';
 import { RotatingLines } from 'react-loader-spinner';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 Modal.setAppElement('#root');
 
 export default function EditProfileModal({ onClose }) {
+    const queryClient = useQueryClient();
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState(false);
     const [modalIsOpen, setIsOpen] = useState(false);
@@ -28,10 +31,10 @@ export default function EditProfileModal({ onClose }) {
         phoneNumber: yup.string().required('Phone Number is required'),
         country: yup.string().required('Country is required'),
         state: yup.string().required('State is required'),
-        password: yup
-            .string()
-            .min(8, 'Password must be at least 8 characters')
-            .required('Password is required'),
+        // password: yup
+        //     .string()
+        //     .min(8, 'Password must be at least 8 characters')
+        //     .required('Password is required'),
     });
 
     const { register, handleSubmit, formState: { errors }, setValue } = useForm({
@@ -56,35 +59,41 @@ export default function EditProfileModal({ onClose }) {
         setShowPassword(!showPassword);
     };
 
+    const mutation = useMutation({
+        mutationFn: userService.updateProfile, // Assuming userService.register is your API call function
+        onSuccess: (data) => {
+
+            toast.success(data.message);
+            dispatch(loginSuccess(data.data));
+            queryClient.invalidateQueries('user');
+            onClose()
+
+        },
+        onError: (error) => {
+            console.error('Registration error:', error);
+            toast.dismiss()
+            toast.error(error?.message);
+            toast.error(error || 'Registration failed');
+        },
+    });
+
+
     const onSubmit = async (data) => {
-        try {
-            const formData = {
-                first_name: data.firstName,
-                last_name: data.lastName,
-                email: data.guardianEmail,
-                gender: data.gender,
-                age: data.age,
-                phone: data.phoneNumber,
-                country: data.country,
-                state: data.state,
-                // password: data.password,
-            };
 
-            // Make API call to update user data
-            const response = await userService.updateProfile(formData);
+        const formData = {
+            first_name: data.firstName,
+            last_name: data.lastName,
+            email: data.guardianEmail,
+            gender: data.gender,
+            age: data.age,
+            phone: data.phoneNumber,
+            country: data.country,
+            state: data.state,
+            // password: data.password,
+        };
 
-            // Dispatch action to update user data in Redux store
-            dispatch(loginSuccess(response.data.user));
+        mutation.mutate(formData);
 
-            // Display success message
-            alert(response.data.message);
-
-            // Close modal
-            onClose();
-        } catch (error) {
-            console.error('Error updating profile:', error);
-            alert('Error updating profile. Please try again.');
-        }
     };
 
     return (
@@ -93,11 +102,11 @@ export default function EditProfileModal({ onClose }) {
                 <div className="top-section">
                     <h2>Edit Profile</h2>
                     <hr />
-                    <span >Hi {user.firstName} {user.lastName} you can now edit your details</span>
+                    <span >Hi {user?.first_name} {user.last_name} you can now edit your details</span>
 
                 </div>
-                {/* <form onSubmit={handleSubmit(onSubmit)}> */}
-                <form >
+                <form onSubmit={handleSubmit(onSubmit)}>
+
                     <div className="form-section ">
                         <div className="form-group">
                             <label>First Name *</label>
@@ -180,18 +189,13 @@ export default function EditProfileModal({ onClose }) {
                     </div>
                     <div className="bottom-section float-end mt-4">
 
-                        {/* <button className='btn  submit-btn' type="submit" disabled={mutation.isPending}>
+                        <button className='btn  submit-btn' type="submit" disabled={mutation.isPending}>
                             {
                                 mutation.isPending ? <RotatingLines type='Oval' style={{ color: '#FFF' }} height={20} width={20} /> :
                                     " Update"
                             }
-                        </button> */}
-                        <button className='btn  submit-btn' type="submit" onClick={onSubmit}>
-
-
-                            Update
-
                         </button>
+
                     </div>
                 </form>
             </div>

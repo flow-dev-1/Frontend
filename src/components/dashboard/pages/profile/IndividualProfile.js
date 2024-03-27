@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import users from '../../json-files/UsersData'
 
-import profile from '../../../../assets/user-profile-image.png';
+import femaleprofileImage from '../../../../assets/user-profile-image.png';
+import maleprofileImage from '../../../../assets/male-profile-image.png';
 import flag from '../../../../assets/Flag_of_Nigeria.png';
 
 import './profile.css'
@@ -31,7 +32,7 @@ export default function IndividualProfile() {
         <div className="user-basic-info">
           <div className="about-user">
             <div className="profile-img">
-              <img src={profile} alt="user profile image" />
+              {user?.gender === "male" ? <img src={maleprofileImage} alt="user Profile image" /> : <img src={femaleprofileImage} alt="user Profile image" />}
             </div>
 
 

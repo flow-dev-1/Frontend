@@ -113,19 +113,22 @@ class UserOBJ {
     //update profile
     updateProfile = async (data) => {
         try {
-            // Check if data is not empty
-            if (data && data.auth_token) {
-                const response = await api.put('api/users/', data, {
-                    headers: {
-                        Authorization: `Bearer ${data.auth_token}`,
-                    },
-                })
-                return response.data
-            } else {
-                throw new Error(
-                    'Please fill in the fields and provide a valid auth_token'
-                )
-            }
+
+            const response = await api.put('api/users/profile', data)
+            return response.data
+
+        } catch (err) {
+            throw err?.response?.data || err.message
+        }
+    }
+
+
+    courseEnrollment = async (data) => {
+        try {
+
+            const response = await api.post('api/users/courses/1/enroll', data)
+            return response.data
+
         } catch (err) {
             throw err?.response?.data || err.message
         }
