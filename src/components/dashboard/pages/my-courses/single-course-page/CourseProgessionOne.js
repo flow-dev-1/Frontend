@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
 
 import affirmationDecor from '../../../../../assets/affirmation-decor.png'
+import AllAboutMeForm from './AllAboutMeForm';
 
 
 
@@ -11,7 +12,7 @@ import affirmationDecor from '../../../../../assets/affirmation-decor.png'
 export default function CourseProgessionOne({ course, onClose }) {
 
     const [currentStep, setCurrentStep] = useState(1);
-
+    const [formData, setFormData] = useState(null);
 
     const handleNext = () => {
         setCurrentStep(currentStep + 1);
@@ -89,6 +90,7 @@ export default function CourseProgessionOne({ course, onClose }) {
 
 
             case 3:
+                //Afirmation
                 return (
                     <div className="affirmation-page">
 
@@ -113,7 +115,127 @@ export default function CourseProgessionOne({ course, onClose }) {
                         </div>
                     </div>
                 );
+            case 4:
+                //aboutme
+                return (
+                    <div className="all-about-me-page">
+                        <h2 className=''>All About Me</h2>
 
+                        <hr className="h-auto w-100 " />
+                        <div className="mt-2h about-me-bg">
+
+                            <div className="">
+
+                                <AllAboutMeForm />
+
+                            </div>
+                        </div>
+
+                        <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
+                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
+                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Submit</button>
+                        </div>
+                    </div>
+                );
+
+            case 5:
+                //summayaboutme
+                return (
+                    <div className="summary-me">
+
+                        <div className="aboutme-monkey">
+                            <div className="about-me-tag">
+
+                            </div>
+
+                            <div className="about-me-boxes">
+                                <div className="box favourite">
+                                    <Icon icon="ph:heart-duotone" />
+                                    <h6>What is your Favorites</h6>
+                                    <ul>
+                                        <li>Food</li>
+                                        <li>animal</li>
+                                        <li>Pet</li>
+                                        <li>Subject</li>
+                                    </ul>
+
+                                </div>
+
+                                <div className="fun-fact-boxes">
+                                <div className="box favourite">
+                                <Icon icon="mingcute:thumb-up-line" />
+                                <h6>I Like</h6>
+                                    <ul>
+                                        <li>Dancing</li>
+                                        <li>Swimming</li>
+                                    </ul>
+
+                                </div>
+                                <div className="box favourite">
+                                <Icon icon="fluent:emoji-48-regular" />
+                                <h6>Fun Fact</h6>
+                                    <ul>
+                                        <li>Food</li>
+                                        <li>animal</li>
+                                    </ul>
+
+                                </div>
+                                <div className="box favourite">
+                                    <Icon icon="ph:heart-duotone" />
+                                    <h6>What is your Favorites</h6>
+                                    <ul>
+                                        <li>Food</li>
+                                        <li>animal</li>
+                                        <li>Pet</li>
+                                        <li>Subject</li>
+                                    </ul>
+
+                                </div>
+                                <div className="box favourite">
+                                    <Icon icon="ph:heart-duotone" />
+                                    <h6>What is your Favorites</h6>
+                                    <ul>
+                                        <li>Food</li>
+                                        <li>animal</li>
+                                        <li>Pet</li>
+                                        <li>Subject</li>
+                                    </ul>
+
+                                </div>
+                                <div className="box favourite">
+                                    <Icon icon="ph:heart-duotone" />
+                                    <h6>What is your Favorites</h6>
+                                    <ul>
+                                        <li>Food</li>
+                                        <li>animal</li>
+                                        <li>Pet</li>
+                                        <li>Subject</li>
+                                    </ul>
+
+                                </div>
+                                <div className="box favourite">
+                                    <Icon icon="ph:heart-duotone" />
+                                    <h6>What is your Favorites</h6>
+                                    <ul>
+                                        <li>Food</li>
+                                        <li>animal</li>
+                                        <li>Pet</li>
+                                        <li>Subject</li>
+                                    </ul>
+
+                                </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
+                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
+                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next</button>
+                        </div>
+                    </div>
+                );
 
             default:
                 return null;
@@ -127,28 +249,5 @@ export default function CourseProgessionOne({ course, onClose }) {
     );
 
 
-    // return (
-    //     <div className="course-pogression-page">
-    //         <div className="video-div">
-    //             <iframe
-    //                 className="custom-video"
-    //                 src="https://www.youtube.com/embed/CW-f1RVjCws"
-    //                 title="YouTube video player"
-    //                 frameborder="0"
-    //                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    //                 allowfullscreen
-    //             ></iframe>
-    //         </div>
-    //         <div className="progression-buttons mt-5">
-    //             <div className=" pause-play-btn">
-    //                 <Icon icon="heroicons-outline:pause" />
-    //                 <Icon icon="heroicons-outline:stop" />
 
-    //             </div>
-    //             <button className="btn progress-btn btn-next-dark">
-    //                 Next {">>>"}
-    //             </button>
-    //         </div>
-    //     </div>
-    // )
 }

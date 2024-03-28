@@ -1,11 +1,13 @@
-
-
-.course-profile{
+.course-profile {
     display: flex;
 }
 
-.courses-list-card-section{
-   
+.courses-list{
+    background-color: #fff;
+}
+
+.courses-list-card-section {
+
     /* background-color: #fff; */
     padding: 10px;
     border-radius: 20px;
@@ -25,12 +27,14 @@
     border: 1px solid #44444440;
     overflow-y: scroll;
 }
+
 .course-links::-webkit-scrollbar {
     width: 0;
     /* Remove scrollbar width */
     height: 0;
     /* Remove scrollbar height */
-  }
+}
+
 .about-courses-menu {
     color: #FFFFFF;
     font-size: 14px;
@@ -39,17 +43,18 @@
     flex-direction: column;
 }
 
-.back-to-course-list{
+.back-to-course-list {
     cursor: pointer;
 }
 
-.course-title-text{
+.course-title-text {
     width: 280px;
     padding: 10px;
-background-color: #FFFFFF;
-border-radius: 5px;
+    background-color: #FFFFFF;
+    border-radius: 5px;
 }
-.course-title-text h2{
+
+.course-title-text h2 {
     font-size: 24px;
     text-wrap: nowrap;
     color: #4B7E31;
@@ -57,8 +62,9 @@ border-radius: 5px;
     line-height: normal;
     margin-bottom: 0;
 }
-.course-title-text h2.sub-title{
-  color: #5B616A;
+
+.course-title-text h2.sub-title {
+    color: #5B616A;
 }
 
 .about-courses-menu .sub-courses {
@@ -86,7 +92,7 @@ border-radius: 5px;
 
 }
 
-.about-courses-menu .sub-courses li p.text-wrap{
+.about-courses-menu .sub-courses li p.text-wrap {
     /* text-align: justify; */
     width: auto;
 }
@@ -94,27 +100,25 @@ border-radius: 5px;
 .about-courses-menu .sub-courses li:hover {
     background: rgba(20, 20, 20, 0.5);
     color: #FFFFFF;
-  }
+}
+
 .about-courses-menu .sub-courses li .iconify {
     font-size: 18px;
-  margin-right: 20px;
-  color: #FAFAFA;
+    margin-right: 20px;
+    color: #FAFAFA;
 }
 
 .about-courses-menu .sub-courses li.active {
     background-color: #D4FFBE;
     color: #5B616A
-
-
 }
-.about-courses-menu .sub-courses li.active .iconify{
+
+.about-courses-menu .sub-courses li.active .iconify {
 
     color: #D6D6D6
-
-
 }
 
-.course-sidebar-content{
+.course-sidebar-content {
     flex: 4;
     border-radius: 10px;
     padding: 40px 10px;
@@ -126,86 +130,91 @@ border-radius: 5px;
 }
 
 
-.video-div{
-padding: 15px;
-background-color: #4B7E31;
-width: fit-content;
-border-radius: 15px;
+.video-div {
+    padding: 15px;
+    background-color: #4B7E31;
+    width: fit-content;
+    border-radius: 15px;
 }
 
-.custom-video{
- 
+.custom-video {
     width: 800px;
     height: 400px;
 }
-.progression-buttons{
+
+.progression-buttons {
     display: flex;
     align-items: center;
-    justify-content: space-around; 
-    
+    justify-content: space-around;
+
 }
 
-.pause-play-btn{
+.pause-play-btn {
     width: 200px;
     display: flex;
     align-items: center;
     justify-content: space-around;
-    border: 1px solid #ECEDF0;  
-    padding: 10px; 
+    border: 1px solid #ECEDF0;
+    padding: 10px;
     border-radius: 5px;
 }
-.pause-play-btn .iconify{
+
+.pause-play-btn .iconify {
     color: #4B7E31;
     font-size: 32px;
 }
-.btn.progress-btn{
+
+.btn.progress-btn {
     width: 200px;
-   
     font-size: 16px;
     display: flex;
     align-items: center;
     justify-content: space-around;
-    border: 1px solid #ECEDF0;  
-    padding: 10px; 
-    border-radius: 5px; 
-    
+    border: 1px solid #ECEDF0;
+    padding: 10px;
+    border-radius: 5px;
+
 }
 
-.btn.progress-btn.btn-light{
+.btn.progress-btn.btn-light {
     background-color: #D4FFBE;
     color: #4B7E31;
 }
-.btn.progress-btn.btn-dark{
+
+.btn.progress-btn.btn-dark {
     background-color: #4B7E31;
     color: #ffffff;
 }
 
-.course-progression-page .course-info-modal{
+.course-progression-page .course-info-modal {
     width: fit-content;
 }
-.course-progression-page .course-info-modal .progress-course-info-p{
+
+.course-progression-page .course-info-modal .progress-course-info-p {
     color: #4B7E31;
     font-weight: 500;
 }
 
- .affirmation-page{
+.affirmation-page {
     background-image: url('../../../../assets/affirmation-bg.png');
     background-position: center;
-    background-repeat: no-repeat;
+    /* background-repeat: no-repeat; */
     background-size: contain;
     /* display: flex;
     flex-direction: column; */
     /* align-items: center; */
 }
-.course-progression-page .affirmation-page textarea{
+
+.course-progression-page .affirmation-page textarea {
     width: 800px;
     padding: 20px;
 }
-.course-progression-page .affirmation-page textarea::placeholder{
+
+.course-progression-page .affirmation-page textarea::placeholder {
     color: #D6D6D6;
 }
 
-.affirmation-page .video-div{
+.affirmation-page .video-div {
     padding: 30px 20px;
     background-color: #4B7E31;
     width: fit-content;
@@ -213,27 +222,208 @@ border-radius: 15px;
     background-image: url('../../../../assets/Popup-Growth.png');
     background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
-    }
+    background-size: auto;
+}
 
-.affirmation-page h2{
+.affirmation-page h2 {
     color: #FFFFFF;
     background-color: #4B7E31;
     padding: 5px 10px;
 }
 
-.affirmation-page hr{
+.affirmation-page hr {
     border: 1px solid #fff;
 }
-.affirmation-page .decor{
-    width: 900px;
+
+.affirmation-page .decor {
+    width: 850px;
     overflow: hidden;
     position: absolute;
     top: 70px;
 
 }
-.affirmation-page .decor img{
+
+.affirmation-page .decor img {
     width: 100%;
     object-fit: cover;
     object-position: center;
+}
+
+.about-me-bg {
+    padding: 20px;
+    background-image: url('../../../../assets/Favourite.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 900px;
+    height: 450px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.about-me-form-title {
+    text-align: center;
+}
+
+.about-me-form-title .iconify {
+    font-size: 40px;
+    color: #4B7E31;
+    /* background-color: #D4FFBE; */
+    /* border: 1px solid #4B7E31; */
+}
+.about-progression-form p {
+    font-size: 12px;
+    color: #5B616A;
+}
+.about-me-form-title h5 {
+    font-size: 38px;
+    color: #4B7E31;
+}
+
+.about-me-form {
+    width: 700px;
+    background-color: #FFFFFF;
+    /* height: 400px; */
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+.about-progression-form .form-group {
+    display: flex;
+    align-items: center;
+}
+
+.about-progression-form .form-group label {
+    font-size: 14px;
+    color: #5B616A;
+}
+
+
+
+
+.about-progression-form .form-group input {
+    /* max-width: 90%; */
+    width: 400px;
+    height: 50px;
+    font-size: 14px;
+    padding: 10px;
+    margin: 15px 5px;
+    border: none;
+    outline: none;
+    background-color: #F8F8F8;
+    border: 1px solid #ECEDF0;
+    border-radius: 5px;
+
+}
+
+.about-progression-form .form-group input[type='checkbox']{
+    
+    margin:  5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;   
+    background-color: #F8F8F8;
+    border: 2px solid #606060;
+    border-radius: 35px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none; 
+   
+}
+.about-progression-form input[type='checkbox']::before {
+    content: '\2713';
+    display: none;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: normal;
+    color: #fff; 
+    background-color: #4B7E31; 
+    border-radius: 50%;
+}
+
+/* Checked state */
+.about-progression-form input[type='checkbox']:checked::before {
+    display: block; /* Show the checkmark */
+    
+}
+
+.aboutme-monkey{
+    padding: 20px;
+    background-image: url('../../../../assets/all-about-me-image.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 105%;
+    width: 900px;
+    height: 400px;
+    border-radius: 10px;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.about-progression-form .form-group.radio-input label {
+    font-size: 14px;
+    color: #5B616A;
+    font-weight: 600;
+}
+.about-progression-form .form-group.long-input input {
+    width: 550px;
+}
+
+.about-progression-form .form-group input::placeholder {
+
+    color: #D6D6D6;
+}
+
+input[type=password]::-webkit-input-placeholder:-webkit-autofill,
+input[type=text]::-webkit-input-placeholder:-webkit-autofill {
+
+    background-color: #F8F8F8;
+}
+
+.about-me-form-btn {
+    width: 120px;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.about-me-form-btn.btn-next {
+    background-color: #D6D6D6;
+    color: #fff;
+}
+.about-me-form-btn.btn-back {
+    background-color: #D4FFBE;
+    color: #4B7E31;
 }
