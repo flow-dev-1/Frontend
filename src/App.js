@@ -17,6 +17,8 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import OnboardingRootLayout from './components/onboarding/OnboardingRootLayout';
 import SingleCoursePage from './components/dashboard/pages/my-courses/single-course-page/SingleCoursePage';
+import ConfirmPayment from './components/dashboard/pages/ConfirmPayment.js';
+
 function App() {
   return (
 
@@ -43,6 +45,7 @@ function App() {
             <Route path="/dashboard/profile" element={<IndividualProfile />} />
             <Route path="/dashboard/my-courses" element={<MyCourses />} />
             <Route path="/dashboard/my-courses/:id" element={<SingleCoursePage />} />
+            <Route path="/dashboard/enrollment/confirm" element={<ConfirmPayment />} />
           </Route>
         </Route>
 

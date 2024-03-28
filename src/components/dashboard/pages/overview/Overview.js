@@ -8,7 +8,7 @@ import femaleprofileImage from '../../../../assets/user-profile-image.png';
 import maleprofileImage from '../../../../assets/male-profile-image.png';
 import './overview.css'
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function IndividualOverview() {
   const navigate = useNavigate();
@@ -20,14 +20,14 @@ export default function IndividualOverview() {
 
       <div className="d-flex align-items-center justify-content-between">
         <div>
-          <h2>Hi, {user?.first_name}! </h2>
+          <h2>Hi {user?.first_name?.trim()}! </h2>
           <p>Welcome back to Flow!</p>
         </div>
         {/* {user?.gender === "female" && <img src={femaleprofileImage} alt="user Profile image" />}
         {user?.gender === "male" && <img src={maleprofileImage} alt="user Profile image" />} */}
 
         {user?.gender === "male" ? <img src={maleprofileImage} alt="user Profile image" /> : <img src={femaleprofileImage} alt="user Profile image" />}
-      
+
 
       </div>
 

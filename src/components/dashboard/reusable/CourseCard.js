@@ -44,55 +44,49 @@ const CourseCard = ({ course, enrolled }) => {
           <img src={course.image} alt="" />
           <div className="px-3 py-2">
             <h3>{course.title}</h3>
-          {course.subtitle && <h4>{course.subtitle}</h4>}
-          <p>{course.description}</p>
-          <div className="d-flex icons">
-            <span><Icon icon="fluent:people-24-regular" /> {course.viewed}</span>
-            <span><Icon icon="mingcute:thumb-up-line" /> {course.likes}</span>
+            {course.subtitle && <h4>{course.subtitle}</h4>}
+            <p>{course.description}</p>
+            <div className="d-flex icons">
+              <span><Icon icon="fluent:people-24-regular" /> {course.viewed}</span>
+              <span><Icon icon="mingcute:thumb-up-line" /> {course.likes}</span>
+            </div>
           </div>
-          </div>
-          
-          
+
+
         </div>
         <div className="course-card-btn">
-            <button
-              className='btn card-btn preview'
-              onClick={() => openModal('course')}>
-              <Icon icon="prime:eye" /> Review
-            </button>
-            {enrolled ? (
-              <>
+          <button
+            className='btn card-btn preview'
+            onClick={() => openModal('course')}>
+            <Icon icon="prime:eye" /> Review
+          </button>
+          {enrolled ? (
+            <>
 
-                <button className='btn card-btn cart' onClick={() => openPage(course)}>
-                  <Icon icon="prime:play-circle" /> Start
-                </button>
-                {/* <p className='mb-0'> 0% {<br />} Done</p> */}
-                <p className='mb-0'>
-                  <span className="percentage">0%</span> Done
-                </p>
-              </>
+              <button className='btn card-btn cart' onClick={() => openPage(course)}>
+                <Icon icon="prime:play-circle" /> Start
+              </button>
+              {/* <p className='mb-0'> 0% {<br />} Done</p> */}
+              <p className='mb-0'>
+                <span className="percentage">0%</span> Done
+              </p>
+            </>
 
-            ) : (
-              <>
-                <button className='btn card-btn cart' onClick={() => openModal('payment')}>
-                  <Icon icon="f7:cart" /> N{course.amount}
-                </button>
-              </>
+          ) : (
+            <>
+              <button className='btn card-btn cart' onClick={() => openModal('payment')}>
+                ₦{course.amount}
+              </button>
+            </>
 
-            )}
-            {/* <button
+          )}
+          {/* <button
               className='btn card-btn cart'
               onClick={() => openModal('payment')}>
               <Icon icon="f7:cart" /> N{course.amount}
             </button> */}
-          </div>
+        </div>
       </div>
-
-
-
-
-
-
 
       <Modal
         isOpen={modalIsOpen}
