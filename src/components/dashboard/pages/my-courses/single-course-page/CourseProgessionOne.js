@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
 
 import affirmationDecor from '../../../../../assets/affirmation-decor.png'
+import celebrate from '../../../../../assets/celebrate.png';
+import aboutMeTag from '../../../../../assets/all-about-me-tag.png'
 import AllAboutMeForm from './AllAboutMeForm';
 
 
@@ -14,7 +16,7 @@ export default function CourseProgessionOne({ course, onClose }) {
     const [currentStep, setCurrentStep] = useState(1);
     const [formData, setFormData] = useState(null);
 
-    const handleNext = () => {
+    const handleNext = (formData) => {
         setCurrentStep(currentStep + 1);
     };
 
@@ -81,7 +83,7 @@ export default function CourseProgessionOne({ course, onClose }) {
                                 </div>
                             </div>
                         </div>
-                        <div className='d-flex align-items-center justify-content-around mt-5'>
+                        <div className='d-flex align-items-center justify-content-around mt-3'>
                             <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
                             <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
                         </div>
@@ -126,7 +128,7 @@ export default function CourseProgessionOne({ course, onClose }) {
 
                             <div className="">
 
-                                <AllAboutMeForm />
+                                <AllAboutMeForm onSubmit={handleNext} />
 
                             </div>
                         </div>
@@ -145,13 +147,13 @@ export default function CourseProgessionOne({ course, onClose }) {
 
                         <div className="aboutme-monkey">
                             <div className="about-me-tag">
-
+                                <img src={aboutMeTag} alt="" />
                             </div>
 
-                            <div className="about-me-boxes">
-                                <div className="box favourite">
+                            <div className="about-me-boxes mt-4">
+                                <div className="box favourite large">
                                     <Icon icon="ph:heart-duotone" />
-                                    <h6>What is your Favorites</h6>
+                                    <h5>What is your {<br />} Favorites</h5>
                                     <ul>
                                         <li>Food</li>
                                         <li>animal</li>
@@ -162,68 +164,80 @@ export default function CourseProgessionOne({ course, onClose }) {
                                 </div>
 
                                 <div className="fun-fact-boxes">
-                                <div className="box favourite">
-                                <Icon icon="mingcute:thumb-up-line" />
-                                <h6>I Like</h6>
+                                    <div className="box favourite">
+                                        <Icon icon="mingcute:thumb-up-line" />
+                                        <h5>I Like</h5>
+                                        <ul>
+                                            <li>Dancing</li>
+                                            <li>Swimming</li>
+                                        </ul>
+
+                                    </div>
+                                    <div className="box favourite">
+                                        <Icon icon="fluent:emoji-48-regular" />
+                                        <h5>Fun Fact</h5>
+                                        <ul>
+                                            <li>Food</li>
+                                            <li>animal</li>
+                                        </ul>
+
+                                    </div>
+                                    <div className="box favourite ">
+                                        <Icon icon="heroicons:puzzle-piece" />
+                                        <h5>Hobby</h5>
+                                        <ul>
+                                            <li>Dancing</li>
+
+                                        </ul>
+
+                                    </div>
+
+                                    <div className="box favourite ">
+                                        <Icon icon="heroicons:briefcase" />
+                                        <h5>Job</h5>
+                                        <ul>
+                                            <li>Sailor</li>
+                                        </ul>
+
+                                    </div>
+
+                                    <div className="box favourite">
+                                        <Icon icon="fluent:people-28-regular" />
+                                        <h5>Friend</h5>
+                                        <ul>
+                                            <li>Adams</li>
+                                        </ul>
+
+                                    </div>
+
+                                    <div className="box favourite">
+                                        <Icon icon="icon-park-twotone:color-card" />
+                                        <h5>Colour</h5>
+                                        <ul>
+                                            <li>Brown</li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                                <div className="box favourite large">
+                                    <Icon icon="dashicons:format-chat" />
+                                    <h5>People say that...</h5>
                                     <ul>
-                                        <li>Dancing</li>
-                                        <li>Swimming</li>
+                                        <li>
+                                            <Icon icon="mdi-light:check-circle" className='tick-icon' />
+                                            I am a nice person
+                                        </li>
+
+                                        <li>
+                                            <Icon icon="mdi-light:check-circle" className='tick-icon' />
+                                            I am a sporty
+                                        </li>
+                                        <li>
+                                            <Icon icon="mdi-light:check-circle" className='tick-icon' />
+                                            I am a funny person
+                                        </li>
                                     </ul>
 
-                                </div>
-                                <div className="box favourite">
-                                <Icon icon="fluent:emoji-48-regular" />
-                                <h6>Fun Fact</h6>
-                                    <ul>
-                                        <li>Food</li>
-                                        <li>animal</li>
-                                    </ul>
-
-                                </div>
-                                <div className="box favourite">
-                                    <Icon icon="ph:heart-duotone" />
-                                    <h6>What is your Favorites</h6>
-                                    <ul>
-                                        <li>Food</li>
-                                        <li>animal</li>
-                                        <li>Pet</li>
-                                        <li>Subject</li>
-                                    </ul>
-
-                                </div>
-                                <div className="box favourite">
-                                    <Icon icon="ph:heart-duotone" />
-                                    <h6>What is your Favorites</h6>
-                                    <ul>
-                                        <li>Food</li>
-                                        <li>animal</li>
-                                        <li>Pet</li>
-                                        <li>Subject</li>
-                                    </ul>
-
-                                </div>
-                                <div className="box favourite">
-                                    <Icon icon="ph:heart-duotone" />
-                                    <h6>What is your Favorites</h6>
-                                    <ul>
-                                        <li>Food</li>
-                                        <li>animal</li>
-                                        <li>Pet</li>
-                                        <li>Subject</li>
-                                    </ul>
-
-                                </div>
-                                <div className="box favourite">
-                                    <Icon icon="ph:heart-duotone" />
-                                    <h6>What is your Favorites</h6>
-                                    <ul>
-                                        <li>Food</li>
-                                        <li>animal</li>
-                                        <li>Pet</li>
-                                        <li>Subject</li>
-                                    </ul>
-
-                                </div>
                                 </div>
                             </div>
 
@@ -233,6 +247,25 @@ export default function CourseProgessionOne({ course, onClose }) {
                         <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
                             <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
                             <button className='btn progress-btn btn-dark' onClick={handleNext}>Next</button>
+                        </div>
+                    </div>
+                );
+
+            case 6:
+                //end
+                return (
+                    <div className="end-of-course-page">
+
+                        <div className="congrats">
+                            <img src={celebrate} alt="celebrate" />
+                            <h1>Hurray!</h1>
+                            <p>You have made it to the {<br />} end of week 1.</p>
+                        </div>
+
+
+                        <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
+
+                            <button className='btn progress-btn btn-dark' onClick={handlePrevious} >Proceed to Week 2</button>
                         </div>
                     </div>
                 );
