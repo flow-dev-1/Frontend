@@ -16,7 +16,7 @@ export default function MyCourses() {
           <div className="browse-all-courses-text container-fluid">
             <p>Enrolled Courses</p>
           </div>
-          <div className="courses-list-card-section row g-4 mx-2  ">
+          <div className="courses-list-card-section enrolled row g-4 mx-2  ">
             {/* {courses.map(course => (
               <CourseCard key={course.id} course={course} />
             ))} */}

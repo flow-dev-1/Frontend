@@ -208,6 +208,8 @@
 .course-progression-page .affirmation-page textarea {
     width: 800px;
     padding: 20px;
+    outline: none;
+    border: none;
 }
 
 .course-progression-page .affirmation-page textarea::placeholder {
@@ -364,9 +366,9 @@
 .aboutme-monkey {
     padding: 0 20px 20px 20px;
     background-image: url('../../../../assets/all-about-me-image.png');
-    background-position: center;
+    background-position: center center;
     background-repeat: no-repeat;
-    background-size: 105%;
+    background-size: 107%;
     width: 900px;
     height: fit-content;
     border-radius: 10px;
@@ -440,6 +442,18 @@
     font-size: 22px;
     color: #256b02;
     font-weight: 800;
+}
+
+.download-about-me{
+    float: right;
+    color: #5B616A;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.download-about-me .iconify{
+    font-size: 30px;
+    color: #456435;
 }
 
 

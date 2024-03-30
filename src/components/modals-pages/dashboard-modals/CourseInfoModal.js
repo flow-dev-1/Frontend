@@ -10,12 +10,12 @@ export default function CourseInfoModal({ course, onClose }) {
     const [modalIsOpen, setIsOpen] = useState(false);
 
 
-    function openModal () {
+    function openModal() {
         setIsOpen(true);
-      };
+    };
     function closeModal() {
         setIsOpen(false);
-      }
+    }
 
 
 
@@ -37,7 +37,8 @@ export default function CourseInfoModal({ course, onClose }) {
                             <ul>
                                 {course.objectives.map((objective, index) => (
                                     <li key={index}>
-                                        <p className='fw-bold'>{objective.title}:</p> {objective.description}</li>
+                                        {/* <p className='fw-bold'>{objective.title}:</p> {objective.description}</li> */}
+                                        <p className='fw-bold'>{objective.title === "" ? objective.title : `${objective.title}:`}</p> {objective.description}</li>
                                 ))}
                             </ul>
                         </div>
@@ -47,11 +48,11 @@ export default function CourseInfoModal({ course, onClose }) {
             </div>
 
             {!course.enrolled && (
-        <div className="course-info-modal-footer container-fluid py-2 px-4">
-          <p>For more details, enroll in the course now!</p>
-          <button className="btn modal-btn cart" onClick={openModal}><Icon icon="f7:cart" /> N{course.amount}</button>
-        </div>
-      )}
+                <div className="course-info-modal-footer container-fluid py-2 px-4">
+                    <p>For more details, enroll in the course now!</p>
+                    <button className="btn modal-btn cart" onClick={openModal}><Icon icon="f7:cart" /> N{course.amount}</button>
+                </div>
+            )}
             {/* <div className="course-info-modal-footer container-fluid py-2 px-4">
                 <p>For more details, enroll in the course now!</p>
                 <button className="btn modal-btn cart"  onClick={openModal}><Icon icon="f7:cart" /> N{course.amount}</button>
@@ -59,16 +60,16 @@ export default function CourseInfoModal({ course, onClose }) {
 
 
             <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        className="custom-modal"
-        overlayClassName="custom-overlay"
-        contentLabel="Example Modal"
-        shouldCloseOnOverlayClick={true}
-      > <PaymentModal
-          course={course} onClose={closeModal}
-        />
-      </Modal>
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                className="custom-modal"
+                overlayClassName="custom-overlay"
+                contentLabel="Example Modal"
+                shouldCloseOnOverlayClick={true}
+            > <PaymentModal
+                    course={course} onClose={closeModal}
+                />
+            </Modal>
         </div>
     );
 }

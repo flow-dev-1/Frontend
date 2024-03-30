@@ -13,13 +13,15 @@ function SingleCoursePage() {
     const navigate = useNavigate();
 
     const [activeLink, setActiveLink] = React.useState("weekone");
+    const [currentWeekIndex, setCurrentWeekIndex] = React.useState(0);
 
 
 
 
-    const handleLinkClick = (linkName) => {
+    const handleLinkClick = (linkName, index) => {
         setActiveLink(linkName);
-        // Additional logic to change content based on the clicked link
+        setActiveLink(`week${index + 1}`);
+        setCurrentWeekIndex(index);
     };
 
 
@@ -27,7 +29,7 @@ function SingleCoursePage() {
     const renderSidebarContent = () => {
         switch (activeLink) {
             case 'weekone':
-                return <CourseProgessionOne course={course} /> ;
+                return <CourseProgessionOne course={course} currentWeekIndex={currentWeekIndex} /> ;
             
             default:
                 return null;
