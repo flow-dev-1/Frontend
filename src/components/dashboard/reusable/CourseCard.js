@@ -38,10 +38,13 @@ const CourseCard = ({ course, enrolled }) => {
 
   return (
     <div className="reusable-course-card">
+      {/* <div  > */}
+
       <div className="course-card">
 
         <div className="course-details">
-          <img src={course.image} alt="" />
+          {/* <img src={course.image} alt="" className='' /> */}
+          <img src={course.image} alt="" className={course.subtitle.toLowerCase() === "growth mindset" ? "growth-mindset" : ""} />
           <div className="px-3 py-2">
             <h3>{course.title}</h3>
             {course.subtitle && <h4>{course.subtitle}</h4>}
@@ -55,15 +58,15 @@ const CourseCard = ({ course, enrolled }) => {
 
         </div>
         <div className="course-card-btn">
-          <button
-            className='btn card-btn preview'
-            onClick={() => openModal('course')}>
-            <Icon icon="prime:eye" /> Review
-          </button>
+
           {enrolled ? (
             <>
-
-              <button className='btn card-btn cart' onClick={() => openPage(course)}>
+              <button
+                className='btn card-btn enrolled preview'
+                onClick={() => openModal('course')}>
+                <Icon icon="prime:eye" /> Review
+              </button>
+              <button className='btn card-btn enrolled cart' onClick={() => openPage(course)}>
                 <Icon icon="prime:play-circle" /> Start
               </button>
               {/* <p className='mb-0'> 0% {<br />} Done</p> */}
@@ -74,6 +77,11 @@ const CourseCard = ({ course, enrolled }) => {
 
           ) : (
             <>
+              <button
+                className='btn card-btn preview'
+                onClick={() => openModal('course')}>
+                <Icon icon="prime:eye" /> Review
+              </button>
               <button className='btn card-btn cart' onClick={() => openModal('payment')}>
                 ₦{course.amount}
               </button>

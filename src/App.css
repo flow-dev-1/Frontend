@@ -61,6 +61,7 @@ a, a:hover {
 ul,
 ol {
   padding-left: 0;
+  list-style: none;
 }
 
 /* Remove default list styles from list items */

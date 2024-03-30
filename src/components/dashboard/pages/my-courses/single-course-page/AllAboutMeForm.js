@@ -1,24 +1,60 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 
 
 
 
 
-export default function AllAboutMeForm() {
+export default function AllAboutMeForm({ onSubmit }) {
 
     const [currentForm, setCurrentForm] = useState(1);
     const [nextButtonColor, setNextButtonColor] = useState('#D6D6D6');
-    const [formData, setFormData] = useState("");
+    const [formData, setFormData] = useState({
+        food: '',
+        animal: '',
+        pet: '',
+        subject: '',
+        like1: '',
+        like2: '',
+        nicePerson: false,
+        funnyPerson: false,
+        goodReading: false,
+        goodMath: false,
+        sporty: false,
+        helpingOthers: false,
+        calmPerson: false,
+        funFact1: '',
+        funFact2: '',
+        favoriteColor: '',
+        desiredJob: '',
+        bestFriendName: '',
+        favoriteHobby: '',
+    });
 
 
-    
-   
 
 
 
-    
+useEffect(() => {
+    setFormData((prevData) => ({
+        ...prevData,
+      
+        food: '',
+        animal: '',
+        pet: '',
+        subject: '',
+        like1: '',
+        like2: '',
+        funFact1: '',
+        funFact2: '',
+        favoriteColor: '',
+        desiredJob: '',
+        bestFriendName: '',
+        favoriteHobby: '',
+    }));
+}, []);
+
 
 
     const handleNext = () => {
@@ -30,14 +66,20 @@ export default function AllAboutMeForm() {
 
 
 
-
-
     const handleInputChange = (fieldName, value) => {
-        if (value.trim() !== '') {
-            setNextButtonColor('#4B7E31');
-        } else {
-            setNextButtonColor('#D6D6D6');
-        }
+        setFormData((prevData) => ({
+            ...prevData,
+            [fieldName]: value,
+        }));
+        // if (value?.trim() !== '') {
+        //             setNextButtonColor('#4B7E31');
+        //         } else {
+        //             setNextButtonColor('#D6D6D6');
+        //         }
+    };
+
+    const handleSubmit = () => {
+        onSubmit(formData);
     };
 
 
@@ -60,7 +102,7 @@ export default function AllAboutMeForm() {
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label>FOOD: </label>
-                                        <input type="text" placeholder="Type here..." />
+                                        <input type="text" name="food" onChange={(e) => handleInputChange('food', e.target.value)} placeholder="Type here..." />
                                         
                                     </div>
                                 </div>
@@ -68,7 +110,7 @@ export default function AllAboutMeForm() {
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label>ANIMAL: </label>
-                                        <input type="text" placeholder="Type here..."  />
+                                        <input type="text" name="animal" onChange={(e) => handleInputChange('animal', e.target.value)} placeholder="Type here..."  />
                                         
                                     </div>
                                 </div>
@@ -76,7 +118,7 @@ export default function AllAboutMeForm() {
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label>PET: </label>
-                                        <input type="text" placeholder="Type here..."  />
+                                        <input type="text" name="pet" onChange={(e) => handleInputChange('pet', e.target.value)} placeholder="Type here..."  />
                                         
                                     </div>
                                 </div>
@@ -84,7 +126,7 @@ export default function AllAboutMeForm() {
                                 <div className="col-md-6">
                                     <div className="form-group">
                                         <label>SUBJECT: </label>
-                                        <input type="text" placeholder="Type here..."  onChange={(e) => handleInputChange('favsubject', e.target.value)} />
+                                        <input type="text" name="subject" onChange={(e) => handleInputChange('subject', e.target.value)} placeholder="Type here..." />
                                         
                                     </div>
                                 </div>
@@ -117,13 +159,13 @@ export default function AllAboutMeForm() {
 
                                 <div className="">
                                     <div className="form-group long-input">
-                                        <input type="text" placeholder="Type here..." />
+                                        <input type="text" name='like1' onChange={(e) => handleInputChange('like1', e.target.value)} placeholder="Type here..." />
                                     </div>
                                 </div>
 
                                 <div className="">
                                     <div className="form-group long-input">
-                                        <input type="text" placeholder="Type here..." />
+                                        <input type="text" name='like2' onChange={(e) => handleInputChange('like2', e.target.value)} placeholder="Type here..." />
                                     </div>
                                 </div>
                             </form>
@@ -159,9 +201,9 @@ export default function AllAboutMeForm() {
 
                                 <div className="col-md-6">
                                     <div className="form-group radio-input">
-                                        <input type="checkbox" name="" id="nice-person-checkbox"
-                                            checked={formData.nicePerson}
-                                            
+                                        <input type="checkbox" name="nicePerson" id="nice-person-checkbox"
+                                            checked={formData.nicePerson} 
+                                            onChange={(e) => handleInputChange('nicePerson', e.target.checked)}
                                              />
                                         <label>I am a nice person </label>
                                     </div>
@@ -170,36 +212,36 @@ export default function AllAboutMeForm() {
 
                                 <div className="col-md-6">
                                     <div className="form-group radio-input">
-                                        <input type="checkbox" name="" id="funny-person-checkbox"
+                                        <input type="checkbox" name="funnyPerson" id="funny-person-checkbox"
                                             checked={formData.funnyPerson}
-                                            
+                                            onChange={(e) => handleInputChange('funnyPerson', e.target.checked)}
                                              />
                                         <label>I am a funny person </label>
                                     </div>
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group radio-input">
-                                        <input type="checkbox" name="" id="good-reading-checkbox"
+                                        <input type="checkbox" name="goodReading" id="good-reading-checkbox"
                                             checked={formData.goodReading}
-                                            
+                                            onChange={(e) => handleInputChange('goodReading', e.target.checked)}
                                              />
                                         <label>I am good at reading </label>
                                     </div>
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group radio-input">
-                                        <input type="checkbox" name="" id="good-math-checkbox"
+                                        <input type="checkbox" name="goodMath" id="good-math-checkbox"
                                             checked={formData.goodMath}
-                                            
+                                            onChange={(e) => handleInputChange('goodMath', e.target.checked)}
                                              />
                                         <label>I am good at math </label>
                                     </div>
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group radio-input">
-                                        <input type="checkbox" name="" id="sporty-checkbox"
+                                        <input type="checkbox" name="sporty" id="sporty-checkbox"
                                             checked={formData.sporty}
-                                            
+                                            onChange={(e) => handleInputChange('sporty', e.target.checked)}
                                              />
                                         <label>I am a sporty </label>
 
@@ -207,9 +249,9 @@ export default function AllAboutMeForm() {
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group radio-input">
-                                        <input type="checkbox" name="" id="helping-others-checkbox"
+                                        <input type="checkbox" name="helpingOthers" id="helping-others-checkbox"
                                             checked={formData.helpingOthers}
-                                           
+                                            onChange={(e) => handleInputChange('helpingOthers', e.target.checked)}
                                              />
 
                                         <label>I am helping other people </label>
@@ -217,9 +259,9 @@ export default function AllAboutMeForm() {
                                 </div>
                                 <div className="col-md-6">
                                     <div className="form-group radio-input">
-                                        <input type="checkbox" name="" id="calm-person-checkbox"
+                                        <input type="checkbox" name="calmPerson" id="calm-person-checkbox"
                                             checked={formData.calmPerson}
-                                           
+                                            onChange={(e) => handleInputChange('calmPerson', e.target.checked)}
                                              />
                                         <label>I am a calm person </label>
                                     </div>
@@ -258,14 +300,14 @@ export default function AllAboutMeForm() {
 
                                 <div className="">
                                     <div className="form-group long-input">
-                                        <input type="text" placeholder="Type here..."  />
+                                        <input type="text" name='funFact1' onChange={(e) => handleInputChange('funFact1', e.target.value)} placeholder="Type here..."  />
                                        
                                     </div>
                                 </div>
 
                                 <div className="">
                                     <div className="form-group long-input">
-                                        <input type="text" placeholder="Type here..."  />
+                                        <input type="text" name='funFact2' onChange={(e) => handleInputChange('funFact2', e.target.value)} placeholder="Type here..."  />
                                         
                                     </div>
                                 </div>
@@ -301,7 +343,7 @@ export default function AllAboutMeForm() {
                             <form className=" mt-2" >
                                 <div className="">
                                     <div className="form-group long-input">
-                                        <input type="text" placeholder="Type here..."  />
+                                        <input type="text" name='favouriteColor' onChange={(e) => handleInputChange('favouriteColor', e.target.value)} placeholder="Type here..."  />
                                        
                                     </div>
                                 </div>
@@ -338,7 +380,7 @@ export default function AllAboutMeForm() {
                             <form className=" mt-2" >
                                 <div className="">
                                     <div className="form-group long-input">
-                                        <input type="text" placeholder="Type here..." />
+                                        <input type="text" name='desiredJob' onChange={(e) => handleInputChange('desiredJob', e.target.value)} placeholder="Type here..." />
                                        
                                     </div>
                                 </div>
@@ -375,7 +417,7 @@ export default function AllAboutMeForm() {
                             <form className=" mt-2" >
                                 <div className="">
                                     <div className="form-group long-input">
-                                        <input type="text" placeholder="Type here..." />
+                                        <input type="text" name='bestFriendName' onChange={(e) => handleInputChange('bestFriendName', e.target.value)} placeholder="Type here..." />
                                         
                                     </div>
                                 </div>
@@ -413,8 +455,8 @@ export default function AllAboutMeForm() {
                             <form className=" mt-2" >
                                 <div className="">
                                     <div className="form-group long-input">
-                                        <input type="text" placeholder="Type here..."  />
-                                       
+                                        <input type="text"name='favoriteHobby' onChange={(e) => handleInputChange('favoriteHobby', e.target.value)} placeholder="Type here..."  />
+                                                                               
                                     </div>
                                 </div>
                             </form>
@@ -425,7 +467,7 @@ export default function AllAboutMeForm() {
                                 </button>
                                 <button className="btn about-me-form-btn btn-next mx-2"
                                 style={{ backgroundColor: nextButtonColor }}
-                                onClick={handleNext}>
+                                onClick={handleSubmit}>
 
                                     Submit {">>>"}
                                 </button>
