@@ -1,0 +1,30 @@
+.support-page h2 {
+  font-size: 24px;
+  margin-top: 0;
+}
+
+.support-page p {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.support-page .contact-info {
+  margin-top: 20px;
+}
+
+.support-page .contact-info p {
+  margin-bottom: 10px;
+}
+
+.support-page .contact-info ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.support-page .contact-info li {
+  margin-bottom: 10px;
+}
+
+.support-page .contact-info strong {
+  font-weight: bold;
+}

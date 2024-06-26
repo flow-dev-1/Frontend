@@ -1,0 +1,251 @@
+/* src/components/auth/authStyles.css */
+
+/* Styles for the registration page */
+.registration-page {
+  width: 900px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 60px auto 0 auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 15px;
+}
+
+.registration-page.sign-in {
+  width: fit-content;
+}
+
+.registration-page form {
+  margin: 15px 0;
+}
+
+.registration-page h2 {
+  font-size: 40px;
+}
+
+.registration-page span {
+  color: #FD483D;
+  font-size: 12px;
+}
+
+.registration-page hr {
+  width: 100%;
+  /* transform: ; */
+  border: 1px solid #ccc;
+  margin: 5px 0;
+}
+
+.registration-page .form-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  /* grid-column-gap: 15px; */
+  gap: 10px;
+}
+
+.registration-page .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.registration-page .form-group label,
+.registration-page .forgot-password,
+.registration-page.sign-in p {
+
+  margin-bottom: 5px;
+  font-size: 13px;
+  text-align: left;
+  color: #5B616A;
+
+
+}
+
+.registration-page .form-group input,
+.registration-page .form-group select {
+  width: calc(100% - 10px);
+  font-size: 14px;
+  padding: 10px;
+  border: none;
+  outline: none;
+  background-color: #F8F8F8;
+  border: 1px solid #ECEDF0;
+  border-radius: 5px;
+
+}
+
+.registration-page.sign-in .form-group input,
+.registration-page.sign-in .form-group .input-with-icon,
+.registration-page.sign-in .form-group select {
+  width: 300px;
+
+}
+
+.input-with-icon {
+  width: calc(100% - 10px);
+  font-size: 14px;
+  background-color: #F8F8F8;
+  border: 1px solid #ECEDF0;
+  border-radius: 5px;
+  padding: 0 10px;
+}
+
+.input-with-icon input[type=password],
+.input-with-icon input[type=text] {
+  flex: 1;
+  outline: none;
+  border: none;
+  background-color: #F8F8F8;
+  padding: 10px 0;
+
+}
+
+/* .input-with-icon input[type=text]:enabled,
+.input-with-icon input[type=text]:disabled,
+.input-with-icon input[type=password]:disabled,
+.input-with-icon input[type=password]:enabled {
+  background-color: #F8F8F8;
+} */
+
+input[type=password]::-webkit-input-placeholder:-webkit-autofill,
+input[type=text]::-webkit-input-placeholder:-webkit-autofill {
+
+  background-color: #F8F8F8;
+}
+
+.registration-page .form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url('../../../assets/dropdown-arrow.png');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  /* background-size: 15px; */
+  background-size: 0.9em auto, 100%;
+  font-size: 14px;
+  color: #D6D6D6;
+}
+
+.registration-page .form-group input::placeholder,
+.registration-page .form-group select option:first-child {
+  font-size: 14px;
+  color: #D6D6D6;
+
+}
+
+.registration-page .form-group .password-toggle {
+  /* position: relative; */
+}
+
+.registration-page .form-group .password-toggle i {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.registration-page .form-group .password-toggle i.fa-eye-slash {
+  display: none;
+}
+
+.registration-page .password-error,
+.registration-page p.password-match {
+  color: red;
+  width: auto;
+  margin: 0;
+  font-size: 8px
+}
+
+.registration-page .bottom-section {
+  margin-top: 10px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+}
+
+.error-message {
+  color: #FD483D !important;
+  font-size: 12px !important;
+}
+
+.bottom-section p,
+.rember-me {
+  font-size: 14px;
+  text-align: center;
+  line-height: normal;
+
+}
+
+p a,
+p span,
+.registration-page .forgot-password {
+  color: #275DAD;
+}
+
+.submit-btn,
+.submit-btn:hover {
+  width: 200px;
+  padding: 8px 20px;
+  background-color: #275DAD;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid #275DAD;
+  font-size: 14px;
+}
+
+.registration-page.sign-in .submit-btn,
+.registration-page.sign-in .submit-btn:hover {
+  width: 300px;
+}
+
+
+.otp-input {
+  text-wrap: nowrap;
+}
+
+.modal-content h2 {
+  font-size: 40px;
+  text-align: center;
+
+}
+
+.otp-modal p {
+  font-size: 14px;
+  text-align: center;
+
+}
+
+.modal-content .submit-btn {
+  width: 300px;
+}
+
+.otp-input input {
+  width: 45px;
+  height: 45px;
+  border-radius: 4px;
+  font-size: 18px;
+  text-align: center;
+  line-height: normal;
+  margin: 1rem;
+  background-color: #F8F8F8;
+  border: 1px solid #d2d3d6;
+
+}
+
+.success-modal .icon-with-bg {
+  width: 75px;
+  height: 75px;
+  border-radius: 50px;
+  background-color: #50AA5042;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.success-modal .rounded-icon {
+  color: #50AA50;
+  font-size: 50px;
+}

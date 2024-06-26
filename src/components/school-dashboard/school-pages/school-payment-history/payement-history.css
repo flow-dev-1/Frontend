@@ -1,0 +1,68 @@
+.payment-history {
+  background-color: #fff;
+}
+
+.payment-history h2 {
+  margin-top: 0;
+}
+
+.payment-history .search-filter-sort {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 3rem;
+}
+
+.payment-history .search-filter-sort input {
+  width: 60%;
+  padding: 8px;
+  border: 1px solid rgba(94, 45, 189, 0.05);
+  border-radius: 4px;
+}
+
+.filters button {
+  background-color: transparent;
+  font-size: 14px;
+}
+
+.payment-history .search-filter-sort .filters {
+  display: flex;
+  gap: 10px;
+}
+
+.payment-history .search-filter-sort button {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.payment-history table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.payment-history table th,
+.payment-history table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.payment-history table th {
+  background-color: #f1f1f1;
+}
+
+.payment-history .pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.payment-history .pagination button {
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 4px;
+}

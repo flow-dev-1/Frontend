@@ -1,0 +1,46 @@
+input {
+  padding: 0.2rem;
+  font-size: 14px;
+  background-color: #ecedf0;
+  color: #d6d6d6;
+  border: solid 1px #d6d6d6;
+}
+
+label {
+  color: #5b616a;
+  font-size: 14px;
+}
+
+select {
+  padding: 0.2rem;
+  font-size: 14px;
+  background-color: #ecedf0;
+  color: #d6d6d6;
+  border: solid 1px #d6d6d6;
+}
+
+.flex-row {
+  margin: 0.2rem 0;
+}
+
+.update {
+  width: 200px;
+  margin-left: auto;
+  padding: 0.5rem 2rem;
+  color: #ffff;
+  background-color: #275dad;
+  border-radius: 5px;
+}
+
+.required {
+  color: #fd483d;
+  font-size: 10px;
+  text-align: left;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #5b616a;
+}
