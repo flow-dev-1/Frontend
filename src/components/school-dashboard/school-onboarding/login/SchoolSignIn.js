@@ -4,12 +4,13 @@ import { Icon } from '@iconify/react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import userService from '../../../../services/api/users'
+import schoolService from '../../../../services/api/school'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { RotatingLines } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
 import { setToken } from '../../../../redux/reducers/jwtReducer'
+import '../onboarding.css'
 
 export default function SchoolSignIn() {
   const navigate = useNavigate()
@@ -22,7 +23,7 @@ export default function SchoolSignIn() {
   }
 
   const schema = yup.object().shape({
-    email: yup.string().required('Your Full Name is Required!'),
+    email: yup.string().required('Email is required'),
     password: yup
       .string()
       .min(6, 'Password must be at least 6 characters')
@@ -38,26 +39,25 @@ export default function SchoolSignIn() {
     resolver: yupResolver(schema),
   })
 
-  const onSubmit = (data) => {
-    // Call the mutate function to trigger the login mutation
-    mutation.mutate(data)
-  }
-
   const mutation = useMutation({
-    mutationFn: userService.login, // Assuming userService.register is your API call function
+    mutationFn: schoolService.schoolLogin, // Assuming userService.login is your API call function
     onSuccess: (data) => {
       console.log('Login successful:', data)
-      toast.success(data.message)
+      toast.success('Login successful')
       dispatch(setToken(data?.token))
-      navigate('/dashboard', { replace: true })
+      localStorage.setItem('Flow-Auth-Token', data?.token)
+      navigate('/school-dashboard', { replace: true })
     },
     onError: (error) => {
-      console.error('Registration error:', error)
+      console.error('Login error:', error)
       toast.dismiss()
-      toast.error(error?.message)
-      toast.error(error || 'Registration failed')
+      toast.error(error?.message || error || 'Login failed')
     },
   })
+
+  const onSubmit = (data) => {
+    mutation.mutate(data)
+  }
 
   return (
     <div>
@@ -73,12 +73,12 @@ export default function SchoolSignIn() {
               <label>Email *</label>
               <input type='email' {...register('email', { required: true })} />
               {errors.email && (
-                <p className='error-message'>Email is required</p>
+                <p className='error-message'>{errors.email.message}</p>
               )}
             </div>
             <div className='form-group my-3'>
               <div className='d-flex align-items-center justify-content-between'>
-                <label>Create Password *</label>
+                <label>Password *</label>
                 <Link to='/forgot-password' className='forgot-password'>
                   Forgot Password?
                 </Link>
@@ -101,7 +101,7 @@ export default function SchoolSignIn() {
                 </div>
               </div>
               {errors.password && (
-                <p className='error-message'>Password is required</p>
+                <p className='error-message'>{errors.password.message}</p>
               )}
               {showPasswordError && (
                 <p className='error-message'>Incorrect email or password</p>

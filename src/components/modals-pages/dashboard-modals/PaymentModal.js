@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import userService from '../../../services/api/users';
+import userService from '../../../services/api/user';
 import { setToken } from "../../../redux/reducers/jwtReducer";
 
 

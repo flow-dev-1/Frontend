@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import { useDispatch, useSelector } from "react-redux";
 // import { setToken } from "../../../redux/reducers/jwtReducer";
 import { loginSuccess } from "../../../redux/reducers/userReducer";
-import userService from '../../../services/api/users';
+import userService from '../../../services/api/user';
 import { states } from '../../states';
 import { RotatingLines } from 'react-loader-spinner';
 import { useMutation, useQueryClient } from '@tanstack/react-query';

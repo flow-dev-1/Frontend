@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import userService from '../../../services/api/users';
+import userService from '../../../services/api/user';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { RotatingLines } from 'react-loader-spinner';
@@ -78,7 +78,7 @@ export default function SignIn() {
             <div className="form-group my-3">
               <div className="d-flex align-items-center justify-content-between">
                 <label>Create Password *</label>
-                <Link to="/forgot-password" className='forgot-password'>Forgot Password?</Link>
+                <Link to="/school/forgot-password" className='forgot-password'>Forgot Password?</Link>
               </div>
 
               <div className="d-flex align-items-center input-with-icon">

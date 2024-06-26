@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react'
 import Modal from 'react-modal'
 import SettingsAddNewTeam from '../../../modals/settings-profile/SettingsAddNewTeam'
 import { useQuery, useMutation } from '@tanstack/react-query'
-import adminService from '../../../../../services/api/users'
+import adminService from '../../../../../services/api/user'
 import { RotatingLines } from 'react-loader-spinner' // Import the loading spinner
 import { toast } from 'react-toastify'
 

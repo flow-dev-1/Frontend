@@ -10,7 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-import userService from '../../../services/api/users';
+import userService from '../../../services/api/user';
 import { states } from '../../states';
 import { RotatingLines } from 'react-loader-spinner';
 import { useDispatch } from "react-redux";

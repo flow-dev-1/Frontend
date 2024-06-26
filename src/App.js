@@ -32,8 +32,8 @@ import SchoolEnrolledStudents from './components/school-dashboard/school-pages/s
 import SchoolRegistrationForm from './components/school-dashboard/school-onboarding/registration/SchoolRegistrationForm.js'
 import SchoolSignIn from './components/school-dashboard/school-onboarding/login/SchoolSignIn.js'
 import SchoolForgotPassword from './components/school-dashboard/school-onboarding/login/SchoolForgotPassword.js'
-import SchoolResetPassword from './components/school-dashboard/school-onboarding/login/ResetPassword.js'
-import SigninCategory from './components/common-pages/signin-category/SignupCategory.js'
+import SchoolResetPassword from './components/school-dashboard/school-onboarding/login/SchoolResetPassword.js'
+import SigninCategory from './components/common-pages/signin-category/SigninCategory.js'
 
 function App() {
   return (
@@ -43,23 +43,26 @@ function App() {
           {/*   Onboarding Routes */}
 
           <Route element={<OnboardingRootLayout />}>
-            <Route path='/' element={<SignupCategory />} />
+            <Route index element={<SignupCategory />} />
             <Route path='/sign-in' element={<SigninCategory />} />
-            <Route path='/sign-up/registration' element={<RegistrationForm />} />
-            <Route path='/sign-in' element={<SignIn />} />
+            <Route
+              path='/individual/sign-up/registration'
+              element={<RegistrationForm />}
+            />
+            <Route path='/individual/sign-in' element={<SignIn />} />
             <Route path='/forgot-password' element={<ForgotPassword />} />
             <Route path='/reset-password' element={<ResetPassword />} />
             <Route
-              path='/dashboard/signup/registration'
+              path='/school/sign-up/registration'
               element={<SchoolRegistrationForm />}
             />
-            <Route path='/dashboard/sign-in' element={<SchoolSignIn />} />
+            <Route path='/school/sign-in' element={<SchoolSignIn />} />
             <Route
-              path='/dashboard/forgot-password'
+              path='/school/forgot-password'
               element={<SchoolForgotPassword />}
             />
             <Route
-              path='/dashboard/reset-password'
+              path='/school/reset-password'
               element={<SchoolResetPassword />}
             />
           </Route>

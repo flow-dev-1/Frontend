@@ -1,28 +1,43 @@
-import { createSlice } from "@reduxjs/toolkit";
-
+import { createSlice } from '@reduxjs/toolkit'
 
 const userSlice = createSlice({
-    name: "user",
-    initialState: {
+  name: 'user',
+  initialState: {
+    user: null,
+    connections: [],
+    isSidebarOpen: false,
+  },
+  reducers: {
+    loginSuccess: (state, action) => {
+      return {
+        ...state,
+        user: action.payload,
+      }
+    },
+    logoutSuccess: (state) => {
+      return {
+        ...state,
         user: null,
+        connections: [],
+      }
     },
-    reducers: {
-        loginSuccess: (state, action) => {
-            return {
-                ...state,
-                user: action.payload,
-            };
-        },
-        logoutSuccess: (state) => {
-            return {
-                ...state,
-                user: null,
-
-            };
-        },
-
+    connections: (state, action) => {
+      return {
+        ...state,
+        connections: action.payload,
+      }
     },
-});
+    toggleSidebar: (state) => {
+      state.isSidebarOpen = !state.isSidebarOpen
+    },
+  },
+})
 
-export const { loginSuccess, logoutSuccess } = userSlice.actions;
-export default userSlice.reducer;
+export const {
+  loginSuccess,
+  logoutSuccess,
+  offlineMode,
+  toggleSidebar,
+  connections,
+} = userSlice.actions
+export default userSlice.reducer

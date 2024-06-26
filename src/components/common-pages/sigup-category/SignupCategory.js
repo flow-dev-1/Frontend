@@ -15,7 +15,7 @@ export default function SignupCategory() {
 
       <div className='back-btn'>
         <Link to='/'>
-          <Icon icon='fa6-solid:arrow-left' className='back-icon'  width={30}/>
+          <Icon icon='fa6-solid:arrow-left' className='back-icon' width={30} />
         </Link>
         <h2>Back to Home</h2>
       </div>
@@ -25,7 +25,14 @@ export default function SignupCategory() {
           <img src={schoolImage} alt='School' className='card-image' />
           <div className='card-content'>
             <h2> For Schools</h2>
-            <button className='btn signup-button'>Coming Soon</button>
+            <button
+              className='btn signup-button'
+              onClick={() => {
+                navigate('/school/sign-up/registration')
+              }}
+            >
+              Register Now
+            </button>
           </div>
         </div>
 
@@ -36,7 +43,7 @@ export default function SignupCategory() {
             <button
               className='btn signup-button'
               onClick={() => {
-                navigate('/signup/registration')
+                navigate('/individual/sign-up/registration')
               }}
             >
               Register Now

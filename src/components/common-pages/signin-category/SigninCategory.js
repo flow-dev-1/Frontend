@@ -25,7 +25,14 @@ export default function SigninCategory() {
           <img src={schoolImage} alt='School' className='card-image' />
           <div className='card-content'>
             <h2> For Schools</h2>
-            <button className='btn signup-button'>Coming Soon</button>
+            <button
+              className='btn signup-button'
+              onClick={() => {
+                navigate('/school/sign-in')
+              }}
+            >
+              Sign In
+            </button>
           </div>
         </div>
 
@@ -36,10 +43,10 @@ export default function SigninCategory() {
             <button
               className='btn signup-button'
               onClick={() => {
-                navigate('/signup/registration')
+                navigate('/individual/sign-in')
               }}
             >
-              Register Now
+              Sign In
             </button>
           </div>
         </div>

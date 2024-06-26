@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 import EmailVerificationSuccessful from '../../modals-pages/onboarding-modals/EmailVerificationSuccessful';
 import { useDispatch } from "react-redux";
 import { setToken } from "../../../redux/reducers/jwtReducer";
-import userService from '../../../services/api/users';
+import userService from '../../../services/api/user';
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'

@@ -1,7 +1,7 @@
 import { Outlet, Link, useLocation } from 'react-router-dom'
 import './dashboard.css'
 import Sidebar from './sidebar/SideBar'
-import userService from '../../services/api/users'
+import userService from '../../services/api/user'
 import { useQuery } from '@tanstack/react-query'
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
