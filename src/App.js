@@ -34,6 +34,8 @@ import SchoolSignIn from './components/school-dashboard/school-onboarding/login/
 import SchoolForgotPassword from './components/school-dashboard/school-onboarding/login/SchoolForgotPassword.js'
 import SchoolResetPassword from './components/school-dashboard/school-onboarding/login/SchoolResetPassword.js'
 import SigninCategory from './components/common-pages/signin-category/SigninCategory.js'
+import ProtectedRoute from './components/ProtectedRoutes.js'
+
 
 function App() {
   return (
@@ -84,7 +86,14 @@ function App() {
           </Route>
         </Route>
 
-        <Route path='/school-dashboard' element={<SchoolDashboard />}>
+        <Route
+          path='/school-dashboard'
+          element={
+            <ProtectedRoute>
+              <SchoolDashboard />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<SchoolOverview />} />
           <Route
             path='/school-dashboard/settings/profile'
@@ -123,7 +132,9 @@ function App() {
             path='/school-dashboard/payment-history'
             element={<SchoolPaymentHistory />}
           />
+          {/*for other users*/}
         </Route>
+
       </Routes>
       <ToastContainer position='top-right' />
     </BrowserRouter>

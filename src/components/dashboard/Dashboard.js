@@ -25,6 +25,14 @@ export default function Dashboard() {
 
   // You might want to render a loading indicator here
 
+  const logOut = () => {
+    // localStorage.removeItem('Flow-Auth-Token');
+    localStorage.clear();
+    dispatch(logoutSuccess());
+    dispatch(clearToken())
+    navigate('/sign-in', { replace: true })
+  };
+
   return (
     // <div className="dashboard">
     <div
@@ -39,7 +47,7 @@ export default function Dashboard() {
           <Link to='/dashboard' className='navbar-logo'>
             <img src={logo} alt='' />
           </Link>
-          <div className='navbar-logo' style={{ cursor: 'pointer' }}>
+          <div className='navbar-logo' onClick={logOut} style={{ cursor: 'pointer' }}>
             Logout
           </div>
         </div>

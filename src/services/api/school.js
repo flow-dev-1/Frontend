@@ -12,10 +12,10 @@ class SchoolOBJ {
     }
   }
   //Get Admins
-  getAdmins = async () => {
+  getAdmins = async (params) => {
     try {
       // Check if data is not empty
-      const response = await api.get(`api/admins/all`)
+      const response = await api.get(`api/schools/${params}/team`)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
@@ -25,7 +25,7 @@ class SchoolOBJ {
   getMyProfile = async () => {
     try {
       // Check if data is not empty
-      const response = await api.get(`api/admins/me`)
+      const response = await api.get(`api/schools/me`)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
@@ -33,6 +33,7 @@ class SchoolOBJ {
   }
   //Login
   schoolLogin = async (data) => {
+
     try {
       const response = await api.post(`api/schools/login`, data)
       return response.data
@@ -53,7 +54,16 @@ class SchoolOBJ {
   //Send Invite
   adminInvite = async (data) => {
     try {
-      const response = await api.post(`api/admins/invitation`, data)
+      const response = await api.post(`api/schools/invitation`, data)
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+
+  deleteAdmin = async (params) => {
+    try {
+      const response = await api.delete(`api/schools/teams/${params}`)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
@@ -118,19 +128,30 @@ class SchoolOBJ {
   //Update Profile
   changePassword = async (data) => {
     try {
-      const response = await api.patch(`api/admins/password`, data)
+      const response = await api.patch(`api/schools/password`, data)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
     }
   }
 
-  //Delete Admin
-  deleteAdmin = async (params) => {
+  //Get app members
+  getCourses = async (params, type) => {
     try {
       // Check if data is not empty
 
-      const response = await api.delete(`api/admins/${params}`)
+      const response = await api.get(`api/schools/${params}/courses?type=${type}`)
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+
+  getEnrolledCourseData = async (params1, params2) => {
+
+    try {
+      // Check if data is not empty
+      const response = await api.get(`api/schools/${params1}/courses/enrolled/${params2}`)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
@@ -179,17 +200,7 @@ class SchoolOBJ {
       throw err?.response?.data || err.message
     }
   }
-  //Admin change course status
-  adminDeleteCourse = async (params) => {
-    try {
-      // Check if data is not empty
 
-      const response = await api.put(`api/admins/courses/${params}`)
-      return response.data
-    } catch (err) {
-      throw err?.response?.data || err.message
-    }
-  }
 
   //Get app members
   getMembers = async () => {
@@ -203,52 +214,10 @@ class SchoolOBJ {
     }
   }
 
-  //Get user's Connections
-  sendConnectionRequest = async (receiverId) => {
-    try {
-      const response = await api.put(
-        `api/users/${receiverId}/connection?status=request`
-      )
-      return response.data
-    } catch (err) {
-      throw err?.response?.data || err.message
-    }
-  }
 
-  //Get user's Connections
-  handleConnectionRequest = async (receiverId, status) => {
-    try {
-      const response = await api.put(
-        `api/users/${receiverId}/connection?status=${status}`
-      )
-      return response.data
-    } catch (err) {
-      throw err?.response?.data || err.message
-    }
-  }
 
-  //Get user's Notifications
-  getNotifications = async () => {
-    try {
-      const response = await api.get(`api/users/notifications`)
-      return response.data
-    } catch (err) {
-      throw err?.response?.data || err.message
-    }
-  }
 
-  // Update Single Group
 
-  editGroup = async (params, data) => {
-    try {
-      // Check if data is not empty
-
-      const response = await api.patch(`api/admin/groups/${params}`, data)
-      return response.data
-    } catch (err) {
-      throw err?.response?.data || err.message
-    }
-  }
   // Update Single Forum
 
   editForum = async (params, data) => {
@@ -302,5 +271,5 @@ class SchoolOBJ {
   }
 }
 
-const admin = new SchoolOBJ()
-export default admin
+const schoolService = new SchoolOBJ()
+export default schoolService

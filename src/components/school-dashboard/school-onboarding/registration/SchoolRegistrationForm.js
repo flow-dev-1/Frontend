@@ -15,7 +15,7 @@ import { RotatingLines } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
 import { setToken } from '../../../../redux/reducers/jwtReducer'
 import 'react-phone-number-input/style.css'
-import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input'
+import PhoneInput, { isValidPhoneNumber, getCountryCallingCode } from 'react-phone-number-input'
 import { type } from '@testing-library/user-event/dist/type'
 import { useLocation } from 'react-router-dom'
 import SchoolOTP from '../../modals/school-onboarding-modals/SchoolOTP'
@@ -26,6 +26,7 @@ export default function SchoolRegistrationForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
   const location = useLocation()
+  const [countryCode, setCountryCode] = useState(getCountryCallingCode("NG"));
 
   const schema = yup.object().shape({
     school_name: yup.string().required('Name of School is required'),
@@ -207,6 +208,7 @@ export default function SchoolRegistrationForm() {
                 padding: '1px', // Add padding for better visual appearance
               }}
             />
+            {countryCode && <span className='country-code'>+{countryCode}</span>}
             {errors.phone && (
               <p className='error-message'>{errors.phone.message}</p>
             )}

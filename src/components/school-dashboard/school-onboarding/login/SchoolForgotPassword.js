@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Modal from 'react-modal'
 import EmailVerificationSuccessful from '../../modals/EmailVerificationSuccessful'
 import { useForm } from 'react-hook-form'
@@ -17,6 +17,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 export default function ForgotPassword() {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [email, setEmail] = useState('')
+  const { id } = useParams()
+
+  console.log(id, "Id o")
 
   const dispatch = useDispatch()
   const location = useLocation()

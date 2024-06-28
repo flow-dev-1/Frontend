@@ -1,42 +1,39 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import './settings-team.css'
 import { Icon } from '@iconify/react'
 import Modal from 'react-modal'
 import SettingsAddNewTeam from '../../../modals/settings-profile/SettingsAddNewTeam'
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import adminService from '../../../../../services/api/user'
-import { RotatingLines } from 'react-loader-spinner' // Import the loading spinner
+import { RotatingLines } from 'react-loader-spinner'
 import { toast } from 'react-toastify'
+import { useSelector } from 'react-redux'
+import schoolService from '../../../../../services/api/school'
 
 const SchoolSettingsTeams = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [modalIsOpenSuccess, setModalIsOpenSuccess] = useState(false)
   const [showDropdown, setShowDropdown] = useState(null)
+  const queryClient = useQueryClient()
+  const toastId = useRef(null)
 
-  const {
-    data: admins,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['get-admin-roles'],
-    queryFn: adminService.getAdmins,
-  })
+  const { user } = useSelector((state) => state.user);
 
-  const adminData = admins?.admins
+  let schoolId;
 
-  // const deleteMutation = useMutation({
-  //   mutationFn: (postId) => adminService.deleteAdmin(postId),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries(['get-admin-roles'])
-  //     toast.success('Admin deleted successfully')
-  //     setModalIsOpenSuccess(false)
-  //   },
-  //   onError: (error) => {
-  //     console.error('Like error:', error)
-  //     toast.error(error.message)
-  //     setModalIsOpenSuccess(false)
-  //   },
-  // })
+  if (user.isSchool) {
+    schoolId = user._id
+  }
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['school-teams'],
+    queryFn: () => schoolService.getAdmins(schoolId),
+    enabled: !!schoolId,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false
+  });
+
+  const adminData = data?.teams?.team
 
   const closeModal = () => {
     setModalIsOpen(false)
@@ -47,16 +44,44 @@ const SchoolSettingsTeams = () => {
     setShowDropdown(showDropdown === index ? null : index)
   }
 
-  // const handleDelte = (postId) => {
-  //   deleteMutation.mutate(postId)
-  // }
+  const mutation = useMutation({
+    mutationFn: schoolService.deleteAdmin,
+    onMutate: () => {
+      toastId.current = toast.loading("Deleting team member...");
+    },
+    onSuccess: (data) => {
+      toast.update(toastId.current, {
+        render: "Team member deleted successfully",
+        type: "success",
+        isLoading: false,
+        autoClose: 3000
+      });
+      queryClient.invalidateQueries(['school-teams']);
+      setModalIsOpenSuccess(true)
+    },
+    onError: (error) => {
+      console.log(error)
+      toast.update(toastId.current, {
+        render: error?.message || "Error deleting team member",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000
+      });
+    },
+  });
+
+  const handleDelete = (adminId) => {
+    if (!window.confirm("Are you sure you want to delete this team member?")) return
+    mutation.mutate(adminId)
+  }
+
   return (
     <div>
       <div className='d-flex justify-content-between align-items-end mb-4'>
         <div className='teams'>
           <h3>Teams</h3>
           <p>
-            Here is a list of your teammates. Feel free to add or remove at
+            Here is a list of your team mates. Feel free to add or remove at
             will.
           </p>
         </div>
@@ -85,15 +110,16 @@ const SchoolSettingsTeams = () => {
                 <td>{`${admin.first_name} ${admin.last_name}`}</td>
                 <td>{admin.email}</td>
                 <td>
-                  {admin.adminType === '66753525c372d9ce450a405f'
-                    ? 'Super-Admin'
-                    : 'Admin'}
+                  {admin.school === data?.teams?._id
+                    ? admin?.schoolAdminPermission
+                    : admin?.newInvite?.schoolAdminPermission
+                  }
                 </td>
                 <td style={{ textAlign: 'center' }}>
                   <span
                     style={{
-                      color: admin.isVerified ? 'green' : 'red',
-                      backgroundColor: admin.isVerified ? '#e6ffe6' : '#ffe6e6',
+                      color: admin.schoolAdminStatus !== "Confirmed" ? 'red' : 'green',
+                      backgroundColor: admin.schoolAdminStatus !== "Confirmed" ? '#ffe6e6' : '#e6ffe6',
                       padding: '5px 10px',
                       borderRadius: '20px',
                       textAlign: 'center',
@@ -101,10 +127,17 @@ const SchoolSettingsTeams = () => {
                     }}
                   >
                     {' '}
-                    {admin.isVerified ? 'Active' : 'Inactive'}
+                    {
+                      admin.school === data?.teams?._id
+                        ? admin.schoolAdminStatus
+                        : "Pending"
+                    }
                   </span>
                 </td>
-                <td>{new Date(admin.createdAt).toLocaleDateString()}</td>
+                <td>{new Date(admin.school === data?.teams?._id
+                  ? admin?.schoolAdminDate
+                  : admin?.newInvite?.schoolAdminDate
+                ).toLocaleDateString()}</td>
                 <td>
                   <div className='action-container'>
                     <Icon
@@ -113,7 +146,7 @@ const SchoolSettingsTeams = () => {
                     />
                     {showDropdown === index && (
                       <div className='dropdown'>
-                        <button>
+                        <button onClick={() => handleDelete(admin._id)} disabled={mutation.isPending}>
                           <span>
                             <Icon icon='fluent:delete-20-regular' />
                           </span>
@@ -144,7 +177,7 @@ const SchoolSettingsTeams = () => {
           </div>
           <h4 className='text-center'>Successful</h4>
           <p className='text-center'>
-            You have successfully invited a teammate.
+            You have successfully Deleted a team member.
           </p>
         </div>
       </Modal>

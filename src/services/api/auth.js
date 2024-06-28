@@ -136,6 +136,7 @@ class AuthOBJ {
       throw err?.response?.data || err.message
     }
   }
+
 }
 const auth = new AuthOBJ()
 export default auth

@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Icon } from '@iconify/react'
 import './settings-modal.css'
-import adminService from '../../../../services/api/user'
 import { RotatingLines } from 'react-loader-spinner'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import Modal from 'react-modal'
+import schoolService from '../../../../services/api/school'
 
 const schema = yup.object().shape({
   first_name: yup.string().required('First Name is required'),
@@ -23,7 +23,8 @@ const schema = yup.object().shape({
 
 const SettingsAddNewTeam = ({ closeModal }) => {
   const [modalIsOpenSuccess, setModalIsOpenSuccess] = useState(false)
-  const [hasMutated, setHasMutated] = useState(false)
+  const mutationTriggered = useRef(false)
+  const queryClient = useQueryClient()
 
   const closeSuccessModal = () => {
     setModalIsOpenSuccess(false)
@@ -38,43 +39,25 @@ const SettingsAddNewTeam = ({ closeModal }) => {
     resolver: yupResolver(schema),
   })
 
-  const navigate = useNavigate()
-
-  const {
-    data: adminRoles,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['get-admin-roles'],
-    queryFn: adminService.getAdminRoles,
-  })
-
-  console.log(adminRoles)
 
   const mutation = useMutation({
-    mutationFn: adminService.adminInvite,
+    mutationFn: schoolService.adminInvite,
     onSuccess: (data) => {
-      if (!hasMutated) {
-        setModalIsOpenSuccess(true)
-        setHasMutated(true)
-      }
+      setModalIsOpenSuccess(true)
+      queryClient.invalidateQueries(['school-teams'])
+      mutationTriggered.current = false
     },
     onError: (error) => {
-      if (!hasMutated) {
-        toast.error(error?.message)
-        setHasMutated(true)
-      }
+      toast.error(error?.message)
+      mutationTriggered.current = false
     },
   })
 
-  useEffect(() => {
-    if (mutation.isSuccess || mutation.isError) {
-      setHasMutated(false)
-    }
-  }, [mutation.isSuccess, mutation.isError])
-
   const onSubmit = (data) => {
-    mutation.mutate(data)
+    if (!mutationTriggered.current) {
+      mutationTriggered.current = true
+      mutation.mutate(data)
+    }
   }
 
   return (
@@ -115,9 +98,9 @@ const SettingsAddNewTeam = ({ closeModal }) => {
                 onChange={(e) => setValue('position', e.target.value)}
               >
                 <option value=''>Select...</option>
-                {adminRoles?.adminRoles.map((role) => (
-                  <option key={role._id} value={role._id}>
-                    {role.type}
+                {["Admin", "Student"].map((role, i) => (
+                  <option key={i} value={role}>
+                    {role}
                   </option>
                 ))}
               </select>

@@ -1,10 +1,27 @@
-import { Outlet, Link, useLocation } from 'react-router-dom'
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import SchoolSidebar from './sidebar/SchoolSidebar'
 import logo from '../../../../assets/logo.png'
 import SchoolSingleCoursePage from '../school-single-course-page/SchoolSingleCoursePage'
 import './dashboard.css'
+import { useDispatch } from 'react-redux';
+import { logoutSuccess } from "../../../../redux/reducers/userReducer";
+import { clearToken } from "../../../../redux/reducers/jwtReducer";
+
+
+
 export default function SchoolDashboard() {
-  const location = useLocation()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const logOut = () => {
+    localStorage.removeItem('Flow-Auth-Token');
+    dispatch(logoutSuccess());
+    dispatch(clearToken())
+    navigate('/sign-in', { replace: true })
+  };
+
+
   return (
     <div
       className={
@@ -18,7 +35,7 @@ export default function SchoolDashboard() {
           <Link to='/dashboard' className='navbar-logo'>
             <img src={logo} alt='' />
           </Link>
-          <div className='navbar-logo' style={{ cursor: 'pointer' }}>
+          <div className='navbar-logo' onClick={logOut} style={{ cursor: 'pointer' }}>
             Logout
           </div>
         </div>

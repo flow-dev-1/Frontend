@@ -4,72 +4,35 @@ import logo from '../../../../../assets/school-logo.png'
 import { Icon } from '@iconify/react'
 import SettingsEditProfileModal from '../../../modals/settings-profile/SettingsEditProfileModal'
 import Modal from 'react-modal'
+import { useQuery } from '@tanstack/react-query'
+import schoolService from '../../../../../services/api/school'
+import { useSelector } from 'react-redux'
 
 const SchoolSettingsProfile = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
-  const [showDropdown, setShowDropdown] = useState(null)
   const [selectedMember, setSelectedMember] = useState(null)
   const [selectedTable, setSelectedTable] = useState(null)
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
-  const teamMembersData = [
-    {
-      id: 1,
-      name: 'Jane Doe',
-      email: 'janedoe@gmail.com',
-      permission: 'Superadmin',
-      status: 'Active',
-      dateAdded: '22-09-23',
-    },
-    {
-      id: 2,
-      name: 'John Smith',
-      email: 'johnsmith@gmail.com',
-      permission: 'Admin',
-      status: 'Inactive',
-      dateAdded: '15-10-23',
-    },
-    {
-      id: 3,
-      name: 'Alice Johnson',
-      email: 'alicejohnson@gmail.com',
-      permission: 'User',
-      status: 'Active',
-      dateAdded: '30-11-23',
-    },
-  ]
 
-  const notificationsEmailsData = [
-    {
-      id: 1,
-      name: 'Emily Clark',
-      email: 'emilyclark@gmail.com',
-      permission: 'Notification',
-      status: 'Active',
-      dateAdded: '12-05-23',
-    },
-    {
-      id: 2,
-      name: 'Michael Brown',
-      email: 'michaelbrown@gmail.com',
-      permission: 'Notification',
-      status: 'Inactive',
-      dateAdded: '17-08-23',
-    },
-    {
-      id: 3,
-      name: 'Sarah Davis',
-      email: 'sarahdavis@gmail.com',
-      permission: 'Notification',
-      status: 'Active',
-      dateAdded: '25-11-23',
-    },
-  ]
+  const { user } = useSelector((state) => state.user);
 
-  const [teamMembers, setTeamMembers] = useState(teamMembersData)
-  const [notificationsEmails, setNotificationsEmails] = useState(
-    notificationsEmailsData
-  )
+  let schoolId;
+
+  // ToDO: Do a check if its a school or a user
+  if (user.isSchool) {
+    schoolId = user._id
+  }
+
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['school-profile'],
+    queryFn: () => schoolService.getMyProfile(schoolId),
+    enabled: !!schoolId,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false
+  });
+
+
 
   const openModal = (member, table) => {
     setSelectedMember(member)
@@ -83,36 +46,19 @@ const SchoolSettingsProfile = () => {
     setSelectedTable(null)
   }
 
-  const handleActionClick = (index) => {
-    setShowDropdown(showDropdown === index ? null : index)
-  }
-
-  const handleDelete = () => {
-    if (selectedTable === 'teamMembers') {
-      setTeamMembers(
-        teamMembers.filter((member) => member.id !== selectedMember.id)
-      )
-    } else if (selectedTable === 'notificationsEmails') {
-      setNotificationsEmails(
-        notificationsEmails.filter((member) => member.id !== selectedMember.id)
-      )
-    }
-    closeModal()
-    alert('Successfully deleted')
-  }
 
   return (
     <div className='school-profile'>
       <div className='heading-flex'>
         <div className='school-header'>
           <div className='school-logo'>
-            <img src={logo} alt='School Logo' />
+            <img src={data?.school?.photo} alt='School Logo' />
           </div>
           <div className='school-info'>
-            <h1 className='h1'>Greensprings School</h1>
-            <p>22, Awolowo Way, Ikoyi</p>
-            <p>LGA | STATE</p>
-            <p>NIGERIA 🇳🇬</p>
+            <h1 className='h1'>{data?.school?.school_name}</h1>
+            <p>{data?.school?.address}</p>
+            <p>{data?.school?.lga} | {data?.school?.state}</p>
+            <p>{data?.school?.country} 🇳🇬</p>
           </div>
         </div>
         <button className='edit-btn' onClick={() => setModalIsOpen(true)}>
@@ -125,13 +71,13 @@ const SchoolSettingsProfile = () => {
 
       <div className='heading banner'>
         <p>
-          <span>Contact Person:</span> Mrs. Justina Joe
+          <span>Contact Person:</span> {data?.school?.contact_name}
         </p>
         <p>
-          <span>Email:</span> AdeyemiB@greensprings.com
+          <span>Email:</span> {data?.school?.email}
         </p>
         <p>
-          <span>Phone Number:</span> +2348123456789
+          <span>Phone Number:</span> {data?.school?.phone}
         </p>
       </div>
       <Modal

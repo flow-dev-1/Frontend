@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
+import { encryptURI } from '../../../../../utils/encryption'
 
-const SchoolCourseCardEnrolled = ({ openModal, course }) => {
+const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
+
+  const [course] = useState(courseData.course)
   const navigate = useNavigate()
 
   const navigateToCourse = () => {
-    navigate(`/school-dashboard/courses/enrolled/${course.id}`)
+    navigate(`/school-dashboard/courses/enrolled/${encryptURI(courseData._id)}`)
   }
 
   // enrolled color
@@ -28,37 +31,53 @@ const SchoolCourseCardEnrolled = ({ openModal, course }) => {
   let reviewBtnClass
   let detailsBtnClass
 
-  if (course.status.enrolled) {
-    reviewBtnColor = darkGreen
-    detailsBtnColor = lightGreen
-    reviewBtnClass = 'enrolled'
-    detailsBtnClass = 'enrolled'
-  } else {
-    reviewBtnColor =
-      course.category.toLowerCase() === 'students' ? darkTertiary : darkEducator
-    detailsBtnColor =
-      course.category.toLowerCase() === 'students'
-        ? lightTertiary
-        : lightEducator
+  // if (course.status.enrolled) {
+  //   reviewBtnColor = darkGreen
+  //   detailsBtnColor = lightGreen
+  //   reviewBtnClass = 'enrolled'
+  //   detailsBtnClass = 'enrolled'
+  // } else {
+  //   reviewBtnColor =
+  //     course.category.toLowerCase() === 'students' ? darkTertiary : darkEducator
+  //   detailsBtnColor =
+  //     course.category.toLowerCase() === 'students'
+  //       ? lightTertiary
+  //       : lightEducator
 
-    reviewBtnClass =
-      course.category.toLowerCase() === 'students' ? 'not-enrolled' : 'educator'
-    detailsBtnClass =
-      course.category.toLowerCase() === 'students' ? 'not-enrolled' : 'educator'
+  //   reviewBtnClass =
+  //     course.category.toLowerCase() === 'students' ? 'not-enrolled' : 'educator'
+  //   detailsBtnClass =
+  //     course.category.toLowerCase() === 'students' ? 'not-enrolled' : 'educator'
+  // }
+
+  const likesPercent = (likes, courseEnrollment) => {
+    if (likes === 0) return 0
+    return (likes / courseEnrollment) * 100
+  }
+
+  const viewSingleCourse = (url) => {
+    window.open(url, '_blank')
+  }
+
+  const truncateText = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...'
+    }
+    return text
   }
 
   return (
     <div onClick={navigateToCourse} style={{ cursor: 'pointer' }}>
       <div className='course-card'>
         <div className='course-card-img'>
-          <img src={course.dispImg} alt='' />
-          <div className='course-card-category'>{course.category}</div>
+          <img src={course.image} alt='' />
+          <div className='course-card-category'>{course.grade !== "Educators" ? "Students" : "Educators"}</div>
         </div>
         <div className='course-card-title'>
           <h3>{course.title}:</h3>
           <h3>{course.subtitle}</h3>
         </div>
-        <p className='course-card-desc'>{course.description}</p>
+        {truncateText(course.description, 100)}
         <div className='users-review'>
           <div className='users-count'>
             <span>
@@ -67,7 +86,8 @@ const SchoolCourseCardEnrolled = ({ openModal, course }) => {
                 style={{ color: reviewBtnColor }}
               />{' '}
             </span>
-            {course.usersCount}
+            {course?.courseEnrollment?.length}{' '}
+            Students
           </div>
           <div className='likes-count'>
             <span>
@@ -76,7 +96,10 @@ const SchoolCourseCardEnrolled = ({ openModal, course }) => {
                 style={{ color: reviewBtnColor }}
               />{' '}
             </span>
-            {course.likesCountPercent}%
+            {likesPercent(
+              course?.likes?.length,
+              course?.courseEnrollment?.length
+            )}%
           </div>
         </div>
         <div className='course-card-buttons'>

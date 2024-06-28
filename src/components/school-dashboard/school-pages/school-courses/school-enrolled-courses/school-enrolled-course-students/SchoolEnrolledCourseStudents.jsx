@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal'
 import './enrolled-course-student.css'
 import courseImg1 from '../../../../../../assets/course1.png'
@@ -7,61 +7,43 @@ import courseImg3 from '../../../../../../assets/course3.png'
 import { Icon } from '@iconify/react'
 import CourseDetailModal from '../../../../modals/courses/CourseDetailModal'
 import SchoolCourseCardEnrolled from '../../school-course-card/SchoolCourseCardEnrolled'
+import { useQuery } from '@tanstack/react-query'
+import schoolService from "../../../../../../services/api/school"
+import { useSelector } from "react-redux";
+import { RotatingSquare } from 'react-loader-spinner'
 
 Modal.setAppElement('#root') // This is to avoid screen readers issues with React Modal
 
-const initialCourses = [
-  {
-    id: 1,
-    category: 'Students',
-    dispImg: courseImg1,
-    title: 'Max the Explorer Monkey',
-    subtitle: 'Growth Mindset',
-    description:
-      'The curriculum combines engaging educational content, interactive activities, and reflective discussions to...',
-    status: {
-      enrolled: true,
-      progress: '10',
-    },
-    likesCountPercent: 98,
-    usersCount: 1548,
-  },
-  {
-    id: 2,
-    category: 'Students',
-    dispImg: courseImg2,
-    title: 'Flowa the Money Manager',
-    subtitle: 'Mind and Money',
-    description:
-      'The curriculum combines engaging educational content, interactive activities, and reflective discussions to...',
-    status: {
-      enrolled: false,
-      progress: '0',
-    },
-    likesCountPercent: 98,
-    usersCount: 1548,
-  },
-  {
-    id: 3,
-    category: 'Educators',
-    dispImg: courseImg3,
-    title: 'Understanding Your Students',
-    subtitle: 'SEL for Educators',
-    description:
-      'The curriculum combines engaging educational content, interactive activities, and reflective discussions to...',
-    status: {
-      enrolled: false,
-      progress: '0',
-    },
-    likesCountPercent: 98,
-    usersCount: 1548,
-  },
-]
 
 const SchoolEnrolledCourseStudents = () => {
-  const [courses] = useState(initialCourses)
+  const { user } = useSelector((state) => state.user);
+  const [courses, setCourses] = useState([])
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [selectedCourse, setSelectedCourse] = useState(null)
+  let schoolId;
+
+  // ToDO: Do a check if its a school or a user
+  if (user.isSchool) {
+    schoolId = user._id
+  }
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['school-enrolled-courses'],
+    queryFn: () => schoolService.getCourses(schoolId, "Enrolled"),
+    enabled: !!schoolId,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false
+  });
+
+  useEffect(() => {
+    if (!data) return
+
+    setCourses(data.courses)
+    return () => {
+
+    }
+  }, [data])
+
 
   const openModal = (course) => {
     setSelectedCourse(course)
@@ -120,12 +102,14 @@ const SchoolEnrolledCourseStudents = () => {
           </div>
         </form>
       </div>
-
+      {
+        isLoading && <RotatingSquare />
+      }
       <div className='course-list'>
         {courses.map((course) => (
           <SchoolCourseCardEnrolled
             key={course.id}
-            course={course}
+            courseData={course}
             openModal={openModal}
           />
         ))}
