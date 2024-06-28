@@ -1,6 +1,12 @@
 import { Icon } from '@iconify/react'
+import { useState } from 'react'
 
 const SchoolCourseCard = ({ openModal, course }) => {
+  const [isOn, setIsOn] = useState(false)
+
+  const handleToggle = () => {
+    setIsOn(!isOn)
+  }
   // enrolled color
   const lightGreen = '#D4FFBE'
   const darkGreen = '#4B7E31'
@@ -56,6 +62,8 @@ const SchoolCourseCard = ({ openModal, course }) => {
     return text
   }
 
+  console.log(course)
+
   return (
     <div>
       <div className='course-card'>
@@ -70,22 +78,30 @@ const SchoolCourseCard = ({ openModal, course }) => {
           {/* <h3>{course.subtitle}</h3> */}
         </div>
         {truncateText(course.description, 100)}
-        <div className='users-review'>
-          <div className='users-count'>
+        <div style={{ margin: '1rem 0' }} className='users-review'>
+          <div
+            style={
+              course.status === 'published'
+                ? { color: '#329BD6' }
+                : { color: '#4B7E31' }
+            }
+            className='users-count'
+          >
             <span>
-              <Icon
-                icon='fluent:people-24-regular'
-                style={{ color: reviewBtnColor }}
-              />{' '}
+              <Icon icon='fluent:people-24-regular' />{' '}
             </span>
             {course?.courseEnrollment?.length} Students
           </div>
-          <div className='likes-count'>
+          <div
+            style={
+              course.status === 'published'
+                ? { color: '#329BD6' }
+                : { color: '#4B7E31' }
+            }
+            className='likes-count'
+          >
             <span>
-              <Icon
-                icon='mingcute:thumb-up-line'
-                style={{ color: reviewBtnColor }}
-              />{' '}
+              <Icon icon='mingcute:thumb-up-line' />{' '}
             </span>
             {likesPercent(
               course?.likes?.length,
@@ -93,10 +109,27 @@ const SchoolCourseCard = ({ openModal, course }) => {
             )}
             %
           </div>
+          {course.status === 'published' ? (
+            <div
+              className={`toggle-switch ${isOn ? 'on' : 'off'}`}
+              onClick={handleToggle}
+            >
+              <div className='toggle-knob'></div>
+            </div>
+          ) : (
+            ''
+          )}
         </div>
         <div className='course-card-buttons'>
           <div className='course-card-buttons-main'>
-            <button className={`reviewBtn ${reviewBtnClass}`}>
+            <button
+              style={
+                course.status === 'published'
+                  ? { backgroundColor: '#F8F8F8', color: '#329BD6' }
+                  : { backgroundColor: '#D4FFBE', color: '#4B7E31' }
+              }
+              className={`reviewBtn ${reviewBtnClass}`}
+            >
               <span>
                 <Icon
                   icon='solar:eye-linear'
@@ -108,6 +141,11 @@ const SchoolCourseCard = ({ openModal, course }) => {
             <button
               className={`detailsBtn ${detailsBtnClass}`}
               onClick={() => openModal(course)}
+              style={
+                course.status === 'published'
+                  ? { backgroundColor: darkEducator, color: '#5CE1E6' }
+                  : { backgroundColor: darkGreen, color: 'ffff' }
+              }
             >
               <span>
                 <Icon
@@ -117,6 +155,20 @@ const SchoolCourseCard = ({ openModal, course }) => {
               </span>{' '}
               View Details
             </button>
+            {course.status === 'published' ? (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  fontSize: '12px',
+                }}
+              >
+                <span style={{ color: darkGreen }}>0 %</span> <span>Done</span>
+              </div>
+            ) : (
+              ''
+            )}
           </div>
           {course.status.enrolled ? (
             <div className='course-card-progress'>
