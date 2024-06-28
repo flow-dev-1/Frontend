@@ -20,6 +20,8 @@ const SchoolCourseCard = ({ openModal, course }) => {
   let reviewBtnClass
   let detailsBtnClass
 
+  console.log(course)
+
   if (course.status.enrolled) {
     reviewBtnColor = darkGreen
     detailsBtnColor = lightGreen
@@ -32,7 +34,6 @@ const SchoolCourseCard = ({ openModal, course }) => {
     //   course.category.toLowerCase() == 'students'
     //     ? lightTertiary
     //     : lightEducator
-
     // reviewBtnClass =
     //   course.category.toLowerCase() == 'students' ? 'not-enrolled' : 'educator'
     // detailsBtnClass =
@@ -60,7 +61,9 @@ const SchoolCourseCard = ({ openModal, course }) => {
       <div className='course-card'>
         <div className='course-card-img'>
           <img src={course.image} alt='' />
-          <div className='course-card-category'>{course.grade !== "Educators" ? "Students" : "Educators"}</div>
+          <div className='course-card-category'>
+            {course.grade !== 'Educators' ? 'Students' : 'Educators'}
+          </div>
         </div>
         <div className='course-card-title'>
           <h3>{course.title}:</h3>
@@ -75,8 +78,7 @@ const SchoolCourseCard = ({ openModal, course }) => {
                 style={{ color: reviewBtnColor }}
               />{' '}
             </span>
-            {course?.courseEnrollment?.length}{' '}
-            Students
+            {course?.courseEnrollment?.length} Students
           </div>
           <div className='likes-count'>
             <span>
@@ -88,7 +90,8 @@ const SchoolCourseCard = ({ openModal, course }) => {
             {likesPercent(
               course?.likes?.length,
               course?.courseEnrollment?.length
-            )}%
+            )}
+            %
           </div>
         </div>
         <div className='course-card-buttons'>
@@ -104,7 +107,7 @@ const SchoolCourseCard = ({ openModal, course }) => {
             </button>
             <button
               className={`detailsBtn ${detailsBtnClass}`}
-              onClick={openModal}
+              onClick={() => openModal(course)}
             >
               <span>
                 <Icon

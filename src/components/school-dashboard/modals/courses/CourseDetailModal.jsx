@@ -13,6 +13,8 @@ const CourseDetailModal = ({ course }) => {
     setOpenEnrollModal(false)
   }
 
+  console.log(course)
+
   if (!course) return null
 
   const daysOfWeek = [
@@ -25,8 +27,8 @@ const CourseDetailModal = ({ course }) => {
     'Sunday',
   ]
   const timeOptions = Array.from(
-    { length: 24 },
-    (_, i) => `${String(i).padStart(2, '0')}:00`
+    { length: 10 },
+    (_, i) => `${String(i + 8).padStart(2, '0')}:00`
   )
 
   return (
@@ -78,6 +80,7 @@ const CourseDetailModal = ({ course }) => {
         onRequestClose={closeEnrollementModal}
         daysOfWeek={daysOfWeek}
         timeOptions={timeOptions}
+        course={course}
       />
     </div>
   )

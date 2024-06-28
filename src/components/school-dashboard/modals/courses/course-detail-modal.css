@@ -25,6 +25,19 @@
   cursor: pointer;
 }
 
+.class-input select {
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+input {
+  color: #1e1e1e !important;
+}
+
+select {
+  color: #1e1e1e !important;
+}
+
 .modal-title {
   font-size: 24px;
   margin-bottom: 10px;

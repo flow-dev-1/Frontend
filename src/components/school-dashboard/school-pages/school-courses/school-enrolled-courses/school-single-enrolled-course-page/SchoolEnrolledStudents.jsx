@@ -185,7 +185,7 @@ const SchoolEnrolledStudents = () => {
         isOpen={showCreateModal}
         onRequestClose={closeModals}
         contentLabel='Example Modal'
-        className='custom-modal-otp-two'
+        className='custom-modal-otp-three'
         overlayClassName='custom-overlay'
       >
         <div>
