@@ -1,0 +1,80 @@
+.signup-category {
+    /* padding: 0 40px; */
+    display: flex;
+    flex-direction: column;
+    /* text-align: center; */
+    margin: 60px 0 0 0;
+}
+
+
+.signup-options {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+}
+
+.signup-category .back-button {
+    position: absolute;
+    top: 100px;
+    left: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.back-button .back-icon {
+    font-size: 25px;
+    margin: 0 10px 0 0;
+}
+
+.signup-option {
+    width: 300px;
+    border-radius: 15px;
+    background: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 30px;
+    overflow: hidden;
+  }
+  
+  .signup-option  .card-image {
+    width: 100%;
+    border-radius: 15px 15px 0 0px ;
+    object-fit: cover; 
+    object-position: center;
+  }
+  
+  .signup-option  .card-content {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 40%;
+  }
+  
+  .signup-option h2 {
+    font-size: 35px;
+  }
+  
+  .signup-button, .signup-button:hover {
+    width: 200px;
+    padding: 8px 20px;
+    background-color: #275DAD;
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    border: 2px solid #275DAD;
+    font-size: 14px;
+  }
+  
+  /* .signup-button:hover {
+    background-color: transparent;
+    color: #275DAD;
+  } */
+  

@@ -1,0 +1,13 @@
+.overview {
+    /* padding: 20px; */
+    /* width: 100%; */
+  }
+
+  .browse-all-courses-text{
+    width: 950px;
+    background-color:  #275DAD;
+    padding: 10px ;
+    color: #fff;
+    text-align: left;
+    margin: 20px auto;
+  }

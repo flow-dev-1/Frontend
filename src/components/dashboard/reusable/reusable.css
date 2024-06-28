@@ -1,0 +1,120 @@
+.reusable-course-card {
+    display: flex;
+}
+.course-card {
+
+    width: 300px;
+    border-radius: 20px ;
+    /* padding: 5px; */
+    background: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: space-between;
+    overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
+}
+.reusable-course-card img {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 20px 20px 0 0px;
+    
+}
+.reusable-course-card img.growth-mindset {
+    width: 100%;
+    object-fit: contain;
+    border-radius: 0px;
+    padding: 15px;
+}
+
+
+
+.course-details {
+    /* padding: 10px; */
+}
+
+.course-details h3 {
+    margin-top: 0;
+    font-size: 30px;
+}
+
+.course-details h4 {
+    margin-top: 5px;
+    color: #666;
+    font-size: 24px;
+    color: #00BCC3;
+}
+
+.course-details p {
+    font-size: 12px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-align: justify;
+}
+
+.reusable-course-card .course-card span {
+    display: flex;
+    align-items: center;
+    margin-right: 30px;
+    font-size: 12px;
+}
+
+.reusable-course-card .course-card span .iconify{
+    color: #275DAD;
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+.course-card-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding:  15px;
+    
+}
+.course-card-btn .card-btn {
+
+    font-size: 14px;
+    /* margin-top: 15px; */
+}
+.course-card-btn .card-btn .iconify {
+
+    font-size: 20px;
+}
+.course-card-btn .card-btn.preview{
+    background-color: #F8F8F8;
+    color: #275DAD;
+}
+
+.course-card-btn .card-btn.cart{
+    background-color: #275DAD;
+    color: #FFFFFF;
+    
+}
+
+.course-card-btn .card-btn.enrolled.preview{
+    background-color: #D4FFBE;
+    color: #4B7E31;
+}
+
+.course-card-btn .card-btn.enrolled.cart{
+    background-color: #4B7E31;
+    color: #FFFFFF;
+    
+}
+.courses-list-card-section.enrolled span .iconify, .courses-list-card-section.enrolled h3, .courses-list-card-section.enrolled span.percentage{
+    color: #4B7E31;
+}
+
+.courses-list-card-section.enrolled h4{
+    color: #5B616A;
+}
+
+/* Add more styles as needed */
+
+

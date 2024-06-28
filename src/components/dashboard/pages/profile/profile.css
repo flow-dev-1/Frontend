@@ -1,0 +1,78 @@
+.profile {
+  /* padding: 20px; */
+}
+
+
+
+.user-basic-info{
+display: flex;
+align-items: flex-end;
+justify-content: space-between;
+box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+padding: 10px;
+}
+
+
+.user-basic-info .about-user{
+  display: flex;
+align-items: center;
+justify-content: space-around;
+
+}
+
+.about-user-info h2{
+  font-size: 45px;
+}
+
+.about-user-info p{
+  font-size: 18px;
+}
+
+.user-basic-info .about-user .flag{
+  height: auto;
+  width: 25px;
+}
+.user-basic-info .about-user img{
+ width: 100%;
+ object-fit: cover;
+ object-position: center;
+}
+
+.user-basic-info .about-user .green-spring-div{
+width: fit-content;
+background-color: #ECEDF0;
+font-size: 12px;
+color: #5B616A;
+padding: 5px 10px;
+margin-top: 10px;
+border-radius: 30px;
+border: 1px solid #9e9fa0;
+}
+
+.individual-profile .edit-profile-btn{
+width: 200px;
+background-color: #275DAD;
+font-size: 14px;
+color: #fff;
+padding: 5px 10px;
+}
+
+.user-other-info{
+width: 950px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+background-color: #ECEDF0;
+  padding: 10px;
+  margin-top: 50px;
+}
+
+.user-other-info p{
+color: #275DAD;
+font-size: 16px;
+}
+
+.user-other-info p span{
+color: #5B616A;
+font-size: 12px;
+}
