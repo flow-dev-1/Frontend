@@ -2,8 +2,9 @@
   padding: 20px;
 }
 
-.teams h3, p {
- text-align: left;
+.teams h3,
+p {
+  text-align: left;
 }
 
 .school-header {
@@ -14,6 +15,10 @@
 
 .school-info p {
   text-align: left;
+}
+
+button.update.fix {
+  margin-left: auto;
 }
 
 .heading-flex {
@@ -50,12 +55,12 @@
 }
 
 .heading.banner p {
- color: #275dad;
+  color: #275dad;
 }
 
 .heading.banner p span {
   font-size: 10px;
-  color: #5B616A;
+  color: #5b616a;
   margin-right: 10px;
 }
 

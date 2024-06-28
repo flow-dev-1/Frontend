@@ -1,10 +1,33 @@
-import React from 'react'
-import Modal from 'react-modal'
+import React, { useState } from 'react'
 import { Icon } from '@iconify/react'
 import './course-detail-modal.css'
+import EnrollmentModal from '../Enrollment/EnrollmentModal'
 
 const CourseDetailModal = ({ course }) => {
+  const [openEnrollModal, setOpenEnrollModal] = useState(false)
+  const openEnrollementModal = () => {
+    setOpenEnrollModal(true)
+  }
+
+  const closeEnrollementModal = () => {
+    setOpenEnrollModal(false)
+  }
+
   if (!course) return null
+
+  const daysOfWeek = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ]
+  const timeOptions = Array.from(
+    { length: 24 },
+    (_, i) => `${String(i).padStart(2, '0')}:00`
+  )
 
   return (
     <div>
@@ -45,10 +68,17 @@ const CourseDetailModal = ({ course }) => {
         </li>
       </ul>
       <div className='modal-footer'>
-        <button className='purchase-button'>
+        <button onClick={openEnrollementModal} className='purchase-button'>
           <Icon icon='mdi:cart' width={24} /> N15,000
         </button>
       </div>
+
+      <EnrollmentModal
+        isOpen={openEnrollModal}
+        onRequestClose={closeEnrollementModal}
+        daysOfWeek={daysOfWeek}
+        timeOptions={timeOptions}
+      />
     </div>
   )
 }

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import Modal from 'react-modal'
-import '../onboarding.css'
-import OtpModal from '../../../modals-pages/onboarding-modals/OTP'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -15,9 +13,10 @@ import { RotatingLines } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
 import { setToken } from '../../../../redux/reducers/jwtReducer'
 import 'react-phone-number-input/style.css'
-import PhoneInput, { isValidPhoneNumber, getCountryCallingCode } from 'react-phone-number-input'
-import { type } from '@testing-library/user-event/dist/type'
-import { useLocation } from 'react-router-dom'
+import PhoneInput, {
+  isValidPhoneNumber,
+  getCountryCallingCode,
+} from 'react-phone-number-input'
 import SchoolOTP from '../../modals/school-onboarding-modals/SchoolOTP'
 Modal.setAppElement('#root') // Set the root element for the modal
 
@@ -26,7 +25,9 @@ export default function SchoolRegistrationForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
   const location = useLocation()
-  const [countryCode, setCountryCode] = useState(getCountryCallingCode("NG"));
+  const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
+  const [countries, setCountries] = useState([])
+  const [isNigeria, setIsNigeria] = useState(true) // State to track if the selected country is Nigeria
 
   const schema = yup.object().shape({
     school_name: yup.string().required('Name of School is required'),
@@ -61,6 +62,7 @@ export default function SchoolRegistrationForm() {
     handleSubmit,
     setValue,
     formState: { errors },
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
   })
@@ -77,6 +79,26 @@ export default function SchoolRegistrationForm() {
       dispatch(setToken(token))
     }
   }, [location, dispatch])
+
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const response = await fetch('https://restcountries.com/v3.1/all')
+        const data = await response.json()
+        setCountries(data)
+      } catch (error) {
+        console.error('Error fetching countries:', error)
+      }
+    }
+
+    fetchCountries()
+  }, [])
+
+  // Watch for changes in the country field
+  const selectedCountry = watch('country')
+  useEffect(() => {
+    setIsNigeria(selectedCountry === 'Nigeria')
+  }, [selectedCountry])
 
   const mutation = useMutation({
     mutationFn: schoolService.register, // Assuming userService.register is your API call function
@@ -154,7 +176,11 @@ export default function SchoolRegistrationForm() {
             <label>Country *</label>
             <select {...register('country')}>
               <option value=''>Select Country</option>
-              <option value='Nigeria'>Nigeria</option>
+              {countries.map((country) => (
+                <option key={country.cca2} value={country.name.common}>
+                  {country.name.common}
+                </option>
+              ))}
             </select>
             {errors.country && (
               <p className='error-message'>{errors.country.message}</p>
@@ -162,14 +188,22 @@ export default function SchoolRegistrationForm() {
           </div>
           <div className='form-group'>
             <label>State *</label>
-            <select {...register('state')}>
-              <option value=''>Select State</option>
-              {states.map((state) => (
-                <option key={state} value={state}>
-                  {state}
-                </option>
-              ))}
-            </select>
+            {isNigeria ? (
+              <select {...register('state')}>
+                <option value=''>Select State</option>
+                {states.map((state) => (
+                  <option key={state} value={state}>
+                    {state}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type='text'
+                placeholder='Type here...'
+                {...register('state')}
+              />
+            )}
             {errors.state && (
               <p className='error-message'>{errors.state.message}</p>
             )}
@@ -198,17 +232,25 @@ export default function SchoolRegistrationForm() {
           </div>
           <div className='form-group'>
             <label>Contact Phone Number *</label>
-            <PhoneInput
-              placeholder='Enter phone number'
-              onChange={(val) => setValue('phone', val)}
-              defaultCountry='NG' // Set the default country (change as needed)
-              style={{
-                border: '1px solid #ccc', // Add border to the input
-                borderRadius: '5px', // Add border-radius for rounded corners
-                padding: '1px', // Add padding for better visual appearance
-              }}
-            />
-            {countryCode && <span className='country-code'>+{countryCode}</span>}
+            <div className='flex-code-input'>
+              <PhoneInput
+                placeholder='Enter phone number'
+                onChange={(val) => setValue('phone', val)}
+                defaultCountry='NG' // Set the default country (change as needed)
+                style={{
+                  // Full width
+                  border: '1px solid #ccc', // Add border to the input
+                  borderRadius: '5px', // Add border-radius for rounded corners
+                  padding: '1px', // Add padding for better visual appearance
+                }}
+              />
+              {countryCode && (
+                <span style={{ color: '#5b616a' }} className='country-code'>
+                  +{countryCode}
+                </span>
+              )}
+            </div>
+
             {errors.phone && (
               <p className='error-message'>{errors.phone.message}</p>
             )}

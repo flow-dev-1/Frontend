@@ -180,3 +180,62 @@ tbody {
   color: #50aa50;
   font-size: 50px;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+}
+
+thead {
+  background-color: #f4f4f4;
+}
+
+.action-container {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown button {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  border: none;
+  background: none;
+  text-align: left;
+}
+
+.dropdown button:hover {
+  background-color: #f4f4f4;
+}
+
+.thead tr th {
+  background-color: #fff;
+  font-weight: 500;
+}
+
+.thead tr th {
+  border-left: 1px solid #fff; /* Apply white border on the left */
+  border-right: none; /* Remove border on the right by default */
+}
+
+.thead tr th:first-child {
+  border-left: 0.5px solid #5b616a; /* Remove left border for the first th */
+  /* Remove left border for the first th */
+}
+
+.thead tr th:last-child {
+  border-right: 1px solid #5b616a; /* Apply white border on the right for the last th */
+}

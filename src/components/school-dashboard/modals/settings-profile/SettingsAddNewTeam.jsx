@@ -76,19 +76,31 @@ const SettingsAddNewTeam = ({ closeModal }) => {
             <div>
               <label>First Name *</label>
               <input type='text' {...register('first_name')} />
-              {errors.first_name && <p>{errors.first_name.message}</p>}
+              {errors.first_name && (
+                <p style={{ color: '#FD483D', fontSize: '12px' }}>
+                  {errors.first_name.message}
+                </p>
+              )}
             </div>
             <div>
               <label>Last Name *</label>
               <input type='text' {...register('last_name')} />
-              {errors.last_name && <p>{errors.last_name.message}</p>}
+              {errors.last_name && (
+                <p style={{ color: '#FD483D', fontSize: '12px' }}>
+                  {errors.last_name.message}
+                </p>
+              )}
             </div>
           </div>
           <div className='flex-row'>
             <div>
               <label>Work Email Address *</label>
               <input type='text' {...register('email')} />
-              {errors.email && <p>{errors.email.message}</p>}
+              {errors.email && (
+                <p style={{ color: '#FD483D', fontSize: '12px' }}>
+                  {errors.email.message}
+                </p>
+              )}
             </div>
             <div>
               <label>Permission *</label>
@@ -103,7 +115,11 @@ const SettingsAddNewTeam = ({ closeModal }) => {
                   </option>
                 ))}
               </select>
-              {errors.position && <p>{errors.position.message}</p>}
+              {errors.position && (
+                <p style={{ color: '#FD483D', fontSize: '12px' }}>
+                  {errors.position.message}
+                </p>
+              )}
             </div>
           </div>
           <hr />

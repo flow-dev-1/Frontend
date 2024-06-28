@@ -27,6 +27,21 @@
   z-index: 99;
 }
 
+.flex-code-input {
+  position: relative;
+}
+
+.country-code {
+  position: absolute;
+  top: 0.8rem;
+  color: #5b616a;
+  left: 2.5rem;
+}
+
+.PhoneInputCountry {
+  width: 70px;
+}
+
 .btn.submit-btn.forgot {
   width: 100%;
 }
@@ -276,4 +291,8 @@ label {
   align-items: center;
   justify-content: space-between;
   margin-top: 1rem;
+}
+
+.country-code {
+  color: #5b616a;
 }

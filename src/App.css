@@ -180,12 +180,19 @@ li {
 }
 .custom-modal-otp-two {
   width: 60%;
-
   justify-content: center;
   background-color: #fefefe;
   margin: 0 auto;
   border-radius: 20px;
   padding: 30px 60px;
+}
+.custom-modal-otp-three {
+  width: 75%;
+  justify-content: center;
+  background-color: #fefefe;
+  margin: 0 auto;
+  border-radius: 20px;
+  padding: 20px 40px;
 }
 .send-invite-modal {
   width: 50%;
@@ -250,6 +257,10 @@ p.head-p {
 
 .back-btn h2 {
   margin: 0;
+}
+
+input {
+  color: #1e1e1e !important;
 }
 
 /* For Firefox */

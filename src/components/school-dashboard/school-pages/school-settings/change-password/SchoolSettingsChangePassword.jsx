@@ -87,8 +87,10 @@ const SchoolSettingsChangePassword = () => {
                 {...register('oldPassword')}
               />
               <Icon width={20} icon='mdi:eye' className='icon' />
-              {errors.oldPassword && <p>{errors.oldPassword.message}</p>}
             </div>
+            {errors.oldPassword && (
+              <p style={{ color: '#E83151' }}>{errors.oldPassword.message}</p>
+            )}
           </div>
           <div className='form-group'>
             <label className='new-password'>New Password</label>
@@ -100,8 +102,10 @@ const SchoolSettingsChangePassword = () => {
                 {...register('newPassword')}
               />
               <Icon icon='mdi:eye' width={20} className='icon' />
-              {errors.newPassword && <p>{errors.newPassword.message}</p>}
             </div>
+            {errors.newPassword && (
+              <p style={{ color: '#E83151' }}>{errors.newPassword.message}</p>
+            )}
           </div>
           <div className='form-group'>
             <label className='confirm-password'>Confirm Password</label>
@@ -113,10 +117,12 @@ const SchoolSettingsChangePassword = () => {
                 {...register('confirmPassword')}
               />
               <Icon icon='mdi:eye' width={20} className='icon' />
-              {errors.confirmPassword && (
-                <p>{errors.confirmPassword.message}</p>
-              )}
             </div>
+            {errors.confirmPassword && (
+              <p style={{ color: '#E83151' }}>
+                {errors.confirmPassword.message}
+              </p>
+            )}
           </div>
           <button
             style={{ color: '#275DAD' }}
