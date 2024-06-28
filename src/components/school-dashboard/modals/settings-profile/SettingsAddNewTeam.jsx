@@ -39,7 +39,6 @@ const SettingsAddNewTeam = ({ closeModal }) => {
     resolver: yupResolver(schema),
   })
 
-
   const mutation = useMutation({
     mutationFn: schoolService.adminInvite,
     onSuccess: (data) => {
@@ -63,7 +62,7 @@ const SettingsAddNewTeam = ({ closeModal }) => {
   return (
     <div className='' onSubmit={handleSubmit(onSubmit)}>
       <div className='edit-course-container '>
-        <div className='header'>
+        <div className='header' style={{ border: 'none' }}>
           <p className='team-heading'>Add New Team</p>
           <span onClick={closeModal}>
             <Icon icon='bitcoin-icons:cross-outline' width={30} />
@@ -71,7 +70,7 @@ const SettingsAddNewTeam = ({ closeModal }) => {
         </div>
 
         <p className='sub-heading'>Input teammate’s details below</p>
-
+        <hr />
         <form className='form-borders' onSubmit={handleSubmit(onSubmit)}>
           <div className='flex-row '>
             <div>
@@ -92,13 +91,13 @@ const SettingsAddNewTeam = ({ closeModal }) => {
               {errors.email && <p>{errors.email.message}</p>}
             </div>
             <div>
-              <label>Position *</label>
+              <label>Permission *</label>
               <select
                 {...register('position')}
                 onChange={(e) => setValue('position', e.target.value)}
               >
                 <option value=''>Select...</option>
-                {["Admin", "Student"].map((role, i) => (
+                {['Admin', 'Student'].map((role, i) => (
                   <option key={i} value={role}>
                     {role}
                   </option>
@@ -107,6 +106,7 @@ const SettingsAddNewTeam = ({ closeModal }) => {
               {errors.position && <p>{errors.position.message}</p>}
             </div>
           </div>
+          <hr />
           <button
             type='submit'
             className='update'

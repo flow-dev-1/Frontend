@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-import { useState, useEffect, useRef } from 'react'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Icon } from '@iconify/react'
-import './settings-modal.css'
-=======
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -15,15 +6,10 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { Icon } from '@iconify/react'
 import './settings-modal.css'
 import adminService from '../../../../services/api/user'
->>>>>>> d4eb5d6cc977fc89a61cec832a0f3cf4c910b3d2
 import { RotatingLines } from 'react-loader-spinner'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import Modal from 'react-modal'
-<<<<<<< HEAD
-import schoolService from '../../../../services/api/school'
-=======
->>>>>>> d4eb5d6cc977fc89a61cec832a0f3cf4c910b3d2
 
 const schema = yup.object().shape({
   first_name: yup.string().required('First Name is required'),
@@ -37,12 +23,7 @@ const schema = yup.object().shape({
 
 const SettingsAddEmailNotificationModal = ({ closeModal }) => {
   const [modalIsOpenSuccess, setModalIsOpenSuccess] = useState(false)
-<<<<<<< HEAD
-  const mutationTriggered = useRef(false)
-  const queryClient = useQueryClient()
-=======
   const [hasMutated, setHasMutated] = useState(false)
->>>>>>> d4eb5d6cc977fc89a61cec832a0f3cf4c910b3d2
 
   const closeSuccessModal = () => {
     setModalIsOpenSuccess(false)
@@ -57,27 +38,6 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
     resolver: yupResolver(schema),
   })
 
-<<<<<<< HEAD
-
-  const mutation = useMutation({
-    mutationFn: schoolService.emailAdminInvite,
-    onSuccess: (data) => {
-      setModalIsOpenSuccess(true)
-      queryClient.invalidateQueries(['school-email-team'])
-      mutationTriggered.current = false
-    },
-    onError: (error) => {
-      toast.error(error?.message)
-      mutationTriggered.current = false
-    },
-  })
-
-  const onSubmit = (data) => {
-    if (!mutationTriggered.current) {
-      mutationTriggered.current = true
-      mutation.mutate(data)
-    }
-=======
   const navigate = useNavigate()
 
   const {
@@ -115,7 +75,6 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
 
   const onSubmit = (data) => {
     mutation.mutate(data)
->>>>>>> d4eb5d6cc977fc89a61cec832a0f3cf4c910b3d2
   }
 
   return (
@@ -130,11 +89,7 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
 
         <p className='sub-heading'>Input teammate’s details below</p>
 
-<<<<<<< HEAD
-        <form className='form-borders' onSubmit={handleSubmit(onSubmit)}>
-=======
         <form className='form-borders'>
->>>>>>> d4eb5d6cc977fc89a61cec832a0f3cf4c910b3d2
           <div className='flex-row '>
             <div>
               <label>First Name *</label>
@@ -160,15 +115,9 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
                 onChange={(e) => setValue('position', e.target.value)}
               >
                 <option value=''>Select...</option>
-<<<<<<< HEAD
-                {["Email"].map((role, i) => (
-                  <option key={i} value={role}>
-                    {role}
-=======
                 {adminRoles?.adminRoles.map((role) => (
                   <option key={role._id} value={role._id}>
                     {role.type}
->>>>>>> d4eb5d6cc977fc89a61cec832a0f3cf4c910b3d2
                   </option>
                 ))}
               </select>

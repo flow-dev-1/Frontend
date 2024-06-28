@@ -178,6 +178,15 @@ li {
   border-radius: 20px;
   padding: 30px 60px;
 }
+.custom-modal-otp-two {
+  width: 60%;
+
+  justify-content: center;
+  background-color: #fefefe;
+  margin: 0 auto;
+  border-radius: 20px;
+  padding: 30px 60px;
+}
 .send-invite-modal {
   width: 50%;
   background-color: #fefefe;
