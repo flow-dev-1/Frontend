@@ -28,7 +28,10 @@ const schema = yup.object().shape({
   dayOfWeek: yup.string().required('Day of the Week is required'),
   startTime: yup.string().required('Start Time is required'),
   endTime: yup.string().required('End Time is required'),
-  students: yup.array().min(1, 'At least one student email is required'),
+  students: yup
+    .array()
+    .min(1, 'At least one student email is required')
+    .of(yup.string().email('Invalid email')),
 })
 
 const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
@@ -63,8 +66,6 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   const { user } = useSelector((state) => state.user)
 
   let params1
-
-  // ToDO: Do a check if its a school or a user
   if (user.isSchool) {
     params1 = user._id
   }
@@ -230,7 +231,10 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                   onChange={(e) =>
                     setValue(
                       'students',
-                      e.target.value.split(',').map((email) => email.trim())
+                      e.target.value
+                        .split(',')
+                        .map((email) => email.trim())
+                        .filter((email) => validateEmail(email))
                     )
                   }
                 />

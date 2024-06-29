@@ -8,19 +8,19 @@ import { Icon } from '@iconify/react'
 import CourseDetailModal from '../../../../modals/courses/CourseDetailModal'
 import SchoolCourseCardEnrolled from '../../school-course-card/SchoolCourseCardEnrolled'
 import { useQuery } from '@tanstack/react-query'
-import schoolService from "../../../../../../services/api/school"
-import { useSelector } from "react-redux";
+import schoolService from '../../../../../../services/api/school'
+import { useSelector } from 'react-redux'
 import { RotatingSquare } from 'react-loader-spinner'
+import Loading from '../../../../../loader/Loader'
 
 Modal.setAppElement('#root') // This is to avoid screen readers issues with React Modal
 
-
 const SchoolEnrolledCourseStudents = () => {
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user)
   const [courses, setCourses] = useState([])
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [selectedCourse, setSelectedCourse] = useState(null)
-  let schoolId;
+  let schoolId
 
   // ToDO: Do a check if its a school or a user
   if (user.isSchool) {
@@ -29,21 +29,18 @@ const SchoolEnrolledCourseStudents = () => {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['school-enrolled-courses'],
-    queryFn: () => schoolService.getCourses(schoolId, "Enrolled"),
+    queryFn: () => schoolService.getCourses(schoolId, 'Enrolled'),
     enabled: !!schoolId,
     refetchOnMount: false,
-    refetchOnWindowFocus: false
-  });
+    refetchOnWindowFocus: false,
+  })
 
   useEffect(() => {
     if (!data) return
 
     setCourses(data.courses)
-    return () => {
-
-    }
+    return () => {}
   }, [data])
-
 
   const openModal = (course) => {
     setSelectedCourse(course)
@@ -102,9 +99,7 @@ const SchoolEnrolledCourseStudents = () => {
           </div>
         </form>
       </div>
-      {
-        isLoading && <RotatingSquare />
-      }
+      {isLoading && <Loading />}
       <div className='course-list'>
         {courses.map((course) => (
           <SchoolCourseCardEnrolled

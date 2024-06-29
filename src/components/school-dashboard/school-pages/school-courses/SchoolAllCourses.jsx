@@ -9,17 +9,18 @@ import CourseDetailModal from '../../modals/courses/CourseDetailModal'
 import SchoolCourseCard from './school-course-card/SchoolCourseCard'
 import { useQuery } from '@tanstack/react-query'
 import schoolService from '../../../../services/api/school'
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux'
 import { RotatingSquare } from 'react-loader-spinner'
+import Loading from '../../../loader/Loader'
 
 Modal.setAppElement('#root') // This is to avoid screen readers issues with React Modal
 
 const SchoolAllCourses = () => {
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user)
   const [courses, setCourses] = useState([])
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [selectedCourse, setSelectedCourse] = useState(null)
-  let schoolId;
+  let schoolId
 
   // ToDO: Do a check if its a school or a user
   if (user.isSchool) {
@@ -28,22 +29,19 @@ const SchoolAllCourses = () => {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['courses'],
-    queryFn: () => schoolService.getCourses(schoolId, "All"),
+    queryFn: () => schoolService.getCourses(schoolId, 'All'),
     enabled: !!schoolId,
     refetchOnMount: false,
-    refetchOnWindowFocus: false
-  });
+    refetchOnWindowFocus: false,
+  })
 
   console.log(data)
 
   useEffect(() => {
     if (!data) return
     setCourses(data.courses)
-    return () => {
-
-    }
+    return () => {}
   }, [data])
-
 
   const openModal = (course) => {
     setSelectedCourse(course)
@@ -102,13 +100,15 @@ const SchoolAllCourses = () => {
           </div>
         </form>
       </div>
-      {
-        isLoading && <RotatingSquare />
-      }
+      {isLoading && <Loading />}
 
       <div className='course-list'>
         {courses.map((course) => (
-          <SchoolCourseCard key={course.id} course={course} openModal={openModal} />
+          <SchoolCourseCard
+            key={course.id}
+            course={course}
+            openModal={openModal}
+          />
         ))}
       </div>
 

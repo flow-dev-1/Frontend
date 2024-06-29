@@ -29,6 +29,7 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
     setModalIsOpenSuccess(false)
     closeModal()
   }
+
   const {
     register,
     handleSubmit,
@@ -39,17 +40,6 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
   })
 
   const navigate = useNavigate()
-
-  const {
-    data: adminRoles,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['get-admin-roles'],
-    queryFn: adminService.getAdminRoles,
-  })
-
-  console.log(adminRoles)
 
   const mutation = useMutation({
     mutationFn: adminService.adminInvite,
@@ -79,7 +69,7 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
 
   return (
     <div className=''>
-      <div className='edit-course-container '>
+      <div className='edit-course-container'>
         <div className='header'>
           <p className='team-heading'>Add New Team</p>
           <span onClick={closeModal}>
@@ -89,24 +79,36 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
 
         <p className='sub-heading'>Input teammate’s details below</p>
 
-        <form className='form-borders'>
-          <div className='flex-row '>
+        <form className='form-borders' onSubmit={handleSubmit(onSubmit)}>
+          <div className='flex-row'>
             <div>
               <label>First Name *</label>
               <input type='text' {...register('first_name')} />
-              {errors.first_name && <p>{errors.first_name.message}</p>}
+              {errors.first_name && (
+                <p style={{ color: '#FD483D', fontSize: '12px' }}>
+                  {errors.first_name.message}
+                </p>
+              )}
             </div>
             <div>
               <label>Last Name *</label>
               <input type='text' {...register('last_name')} />
-              {errors.last_name && <p>{errors.last_name.message}</p>}
+              {errors.last_name && (
+                <p style={{ color: '#FD483D', fontSize: '12px' }}>
+                  {errors.last_name.message}
+                </p>
+              )}
             </div>
           </div>
           <div className='flex-row'>
             <div>
               <label>Work Email Address *</label>
               <input type='text' {...register('email')} />
-              {errors.email && <p>{errors.email.message}</p>}
+              {errors.email && (
+                <p style={{ color: '#FD483D', fontSize: '12px' }}>
+                  {errors.email.message}
+                </p>
+              )}
             </div>
             <div>
               <label>Position *</label>
@@ -115,13 +117,13 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
                 onChange={(e) => setValue('position', e.target.value)}
               >
                 <option value=''>Select...</option>
-                {adminRoles?.adminRoles.map((role) => (
-                  <option key={role._id} value={role._id}>
-                    {role.type}
-                  </option>
-                ))}
+                <option value='admin'>Admin</option>
               </select>
-              {errors.position && <p>{errors.position.message}</p>}
+              {errors.position && (
+                <p style={{ color: '#FD483D', fontSize: '12px' }}>
+                  {errors.position.message}
+                </p>
+              )}
             </div>
           </div>
           <button
@@ -151,11 +153,11 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
       >
         <div className='succes-modal-content'>
           <div className='success-icon icon-with-bg'>
-            <div class='circle'>
-              <div class='checkmark'></div>
+            <div className='circle'>
+              <div className='checkmark'></div>
             </div>
           </div>
-          <h4 className='text-center'>Successfull</h4>
+          <h4 className='text-center'>Successful</h4>
           <p className='text-center'>
             You have successfully invited a teammate.
           </p>
