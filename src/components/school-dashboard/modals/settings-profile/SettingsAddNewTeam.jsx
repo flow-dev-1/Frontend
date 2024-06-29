@@ -39,7 +39,6 @@ const SettingsAddNewTeam = ({ closeModal }) => {
     resolver: yupResolver(schema),
   })
 
-
   const mutation = useMutation({
     mutationFn: schoolService.adminInvite,
     onSuccess: (data) => {
@@ -63,7 +62,7 @@ const SettingsAddNewTeam = ({ closeModal }) => {
   return (
     <div className='' onSubmit={handleSubmit(onSubmit)}>
       <div className='edit-course-container '>
-        <div className='header'>
+        <div className='header' style={{ border: 'none' }}>
           <p className='team-heading'>Add New Team</p>
           <span onClick={closeModal}>
             <Icon icon='bitcoin-icons:cross-outline' width={30} />
@@ -71,42 +70,59 @@ const SettingsAddNewTeam = ({ closeModal }) => {
         </div>
 
         <p className='sub-heading'>Input teammate’s details below</p>
-
+        <hr />
         <form className='form-borders' onSubmit={handleSubmit(onSubmit)}>
           <div className='flex-row '>
             <div>
               <label>First Name *</label>
               <input type='text' {...register('first_name')} />
-              {errors.first_name && <p>{errors.first_name.message}</p>}
+              {errors.first_name && (
+                <p style={{ color: '#FD483D', fontSize: '12px' }}>
+                  {errors.first_name.message}
+                </p>
+              )}
             </div>
             <div>
               <label>Last Name *</label>
               <input type='text' {...register('last_name')} />
-              {errors.last_name && <p>{errors.last_name.message}</p>}
+              {errors.last_name && (
+                <p style={{ color: '#FD483D', fontSize: '12px' }}>
+                  {errors.last_name.message}
+                </p>
+              )}
             </div>
           </div>
           <div className='flex-row'>
             <div>
               <label>Work Email Address *</label>
               <input type='text' {...register('email')} />
-              {errors.email && <p>{errors.email.message}</p>}
+              {errors.email && (
+                <p style={{ color: '#FD483D', fontSize: '12px' }}>
+                  {errors.email.message}
+                </p>
+              )}
             </div>
             <div>
-              <label>Position *</label>
+              <label>Permission *</label>
               <select
                 {...register('position')}
                 onChange={(e) => setValue('position', e.target.value)}
               >
                 <option value=''>Select...</option>
-                {["Admin", "Student"].map((role, i) => (
+                {['Admin', 'Student'].map((role, i) => (
                   <option key={i} value={role}>
                     {role}
                   </option>
                 ))}
               </select>
-              {errors.position && <p>{errors.position.message}</p>}
+              {errors.position && (
+                <p style={{ color: '#FD483D', fontSize: '12px' }}>
+                  {errors.position.message}
+                </p>
+              )}
             </div>
           </div>
+          <hr />
           <button
             type='submit'
             className='update'

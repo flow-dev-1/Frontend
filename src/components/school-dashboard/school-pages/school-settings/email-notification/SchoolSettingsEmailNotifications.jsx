@@ -18,9 +18,9 @@ const SchooolSettingsEmailNotifications = () => {
   const queryClient = useQueryClient()
   const toastId = useRef(null)
 
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user)
 
-  let schoolId;
+  let schoolId
 
   if (user.isSchool) {
     schoolId = user._id
@@ -31,9 +31,8 @@ const SchooolSettingsEmailNotifications = () => {
     queryFn: () => schoolService.getEmailAdmins(schoolId),
     enabled: !!schoolId,
     refetchOnMount: false,
-    refetchOnWindowFocus: false
-  });
-
+    refetchOnWindowFocus: false,
+  })
 
   const openModal = (member, table) => {
     setSelectedMember(member)
@@ -55,36 +54,39 @@ const SchooolSettingsEmailNotifications = () => {
   const mutation = useMutation({
     mutationFn: schoolService.deleteEmailAdmin,
     onMutate: () => {
-      toastId.current = toast.loading("Deleting team member...");
+      toastId.current = toast.loading('Deleting team member...')
     },
     onSuccess: (data) => {
       toast.update(toastId.current, {
-        render: "Team member deleted successfully",
-        type: "success",
+        render: 'Team member deleted successfully',
+        type: 'success',
         isLoading: false,
-        autoClose: 3000
-      });
+        autoClose: 3000,
+      })
       setShowDropdown(null)
-      queryClient.invalidateQueries(['school-email']);
+      queryClient.invalidateQueries(['school-email'])
       setModalIsOpenSuccess(true)
     },
     onError: (error) => {
       console.log(error)
       toast.update(toastId.current, {
-        render: error?.message || "Error deleting team member",
-        type: "error",
+        render: error?.message || 'Error deleting team member',
+        type: 'error',
         isLoading: false,
-        autoClose: 3000
-      });
+        autoClose: 3000,
+      })
     },
-  });
+  })
 
   const handleDelete = (adminId) => {
-    if (!window.confirm("Are you sure you want to delete this team member?")) return
+    if (!window.confirm('Are you sure you want to delete this team member?'))
+      return
     mutation.mutate(adminId)
   }
 
   const teamMembers = data?.teams?.email_notification || []
+
+  console.log(teamMembers)
 
   return (
     <div>
@@ -100,7 +102,6 @@ const SchooolSettingsEmailNotifications = () => {
           </p>
         </div>
         <button className='edit-btn' onClick={() => setModalIsOpen(true)}>
-
           Add Email
           <span>
             <Icon icon='ic:round-plus' />
@@ -108,7 +109,7 @@ const SchooolSettingsEmailNotifications = () => {
         </button>
       </div>
       <table>
-        <thead>
+        <thead  className='thead'>
           <tr>
             <th>S/N</th>
             <th>Name</th>
@@ -123,17 +124,23 @@ const SchooolSettingsEmailNotifications = () => {
           {teamMembers.map((member, index) => (
             <tr key={member.id}>
               <td>{index + 1}</td>
-              <td>{member.first_name} {member.last_name}</td>
+              <td>
+                {member.first_name} {member.last_name}
+              </td>
               <td>{member.email}</td>
               {/* <td>{member.position}</td> */}
-              <td style={{
-                color: 'green',
-                backgroundColor: '#e6ffe6',
-                padding: '5px 10px',
-                borderRadius: '20px',
-                textAlign: 'center',
-                margin: '1rem 0',
-              }}>Active</td>
+              <td
+                style={{
+                  color: 'green',
+                  backgroundColor: '#e6ffe6',
+                  padding: '5px 10px',
+                  borderRadius: '20px',
+                  textAlign: 'center',
+                  margin: '1rem 0',
+                }}
+              >
+                Active
+              </td>
               <td>{new Date(member?.dateAdded).toLocaleDateString()}</td>
               <td>
                 <div className='action-container'>
@@ -143,7 +150,10 @@ const SchooolSettingsEmailNotifications = () => {
                   />
                   {showDropdown === index && (
                     <div className='dropdown'>
-                      <button onClick={() => handleDelete(member._id)} disabled={mutation.isPending}>
+                      <button
+                        onClick={() => handleDelete(member._id)}
+                        disabled={mutation.isPending}
+                      >
                         <span>
                           <Icon icon='fluent:delete-20-regular' />
                         </span>

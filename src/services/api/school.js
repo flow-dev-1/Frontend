@@ -45,7 +45,6 @@ class SchoolOBJ {
   }
   //Login
   schoolLogin = async (data) => {
-
     try {
       const response = await api.post(`api/schools/login`, data)
       return response.data
@@ -99,7 +98,6 @@ class SchoolOBJ {
       throw err?.response?.data || err.message
     }
   }
-
 
   //Verify account
   schoolVerifyAccount = async (data) => {
@@ -171,7 +169,9 @@ class SchoolOBJ {
     try {
       // Check if data is not empty
 
-      const response = await api.get(`api/schools/${params}/courses?type=${type}`)
+      const response = await api.get(
+        `api/schools/${params}/courses?type=${type}`
+      )
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
@@ -179,10 +179,23 @@ class SchoolOBJ {
   }
 
   getEnrolledCourseData = async (params1, params2) => {
-
     try {
       // Check if data is not empty
-      const response = await api.get(`api/schools/${params1}/courses/enrolled/${params2}`)
+      const response = await api.get(
+        `api/schools/${params1}/courses/enrolled/${params2}`
+      )
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+  enrolledStudents = async (params1, params2, data) => {
+    try {
+      // Check if data is not empty
+      const response = await api.post(
+        `api/schools/${params1}/courses/${params2}/enroll`,
+        data
+      )
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
@@ -193,15 +206,14 @@ class SchoolOBJ {
     try {
       const response = await api.put(`api/schools`, data, {
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       })
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
     }
   }
-
 }
 
 const schoolService = new SchoolOBJ()

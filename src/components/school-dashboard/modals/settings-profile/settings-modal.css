@@ -18,13 +18,15 @@ label {
   margin-left: 40%;
 }
 
+.flex-row div select {
+  padding: 0.5rem;
+  border-radius: 5px;
+}
 .sub-heading {
   text-align: center;
   padding: 1rem 0;
 }
 .form-borders {
-  border-top: 1px solid #5b616a;
-  padding-top: 1rem;
   padding-bottom: 3rem;
 }
 
@@ -49,10 +51,30 @@ select {
 }
 
 .flex-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin: 0.2rem 0;
+  gap: 2rem;
 }
 
-.update {
+.flex-row div {
+  width: 100%;
+  margin: 0.5rem;
+}
+
+.flex-row div input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 5px;
+  color: #1e1e1e;
+}
+
+button.update {
+  width: 50%;
+  border: none;
+  display: block;
+  margin-top: 2rem;
 }
 
 .required {

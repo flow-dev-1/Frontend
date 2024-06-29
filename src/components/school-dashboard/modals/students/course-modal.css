@@ -1,0 +1,143 @@
+.flex-row input {
+  padding: 0.2rem;
+  font-size: 14px;
+  background-color: #ecedf0;
+  color: #5b616a;
+  border: solid 1px #d6d6d6;
+}
+
+.flex-row div input {
+  color: #5b616a;
+}
+
+label {
+  color: #5b616a;
+  font-size: 14px;
+}
+
+.flex-row-select {
+  display: flex;
+  align-items: center;
+}
+
+.custom-flex {
+  display: flex;
+  align-items: end;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.action-btn button {
+  border: none;
+  display: block;
+  padding: 0.5rem 2rem;
+  
+}
+
+.action-btn button.yes {
+  border: 1px solid #e83151;
+  background-color: #fff;
+  color: #e83151;
+}
+
+.no {
+  color: #fff;
+  background-color: #e83151;
+}
+select {
+  padding: 0.2rem;
+  font-size: 14px;
+  background-color: #ecedf0;
+  color: #d6d6d6;
+  border: solid 1px #d6d6d6;
+}
+
+.flex-row {
+  margin: 0.2rem 0;
+}
+
+.update {
+  width: 200px;
+  margin-left: 60%;
+  padding: 0.5rem 2rem;
+  color: #ffff;
+  background-color: #275dad;
+  border-radius: 5px;
+}
+
+.required {
+  color: #fd483d;
+  font-size: 10px;
+  text-align: left;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #5b616a;
+}
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  width: 300px;
+  font-family: Arial, sans-serif;
+}
+
+.file-upload label {
+  font-size: 14px;
+  margin-right: 8px;
+}
+
+.file-upload input[type='file'] {
+  display: none;
+}
+
+.file-upload .icon-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #dcdcdc;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #f8f8f8;
+}
+
+.file-upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.upload-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  background-color: #f4f4f4;
+}
+
+.upload-icon {
+  margin-right: 8px;
+}
+
+.upload-button input[type='file'] {
+  display: none;
+}

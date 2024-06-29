@@ -84,7 +84,7 @@ const SchoolSettingsProfile = () => {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel='Edit Course'
-        className='edit-course-modal-custom'
+        className='custom-modal-otp-three'
         overlayClassName='custom-overlay'
       >
         <SettingsEditProfileModal closeModal={closeModal} />

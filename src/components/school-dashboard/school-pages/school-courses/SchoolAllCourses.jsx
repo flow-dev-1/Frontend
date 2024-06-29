@@ -34,6 +34,8 @@ const SchoolAllCourses = () => {
     refetchOnWindowFocus: false
   });
 
+  console.log(data)
+
   useEffect(() => {
     if (!data) return
     setCourses(data.courses)

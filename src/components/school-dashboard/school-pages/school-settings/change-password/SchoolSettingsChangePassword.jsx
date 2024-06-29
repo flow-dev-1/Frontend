@@ -75,10 +75,10 @@ const SchoolSettingsChangePassword = () => {
         Take charge of the security access to your dashboard. Change your{' '}
         <a href='/'>Flow</a> password by filling the form below.
       </p>
-      <div className='mt-5'>
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <div className='mt-5 border-container'>
+        <form style={{ marginTop: '0' }} onSubmit={handleSubmit(onSubmit)}>
           <div className='form-group'>
-            <label htmlFor='old-password'>Old Password</label>
+            <label className='old-password'>Old Password</label>
             <div>
               <input
                 type='password'
@@ -86,12 +86,14 @@ const SchoolSettingsChangePassword = () => {
                 placeholder='Type here...'
                 {...register('oldPassword')}
               />
-              <Icon icon='mdi:eye' className='icon' />
-              {errors.oldPassword && <p>{errors.oldPassword.message}</p>}
+              <Icon width={20} icon='mdi:eye' className='icon' />
             </div>
+            {errors.oldPassword && (
+              <p style={{ color: '#E83151' }}>{errors.oldPassword.message}</p>
+            )}
           </div>
           <div className='form-group'>
-            <label htmlFor='new-password'>New Password</label>
+            <label className='new-password'>New Password</label>
             <div>
               <input
                 type='password'
@@ -99,12 +101,14 @@ const SchoolSettingsChangePassword = () => {
                 placeholder='Type here...'
                 {...register('newPassword')}
               />
-              <Icon icon='mdi:eye' className='icon' />
-              {errors.newPassword && <p>{errors.newPassword.message}</p>}
+              <Icon icon='mdi:eye' width={20} className='icon' />
             </div>
+            {errors.newPassword && (
+              <p style={{ color: '#E83151' }}>{errors.newPassword.message}</p>
+            )}
           </div>
           <div className='form-group'>
-            <label htmlFor='confirm-password'>Confirm Password</label>
+            <label className='confirm-password'>Confirm Password</label>
             <div>
               <input
                 type='password'
@@ -112,17 +116,21 @@ const SchoolSettingsChangePassword = () => {
                 placeholder='Type here...'
                 {...register('confirmPassword')}
               />
-              <Icon icon='mdi:eye' className='icon' />
-              {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
+              <Icon icon='mdi:eye' width={20} className='icon' />
             </div>
+            {errors.confirmPassword && (
+              <p style={{ color: '#E83151' }}>
+                {errors.confirmPassword.message}
+              </p>
+            )}
           </div>
-          <button type='submit' disabled={mutation.isPending}>
+          <button
+            style={{ color: '#275DAD' }}
+            type='submit'
+            disabled={mutation.isPending}
+          >
             {mutation.isPending ? (
-              <RotatingLines
-                width="20"
-                height="20"
-                strokeColor="#FFF"
-              />
+              <RotatingLines width='20' height='20' strokeColor='#FFF' />
             ) : (
               'Update Password'
             )}

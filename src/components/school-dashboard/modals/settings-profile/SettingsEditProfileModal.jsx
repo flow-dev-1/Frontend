@@ -98,7 +98,7 @@ const SettingsEditProfileModal = ({ closeModal }) => {
 
      
 
-      <button className='update' onClick={handleUpdate}>
+      <button className='update fix' onClick={handleUpdate}>
         Update
       </button>
     </div>
