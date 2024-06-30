@@ -6,7 +6,7 @@ import userService from '../../../services/api/admin'
 import { useDispatch } from 'react-redux'
 import { clearToken } from '../../../redux/reducers/jwtReducer'
 import { toast } from 'react-toastify'
-export default function OtpModal({ email, resendOTP }) {
+export default function StudentOtpModal({ email, resendOTP }) {
   const dispatch = useDispatch()
   const [modalIsOpen, setIsOpen] = useState(false)
   const [otp, setOtp] = useState(['', '', '', '', '', ''])

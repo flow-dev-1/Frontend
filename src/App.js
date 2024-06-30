@@ -4,7 +4,7 @@ import './App.css'
 
 // import LandingPage from './components/common-pages/landing-page/LandingPage';
 import SignupCategory from './components/common-pages/sigup-category/SignupCategory'
-import RegistrationForm from './components/onboarding/registration/RegistrationForm'
+import RegistrationForm from './components/onboarding/registration/StudentRegistrationForm.js'
 import SignIn from './components/onboarding/login/SignIn'
 import ForgotPassword from './components/onboarding/login/ForgotPassword'
 import ResetPassword from './components/onboarding/login/ResetPassword'
@@ -35,7 +35,9 @@ import SchoolForgotPassword from './components/school-dashboard/school-onboardin
 import SchoolResetPassword from './components/school-dashboard/school-onboarding/login/SchoolResetPassword.js'
 import SigninCategory from './components/common-pages/signin-category/SigninCategory.js'
 import ProtectedRoute from './components/ProtectedRoutes.js'
-
+import IndividualSignupCategory from './components/common-pages/individual-signup-categorty/IndividualSignupCategory.jsx'
+import StudentRegistrationForm from './components/onboarding/registration/StudentRegistrationForm.js'
+import EducatorRegistrationForm from './components/onboarding/registration/EducatorRegistrationForm.js'
 
 function App() {
   return (
@@ -48,8 +50,17 @@ function App() {
             <Route index element={<SignupCategory />} />
             <Route path='/sign-in' element={<SigninCategory />} />
             <Route
-              path='/individual/sign-up/registration'
-              element={<RegistrationForm />}
+              path='/individual/sign-up/student-registration'
+              element={<StudentRegistrationForm />}
+            />
+            <Route
+              path='/individual/sign-up/educator-registration'
+              element={<EducatorRegistrationForm />}
+            />
+
+            <Route
+              path='/individual/sign-up'
+              element={<IndividualSignupCategory />}
             />
             <Route path='/individual/sign-in' element={<SignIn />} />
             <Route path='/forgot-password' element={<ForgotPassword />} />
@@ -134,7 +145,6 @@ function App() {
           />
           {/*for other users*/}
         </Route>
-
       </Routes>
       <ToastContainer position='top-right' />
     </BrowserRouter>
