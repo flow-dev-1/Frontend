@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import Modal from 'react-modal'
 import '../onboarding.css'
-import OtpModal from '../../modals-pages/onboarding-modals/EducatorOtpModal'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -33,7 +32,8 @@ export default function EducatorRegistrationForm() {
   const [isNigeria, setIsNigeria] = useState(true) // State to track if the selected country is Nigeria
 
   const schema = yup.object().shape({
-    fullName: yup.string().required('Full Name is required'),
+    firstName: yup.string().required('First Name is required'),
+    lastName: yup.string().required('Last Name is required'),
     email: yup
       .string()
       .email('Invalid Email')
@@ -111,14 +111,15 @@ export default function EducatorRegistrationForm() {
 
   const onSubmit = (data) => {
     const formData = {
-      full_name: data.fullName.trim(),
+      first_name: data.firstName.trim(),
+      last_name: data.lastName.trim(),
       email: data.email,
-      phone_number: data.phoneNumber,
+      phone: data.phoneNumber,
       country: data.country,
       state: data.state,
       lga: data.lga,
       gender: data.gender,
-      dob: data.dob,
+      age: new Date().getFullYear() - new Date(data.dob).getFullYear(),
       password: data.password,
     }
     setFormData(formData)
@@ -145,14 +146,25 @@ export default function EducatorRegistrationForm() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='form-section'>
             <div className='form-group'>
-              <label>Full Name *</label>
+              <label>First Name *</label>
               <input
                 type='text'
                 placeholder='Type here...'
-                {...register('fullName')}
+                {...register('firstName')}
               />
-              {errors.fullName && (
-                <p className='error-message'>{errors.fullName.message}</p>
+              {errors.firstName && (
+                <p className='error-message'>{errors.firstName.message}</p>
+              )}
+            </div>
+            <div className='form-group'>
+              <label>Last Name *</label>
+              <input
+                type='text'
+                placeholder='Type here...'
+                {...register('lastName')}
+              />
+              {errors.lastName && (
+                <p className='error-message'>{errors.lastName.message}</p>
               )}
             </div>
             <div className='form-group'>
@@ -287,7 +299,8 @@ export default function EducatorRegistrationForm() {
           <hr className='my-4' />
           <div className='bottom-section'>
             <p>
-              Already have an account? <Link to='/individual/sign-in'>Sign In</Link>
+              Already have an account?{' '}
+              <Link to='/individual/sign-in'>Sign In</Link>
             </p>
 
             <button

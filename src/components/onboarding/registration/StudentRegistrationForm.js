@@ -33,7 +33,8 @@ export default function StudentRegistrationForm() {
   const [isNigeria, setIsNigeria] = useState(true) // State to track if the selected country is Nigeria
 
   const schema = yup.object().shape({
-    childFullName: yup.string().required("Child's Full Name is required"),
+    childFirstName: yup.string().required("Child's First Name is required"),
+    childLastName: yup.string().required("Child's Last Name is required"),
     guardianEmail: yup
       .string()
       .email('Invalid Email')
@@ -112,7 +113,8 @@ export default function StudentRegistrationForm() {
 
   const onSubmit = (data) => {
     const formData = {
-      child_full_name: data.childFullName.trim(),
+      child_first_name: data.childFirstName.trim(),
+      child_last_name: data.childLastName.trim(),
       guardian_email: data.guardianEmail,
       guardian_phone: data.guardianPhone,
       country: data.country,
@@ -147,14 +149,25 @@ export default function StudentRegistrationForm() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='form-section'>
             <div className='form-group'>
-              <label>Child's Full Name *</label>
+              <label>Child's First Name *</label>
               <input
                 type='text'
                 placeholder='Type here...'
-                {...register('childFullName')}
+                {...register('childFirstName')}
               />
-              {errors.childFullName && (
-                <p className='error-message'>{errors.childFullName.message}</p>
+              {errors.childFirstName && (
+                <p className='error-message'>{errors.childFirstName.message}</p>
+              )}
+            </div>
+            <div className='form-group'>
+              <label>Child's Last Name *</label>
+              <input
+                type='text'
+                placeholder='Type here...'
+                {...register('childLastName')}
+              />
+              {errors.childLastName && (
+                <p className='error-message'>{errors.childLastName.message}</p>
               )}
             </div>
             <div className='form-group'>
@@ -287,6 +300,7 @@ export default function StudentRegistrationForm() {
                 <Icon
                   icon={showPassword ? 'mdi:eye-off' : 'mdi:eye'}
                   width={24}
+                  onClick={togglePasswordVisibility}
                 />
               </div>
               {showPasswordError && (
@@ -310,6 +324,7 @@ export default function StudentRegistrationForm() {
                 <Icon
                   icon={showPassword ? 'mdi:eye-off' : 'mdi:eye'}
                   width={24}
+                  onClick={togglePasswordVisibility}
                 />
               </div>
               {errors.confirmPassword && (
@@ -322,7 +337,8 @@ export default function StudentRegistrationForm() {
           <hr className='my-4' />
           <div className='bottom-section'>
             <p>
-              Already have an account? <Link to='/individual/sign-in'>Sign In</Link>
+              Already have an account?{' '}
+              <Link to='/individual/sign-in'>Sign In</Link>
             </p>
 
             <button
@@ -338,7 +354,7 @@ export default function StudentRegistrationForm() {
                   width={20}
                 />
               ) : (
-                ' Submit'
+                'Submit'
               )}
             </button>
           </div>
