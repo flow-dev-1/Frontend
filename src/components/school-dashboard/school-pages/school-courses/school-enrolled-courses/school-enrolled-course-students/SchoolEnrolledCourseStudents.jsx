@@ -39,7 +39,7 @@ const SchoolEnrolledCourseStudents = () => {
     if (!data) return
 
     setCourses(data.courses)
-    return () => {}
+    return () => { }
   }, [data])
 
   const openModal = (course) => {
@@ -79,8 +79,8 @@ const SchoolEnrolledCourseStudents = () => {
                   Filter by
                 </option>
                 <option value=''>All</option>
-                <option value=''>Enrolled</option>
-                <option value=''>Not-enrolled</option>
+                <option value=''>Students</option>
+                <option value=''>Teachers</option>
               </select>
             </label>
 

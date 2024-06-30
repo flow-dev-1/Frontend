@@ -38,6 +38,7 @@ import ProtectedRoute from './components/ProtectedRoutes.js'
 import IndividualSignupCategory from './components/common-pages/individual-signup-categorty/IndividualSignupCategory.jsx'
 import StudentRegistrationForm from './components/onboarding/registration/StudentRegistrationForm.js'
 import EducatorRegistrationForm from './components/onboarding/registration/EducatorRegistrationForm.js'
+import IndividualCategory from './components/common-pages/sigup-category/IndividualCategory.js'
 
 function App() {
   return (
@@ -48,7 +49,11 @@ function App() {
 
           <Route element={<OnboardingRootLayout />}>
             <Route index element={<SignupCategory />} />
-            <Route path='/sign-in' element={<SigninCategory />} />
+            <Route path='sign-in'  element={<SigninCategory />} />
+
+            
+
+            <Route path='/individual/sign-up' element={<IndividualCategory />} />
             <Route
               path='/individual/sign-up/student-registration'
               element={<StudentRegistrationForm />}
@@ -58,9 +63,11 @@ function App() {
               element={<EducatorRegistrationForm />}
             />
 
+           
+
             <Route
-              path='/individual/sign-up'
-              element={<IndividualSignupCategory />}
+              path='/individual/sign-up/educators'
+              element={<EducatorRegistrationForm />}
             />
             <Route path='/individual/sign-in' element={<SignIn />} />
             <Route path='/forgot-password' element={<ForgotPassword />} />

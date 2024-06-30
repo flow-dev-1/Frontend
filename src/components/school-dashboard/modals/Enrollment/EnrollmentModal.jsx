@@ -29,9 +29,11 @@ const schema = yup.object().shape({
   startTime: yup.string().required('Start Time is required'),
   endTime: yup.string().required('End Time is required'),
   students: yup
-    .array()
-    .min(1, 'At least one student email is required')
-    .of(yup.string().email('Invalid email')),
+    .string()
+    .test('emails', 'Invalid email(s)', (value) => {
+      const emails = value.split(',').map(email => email.trim())
+      return emails.every(email => !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    }),
 })
 
 const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
@@ -57,6 +59,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
     register,
     handleSubmit,
     setValue,
+    getValues,
     watch,
     formState: { errors },
   } = useForm({
@@ -102,9 +105,12 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
         const emails = XLSX.utils
           .sheet_to_json(worksheet, { header: 1 })
           .flat()
-          .filter((email) => typeof email === 'string' && validateEmail(email))
-        setValue('students', emails)
-      }
+          .filter((email) => typeof email === 'string' && validateEmail(email));
+        const currentEmails = getValues('students').trim();
+        const currentEmailsArray = currentEmails ? currentEmails.split(',').map(email => email.trim()) : [];
+        const mergedEmails = [...new Set([...currentEmailsArray, ...emails])];
+        setValue('students', mergedEmails.join(', '));
+      };
       reader.readAsArrayBuffer(file)
     }
   }
@@ -119,13 +125,13 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   }
 
   const onSubmit = (data) => {
-    if (
-      !window.confirm(
-        'Are you sure you want to enroll the students for this course?'
-      )
-    )
-      return
-    mutation.mutate(data)
+
+    if (!window.confirm('Are you sure you want to enroll the students for this course?')) return
+
+    const emailsArray = data.students.split(',').map(email => email.trim()).filter(email => validateEmail(email))
+    const finalData = { ...data, students: emailsArray }
+
+    mutation.mutate(finalData)
   }
 
   return (
@@ -227,16 +233,6 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                   rows={3}
                   cols={50}
                   {...register('students')}
-                  value={watch('students')?.join(', ')}
-                  onChange={(e) =>
-                    setValue(
-                      'students',
-                      e.target.value
-                        .split(',')
-                        .map((email) => email.trim())
-                        .filter((email) => validateEmail(email))
-                    )
-                  }
                 />
                 {errors.students && (
                   <p className='error-message'>{errors.students.message}</p>
@@ -277,16 +273,15 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
               type='submit'
               disabled={mutation.isPending}
             >
-              {mutation.isPending ? (
-                <RotatingLines
+              {
+                mutation.isPending ? <RotatingLines
                   type='Oval'
                   style={{ color: '#FFF' }}
                   height={20}
-                  width={20}
-                />
-              ) : (
-                'Send invites'
-              )}
+                  width={20} /> :
+                  "Enroll"
+              }
+
             </button>
           </form>
         </div>

@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react'
 import './course-detail-modal.css'
 import EnrollmentModal from '../Enrollment/EnrollmentModal'
 
-const CourseDetailModal = ({ course }) => {
+const CourseDetailModal = ({ course, enrolled }) => {
   const [openEnrollModal, setOpenEnrollModal] = useState(false)
   const openEnrollementModal = () => {
     setOpenEnrollModal(true)
@@ -13,7 +13,6 @@ const CourseDetailModal = ({ course }) => {
     setOpenEnrollModal(false)
   }
 
-  console.log(course)
 
   if (!course) return null
 
@@ -69,11 +68,15 @@ const CourseDetailModal = ({ course }) => {
           reinforcing the social aspects of a growth mindset.
         </li>
       </ul>
-      <div className='modal-footer'>
-        <button onClick={openEnrollementModal} className='purchase-button'>
-          <Icon icon='mdi:cart' width={24} /> N15,000
-        </button>
-      </div>
+      {
+        (enrolled && !enrolled.includes(course._id)) &&
+        <div className='modal-footer'>
+          <button onClick={openEnrollementModal} className='purchase-button'>
+            <Icon icon='mdi:cart' width={24} /> {course.currency} {course.cost}
+          </button>
+        </div>
+      }
+
 
       <EnrollmentModal
         isOpen={openEnrollModal}

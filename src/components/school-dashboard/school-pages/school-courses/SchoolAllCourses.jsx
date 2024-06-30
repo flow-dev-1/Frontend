@@ -35,12 +35,21 @@ const SchoolAllCourses = () => {
     refetchOnWindowFocus: false,
   })
 
-  console.log(data)
+  const { data: enrolledData, } = useQuery({
+    queryKey: ['school-enrolled-courses'],
+    queryFn: () => schoolService.getCourses(schoolId, 'Enrolled'),
+    enabled: !!schoolId,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  })
+
+  // console.log(enrolledData, "enrolled")
+  const enrolledDataArray = enrolledData?.courses?.map(item => item.course._id) || []
 
   useEffect(() => {
     if (!data) return
     setCourses(data.courses)
-    return () => {}
+    return () => { }
   }, [data])
 
   const openModal = (course) => {
@@ -80,8 +89,8 @@ const SchoolAllCourses = () => {
                   Filter by
                 </option>
                 <option value=''>All</option>
-                <option value=''>Enrolled</option>
-                <option value=''>Not-enrolled</option>
+                <option value=''>Students</option>
+                <option value=''>Teachers</option>
               </select>
             </label>
 
@@ -105,9 +114,10 @@ const SchoolAllCourses = () => {
       <div className='course-list'>
         {courses.map((course) => (
           <SchoolCourseCard
-            key={course.id}
+            key={course._id}
             course={course}
             openModal={openModal}
+            enrolled={enrolledDataArray}
           />
         ))}
       </div>
@@ -119,7 +129,9 @@ const SchoolAllCourses = () => {
         className='custom-modal-otp'
         overlayClassName='custom-overlay'
       >
-        <CourseDetailModal course={selectedCourse} />
+        <CourseDetailModal course={selectedCourse}
+          enrolled={enrolledDataArray}
+        />
       </Modal>
     </div>
   )

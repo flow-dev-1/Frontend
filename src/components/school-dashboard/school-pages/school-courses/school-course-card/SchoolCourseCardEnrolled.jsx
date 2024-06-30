@@ -4,9 +4,13 @@ import { Icon } from '@iconify/react'
 import { encryptURI } from '../../../../../utils/encryption'
 
 const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
-
+  const [isOn, setIsOn] = useState(false)
   const [course] = useState(courseData.course)
   const navigate = useNavigate()
+
+  const handleToggle = () => {
+    setIsOn(!isOn)
+  }
 
   const navigateToCourse = () => {
     navigate(`/school-dashboard/courses/enrolled/${encryptURI(courseData._id)}`)
@@ -67,9 +71,9 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
   }
 
   return (
-    <div onClick={navigateToCourse} style={{ cursor: 'pointer' }}>
+    <div style={{ cursor: 'pointer' }}>
       <div className='course-card'>
-        <div className='course-card-img'>
+        <div className='course-card-img' onClick={navigateToCourse}>
           <img src={course.image} alt='' />
           <div className='course-card-category'>{course.grade !== "Educators" ? "Students" : "Educators"}</div>
         </div>
@@ -101,12 +105,19 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
               course?.courseEnrollment?.length
             )}%
           </div>
+          <div
+            className={`toggle-switch ${isOn ? 'on' : 'off'}`}
+            onClick={handleToggle}
+          >
+            <div className='toggle-knob'></div>
+          </div>
         </div>
         <div className='course-card-buttons'>
           <div className='course-card-buttons-main'>
             <button
               className={`reviewBtn ${reviewBtnClass}`}
               onClick={(e) => e.stopPropagation()}
+              style={{ backgroundColor: '#D4FFBE', color: '#4B7E31' }}
             >
               <span>
                 <Icon
@@ -118,6 +129,7 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
             </button>
             <button
               className={`detailsBtn ${detailsBtnClass}`}
+              style={{ backgroundColor: darkGreen, color: lightGreen }}
               onClick={(e) => {
                 e.stopPropagation()
                 openModal(course)
@@ -131,14 +143,20 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
               </span>{' '}
               View Details
             </button>
-          </div>
-          {course.status.enrolled ? (
-            <div className='course-card-progress'>
-              {course.status.progress}% done
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                fontSize: '12px',
+              }}
+            >
+              <span style={{ color: darkGreen, fontWeight: "bold" }}>0 %</span> <span>Done</span>
             </div>
-          ) : (
-            ''
-          )}
+          </div>
+
+
+
         </div>
       </div>
     </div>
