@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Modal from 'react-modal'
 import excelDoc from '../../../../assets/flow-doc.xlsx'
 import { Icon } from '@iconify/react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import * as XLSX from 'xlsx'
 import userService from '../../../../services/api/school'
@@ -37,6 +37,8 @@ const schema = yup.object().shape({
 })
 
 const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
+  const queryClient = useQueryClient();
+
   const classOptions = [
     'Primary 1',
     'Primary 2',
@@ -80,6 +82,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
     onSuccess: (data) => {
       console.log('Mutation success:', data)
       toast.success('Enrollment successful')
+      queryClient.invalidateQueries(["school-enrolled-courses"]);
       onRequestClose()
     },
     onError: (error) => {

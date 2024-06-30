@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import Modal from 'react-modal'
 import EmailVerificationSuccessful from './EmailVerificationSuccessful'
 import { useMutation } from '@tanstack/react-query'
-import userService from '../../../services/api/admin'
 import { useDispatch } from 'react-redux'
 import { clearToken } from '../../../redux/reducers/jwtReducer'
 import { toast } from 'react-toastify'
+import userService from '../../../services/api/user'
+
 export default function StudentOtpModal({ email, resendOTP }) {
   const dispatch = useDispatch()
   const [modalIsOpen, setIsOpen] = useState(false)
@@ -57,6 +58,7 @@ export default function StudentOtpModal({ email, resendOTP }) {
     mutationFn: userService.verifyAccount, // Assuming userService.register is your API call function
     onSuccess: (data) => {
       console.log('OTP Verification:', data)
+      toast.dismiss()
       toast.success(data.message)
       dispatch(clearToken())
       openModal()
@@ -122,7 +124,7 @@ export default function StudentOtpModal({ email, resendOTP }) {
         isOpen={modalIsOpen}
         // onRequestClose={closeModal}
         contentLabel='Example Modal'
-        className='custom-modal'
+        className='custom-modal-success'
         overlayClassName='custom-overlay'
         shouldCloseOnOverlayClick={false}
       >

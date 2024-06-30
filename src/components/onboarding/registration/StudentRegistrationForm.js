@@ -67,9 +67,14 @@ export default function StudentRegistrationForm() {
     setValue,
     formState: { errors },
     watch,
+    reset
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      country: "Nigeria"
+    }
   })
+
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
@@ -78,16 +83,29 @@ export default function StudentRegistrationForm() {
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const response = await fetch('https://restcountries.com/v3.1/all')
-        const data = await response.json()
-        setCountries(data)
+        const response = await fetch('https://restcountries.com/v3.1/all');
+        const data = await response.json();
+        // Sort the countries alphabetically by their common name
+        const sortedData = data.sort((a, b) => {
+          const nameA = a.name.common.toUpperCase(); // ignore upper and lowercase
+          const nameB = b.name.common.toUpperCase(); // ignore upper and lowercase
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1;
+          }
+          // names must be equal
+          return 0;
+        });
+        setCountries(sortedData);
       } catch (error) {
-        console.error('Error fetching countries:', error)
+        console.error('Error fetching countries:', error);
       }
-    }
+    };
 
-    fetchCountries()
-  }, [])
+    fetchCountries();
+  }, []);
 
   // Watch for changes in the country field
   const selectedCountry = watch('country')
@@ -96,7 +114,7 @@ export default function StudentRegistrationForm() {
   }, [selectedCountry])
 
   const mutation = useMutation({
-    mutationFn: userService.register,
+    mutationFn: (data) => userService.register("Individual", data),
     onSuccess: (data) => {
       console.log('Registration successful:', data)
       toast.success(data.message)
@@ -107,23 +125,26 @@ export default function StudentRegistrationForm() {
       console.error('Registration error:', error)
       toast.dismiss()
       toast.error(error?.message)
+      toast.error(error?.error)
       toast.error(error || 'Registration failed')
     },
   })
 
   const onSubmit = (data) => {
+    console.log(data, "Data here")
     const formData = {
-      child_first_name: data.childFirstName.trim(),
-      child_last_name: data.childLastName.trim(),
-      guardian_email: data.guardianEmail,
-      guardian_phone: data.guardianPhone,
+      first_name: data.childFirstName.trim(),
+      last_name: data.childLastName.trim(),
+      email: data.guardianEmail,
+      phone: data.guardianPhone,
       country: data.country,
       state: data.state,
       lga: data.lga,
       gender: data.gender,
-      dob: data.dob,
-      school_grade: data.schoolGrade,
+      DOB: data.dob,
+      grade: data.schoolGrade,
       password: data.password,
+
     }
     setFormData(formData)
     mutation.mutate(formData)
@@ -187,6 +208,11 @@ export default function StudentRegistrationForm() {
                 <PhoneInput
                   placeholder='Enter phone number'
                   onChange={(val) => setValue('guardianPhone', val)}
+                  onCountryChange={(country) => {
+                    if (country) {
+                      setCountryCode(getCountryCallingCode(country));
+                    }
+                  }}
                   defaultCountry='NG' // Set the default country (change as needed)
                   style={{
                     border: '1px solid #ccc', // Add border to the input
@@ -207,7 +233,7 @@ export default function StudentRegistrationForm() {
             <div className='form-group'>
               <label>Country *</label>
               <select {...register('country')}>
-                <option value=''>Select Country</option>
+                <option value='Nigeria'>Nigeria</option>
                 {countries.map((country) => (
                   <option key={country.cca2} value={country.name.common}>
                     {country.name.common}
@@ -275,11 +301,15 @@ export default function StudentRegistrationForm() {
             </div>
             <div className='form-group'>
               <label>School Grade *</label>
-              <input
-                type='text'
-                placeholder='Type here...'
-                {...register('schoolGrade')}
-              />
+
+              <select  {...register('schoolGrade')}>
+                <option value=''>Select Grade</option>
+                {["Primary", "Secondary"].map((grade, i) => (
+                  <option key={i} value={grade}>
+                    {grade}
+                  </option>
+                ))}
+              </select>
               {errors.schoolGrade && (
                 <p className='error-message'>{errors.schoolGrade.message}</p>
               )}
@@ -364,7 +394,7 @@ export default function StudentRegistrationForm() {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel='OTP Modal'
-        className='custom-modal'
+        className='custom-modal-otp'
         overlayClassName='custom-overlay'
       >
         <StudentOtpModal

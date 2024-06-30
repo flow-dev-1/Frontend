@@ -16,7 +16,7 @@ const ConfirmPayment = () => {
             setIsOpen(true)
             // mutate({ code: queryCode })
         } else {
-            navigate('/login', { replace: true })
+            navigate('/sign-in', { replace: true })
         }
     }, [])
 

@@ -3,9 +3,18 @@ import api from '../index.js'
 class UserOBJ {
 
   //Register
-  register = async (data) => {
+  register = async (userType, data) => {
     try {
-      const response = await api.post(`api/users`, data)
+      const response = await api.post(`api/users/register?type=${userType}`, data)
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+
+  verifyAccount = async (data) => {
+    try {
+      const response = await api.patch(`api/users/verify-account`, data)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message

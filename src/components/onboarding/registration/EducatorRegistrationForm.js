@@ -19,6 +19,7 @@ import PhoneInput, {
   getCountryCallingCode,
 } from 'react-phone-number-input'
 import EducatorOtpModal from '../../modals-pages/onboarding-modals/EducatorOtpModal'
+import StudentOtpModal from '../../modals-pages/onboarding-modals/StudentOtpModal'
 
 Modal.setAppElement('#root') // Set the root element for the modal
 
@@ -53,10 +54,10 @@ export default function EducatorRegistrationForm() {
       .string()
       .min(8, 'Password must be at least 8 characters')
       .required('Password is required'),
-    confirmPassword: yup
-      .string()
-      .oneOf([yup.ref('password'), null], 'Passwords must match')
-      .required('Confirm Password is required'),
+    // confirmPassword: yup
+    //   .string()
+    //   .oneOf([yup.ref('password'), null], 'Passwords must match')
+    //   .required('Confirm Password is required'),
   })
 
   const {
@@ -67,6 +68,9 @@ export default function EducatorRegistrationForm() {
     watch,
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      country: "Nigeria"
+    }
   })
 
   const togglePasswordVisibility = () => {
@@ -76,16 +80,29 @@ export default function EducatorRegistrationForm() {
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const response = await fetch('https://restcountries.com/v3.1/all')
-        const data = await response.json()
-        setCountries(data)
+        const response = await fetch('https://restcountries.com/v3.1/all');
+        const data = await response.json();
+        // Sort the countries alphabetically by their common name
+        const sortedData = data.sort((a, b) => {
+          const nameA = a.name.common.toUpperCase(); // ignore upper and lowercase
+          const nameB = b.name.common.toUpperCase(); // ignore upper and lowercase
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1;
+          }
+          // names must be equal
+          return 0;
+        });
+        setCountries(sortedData);
       } catch (error) {
-        console.error('Error fetching countries:', error)
+        console.error('Error fetching countries:', error);
       }
-    }
+    };
 
-    fetchCountries()
-  }, [])
+    fetchCountries();
+  }, []);
 
   // Watch for changes in the country field
   const selectedCountry = watch('country')
@@ -94,7 +111,7 @@ export default function EducatorRegistrationForm() {
   }, [selectedCountry])
 
   const mutation = useMutation({
-    mutationFn: userService.register,
+    mutationFn: (data) => userService.register("Individual", data),
     onSuccess: (data) => {
       console.log('Registration successful:', data)
       toast.success(data.message)
@@ -110,6 +127,7 @@ export default function EducatorRegistrationForm() {
   })
 
   const onSubmit = (data) => {
+    console.log("data")
     const formData = {
       first_name: data.firstName.trim(),
       last_name: data.lastName.trim(),
@@ -119,7 +137,9 @@ export default function EducatorRegistrationForm() {
       state: data.state,
       lga: data.lga,
       gender: data.gender,
-      age: new Date().getFullYear() - new Date(data.dob).getFullYear(),
+      // age: new Date().getFullYear() - new Date(data.dob).getFullYear(),
+      DOB: data.dob,
+      grade: "Educator",
       password: data.password,
     }
     setFormData(formData)
@@ -185,6 +205,11 @@ export default function EducatorRegistrationForm() {
                   placeholder='Enter phone number'
                   onChange={(val) => setValue('phoneNumber', val)}
                   defaultCountry='NG' // Set the default country (change as needed)
+                  onCountryChange={(country) => {
+                    if (country) {
+                      setCountryCode(getCountryCallingCode(country));
+                    }
+                  }}
                   style={{
                     // Full width
                     border: '1px solid #ccc', // Add border to the input
@@ -205,7 +230,7 @@ export default function EducatorRegistrationForm() {
             <div className='form-group'>
               <label>Country *</label>
               <select {...register('country')}>
-                <option value=''>Select Country</option>
+                <option value='Nigeria'>Nigeria</option>
                 {countries.map((country) => (
                   <option key={country.cca2} value={country.name.common}>
                     {country.name.common}
@@ -316,7 +341,7 @@ export default function EducatorRegistrationForm() {
                   width={20}
                 />
               ) : (
-                ' Submit'
+                'Submit'
               )}
             </button>
           </div>
@@ -327,10 +352,10 @@ export default function EducatorRegistrationForm() {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel='Registration Modal'
-        className='custom-modal'
+        className='custom-modal-otp'
         overlayClassName='custom-overlay'
       >
-        <EducatorOtpModal formData={formData} closeModal={closeModal} />
+        <StudentOtpModal formData={formData} closeModal={closeModal} />
       </Modal>
     </div>
   )

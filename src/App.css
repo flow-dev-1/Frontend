@@ -136,6 +136,7 @@ input:-webkit-autofill:active {
   opacity: 0.8;
   border: none;
 }
+
 .modal-content {
   width: max-content;
   display: flex;
@@ -146,6 +147,7 @@ input:-webkit-autofill:active {
   border-radius: 20px;
   padding: 30px 60px;
 }
+
 .see-more-content {
   width: 100%;
   height: inherit;
@@ -158,6 +160,7 @@ ul,
 li {
   font-size: 12px;
 }
+
 .edit-course-modal {
   width: 70%;
   display: flex;
@@ -168,6 +171,7 @@ li {
   border-radius: 20px;
   padding: 30px 60px;
 }
+
 .custom-modal-otp {
   width: 70%;
   display: flex;
@@ -178,6 +182,7 @@ li {
   border-radius: 20px;
   padding: 30px 60px;
 }
+
 .custom-modal-otp-two {
   width: 60%;
   justify-content: center;
@@ -186,6 +191,7 @@ li {
   border-radius: 20px;
   padding: 30px 60px;
 }
+
 .custom-modal-otp-three {
   width: 75%;
   justify-content: center;
@@ -194,6 +200,7 @@ li {
   border-radius: 20px;
   padding: 20px 40px;
 }
+
 .send-invite-modal {
   width: 50%;
   background-color: #fefefe;
@@ -201,6 +208,7 @@ li {
   border-radius: 20px;
   padding: 30px 60px;
 }
+
 .see-more-modal {
   width: 80%;
   height: 80vh;
@@ -216,15 +224,16 @@ li {
 p.head-p {
   text-align: center;
 }
+
 .custom-modal-success {
-  width: 35%;
+  width: 30%;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #fefefe;
   margin: 0 auto;
   border-radius: 20px;
-  padding: 30px 60px;
+  padding: 10px 10px;
 }
 
 .modal-content h2 {
@@ -234,17 +243,22 @@ p.head-p {
 
 /* For Webkit-based browsers (Chrome, Safari) */
 ::-webkit-scrollbar {
-  width: 8px; /* Slim width */
+  width: 8px;
+  /* Slim width */
 }
 
 ::-webkit-scrollbar-track {
-  background: #00bcc3; /* Background of the scrollbar track */
+  background: #00bcc3;
+  /* Background of the scrollbar track */
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #91f8fb; /* Color of the scroll thumb */
-  border-radius: 10px; /* Rounded corners for the scroll thumb */
-  border: none; /* Optional: Adds a border around the thumb */
+  background-color: #91f8fb;
+  /* Color of the scroll thumb */
+  border-radius: 10px;
+  /* Rounded corners for the scroll thumb */
+  border: none;
+  /* Optional: Adds a border around the thumb */
 }
 
 .back-btn {

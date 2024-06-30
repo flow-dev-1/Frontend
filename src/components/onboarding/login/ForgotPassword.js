@@ -90,7 +90,7 @@ export default function ForgotPassword() {
         </form>
 
         <p className='text-center'>
-          Remember your details? <Link to='/login'>Sign in</Link>
+          Remember your details? <Link to='/sign-in'>Sign in</Link>
         </p>
       </div>
 

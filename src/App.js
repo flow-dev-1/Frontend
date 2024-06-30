@@ -39,6 +39,7 @@ import IndividualSignupCategory from './components/common-pages/individual-signu
 import StudentRegistrationForm from './components/onboarding/registration/StudentRegistrationForm.js'
 import EducatorRegistrationForm from './components/onboarding/registration/EducatorRegistrationForm.js'
 import IndividualCategory from './components/common-pages/sigup-category/IndividualCategory.js'
+import InvitedUserRegistration from './components/onboarding/registration/InvitedUserRegistration.js'
 
 function App() {
   return (
@@ -49,21 +50,23 @@ function App() {
 
           <Route element={<OnboardingRootLayout />}>
             <Route index element={<SignupCategory />} />
-            <Route path='sign-in'  element={<SigninCategory />} />
-
-            
+            <Route path='sign-in' element={<SigninCategory />} />
 
             <Route path='/individual/sign-up' element={<IndividualCategory />} />
+
             <Route
               path='/individual/sign-up/student-registration'
               element={<StudentRegistrationForm />}
             />
+
             <Route
+              path='/invited-user'
+              element={<InvitedUserRegistration />}
+            />
+            {/* <Route
               path='/individual/sign-up/educator-registration'
               element={<EducatorRegistrationForm />}
-            />
-
-           
+            /> */}
 
             <Route
               path='/individual/sign-up/educators'

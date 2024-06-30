@@ -132,7 +132,7 @@ export default function SchoolSignIn() {
           </div>
         </form>
         <p className='text-center'>
-          Don’t have an account? <Link to='/signup'>Sign Up</Link>
+          Don’t have an account? <Link to='/'>Sign Up</Link>
         </p>
       </div>
     </div>

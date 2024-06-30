@@ -63,8 +63,8 @@ const SchoolEnrolledStudents = () => {
     queryKey: ['school-single-courses'],
     queryFn: () => schoolService.getEnrolledCourseData(schoolId, decryptId(id)),
     enabled: !!id,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    // refetchOnMount: false,
+    // refetchOnWindowFocus: false,
   })
 
   useEffect(() => {
@@ -274,7 +274,7 @@ const SchoolEnrolledStudents = () => {
                 <td>{data?.user?.email}</td>
                 <td>{data?.user?.phone}</td>
                 <td>{data?.user?.gender === 'male' ? 'M' : 'F'}</td>
-                <td>{data?.user?.age}</td>
+                <td>{new Date().getFullYear() - new Date(data?.user?.DOB).getFullYear()}</td>
                 <td>{data?.progress}%</td>
                 <td>
                   <Icon

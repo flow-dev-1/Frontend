@@ -50,7 +50,7 @@ export default function IndividualCategory() {
                                     type: 'Student',
                                 };
                                 navigate(
-                                  '/individual/sign-up/student-registration'
+                                    '/individual/sign-up/student-registration'
                                 )
                             }}
                         >

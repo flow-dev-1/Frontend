@@ -110,7 +110,7 @@ export default function SignIn() {
           </div>
         </form>
         <p className='text-center'>
-          Don’t have an account? <Link to="/signup">Sign Up</Link>
+          Don’t have an account? <Link to="/individual/sign-up">Sign Up</Link>
         </p>
       </div>
     </div>
