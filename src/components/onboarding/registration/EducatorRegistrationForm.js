@@ -287,7 +287,7 @@ export default function EducatorRegistrationForm() {
           <hr className='my-4' />
           <div className='bottom-section'>
             <p>
-              Already have an account? <Link to='/login'>Sign In</Link>
+              Already have an account? <Link to='/individual/sign-in'>Sign In</Link>
             </p>
 
             <button

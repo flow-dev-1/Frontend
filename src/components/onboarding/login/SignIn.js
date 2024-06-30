@@ -64,7 +64,7 @@ export default function SignIn() {
 
   return (
     <div>
-      <div className="sign-in registration-page">
+      <div className="sign-in registration-page overflow-hidden">
         <h2 className='text-center'>Sign In</h2>
         <p className='text-center'>Enter your details to explore our offerings.</p>
 

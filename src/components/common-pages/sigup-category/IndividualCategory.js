@@ -49,7 +49,9 @@ export default function IndividualCategory() {
                                 const state = {
                                     type: 'Student',
                                 };
-                                navigate('/individual/sign-up/students')
+                                navigate(
+                                  '/individual/sign-up/student-registration'
+                                )
                             }}
                         >
                             Register Now

@@ -73,7 +73,7 @@ export default function SchoolResetPassword() {
   }
 
   return (
-    <div className='registration-page two'>
+    <div className='registration-page two  overflow-hidden'>
       <h2 className='head-text text-center'>Reset Password</h2>
       <p className='head-p'>Create a New Password</p>
 

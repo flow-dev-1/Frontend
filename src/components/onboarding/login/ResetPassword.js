@@ -134,89 +134,90 @@ export default function ResetPassword() {
         mutation.mutate(data)
     }
     return (
-        <div>
-            {
-                open && (
-                    <div className="sign-in registration-page">
-                        <h2 className='text-center'>Reset Password</h2>
-                        <p className='text-center'>Create a New Password</p>
+      <div>
+        {open && (
+          <div className='sign-in registration-page  overflow-hidden'>
+            <h2 className='text-center'>Reset Password</h2>
+            <p className='text-center'>Create a New Password</p>
 
-                        <form onSubmit={handleSubmit(onSubmit)}>
-                            <div className="form-section d-flex flex-column align-items-center ">
-
-                                <div className="form-group my-3">
-                                    <label>Enter New Password</label>
-                                    <div className="d-flex align-items-center input-with-icon">
-                                        <input
-                                            type={showPassword ? 'text' : 'password'}
-                                            placeholder="Type here..."
-                                            {...register('password')}
-                                        />
-                                        <div
-                                            className="password-toggle float-right"
-                                            onClick={togglePasswordVisibility}
-                                        >
-                                            <Icon icon={showPassword ? "mdi:eye-off" : "mdi:eye"} className='eye-icon' />
-                                        </div>
-                                    </div>
-                                    {errors.password && <p className="error-message">Password is required</p>}
-                                </div>
-
-                                <div className="form-group my-3">
-                                    <label>Confirm Password</label>
-                                    <div className="d-flex align-items-center input-with-icon">
-                                        <input
-                                            type={showConfirmPassword ? 'text' : 'password'}
-                                            placeholder="Type here..."
-                                            {...register('confirmPassword')}
-                                        />
-                                        <div
-                                            className="password-toggle float-right"
-                                            onClick={toggleConfirmPasswordVisibility}
-                                        >
-                                            <Icon icon={showConfirmPassword ? "mdi:eye-off" : "mdi:eye"} className='eye-icon' />
-                                        </div>
-                                    </div>
-                                    {errors.confirmPassword && (
-                                        <p className="error-message">{errors.confirmPassword.message}</p>
-                                    )}
-                                </div>
-
-
-                                <button className='btn submit-btn' type='submit'>
-                                    {mutation.isPending ? (
-                                        <RotatingLines
-                                            type='Oval'
-                                            style={{ color: '#FFF' }}
-                                            height={20}
-                                            width={20}
-                                        />
-                                    ) : (
-                                        <>
-                                            Submit
-                                        </>
-                                    )}
-                                </button>
-
-                            </div>
-                        </form>
-
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className='form-section d-flex flex-column align-items-center '>
+                <div className='form-group my-3'>
+                  <label>Enter New Password</label>
+                  <div className='d-flex align-items-center input-with-icon'>
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder='Type here...'
+                      {...register('password')}
+                    />
+                    <div
+                      className='password-toggle float-right'
+                      onClick={togglePasswordVisibility}
+                    >
+                      <Icon
+                        icon={showPassword ? 'mdi:eye-off' : 'mdi:eye'}
+                        className='eye-icon'
+                      />
                     </div>
-                )
-            }
+                  </div>
+                  {errors.password && (
+                    <p className='error-message'>Password is required</p>
+                  )}
+                </div>
 
-            <Modal
-                isOpen={modalIsOpen}
-                // onRequestClose={closeModal}
-                contentLabel="Example Modal"
-                className="custom-modal"
-                overlayClassName="custom-overlay"
-                shouldCloseOnOverlayClick={false}
-            >
-                <EmailVerificationSuccessful from="resetPassword" />
-            </Modal>
+                <div className='form-group my-3'>
+                  <label>Confirm Password</label>
+                  <div className='d-flex align-items-center input-with-icon'>
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      placeholder='Type here...'
+                      {...register('confirmPassword')}
+                    />
+                    <div
+                      className='password-toggle float-right'
+                      onClick={toggleConfirmPasswordVisibility}
+                    >
+                      <Icon
+                        icon={showConfirmPassword ? 'mdi:eye-off' : 'mdi:eye'}
+                        className='eye-icon'
+                      />
+                    </div>
+                  </div>
+                  {errors.confirmPassword && (
+                    <p className='error-message'>
+                      {errors.confirmPassword.message}
+                    </p>
+                  )}
+                </div>
 
-        </div>
-    );
+                <button className='btn submit-btn' type='submit'>
+                  {mutation.isPending ? (
+                    <RotatingLines
+                      type='Oval'
+                      style={{ color: '#FFF' }}
+                      height={20}
+                      width={20}
+                    />
+                  ) : (
+                    <>Submit</>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        <Modal
+          isOpen={modalIsOpen}
+          // onRequestClose={closeModal}
+          contentLabel='Example Modal'
+          className='custom-modal'
+          overlayClassName='custom-overlay'
+          shouldCloseOnOverlayClick={false}
+        >
+          <EmailVerificationSuccessful from='resetPassword' />
+        </Modal>
+      </div>
+    )
 }
 
