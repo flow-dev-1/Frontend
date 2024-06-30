@@ -1,11 +1,20 @@
 import api from '../index.js'
 
 class SchoolOBJ {
-  //Get Admin Roles
-  getAdminRoles = async () => {
+  //Login
+  schoolLogin = async (data) => {
     try {
-      // Check if data is not empty
-      const response = await api.get(`api/admins/roles`)
+      const response = await api.post(`api/schools/login`, data)
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+
+  //Register
+  register = async (data) => {
+    try {
+      const response = await api.post(`api/schools`, data)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
@@ -43,25 +52,7 @@ class SchoolOBJ {
       throw err?.response?.data || err.message
     }
   }
-  //Login
-  schoolLogin = async (data) => {
-    try {
-      const response = await api.post(`api/schools/login`, data)
-      return response.data
-    } catch (err) {
-      throw err?.response?.data || err.message
-    }
-  }
 
-  //Register
-  register = async (data) => {
-    try {
-      const response = await api.post(`api/schools`, data)
-      return response.data
-    } catch (err) {
-      throw err?.response?.data || err.message
-    }
-  }
   //Send Invite
   adminInvite = async (data) => {
     try {
@@ -196,6 +187,30 @@ class SchoolOBJ {
         `api/schools/${params1}/courses/${params2}/enroll`,
         data
       )
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+
+  enrollStudentsIntoCourse = async (params1, params2, data) => {
+    try {
+      // Check if data is not empty
+      const response = await api.put(
+        `api/schools/${params1}/courses/${params2}/users`,
+        data
+      )
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+
+  unEnrollStudentsFromCourse = async (params1, params2, params3) => {
+    try {
+      // Check if data is not empty
+      const response = await api.delete(
+        `api/schools/${params1}/users/${params2}/enrollment/${params3}`)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message

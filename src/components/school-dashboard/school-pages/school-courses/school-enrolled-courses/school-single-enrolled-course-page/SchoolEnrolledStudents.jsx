@@ -3,17 +3,39 @@ import { Icon } from '@iconify/react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import './enrolled-courses.css'
 import backgroundImage from '../../../../../../assets/bg-monky.png' // Make sure to replace with the correct path to the uploaded image
-import schoolService from '../../../../../../services/api/school'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSelector } from 'react-redux'
 import { decryptId } from '../../../../../../utils/encryption'
 import Modal from 'react-modal'
 import DeleteStudentModal from '../../../../modals/students/DeleteStudentModal'
+import { toast } from 'react-toastify'
+import * as XLSX from 'xlsx'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import excelDoc from '../../../../../../assets/flow-doc.xlsx'
+import schoolService from '../../../../../../services/api/school'
+import { RotatingLines } from 'react-loader-spinner'
+
+const schema = yup.object().shape({
+  students: yup
+    .string()
+    .test('emails', 'Invalid email(s)', (value) => {
+      const emails = value.split(',').map(email => email.trim());
+      // Check if there is at least one email and all emails are valid
+      return emails.length > 0 && emails.every(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+    })
+    .required('At least one email is required'),
+});
 
 const SchoolEnrolledStudents = () => {
+  const queryClient = useQueryClient()
   const { user } = useSelector((state) => state.user)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+
+  const [deleteUserCredentials, setDeleteUser] = useState({ user: null, enrollId: null })
+
   const handleDeleteClick = () => {
     setShowDeleteModal(true)
   }
@@ -25,6 +47,7 @@ const SchoolEnrolledStudents = () => {
 
   const closeModals = () => {
     setShowCreateModal(false)
+    setShowDeleteModal(false)
   }
 
   let schoolId
@@ -47,7 +70,7 @@ const SchoolEnrolledStudents = () => {
   useEffect(() => {
     if (!data) return
     setData(data.course)
-    return () => {}
+    return () => { }
   }, [data])
 
   const formatDate = (isoString) => {
@@ -79,6 +102,96 @@ const SchoolEnrolledStudents = () => {
 
     // Return the formatted time
     return `${twelveHour}:${minute.toString().padStart(2, '0')} ${period}`
+  }
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    getValues,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  })
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        const data = new Uint8Array(event.target.result)
+        const workbook = XLSX.read(data, { type: 'array' })
+        const sheetName = workbook.SheetNames[0]
+        const worksheet = workbook.Sheets[sheetName]
+        const emails = XLSX.utils
+          .sheet_to_json(worksheet, { header: 1 })
+          .flat()
+          .filter((email) => typeof email === 'string' && validateEmail(email));
+        const currentEmails = getValues('students').trim();
+        const currentEmailsArray = currentEmails ? currentEmails.split(',').map(email => email.trim()) : [];
+        const mergedEmails = [...new Set([...currentEmailsArray, ...emails])];
+        setValue('students', mergedEmails.join(', '));
+      };
+      reader.readAsArrayBuffer(file)
+    }
+  }
+
+  const mutation = useMutation({
+    mutationFn: (data) => schoolService.enrollStudentsIntoCourse(schoolId, decryptId(id), data),
+    onSuccess: (data) => {
+      console.log('Mutation success:', data)
+      toast.success('Enrollment successful')
+      queryClient.invalidateQueries(['school-single-courses'])
+      reset()
+      closeModals()
+    },
+    onError: (error) => {
+      console.error('Mutation error:', error)
+      toast.error(error?.message || 'Enrollment failed')
+    },
+  })
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return re.test(String(email).toLowerCase())
+  }
+  const handleExcelDownload = () => {
+    const link = document.createElement('a')
+    link.href = excelDoc
+    link.download = 'template.xlsx'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
+  const onSubmit = (data) => {
+
+    if (!window.confirm('Are you sure you want to enroll the students for this course?')) return
+
+    const emailsArray = data.students.split(',').map(email => email.trim()).filter(email => validateEmail(email))
+    const finalData = { ...data, students: emailsArray, stdClass: enrollmentData.stdClass }
+
+    mutation.mutate(finalData)
+  }
+
+  const deleteMutation = useMutation({
+    mutationFn: () => schoolService.unEnrollStudentsFromCourse(enrollmentData._id, deleteUserCredentials.user, deleteUserCredentials.enrollId),
+    onSuccess: (data) => {
+      console.log('Mutation success:', data)
+      toast.success('User UnEnrolled successfully!')
+      queryClient.invalidateQueries(['school-single-courses'])
+      reset()
+      closeModals()
+    },
+    onError: (error) => {
+      console.error('Mutation error:', error)
+      toast.error(error?.message || 'Enrollment failed')
+    },
+  })
+
+
+  const deleteUser = () => {
+    deleteMutation.mutate()
   }
 
   return (
@@ -168,7 +281,10 @@ const SchoolEnrolledStudents = () => {
                     icon='mynaui:trash'
                     className='action-icon delete-icon'
                     width={18}
-                    onClick={handleCreateClick}
+                    onClick={() => {
+                      setDeleteUser({ user: data.user._id, enrollId: data._id })
+                      handleDeleteClick()
+                    }}
                   />
                   <Icon
                     icon='iconamoon:arrow-right-2-thin'
@@ -196,39 +312,65 @@ const SchoolEnrolledStudents = () => {
               *Indicates Required
             </p>
           </div>
-          <div className='flex-container'>
-            <div>
-              <label htmlFor=''>Student Email *</label>
-              <textarea
-                name=''
-                placeholder='Enter email addresses here'
-                id=''
-                rows={3}
-                cols={50}
-              />
-            </div>
-            <div className='upload'>
-              <label htmlFor='file-upload'>Or Upload File Here *</label>
-              <div className='file-upload-wrapper'>
-                <input
-                  type='file'
-                  id='file-upload'
-                  className='file-upload-input'
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className='flex-container'>
+              <div>
+                <label htmlFor=''>Student Email *</label>
+                <textarea
+                  id='student-email'
+                  name='student-email'
+                  placeholder='Enter email addresses here'
+                  rows={3}
+                  cols={50}
+                  {...register('students')}
                 />
-                <label htmlFor='file-upload' className='file-upload-label'>
-                  Choose file
-                  <Icon
-                    icon='ant-design:upload-outlined'
-                    width='24'
-                    height='24'
-                  />
+                {errors.students && (
+                  <p className='error-message'>{errors.students.message}</p>
+                )}
+              </div>
+              <div className='upload'>
+                <label htmlFor='file-upload'>
+                  Or Upload file here (CSV, Excel) *
                 </label>
+                <div className='file-upload-wrapper'>
+                  <input
+                    type='file'
+                    id='file-upload'
+                    className='file-upload-input'
+                    onChange={handleFileUpload}
+                  />
+                  <label htmlFor='file-upload' className='file-upload-label'>
+                    Choose file
+                    <Icon
+                      icon='ant-design:upload-outlined'
+                      width='24'
+                      height='24'
+                    />
+                  </label>
+                </div>
+                <span
+                  style={{ fontSize: '12px', cursor: 'pointer' }}
+                  onClick={handleExcelDownload}
+                >
+                  Kindly use this Excel template
+                  <Icon icon='vscode-icons:file-type-excel' width={20} />
+                </span>
               </div>
             </div>
-          </div>
-          <button onClick={closeModals} className='modal-button'>
-            Send Invite
-          </button>
+            <button
+              type='submit'
+              disabled={mutation.isPending} className='modal-button'>
+              {
+                mutation.isPending ? <RotatingLines
+                  type='Oval'
+                  style={{ color: '#FFF' }}
+                  height={20}
+                  width={20} /> :
+                  "Send Invite"
+              }
+
+            </button>
+          </form>
         </div>
       </Modal>
 
@@ -239,7 +381,7 @@ const SchoolEnrolledStudents = () => {
         className='custom-modal-success'
         overlayClassName='custom-overlay'
       >
-        <DeleteStudentModal closeModal={closeModals} />
+        <DeleteStudentModal closeModal={closeModals} handleDeleteUser={deleteUser} isPending={deleteMutation.isPending} />
       </Modal>
     </div>
   )

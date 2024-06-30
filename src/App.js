@@ -35,6 +35,8 @@ import SchoolForgotPassword from './components/school-dashboard/school-onboardin
 import SchoolResetPassword from './components/school-dashboard/school-onboarding/login/SchoolResetPassword.js'
 import SigninCategory from './components/common-pages/signin-category/SigninCategory.js'
 import ProtectedRoute from './components/ProtectedRoutes.js'
+import IndividualCategory from './components/common-pages/sigup-category/IndividualCategory.js'
+import RegFormEducators from './components/onboarding/registration/RegFormEducators.js'
 
 
 function App() {
@@ -46,10 +48,20 @@ function App() {
 
           <Route element={<OnboardingRootLayout />}>
             <Route index element={<SignupCategory />} />
+
             <Route path='/sign-in' element={<SigninCategory />} />
             <Route
-              path='/individual/sign-up/registration'
+              path='/individual/sign-up'
+              element={<IndividualCategory />}
+            />
+            <Route
+              path='/individual/sign-up/students'
               element={<RegistrationForm />}
+            />
+
+            <Route
+              path='/individual/sign-up/educators'
+              element={<RegFormEducators />}
             />
             <Route path='/individual/sign-in' element={<SignIn />} />
             <Route path='/forgot-password' element={<ForgotPassword />} />

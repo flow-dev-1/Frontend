@@ -43,7 +43,7 @@ export default function SignupCategory() {
             <button
               className='btn signup-button'
               onClick={() => {
-                navigate('/individual/sign-up/registration')
+                navigate('/individual/sign-up')
               }}
             >
               Register Now

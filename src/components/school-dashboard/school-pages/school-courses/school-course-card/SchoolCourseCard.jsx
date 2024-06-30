@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
 import { useState } from 'react'
 
-const SchoolCourseCard = ({ openModal, course }) => {
+const SchoolCourseCard = ({ openModal, course, enrolled }) => {
   const [isOn, setIsOn] = useState(false)
 
   const handleToggle = () => {
@@ -26,9 +26,8 @@ const SchoolCourseCard = ({ openModal, course }) => {
   let reviewBtnClass
   let detailsBtnClass
 
-  console.log(course)
 
-  if (course.status.enrolled) {
+  if (enrolled.includes(course._id)) {
     reviewBtnColor = darkGreen
     detailsBtnColor = lightGreen
     reviewBtnClass = 'enrolled'
@@ -62,7 +61,6 @@ const SchoolCourseCard = ({ openModal, course }) => {
     return text
   }
 
-  console.log(course)
 
   return (
     <div>
@@ -109,7 +107,7 @@ const SchoolCourseCard = ({ openModal, course }) => {
             )}
             %
           </div>
-          {course.status === 'published' ? (
+          {enrolled.includes(course._id) ? (
             <div
               className={`toggle-switch ${isOn ? 'on' : 'off'}`}
               onClick={handleToggle}
@@ -124,9 +122,12 @@ const SchoolCourseCard = ({ openModal, course }) => {
           <div className='course-card-buttons-main'>
             <button
               style={
-                course.status === 'published'
-                  ? { backgroundColor: '#F8F8F8', color: '#329BD6' }
-                  : { backgroundColor: '#D4FFBE', color: '#4B7E31' }
+                enrolled.includes(course._id)
+                  ? { backgroundColor: '#D4FFBE', color: '#4B7E31' } :
+                  course.grade !== 'Educators' ?
+                    { backgroundColor: lightTertiary, color: '#329BD6' } :
+                    { backgroundColor: lightEducator, color: darkEducator }
+
               }
               className={`reviewBtn ${reviewBtnClass}`}
             >
@@ -139,23 +140,31 @@ const SchoolCourseCard = ({ openModal, course }) => {
               Review
             </button>
             <button
-              className={`detailsBtn ${detailsBtnClass}`}
+              // className={`detailsBtn ${detailsBtnClass}`}
               onClick={() => openModal(course)}
               style={
-                course.status === 'published'
-                  ? { backgroundColor: darkEducator, color: '#5CE1E6' }
-                  : { backgroundColor: darkGreen, color: 'ffff' }
+                enrolled.includes(course._id)
+                  ? { backgroundColor: darkGreen, color: lightGreen } :
+                  course.grade !== 'Educators' ? { backgroundColor: darkTertiary, color: 'white' }
+                    : { backgroundColor: darkEducator, color: lightEducator }
               }
             >
               <span>
-                <Icon
-                  icon='tabler:list-details'
-                  style={{ color: detailsBtnColor }}
-                />
+                {
+                  enrolled.includes(course._id) ?
+                    <Icon icon='tabler:list-details' /> :
+                    <Icon icon='mdi:cart' width={24} style={{ color: 'ffff' }} />
+
+                }
+
               </span>{' '}
-              View Details
+              {
+                enrolled.includes(course._id) ? "  View Details" :
+                  `${course.currency} ${course.cost}`
+              }
+
             </button>
-            {course.status === 'published' ? (
+            {enrolled.includes(course._id) ? (
               <div
                 style={{
                   display: 'flex',
@@ -164,19 +173,12 @@ const SchoolCourseCard = ({ openModal, course }) => {
                   fontSize: '12px',
                 }}
               >
-                <span style={{ color: darkGreen }}>0 %</span> <span>Done</span>
+                <span style={{ color: darkGreen, fontWeight: "bold" }}>0 %</span> <span>Done</span>
               </div>
             ) : (
               ''
             )}
           </div>
-          {course.status.enrolled ? (
-            <div className='course-card-progress'>
-              {course.status.progress}% done
-            </div>
-          ) : (
-            ''
-          )}
         </div>
       </div>
     </div>

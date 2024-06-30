@@ -105,7 +105,7 @@ export default function RegistrationForm() {
     <div>
       <div className="registration-page">
         <div className="top-section">
-          <h2>Register as an Individual</h2>
+          <h2>Register as a Student</h2>
           <hr />
           <span>*Indicates Required</span>
         </div>
