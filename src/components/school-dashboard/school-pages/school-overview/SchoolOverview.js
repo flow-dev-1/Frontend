@@ -1,205 +1,288 @@
 import React from 'react'
-import { Line, Pie, Bar } from 'react-chartjs-2'
+import { Icon } from '@iconify/react'
 import {
-  Chart as ChartJS,
-  LineElement,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  ArcElement,
-  BarElement,
-} from 'chart.js'
-import './overview.css'
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+} from 'recharts'
+import './school-overview.css'
 
-ChartJS.register(
-  LineElement,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  ArcElement,
-  BarElement
-)
+const dataActive = [
+  { name: 'Active', value: 40 },
+  { name: 'Not Active', value: 10 },
+]
 
-const SchoolOverview = () => {
-  const lineData = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    datasets: [
-      {
-        label: 'Enrollment Chart',
-        data: [10, 20, 15, 30, 40, 25, 35],
-        borderColor: '#4bc0c0',
-        fill: false,
-      },
-    ],
-  }
+const dataCompletion = [
+  { name: 'Completed', value: 80 },
+  { name: 'Remaining', value: 20 },
+]
 
-  const pieData1 = {
-    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-    datasets: [
-      {
-        data: [20, 15, 10, 30, 25],
-        backgroundColor: [
-          '#ff6384',
-          '#36a2eb',
-          '#cc65fe',
-          '#ffce56',
-          '#4bc0c0',
-        ],
-      },
-    ],
-  }
+const dataGender = [
+  { name: 'Male', value: 90 },
+  { name: 'Female', value: 50 },
+]
 
-  const barData1 = {
-    labels: [
-      'Location 1',
-      'Location 2',
-      'Location 3',
-      'Location 4',
-      'Location 5',
-    ],
-    datasets: [
-      {
-        label: 'Engagement',
-        data: [50, 60, 70, 180, 190],
-        backgroundColor: [
-          '#ff6384',
-          '#36a2eb',
-          '#cc65fe',
-          '#ffce56',
-          '#4bc0c0',
-        ],
-      },
-    ],
-  }
+const dataEnrollment = [
+  { name: 'Growth Mindset', value: 10 },
+  { name: 'LEAP', value: 35 },
+  { name: 'Mind & Money', value: 20 },
+  { name: 'Course Name', value: 15 },
+  { name: 'Course Name', value: 25 },
+]
 
-  const pieData2 = {
-    labels: ['Male', 'Female'],
-    datasets: [
-      {
-        data: [70, 30],
-        backgroundColor: ['#36a2eb', '#ff6384'],
-      },
-    ],
-  }
+const COLORS = ['#17E383', '#652AC433', '#FF8042', '#0088FE']
+const BAR_COLORS = ['#4bc0c0', '#9966ff', '#ff9f40', '#4b4b4b', '#ff9f40']
+const GENDER_COLORS = ['#6f6af8', '#fd46d5'] // New array for gender chart colors
 
-  const barData2 = {
-    labels: [
-      'GROWTH MINDSET',
-      'LEAP',
-      'MIND & MONEY',
-      'VALUE & GOALS',
-      'RESILIENCE',
-    ],
-    datasets: [
-      {
-        label: 'Course Engagement',
-        data: [100, 400, 200, 300, 350],
-        backgroundColor: [
-          '#4bc0c0',
-          '#9966ff',
-          '#ff9f40',
-          '#ffcd56',
-          '#36a2eb',
-        ],
-      },
-    ],
-  }
-
-  const barData3 = {
-    labels: ['LGA 1', 'LGA 2', 'LGA 3', 'LGA 4', 'LGA 5'],
-    datasets: [
-      {
-        label: 'Locations',
-        data: [20, 40, 30, 50, 40],
-        backgroundColor: [
-          '#4bc0c0',
-          '#9966ff',
-          '#ff9f40',
-          '#ffcd56',
-          '#36a2eb',
-        ],
-      },
-    ],
-  }
+const renderCustomizedLabel = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  percent,
+  index,
+}) => {
+  const RADIAN = Math.PI / 180
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5
+  const x = cx + radius * Math.cos(-midAngle * RADIAN)
+  const y = cy + radius * Math.sin(-midAngle * RADIAN)
 
   return (
+    <text
+      x={x}
+      y={y}
+      fill='white'
+      textAnchor={x > cx ? 'start' : 'end'}
+      dominantBaseline='central'
+      fontSize={10} // Reduced font size
+    >
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  )
+}
+
+const SchoolOverview = () => {
+  return (
     <div className='overview'>
-      <div className='card total-income'>
-        <h3>Total Income</h3>
-        <p>0.00</p>
-        <p className='outstanding'>Outstanding: -₦230,000</p>
-      </div>
-      <div className='card total-enrolled-schools'>
-        <h3>Total Enrolled Schools</h3>
-        <p>0</p>
-      </div>
-      <div className='card total-enrolled-teachers'>
-        <h3>Total Enrolled Teachers</h3>
-        <p>0</p>
-      </div>
-      <div className='card total-enrolled-students'>
-        <h3>Total Enrolled Students</h3>
-        <p>0</p>
-      </div>
-      <div className='chart-container'>
-        <div className='chart-box'>
-          <div className='filter-options'>
-            <h4>Enrollment Chart</h4>
-            <div>
-              <button>Filter by</button>
-              <button>Sort by</button>
-            </div>
-          </div>
-          <Line data={lineData} />
+      <div className='top-cards'>
+        <div className='balance'>
+          <p>Account Balance:</p>
+          <p className='value'>-N4,000,000.00</p>
         </div>
-        <div className='chart-box'>
-          <div className='filter-options'>
-            <h4>Busy Days</h4>
-            <div>
-              <button>Filter by</button>
-            </div>
-          </div>
-          <Pie data={pieData1} />
+
+        <div className='stat one'>
+          <p className='enroll'>Total Enrolled Teachers</p>
+          <p className='value'>0</p>
         </div>
-        <div className='chart-box'>
-          <div className='filter-options'>
-            <h4>Busy Hours</h4>
-            <div>
-              <button>Filter by</button>
-            </div>
-          </div>
-          <Line data={lineData} />
+        <div class='stat'>
+          <p className='total'>Total Enrolled Students</p>
+          <p className='value'>0</p>
         </div>
       </div>
-      <div className='chart-container'>
-        <div className='chart-box'>
-          <div className='filter-options'>
-            <h4>Gender Analysis</h4>
-            <div>
-              <button>Filter by</button>
+
+      <div className='charts'>
+        <div className='chart'>
+          <div>
+            <div className='chart-heading'>
+              <p>Activity Report</p>
+              <div style={{ cursor: 'pointer' }} className='filter-sort'>
+                <span>
+                  <Icon icon='octicon:filter-16' />
+                </span>
+                <select style={{ cursor: 'pointer' }}>
+                  <option value='all'>Filter by</option>
+                  <option value='published'>Published</option>
+                  <option value='draft'>Draft</option>
+                </select>
+              </div>
+            </div>
+            <hr />
+
+            <ResponsiveContainer width='100%' height={250}>
+              <PieChart>
+                <Pie
+                  data={dataActive}
+                  dataKey='value'
+                  nameKey='name'
+                  cx='50%'
+                  cy='50%'
+                  outerRadius={120}
+                  label={renderCustomizedLabel}
+                  labelLine={false}
+                >
+                  {dataActive.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+            <div className='students-dash'>students</div>
+            <div className='summary'>
+              <div className='summary-box'>
+                <p className='active'>Active/Not-Active</p>
+                <div>
+                  <div className='box'></div> Active - 40
+                </div>
+                <div>
+                  <div className='box-2'></div> Not-Active - 40
+                </div>
+              </div>
             </div>
           </div>
-          <Pie data={pieData2} />
         </div>
-        <div className='chart-box'>
-          <div className='filter-options'>
-            <h4>Course Engagement</h4>
-            <div>
-              <button>Filter by</button>
-              <button>Sort by</button>
+        <div className='chart'>
+          <div>
+            <div className='chart-heading'>
+              <p>Progress Report</p>
+              <div style={{ cursor: 'pointer' }} className='filter-sort'>
+                <span>
+                  <Icon icon='octicon:filter-16' />
+                </span>
+                <select style={{ cursor: 'pointer' }}>
+                  <option value='all'>Filter by</option>
+                  <option value='published'>Published</option>
+                  <option value='draft'>Draft</option>
+                </select>
+              </div>
             </div>
           </div>
-          <Bar data={barData2} />
+          <hr />
+          <ResponsiveContainer width='100%' height={250}>
+            <PieChart>
+              <Pie
+                data={dataCompletion}
+                dataKey='value'
+                nameKey='name'
+                cx='50%'
+                cy='50%'
+                innerRadius={80} // Adjusted innerRadius for increased thickness
+                outerRadius={120} // Adjusted outerRadius for increased thickness
+                label={renderCustomizedLabel}
+                labelLine={false}
+              >
+                {dataCompletion.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+          <div className='students-dash'>students</div>
+          <div className='summary'>
+            <div className='summary-box'>
+              <p className='active'>Completion Rate</p>
+              <div>
+                <div className='box'></div> Completed - 80%
+              </div>
+              <div>
+                <div className='box-2'></div> Remaining - 40%
+              </div>
+            </div>
+          </div>
         </div>
-        <div className='chart-box'>
-          <div className='filter-options'>
-            <h4>Locations</h4>
-            <div>
-              <button>Filter by</button>
-              <button>Sort by</button>
+      </div>
+      <div className='charts'>
+        <div className='chart two'>
+          <div>
+            <div className='chart-heading'>
+              <p>Gender Balance</p>
+              <div style={{ cursor: 'pointer' }} className='filter-sort'>
+                <span>
+                  <Icon icon='octicon:filter-16' />
+                </span>
+                <select style={{ cursor: 'pointer' }}>
+                  <option value='all'>Filter by</option>
+                  <option value='published'>Published</option>
+                  <option value='draft'>Draft</option>
+                </select>
+              </div>
             </div>
           </div>
-          <Bar data={barData3} />
+          <hr />
+          <ResponsiveContainer width='100%' height={250}>
+            <PieChart>
+              <Pie
+                data={dataGender}
+                dataKey='value'
+                nameKey='name'
+                cx='50%'
+                cy='50%'
+                outerRadius={120}
+                label={renderCustomizedLabel}
+                labelLine={false}
+              >
+                {dataGender.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={GENDER_COLORS[index % GENDER_COLORS.length]}
+                  />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+          <div className='students-dash'>students</div>
+          <div className='summary'>
+            <div className='summary-box'>
+              <p className='active'>Gender</p>
+              <div>
+                <div className='box male'></div> Male -{' '}
+                <span className='male'> 80</span>
+              </div>
+              <div>
+                <div className='box-2 female'></div> Female -{' '}
+                <span className='female'> 50</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className='chart bar-chart'>
+          <div>
+            <div className='chart-heading'>
+              <p>Enrollment Per Course</p>
+              <div style={{ cursor: 'pointer' }} className='filter-sort'>
+                <span>
+                  <Icon icon='octicon:filter-16' />
+                </span>
+                <select style={{ cursor: 'pointer' }}>
+                  <option value='all'>Filter by</option>
+                  <option value='published'>Published</option>
+                  <option value='draft'>Draft</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <hr />
+          <ResponsiveContainer width='100%' height={400}>
+            <BarChart
+              data={dataEnrollment}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            >
+              <XAxis dataKey='name' />
+              <YAxis />
+
+              <Bar dataKey='value'>
+                {dataEnrollment.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={BAR_COLORS[index % BAR_COLORS.length]}
+                  />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>
