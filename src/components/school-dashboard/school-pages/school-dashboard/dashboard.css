@@ -5,13 +5,6 @@
   width: 100%;
 }
 
-.course-page {
-  background-image: url('../../../../assets/course-bg.png');
-  background-position: right;
-  background-repeat: no-repeat;
-  background-size: cover;
-  /* height: 100vh; */
-}
 .sidebar-content {
   width: 20%;
 }

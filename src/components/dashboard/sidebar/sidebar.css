@@ -1,18 +1,38 @@
 .sidebar-user {
   position: fixed;
   width: 250px;
-  height: 100vh;
+  height: 90vh;
+  margin-top: 60px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #00BCC3;
-  box-shadow: 0px 4px 15px 0px #0000000D;
+  background-color: #00bcc3;
+  box-shadow: 0px 4px 15px 0px #0000000d;
   border: 1px solid #44444440;
+  overflow-y: scroll;
 }
 
+.sidebar-user-menu .link.active {
+  background-color: #fff;
+  color: #00bcc3;
+}
+
+.sidebar-user-menu .link.active-inner {
+  background-color: #fff;
+  border-radius: 5px;
+  padding-left: 2rem;
+  color: #00bcc3;
+}
+
+.sidebar-user-menu .link.inner {
+  padding-left: 2rem;
+}
+.sidebar-user-menu .link.inner {
+  border-radius: 5px;
+}
 .profile-img-container,
 .sidebar-user-menu {
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
 .mobile-sidebar-menu {
@@ -22,10 +42,9 @@
 .hamburger-icon {
   display: none;
   z-index: 990;
-  color: #00BCC3;
+  color: #00bcc3;
   font-size: 35px;
 }
-
 
 .sidebar-user .profile-info {
   display: flex;
@@ -53,22 +72,31 @@
   align-items: center;
   font-weight: 400;
   font-size: 16px;
-  color: #FFFFFF;
+  color: #ffffff;
   white-space: nowrap;
   padding: 5px 10px;
-  border-radius: 5px;
+  border-radius: 25px;
   background-color: transparent;
 }
 
+.chevron-icon {
+  font-size: 25px;
+  margin-left: 1rem;
+}
+.nested-menu {
+  padding-left: 2rem;
+}
+
 .sidebar-user-menu .link:hover {
-  background: rgba(20, 20, 20, 0.5);
-  color: #FFFFFF;
+  background: #ffffff;
+  color: #00bcc3;
   cursor: pointer;
 }
 
 .sidebar-user .sidebar-user-menu .active .link {
-  background: #FFFFFF;
-  color: #00BCC3;
+  background: #ffffff;
+  color: #00bcc3;
+  border-radius: 25px;
   /* padding-left: 1.2rem ; */
 }
 
@@ -80,7 +108,6 @@
   padding-left: 0 !important;
 } */
 
-
 .sidebar-user-menu .sidebar-icon {
   font-size: 25px;
   margin-right: 20px;
@@ -90,15 +117,7 @@
   display: none;
 }
 
-
-
-
-
-
 @media screen and (max-width: 800px) {
-
-
-
   .admin.hamburger-icon {
     /* ... Existing styles ... */
     cursor: pointer;
@@ -120,7 +139,6 @@
     /* margin-top: 50px; */
     height: 100vh;
     justify-content: center;
-
   }
 
   .hamburger-icon {
@@ -145,10 +163,9 @@
   }
 
   .sidebar-user.open {
-    background-color: #00BCC3;
+    background-color: #00bcc3;
     z-index: 999;
     width: 100%;
-
   }
 
   .content {
@@ -176,9 +193,11 @@
   }
 }
 
-@media screen and (max-width: 769px) {}
+@media screen and (max-width: 769px) {
+}
 
-@media screen and (max-width: 600px) {}
+@media screen and (max-width: 600px) {
+}
 
 @media screen and (max-width: 426px) {
   .hamburger-icon {
@@ -186,6 +205,8 @@
   }
 }
 
-@media screen and (max-width: 376px) {}
+@media screen and (max-width: 376px) {
+}
 
-@media screen and (max-width: 321px) {}
+@media screen and (max-width: 321px) {
+}

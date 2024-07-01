@@ -40,6 +40,8 @@ import StudentRegistrationForm from './components/onboarding/registration/Studen
 import EducatorRegistrationForm from './components/onboarding/registration/EducatorRegistrationForm.js'
 import IndividualCategory from './components/common-pages/sigup-category/IndividualCategory.js'
 import InvitedUserRegistration from './components/onboarding/registration/InvitedUserRegistration.js'
+import Support from './components/dashboard/pages/support/Support.jsx'
+import PayementHistory from './components/dashboard/pages/payment-history/PayementHistory.jsx'
 
 function App() {
   return (
@@ -52,17 +54,17 @@ function App() {
             <Route index element={<SignupCategory />} />
             <Route path='sign-in' element={<SigninCategory />} />
 
-            <Route path='/individual/sign-up' element={<IndividualCategory />} />
+            <Route
+              path='/individual/sign-up'
+              element={<IndividualCategory />}
+            />
 
             <Route
               path='/individual/sign-up/student-registration'
               element={<StudentRegistrationForm />}
             />
 
-            <Route
-              path='/invited-user'
-              element={<InvitedUserRegistration />}
-            />
+            <Route path='/invited-user' element={<InvitedUserRegistration />} />
             {/* <Route
               path='/individual/sign-up/educator-registration'
               element={<EducatorRegistrationForm />}
@@ -94,6 +96,11 @@ function App() {
           <Route path='/dashboard' element={<Dashboard />}>
             <Route index element={<IndividualOverview />} />
             <Route path='/dashboard/profile' element={<IndividualProfile />} />
+            <Route path='/dashboard/support' element={<Support />} />
+            <Route
+              path='/dashboard/payment-history'
+              element={<PayementHistory />}
+            />
             <Route path='/dashboard/my-courses' element={<MyCourses />} />
             <Route
               path='/dashboard/my-courses/:id'

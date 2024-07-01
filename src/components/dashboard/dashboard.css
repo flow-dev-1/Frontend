@@ -2,17 +2,8 @@
 
 .dashboard {
   display: flex;
-  
 }
 
-.course-page {
-  background-image: url('../../assets/course-bg.png');
-  background-position: right;
-  background-repeat: no-repeat;
-  background-size: cover;
-  /* height: 100vh; */
-  
-}
 .sidebar-content {
   flex: 2;
 }
@@ -22,4 +13,3 @@
   padding: 40px 20px;
   margin: 50px 0 0 250px;
 }
-
