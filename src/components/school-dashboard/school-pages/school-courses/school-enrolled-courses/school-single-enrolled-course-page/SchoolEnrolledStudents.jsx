@@ -268,7 +268,7 @@ const SchoolEnrolledStudents = () => {
             {enrollmentData?.studentEnrollments?.map((data, index) => (
               <tr key={data._id}>
                 <td>{index + 1}</td>
-                <td>
+                <td style={{ cursor: "pointer" }} onClick={() => navigate(`users/${data?.user?._id}`)}>
                   {data?.user?.first_name} {data?.user?.last_name}
                 </td>
                 <td>{data?.user?.email}</td>

@@ -135,6 +135,7 @@ function App() {
             path='/school-dashboard/courses/enrolled/:id'
             element={<SchoolEnrolledStudents />}
           />
+          <Route path='/school-dashboard/courses/enrolled/:id/users/:userId' element={<IndividualProfile />} />
           <Route
             path='/school-dashboard/settings/teams'
             element={<SchoolSettingsTeams />}

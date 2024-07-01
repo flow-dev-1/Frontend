@@ -12,6 +12,37 @@ class UserOBJ {
     }
   }
 
+  getInvitedUser = async (auth_token) => {
+    try {
+      // Check if data is not empty
+
+      const response = await api.get('api/users/me', {
+        headers: {
+          Authorization: `Bearer ${auth_token}`,
+        },
+      })
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+
+  //Register
+  registerInvitedUser = async (auth_token, data) => {
+
+    console.log(auth_token)
+    try {
+      const response = await api.post(`api/users/invited-user`, data, {
+        headers: {
+          Authorization: `Bearer ${auth_token}`,
+        },
+      })
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+
   verifyAccount = async (data) => {
     try {
       const response = await api.patch(`api/users/verify-account`, data)

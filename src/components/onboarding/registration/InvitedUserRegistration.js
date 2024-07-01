@@ -6,7 +6,7 @@ import '../onboarding.css'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import userService from '../../../services/api/user'
 import { states } from '../../states'
@@ -19,6 +19,7 @@ import PhoneInput, {
     getCountryCallingCode,
 } from 'react-phone-number-input'
 import StudentOtpModal from '../../modals-pages/onboarding-modals/StudentOtpModal'
+import EmailVerificationSuccessful from '../../modals-pages/onboarding-modals/EmailVerificationSuccessful'
 
 Modal.setAppElement('#root') // Set the root element for the modal
 
@@ -32,35 +33,42 @@ export default function InvitedUserRegistration() {
     const [countries, setCountries] = useState([])
     const [isNigeria, setIsNigeria] = useState(true) // State to track if the selected country is Nigeria
     const [step, setStep] = useState(0)
+    const [schGrade, setGrade] = useState("")
+    const [token, setJWTToken] = useState("")
     const navigate = useNavigate()
 
     const schema = yup.object().shape({
-        childFirstName: yup.string().required("Child's First Name is required"),
-        childLastName: yup.string().required("Child's Last Name is required"),
+        childFirstName: yup.string().required("First Name is required"),
+        childLastName: yup.string().required("Last Name is required"),
         guardianEmail: yup
             .string()
             .email('Invalid Email')
-            .required("Guardian's Email Address is required"),
+            .required("Email Address is required"),
         guardianPhone: yup
             .string()
-            .required("Guardian's Phone Number is required")
+            .required("Phone Number is required")
             .test('isValidPhoneNumber', 'Invalid phone number', (value) =>
                 isValidPhoneNumber(value)
             ),
         country: yup.string().required('Country is required'),
         state: yup.string().required('State is required'),
         lga: yup.string().required('LGA is required'),
-        gender: yup.string().required("Child's Gender is required"),
-        dob: yup.date().required("Child's Date of Birth is required"),
+        gender: yup.string().required("Gender is required"),
+        dob: yup.date().required("Date of Birth is required"),
         schoolGrade: yup.string().required('School Grade is required'),
         password: yup
             .string()
             .min(8, 'Password must be at least 8 characters')
-            .required('Password is required'),
+            .nullable() // Make it nullable
+            .transform((value, originalValue) => originalValue === '' ? null : value), // Convert empty string to null
         confirmPassword: yup
             .string()
-            .oneOf([yup.ref('password'), null], 'Passwords must match')
-            .required('Confirm Password is required'),
+            .nullable()
+            // .oneOf([yup.ref('password'), null], 'Passwords must match')
+            .when('password', {
+                is: (val) => val && val.length > 0,
+                then: (schema) => schema.required('Confirm Password is required if Password is provided'),
+            }),
     })
 
     const {
@@ -73,9 +81,42 @@ export default function InvitedUserRegistration() {
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            country: "Nigeria"
+            country: "Nigeria",
         }
     })
+
+
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ['get-invited-user'],
+        queryFn: () => userService.getInvitedUser(token),
+        enabled: !!token,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+    })
+
+    useEffect(() => {
+        if (!data) return
+        let userData = data.user
+        if (userData?.isVerified) {
+            setValue("country", userData.country)
+            setValue("childFirstName", userData.first_name)
+            setValue("childLastName", userData.last_name)
+            setValue("guardianEmail", userData.email)
+            const phone = userData.phone ? userData.phone.trim() : "";
+            setValue("guardianPhone", phone);
+            setValue("state", userData.state)
+            setValue("lga", userData.lga)
+            setValue("gender", userData.gender)
+            const dob = userData.DOB ? new Date(userData.DOB) : null;
+            if (dob instanceof Date && !isNaN(dob)) {
+                setValue("dob", dob.toISOString().split('T')[0]); // Format to YYYY-MM-DD
+            }
+        }
+        return () => {
+
+        }
+    }, [data])
+
 
 
     const togglePasswordVisibility = () => {
@@ -89,8 +130,15 @@ export default function InvitedUserRegistration() {
         const token = urlParams.get('t')
         const school = urlParams.get('s')
         const email = urlParams.get('email')
+        const grade = urlParams.get("grade")
+        const schoolName = urlParams.get('schoolName')
+        const coursName = urlParams.get('coursName')
+        setGrade(grade)
+        setJWTToken(token)
+        setValue("schoolGrade", grade)
+        setValue("guardianEmail", email)
 
-        if (token) {
+        if (token && email) {
             setStep(1)
             // mutate({ code: queryCode })
         } else {
@@ -130,12 +178,12 @@ export default function InvitedUserRegistration() {
     }, [selectedCountry])
 
     const mutation = useMutation({
-        mutationFn: (data) => userService.register("Individual", data),
-        onSuccess: (data) => {
-            console.log('Registration successful:', data)
-            toast.success(data.message)
-            dispatch(setToken(data?.token))
+        mutationFn: (params) => userService.registerInvitedUser(token, params),
+        onSuccess: (res) => {
+            console.log('Registration successful:', res)
+            toast.success(res.message)
             openModal()
+
         },
         onError: (error) => {
             console.error('Registration error:', error)
@@ -182,7 +230,7 @@ export default function InvitedUserRegistration() {
                 <div>
                     <div className='registration-page'>
                         <div className='top-section'>
-                            <h2>Register as a Student</h2>
+                            <h2>Register as {schGrade !== "Educator" ? "a Student" : "an Educator"}</h2>
                             <hr />
                             <span>*Indicates Required</span>
                         </div>
@@ -190,7 +238,7 @@ export default function InvitedUserRegistration() {
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className='form-section'>
                                 <div className='form-group'>
-                                    <label>Child's First Name *</label>
+                                    <label>First Name *</label>
                                     <input
                                         type='text'
                                         placeholder='Type here...'
@@ -201,7 +249,7 @@ export default function InvitedUserRegistration() {
                                     )}
                                 </div>
                                 <div className='form-group'>
-                                    <label>Child's Last Name *</label>
+                                    <label>Last Name *</label>
                                     <input
                                         type='text'
                                         placeholder='Type here...'
@@ -217,6 +265,7 @@ export default function InvitedUserRegistration() {
                                         type='email'
                                         placeholder='Type here...'
                                         {...register('guardianEmail')}
+                                        disabled
                                     />
                                     {errors.guardianEmail && (
                                         <p className='error-message'>{errors.guardianEmail.message}</p>
@@ -227,6 +276,7 @@ export default function InvitedUserRegistration() {
                                     <div className='flex-code-input'>
                                         <PhoneInput
                                             placeholder='Enter phone number'
+                                            value={watch('guardianPhone')}
                                             onChange={(val) => setValue('guardianPhone', val)}
                                             onCountryChange={(country) => {
                                                 if (country) {
@@ -322,7 +372,7 @@ export default function InvitedUserRegistration() {
                                 <div className='form-group'>
                                     <label>School Grade *</label>
 
-                                    <select  {...register('schoolGrade')}>
+                                    <select  {...register('schoolGrade')} disabled>
                                         <option value=''>Select Grade</option>
                                         {["Primary", "Secondary"].map((grade, i) => (
                                             <option key={i} value={grade}>
@@ -339,12 +389,13 @@ export default function InvitedUserRegistration() {
                                     <div className='d-flex align-items-center input-with-icon'>
                                         <input
                                             type={showPassword ? 'text' : 'password'}
-                                            placeholder='Type here...'
+                                            placeholder='********'
                                             {...register('password')}
                                             onChange={(e) => {
                                                 const value = e.target.value
                                                 setShowPasswordError(value.length < 8)
                                             }}
+                                            disabled={data?.user?.isVerified}
                                         />
 
                                         <Icon
@@ -353,11 +404,11 @@ export default function InvitedUserRegistration() {
                                             onClick={togglePasswordVisibility}
                                         />
                                     </div>
-                                    {showPasswordError && (
+                                    {/* {showPasswordError && (
                                         <p className='error-message'>
                                             Password must be at least 8 characters
                                         </p>
-                                    )}
+                                    )} */}
                                     {errors.password && (
                                         <p className='error-message'>{errors.password.message}</p>
                                     )}
@@ -367,8 +418,9 @@ export default function InvitedUserRegistration() {
                                     <div className='d-flex align-items-center input-with-icon'>
                                         <input
                                             type={showPassword ? 'text' : 'password'}
-                                            placeholder='Type here...'
+                                            placeholder='********'
                                             {...register('confirmPassword')}
+                                            disabled={data?.user?.isVerified}
                                         />
 
                                         <Icon
@@ -417,11 +469,7 @@ export default function InvitedUserRegistration() {
                         className='custom-modal-otp'
                         overlayClassName='custom-overlay'
                     >
-                        <StudentOtpModal
-                            formData={formData}
-                            closeModal={closeModal}
-                            guardianPhone={watch('guardianPhone')}
-                        />
+                        <EmailVerificationSuccessful from='otp' />
                     </Modal>
                 </div>
             }
