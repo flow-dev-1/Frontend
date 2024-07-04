@@ -65,6 +65,8 @@ function App() {
             />
 
             <Route path='/invited-user' element={<InvitedUserRegistration />} />
+
+            <Route path='/invited-admin' element={<InvitedUserRegistration />} />
             {/* <Route
               path='/individual/sign-up/educator-registration'
               element={<EducatorRegistrationForm />}
