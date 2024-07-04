@@ -42,6 +42,7 @@ import IndividualCategory from './components/common-pages/sigup-category/Individ
 import InvitedUserRegistration from './components/onboarding/registration/InvitedUserRegistration.js'
 import Support from './components/dashboard/pages/support/Support.jsx'
 import PayementHistory from './components/dashboard/pages/payment-history/PayementHistory.jsx'
+import InvitedAdminRegistration from './components/onboarding/registration/InvitedAdminRegistration.js'
 
 function App() {
   return (
@@ -64,9 +65,12 @@ function App() {
               element={<StudentRegistrationForm />}
             />
 
-            <Route path='/invited-user' element={<InvitedUserRegistration />} />
+            <Route
+              path='/invited-user'
+              element={<InvitedAdminRegistration />}
+            />
 
-            <Route path='/invited-admin' element={<InvitedUserRegistration />} />
+            <Route path='/invited-admin' element={<InvitedAdminRegistration />} />
             {/* <Route
               path='/individual/sign-up/educator-registration'
               element={<EducatorRegistrationForm />}
@@ -137,7 +141,10 @@ function App() {
             path='/school-dashboard/courses/enrolled/:id'
             element={<SchoolEnrolledStudents />}
           />
-          <Route path='/school-dashboard/courses/enrolled/:id/users/:userId' element={<IndividualProfile />} />
+          <Route
+            path='/school-dashboard/courses/enrolled/:id/users/:userId'
+            element={<IndividualProfile />}
+          />
           <Route
             path='/school-dashboard/settings/teams'
             element={<SchoolSettingsTeams />}

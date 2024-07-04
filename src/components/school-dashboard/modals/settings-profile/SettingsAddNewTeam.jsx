@@ -105,6 +105,7 @@ const SettingsAddNewTeam = ({ closeModal }) => {
             <div>
               <label>Permission *</label>
               <select
+              id='select'
                 {...register('position')}
                 onChange={(e) => setValue('position', e.target.value)}
               >

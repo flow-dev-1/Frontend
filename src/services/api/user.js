@@ -42,6 +42,20 @@ class UserOBJ {
       throw err?.response?.data || err.message
     }
   }
+  registerInvitedAdmin = async (auth_token, data) => {
+
+    console.log(auth_token)
+    try {
+      const response = await api.post(`api/users/invited-school-admin`, data, {
+        headers: {
+          Authorization: `Bearer ${auth_token}`,
+        },
+      })
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
 
   verifyAccount = async (data) => {
     try {

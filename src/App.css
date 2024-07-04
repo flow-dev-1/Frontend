@@ -72,6 +72,10 @@ select:focus {
   /* border: none; */
 }
 
+select {
+  border: 1px solid #f8f8f8 !important;
+}
+
 button {
   cursor: pointer;
 }

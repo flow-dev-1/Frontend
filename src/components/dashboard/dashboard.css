@@ -2,6 +2,7 @@
 
 .dashboard {
   display: flex;
+  width: 100%;
 }
 
 .sidebar-content {
@@ -12,4 +13,11 @@
   flex: 4;
   padding: 40px 20px;
   margin: 50px 0 0 250px;
+}
+
+.course-profile {
+  width: 100%;
+}
+.course-sidebar-content {
+  width: 100%;
 }

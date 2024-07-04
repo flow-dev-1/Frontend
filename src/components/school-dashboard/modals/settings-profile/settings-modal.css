@@ -1,7 +1,7 @@
 input {
   padding: 0.2rem;
   font-size: 14px;
-  background-color: #f8f8f8;
+  background-color: #f8f8f8 !important;
   color: #d6d6d6;
   border: 1px solid #d6d6d6;
 }
@@ -88,4 +88,9 @@ button.update {
   align-items: center;
   justify-content: space-between;
   border-bottom: none;
+}
+
+#select {
+  border: 1px solid #f8f8f8 !important;
+  background-color: #f8f8f8 !important;
 }

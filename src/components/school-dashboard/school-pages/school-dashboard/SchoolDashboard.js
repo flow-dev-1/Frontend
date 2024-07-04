@@ -32,7 +32,7 @@ export default function SchoolDashboard() {
     >
       <nav className='navbar'>
         <div className='container'>
-          <Link to='/dashboard' className='navbar-logo'>
+          <Link to='/school-dashboard' className='navbar-logo'>
             <img src={logo} alt='' />
           </Link>
           <div className='navbar-logo' onClick={logOut} style={{ cursor: 'pointer' }}>

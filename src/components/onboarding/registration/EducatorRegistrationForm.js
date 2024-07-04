@@ -355,7 +355,7 @@ export default function EducatorRegistrationForm() {
         className='custom-modal-otp'
         overlayClassName='custom-overlay'
       >
-        <StudentOtpModal formData={formData} closeModal={closeModal} />
+        <EducatorOtpModal resendOTP={handleSubmit(onSubmit)} closeModal={closeModal} />
       </Modal>
     </div>
   )

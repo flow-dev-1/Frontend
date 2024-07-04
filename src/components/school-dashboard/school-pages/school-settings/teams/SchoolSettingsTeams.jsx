@@ -15,9 +15,9 @@ const SchoolSettingsTeams = () => {
   const queryClient = useQueryClient()
   const toastId = useRef(null)
 
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user)
 
-  let schoolId;
+  let schoolId
 
   if (user.isSchool) {
     schoolId = user._id
@@ -28,8 +28,8 @@ const SchoolSettingsTeams = () => {
     queryFn: () => schoolService.getAdmins(schoolId),
     enabled: !!schoolId,
     refetchOnMount: false,
-    refetchOnWindowFocus: false
-  });
+    refetchOnWindowFocus: false,
+  })
 
   const adminData = data?.teams?.team
 
@@ -45,32 +45,33 @@ const SchoolSettingsTeams = () => {
   const mutation = useMutation({
     mutationFn: schoolService.deleteAdmin,
     onMutate: () => {
-      toastId.current = toast.loading("Deleting team member...");
+      toastId.current = toast.loading('Deleting team member...')
     },
     onSuccess: (data) => {
       toast.update(toastId.current, {
-        render: "Team member deleted successfully",
-        type: "success",
+        render: 'Team member deleted successfully',
+        type: 'success',
         isLoading: false,
-        autoClose: 3000
-      });
+        autoClose: 3000,
+      })
       setShowDropdown(null)
-      queryClient.invalidateQueries(['school-teams']);
+      queryClient.invalidateQueries(['school-teams'])
       setModalIsOpenSuccess(true)
     },
     onError: (error) => {
       console.log(error)
       toast.update(toastId.current, {
-        render: error?.message || "Error deleting team member",
-        type: "error",
+        render: error?.message || 'Error deleting team member',
+        type: 'error',
         isLoading: false,
-        autoClose: 3000
-      });
+        autoClose: 3000,
+      })
     },
-  });
+  })
 
   const handleDelete = (adminId) => {
-    if (!window.confirm("Are you sure you want to delete this team member?")) return
+    if (!window.confirm('Are you sure you want to delete this team member?'))
+      return
     mutation.mutate(adminId)
   }
 
@@ -111,14 +112,19 @@ const SchoolSettingsTeams = () => {
                 <td>
                   {admin.school === data?.teams?._id
                     ? admin?.schoolAdminPermission
-                    : admin?.newInvite?.schoolAdminPermission
-                  }
+                    : admin?.newInvite?.schoolAdminPermission}
                 </td>
                 <td style={{ textAlign: 'center' }}>
                   <span
                     style={{
-                      color: admin.schoolAdminStatus !== "Confirmed" ? 'red' : 'green',
-                      backgroundColor: admin.schoolAdminStatus !== "Confirmed" ? '#ffe6e6' : '#e6ffe6',
+                      color:
+                        admin.schoolAdminStatus !== 'Confirmed'
+                          ? 'red'
+                          : 'green',
+                      backgroundColor:
+                        admin.schoolAdminStatus !== 'Confirmed'
+                          ? '#ffe6e6'
+                          : '#e6ffe6',
                       padding: '5px 10px',
                       borderRadius: '20px',
                       textAlign: 'center',
@@ -126,17 +132,18 @@ const SchoolSettingsTeams = () => {
                     }}
                   >
                     {' '}
-                    {
-                      admin.school === data?.teams?._id
-                        ? admin.schoolAdminStatus
-                        : "Pending"
-                    }
+                    {admin.school === data?.teams?._id
+                      ? admin.schoolAdminStatus
+                      : 'Pending'}
                   </span>
                 </td>
-                <td>{new Date(admin.school === data?.teams?._id
-                  ? admin?.schoolAdminDate
-                  : admin?.newInvite?.schoolAdminDate
-                ).toLocaleDateString()}</td>
+                <td>
+                  {new Date(
+                    admin.school === data?.teams?._id
+                      ? admin?.schoolAdminDate
+                      : admin?.newInvite?.schoolAdminDate
+                  ).toLocaleDateString()}
+                </td>
                 <td>
                   <div className='action-container'>
                     <Icon
@@ -145,7 +152,10 @@ const SchoolSettingsTeams = () => {
                     />
                     {showDropdown === index && (
                       <div className='dropdown'>
-                        <button onClick={() => handleDelete(admin._id)} disabled={mutation.isPending}>
+                        <button
+                          onClick={() => handleDelete(admin._id)}
+                          disabled={mutation.isPending}
+                        >
                           <span>
                             <Icon icon='fluent:delete-20-regular' />
                           </span>

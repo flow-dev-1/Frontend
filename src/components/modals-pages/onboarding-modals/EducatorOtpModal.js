@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import Modal from 'react-modal'
 import EmailVerificationSuccessful from './EmailVerificationSuccessful'
 import { useMutation } from '@tanstack/react-query'
-import userService from '../../../services/api/admin'
+import userService from '../../../services/api/user'
 import { useDispatch } from 'react-redux'
 import { clearToken } from '../../../redux/reducers/jwtReducer'
 import { toast } from 'react-toastify'
+import { RotatingLines } from 'react-loader-spinner'
 
 export default function EducatorOtpModal({ email, resendOTP }) {
   const dispatch = useDispatch()
@@ -50,7 +51,7 @@ export default function EducatorOtpModal({ email, resendOTP }) {
   }, [countdown])
 
   const handleResendOTP = () => {
-    setCountdown(600)
+    // setCountdown(600)
     resendOTP()
   }
 
@@ -90,7 +91,16 @@ export default function EducatorOtpModal({ email, resendOTP }) {
         </div>
 
         <button onClick={handleSubmit} className='btn submit-btn'>
-          Submit
+          {mutation.isPending ? (
+            <RotatingLines
+              type='Oval'
+              style={{ color: '#FFF' }}
+              height={20}
+              width={20}
+            />
+          ) : (
+            'Submit'
+          )}
         </button>
         <p className='mt-3'>
           Yet to receive OTP?

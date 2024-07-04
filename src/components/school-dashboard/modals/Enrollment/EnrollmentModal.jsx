@@ -28,16 +28,16 @@ const schema = yup.object().shape({
   dayOfWeek: yup.string().required('Day of the Week is required'),
   startTime: yup.string().required('Start Time is required'),
   endTime: yup.string().required('End Time is required'),
-  students: yup
-    .string()
-    .test('emails', 'Invalid email(s)', (value) => {
-      const emails = value.split(',').map(email => email.trim())
-      return emails.every(email => !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-    }),
+  students: yup.string().test('emails', 'Invalid email(s)', (value) => {
+    const emails = value.split(',').map((email) => email.trim())
+    return emails.every(
+      (email) => !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+    )
+  }),
 })
 
 const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const classOptions = [
     'Primary 1',
@@ -82,7 +82,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
     onSuccess: (data) => {
       console.log('Mutation success:', data)
       toast.success('Enrollment successful')
-      queryClient.invalidateQueries(["school-enrolled-courses"]);
+      queryClient.invalidateQueries(['school-enrolled-courses'])
       onRequestClose()
     },
     onError: (error) => {
@@ -108,12 +108,14 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
         const emails = XLSX.utils
           .sheet_to_json(worksheet, { header: 1 })
           .flat()
-          .filter((email) => typeof email === 'string' && validateEmail(email));
-        const currentEmails = getValues('students').trim();
-        const currentEmailsArray = currentEmails ? currentEmails.split(',').map(email => email.trim()) : [];
-        const mergedEmails = [...new Set([...currentEmailsArray, ...emails])];
-        setValue('students', mergedEmails.join(', '));
-      };
+          .filter((email) => typeof email === 'string' && validateEmail(email))
+        const currentEmails = getValues('students').trim()
+        const currentEmailsArray = currentEmails
+          ? currentEmails.split(',').map((email) => email.trim())
+          : []
+        const mergedEmails = [...new Set([...currentEmailsArray, ...emails])]
+        setValue('students', mergedEmails.join(', '))
+      }
       reader.readAsArrayBuffer(file)
     }
   }
@@ -128,13 +130,21 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   }
 
   const onSubmit = (data) => {
+    if (
+      !window.confirm(
+        'Are you sure you want to enroll the students for this course?'
+      )
+    )
+      return
 
-    if (!window.confirm('Are you sure you want to enroll the students for this course?')) return
+    const emailsArray = data.students
 
-    const emailsArray = data.students.split(',').map(email => email.trim()).filter(email => validateEmail(email))
+      .split(',')
+      .map((email) => email.trim())
+      .filter((email) => validateEmail(email))
     const finalData = { ...data, students: emailsArray }
-
-    mutation.mutate(finalData)
+    console.log(finalData)
+    mutation.mutate(data)
   }
 
   return (
@@ -162,7 +172,12 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className='class-input'>
               <label htmlFor='stdClass'>Class *</label>
-              <select id='stdClass' name='stdClass' {...register('stdClass')}>
+              <select
+                style={{ border: '1px solid #D9D9D9' }}
+                id='stdClass'
+                name='stdClass'
+                {...register('stdClass')}
+              >
                 <option value=''>Select Class</option>
                 {classOptions.map((className, index) => (
                   <option key={index} value={className}>
@@ -178,6 +193,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
               <div>
                 <label htmlFor='dayOfWeek'>Day of the Week *</label>
                 <select
+                  style={{ border: '1px solid #D9D9D9' }}
                   id='dayOfWeek'
                   name='dayOfWeek'
                   {...register('dayOfWeek')}
@@ -198,6 +214,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                 <select
                   id='startTime'
                   name='startTime'
+                  style={{ border: '1px solid #D9D9D9' }}
                   {...register('startTime')}
                 >
                   <option value=''>Select Start Time</option>
@@ -213,7 +230,12 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
               </div>
               <div>
                 <label htmlFor='endTime'>End Time *</label>
-                <select id='endTime' name='endTime' {...register('endTime')}>
+                <select
+                  style={{ border: '1px solid #D9D9D9' }}
+                  id='endTime'
+                  name='endTime'
+                  {...register('endTime')}
+                >
                   <option value=''>Select End Time</option>
                   {timeOptions.map((time, index) => (
                     <option key={index} value={time}>
@@ -228,10 +250,10 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
             </div>
             <div className='text-area'>
               <div>
-                <label htmlFor='student-email'>Student Email *</label>
+                <label htmlFor='students'>Student Email *</label>
                 <textarea
-                  id='student-email'
-                  name='student-email'
+                  id='students'
+                  name='students'
                   placeholder='Enter email addresses here'
                   rows={3}
                   cols={50}
@@ -276,15 +298,16 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
               type='submit'
               disabled={mutation.isPending}
             >
-              {
-                mutation.isPending ? <RotatingLines
+              {mutation.isPending ? (
+                <RotatingLines
                   type='Oval'
                   style={{ color: '#FFF' }}
                   height={20}
-                  width={20} /> :
-                  "Enroll"
-              }
-
+                  width={20}
+                />
+              ) : (
+                'Enroll'
+              )}
             </button>
           </form>
         </div>
