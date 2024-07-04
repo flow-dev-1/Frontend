@@ -128,10 +128,6 @@ input[type='text']::-webkit-input-placeholder:-webkit-autofill {
   margin-top: 2rem;
 }
 
-.registration-page .form-group .password-toggle {
-  /* position: relative; */
-}
-
 .registration-page .form-group .password-toggle i {
   position: absolute;
   top: 50%;
@@ -240,7 +236,6 @@ p span,
   color: #50aa50;
   font-size: 50px;
 }
-
 
 .flex-code-input .PhoneInputCountry {
   width: auto;

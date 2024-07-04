@@ -69,8 +69,8 @@ export default function EducatorRegistrationForm() {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      country: "Nigeria"
-    }
+      country: 'Nigeria',
+    },
   })
 
   const togglePasswordVisibility = () => {
@@ -80,29 +80,29 @@ export default function EducatorRegistrationForm() {
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const response = await fetch('https://restcountries.com/v3.1/all');
-        const data = await response.json();
+        const response = await fetch('https://restcountries.com/v3.1/all')
+        const data = await response.json()
         // Sort the countries alphabetically by their common name
         const sortedData = data.sort((a, b) => {
-          const nameA = a.name.common.toUpperCase(); // ignore upper and lowercase
-          const nameB = b.name.common.toUpperCase(); // ignore upper and lowercase
+          const nameA = a.name.common.toUpperCase() // ignore upper and lowercase
+          const nameB = b.name.common.toUpperCase() // ignore upper and lowercase
           if (nameA < nameB) {
-            return -1;
+            return -1
           }
           if (nameA > nameB) {
-            return 1;
+            return 1
           }
           // names must be equal
-          return 0;
-        });
-        setCountries(sortedData);
+          return 0
+        })
+        setCountries(sortedData)
       } catch (error) {
-        console.error('Error fetching countries:', error);
+        console.error('Error fetching countries:', error)
       }
-    };
+    }
 
-    fetchCountries();
-  }, []);
+    fetchCountries()
+  }, [])
 
   // Watch for changes in the country field
   const selectedCountry = watch('country')
@@ -111,7 +111,7 @@ export default function EducatorRegistrationForm() {
   }, [selectedCountry])
 
   const mutation = useMutation({
-    mutationFn: (data) => userService.register("Individual", data),
+    mutationFn: (data) => userService.register('Individual', data),
     onSuccess: (data) => {
       console.log('Registration successful:', data)
       toast.success(data.message)
@@ -127,7 +127,7 @@ export default function EducatorRegistrationForm() {
   })
 
   const onSubmit = (data) => {
-    console.log("data")
+    console.log('data')
     const formData = {
       first_name: data.firstName.trim(),
       last_name: data.lastName.trim(),
@@ -139,7 +139,7 @@ export default function EducatorRegistrationForm() {
       gender: data.gender,
       // age: new Date().getFullYear() - new Date(data.dob).getFullYear(),
       DOB: data.dob,
-      grade: "Educator",
+      grade: 'Educator',
       password: data.password,
     }
     setFormData(formData)
@@ -207,7 +207,7 @@ export default function EducatorRegistrationForm() {
                   defaultCountry='NG' // Set the default country (change as needed)
                   onCountryChange={(country) => {
                     if (country) {
-                      setCountryCode(getCountryCallingCode(country));
+                      setCountryCode(getCountryCallingCode(country))
                     }
                   }}
                   style={{
@@ -355,7 +355,7 @@ export default function EducatorRegistrationForm() {
         className='custom-modal-otp'
         overlayClassName='custom-overlay'
       >
-        <EducatorOtpModal resendOTP={handleSubmit(onSubmit)} closeModal={closeModal} />
+        <StudentOtpModal resendOTP={handleSubmit(onSubmit)} formData={formData} closeModal={closeModal} />
       </Modal>
     </div>
   )
