@@ -26,7 +26,6 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
   let reviewBtnClass
   let detailsBtnClass
 
-
   if (enrolled.includes(course._id)) {
     reviewBtnColor = darkGreen
     detailsBtnColor = lightGreen
@@ -61,21 +60,21 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
     return text
   }
 
-
   return (
     <div>
-      <div className='course-card'>
+      <div className='course-card' style={{height:"500px"}}>
         <div className='course-card-img'>
           <img src={course.image} alt='' />
           <div className='course-card-category'>
             {course.grade !== 'Educators' ? 'Students' : 'Educators'}
           </div>
         </div>
-        <div className='course-card-title'>
+        <div className='course-card-title' style={{marginBottom:"0"}}>
           <h3>{course.title}:</h3>
           {/* <h3>{course.subtitle}</h3> */}
         </div>
-        {truncateText(course.description, 100)}
+        <p style={{fontSize:"14px"}}>{truncateText(course.description, 100)}</p>
+
         <div style={{ margin: '1rem 0' }} className='users-review'>
           <div
             style={
@@ -123,11 +122,10 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
             <button
               style={
                 enrolled.includes(course._id)
-                  ? { backgroundColor: '#D4FFBE', color: '#4B7E31' } :
-                  course.grade !== 'Educators' ?
-                    { backgroundColor: lightTertiary, color: '#329BD6' } :
-                    { backgroundColor: lightEducator, color: darkEducator }
-
+                  ? { backgroundColor: '#D4FFBE', color: '#4B7E31' }
+                  : course.grade !== 'Educators'
+                  ? { backgroundColor: lightTertiary, color: '#329BD6' }
+                  : { backgroundColor: lightEducator, color: darkEducator }
               }
               className={`reviewBtn ${reviewBtnClass}`}
             >
@@ -144,25 +142,22 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
               onClick={() => openModal(course)}
               style={
                 enrolled.includes(course._id)
-                  ? { backgroundColor: darkGreen, color: lightGreen } :
-                  course.grade !== 'Educators' ? { backgroundColor: darkTertiary, color: 'white' }
-                    : { backgroundColor: darkEducator, color: lightEducator }
+                  ? { backgroundColor: darkGreen, color: lightGreen }
+                  : course.grade !== 'Educators'
+                  ? { backgroundColor: darkTertiary, color: 'white' }
+                  : { backgroundColor: darkEducator, color: lightEducator }
               }
             >
               <span>
-                {
-                  enrolled.includes(course._id) ?
-                    <Icon icon='tabler:list-details' /> :
-                    <Icon icon='mdi:cart' width={24} style={{ color: 'ffff' }} />
-
-                }
-
+                {enrolled.includes(course._id) ? (
+                  <Icon icon='tabler:list-details' />
+                ) : (
+                  <Icon icon='mdi:cart' width={24} style={{ color: 'ffff' }} />
+                )}
               </span>{' '}
-              {
-                enrolled.includes(course._id) ? "  View Details" :
-                  `${course.currency} ${course.cost}`
-              }
-
+              {enrolled.includes(course._id)
+                ? '  View Details'
+                : `${course.currency} ${course.cost}`}
             </button>
             {enrolled.includes(course._id) ? (
               <div
@@ -173,7 +168,10 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
                   fontSize: '12px',
                 }}
               >
-                <span style={{ color: darkGreen, fontWeight: "bold" }}>0 %</span> <span>Done</span>
+                <span style={{ color: darkGreen, fontWeight: 'bold' }}>
+                  0 %
+                </span>{' '}
+                <span>Done</span>
               </div>
             ) : (
               ''
