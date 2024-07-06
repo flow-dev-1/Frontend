@@ -78,7 +78,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   const params2 = course?._id
 
   const mutation = useMutation({
-    mutationFn: (data) => userService.enrolledStudents(params1, params2, data),
+    mutationFn: (value) => userService.enrolledStudents(params1, params2, value),
     onSuccess: (data) => {
       console.log('Mutation success:', data)
       toast.success('Enrollment successful')
@@ -143,8 +143,8 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
       .map((email) => email.trim())
       .filter((email) => validateEmail(email))
     const finalData = { ...data, students: emailsArray }
-    console.log(finalData)
-    mutation.mutate(data)
+
+    mutation.mutate(finalData)
   }
 
   return (
