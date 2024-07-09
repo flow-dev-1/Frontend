@@ -16,6 +16,7 @@ import * as yup from 'yup'
 import excelDoc from '../../../../../../assets/flow-doc.xlsx'
 import schoolService from '../../../../../../services/api/school'
 import { RotatingLines } from 'react-loader-spinner'
+import Loading from '../../../../../loader/Loader'
 
 const schema = yup.object().shape({
   students: yup
@@ -217,6 +218,13 @@ const SchoolEnrolledStudents = () => {
   const deleteUser = () => {
     deleteMutation.mutate()
   }
+
+    if (isLoading) {
+      return <Loading />
+    }
+    if (isError) {
+      return <div>An error occured while loading...</div>
+    }
 
   return (
     <div className='enrolled-course-student'>

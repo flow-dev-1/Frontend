@@ -98,7 +98,10 @@ export default function ForgotPassword() {
   }
 
   return (
-    <div className='registration-page two  overflow-hidden'>
+    <div
+      className='registration-page two  overflow-hidden'
+      style={{ width: '450px', height: '450px' }}
+    >
       <h2 className='head-text text-center'>Forgot Password?</h2>
       <p className='head-p text-center'>
         Enter your email address you registered with.

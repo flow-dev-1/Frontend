@@ -66,7 +66,7 @@ export default function SchoolResetPassword() {
 
   const closeModal = () => {
     setModalIsOpen(false)
-    navigate('/sign-in')
+    navigate('/school/sign-in')
   }
 
   const onSubmit = ({ password }) => {
@@ -74,7 +74,10 @@ export default function SchoolResetPassword() {
   }
 
   return (
-    <div className='registration-page two  overflow-hidden'>
+    <div
+      className='registration-page two  overflow-hidden'
+      style={{paddingTop:"3rem", width: '450px', height: '450px' }}
+    >
       <h2 className='head-text text-center'>Reset Password</h2>
       <p className='head-p'>Create a New Password</p>
 
@@ -93,8 +96,9 @@ export default function SchoolResetPassword() {
                 onClick={togglePasswordVisibility}
               >
                 <Icon
-                  icon={showPassword ? 'mdi:eye-off' : 'mdi:eye'}
+                  icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
                   className='eye-icon'
+                  width={20}
                 />
               </div>
             </div>
@@ -116,8 +120,9 @@ export default function SchoolResetPassword() {
                 onClick={toggleConfirmPasswordVisibility}
               >
                 <Icon
-                  icon={showConfirmPassword ? 'mdi:eye-off' : 'mdi:eye'}
+                  icon={showConfirmPassword ? 'oui:eye-closed' : 'ph:eye-light'}
                   className='eye-icon'
+                  width={20}
                 />
               </div>
             </div>

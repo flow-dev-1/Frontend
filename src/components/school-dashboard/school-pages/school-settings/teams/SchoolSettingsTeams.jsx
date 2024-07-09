@@ -7,6 +7,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
 import schoolService from '../../../../../services/api/school'
+import Loading from '../../../../loader/Loader'
 
 const SchoolSettingsTeams = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
@@ -73,6 +74,13 @@ const SchoolSettingsTeams = () => {
     if (!window.confirm('Are you sure you want to delete this team member?'))
       return
     mutation.mutate(adminId)
+  }
+
+  if (isLoading) {
+    return <Loading />
+  }
+  if (isError) {
+    return <div>An error occured while loading...</div>
   }
 
   return (

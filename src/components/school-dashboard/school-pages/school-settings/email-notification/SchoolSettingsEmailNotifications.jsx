@@ -7,6 +7,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
 import schoolService from '../../../../../services/api/school'
+import Loading from '../../../../loader/Loader'
 
 const SchooolSettingsEmailNotifications = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
@@ -87,6 +88,13 @@ const SchooolSettingsEmailNotifications = () => {
   const teamMembers = data?.teams?.email_notification || []
 
   console.log(teamMembers)
+
+    if (isLoading) {
+      return <Loading />
+    }
+    if (isError) {
+      return <div>An error occured while loading...</div>
+    }
 
   return (
     <div>

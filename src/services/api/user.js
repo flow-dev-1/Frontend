@@ -1,11 +1,13 @@
 import api from '../index.js'
 
 class UserOBJ {
-
   //Register
   register = async (userType, data) => {
     try {
-      const response = await api.post(`api/users/register?type=${userType}`, data)
+      const response = await api.post(
+        `api/users/register?type=${userType}`,
+        data
+      )
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
@@ -29,7 +31,6 @@ class UserOBJ {
 
   //Register
   registerInvitedUser = async (auth_token, data) => {
-
     console.log(auth_token)
     try {
       const response = await api.post(`api/users/invited-user`, data, {
@@ -43,7 +44,6 @@ class UserOBJ {
     }
   }
   registerInvitedAdmin = async (auth_token, data) => {
-
     console.log(auth_token)
     try {
       const response = await api.post(`api/users/invited-school-admin`, data, {
@@ -65,11 +65,35 @@ class UserOBJ {
       throw err?.response?.data || err.message
     }
   }
+  verifyToken = async (data) => {
+    try {
+      const response = await api.post(`api/users/verify-token`, data)
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
 
   //Login
   login = async (data) => {
     try {
       const response = await api.post(`api/users/login`, data)
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+  forgotPassword = async (data) => {
+    try {
+      const response = await api.post(`api/users/forgot-password`, data)
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+  resetPassword = async (data) => {
+    try {
+      const response = await api.put(`api/users/password`, data)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
@@ -87,7 +111,6 @@ class UserOBJ {
       throw err?.response?.data || err.message
     }
   }
-
 }
 
 const user = new UserOBJ()

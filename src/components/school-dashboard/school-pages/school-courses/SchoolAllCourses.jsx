@@ -35,7 +35,7 @@ const SchoolAllCourses = () => {
     refetchOnWindowFocus: false,
   })
 
-  const { data: enrolledData, } = useQuery({
+  const { data: enrolledData } = useQuery({
     queryKey: ['school-enrolled-courses'],
     queryFn: () => schoolService.getCourses(schoolId, 'Enrolled'),
     enabled: !!schoolId,
@@ -44,12 +44,13 @@ const SchoolAllCourses = () => {
   })
 
   // console.log(enrolledData, "enrolled")
-  const enrolledDataArray = enrolledData?.courses?.map(item => item.course._id) || []
+  const enrolledDataArray =
+    enrolledData?.courses?.map((item) => item.course._id) || []
 
   useEffect(() => {
     if (!data) return
     setCourses(data.courses)
-    return () => { }
+    return () => {}
   }, [data])
 
   const openModal = (course) => {
@@ -129,7 +130,8 @@ const SchoolAllCourses = () => {
         className='custom-modal-otp-variant'
         overlayClassName='custom-overlay'
       >
-        <CourseDetailModal course={selectedCourse}
+        <CourseDetailModal
+          course={selectedCourse}
           enrolled={enrolledDataArray}
         />
       </Modal>

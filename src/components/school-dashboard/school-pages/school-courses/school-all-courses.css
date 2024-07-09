@@ -47,17 +47,21 @@
   padding: 1.25rem 0;
 }
 
-.search-wrapper {
+.search-bar .search .search-wrapper {
   display: flex;
   width: 35rem;
   margin-right: 2rem;
   border-radius: 2px;
-  background-color: rgba(94, 45, 189, 0.05);
 }
 
-.search-icon {
+.search-bar .search .search-wrapper input {
+  background-color: rgba(94, 45, 189, 0.05) !important;
+}
+
+.search-bar .search .search-wrapper .search-icon {
   padding: 0.375rem 0.75rem;
   cursor: text;
+  background-color: rgba(94, 45, 189, 0.05) !important;
 }
 
 #search-input {

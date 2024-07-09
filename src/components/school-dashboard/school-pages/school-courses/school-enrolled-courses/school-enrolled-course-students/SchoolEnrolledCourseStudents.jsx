@@ -114,7 +114,7 @@ const SchoolEnrolledCourseStudents = () => {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel='Course Detail Modal'
-        className='custom-modal-otp'
+        className='custom-modal-otp-variant'
         overlayClassName='custom-overlay'
       >
         <CourseDetailModal course={selectedCourse} />

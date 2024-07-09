@@ -114,6 +114,7 @@ export default function InvitedAdminRegistration() {
     const email = urlParams.get('email')
     setGrade(grade)
     setJWTToken(token)
+    localStorage.setItem('Flow-Auth-Token', token)
     setValue('schoolGrade', grade)
     setValue('email', email)
 
