@@ -50,7 +50,8 @@ export default function StudentOtpModal({ email, resendOTP }) {
     }
   }, [countdown])
 
-  const handleResendOTP = () => {
+  const handleResendOTP = (e) => {
+    e.preventDefault()
     setCountdown(600)
     resendOTP()
   }

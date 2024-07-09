@@ -113,7 +113,7 @@ export default function EducatorRegistrationForm() {
   }, [selectedCountry])
 
   const mutation = useMutation({
-    mutationFn: (data) => userService.register('Educator', data),
+    mutationFn: (data) => userService.register('School', data),
     onSuccess: (data) => {
       console.log('Registration successful:', data)
       toast.success(data.message)

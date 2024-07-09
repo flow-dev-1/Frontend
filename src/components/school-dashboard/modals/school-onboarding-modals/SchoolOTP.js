@@ -67,7 +67,8 @@ export default function SchoolOTP({ email, resendOTP }) {
     }
   }, [countdown])
 
-  const handleResendOTP = () => {
+  const handleResendOTP = (e) => {
+    e.preventDefault()
     setCountdown(600)
     resendOTP()
   }
@@ -103,7 +104,7 @@ export default function SchoolOTP({ email, resendOTP }) {
             'Submit'
           )}
         </button>
-        <form onSubmit={resendOTP}>
+        <form onSubmit={handleResendOTP}>
           <p className='mt-3'>
             Yet to receive OTP?
             {countdown > 0 ? (
