@@ -225,17 +225,3 @@ thead {
   background-color: #fff;
   font-weight: 500;
 }
-
-.thead tr th {
-  border-left: 1px solid #fff; /* Apply white border on the left */
-  border-right: none; /* Remove border on the right by default */
-}
-
-.thead tr th:first-child {
-  border-left: 0.5px solid #5b616a; /* Remove left border for the first th */
-  /* Remove left border for the first th */
-}
-
-.thead tr th:last-child {
-  border-right: 1px solid #5b616a; /* Apply white border on the right for the last th */
-}

@@ -28,6 +28,7 @@ export default function SchoolRegistrationForm() {
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
   const [countries, setCountries] = useState([])
   const [isNigeria, setIsNigeria] = useState(true) // State to track if the selected country is Nigeria
+  const [email, setEmail] = useState('')
 
   const schema = yup.object().shape({
     school_name: yup.string().required('Name of School is required'),
@@ -66,8 +67,8 @@ export default function SchoolRegistrationForm() {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      country: "Nigeria"
-    }
+      country: 'Nigeria',
+    },
   })
 
   const togglePasswordVisibility = () => {
@@ -86,29 +87,29 @@ export default function SchoolRegistrationForm() {
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const response = await fetch('https://restcountries.com/v3.1/all');
-        const data = await response.json();
+        const response = await fetch('https://restcountries.com/v3.1/all')
+        const data = await response.json()
         // Sort the countries alphabetically by their common name
         const sortedData = data.sort((a, b) => {
-          const nameA = a.name.common.toUpperCase(); // ignore upper and lowercase
-          const nameB = b.name.common.toUpperCase(); // ignore upper and lowercase
+          const nameA = a.name.common.toUpperCase() // ignore upper and lowercase
+          const nameB = b.name.common.toUpperCase() // ignore upper and lowercase
           if (nameA < nameB) {
-            return -1;
+            return -1
           }
           if (nameA > nameB) {
-            return 1;
+            return 1
           }
           // names must be equal
-          return 0;
-        });
-        setCountries(sortedData);
+          return 0
+        })
+        setCountries(sortedData)
       } catch (error) {
-        console.error('Error fetching countries:', error);
+        console.error('Error fetching countries:', error)
       }
-    };
+    }
 
-    fetchCountries();
-  }, []);
+    fetchCountries()
+  }, [])
 
   // Watch for changes in the country field
   const selectedCountry = watch('country')
@@ -122,11 +123,11 @@ export default function SchoolRegistrationForm() {
       console.log('Registration successful:', data)
       toast.success(data.message)
       dispatch(setToken(data?.token))
+      localStorage.setItem('Flow-Auth-Token', data?.token)
       openModal()
     },
     onError: (error) => {
       console.error('Registration error:', error)
-      toast.dismiss()
       toast.error(error?.message)
       toast.error(error || 'Registration failed')
     },
@@ -183,6 +184,7 @@ export default function SchoolRegistrationForm() {
               type='email'
               placeholder='Type here...'
               {...register('email')}
+              onChange={(e) => setEmail(e.target.value)}
             />
             {errors.email && (
               <p className='error-message'>{errors.email.message}</p>
@@ -254,7 +256,7 @@ export default function SchoolRegistrationForm() {
                 onChange={(val) => setValue('phone', val)}
                 onCountryChange={(country) => {
                   if (country) {
-                    setCountryCode(getCountryCallingCode(country));
+                    setCountryCode(getCountryCallingCode(country))
                   }
                 }}
                 defaultCountry='NG' // Set the default country (change as needed)
@@ -301,8 +303,9 @@ export default function SchoolRegistrationForm() {
                 onClick={togglePasswordVisibility}
               >
                 <Icon
-                  icon={showPassword ? 'mdi:eye-off' : 'mdi:eye'}
+                  icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
                   className='eye-icon'
+                  width={20}
                 />
               </div>
             </div>
@@ -324,7 +327,8 @@ export default function SchoolRegistrationForm() {
                 onClick={togglePasswordVisibility}
               >
                 <Icon
-                  icon={showPassword ? 'mdi:eye-off' : 'mdi:eye'}
+                  icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
+                  width={20}
                   className='eye-icon'
                 />
               </div>
@@ -337,15 +341,20 @@ export default function SchoolRegistrationForm() {
 
         <div className='bottom-section'>
           <p className='terms-and-conditions'>
-            <input type='checkbox' required width={40} />
-            By ticking this box, you agree with our{' '}
-            <Link to='/terms'>Terms & Conditions</Link>
+            <input className='checkbox' type='checkbox' required width={40} />
+            By ticking this box, you agree with our{'      '}{' '}
+            <Link className='a' to='#'>
+              Terms & Conditions
+            </Link>
           </p>
         </div>
         <hr className='my-0' />
         <div className='flex-submit'>
           <p className='have-account'>
-            Already have an account? <Link to='/school/sign-in'>Sign In</Link>
+            Already have an account?{' '}
+            <span id='span'>
+              <Link to='/school/sign-in'>Sign In</Link>
+            </span>
           </p>
           <button
             className='btn submit-btn'
@@ -376,7 +385,7 @@ export default function SchoolRegistrationForm() {
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
           resendOTP={handleSubmit(onSubmit)}
-          email={new URLSearchParams(location.search).get('email')}
+          email={new URLSearchParams(location.search).get('email') || email}
         />
       </Modal>
     </div>

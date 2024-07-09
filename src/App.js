@@ -70,7 +70,10 @@ function App() {
               element={<InvitedAdminRegistration />}
             />
 
-            <Route path='/invited-admin' element={<InvitedAdminRegistration />} />
+            <Route
+              path='/invited-admin'
+              element={<InvitedAdminRegistration />}
+            />
             {/* <Route
               path='/individual/sign-up/educator-registration'
               element={<EducatorRegistrationForm />}
@@ -81,8 +84,14 @@ function App() {
               element={<EducatorRegistrationForm />}
             />
             <Route path='/individual/sign-in' element={<SignIn />} />
-            <Route path='/forgot-password' element={<ForgotPassword />} />
-            <Route path='/reset-password' element={<ResetPassword />} />
+            <Route
+              path='/individual/forgot-password'
+              element={<ForgotPassword />}
+            />
+            <Route
+              path='/individual/reset-password'
+              element={<ResetPassword />}
+            />
             <Route
               path='/school/sign-up/registration'
               element={<SchoolRegistrationForm />}

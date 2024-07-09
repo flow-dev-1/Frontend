@@ -1,5 +1,6 @@
 import React from 'react'
 import './payement-history.css'
+import { Icon } from '@iconify/react'
 
 const SchoolPaymentHistory = () => {
   return (
@@ -8,12 +9,30 @@ const SchoolPaymentHistory = () => {
       <p>You can browse through all payments made on this platform overtime.</p>
       <div className='search-filter-sort'>
         <input
+          style={{ backgroundColor: '#f3f1f8' }}
           type='text'
           placeholder='Search by time, date, order ID or Payment Type'
         />
         <div className='filters'>
-          <button>Filter by</button>
-          <button>Sort by </button>
+          <div style={{ cursor: 'pointer' }} className='filter-sort'>
+            <span>
+              <Icon icon='octicon:filter-16' />
+            </span>
+            <select style={{ cursor: 'pointer' }}>
+              <option value='all'>Filter by</option>
+              <option value='published'>Published</option>
+              <option value='draft'>Draft</option>
+            </select>
+          </div>
+          <div className='filter-sort'>
+            <span>
+              <Icon icon='mingcute:az-sort-ascending-letters-line' />
+            </span>
+            <select style={{ cursor: 'pointer' }}>
+              <option value='a-z'>Sort by A-Z</option>
+              <option value='z-a'>Sort by Z-A</option>
+            </select>
+          </div>
         </div>
       </div>
       <table>

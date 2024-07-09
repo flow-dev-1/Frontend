@@ -26,6 +26,12 @@
   border-radius: 15px;
   z-index: 99;
 }
+#checkbox {
+  display: inline-block;
+  scale: 1.5;
+  margin-left: 0.4rem;
+  margin-right: 0.4rem;
+}
 
 .flex-code-input {
   position: relative;
@@ -38,7 +44,7 @@
   left: 2.5rem;
 }
 
-.PhoneInputCountry {
+.flex-code-input .PhoneInputCountry {
   width: 70px;
 }
 
@@ -176,6 +182,17 @@ input[type='text']::-webkit-input-placeholder:-webkit-autofill {
   width: auto;
   margin: 0;
   font-size: 8px;
+}
+.a {
+  display: inline-block;
+  margin-left: 0.3rem;
+}
+
+.checkbox {
+  scale: 2;
+  display: inline-block;
+  margin-left: 0.5rem;
+  margin-right: 0.8rem;
 }
 
 .registration-page .bottom-section {

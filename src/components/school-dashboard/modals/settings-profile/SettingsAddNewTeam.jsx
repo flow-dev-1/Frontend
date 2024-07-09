@@ -75,7 +75,11 @@ const SettingsAddNewTeam = ({ closeModal }) => {
           <div className='flex-row '>
             <div>
               <label>First Name *</label>
-              <input type='text' {...register('first_name')} />
+              <input
+                type='text'
+                placeholder='Type here...'
+                {...register('first_name')}
+              />
               {errors.first_name && (
                 <p style={{ color: '#FD483D', fontSize: '12px' }}>
                   {errors.first_name.message}
@@ -84,7 +88,11 @@ const SettingsAddNewTeam = ({ closeModal }) => {
             </div>
             <div>
               <label>Last Name *</label>
-              <input type='text' {...register('last_name')} />
+              <input
+                type='text'
+                {...register('last_name')}
+                placeholder='Type here...'
+              />
               {errors.last_name && (
                 <p style={{ color: '#FD483D', fontSize: '12px' }}>
                   {errors.last_name.message}
@@ -95,7 +103,11 @@ const SettingsAddNewTeam = ({ closeModal }) => {
           <div className='flex-row'>
             <div>
               <label>Work Email Address *</label>
-              <input type='text' {...register('email')} />
+              <input
+                type='text'
+                placeholder='Type here...'
+                {...register('email')}
+              />
               {errors.email && (
                 <p style={{ color: '#FD483D', fontSize: '12px' }}>
                   {errors.email.message}
@@ -105,7 +117,8 @@ const SettingsAddNewTeam = ({ closeModal }) => {
             <div>
               <label>Permission *</label>
               <select
-              id='select'
+                style={{ border: '1px solid #d6d6d6' }}
+                id='select'
                 {...register('position')}
                 onChange={(e) => setValue('position', e.target.value)}
               >

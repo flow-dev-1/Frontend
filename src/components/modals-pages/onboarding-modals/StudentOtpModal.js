@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { clearToken } from '../../../redux/reducers/jwtReducer'
 import { toast } from 'react-toastify'
 import userService from '../../../services/api/user'
+import { RotatingLines } from 'react-loader-spinner'
 
 export default function StudentOtpModal({ email, resendOTP }) {
   const dispatch = useDispatch()
@@ -75,7 +76,8 @@ export default function StudentOtpModal({ email, resendOTP }) {
       <div className='d-flex flex-column align-items-center '>
         <h2>Verify your email account!</h2>
         <p className='my-2'>
-          Kindly enter the OTP sent to <span>{email}</span>
+          Kindly enter the OTP sent to{' '}
+          <span style={{ color: '##275DAD' }}>{email}</span>
         </p>
         <div className='otp-input my-4'>
           {otp.map((digit, index) => (
@@ -91,7 +93,16 @@ export default function StudentOtpModal({ email, resendOTP }) {
         </div>
 
         <button onClick={handleSubmit} className='btn submit-btn'>
-          Submit
+          {mutation.isPending ? (
+            <RotatingLines
+              type='Oval'
+              style={{ color: '#FFF', backgroundColor: '#275DAD' }}
+              height={20}
+              width={20}
+            />
+          ) : (
+            'Submit'
+          )}
         </button>
         <p className='mt-3'>
           Yet to receive OTP?

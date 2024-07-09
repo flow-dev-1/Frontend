@@ -40,7 +40,6 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
     resolver: yupResolver(schema),
   })
 
-
   const mutation = useMutation({
     mutationFn: schoolService.emailAdminInvite,
     onSuccess: (data) => {
@@ -77,7 +76,11 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
           <div className='flex-row '>
             <div>
               <label>First Name *</label>
-              <input type='text' {...register('first_name')} />
+              <input
+                type='text'
+                {...register('first_name')}
+                placeholder='Type here...'
+              />
               {errors.first_name && (
                 <p style={{ color: '#FD483D', fontSize: '12px' }}>
                   {errors.first_name.message}
@@ -86,7 +89,11 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
             </div>
             <div>
               <label>Last Name *</label>
-              <input type='text' {...register('last_name')} />
+              <input
+                type='text'
+                {...register('last_name')}
+                placeholder='Type here...'
+              />
               {errors.last_name && (
                 <p style={{ color: '#FD483D', fontSize: '12px' }}>
                   {errors.last_name.message}
@@ -97,7 +104,11 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
           <div className='flex-row'>
             <div>
               <label>Work Email Address *</label>
-              <input type='text' {...register('email')} />
+              <input
+                type='text'
+                {...register('email')}
+                placeholder='Type here...'
+              />
               {errors.email && (
                 <p style={{ color: '#FD483D', fontSize: '12px' }}>
                   {errors.email.message}
@@ -107,11 +118,13 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
             <div>
               <label>Position *</label>
               <select
+                id='select'
+                style={{ border: '1px solid #d6d6d6' }}
                 {...register('position')}
                 onChange={(e) => setValue('position', e.target.value)}
               >
                 <option value=''>Select...</option>
-                {["Email"].map((role, i) => (
+                {['Email'].map((role, i) => (
                   <option key={i} value={role}>
                     {role}
                   </option>

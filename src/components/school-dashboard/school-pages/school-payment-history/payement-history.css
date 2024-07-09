@@ -14,11 +14,18 @@
   margin-top: 3rem;
 }
 
+.filter-sort {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .payment-history .search-filter-sort input {
   width: 60%;
   padding: 8px;
   border: 1px solid rgba(94, 45, 189, 0.05);
   border-radius: 4px;
+  background-color: #f3f1f8;
 }
 
 .filters button {
@@ -51,8 +58,8 @@
   text-align: left;
 }
 
-.payment-history table th {
-  background-color: #f1f1f1;
+.payment-history table thead tr th {
+  background-color: #fff;
 }
 
 .payment-history .pagination {
@@ -65,4 +72,22 @@
   padding: 8px;
   cursor: pointer;
   border-radius: 4px;
+}
+
+table thead tr th {
+  background-color: #fff;
+  font-weight: 500;
+}
+table thead tr th:not(:last-child) {
+  border-right: 1px solid#fff;
+  padding: 12px;
+}
+table thead tr th:first-child {
+  border-left: 1.5px solid #ecedf0;
+
+  padding: 12px;
+}
+table tbody tr td:not(:last-child) {
+  border-right: 1px solid#fff;
+  padding: 12px;
 }

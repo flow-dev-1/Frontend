@@ -64,47 +64,7 @@ export default function IndividualProfile() {
             Edit Profile
           </button>
         </div>
-        <div className='search-bar'>
-          <form action='' className='search'>
-            <div className='search-wrapper'>
-              <span className='search-icon'>
-                <Icon icon='lets-icons:search' style={{ color: '#4d4d4d' }} />
-              </span>
-              <input
-                type='text'
-                id='search-input'
-                placeholder='Search by Name, Age, Email, Phone Number'
-              />
-            </div>
 
-            <div className='filter-sort'>
-              <label>
-                <Icon icon='gridicons:filter' style={{ color: '#4d4d4d' }} />
-                <select name='' id='' className='filter'>
-                  <option value='' selected disabled>
-                    Filter by
-                  </option>
-                  <option value=''>All</option>
-                  <option value=''>Students</option>
-                  <option value=''>Teachers</option>
-                </select>
-              </label>
-
-              <label>
-                <Icon
-                  icon='ic:outline-sort-by-alpha'
-                  style={{ color: '#4d4d4d' }}
-                />
-                <select name='' id='' className='sort'>
-                  <option value='' selected>
-                    Sort by
-                  </option>
-                  <option value=''>Sort by</option>
-                </select>
-              </label>
-            </div>
-          </form>
-        </div>
         <div className='user-other-info '>
           <p id='p'>
             <span className='span'>Email: </span>

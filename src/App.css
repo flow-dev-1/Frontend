@@ -186,6 +186,17 @@ li {
   border-radius: 20px;
   padding: 30px 60px;
 }
+.custom-modal-otp-variant {
+  width: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fefefe;
+  margin: 0 auto;
+  border-radius: 20px;
+  padding: 0;
+  overflow: hidden;
+}
 
 .custom-modal-otp-two {
   width: 60%;

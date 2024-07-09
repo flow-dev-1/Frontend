@@ -21,12 +21,15 @@ const schema = yup.object().shape({
   students: yup
     .string()
     .test('emails', 'Invalid email(s)', (value) => {
-      const emails = value.split(',').map(email => email.trim());
+      const emails = value.split(',').map((email) => email.trim())
       // Check if there is at least one email and all emails are valid
-      return emails.length > 0 && emails.every(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+      return (
+        emails.length > 0 &&
+        emails.every((email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      )
     })
     .required('At least one email is required'),
-});
+})
 
 const SchoolEnrolledStudents = () => {
   const queryClient = useQueryClient()
@@ -34,7 +37,10 @@ const SchoolEnrolledStudents = () => {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
-  const [deleteUserCredentials, setDeleteUser] = useState({ user: null, enrollId: null })
+  const [deleteUserCredentials, setDeleteUser] = useState({
+    user: null,
+    enrollId: null,
+  })
 
   const handleDeleteClick = () => {
     setShowDeleteModal(true)
@@ -70,7 +76,7 @@ const SchoolEnrolledStudents = () => {
   useEffect(() => {
     if (!data) return
     setData(data.course)
-    return () => { }
+    return () => {}
   }, [data])
 
   const formatDate = (isoString) => {
@@ -126,18 +132,21 @@ const SchoolEnrolledStudents = () => {
         const emails = XLSX.utils
           .sheet_to_json(worksheet, { header: 1 })
           .flat()
-          .filter((email) => typeof email === 'string' && validateEmail(email));
-        const currentEmails = getValues('students').trim();
-        const currentEmailsArray = currentEmails ? currentEmails.split(',').map(email => email.trim()) : [];
-        const mergedEmails = [...new Set([...currentEmailsArray, ...emails])];
-        setValue('students', mergedEmails.join(', '));
-      };
+          .filter((email) => typeof email === 'string' && validateEmail(email))
+        const currentEmails = getValues('students').trim()
+        const currentEmailsArray = currentEmails
+          ? currentEmails.split(',').map((email) => email.trim())
+          : []
+        const mergedEmails = [...new Set([...currentEmailsArray, ...emails])]
+        setValue('students', mergedEmails.join(', '))
+      }
       reader.readAsArrayBuffer(file)
     }
   }
 
   const mutation = useMutation({
-    mutationFn: (data) => schoolService.enrollStudentsIntoCourse(schoolId, decryptId(id), data),
+    mutationFn: (data) =>
+      schoolService.enrollStudentsIntoCourse(schoolId, decryptId(id), data),
     onSuccess: (data) => {
       console.log('Mutation success:', data)
       toast.success('Enrollment successful')
@@ -165,17 +174,33 @@ const SchoolEnrolledStudents = () => {
   }
 
   const onSubmit = (data) => {
+    if (
+      !window.confirm(
+        'Are you sure you want to enroll the students for this course?'
+      )
+    )
+      return
 
-    if (!window.confirm('Are you sure you want to enroll the students for this course?')) return
-
-    const emailsArray = data.students.split(',').map(email => email.trim()).filter(email => validateEmail(email))
-    const finalData = { ...data, students: emailsArray, stdClass: enrollmentData.stdClass }
+    const emailsArray = data.students
+      .split(',')
+      .map((email) => email.trim())
+      .filter((email) => validateEmail(email))
+    const finalData = {
+      ...data,
+      students: emailsArray,
+      stdClass: enrollmentData.stdClass,
+    }
 
     mutation.mutate(finalData)
   }
 
   const deleteMutation = useMutation({
-    mutationFn: () => schoolService.unEnrollStudentsFromCourse(enrollmentData._id, deleteUserCredentials.user, deleteUserCredentials.enrollId),
+    mutationFn: () =>
+      schoolService.unEnrollStudentsFromCourse(
+        enrollmentData._id,
+        deleteUserCredentials.user,
+        deleteUserCredentials.enrollId
+      ),
     onSuccess: (data) => {
       console.log('Mutation success:', data)
       toast.success('User UnEnrolled successfully!')
@@ -188,7 +213,6 @@ const SchoolEnrolledStudents = () => {
       toast.error(error?.message || 'Enrollment failed')
     },
   })
-
 
   const deleteUser = () => {
     deleteMutation.mutate()
@@ -245,9 +269,11 @@ const SchoolEnrolledStudents = () => {
           <p>Start Time:</p>
           <p>{convertTo12HourFormat(enrollmentData?.startTime)}</p>
         </div>
-        <div className='info-item'>
-          <p>End Time:</p>
-          <p>{convertTo12HourFormat(enrollmentData?.endTime)}</p>
+        <div style={{ border: 'none' }} className='info-item'>
+          <p style={{ border: 'none' }}>End Time:</p>
+          <p style={{ border: 'none' }}>
+            {convertTo12HourFormat(enrollmentData?.endTime)}
+          </p>
         </div>
       </div>
       <div className='table-container'>
@@ -268,13 +294,19 @@ const SchoolEnrolledStudents = () => {
             {enrollmentData?.studentEnrollments?.map((data, index) => (
               <tr key={data._id}>
                 <td>{index + 1}</td>
-                <td style={{ cursor: "pointer" }} onClick={() => navigate(`users/${data?.user?._id}`)}>
+                <td
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => navigate(`users/${data?.user?._id}`)}
+                >
                   {data?.user?.first_name} {data?.user?.last_name}
                 </td>
                 <td>{data?.user?.email}</td>
                 <td>{data?.user?.phone}</td>
                 <td>{data?.user?.gender === 'male' ? 'M' : 'F'}</td>
-                <td>{new Date().getFullYear() - new Date(data?.user?.DOB).getFullYear()}</td>
+                <td>
+                  {new Date().getFullYear() -
+                    new Date(data?.user?.DOB).getFullYear()}
+                </td>
                 <td>{data?.progress}%</td>
                 <td>
                   <Icon
@@ -359,16 +391,19 @@ const SchoolEnrolledStudents = () => {
             </div>
             <button
               type='submit'
-              disabled={mutation.isPending} className='modal-button'>
-              {
-                mutation.isPending ? <RotatingLines
+              disabled={mutation.isPending}
+              className='modal-button'
+            >
+              {mutation.isPending ? (
+                <RotatingLines
                   type='Oval'
                   style={{ color: '#FFF' }}
                   height={20}
-                  width={20} /> :
-                  "Send Invite"
-              }
-
+                  width={20}
+                />
+              ) : (
+                'Send Invite'
+              )}
             </button>
           </form>
         </div>
@@ -381,7 +416,11 @@ const SchoolEnrolledStudents = () => {
         className='custom-modal-success'
         overlayClassName='custom-overlay'
       >
-        <DeleteStudentModal closeModal={closeModals} handleDeleteUser={deleteUser} isPending={deleteMutation.isPending} />
+        <DeleteStudentModal
+          closeModal={closeModals}
+          handleDeleteUser={deleteUser}
+          isPending={deleteMutation.isPending}
+        />
       </Modal>
     </div>
   )

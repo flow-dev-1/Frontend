@@ -181,3 +181,10 @@ tbody {
   color: #50aa50;
   font-size: 50px;
 }
+
+#banner p {
+  color: #fff;
+}
+#banner p span {
+  color: #5ce1e6;
+}

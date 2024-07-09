@@ -73,7 +73,7 @@ export default function SchoolSignIn() {
           <div className='form-section d-flex flex-column align-items-center '>
             <div className='form-group'>
               <label>Email *</label>
-              <input type='email' {...register('email', { required: true })} />
+              <input type='email' {...register('email', { required: true })} placeholder='Enter email address' />
               {errors.email && (
                 <p className='error-message'>{errors.email.message}</p>
               )}
@@ -81,7 +81,7 @@ export default function SchoolSignIn() {
             <div className='form-group my-3'>
               <div className='d-flex align-items-center justify-content-between'>
                 <label>Password *</label>
-                <Link to='/forgot-password' className='forgot-password'>
+                <Link to='/school/forgot-password' className='forgot-password'>
                   Forgot Password?
                 </Link>
               </div>
@@ -97,8 +97,9 @@ export default function SchoolSignIn() {
                   onClick={togglePasswordVisibility}
                 >
                   <Icon
-                    icon={showPassword ? 'mdi:eye-off' : 'mdi:eye'}
+                    icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
                     className='eye-icon'
+                    width={20}
                   />
                 </div>
               </div>
@@ -110,7 +111,7 @@ export default function SchoolSignIn() {
               )}
             </div>
             <div className='d-flex align-items-center mb-2 me-auto rember-me'>
-              <input type='checkbox' name='' id='' className='mx-2' />
+              <input type='checkbox' name='' id='checkbox' className='mx-2 ' />
               Remember Me
             </div>
             <button

@@ -25,22 +25,22 @@ const SchoolSettingsDeactivateAccount = () => {
   const mutation = useMutation({
     mutationFn: (data) => schoolService.deactivateAccount(data),
     onMutate: () => {
-      toastId.current = toast.loading("Deactivating account...")
+      toastId.current = toast.loading('Deactivating account...')
     },
     onSuccess: (data) => {
       toast.update(toastId.current, {
-        render: "Account deactivated successfully",
-        type: "success",
+        render: 'Account deactivated successfully',
+        type: 'success',
         isLoading: false,
         autoClose: 3000,
       })
-      navigate("/sign-in", { replace: true })
+      navigate('/sign-in', { replace: true })
       // Add any other necessary cleanup or redirection here
     },
     onError: (error) => {
       toast.update(toastId.current, {
-        render: error?.message || "Error deactivating account",
-        type: "error",
+        render: error?.message || 'Error deactivating account',
+        type: 'error',
         isLoading: false,
         autoClose: 3000,
       })
@@ -48,7 +48,8 @@ const SchoolSettingsDeactivateAccount = () => {
   })
 
   const handleDeactivate = () => {
-    if (!window.confirm("Are you sure you want to deactivate your account?")) return
+    if (!window.confirm('Are you sure you want to deactivate your account?'))
+      return
     mutation.mutate({ reason: feedback })
   }
 

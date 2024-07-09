@@ -16,6 +16,13 @@
   position: relative;
 }
 
+.ul li {
+  list-style-type: disc;
+  margin-left: 2rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .modal-close-button {
   background: none;
   border: none;

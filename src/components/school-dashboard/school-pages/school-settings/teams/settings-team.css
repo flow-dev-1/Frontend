@@ -206,5 +206,6 @@ tbody {
 
 .team-members table thead tr th {
   background-color: #fff;
-  font-weight: 500;
+  font-weight: 400;
+  font-size: 14px;
 }

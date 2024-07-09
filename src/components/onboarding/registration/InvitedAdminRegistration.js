@@ -36,6 +36,8 @@ export default function InvitedAdminRegistration() {
   const [token, setJWTToken] = useState('')
   const navigate = useNavigate()
 
+  const [email, setEmail] = useState('')
+
   const schema = yup.object().shape({
     firstName: yup.string().required('First Name is required'),
     lastName: yup.string().required('Last Name is required'),

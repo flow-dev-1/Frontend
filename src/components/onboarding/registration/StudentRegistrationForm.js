@@ -30,7 +30,9 @@ export default function StudentRegistrationForm() {
   const [formData, setFormData] = useState(null)
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
   const [countries, setCountries] = useState([])
-  const [isNigeria, setIsNigeria] = useState(true) // State to track if the selected country is Nigeria
+  const [isNigeria, setIsNigeria] = useState(true)
+  const [email, setEmail] = useState('')
+  // State to track if the selected country is Nigeria
 
   const schema = yup.object().shape({
     childFirstName: yup.string().required("Child's First Name is required"),
@@ -118,6 +120,7 @@ export default function StudentRegistrationForm() {
       console.log('Registration successful:', data)
       toast.success(data.message)
       dispatch(setToken(data?.token))
+      localStorage.setItem('Flow-Auth-Token', data?.token)
       openModal()
     },
     onError: (error) => {
@@ -195,6 +198,7 @@ export default function StudentRegistrationForm() {
                 type='email'
                 placeholder='Type here...'
                 {...register('guardianEmail')}
+                onChange={(e) => setEmail(e.target.value)}
               />
               {errors.guardianEmail && (
                 <p className='error-message'>{errors.guardianEmail.message}</p>
@@ -364,7 +368,7 @@ export default function StudentRegistrationForm() {
           </div>
           <hr className='my-4' />
           <div className='bottom-section'>
-            <p>
+            <p style ={{width: "80%", textAlign:"center"}}>
               Already have an account?{' '}
               <Link to='/individual/sign-in'>Sign In</Link>
             </p>
@@ -396,7 +400,7 @@ export default function StudentRegistrationForm() {
         overlayClassName='custom-overlay'
       >
         <StudentOtpModal
-          formData={formData}
+          email={email}
           closeModal={closeModal}
           guardianPhone={watch('guardianPhone')}
           resendOTP={handleSubmit(onSubmit)}

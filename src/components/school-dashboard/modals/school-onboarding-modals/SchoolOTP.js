@@ -123,8 +123,14 @@ export default function SchoolOTP({ email, resendOTP }) {
               <button
                 className='resend-btn'
                 type='submit'
-                style={{ cursor: 'pointer' }}
-                onclidk={resendOTP}
+                style={{
+                  cursor: 'pointer',
+                  border: 'none',
+                  backgroundColor: 'transparent',
+                  color: '#275DAD',
+                  marginLeft: '0.5rem',
+                }}
+                onclidk={handleResendOTP}
               >
                 Resend OTP
               </button>
@@ -139,10 +145,7 @@ export default function SchoolOTP({ email, resendOTP }) {
         overlayClassName='custom-overlay'
         shouldCloseOnOverlayClick={false}
       >
-        <SchoolEmailVerificationSuccessful
-          from='otp'
-       
-        />
+        <SchoolEmailVerificationSuccessful from='otp' />
       </Modal>
     </div>
   )

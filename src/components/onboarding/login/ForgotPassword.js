@@ -59,7 +59,10 @@ export default function ForgotPassword() {
 
   return (
     <div>
-      <div className='sign-in registration-page overflow-hidden'>
+      <div
+        className='sign-in registration-page overflow-hidden'
+        style={{ justifyContent: 'start', paddingTop: '4rem' }}
+      >
         <h2 className='text-center'>Forgot Password?</h2>
         <p className='text-center'>
           Enter your email address you registered with.
@@ -78,7 +81,7 @@ export default function ForgotPassword() {
               {mutation.isPending ? (
                 <RotatingLines
                   type='Oval'
-                  style={{ color: '#FFF' }}
+                  style={{ color: '#34D186' }}
                   height={20}
                   width={20}
                 />
@@ -90,7 +93,7 @@ export default function ForgotPassword() {
         </form>
 
         <p className='text-center'>
-          Remember your details? <Link to='/sign-in'>Sign in</Link>
+          Remember your details? <Link to='/individual/sign-in'>Sign in</Link>
         </p>
       </div>
 

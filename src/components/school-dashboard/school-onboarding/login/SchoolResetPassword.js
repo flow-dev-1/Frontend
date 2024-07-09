@@ -50,7 +50,8 @@ export default function SchoolResetPassword() {
 
   const mutation = useMutation({
     mutationFn: schoolService.schoolResetPassword,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      localStorage.setItem('Flow-Auth-Token', data?.token)
       openModal()
     },
     onError: (error) => {

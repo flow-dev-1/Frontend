@@ -91,6 +91,60 @@ button.update {
 }
 
 #select {
-  border: 1px solid #f8f8f8 !important;
+  border: 1.5px solid #ecedf0 !important;
   background-color: #f8f8f8 !important;
+  padding: 0.5rem;
+}
+
+.country-code {
+  position: absolute;
+  top: 0.8rem;
+  color: #5b616a;
+  left: 2.5rem;
+}
+
+.flex-code-input .PhoneInputCountry {
+  width: 70px;
+}
+
+.flex-row div select {
+  padding: 0;
+}
+
+.upload {
+  width: 100%;
+  margin: 0;
+}
+
+.file-upload-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 4px;
+  margin: 0;
+  background-color: #f8f9fa;
+}
+
+.file-upload-input {
+  display: none;
+}
+
+.file-upload-label {
+  display: flex;
+  align-items: center;
+  gap: 13rem;
+  cursor: pointer;
+  color: #007bff;
+  border-radius: 5px;
+}
+
+.file-upload-label .iconify {
+  margin-right: 8px;
+}
+
+.flex-row div {
+  margin-left: 0;
 }

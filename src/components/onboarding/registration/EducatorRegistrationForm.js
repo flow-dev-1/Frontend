@@ -30,7 +30,9 @@ export default function EducatorRegistrationForm() {
   const [formData, setFormData] = useState(null)
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
   const [countries, setCountries] = useState([])
-  const [isNigeria, setIsNigeria] = useState(true) // State to track if the selected country is Nigeria
+  const [isNigeria, setIsNigeria] = useState(true)
+  // State to track if the selected country is Nigeria
+  const [email, setEmail] = useState('')
 
   const schema = yup.object().shape({
     firstName: yup.string().required('First Name is required'),
@@ -111,11 +113,12 @@ export default function EducatorRegistrationForm() {
   }, [selectedCountry])
 
   const mutation = useMutation({
-    mutationFn: (data) => userService.register('Individual', data),
+    mutationFn: (data) => userService.register('Educator', data),
     onSuccess: (data) => {
       console.log('Registration successful:', data)
       toast.success(data.message)
       dispatch(setToken(data?.token))
+      localStorage.setItem("Flow-Auth-Token", data?.token)
       openModal()
     },
     onError: (error) => {
@@ -193,6 +196,7 @@ export default function EducatorRegistrationForm() {
                 type='email'
                 placeholder='Type here...'
                 {...register('email')}
+                onChange={(e) => setEmail(e.target.value)}
               />
               {errors.email && (
                 <p className='error-message'>{errors.email.message}</p>
@@ -323,7 +327,7 @@ export default function EducatorRegistrationForm() {
 
           <hr className='my-4' />
           <div className='bottom-section'>
-            <p>
+            <p style={{ width: '80%', textAlign: 'center' }}>
               Already have an account?{' '}
               <Link to='/individual/sign-in'>Sign In</Link>
             </p>
@@ -355,7 +359,11 @@ export default function EducatorRegistrationForm() {
         className='custom-modal-otp'
         overlayClassName='custom-overlay'
       >
-        <StudentOtpModal resendOTP={handleSubmit(onSubmit)} formData={formData} closeModal={closeModal} />
+        <StudentOtpModal
+          resendOTP={handleSubmit(onSubmit)}
+          email={email}
+          closeModal={closeModal}
+        />
       </Modal>
     </div>
   )

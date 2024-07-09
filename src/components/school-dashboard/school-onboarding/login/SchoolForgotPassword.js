@@ -19,7 +19,7 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState('')
   const { id } = useParams()
 
-  console.log(id, "Id o")
+  console.log(id, 'Id o')
 
   const dispatch = useDispatch()
   const location = useLocation()
@@ -42,6 +42,7 @@ export default function ForgotPassword() {
     if (resetToken && queryCode) {
       mutate({ code: queryCode })
       dispatch(setToken(resetToken))
+      localStorage.setItem('Flow-Auth-Token', resetToken)
     } else {
     }
   }, [])
@@ -84,7 +85,8 @@ export default function ForgotPassword() {
     },
     onError: (error) => {
       // Handle login error
-      navigate('/school/sign-in', { replace: true })
+      // navigate('/school/sign-in', { replace: true })
+      console.log(error)
       toast.error(error)
     },
   })
@@ -119,7 +121,7 @@ export default function ForgotPassword() {
         >
           {mutation.isPending ? (
             <RotatingLines
-              strokeColor='#FFF'
+              strokeColor='#4B7E31'
               strokeWidth='5'
               animationDuration='0.75'
               width='20'
