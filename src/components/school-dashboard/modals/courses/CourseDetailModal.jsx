@@ -75,7 +75,7 @@ const CourseDetailModal = ({ course, enrolled }) => {
             <span style={{ color: '#4b7e31' }}>Developing Self-awareness:</span>
             Students will reflect on their personal strengths, interests, and
             aspirations, recognize their potential for growth, and understand
-            what they can and cannot control.
+             they can and cannot control.
           </li>
           <li>
             <span style={{ color: '#4b7e31' }}>Encouraging Collaboration:</span>
