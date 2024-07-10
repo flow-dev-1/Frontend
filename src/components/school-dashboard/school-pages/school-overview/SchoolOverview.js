@@ -76,6 +76,9 @@ const SchoolOverview = () => {
         <div className='balance'>
           <p>Account Balance:</p>
           <p className='value'>-N4,000,000.00</p>
+          <p id='play'>
+            Pay Now <span style={{ fontSize: '18px' }}>+</span>{' '}
+          </p>
         </div>
 
         <div className='stat one'>

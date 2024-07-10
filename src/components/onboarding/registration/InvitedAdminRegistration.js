@@ -26,6 +26,7 @@ Modal.setAppElement('#root') // Set the root element for the modal
 export default function InvitedAdminRegistration() {
   const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
   const [formData, setFormData] = useState(null)
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
@@ -105,6 +106,9 @@ export default function InvitedAdminRegistration() {
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
+  }
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword)
   }
 
   useEffect(() => {

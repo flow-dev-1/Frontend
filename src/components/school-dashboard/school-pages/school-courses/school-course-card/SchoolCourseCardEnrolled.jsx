@@ -72,16 +72,22 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
 
   return (
     <div style={{ cursor: 'pointer' }}>
-      <div className='course-card'>
-        <div className='course-card-img' onClick={navigateToCourse}>
+      <div className='course-card' style={{ height: '480px' }}>
+        <div className='course-card-img' style={{ height: '230px' }}>
           <img src={course.image} alt='' />
-          <div className='course-card-category'>{course.grade !== "Educators" ? "Students" : "Educators"}</div>
+          <div className='course-card-category'>
+            {course.grade !== 'Educators' ? 'Students' : 'Educators'}
+          </div>
         </div>
-        <div className='course-card-title'>
+        <div className='course-card-title' style={{ margin: '0' }}>
           <h3>{course.title}:</h3>
           <h3>{course.subtitle}</h3>
         </div>
-        {truncateText(course.description, 100)}
+        <p style={{ fontSize: '14px', height: '60px', marginBottom: '1rem' }}>
+          {' '}
+          {truncateText(course.description, 100)}
+        </p>
+
         <div className='users-review'>
           <div className='users-count'>
             <span>
@@ -90,8 +96,7 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
                 style={{ color: reviewBtnColor }}
               />{' '}
             </span>
-            {course?.courseEnrollment?.length}{' '}
-            Students
+            {course?.courseEnrollment?.length} Students
           </div>
           <div className='likes-count'>
             <span>
@@ -103,20 +108,24 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
             {likesPercent(
               course?.likes?.length,
               course?.courseEnrollment?.length
-            )}%
+            )}
+            %
           </div>
           <div
             className={`toggle-switch ${isOn ? 'on' : 'off'}`}
             onClick={handleToggle}
           >
-            <div className='toggle-knob'></div>
+            <div className={isOn ? 'onKnob' : 'offKnob'}></div>
           </div>
         </div>
         <div className='course-card-buttons'>
           <div className='course-card-buttons-main'>
             <button
               className={`reviewBtn ${reviewBtnClass}`}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation()
+                openModal(course)
+              }}
               style={{ backgroundColor: '#D4FFBE', color: '#4B7E31' }}
             >
               <span>
@@ -129,11 +138,11 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
             </button>
             <button
               className={`detailsBtn ${detailsBtnClass}`}
-              style={{ backgroundColor: darkGreen, color: lightGreen }}
               onClick={(e) => {
                 e.stopPropagation()
-                openModal(course)
+                navigateToCourse()
               }}
+              style={{ backgroundColor: darkGreen, color: lightGreen }}
             >
               <span>
                 <Icon
@@ -151,12 +160,10 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
                 fontSize: '12px',
               }}
             >
-              <span style={{ color: darkGreen, fontWeight: "bold" }}>0 %</span> <span>Done</span>
+              <span style={{ color: darkGreen, fontWeight: 'bold' }}>0 %</span>{' '}
+              <span>Done</span>
             </div>
           </div>
-
-
-
         </div>
       </div>
     </div>

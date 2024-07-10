@@ -1,24 +1,44 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import './sidebar.css'
+import { useNavigate } from 'react-router-dom'
 
 function SchoolSidebar() {
   const location = useLocation()
   const [isCoursesOpen, setIsCoursesOpen] = useState(false)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const navigate = useNavigate()
 
   const toggleCourses = () => {
+    navigate('/school-dashboard/courses/all')
     setIsCoursesOpen(!isCoursesOpen)
+    setIsSettingsOpen(false)
   }
 
   const toggleSettings = () => {
+    navigate('/school-dashboard/settings/profile')
     setIsSettingsOpen(!isSettingsOpen)
+    setIsCoursesOpen(false)
   }
 
   const isActiveLink = (path) => {
     return location.pathname === path
   }
+
+  useEffect(() => {
+    if (location.pathname.startsWith('/school-dashboard/courses')) {
+      setIsCoursesOpen(true)
+    } else {
+      setIsCoursesOpen(false)
+    }
+
+    if (location.pathname.startsWith('/school-dashboard/settings')) {
+      setIsSettingsOpen(true)
+    } else {
+      setIsSettingsOpen(false)
+    }
+  }, [location.pathname])
 
   return (
     <div className='sidebar-user'>
@@ -37,7 +57,10 @@ function SchoolSidebar() {
           </li>
 
           <li>
-            <div className='link' onClick={toggleCourses}>
+            <div
+              className={`link ${isCoursesOpen ? 'active' : ''}`}
+              onClick={toggleCourses}
+            >
               <Icon icon='mdi:book-open-variant' className='sidebar-icon' />
               Courses
               <Icon
@@ -102,7 +125,10 @@ function SchoolSidebar() {
           </li>
 
           <li>
-            <div className='link' onClick={toggleSettings}>
+            <div
+              className={`link ${isSettingsOpen ? 'active' : ''}`}
+              onClick={toggleSettings}
+            >
               <Icon icon='mdi:cog' className='sidebar-icon' />
               Settings
               <Icon

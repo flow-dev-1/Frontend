@@ -290,27 +290,53 @@ label {
   width: 45px;
   height: 20px;
   border-radius: 20px;
-  background-color: #ccc;
   position: relative;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .toggle-switch.on {
-  background-color: red;
+  border: 1px solid green;
+  background-color: #fff;
+}
+.toggle-switch.off {
+  background-color: #fff;
+  border: 1px solid red;
 }
 
 .toggle-knob {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background-color: white;
+  background-color: red;
   position: absolute;
-  top: 1px;
+  top: 0.8px;
   left: 1px;
   transition: left 0.3s;
 }
 
-.toggle-switch.on .toggle-knob {
+.onKnob {
+  background-color: green;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  position: absolute;
+  top: 0.8px;
+  left: 1px;
+  transition: left 0.3s;
+}
+
+.offKnob {
+  background-color: red;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  position: absolute;
+  top: 0.8px;
+  left: 1px;
+  transition: left 0.3s;
+}
+
+.toggle-switch.on .onKnob {
   left: 26px;
 }

@@ -63,6 +63,10 @@ const SchoolAllCourses = () => {
     setSelectedCourse(null)
   }
 
+  const navigateToCourse = () => {
+    navigate(`/school-dashboard/courses/enrolled/${encryptURI(courseData._id)}`)
+  }
+
   return (
     <div className='my-container'>
       <div className='category-desc'>

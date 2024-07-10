@@ -50,8 +50,8 @@
 }
 
 select {
- background-color: #fff !important;
- border: #fff !important;
+  background-color: #fff !important;
+  border: #fff !important;
 }
 
 .chart {
@@ -231,4 +231,17 @@ select {
 
 .female {
   color: #fd46d5;
+}
+
+#play {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 14px;
+  padding: 0.1rem 2rem;
+  width: 52%;
+  border-radius: 30px;
+  background-color: #5ce1e6;
+  color: #275dad;
+  margin-top: 0.2rem;
 }

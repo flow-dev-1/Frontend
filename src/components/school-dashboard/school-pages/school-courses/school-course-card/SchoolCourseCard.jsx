@@ -1,12 +1,38 @@
 import { Icon } from '@iconify/react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { encryptURI } from '../../../../../utils/encryption'
+import EnrollmentModal from '../../../modals/Enrollment/EnrollmentModal'
 
 const SchoolCourseCard = ({ openModal, course, enrolled }) => {
   const [isOn, setIsOn] = useState(false)
+  const [openEnrollModal, setOpenEnrollModal] = useState(false)
+  const openEnrollementModal = () => {
+    setOpenEnrollModal(true)
+  }
+
+  const closeEnrollementModal = () => {
+    setOpenEnrollModal(false)
+  }
 
   const handleToggle = () => {
     setIsOn(!isOn)
   }
+
+  const daysOfWeek = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ]
+  const timeOptions = Array.from(
+    { length: 10 },
+    (_, i) => `${String(i + 8).padStart(2, '0')}:00`
+  )
+
   // enrolled color
   const lightGreen = '#D4FFBE'
   const darkGreen = '#4B7E31'
@@ -62,18 +88,20 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
 
   return (
     <div>
-      <div className='course-card' style={{height:"500px"}}>
-        <div className='course-card-img'>
+      <div className='course-card' style={{ height: '480px' }}>
+        <div className='course-card-img' style={{ height: '230px' }}>
           <img src={course.image} alt='' />
           <div className='course-card-category'>
             {course.grade !== 'Educators' ? 'Students' : 'Educators'}
           </div>
         </div>
-        <div className='course-card-title' style={{marginBottom:"0"}}>
+        <div className='course-card-title' style={{ marginBottom: '0' }}>
           <h3>{course.title}:</h3>
           {/* <h3>{course.subtitle}</h3> */}
         </div>
-        <p style={{fontSize:"14px"}}>{truncateText(course.description, 100)}</p>
+        <p style={{ fontSize: '14px', height: '60px' }}>
+          {truncateText(course.description, 100)}
+        </p>
 
         <div style={{ margin: '1rem 0' }} className='users-review'>
           <div
@@ -111,7 +139,7 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
               className={`toggle-switch ${isOn ? 'on' : 'off'}`}
               onClick={handleToggle}
             >
-              <div className='toggle-knob'></div>
+              <div className={isOn ? 'onKnob' : 'offKnob'}></div>
             </div>
           ) : (
             ''
@@ -120,6 +148,7 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
         <div className='course-card-buttons'>
           <div className='course-card-buttons-main'>
             <button
+              onClick={() => openModal(course)}
               style={
                 enrolled.includes(course._id)
                   ? { backgroundColor: '#D4FFBE', color: '#4B7E31' }
@@ -138,8 +167,7 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
               Review
             </button>
             <button
-              // className={`detailsBtn ${detailsBtnClass}`}
-              onClick={() => openModal(course)}
+              onClick={!enrolled.includes(course._id) ? openEnrollementModal : null}
               style={
                 enrolled.includes(course._id)
                   ? { backgroundColor: darkGreen, color: lightGreen }
@@ -179,6 +207,13 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
           </div>
         </div>
       </div>
+      <EnrollmentModal
+        isOpen={openEnrollModal}
+        onRequestClose={closeEnrollementModal}
+        daysOfWeek={daysOfWeek}
+        timeOptions={timeOptions}
+        course={course}
+      />
     </div>
   )
 }

@@ -78,7 +78,8 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   const params2 = course?._id
 
   const mutation = useMutation({
-    mutationFn: (value) => userService.enrolledStudents(params1, params2, value),
+    mutationFn: (value) =>
+      userService.enrolledStudents(params1, params2, value),
     onSuccess: (data) => {
       console.log('Mutation success:', data)
       toast.success('Enrollment successful')
@@ -178,7 +179,9 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                 name='stdClass'
                 {...register('stdClass')}
               >
-                <option value=''>Select Class</option>
+                <option style={{ color: '#D6D6D6' }} value=''>
+                  Choose
+                </option>
                 {classOptions.map((className, index) => (
                   <option key={index} value={className}>
                     {className}
@@ -198,7 +201,9 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                   name='dayOfWeek'
                   {...register('dayOfWeek')}
                 >
-                  <option value=''>Select Day</option>
+                  <option style={{ color: '#D6D6D6' }} value=''>
+                    Choose
+                  </option>
                   {daysOfWeek.map((day, index) => (
                     <option key={index} value={day}>
                       {day}
@@ -217,7 +222,9 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                   style={{ border: '1px solid #D9D9D9' }}
                   {...register('startTime')}
                 >
-                  <option value=''>Select Start Time</option>
+                  <option style={{ color: '#D6D6D6' }} value=''>
+                    Choose
+                  </option>
                   {timeOptions.map((time, index) => (
                     <option key={index} value={time}>
                       {time}
@@ -236,7 +243,9 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                   name='endTime'
                   {...register('endTime')}
                 >
-                  <option value=''>Select End Time</option>
+                  <option style={{ color: '#D6D6D6' }} value=''>
+                    Choose
+                  </option>
                   {timeOptions.map((time, index) => (
                     <option key={index} value={time}>
                       {time}
@@ -249,12 +258,12 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
               </div>
             </div>
             <div className='text-area'>
-              <div>
+              <div className='div'>
                 <label htmlFor='students'>Student Email *</label>
                 <textarea
                   id='students'
                   name='students'
-                  placeholder='Enter email addresses here'
+                  placeholder='Enter email addresses here and separate with a comma'
                   rows={3}
                   cols={50}
                   {...register('students')}

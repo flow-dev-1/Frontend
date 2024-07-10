@@ -23,6 +23,7 @@ Modal.setAppElement('#root') // Set the root element for the modal
 export default function SchoolRegistrationForm() {
   const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setConfirmShowPassword] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
   const location = useLocation()
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
@@ -74,6 +75,9 @@ export default function SchoolRegistrationForm() {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmShowPassword(!showConfirmPassword)
+  }
 
   useEffect(() => {
     const params = new URLSearchParams(location.search)
@@ -120,10 +124,10 @@ export default function SchoolRegistrationForm() {
   const mutation = useMutation({
     mutationFn: schoolService.register, // Assuming userService.register is your API call function
     onSuccess: (data) => {
-      console.log('Registration successful:', data)
-      toast.success(data.message)
       dispatch(setToken(data?.token))
       localStorage.setItem('Flow-Auth-Token', data?.token)
+      console.log('Registration successful:', data)
+      toast.success(data.message)
       openModal()
     },
     onError: (error) => {
@@ -317,17 +321,17 @@ export default function SchoolRegistrationForm() {
             <label>Confirm Password *</label>
             <div className='input-with-icon'>
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={showConfirmPassword ? 'text' : 'password'}
                 placeholder='Type here...'
                 autoComplete='new-password'
                 {...register('confirmPassword')}
               />
               <div
                 className='password-toggle'
-                onClick={togglePasswordVisibility}
+                onClick={toggleConfirmPasswordVisibility}
               >
                 <Icon
-                  icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
+                  icon={showConfirmPassword ? 'oui:eye-closed' : 'ph:eye-light'}
                   width={20}
                   className='eye-icon'
                 />
