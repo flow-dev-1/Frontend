@@ -15,21 +15,21 @@ export default function EmailVerificationSuccessful({ from, email }) {
         </div>
 
         {from === 'otp' || from === 'resetPassword' ? (
-          <h2>Successful!</h2>
+          <h2 style={{ color: '#5B616A', fontSize: '40px' }}>Successful!</h2>
         ) : (
-          <h2>Email Sent!</h2>
+          <h2 style={{ color: '#5B616A', fontSize: '40px' }}>Email Sent!</h2>
         )}
 
         {from === 'otp' ? (
-          <p className='text-center'>
+          <p style={{ color: '#5B616A' }} className='text-center'>
             You have successfully created your account.
           </p>
         ) : from === 'resetPassword' ? (
-          <p className='text-center'>
+          <p style={{ color: '#5B616A' }} className='text-center'>
             You have successfully changed your password.
           </p>
         ) : (
-          <p style={{ width: '100%' }} className='my-3'>
+          <p style={{ width: '100%', color: '#5B616A' }} className='my-3'>
             A password reset link has been sent to <span>{email && email}</span>
           </p>
         )}
@@ -39,7 +39,8 @@ export default function EmailVerificationSuccessful({ from, email }) {
             onClick={() => {
               navigate('/individual/sign-in')
             }}
-            className='btn submit-btn mt-5 '
+            className='btn submit-btn  success '
+            style={{ borderRadius: '5px', width: '110%', margin: '.5rem 0' }}
           >
             Proceed to Sign In
           </button>
@@ -48,7 +49,14 @@ export default function EmailVerificationSuccessful({ from, email }) {
             onClick={() => {
               navigate('/individual/sign-in')
             }}
-            className='btn submit-btn mt-5'
+            style={{
+              borderRadius: '5px',
+              marginBottom: '1rem',
+              marginTop: '.5rem',
+              padding: '.5rem 0',
+              width: '110%',
+            }}
+            className='btn submit-btn '
           >
             Sign In
           </button>

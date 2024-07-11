@@ -368,13 +368,14 @@ export default function StudentRegistrationForm() {
           </div>
           <hr className='my-4' />
           <div className='bottom-section'>
-            <p style ={{width: "80%", textAlign:"center"}}>
+            <p style={{ width: '80%', textAlign: 'center' }}>
               Already have an account?{' '}
               <Link to='/individual/sign-in'>Sign In</Link>
             </p>
 
             <button
               className='btn submit-btn'
+              style={{ borderRadius: '5px', padding: '.3rem 1rem' }}
               type='submit'
               disabled={mutation.isPending}
             >

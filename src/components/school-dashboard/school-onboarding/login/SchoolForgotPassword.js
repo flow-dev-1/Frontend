@@ -111,6 +111,7 @@ export default function ForgotPassword() {
         <div className='form-group my-4'>
           <label>Email address</label>
           <input
+            style={{ width: '100%', padding: '1.3rem .7rem' }}
             type='email'
             {...register('email', { required: true })}
             placeholder='Enter email address'

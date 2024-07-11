@@ -20,6 +20,22 @@
   color: #e74c3c;
 }
 
+.chart-heading p {
+  font-size: 14px;
+  font-weight: 400;
+  color: #333333;
+}
+
+.overview .filter-sort {
+  border: 1px solid #ecedf0 !important;
+  background-color: transparent !important;
+  border-radius: 25px !important;
+}
+
+.overview .filter-sort select {
+  background-color: #fff;
+}
+
 .stats {
   display: flex;
   justify-content: space-around;
@@ -155,10 +171,12 @@ select {
 .box-2 {
   width: 14px;
   height: 14px;
+  border-radius: 4px;
 }
 
 .box {
   background-color: #17e383;
+  color: #333;
 }
 
 .box-2 {
@@ -167,6 +185,10 @@ select {
 
 .charts {
   margin-top: 1.5rem;
+}
+
+p.active.gender {
+  text-align: center;
 }
 
 .filter-sort {
@@ -196,19 +218,24 @@ select {
 .active {
   color: #979797;
   margin-bottom: 1rem;
+  font-size: 14px;
   padding: 0.6rem;
   border-radius: 20px;
   background-color: #f7f7f7;
 }
 
 .students-dash {
-  padding: 0.2rem;
+  padding: 0.2rem 0.4rem;
   color: #5b616a;
-  background-color: #6dccfa;
-  border-radius: 10px;
+  background-color: #5ce1e6;
+  border-radius: 20px;
   display: flex;
+  justify-content: center;
+  text-align: center;
   align-items: end;
   width: 70px;
+  font-size: 8px;
+  text-transform: uppercase;
   position: relative;
   top: 3rem;
 }

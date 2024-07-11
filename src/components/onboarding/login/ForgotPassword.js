@@ -97,6 +97,7 @@ export default function ForgotPassword() {
           <label>Email address</label>
           <input
             type='email'
+            style={{ padding: '1.3rem .5rem' }}
             {...register('email', { required: true })}
             placeholder='Enter email address'
           />
@@ -105,6 +106,7 @@ export default function ForgotPassword() {
         <button
           className='btn submit-btn forgot'
           type='submit'
+          style={{ borderRadius: '5px', marginBottom: '1rem' }}
           disabled={passwordResetMutation.isPending}
         >
           {passwordResetMutation.isPending ? (
@@ -129,7 +131,7 @@ export default function ForgotPassword() {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel='Email Verification Successful'
-        className='custom-modal-otp'
+        className='custom-modal-success-email'
         overlayClassName='custom-overlay'
         shouldCloseOnOverlayClick={true}
       >

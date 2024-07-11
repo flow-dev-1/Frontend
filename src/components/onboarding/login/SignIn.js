@@ -72,6 +72,7 @@ export default function SignIn() {
             <div className='form-group'>
               <label>Email *</label>
               <input
+                style={{ width: '100%', padding: '1.3rem .7rem' }}
                 type='email'
                 {...register('email', { required: true })}
                 placeholder='Enter email address'
@@ -83,13 +84,20 @@ export default function SignIn() {
             <div className='form-group my-3'>
               <div className='d-flex align-items-center justify-content-between'>
                 <label>Create Password *</label>
-                <Link to='/individual/forgot-password' className='forgot-password'>
+                <Link
+                  to='/individual/forgot-password'
+                  className='forgot-password'
+                >
                   Forgot Password?
                 </Link>
               </div>
 
-              <div className='d-flex align-items-center input-with-icon'>
+              <div
+                style={{ width: '100%' }}
+                className='d-flex align-items-center input-with-icon'
+              >
                 <input
+                  style={{ width: '100%', padding: '1.3rem .7rem' }}
                   type={showPassword ? 'text' : 'password'}
                   placeholder='Type here...'
                   {...register('password', { required: true })}
@@ -99,8 +107,9 @@ export default function SignIn() {
                   onClick={togglePasswordVisibility}
                 >
                   <Icon
-                    icon={showPassword ? 'mdi:eye-off' : 'mdi:eye'}
+                    icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
                     className='eye-icon'
+                    width={20}
                   />
                 </div>
               </div>
@@ -116,6 +125,7 @@ export default function SignIn() {
               Remember Me
             </div>
             <button
+              style={{ width: '100%', borderRadius: '10px', margin: '.5rem 0' }}
               className='btn submit-btn'
               type='submit'
               disabled={mutation.isPending}

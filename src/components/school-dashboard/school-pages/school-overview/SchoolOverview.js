@@ -239,7 +239,7 @@ const SchoolOverview = () => {
           <div className='students-dash'>students</div>
           <div className='summary'>
             <div className='summary-box'>
-              <p className='active'>Gender</p>
+              <p className='active gender'>Gender</p>
               <div>
                 <div className='box male'></div> Male -{' '}
                 <span className='male'> 80</span>

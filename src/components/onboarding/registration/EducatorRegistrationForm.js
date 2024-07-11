@@ -118,7 +118,7 @@ export default function EducatorRegistrationForm() {
       console.log('Registration successful:', data)
       toast.success(data.message)
       dispatch(setToken(data?.token))
-      localStorage.setItem("Flow-Auth-Token", data?.token)
+      localStorage.setItem('Flow-Auth-Token', data?.token)
       openModal()
     },
     onError: (error) => {
@@ -335,6 +335,7 @@ export default function EducatorRegistrationForm() {
             <button
               className='btn submit-btn'
               type='submit'
+              style={{ borderRadius: '5px', padding: '.3rem ' }}
               disabled={mutation.isPending}
             >
               {mutation.isPending ? (

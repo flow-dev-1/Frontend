@@ -316,8 +316,10 @@ p.head-p {
   background-color: transparent;
   display: flex;
   gap: 1rem;
+  margin-left: -15rem;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-top: 3rem;
+  margin-bottom: 0.5rem;
 }
 
 .back-btn h2 {

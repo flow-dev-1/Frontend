@@ -87,8 +87,9 @@ export default function ResetPassword() {
             <label>Enter New Password</label>
             <div className='create-password input-with-icon'>
               <input
+                style={{ padding: '1.3rem .5rem' }}
                 type={showPassword ? 'text' : 'password'}
-                placeholder='Type here...'
+                placeholder='Enter password'
                 {...register('password')}
               />
               <div
@@ -98,7 +99,7 @@ export default function ResetPassword() {
                 <Icon
                   icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
                   className='eye-icon'
-                  width={20}
+                  width={22}
                 />
               </div>
             </div>
@@ -111,8 +112,9 @@ export default function ResetPassword() {
             <label>Confirm Password</label>
             <div className='create-password input-with-icon'>
               <input
+                style={{ padding: '1.3rem .5rem' }}
                 type={showConfirmPassword ? 'text' : 'password'}
-                placeholder='Type here...'
+                placeholder='Enter password'
                 {...register('confirmPassword')}
               />
               <div
@@ -122,7 +124,7 @@ export default function ResetPassword() {
                 <Icon
                   icon={showConfirmPassword ? 'oui:eye-closed' : 'ph:eye-light'}
                   className='eye-icon'
-                  width={20}
+                  width={22}
                 />
               </div>
             </div>
@@ -131,7 +133,11 @@ export default function ResetPassword() {
             )}
           </div>
 
-          <button className='btn submit-btn forgot' type='submit'>
+          <button
+            style={{ borderRadius: '5px', marginBottom: '1rem' }}
+            className='btn submit-btn forgot'
+            type='submit'
+          >
             {mutation.isPending ? (
               <RotatingLines
                 type='Oval'

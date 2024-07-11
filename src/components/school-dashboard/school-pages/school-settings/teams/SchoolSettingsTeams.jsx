@@ -167,7 +167,7 @@ const SchoolSettingsTeams = () => {
                     />
                     {showDropdown === index && (
                       <div
-                        style={{ padding: '0rem .5rem', borderRadius: '5px' }}
+                        style={{ padding: '0rem .5rem', borderRadius: '5px', width:"120px" }}
                         className='dropdown'
                       >
                         <button

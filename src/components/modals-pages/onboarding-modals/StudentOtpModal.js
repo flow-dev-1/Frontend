@@ -80,7 +80,7 @@ export default function StudentOtpModal({ email, resendOTP }) {
           Kindly enter the OTP sent to{' '}
           <span style={{ color: '##275DAD' }}>{email}</span>
         </p>
-        <div className='otp-input my-4'>
+        <div className='otp-input my-1'>
           {otp.map((digit, index) => (
             <input
               type='text'
@@ -93,7 +93,11 @@ export default function StudentOtpModal({ email, resendOTP }) {
           ))}
         </div>
 
-        <button onClick={handleSubmit} className='btn submit-btn'>
+        <button
+          style={{ borderRadius: '5px', padding: '.3rem 1rem' }}
+          onClick={handleSubmit}
+          className='btn submit-btn'
+        >
           {mutation.isPending ? (
             <RotatingLines
               type='Oval'
@@ -106,7 +110,7 @@ export default function StudentOtpModal({ email, resendOTP }) {
           )}
         </button>
         <p className='mt-3'>
-          Yet to receive OTP?
+          Didn’t receive email?
           {countdown > 0 ? (
             <span>
               {' '}
@@ -127,7 +131,7 @@ export default function StudentOtpModal({ email, resendOTP }) {
               style={{ cursor: 'pointer' }}
             >
               {' '}
-              Resend OTP
+              Resend
             </span>
           )}
         </p>

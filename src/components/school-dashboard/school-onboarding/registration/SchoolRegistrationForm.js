@@ -345,9 +345,13 @@ export default function SchoolRegistrationForm() {
 
         <div className='bottom-section'>
           <p className='terms-and-conditions'>
-            <input className='checkbox' type='checkbox' required width={40} />
-            By ticking this box, you agree with our{'      '}{' '}
-            <Link className='a' to='#'>
+            <input className='checkbox' type='checkbox' required />
+            By ticking this box, you agree with our{' '}
+            <Link
+              className='a'
+              to='#'
+              style={{ textDecoration: 'none', color: 'blue' }}
+            >
               Terms & Conditions
             </Link>
           </p>

@@ -87,6 +87,7 @@ export default function SchoolResetPassword() {
             <label>Enter New Password</label>
             <div className='create-password input-with-icon'>
               <input
+                style={{ width: '100%', padding: '1.3rem .7rem' }}
                 type={showPassword ? 'text' : 'password'}
                 placeholder='Type here...'
                 {...register('password')}
@@ -98,7 +99,7 @@ export default function SchoolResetPassword() {
                 <Icon
                   icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
                   className='eye-icon'
-                  width={20}
+                  width={22}
                 />
               </div>
             </div>
@@ -111,6 +112,7 @@ export default function SchoolResetPassword() {
             <label>Confirm Password</label>
             <div className='create-password input-with-icon'>
               <input
+                style={{ width: '100%', padding: '1.3rem .7rem' }}
                 type={showConfirmPassword ? 'text' : 'password'}
                 placeholder='Type here...'
                 {...register('confirmPassword')}
@@ -122,7 +124,7 @@ export default function SchoolResetPassword() {
                 <Icon
                   icon={showConfirmPassword ? 'oui:eye-closed' : 'ph:eye-light'}
                   className='eye-icon'
-                  width={20}
+                  width={22}
                 />
               </div>
             </div>
