@@ -50,24 +50,27 @@ select {
   width: 100%;
 }
 
-.flex-row {
+.edit-course-container .flex-row {
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: space-between;
-  margin: 0.2rem 0;
+  margin: 1rem 0;
   gap: 2rem;
 }
 
 .flex-row div {
   width: 100%;
-  margin: 0.5rem;
 }
 
 .flex-row div input {
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   border-radius: 5px;
   color: #1e1e1e;
+}
+
+.flex-row div input:focus {
+  border: 1px solid #d6d6d6 !important;
 }
 
 button.update {
@@ -103,8 +106,14 @@ button.update {
   left: 2.5rem;
 }
 
-.flex-code-input .PhoneInputCountry {
-  width: 70px;
+.file-upload-wrapper.enroll {
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  gap: 10rem;
+}
+
+.file-upload-wrapper.enroll .file-upload-label {
+  gap: 18rem;
 }
 
 .flex-row div select {
@@ -147,4 +156,20 @@ button.update {
 
 .flex-row div {
   margin-left: 0;
+}
+
+.form-group .flex-code-input {
+  margin: 0;
+}
+.flex-code-input .PhoneInput {
+  background-color: #f8f8f8;
+}
+.flex-code-input .PhoneInputInput {
+  border: none !important;
+  color: transparent !important;
+}
+
+.flex-row div input::placeholder {
+  color: #d6d6d6; /* Change this to your desired color */
+  /* Optional: To ensure the color is fully applied */
 }

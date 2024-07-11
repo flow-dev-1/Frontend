@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import Modal from 'react-modal'
 import excelDoc from '../../../../assets/flow-doc.xlsx'
 import { Icon } from '@iconify/react'
@@ -148,6 +148,16 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
     mutation.mutate(finalData)
   }
 
+  useEffect(() => {
+    const selectElements = document.querySelectorAll('select')
+    selectElements.forEach((select) => {
+      const firstOption = select.options[0]
+      if (firstOption) {
+        firstOption.style.color = '#D6D6D6'
+      }
+    })
+  }, [])
+
   return (
     <Modal
       contentLabel='Enrollment Modal'
@@ -157,101 +167,126 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
       overlayClassName='custom-overlay'
     >
       <div>
-        <h2 className='enroll-heading-flex'>
+        <h2
+          className='enroll-heading-flex'
+          style={{ margin: '0', color: '#5B616A' }}
+        >
           Enroll Student(s)
-          <span onClick={onRequestClose}>
-            <Icon icon='material-symbols-light:close' />
+          <span onClick={onRequestClose} style={{ color: '#5B616A' }}>
+            <Icon icon='material-symbols-light:close' width={22} />
           </span>
         </h2>
-        <hr style={{ marginBottom: '5px' }} />
+        <hr style={{ margin: '5px' }} />
         <div>
-          <p style={{ color: '#FD483D', fontSize: '12px' }}>
+          <p
+            style={{ color: '#FD483D', fontSize: '12px', marginBottom: '2rem' }}
+          >
             *Indicates Required
           </p>
         </div>
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className='class-input'>
-              <label htmlFor='stdClass'>Class *</label>
-              <select
-                style={{ border: '1px solid #D9D9D9' }}
-                id='stdClass'
-                name='stdClass'
-                {...register('stdClass')}
+              <label
+                htmlFor='stdClass'
+                style={{ border: 'none', paddingLeft: '0' }}
               >
-                <option style={{ color: '#D6D6D6' }} value=''>
-                  Choose
-                </option>
-                {classOptions.map((className, index) => (
-                  <option key={index} value={className}>
-                    {className}
-                  </option>
-                ))}
-              </select>
+                Class *
+              </label>
+              <div id='stdClass'>
+                <select
+                  style={{ border: '1px solid #5b616a' }}
+                  name='stdClass'
+                  {...register('stdClass')}
+                >
+                  <option value=''>Choose</option>
+                  {classOptions.map((className, index) => (
+                    <option key={index} value={className}>
+                      {className}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {errors.stdClass && (
                 <p className='error-message'>{errors.stdClass.message}</p>
               )}
             </div>
             <div className='select-flex'>
               <div>
-                <label htmlFor='dayOfWeek'>Day of the Week *</label>
-                <select
-                  style={{ border: '1px solid #D9D9D9' }}
-                  id='dayOfWeek'
-                  name='dayOfWeek'
-                  {...register('dayOfWeek')}
+                <label
+                  style={{ border: 'none', paddingLeft: '0' }}
+                  htmlFor='dayOfWeek'
                 >
-                  <option style={{ color: '#D6D6D6' }} value=''>
-                    Choose
-                  </option>
-                  {daysOfWeek.map((day, index) => (
-                    <option key={index} value={day}>
-                      {day}
-                    </option>
-                  ))}
-                </select>
+                  Day of the Week *
+                </label>
+                <div id='dayOfWeek'>
+                  <select
+                    style={{ border: '1px solid #5b616a' }}
+                    name='dayOfWeek'
+                    {...register('dayOfWeek')}
+                  >
+                    <option value=''>Choose</option>
+                    {daysOfWeek.map((day, index) => (
+                      <option key={index} value={day}>
+                        {day}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 {errors.dayOfWeek && (
                   <p className='error-message'>{errors.dayOfWeek.message}</p>
                 )}
               </div>
               <div>
-                <label htmlFor='startTime'>Start Time *</label>
-                <select
-                  id='startTime'
-                  name='startTime'
-                  style={{ border: '1px solid #D9D9D9' }}
-                  {...register('startTime')}
+                <label
+                  style={{ border: 'none', paddingLeft: '0' }}
+                  htmlFor='startTime'
                 >
-                  <option style={{ color: '#D6D6D6' }} value=''>
-                    Choose
-                  </option>
-                  {timeOptions.map((time, index) => (
-                    <option key={index} value={time}>
-                      {time}
-                    </option>
-                  ))}
-                </select>
+                  Start Time *
+                </label>
+                <div id='startTime'>
+                  <select
+                    name='startTime'
+                    style={{ border: '1px solid #5b616a' }}
+                    {...register('startTime')}
+                  >
+                    <option value=''>Choose</option>
+                    {timeOptions.map((time, index) => (
+                      <option key={index} value={time}>
+                        {time}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 {errors.startTime && (
                   <p className='error-message'>{errors.startTime.message}</p>
                 )}
               </div>
               <div>
-                <label htmlFor='endTime'>End Time *</label>
-                <select
-                  style={{ border: '1px solid #D9D9D9' }}
-                  id='endTime'
-                  name='endTime'
-                  {...register('endTime')}
+                <label
+                  style={{ border: 'none', paddingLeft: '0' }}
+                  htmlFor='endTime'
                 >
-                  <option style={{ color: '#D6D6D6' }} value=''>
-                    Choose
-                  </option>
-                  {timeOptions.map((time, index) => (
-                    <option key={index} value={time}>
-                      {time}
-                    </option>
-                  ))}
-                </select>
+                  End Time *
+                </label>
+                <div id='endTime'>
+                  <select
+                    style={{ border: '1px solid #5b616a' }}
+                    name='endTime'
+                    {...register('endTime')}
+                  >
+                    <option value=''>Choose</option>
+                    {timeOptions.map((time, index) => (
+                      <option key={index} value={time}>
+                        {time}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 {errors.endTime && (
                   <p className='error-message'>{errors.endTime.message}</p>
                 )}
@@ -259,12 +294,17 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
             </div>
             <div className='text-area'>
               <div className='div'>
-                <label htmlFor='students'>Student Email *</label>
+                <label
+                  style={{ border: 'none', paddingLeft: '0' }}
+                  htmlFor='students'
+                >
+                  Student Email *
+                </label>
                 <textarea
-                  id='students'
+                  id='students-textarea'
                   name='students'
                   placeholder='Enter email addresses here and separate with a comma'
-                  rows={3}
+                  rows='5'
                   cols={50}
                   {...register('students')}
                 />
@@ -273,7 +313,10 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                 )}
               </div>
               <div className='upload'>
-                <label htmlFor='file-upload'>
+                <label
+                  style={{ border: 'none', paddingLeft: '0' }}
+                  htmlFor='file-upload'
+                >
                   Or Upload file here (CSV, Excel) *
                 </label>
                 <div className='file-upload-wrapper'>
@@ -283,7 +326,11 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                     className='file-upload-input'
                     onChange={handleFileUpload}
                   />
-                  <label htmlFor='file-upload' className='file-upload-label'>
+                  <label
+                    style={{ border: 'none', paddingLeft: '0' }}
+                    htmlFor='file-upload'
+                    className='file-upload-label'
+                  >
                     Choose file
                     <Icon
                       icon='ant-design:upload-outlined'

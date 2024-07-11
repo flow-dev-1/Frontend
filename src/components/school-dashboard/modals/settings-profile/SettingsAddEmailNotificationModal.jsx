@@ -63,15 +63,23 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
   return (
     <div className=''>
       <div className='edit-course-container'>
-        <div className='header'>
-          <p className='team-heading'>Add New Team</p>
-          <span onClick={closeModal}>
-            <Icon icon='bitcoin-icons:cross-outline' width={30} />
-          </span>
+        <div className='header' style={{ border: 'none' }}>
+          <p
+            className='team-heading'
+            style={{ color: '#18181B', fontSize: '20px' }}
+          >
+            Add New Team
+          </p>
         </div>
 
-        <p className='sub-heading'>Input teammate’s details below</p>
+        <p
+          className='sub-heading'
+          style={{ color: '#18181B', fontSize: '14px' }}
+        >
+          Input teammate’s details below
+        </p>
 
+        <hr />
         <form className='form-borders' onSubmit={handleSubmit(onSubmit)}>
           <div className='flex-row '>
             <div>
@@ -137,9 +145,11 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
               )}
             </div>
           </div>
+          <hr />
           <button
             type='submit'
             className='update'
+            style={{ width: '50%', marginLeft: '10rem' }}
             disabled={mutation?.isPending}
           >
             {mutation?.isPending ? (
@@ -150,7 +160,7 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
                 width={20}
               />
             ) : (
-              <>Send Invite</>
+              <>Add Email</>
             )}
           </button>
         </form>
@@ -159,7 +169,7 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
         isOpen={modalIsOpenSuccess}
         onRequestClose={closeSuccessModal}
         contentLabel='Delete Modal'
-        className='custom-modal-success'
+        className='custom-modal-success-two'
         overlayClassName='custom-overlay'
       >
         <div className='succes-modal-content'>
@@ -167,9 +177,15 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
             <div className='circle'>
               <div className='checkmark'></div>
             </div>
+            :
           </div>
-          <h4 className='text-center'>Successful</h4>
-          <p className='text-center'>
+          <h4
+            className='text-center'
+            style={{ color: '#262626', fontSize: '40px' }}
+          >
+            Successful
+          </h4>
+          <p className='text-center' style={{ color: '#262626' }}>
             You have successfully invited a teammate.
           </p>
         </div>

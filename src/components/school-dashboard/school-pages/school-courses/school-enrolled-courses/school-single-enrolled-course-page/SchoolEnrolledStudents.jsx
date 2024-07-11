@@ -403,8 +403,16 @@ const SchoolEnrolledStudents = () => {
         overlayClassName='custom-overlay'
       >
         <div>
-          <h2 className='text-center'>Add New Student(s)</h2>
-          <hr style={{ marginBottom: '5px' }} />
+          <div className='close-flex'>
+            <h2 className='text-start'>Add New Student(s)</h2>
+            <Icon
+              width={22}
+              onClick={closeModals}
+              icon='iconamoon:close-thin'
+            />
+          </div>
+
+          <hr style={{ margin: '5px' }} />
           <div>
             <p style={{ color: '#FD483D', fontSize: '12px' }}>
               *Indicates Required
@@ -412,7 +420,7 @@ const SchoolEnrolledStudents = () => {
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className='flex-container'>
-              <div>
+              <div style={{ width: '70%' }}>
                 <label htmlFor=''>Student Email *</label>
                 <textarea
                   id='student-email'
@@ -455,10 +463,17 @@ const SchoolEnrolledStudents = () => {
                 </span>
               </div>
             </div>
+            <hr />
             <button
               type='submit'
               disabled={mutation.isPending}
               className='modal-button'
+              style={{
+                width: '150px',
+                padding: '0.2rem 1rem',
+                fontWeight: '300',
+                fontSize: '14px',
+              }}
             >
               {mutation.isPending ? (
                 <RotatingLines

@@ -161,7 +161,7 @@ input:-webkit-autofill:active {
   justify-content: center;
   background-color: #fefefe;
   margin: 0 auto;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 30px 60px;
 }
 
@@ -185,7 +185,7 @@ li {
   justify-content: center;
   background-color: #fefefe;
   margin: 0 auto;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 30px 60px;
 }
 
@@ -206,7 +206,7 @@ li {
   justify-content: center;
   background-color: #fefefe;
   margin: 0 auto;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 0;
   overflow: hidden;
 }
@@ -216,25 +216,26 @@ li {
   justify-content: center;
   background-color: #fefefe;
   margin: 0 auto;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 30px 60px;
 }
 
 .custom-modal-otp-three {
-  width: 75%;
+  width: 991px;
   justify-content: center;
   background-color: #fefefe;
   margin: 0 auto;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 20px 40px;
 }
 
 .send-invite-modal {
   width: 50%;
+  height: 420px;
   background-color: #fefefe;
   margin: 0 auto;
-  border-radius: 20px;
-  padding: 30px 60px;
+  border-radius: 1dvh;
+  padding: 40px 30px;
 }
 
 .see-more-modal {
@@ -245,7 +246,7 @@ li {
   justify-content: center;
   background-color: #fefefe;
   margin: 0 auto;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 30px 60px;
 }
 
@@ -254,13 +255,24 @@ p.head-p {
 }
 
 .custom-modal-success {
-  width: 30%;
+  width: 730px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #fefefe;
   margin: 0 auto;
-  border-radius: 20px;
+  border-radius: 10px;
+  padding: 10px 10px;
+}
+.custom-modal-success-two {
+  width: 610px;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fefefe;
+  margin: 0 auto;
+  border-radius: 10px;
   padding: 10px 10px;
 }
 
@@ -303,6 +315,10 @@ p.head-p {
 
 input {
   color: #1e1e1e !important;
+}
+
+#search-input {
+  border-radius: 8px !important;
 }
 
 /* For Firefox */

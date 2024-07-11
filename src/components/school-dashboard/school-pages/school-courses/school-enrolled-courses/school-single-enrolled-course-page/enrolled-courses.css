@@ -90,6 +90,15 @@ textarea {
   overflow: hidden;
 }
 
+.close-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+h2.text-start {
+  margin: 0;
+}
+
 .select-flex {
   display: flex;
   align-items: center;
@@ -273,8 +282,4 @@ textarea {
 select {
   border: 1px solid #ecedf0;
   background-color: #f8f9fa;
-}
-
-.select-flex select {
-  color: #d9d9d9 !important;
 }

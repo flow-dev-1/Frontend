@@ -166,7 +166,10 @@ const SchoolSettingsTeams = () => {
                       onClick={() => handleActionClick(index)}
                     />
                     {showDropdown === index && (
-                      <div className='dropdown'>
+                      <div
+                        style={{ padding: '0rem .5rem', borderRadius: '5px' }}
+                        className='dropdown'
+                      >
                         <button
                           onClick={() => handleDelete(admin._id)}
                           disabled={mutation.isPending}
@@ -174,7 +177,7 @@ const SchoolSettingsTeams = () => {
                           <span>
                             <Icon icon='fluent:delete-20-regular' />
                           </span>
-                          Delete
+                          Remove
                         </button>
                       </div>
                     )}
@@ -190,7 +193,7 @@ const SchoolSettingsTeams = () => {
         isOpen={modalIsOpenSuccess}
         onRequestClose={closeModal}
         contentLabel='Delete Modal'
-        className='custom-modal-success'
+        className='custom-modal-success-two'
         overlayClassName='custom-overlay'
       >
         <div className='succes-modal-content'>
@@ -199,8 +202,13 @@ const SchoolSettingsTeams = () => {
               <div className='checkmark'></div>
             </div>
           </div>
-          <h4 className='text-center'>Successful</h4>
-          <p className='text-center'>
+          <h4
+            className='text-center'
+            style={{ color: '#262626', fontSize: '40px' }}
+          >
+            Successful
+          </h4>
+          <p className='text-center' style={{ color: '#262626' }}>
             You have successfully Deleted a team member.
           </p>
         </div>

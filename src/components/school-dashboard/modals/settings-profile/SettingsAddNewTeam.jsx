@@ -63,13 +63,17 @@ const SettingsAddNewTeam = ({ closeModal }) => {
     <div className='' onSubmit={handleSubmit(onSubmit)}>
       <div className='edit-course-container '>
         <div className='header' style={{ border: 'none' }}>
-          <p className='team-heading'>Add New Team</p>
-          <span onClick={closeModal}>
-            <Icon icon='bitcoin-icons:cross-outline' width={30} />
-          </span>
+          <p
+            className='team-heading'
+            style={{ color: '#18181B', fontSize: '20px' }}
+          >
+            Add New Team
+          </p>
         </div>
 
-        <p className='sub-heading'>Input teammate’s details below</p>
+        <p className='sub-heading' style={{ fontSize: '14px' }}>
+          Input teammate’s details below
+        </p>
         <hr />
         <form className='form-borders' onSubmit={handleSubmit(onSubmit)}>
           <div className='flex-row '>

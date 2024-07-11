@@ -16,6 +16,10 @@
   justify-content: space-around;
 }
 
+.about-user-info.mx-4 {
+  margin-left: 4rem;
+}
+
 .about-user-info h2 {
   font-size: 45px;
 }
@@ -101,6 +105,9 @@
   padding: 1.25rem 0;
 }
 
+span#p {
+  font-size: 20px;
+}
 .search-wrapper {
   display: flex;
   width: 35rem;

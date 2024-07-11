@@ -90,10 +90,10 @@ const SettingsEditProfileModal = ({ closeModal }) => {
       <div className='header' style={{ border: 'none' }}>
         <h2>Edit Profile</h2>
         <span onClick={closeModal}>
-          <Icon icon='bitcoin-icons:cross-outline' width={30} />
+          <Icon icon='bitcoin-icons:cross-outline' width={22} />
         </span>
       </div>
-      <hr />
+      <hr style={{ marginTop: '0' }} />
       <p className='required'>* Indicates required</p>
       <div className='flex-row'>
         <div>
@@ -164,7 +164,7 @@ const SettingsEditProfileModal = ({ closeModal }) => {
         <div className='upload'>
           <label htmlFor=''>School Logo</label>
           <div
-            className='file-upload-wrapper'
+            className='file-upload-wrapper enroll'
             style={{
               backgroundColor: '#f8f8f8',
               margin: '0',
@@ -177,14 +177,23 @@ const SettingsEditProfileModal = ({ closeModal }) => {
               className='file-upload-label'
             >
               Choose file
-              <Icon icon='ant-design:upload-outlined' width='24' height='24' />
+              <Icon
+                icon='ant-design:upload-outlined'
+                width='24'
+                style={{ color: '#5B616A' }}
+                height='24'
+              />
             </label>
           </div>
         </div>
       </div>
       <hr />
 
-      <button className='update fix' onClick={handleUpdate}>
+      <button
+        className='update fix'
+        style={{ padding: '.3rem 0' }}
+        onClick={handleUpdate}
+      >
         Update
       </button>
     </div>

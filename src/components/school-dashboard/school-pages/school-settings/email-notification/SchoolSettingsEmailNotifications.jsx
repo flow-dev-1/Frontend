@@ -167,10 +167,15 @@ const SchooolSettingsEmailNotifications = () => {
                     onClick={() => handleActionClick(index)}
                   />
                   {showDropdown === index && (
-                    <div className='dropdown'>
+                    <div className='dropdown' style={{ width: '100px' }}>
                       <button
                         onClick={() => handleDelete(member._id)}
                         disabled={mutation.isPending}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          gap: '1rem',
+                        }}
                       >
                         <span>
                           <Icon icon='fluent:delete-20-regular' />
