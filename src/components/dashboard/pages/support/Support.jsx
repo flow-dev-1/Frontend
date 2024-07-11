@@ -4,7 +4,9 @@ import './support.css'
 const Support = () => {
   return (
     <div className='support-page'>
-      <h2>Welcome to Support Page!</h2>
+      <h2 style={{ color: '#18181B', fontSize: '24px' }}>
+        Welcome to Support Page!
+      </h2>
       <p>
         We're here to assist you with any questions, concerns, or issues you may
         have. Whether you're a customer, user, or visitor, we're dedicated to

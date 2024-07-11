@@ -1,19 +1,38 @@
 import React from 'react'
 import './payement-history.css'
+import { Icon } from '@iconify/react'
 
 const PayementHistory = () => {
   return (
     <div className='payment-history'>
-      <h2>Payment History</h2>
+      <h2 style={{ color: '#18181B', fontSize: '24px' }}>Payment History</h2>
       <p>You can browse through all payments made on this platform overtime.</p>
       <div className='search-filter-sort'>
         <input
+          style={{ backgroundColor: 'rgba(94, 45, 189, 0.05)' }}
           type='text'
           placeholder='Search by time, date, order ID or Payment Type'
         />
         <div className='filters'>
-          <button>Filter by</button>
-          <button>Sort by </button>
+          <button>
+            <span>
+              <Icon icon='octicon:filter-16' />
+            </span>
+            <select style={{ cursor: 'pointer' }}>
+              <option value='all'>Filter by</option>
+              <option value='published'>Published</option>
+              <option value='draft'>Draft</option>
+            </select>
+          </button>
+          <button>
+            <span>
+              <Icon icon='mingcute:az-sort-ascending-letters-line' />
+            </span>
+            <select style={{ cursor: 'pointer' }}>
+              <option value='a-z'>Sort by A-Z</option>
+              <option value='z-a'>Sort by Z-A</option>
+            </select>{' '}
+          </button>
         </div>
       </div>
       <table>
@@ -38,11 +57,11 @@ const PayementHistory = () => {
           ))}
         </tbody>
       </table>
-      <div className='pagination'>
-        <span>1 - 8 of 80</span>
+      <div className='nav-btn'>
+        <p>1 - 8 of 20</p>
         <div>
-          <button>{'<'}</button>
-          <button>{'>'}</button>
+          <Icon icon='iconamoon:arrow-left-2-light' width={25} />
+          <Icon icon='iconamoon:arrow-right-2-light' width={25} />
         </div>
       </div>
     </div>

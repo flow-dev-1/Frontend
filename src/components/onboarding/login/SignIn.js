@@ -72,7 +72,7 @@ export default function SignIn() {
             <div className='form-group'>
               <label>Email *</label>
               <input
-                style={{ width: '100%', padding: '1.3rem .7rem' }}
+                 style={{ width: '100%', padding: '1rem .7rem' }}
                 type='email'
                 {...register('email', { required: true })}
                 placeholder='Enter email address'
@@ -97,7 +97,7 @@ export default function SignIn() {
                 className='d-flex align-items-center input-with-icon'
               >
                 <input
-                  style={{ width: '100%', padding: '1.3rem .7rem' }}
+                  style={{ width: '100%', padding: '1rem .7rem' }}
                   type={showPassword ? 'text' : 'password'}
                   placeholder='Type here...'
                   {...register('password', { required: true })}

@@ -12,6 +12,14 @@
   border-radius: 20px;
 }
 
+.overview .search .filter-sort {
+  border-radius: 5px !important;
+  padding: 0.2rem 1rem;
+}
+.overview .search .filter-sort select {
+  background-color: #fff !important;
+}
+
 .course-links {
   flex: 2;
   /* border-radius: 10px; */

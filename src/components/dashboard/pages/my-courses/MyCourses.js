@@ -34,18 +34,6 @@ export default function MyCourses() {
 
           <div className='filter-sort'>
             <label>
-              <Icon icon='gridicons:filter' style={{ color: '#4d4d4d' }} />
-              <select name='' id='' className='filter'>
-                <option value='' selected disabled>
-                  Filter by
-                </option>
-                <option value=''>All</option>
-                <option value=''>Students</option>
-                <option value=''>Teachers</option>
-              </select>
-            </label>
-
-            <label>
               <Icon
                 icon='ic:outline-sort-by-alpha'
                 style={{ color: '#4d4d4d' }}
@@ -55,6 +43,20 @@ export default function MyCourses() {
                   Sort by
                 </option>
                 <option value=''>Sort by</option>
+              </select>
+            </label>
+          </div>
+
+          <div className='filter-sort'>
+            <label>
+              <Icon icon='gridicons:filter' style={{ color: '#4d4d4d' }} />
+              <select name='' id='' className='filter'>
+                <option value='' selected disabled>
+                  Filter by
+                </option>
+                <option value=''>All</option>
+                <option value=''>Students</option>
+                <option value=''>Teachers</option>
               </select>
             </label>
           </div>

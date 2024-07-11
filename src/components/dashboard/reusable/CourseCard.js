@@ -38,7 +38,7 @@ const CourseCard = ({ course }) => {
     <div className='reusable-course-card'>
       {/* <div  > */}
 
-      <div className='course-card'>
+      <div className='course-card' style={{ height: '100%', width: '100%' }}>
         <div className='course-details'>
           {/* <img src={course.image} alt="" className='' /> */}
           <img
@@ -64,7 +64,7 @@ const CourseCard = ({ course }) => {
             </div>
           </div>
         </div>
-        <div className='course-card-btn'>
+        <div className='course-card-btn d-flex'>
           {enrolled ? (
             <>
               <button
@@ -73,10 +73,17 @@ const CourseCard = ({ course }) => {
                     ? {
                         backgroundColor: '#d4ffbe',
                         color: '#8eae7e',
+                        display: 'flex',
+                        padding: '.2rem 8px',
                       }
-                    : { backgroundColor: '#5CE1E6', color: '#275DAD' }
+                    : {
+                        backgroundColor: '#5CE1E6',
+                        color: '#275DAD',
+                        display: 'flex',
+                        padding: '.2rem 8px',
+                      }
                 }
-                className='btn card-btn preview'
+                className='btn card-btn  preview'
                 onClick={() => openModal('course')}
               >
                 <Icon icon='prime:eye' /> Review
@@ -98,8 +105,13 @@ const CourseCard = ({ course }) => {
                     ? {
                         backgroundColor: '#d4ffbe',
                         color: '#8eae7e',
+                        padding: '5px 3px',
                       }
-                    : { backgroundColor: '#5CE1E6', color: '#fff' }
+                    : {
+                        backgroundColor: '#5CE1E6',
+                        color: '#fff',
+                        padding: '5px 3px',
+                      }
                 }
               >
                 <Icon icon='prime:eye' /> Review
@@ -108,7 +120,14 @@ const CourseCard = ({ course }) => {
                 className='btn card-btn enrolled cart'
                 onClick={() => openPage(course)}
               >
-                <Icon icon='prime:play-circle' /> Start
+                <Icon icon='prime:play-circle' />
+                {/* <Icon
+                  icon='vaadin:cart-o'
+                  width={20}
+                  style={{ color: 'ffff' }}
+                />
+                N 1200 */}
+                Start
               </button>
               {/* <p className='mb-0'> 0% {<br />} Done</p> */}
               <p className='mb-0'>
