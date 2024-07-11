@@ -73,9 +73,14 @@ export default function SchoolSignIn() {
           <div className='form-section d-flex flex-column align-items-center '>
             <div className='form-group'>
               <label>Email *</label>
-              <input type='email' {...register('email', { required: true })} placeholder='Enter email address' />
+              <input
+                style={{ width: '100%' }}
+                type='email'
+                {...register('email', { required: true })}
+                placeholder='Enter email address'
+              />
               {errors.email && (
-                <p className='error-message'>{errors.email.message}</p>
+                <p className='error-message text-end'>{errors.email.message}</p>
               )}
             </div>
             <div className='form-group my-3'>
@@ -86,8 +91,12 @@ export default function SchoolSignIn() {
                 </Link>
               </div>
 
-              <div className='d-flex align-items-center input-with-icon'>
+              <div
+                style={{ width: '100%' }}
+                className='d-flex align-items-center input-with-icon'
+              >
                 <input
+                  style={{ width: '100%' }}
                   type={showPassword ? 'text' : 'password'}
                   placeholder='Type here...'
                   {...register('password', { required: true })}
@@ -104,7 +113,7 @@ export default function SchoolSignIn() {
                 </div>
               </div>
               {errors.password && (
-                <p className='error-message'>{errors.password.message}</p>
+                <p className='error-message text-end'>{errors.password.message}</p>
               )}
               {showPasswordError && (
                 <p className='error-message'>Incorrect email or password</p>
@@ -115,6 +124,7 @@ export default function SchoolSignIn() {
               Remember Me
             </div>
             <button
+              style={{ width: '100%', borderRadius: '10px', margin: '.5rem 0' }}
               className='btn submit-btn'
               type='submit'
               disabled={mutation.isPending}

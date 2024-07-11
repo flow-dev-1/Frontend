@@ -84,19 +84,24 @@ const SchoolSettingsTeams = () => {
   }
 
   return (
-    <div>
+    <div style={{ width: '90%' }}>
       <div className='d-flex justify-content-between align-items-end mb-4'>
         <div className='teams'>
-          <h3>Teams</h3>
+          <h3 style={{ fontSize: '24px' }}>Teams -</h3>
           <p>
-            Here is a list of your team mates. Feel free to add or remove at
-            will.
+            Here is a list of your team mates.
+            <br />
+            Feel free to add or remove at will.
           </p>
         </div>
         <button className='edit-btn' onClick={() => setModalIsOpen(true)}>
-          Add New Team +
+          Add New Team{' '}
+          <span>
+            <Icon icon='ic:round-plus' />
+          </span>
         </button>
       </div>
+      <hr />
 
       <div className='team-members'>
         <table>
@@ -125,18 +130,18 @@ const SchoolSettingsTeams = () => {
                 <td style={{ textAlign: 'center' }}>
                   <span
                     style={{
+                      width: '100%',
+                      display: 'inline-block',
                       color:
                         admin.schoolAdminStatus !== 'Confirmed'
                           ? 'red'
-                          : 'green',
+                          : '#0CAF60',
                       backgroundColor:
                         admin.schoolAdminStatus !== 'Confirmed'
                           ? '#ffe6e6'
                           : '#e6ffe6',
-                      padding: '5px 10px',
                       borderRadius: '20px',
                       textAlign: 'center',
-                      margin: '1rem 0',
                     }}
                   >
                     {' '}
@@ -156,6 +161,8 @@ const SchoolSettingsTeams = () => {
                   <div className='action-container'>
                     <Icon
                       icon='pepicons-pencil:dots-y'
+                      width={30}
+                      style={{ color: '#000' }}
                       onClick={() => handleActionClick(index)}
                     />
                     {showDropdown === index && (

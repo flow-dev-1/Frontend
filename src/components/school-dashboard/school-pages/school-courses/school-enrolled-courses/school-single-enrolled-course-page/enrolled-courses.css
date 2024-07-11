@@ -1,15 +1,49 @@
-.header {
+.enrolled-course-student .header {
   display: flex;
   justify-content: space-between;
   padding: 10px;
+  border: none;
+  margin: 1.5rem 0;
+}
+
+.enrolled-course-student .search-bar .search {
+  padding: 0;
+}
+
+.enrolled-course-student .header p {
+  font-size: 22px !important;
+  color: #262626;
 }
 
 .back-button {
   background-color: transparent;
   border: none;
   color: #000;
+  font-weight: 500;
   font-size: 16px;
   cursor: pointer;
+}
+
+.nav-btn {
+  width: 200px;
+  margin-left: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.nav-btn div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.nav-btn p {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.5) !important;
 }
 
 .modal-button {
@@ -112,7 +146,7 @@ textarea {
   justify-content: space-between;
   background-color: #275dad;
   color: white;
-  padding: 15px;
+  padding: 15px 60px;
   margin: 2rem 0;
   border-radius: 8px;
 }

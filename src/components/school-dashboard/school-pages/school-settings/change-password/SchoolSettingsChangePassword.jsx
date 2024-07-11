@@ -70,15 +70,24 @@ const SchoolSettingsChangePassword = () => {
 
   return (
     <div className='settings-change-password'>
-      <h2>Change Password</h2>
+      <h2 style={{ fontSize: '24px' }}>Change Password -</h2>
       <p>
         Take charge of the security access to your dashboard. Change your{' '}
-        <a href='/'>Flow</a> password by filling the form below.
+        <a className='a' href='/'>
+          Flow
+        </a>{' '}
+        password by filling the form below.
       </p>
+      <hr style={{ marginTop: '2rem' }} />
       <div className='mt-5 border-container'>
         <form style={{ marginTop: '0' }} onSubmit={handleSubmit(onSubmit)}>
           <div className='form-group'>
-            <label className='old-password'>Old Password</label>
+            <label
+              style={{ border: '0', paddingLeft: '0' }}
+              className='old-password'
+            >
+              Old Password
+            </label>
             <div>
               <input
                 type='password'
@@ -86,14 +95,19 @@ const SchoolSettingsChangePassword = () => {
                 placeholder='Type here...'
                 {...register('oldPassword')}
               />
-              <Icon width={20} icon='mdi:eye' className='icon' />
+              <Icon width={20} icon='fa6-solid:eye' className='icon' />
             </div>
             {errors.oldPassword && (
               <p style={{ color: '#E83151' }}>{errors.oldPassword.message}</p>
             )}
           </div>
           <div className='form-group'>
-            <label className='new-password'>New Password</label>
+            <label
+              style={{ border: '0', paddingLeft: '0' }}
+              className='new-password'
+            >
+              New Password
+            </label>
             <div>
               <input
                 type='password'
@@ -101,14 +115,19 @@ const SchoolSettingsChangePassword = () => {
                 placeholder='Type here...'
                 {...register('newPassword')}
               />
-              <Icon icon='mdi:eye' width={20} className='icon' />
+              <Icon icon='fa6-solid:eye' width={20} className='icon' />
             </div>
             {errors.newPassword && (
               <p style={{ color: '#E83151' }}>{errors.newPassword.message}</p>
             )}
           </div>
           <div className='form-group'>
-            <label className='confirm-password'>Confirm Password</label>
+            <label
+              className='confirm-password'
+              style={{ border: '0', paddingLeft: '0' }}
+            >
+              Confirm Password
+            </label>
             <div>
               <input
                 type='password'
@@ -116,7 +135,7 @@ const SchoolSettingsChangePassword = () => {
                 placeholder='Type here...'
                 {...register('confirmPassword')}
               />
-              <Icon icon='mdi:eye' width={20} className='icon' />
+              <Icon icon='fa6-solid:eye' width={20} className='icon' />
             </div>
             {errors.confirmPassword && (
               <p style={{ color: '#E83151' }}>
@@ -125,7 +144,11 @@ const SchoolSettingsChangePassword = () => {
             )}
           </div>
           <button
-            style={{ color: '#275DAD' }}
+            style={{
+              color: '#275DAD',
+              backgroundColor: 'rgba(92, 225, 230, 1)',
+              fontWeight: '500',
+            }}
             type='submit'
             disabled={mutation.isPending}
           >

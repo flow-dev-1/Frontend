@@ -39,7 +39,7 @@ const SchoolEnrolledCourseStudents = () => {
     if (!data) return
 
     setCourses(data.courses)
-    return () => { }
+    return () => {}
   }, [data])
 
   const openModal = (course) => {
@@ -55,7 +55,7 @@ const SchoolEnrolledCourseStudents = () => {
   return (
     <div className='my-container'>
       <div className='category-desc'>
-        Browse through all the courses currently available on FLOW.
+        <p>Browse through all the courses currently available on FLOW.</p>
       </div>
 
       <div className='search-bar'>

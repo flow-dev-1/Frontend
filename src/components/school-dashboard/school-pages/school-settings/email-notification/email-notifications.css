@@ -1,7 +1,3 @@
-.school-profile {
-  padding: 20px;
-}
-
 .school-header {
   display: flex;
   align-items: center;
@@ -10,6 +6,10 @@
 
 .school-info p {
   text-align: left;
+}
+
+.teams p {
+  font-size: 14px !important;
 }
 
 .heading-flex {
@@ -27,8 +27,15 @@
   width: 70%;
 }
 
+.teams h3 {
+  color: #18181b;
+}
+
 .team-members p.paragraph-width {
   width: 50%;
+}
+.paragraph-width {
+  width: 80%;
 }
 
 .edit-btn {
@@ -36,9 +43,15 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.2rem 1.5rem;
+  display: inline-block;
+  padding: 0.3rem 3rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 500;
   background-color: #5ce1e6;
   color: #275dad;
+  font-weight: 500;
   border-radius: 5px;
 }
 .school-logo img {
@@ -194,6 +207,8 @@ td {
 
 thead {
   background-color: #f4f4f4;
+  color: #262626;
+  font-weight: 400;
 }
 
 .action-container {

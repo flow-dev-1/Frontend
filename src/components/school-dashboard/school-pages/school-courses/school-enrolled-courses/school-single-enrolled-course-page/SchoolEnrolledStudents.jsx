@@ -219,23 +219,20 @@ const SchoolEnrolledStudents = () => {
     deleteMutation.mutate()
   }
 
-    if (isLoading) {
-      return <Loading />
-    }
-    if (isError) {
-      return <div>An error occured while loading...</div>
-    }
+  if (isLoading) {
+    return <Loading />
+  }
+  if (isError) {
+    return <div>An error occured while loading...</div>
+  }
 
   return (
     <div className='enrolled-course-student'>
       <div className='header'>
         <button className='back-button' onClick={() => navigate(-1)}>
-          ← Back
+          <Icon icon='mingcute:arrow-left-line' width={20} /> Back
         </button>
-      </div>
-
-      <div className='create-course-container'>
-        {' '}
+        <p>Max the Explorer Monkey</p>
         <button className='add-student-button' onClick={handleCreateClick}>
           + Add New Student
         </button>
@@ -284,8 +281,55 @@ const SchoolEnrolledStudents = () => {
           </p>
         </div>
       </div>
+
+      <div className='search-bar'>
+        <form action='' className='search'>
+          <div className='search-wrapper'>
+            <span className='search-icon'>
+              <Icon icon='lets-icons:search' style={{ color: '#4d4d4d' }} />
+            </span>
+            <input
+              type='text'
+              id='search-input'
+              placeholder='Search by Name, Age, Email, Phone Number'
+            />
+          </div>
+
+          <div className='d-flex'>
+            <div className='filter-sort'>
+              <label>
+                <Icon icon='gridicons:filter' style={{ color: '#4d4d4d' }} />
+                <select name='' id='' className='filter'>
+                  <option value='' selected disabled>
+                    Filter by
+                  </option>
+                  <option value=''>All</option>
+                  <option value=''>Students</option>
+                  <option value=''>Teachers</option>
+                </select>
+              </label>
+            </div>
+            <div className='filter-sort'>
+              {' '}
+              <label>
+                <Icon
+                  icon='ic:outline-sort-by-alpha'
+                  style={{ color: '#4d4d4d' }}
+                />
+                <select name='' id='' className='sort'>
+                  <option value='' selected>
+                    Sort by
+                  </option>
+                  <option value=''>Sort by</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
+      <hr />
       <div className='table-container'>
-        <table className='students-table'>
+        <table id='my-table' className='students-table'>
           <thead>
             <tr>
               <th>S/N</th>
@@ -316,11 +360,16 @@ const SchoolEnrolledStudents = () => {
                     new Date(data?.user?.DOB).getFullYear()}
                 </td>
                 <td>{data?.progress}%</td>
-                <td>
+                <td style={{ width: '205px' }}>
                   <Icon
                     icon='mynaui:trash'
                     className='action-icon delete-icon'
-                    width={18}
+                    style={{
+                      color: '#000000',
+                      display: 'inline-block',
+                      marginRight: '7rem',
+                    }}
+                    width={22}
                     onClick={() => {
                       setDeleteUser({ user: data.user._id, enrollId: data._id })
                       handleDeleteClick()
@@ -329,13 +378,22 @@ const SchoolEnrolledStudents = () => {
                   <Icon
                     icon='iconamoon:arrow-right-2-thin'
                     className='action-icon arrow-icon'
-                    width={18}
+                    width={22}
+                    style={{ color: '#000000' }}
                   />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+
+        <div className='nav-btn'>
+          <p>1 - 8 of 20</p>
+          <div>
+            <Icon icon='iconamoon:arrow-left-2-light' width={25} />
+            <Icon icon='iconamoon:arrow-right-2-light' width={25} />
+          </div>
+        </div>
       </div>
       <Modal
         isOpen={showCreateModal}

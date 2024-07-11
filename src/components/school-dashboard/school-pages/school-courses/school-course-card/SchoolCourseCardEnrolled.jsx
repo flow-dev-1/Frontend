@@ -80,10 +80,10 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
           </div>
         </div>
         <div className='course-card-title' style={{ margin: '0' }}>
-          <h3>{course.title}:</h3>
+          <h3 style={{ color: '#4B7E31' }}>{course.title}:</h3>
           <h3>{course.subtitle}</h3>
         </div>
-        <p style={{ fontSize: '14px', height: '60px', marginBottom: '1rem' }}>
+        <p style={{ fontSize: '12px', height: '60px', marginBottom: '1rem' }}>
           {' '}
           {truncateText(course.description, 100)}
         </p>
@@ -132,6 +132,7 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
                 <Icon
                   icon='solar:eye-linear'
                   style={{ color: reviewBtnColor }}
+                  width={20}
                 />
               </span>{' '}
               Review
@@ -145,10 +146,7 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
               style={{ backgroundColor: darkGreen, color: lightGreen }}
             >
               <span>
-                <Icon
-                  icon='tabler:list-details'
-                  style={{ color: detailsBtnColor }}
-                />
+                <Icon icon='vaadin:cart-o' style={{ color: detailsBtnColor }} />
               </span>{' '}
               View Details
             </button>
@@ -160,7 +158,7 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
                 fontSize: '12px',
               }}
             >
-              <span style={{ color: darkGreen, fontWeight: 'bold' }}>0 %</span>{' '}
+              <span style={{ color: '#50AA50', fontWeight: '400' }}>0 %</span>{' '}
               <span>Done</span>
             </div>
           </div>

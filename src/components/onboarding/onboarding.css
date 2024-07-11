@@ -12,6 +12,15 @@
   border-radius: 15px;
   overflow-y: scroll;
 }
+input:focus{
+  border: 1px solid #275DAD !important;
+}
+
+p.error-message {
+  text-align: right;
+}
+
+
 
 .registration-page.sign-in {
   width: fit-content;

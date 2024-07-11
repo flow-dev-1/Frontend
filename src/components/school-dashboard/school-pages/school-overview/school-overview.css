@@ -170,7 +170,7 @@ select {
 }
 
 .filter-sort {
-  border: 1px solid #e1faf8 !important;
+  border-radius: 5px !important;
 }
 
 .chart-heading {

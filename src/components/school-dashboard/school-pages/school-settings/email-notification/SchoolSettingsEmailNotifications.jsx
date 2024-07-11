@@ -89,18 +89,18 @@ const SchooolSettingsEmailNotifications = () => {
 
   console.log(teamMembers)
 
-    if (isLoading) {
-      return <Loading />
-    }
-    if (isError) {
-      return <div>An error occured while loading...</div>
-    }
+  if (isLoading) {
+    return <Loading />
+  }
+  if (isError) {
+    return <div>An error occured while loading...</div>
+  }
 
   return (
-    <div>
+    <div style={{ width: '90%' }}>
       <div className='d-flex justify-content-between align-items-end mb-4 '>
         <div className='teams '>
-          <h3>Email Notification -</h3>
+          <h3 style={{ fontSize: '24px' }}>Email Notification -</h3>
           <p className='paragraph-width'>
             You can add one or more email address to receive system triggered
             notifications like new invoices, low balance, subscription expiry or
@@ -117,7 +117,7 @@ const SchooolSettingsEmailNotifications = () => {
         </button>
       </div>
       <table>
-        <thead  className='thead'>
+        <thead className='thead'>
           <tr>
             <th>S/N</th>
             <th>Name</th>
@@ -139,20 +139,30 @@ const SchooolSettingsEmailNotifications = () => {
               {/* <td>{member.position}</td> */}
               <td
                 style={{
-                  color: 'green',
-                  backgroundColor: '#e6ffe6',
-                  padding: '5px 10px',
-                  borderRadius: '20px',
                   textAlign: 'center',
-                  margin: '1rem 0',
                 }}
               >
-                Active
+                <span
+                  style={{
+                    width: '100%',
+                    display: 'inline-block',
+                    color: 'Confirmed' !== 'Confirmed' ? 'red' : '#0CAF60',
+                    backgroundColor:
+                      'Confirmed' !== 'Confirmed' ? '#ffe6e6' : '#e6ffe6',
+                    borderRadius: '20px',
+                    textAlign: 'center',
+                  }}
+                >
+                  {' '}
+                  Active
+                </span>
               </td>
               <td>{new Date(member?.dateAdded).toLocaleDateString()}</td>
               <td>
                 <div className='action-container'>
                   <Icon
+                    width={30}
+                    style={{ color: '#202020' }}
                     icon='pepicons-pencil:dots-y'
                     onClick={() => handleActionClick(index)}
                   />

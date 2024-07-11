@@ -61,12 +61,15 @@ const SchoolSettingsProfile = () => {
           </div>
           <div className='school-info'>
             <h1 className='h1'>{data?.school?.school_name}</h1>
+            <p className='primary' >Primary</p>
             <p>{data?.school?.address}</p>
             <p>
-              {data?.school?.lga} | {data?.school?.state}
+              {data?.school?.lga.toUpperCase()} |{' '}
+              {data?.school?.state.toUpperCase()}
             </p>
             <p>
-              {data?.school?.country} <img src={NG} width={20} alt='' />
+              {data?.school?.country.toUpperCase()}{' '}
+              <img src={NG} width={20} alt='' />
             </p>
           </div>
         </div>
@@ -88,13 +91,16 @@ const SchoolSettingsProfile = () => {
         }}
       >
         <p>
-          <span>Contact Person:</span> {data?.school?.contact_name}
+          <span style={{ margin: '0', fontSize: '14px' }}>Contact Person:</span>{' '}
+          {data?.school?.contact_name}
         </p>
         <p>
-          <span>Email:</span> {data?.school?.email}
+          <span style={{ margin: '0', fontSize: '14px' }}>Email:</span>{' '}
+          {data?.school?.email}
         </p>
         <p>
-          <span>Phone Number:</span> {data?.school?.phone}
+          <span style={{ margin: '0', fontSize: '14px' }}>Phone Number:</span>{' '}
+          {data?.school?.phone}
         </p>
       </div>
       <Modal

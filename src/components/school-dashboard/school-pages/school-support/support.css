@@ -4,7 +4,7 @@
 }
 
 .support-page p {
-  font-size: 16px;
+  font-size: 12px;
   line-height: 1.5;
 }
 
@@ -23,8 +23,12 @@
 
 .support-page .contact-info li {
   margin-bottom: 10px;
+  list-style-type: disc;
+  margin-left: 1rem;
+  font-size: 12px;
 }
 
 .support-page .contact-info strong {
   font-weight: bold;
+  color: #57585d;
 }

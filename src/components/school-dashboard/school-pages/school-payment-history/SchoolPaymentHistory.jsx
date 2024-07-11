@@ -5,14 +5,24 @@ import { Icon } from '@iconify/react'
 const SchoolPaymentHistory = () => {
   return (
     <div className='payment-history'>
-      <h2>Payment History</h2>
+      <h2 style={{ color: '#18181B', fontSize:"24px" }}>Payment History -</h2>
       <p>You can browse through all payments made on this platform overtime.</p>
+      <hr style={{ marginTop: '2rem' }} />
       <div className='search-filter-sort'>
-        <input
-          style={{ backgroundColor: '#f3f1f8' }}
-          type='text'
-          placeholder='Search by time, date, order ID or Payment Type'
-        />
+        <div className='search-wrapper'>
+          <span className='search-icon'>
+            <Icon icon='lets-icons:search' style={{ color: '#4d4d4d' }} />
+          </span>
+          <input
+            style={{
+              backgroundColor: 'rgba(94, 45, 189, 0.05)',
+              width: '100%',
+            }}
+            id='search-input'
+            type='text'
+            placeholder='Search by Name, Age, Email, Phone Number'
+          />
+        </div>
         <div className='filters'>
           <div style={{ cursor: 'pointer' }} className='filter-sort'>
             <span>
@@ -57,11 +67,11 @@ const SchoolPaymentHistory = () => {
           ))}
         </tbody>
       </table>
-      <div className='pagination'>
-        <span>1 - 8 of 80</span>
+      <div className='nav-btn'>
+        <p>1 - 8 of 20</p>
         <div>
-          <button>{'<'}</button>
-          <button>{'>'}</button>
+          <Icon icon='iconamoon:arrow-left-2-light' width={25} />
+          <Icon icon='iconamoon:arrow-right-2-light' width={25} />
         </div>
       </div>
     </div>

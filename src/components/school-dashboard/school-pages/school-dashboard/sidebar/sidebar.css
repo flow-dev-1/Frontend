@@ -22,6 +22,7 @@
   border-radius: 5px;
   padding-left: 2rem;
   color: #00bcc3;
+  font-family: 'ABeeZee', sans-serif !important;
 }
 
 .sidebar-user-menu .link.inner {
@@ -77,6 +78,7 @@
   padding: 5px 10px;
   border-radius: 25px;
   background-color: transparent;
+  font-family: 'ABeeZee', sans-serif;
 }
 
 .chevron-icon {

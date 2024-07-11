@@ -6,6 +6,10 @@
   margin-top: 0;
 }
 
+.payment-history #search-input {
+  background-color: rgba(94, 45, 189, 0.0) !important;
+}
+
 .payment-history .search-filter-sort {
   display: flex;
   justify-content: space-between;

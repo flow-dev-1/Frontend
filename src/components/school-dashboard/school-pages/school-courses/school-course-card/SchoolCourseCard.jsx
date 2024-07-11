@@ -96,10 +96,18 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
           </div>
         </div>
         <div className='course-card-title' style={{ marginBottom: '0' }}>
-          <h3>{course.title}:</h3>
+          <h3
+            style={
+              enrolled.includes(course._id)
+                ? { color: '#4B7E31' }
+                : { color: '#329BD6' }
+            }
+          >
+            {course.title}:
+          </h3>
           {/* <h3>{course.subtitle}</h3> */}
         </div>
-        <p style={{ fontSize: '14px', height: '60px' }}>
+        <p style={{ fontSize: '12px', height: '60px' }}>
           {truncateText(course.description, 100)}
         </p>
 
@@ -162,12 +170,16 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
                 <Icon
                   icon='solar:eye-linear'
                   style={{ color: reviewBtnColor }}
+                  width={20}
                 />
               </span>{' '}
               Review
             </button>
             <button
-              onClick={!enrolled.includes(course._id) ? openEnrollementModal : null}
+              id='reviewBtn'
+              onClick={
+                !enrolled.includes(course._id) ? openEnrollementModal : null
+              }
               style={
                 enrolled.includes(course._id)
                   ? { backgroundColor: darkGreen, color: lightGreen }
@@ -178,9 +190,13 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
             >
               <span>
                 {enrolled.includes(course._id) ? (
-                  <Icon icon='tabler:list-details' />
+                  <Icon icon='ri:menu-2-fill' width={20} />
                 ) : (
-                  <Icon icon='mdi:cart' width={24} style={{ color: 'ffff' }} />
+                  <Icon
+                    icon='vaadin:cart-o'
+                    width={20}
+                    style={{ color: 'ffff' }}
+                  />
                 )}
               </span>{' '}
               {enrolled.includes(course._id)
@@ -196,9 +212,7 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
                   fontSize: '12px',
                 }}
               >
-                <span style={{ color: darkGreen, fontWeight: 'bold' }}>
-                  0 %
-                </span>{' '}
+                <span style={{ color: '#50AA50', fontWeight: '400' }}>0 %</span>{' '}
                 <span>Done</span>
               </div>
             ) : (
