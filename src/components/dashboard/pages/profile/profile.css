@@ -1,7 +1,3 @@
-.profile {
-  /* padding: 20px; */
-}
-
 .user-basic-info {
   display: flex;
   align-items: flex-end;
@@ -155,5 +151,3 @@ label {
   border: none;
   background-color: transparent;
 }
-
-

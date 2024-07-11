@@ -18,7 +18,6 @@
   outline: 1px solid #275dad !important;
 }
 
-
 .input-with-icon input {
   border: none !important;
 }
@@ -289,13 +288,13 @@ p span,
 }
 
 .otp-input input {
-  width: 45px;
+  width: 60px;
   height: 45px;
   border-radius: 4px;
   font-size: 18px;
   text-align: center;
   line-height: normal;
-  margin: 1rem;
+  margin: 0.5rem;
   background-color: #f8f8f8;
   border: 1px solid #d2d3d6;
 }

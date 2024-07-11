@@ -264,6 +264,17 @@ p.head-p {
   border-radius: 10px;
   padding: 10px 10px;
 }
+.custom-modal-success-email {
+  width: 730px;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fefefe;
+  margin: 0 auto;
+  border-radius: 10px;
+  padding: 10px 10px;
+}
 .custom-modal-success-two {
   width: 610px;
   height: 250px;

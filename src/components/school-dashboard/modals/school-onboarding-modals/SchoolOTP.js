@@ -80,7 +80,7 @@ export default function SchoolOTP({ email, resendOTP }) {
         <p className='my-2'>
           Kindly enter the OTP sent to <span>{email}</span>
         </p>
-        <div className='otp-input my-4'>
+        <div className='otp-input my-1'>
           {otp.map((digit, index) => (
             <input
               type='text'
@@ -92,7 +92,11 @@ export default function SchoolOTP({ email, resendOTP }) {
             />
           ))}
         </div>
-        <button onClick={handleSubmit} className='btn submit-btn success'>
+        <button
+          style={{ borderRadius: '5px' }}
+          onClick={handleSubmit}
+          className='btn submit-btn success'
+        >
           {mutation.isPending ? (
             <RotatingLines
               type='Oval'
@@ -106,7 +110,7 @@ export default function SchoolOTP({ email, resendOTP }) {
         </button>
         <form onSubmit={handleResendOTP}>
           <p className='mt-3'>
-            Yet to receive OTP?
+            Didn’t receive email?
             {countdown > 0 ? (
               <span>
                 {' '}
@@ -133,7 +137,7 @@ export default function SchoolOTP({ email, resendOTP }) {
                 }}
                 onclidk={handleResendOTP}
               >
-                Resend OTP
+                Resend
               </button>
             )}
           </p>

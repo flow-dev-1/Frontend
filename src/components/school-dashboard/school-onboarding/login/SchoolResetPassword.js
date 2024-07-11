@@ -76,7 +76,7 @@ export default function SchoolResetPassword() {
   return (
     <div
       className='registration-page two  overflow-hidden'
-      style={{paddingTop:"3rem", width: '450px', height: '450px' }}
+      style={{ paddingTop: '3rem', width: '450px', height: '450px' }}
     >
       <h2 className='head-text text-center'>Reset Password</h2>
       <p className='head-p'>Create a New Password</p>
@@ -131,7 +131,11 @@ export default function SchoolResetPassword() {
             )}
           </div>
 
-          <button className='btn submit-btn forgot' type='submit'>
+          <button
+            className='btn submit-btn forgot'
+            style={{ borderRadius: '5px', marginBottom: '1rem' }}
+            type='submit'
+          >
             {mutation.isPending ? (
               <RotatingLines
                 type='Oval'

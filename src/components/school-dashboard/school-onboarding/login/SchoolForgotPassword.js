@@ -120,6 +120,7 @@ export default function ForgotPassword() {
         <button
           className='btn submit-btn forgot'
           type='submit'
+          style={{ borderRadius: '5px', marginBottom: '1rem' }}
           disabled={mutation.isPending}
         >
           {mutation.isPending ? (
@@ -144,7 +145,7 @@ export default function ForgotPassword() {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel='Email Verification Successful'
-        className='custom-modal-success'
+        className='custom-modal-success-email'
         overlayClassName='custom-overlay'
         shouldCloseOnOverlayClick={true}
       >
