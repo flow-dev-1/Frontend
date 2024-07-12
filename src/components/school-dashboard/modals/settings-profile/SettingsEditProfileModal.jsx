@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import './settings-modal.css'
 import { Icon } from '@iconify/react'
 import 'react-phone-number-input/style.css'
@@ -9,13 +9,12 @@ import PhoneInput, {
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-const SettingsEditProfileModal = ({ closeModal }) => {
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [cost, setCost] = useState('')
-  const [status, setStatus] = useState('')
-  const [access, setAccess] = useState('')
-  const [image, setImage] = useState('')
+import { useMutation } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
+import schoolService from '../../../../services/api/school'
+import { RotatingLines } from 'react-loader-spinner'
+
+const SettingsEditProfileModal = ({ closeModal, school }) => {
   const [countries, setCountries] = useState([])
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
 
@@ -65,24 +64,36 @@ const SettingsEditProfileModal = ({ closeModal }) => {
     handleSubmit,
     setValue,
     formState: { errors },
-    watch,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      country: 'Nigeria',
+      school_name: school?.school_name || '',
+      contact_name: school?.contact_name || '',
+      email: school?.email || '',
+      country: school?.country || 'Nigeria',
+      state: school?.state || '',
+      lga: school?.lga || '',
+      address: school?.address || '',
+      phone: school?.phone || '',
     },
   })
 
-  const handleUpdate = () => {
-    console.log('Updated course details:', {
-      title,
-      description,
-      cost,
-      status,
-      access,
-      image,
-    })
-    closeModal()
+  const mutation = useMutation({
+    // mutationFn: schoolService.updateProfile, // Define this API call in your service
+    onSuccess: (data) => {
+      console.log('Profile update successful:', data)
+      toast.success('Profile updated successfully')
+      closeModal()
+    },
+    onError: (error) => {
+      console.error('Profile update error:', error)
+      toast.dismiss()
+      toast.error(error?.message || 'Profile update failed')
+    },
+  })
+
+  const handleUpdate = (data) => {
+    mutation.mutate(data)
   }
 
   return (
@@ -95,107 +106,134 @@ const SettingsEditProfileModal = ({ closeModal }) => {
       </div>
       <hr style={{ marginTop: '0' }} />
       <p className='required'>* Indicates required</p>
-      <div className='flex-row'>
-        <div>
-          <label>Name of School *</label>
-          <input
-            placeholder='Type here...'
-            type='text'
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>School Address *</label>
-          <input
-            type='text'
-            placeholder='Type here...'
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-      </div>
-      <div className='flex-row'>
-        <div>
-          <label>Contact Name *</label>
-          <input
-            type='text'
-            value={cost}
-            placeholder='Type here...'
-            onChange={(e) => setCost(e.target.value)}
-          />
-        </div>
-        <div className='form-group'>
-          <label>Contact Phone Number *</label>
-          <div className='flex-code-input'>
-            <PhoneInput
-              placeholder='Enter phone number'
-              onChange={(val) => setValue('phone', val)}
-              onCountryChange={(country) => {
-                if (country) {
-                  setCountryCode(getCountryCallingCode(country))
-                }
-              }}
-              defaultCountry='NG' // Set the default country (change as needed)
-              style={{
-                // Full width
-                border: '1px solid #ccc', // Add border to the input
-                borderRadius: '5px', // Add border-radius for rounded corners
-                padding: '1px', // Add padding for better visual appearance
-              }}
+      <form onSubmit={handleSubmit(handleUpdate)}>
+        <div className='flex-row'>
+          <div>
+            <label>Name of School *</label>
+            <input
+              placeholder='Type here...'
+              type='text'
+              {...register('school_name')}
             />
-            {countryCode && (
-              <span style={{ color: '#5b616a' }} className='country-code'>
-                +{countryCode}
-              </span>
+            {errors.school_name && (
+              <p className='error-message'>{errors.school_name.message}</p>
             )}
           </div>
-
-          {errors.phone && (
-            <p className='error-message'>{errors.phone.message}</p>
-          )}
-        </div>
-      </div>
-      <div className='flex-row'>
-        <div>
-          <label>Contact Email Address *</label>
-          <input type='text' placeholder='Type here...' />
-        </div>
-        <div className='upload'>
-          <label htmlFor=''>School Logo</label>
-          <div
-            className='file-upload-wrapper enroll'
-            style={{
-              backgroundColor: '#f8f8f8',
-              margin: '0',
-            }}
-          >
-            <input type='file' id='file-upload' className='file-upload-input' />
-            <label
-              style={{ border: 'none', color: '#D6D6D6' }}
-              htmlFor='file-upload'
-              className='file-upload-label'
-            >
-              Choose file
-              <Icon
-                icon='ant-design:upload-outlined'
-                width='24'
-                style={{ color: '#5B616A' }}
-                height='24'
-              />
-            </label>
+          <div>
+            <label>School Address *</label>
+            <input
+              type='text'
+              placeholder='Type here...'
+              {...register('address')}
+            />
+            {errors.address && (
+              <p className='error-message'>{errors.address.message}</p>
+            )}
           </div>
         </div>
-      </div>
-      <hr />
+        <div className='flex-row'>
+          <div>
+            <label>Contact Name *</label>
+            <input
+              type='text'
+              placeholder='Type here...'
+              {...register('contact_name')}
+            />
+            {errors.contact_name && (
+              <p className='error-message'>{errors.contact_name.message}</p>
+            )}
+          </div>
+          <div className='form-group'>
+            <label>Contact Phone Number *</label>
+            <div className='flex-code-input'>
+              <PhoneInput
+                placeholder='Enter phone number'
+                {...register('phone')}
+                onCountryChange={(country) => {
+                  if (country) {
+                    setCountryCode(getCountryCallingCode(country))
+                  }
+                }}
+                defaultCountry='NG' // Set the default country (change as needed)
+                style={{
+                  border: '1px solid #ccc',
+                  borderRadius: '5px',
+                  padding: '1px',
+                }}
+              />
+              {countryCode && (
+                <span style={{ color: '#5b616a' }} className='country-code'>
+                  +{countryCode}
+                </span>
+              )}
+            </div>
 
-      <button
-        className='update fix'
-        style={{ padding: '.3rem 0' }}
-        onClick={handleUpdate}
-      >
-        Update
-      </button>
+            {errors.phone && (
+              <p className='error-message'>{errors.phone.message}</p>
+            )}
+          </div>
+        </div>
+        <div className='flex-row'>
+          <div>
+            <label>Contact Email Address *</label>
+            <input
+              type='text'
+              placeholder='Type here...'
+              {...register('email')}
+            />
+            {errors.email && (
+              <p className='error-message'>{errors.email.message}</p>
+            )}
+          </div>
+          <div className='upload'>
+            <label htmlFor=''>School Logo</label>
+            <div
+              className='file-upload-wrapper enroll'
+              style={{
+                backgroundColor: '#f8f8f8',
+                margin: '0',
+              }}
+            >
+              <input
+                type='file'
+                id='file-upload'
+                className='file-upload-input'
+              />
+              <label
+                style={{ border: 'none', color: '#D6D6D6' }}
+                htmlFor='file-upload'
+                className='file-upload-label'
+              >
+                Choose file
+                <Icon
+                  icon='ant-design:upload-outlined'
+                  width='24'
+                  style={{ color: '#5B616A' }}
+                  height='24'
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <button
+          className='update fix'
+          style={{ padding: '.3rem 0' }}
+          type='submit'
+          disabled={mutation.isPending}
+        >
+          {mutation.isPending ? (
+            <RotatingLines
+              type='Oval'
+              style={{ color: '#FFF', backgroundColor: '#275DAD' }}
+              height={20}
+              width={20}
+            />
+          ) : (
+            'Update'
+          )}
+        </button>
+      </form>
     </div>
   )
 }

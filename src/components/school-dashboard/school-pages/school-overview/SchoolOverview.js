@@ -1,5 +1,6 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
+import { useState } from 'react'
 import {
   PieChart,
   Pie,
@@ -13,6 +14,10 @@ import {
   Legend,
 } from 'recharts'
 import './school-overview.css'
+import ActiveStudentsModal from '../../../modals-pages/dashboard-modals/overview/ActiveStudentsModal'
+import NonActiveStudentsModal from '../../../modals-pages/dashboard-modals/overview/NonActiveStudentsModal'
+import ActiveTeachersModal from '../../../modals-pages/dashboard-modals/overview/ActiveTeachersModal'
+import NonActiveTeachersModal from '../../../modals-pages/dashboard-modals/overview/NonActiveTeachersModal'
 
 const dataActive = [
   { name: 'Active', value: 40 },
@@ -70,6 +75,26 @@ const renderCustomizedLabel = ({
 }
 
 const SchoolOverview = () => {
+  const [isActiveStudentModalOpen, setIsActiveStudentModalOpen] =
+    useState(false)
+  const [isActiveTeacherModalOpen, setIsActiveTeacherModalOpen] =
+    useState(false)
+  const [isNonActiveTeacherModalOpen, setIsNonActiveTeacherModalOpen] =
+    useState(false)
+  const [isNonActiveStudentModalOpen, setIsNonActiveStudentModalOpen] =
+    useState(false)
+
+  // Functions to open modals
+  const openActiveStudentModal = () => setIsActiveStudentModalOpen(true)
+  const openActiveTeacherModal = () => setIsActiveTeacherModalOpen(true)
+  const openNonActiveTeacherModal = () => setIsNonActiveTeacherModalOpen(true)
+  const openNonActiveStudentModal = () => setIsNonActiveStudentModalOpen(true)
+
+  // Functions to close modals
+  const closeActiveStudentModal = () => setIsActiveStudentModalOpen(false)
+  const closeActiveTeacherModal = () => setIsActiveTeacherModalOpen(false)
+  const closeNonActiveTeacherModal = () => setIsNonActiveTeacherModalOpen(false)
+  const closeNonActiveStudentModal = () => setIsNonActiveStudentModalOpen(false)
   return (
     <div className='overview'>
       <div className='top-cards'>
@@ -92,7 +117,11 @@ const SchoolOverview = () => {
       </div>
 
       <div className='charts'>
-        <div className='chart'>
+        <div
+          className='chart'
+          style={{ cursor: 'pointer' }}
+          onClick={openActiveStudentModal}
+        >
           <div>
             <div className='chart-heading'>
               <p>Activity Report</p>
@@ -144,7 +173,11 @@ const SchoolOverview = () => {
             </div>
           </div>
         </div>
-        <div className='chart'>
+        <div
+          className='chart'
+          style={{ cursor: 'pointer' }}
+          onClick={openNonActiveStudentModal}
+        >
           <div>
             <div className='chart-heading'>
               <p>Progress Report</p>
@@ -198,7 +231,11 @@ const SchoolOverview = () => {
         </div>
       </div>
       <div className='charts'>
-        <div className='chart two'>
+        <div
+          className='chart two'
+          style={{ cursor: 'pointer' }}
+          onClick={openActiveTeacherModal}
+        >
           <div>
             <div className='chart-heading'>
               <p>Gender Balance</p>
@@ -252,7 +289,7 @@ const SchoolOverview = () => {
           </div>
         </div>
         <div className='chart bar-chart'>
-          <div>
+          <div style={{ cursor: 'pointer' }} onClick={openNonActiveTeacherModal}>
             <div className='chart-heading'>
               <p>Enrollment Per Course</p>
               <div style={{ cursor: 'pointer' }} className='filter-sort'>
@@ -288,6 +325,22 @@ const SchoolOverview = () => {
           </ResponsiveContainer>
         </div>
       </div>
+      <ActiveStudentsModal
+        isOpen={isActiveStudentModalOpen}
+        close={closeActiveStudentModal}
+      />
+      <ActiveTeachersModal
+        isOpen={isActiveTeacherModalOpen}
+        close={closeActiveTeacherModal}
+      />
+      <NonActiveStudentsModal
+        isOpen={isNonActiveStudentModalOpen}
+        close={closeNonActiveStudentModal}
+      />
+      <NonActiveTeachersModal
+        isOpen={isNonActiveTeacherModalOpen}
+        close={closeNonActiveTeacherModal}
+      />
     </div>
   )
 }

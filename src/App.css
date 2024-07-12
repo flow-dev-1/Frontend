@@ -264,6 +264,15 @@ p.head-p {
   border-radius: 10px;
   padding: 10px 10px;
 }
+.custom-modal-dashboard {
+  width: 502px;
+  height: 540px;
+  overflow-y: scroll;
+  background-color: #fefefe;
+  margin: 0 auto;
+  border-radius: 10px;
+  padding: 10px 10px;
+}
 .custom-modal-success-email {
   width: 730px;
   height: 250px;
@@ -335,3 +344,86 @@ input {
 }
 
 /* For Firefox */
+
+.custom-modal-dashboard {
+  width: 502px;
+  height: 540px;
+  overflow-y: scroll;
+  background-color: #fefefe;
+  margin: 0 auto;
+  border-radius: 10px;
+  padding: 10px 10px;
+}
+.custom-modal-dashboard {
+  width: 502px;
+  height: 540px;
+  overflow: hidden;
+ 
+  background-color: #fefefe;
+  margin: 0 auto;
+  border-radius: 10px;
+  padding: 10px 10px;
+}
+
+/* For WebKit browsers (Chrome, Safari) */
+.custom-modal-dashboard::-webkit-scrollbar {
+  width: 10px; /* Set the scrollbar width */
+}
+
+.custom-modal-dashboard::-webkit-scrollbar-thumb {
+  background-color: #ccc; /* Set the thumb color to a light gray */
+  border-radius: 10px;
+}
+
+.custom-modal-dashboard::-webkit-scrollbar-thumb:hover {
+  background-color: #bbb; /* Darken the thumb color on hover */
+}
+
+.custom-modal-dashboard::-webkit-scrollbar-track {
+  background-color: #fff; /* Set the scrollbar background color to white */
+}
+
+.custom-modal-dashboard::-webkit-scrollbar-button {
+  display: none; /* Hide the scrollbar arrows */
+}
+
+/* For Firefox */
+.custom-modal-dashboard {
+  scrollbar-width: thin; /* Options: auto, thin, none */
+  scrollbar-color: #ccc #fff; /* Set the thumb color to light gray and track color to white */
+}
+
+/* Hide scrollbar buttons for Firefox */
+.custom-modal-dashboard::-moz-scrollbar-button {
+  display: none; /* Hide the scrollbar arrows */
+}
+
+/* For Internet Explorer and Edge */
+.custom-modal-dashboard {
+  -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+}
+
+.custom-modal-dashboard::-ms-scrollbar {
+  width: 10px; /* Set the scrollbar width */
+}
+
+.custom-modal-dashboard::-ms-scrollbar-thumb {
+  background-color: #ccc; /* Set the thumb color to a light gray */
+}
+
+.custom-modal-dashboard::-ms-scrollbar-thumb:hover {
+  background-color: #bbb; /* Darken the thumb color on hover */
+}
+
+.custom-modal-dashboard::-ms-scrollbar-track {
+  background-color: #fff; /* Set the scrollbar background color to white */
+}
+
+.custom-modal-dashboard::-ms-scrollbar-button {
+  display: none; /* Hide the scrollbar arrows */
+}
+
+/* General styles for other browsers (fallback) */
+.custom-modal-dashboard::-webkit-scrollbar-corner {
+  background-color: transparent; /* Transparent background for the corner */
+}

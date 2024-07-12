@@ -33,9 +33,7 @@ const SchoolSettingsProfile = () => {
     refetchOnWindowFocus: false,
   })
 
-  const openModal = (member, table) => {
-    setSelectedMember(member)
-    setSelectedTable(table)
+  const openModal = () => {
     setModalIsOpen(true)
   }
 
@@ -61,7 +59,7 @@ const SchoolSettingsProfile = () => {
           </div>
           <div className='school-info'>
             <h1 className='h1'>{data?.school?.school_name}</h1>
-            <p className='primary' >Primary</p>
+            <p className='primary'>Primary</p>
             <p>{data?.school?.address}</p>
             <p>
               {data?.school?.lga.toUpperCase()} |{' '}
@@ -73,7 +71,7 @@ const SchoolSettingsProfile = () => {
             </p>
           </div>
         </div>
-        <button className='edit-btn' onClick={() => setModalIsOpen(true)}>
+        <button className='edit-btn' onClick={openModal}>
           <span>
             <Icon icon='ic:round-plus' />
           </span>
@@ -110,7 +108,10 @@ const SchoolSettingsProfile = () => {
         className='custom-modal-otp-three'
         overlayClassName='custom-overlay'
       >
-        <SettingsEditProfileModal closeModal={closeModal} />
+        <SettingsEditProfileModal
+          closeModal={closeModal}
+          school={data?.school}
+        />
       </Modal>
     </div>
   )

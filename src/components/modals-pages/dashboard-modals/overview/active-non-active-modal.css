@@ -1,0 +1,23 @@
+.header-green {
+  background-color: #0caf60;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.header-red {
+  background-color: #fd483d;
+  color: #fff;
+  padding: 10px;
+
+  margin-bottom: 20px;
+}
+.header-red p {
+  text-align: center;
+}
+
+.header-green p {
+  margin: 0;
+  text-align: center;
+  font-size: 20px;
+}
