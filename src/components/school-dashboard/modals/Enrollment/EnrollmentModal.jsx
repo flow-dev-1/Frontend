@@ -157,6 +157,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
       }
     })
   }, [])
+  // 
 
   return (
     <Modal
