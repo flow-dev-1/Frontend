@@ -89,28 +89,40 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
         </p>
 
         <div className='users-review'>
-          <div className='users-count'>
-            <span>
-              <Icon
-                icon='fluent:people-24-regular'
-                style={{ color: reviewBtnColor }}
-              />{' '}
-            </span>
-            {course?.courseEnrollment?.length} Students
+          <div
+            style={{
+              width: '40%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div className='users-count'>
+              <span>
+                <Icon
+                  icon='fluent:people-24-regular'
+                  style={{ color: darkGreen }}
+                  width={20}
+                />{' '}
+              </span>
+              {course?.courseEnrollment?.length}
+            </div>
+            <div className='likes-count'>
+              <span>
+                <Icon
+                  icon='mingcute:thumb-up-line'
+                  style={{ color: darkGreen }}
+                  width={18}
+                />{' '}
+              </span>
+              {likesPercent(
+                course?.likes?.length,
+                course?.courseEnrollment?.length
+              )}
+              %
+            </div>
           </div>
-          <div className='likes-count'>
-            <span>
-              <Icon
-                icon='mingcute:thumb-up-line'
-                style={{ color: reviewBtnColor }}
-              />{' '}
-            </span>
-            {likesPercent(
-              course?.likes?.length,
-              course?.courseEnrollment?.length
-            )}
-            %
-          </div>
+
           <div
             className={`toggle-switch ${isOn ? 'on' : 'off'}`}
             onClick={handleToggle}
@@ -143,7 +155,7 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
               style={{ backgroundColor: darkGreen, color: lightGreen }}
             >
               <span>
-                <Icon icon='vaadin:cart-o' style={{ color: detailsBtnColor }} />
+                <Icon icon='ri:menu-2-fill' width={20} style={{detailsBtnClass}} />
               </span>{' '}
               View Detail
             </button>

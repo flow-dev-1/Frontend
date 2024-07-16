@@ -135,6 +135,7 @@ const SchoolAllCourses = () => {
         overlayClassName='custom-overlay'
       >
         <CourseDetailModal
+          closeModal={closeModal}
           course={selectedCourse}
           enrolled={enrolledDataArray}
         />

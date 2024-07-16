@@ -111,7 +111,7 @@ export default function ForgotPassword() {
         <div className='form-group my-4'>
           <label>Email address</label>
           <input
-            style={{ width: '100%', padding: '1.3rem .7rem' }}
+            style={{ width: '100%', padding: '.7rem .7rem' }}
             type='email'
             {...register('email', { required: true })}
             placeholder='Enter email address'
@@ -126,11 +126,11 @@ export default function ForgotPassword() {
         >
           {mutation.isPending ? (
             <RotatingLines
-              strokeColor='#4B7E31'
-              strokeWidth='5'
-              animationDuration='0.75'
-              width='20'
-              visible={true}
+              strokeColor='#275dad'
+              type='Oval'
+              style={{ color: '#FFF', backgroundColor: '#275DAD' }}
+              height={20}
+              width={20}
             />
           ) : (
             'Submit'

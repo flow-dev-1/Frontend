@@ -109,7 +109,7 @@ export default function ResetPassword() {
           </div>
 
           <div className='form-group my-3'>
-            <label>Confirm Password</label>
+            <label style={{ border: 'none' }}>Confirm Password</label>
             <div className='create-password input-with-icon'>
               <input
                 style={{ padding: '1.3rem .5rem' }}

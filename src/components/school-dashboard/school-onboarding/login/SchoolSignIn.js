@@ -113,14 +113,19 @@ export default function SchoolSignIn() {
                 </div>
               </div>
               {errors.password && (
-                <p className='error-message text-end'>{errors.password.message}</p>
+                <p className='error-message text-end'>
+                  {errors.password.message}
+                </p>
               )}
               {showPasswordError && (
                 <p className='error-message'>Incorrect email or password</p>
               )}
             </div>
-            <div className='d-flex align-items-center mb-2 me-auto rember-me'>
-              <input type='checkbox' name='' id='checkbox' className='mx-2 ' />
+            <div
+              style={{ marginLeft: '0' }}
+              className='d-flex align-items-center mb-2 me-auto rember-me'
+            >
+              <input className='checkbox' type='checkbox' required />
               Remember Me
             </div>
             <button
@@ -131,6 +136,7 @@ export default function SchoolSignIn() {
             >
               {mutation.isPending ? (
                 <RotatingLines
+                  strokeColor='#275dad'
                   type='Oval'
                   style={{ color: '#FFF', backgroundColor: '#275DAD' }}
                   height={20}

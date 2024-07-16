@@ -70,9 +70,9 @@ export default function SignIn() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='form-section d-flex flex-column align-items-center '>
             <div className='form-group'>
-              <label>Email *</label>
+              <label style={{ border: 'none' }}>Email *</label>
               <input
-                 style={{ width: '100%', padding: '1rem .7rem' }}
+                style={{ width: '100%', padding: '1rem .7rem' }}
                 type='email'
                 {...register('email', { required: true })}
                 placeholder='Enter email address'
@@ -83,7 +83,7 @@ export default function SignIn() {
             </div>
             <div className='form-group my-3'>
               <div className='d-flex align-items-center justify-content-between'>
-                <label>Create Password *</label>
+                <label style={{ border: 'none' }}>Create Password *</label>
                 <Link
                   to='/individual/forgot-password'
                   className='forgot-password'
@@ -120,8 +120,11 @@ export default function SignIn() {
                 <p className='error-message'>Incorrect email or password</p>
               )}
             </div>
-            <div className='d-flex align-items-center mb-2 me-auto rember-me'>
-              <input type='checkbox' name='' id='checkbox' className='mx-2' />
+            <div
+              style={{ marginLeft: '0' }}
+              className='d-flex align-items-center mb-2 me-auto rember-me'
+            >
+              <input className='checkbox' type='checkbox' required />
               Remember Me
             </div>
             <button

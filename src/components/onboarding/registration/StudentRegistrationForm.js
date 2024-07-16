@@ -13,6 +13,7 @@ import { states } from '../../states'
 import { RotatingLines } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
 import { setToken } from '../../../redux/reducers/jwtReducer'
+import { lgas } from '../../states/lgas'
 import 'react-phone-number-input/style.css'
 import PhoneInput, {
   isValidPhoneNumber,
@@ -171,7 +172,9 @@ export default function StudentRegistrationForm() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='form-section'>
             <div className='form-group'>
-              <label>Child's First Name *</label>
+              <label style={{ border: 'none', paddingLeft: '0' }}>
+                Child's First Name *
+              </label>
               <input
                 type='text'
                 placeholder='Type here...'
@@ -182,7 +185,9 @@ export default function StudentRegistrationForm() {
               )}
             </div>
             <div className='form-group'>
-              <label>Child's Last Name *</label>
+              <label style={{ border: 'none', paddingLeft: '0' }}>
+                Child's Last Name *
+              </label>
               <input
                 type='text'
                 placeholder='Type here...'
@@ -193,7 +198,9 @@ export default function StudentRegistrationForm() {
               )}
             </div>
             <div className='form-group'>
-              <label>Guardian's Email Address *</label>
+              <label style={{ border: 'none', paddingLeft: '0' }}>
+                Guardian's Email Address *
+              </label>
               <input
                 type='email'
                 placeholder='Type here...'
@@ -205,7 +212,9 @@ export default function StudentRegistrationForm() {
               )}
             </div>
             <div className='form-group'>
-              <label>Guardian's Phone Number *</label>
+              <label style={{ border: 'none', paddingLeft: '0' }}>
+                Guardian's Phone Number *
+              </label>
               <div className='flex-code-input'>
                 <PhoneInput
                   placeholder='Enter phone number'
@@ -233,7 +242,9 @@ export default function StudentRegistrationForm() {
               )}
             </div>
             <div className='form-group'>
-              <label>Country *</label>
+              <label style={{ border: 'none', paddingLeft: '0' }}>
+                Country *
+              </label>
               <select {...register('country')}>
                 <option value='Nigeria'>Nigeria</option>
                 {countries.map((country) => (
@@ -247,7 +258,9 @@ export default function StudentRegistrationForm() {
               )}
             </div>
             <div className='form-group'>
-              <label>State *</label>
+              <label style={{ border: 'none', paddingLeft: '0' }}>
+                State *
+              </label>
               {isNigeria ? (
                 <select {...register('state')}>
                   <option value=''>Select State</option>
@@ -269,7 +282,7 @@ export default function StudentRegistrationForm() {
               )}
             </div>
             <div className='form-group'>
-              <label>LGA *</label>
+              <label style={{ border: 'none', paddingLeft: '0' }}>LGA *</label>
               <input
                 type='text'
                 placeholder='Type here...'
@@ -280,7 +293,9 @@ export default function StudentRegistrationForm() {
               )}
             </div>
             <div className='form-group'>
-              <label>Child's Gender *</label>
+              <label style={{ border: 'none', paddingLeft: '0' }}>
+                Child's Gender *
+              </label>
               <select {...register('gender')}>
                 <option value=''>Select Gender</option>
                 <option value='male'>Male</option>
@@ -291,7 +306,9 @@ export default function StudentRegistrationForm() {
               )}
             </div>
             <div className='form-group'>
-              <label>Child's D.O.B *</label>
+              <label style={{ border: 'none', paddingLeft: '0' }}>
+                Child's D.O.B *
+              </label>
               <input
                 type='date'
                 placeholder='Type here...'
@@ -302,7 +319,9 @@ export default function StudentRegistrationForm() {
               )}
             </div>
             <div className='form-group'>
-              <label>School Grade *</label>
+              <label style={{ border: 'none', paddingLeft: '0' }}>
+                School Grade *
+              </label>
 
               <select {...register('schoolGrade')}>
                 <option value=''>Select Grade</option>
@@ -317,7 +336,9 @@ export default function StudentRegistrationForm() {
               )}
             </div>
             <div className='form-group'>
-              <label>Password *</label>
+              <label style={{ border: 'none', paddingLeft: '0' }}>
+                Password *
+              </label>
               <div className='d-flex align-items-center input-with-icon'>
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -345,7 +366,9 @@ export default function StudentRegistrationForm() {
               )}
             </div>
             <div className='form-group'>
-              <label>Confirm Password *</label>
+              <label style={{ border: 'none', paddingLeft: '0' }}>
+                Confirm Password *
+              </label>
               <div className='d-flex align-items-center input-with-icon'>
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -375,7 +398,7 @@ export default function StudentRegistrationForm() {
 
             <button
               className='btn submit-btn'
-              style={{ borderRadius: '5px', padding: '.3rem 1rem' }}
+              style={{ borderRadius: '25px', padding: '.3rem 1rem' }}
               type='submit'
               disabled={mutation.isPending}
             >
