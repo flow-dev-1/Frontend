@@ -4,11 +4,24 @@ const userSlice = createSlice({
   name: 'user',
   initialState: {
     user: null,
+    otpModal: false,
     connections: [],
     isSidebarOpen: false,
   },
   reducers: {
-    loginSuccess: (state, action) => {
+    OtpSuccess: (state) => {
+      return {
+        ...state,
+        otpModal: true,
+      }
+    },
+    CloseOtpSuccess: (state) => {
+      return {
+        ...state,
+        otpModal: false,
+      }
+    },
+    OtpSuccess: (state, action) => {
       return {
         ...state,
         user: action.payload,
@@ -36,6 +49,8 @@ const userSlice = createSlice({
 export const {
   loginSuccess,
   logoutSuccess,
+  OtpSuccess,
+  CloseOtpSuccess,
   offlineMode,
   toggleSidebar,
   connections,

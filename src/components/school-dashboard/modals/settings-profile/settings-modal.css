@@ -166,7 +166,6 @@ button.update {
 }
 .flex-code-input .PhoneInputInput {
   border: none !important;
-  color: transparent !important;
 }
 
 .flex-row div input::placeholder {

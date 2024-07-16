@@ -346,12 +346,16 @@ label {
   font-size: 12px;
 }
 
+#grade-select option[disabled][hidden] {
+  color: #ecedf0; /* This makes the placeholder text faded */
+}
+
 input[type='checkbox']:checked {
   outline: none !important;
 }
 
-input[type="checkbox"] {
-    outline: none !important;
+input[type='checkbox'] {
+  outline: none !important;
 }
 
 /* Target the checkbox when it is focused */

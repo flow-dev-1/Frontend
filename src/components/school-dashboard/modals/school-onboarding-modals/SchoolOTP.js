@@ -7,9 +7,14 @@ import { toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
 import { setToken } from '../../../../redux/reducers/jwtReducer'
 import { RotatingLines } from 'react-loader-spinner'
+import { useSelector } from 'react-redux'
 
-export default function SchoolOTP({ email, resendOTP, closeModal }) {
-  const [modalIsOpen, setIsOpen] = useState(false)
+export default function SchoolOTP({
+  email,
+  resendOTP,
+  onRequestClose,
+  openSuccessModal,
+}) {
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
   const dispatch = useDispatch()
 
@@ -28,18 +33,15 @@ export default function SchoolOTP({ email, resendOTP, closeModal }) {
     setOtp([...otpArray, ...otp.slice(otpArray.length)])
   }
 
-  function openModal() {
-    closeModal()
-    setIsOpen(true)
-  }
-
   const mutation = useMutation({
     mutationFn: schoolService.schoolVerifyAccount, // Assuming this is your API call function for verifying OTP
     onSuccess: (data) => {
       console.log('OTP verification successful:', data)
       toast.success(data.message)
       dispatch(setToken(data?.token))
-      openModal() // Open the modal on successful OTP verification
+      onRequestClose()
+      openSuccessModal()
+      // Open the modal on successful OTP verification
     },
     onError: (error) => {
       console.error('OTP verification error:', error)
@@ -67,7 +69,6 @@ export default function SchoolOTP({ email, resendOTP, closeModal }) {
       clearTimeout(timer)
     }
   }, [countdown])
-
   const handleResendOTP = (e) => {
     e.preventDefault()
     setCountdown(600)
@@ -77,7 +78,7 @@ export default function SchoolOTP({ email, resendOTP, closeModal }) {
   return (
     <div className='otp-modal modal-content'>
       <div className='d-flex flex-column align-items-center '>
-        <h2>Verify your email account!</h2>
+        <h2> Verify your email account!</h2>
         <p className='my-2'>
           Kindly enter the OTP sent to <span>{email}</span>
         </p>
@@ -96,13 +97,13 @@ export default function SchoolOTP({ email, resendOTP, closeModal }) {
         <button
           style={{ borderRadius: '5px' }}
           onClick={handleSubmit}
-          className='btn submit-btn success'
+          className='btn submit-btn '
         >
           {mutation.isPending ? (
             <RotatingLines
               strokeColor='#275dad'
               type='Oval'
-              style={{ color: '#FFF', backgroundColor: '#275DAD' }}
+              style={{ color: '#fff', backgroundColor: '#275dad' }}
               height={20}
               width={20}
             />
@@ -145,15 +146,6 @@ export default function SchoolOTP({ email, resendOTP, closeModal }) {
           </p>
         </form>
       </div>
-      <Modal
-        isOpen={modalIsOpen}
-        contentLabel='Example Modal'
-        className='custom-modal-success'
-        overlayClassName='custom-overlay'
-        shouldCloseOnOverlayClick={false}
-      >
-        <SchoolEmailVerificationSuccessful from='otp' />
-      </Modal>
     </div>
   )
 }

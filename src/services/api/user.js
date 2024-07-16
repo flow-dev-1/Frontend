@@ -1,6 +1,7 @@
 import api from '../index.js'
 
 class UserOBJ {
+ 
   //Register
   register = async (userType, data) => {
     try {

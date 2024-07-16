@@ -10,7 +10,6 @@ import { toast } from 'react-toastify'
 import { RotatingLines } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
 import { setToken } from '../../../../redux/reducers/jwtReducer'
-import { loginSuccess } from '../../../../redux/reducers/userReducer'
 import '../onboarding.css'
 
 export default function SchoolSignIn() {
@@ -46,7 +45,6 @@ export default function SchoolSignIn() {
       console.log('Login successful:', data)
       toast.success('Login successful')
       dispatch(setToken(data?.token))
-      dispatch(loginSuccess(data?.user))
       localStorage.setItem('Flow-Auth-Token', data?.token)
       navigate('/school-dashboard', { replace: true })
     },
@@ -125,7 +123,7 @@ export default function SchoolSignIn() {
               style={{ marginLeft: '0' }}
               className='d-flex align-items-center mb-2 me-auto rember-me'
             >
-              <input className='checkbox' type='checkbox' required />
+              <input className='checkbox' type='checkbox' />
               Remember Me
             </div>
             <button
