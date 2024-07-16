@@ -110,37 +110,48 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
         <p style={{ fontSize: '12px', height: '60px' }}>
           {truncateText(course.description, 100)}
         </p>
-
-        <div style={{ margin: '1rem 0' }} className='users-review'>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          {' '}
           <div
-            style={
-              course.status === 'published'
-                ? { color: '#329BD6' }
-                : { color: '#4B7E31' }
-            }
-            className='users-count'
+            style={{ margin: '1rem 0', width: '40%' }}
+            className='users-review'
           >
-            <span>
-              <Icon icon='fluent:people-24-regular' />{' '}
-            </span>
-            {course?.courseEnrollment?.length} Students
-          </div>
-          <div
-            style={
-              course.status === 'published'
-                ? { color: '#329BD6' }
-                : { color: '#4B7E31' }
-            }
-            className='likes-count'
-          >
-            <span>
-              <Icon icon='mingcute:thumb-up-line' />{' '}
-            </span>
-            {likesPercent(
-              course?.likes?.length,
-              course?.courseEnrollment?.length
-            )}
-            %
+            <div
+              style={
+                course.status === 'published'
+                  ? { color: '#329BD6' }
+                  : { color: '#4B7E31' }
+              }
+              className='users-count'
+            >
+              <span>
+                <Icon icon='fluent:people-24-regular' width={20} />{' '}
+              </span>
+              {course?.courseEnrollment?.length}
+            </div>
+            <div
+              style={
+                course.status === 'published'
+                  ? { color: '#329BD6', display: 'flex', alignItems: 'center' }
+                  : { color: '#4B7E31', display: 'flex', alignItems: 'center' }
+              }
+              className='likes-count'
+            >
+              <span>
+                <Icon width={17} icon='mingcute:thumb-up-line' />{' '}
+              </span>
+              {likesPercent(
+                course?.likes?.length,
+                course?.courseEnrollment?.length
+              )}
+              %
+            </div>
           </div>
           {enrolled.includes(course._id) ? (
             <div
@@ -153,6 +164,7 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
             ''
           )}
         </div>
+
         <div className='course-card-buttons'>
           <div className='course-card-buttons-main'>
             <button

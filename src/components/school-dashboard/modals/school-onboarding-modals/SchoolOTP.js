@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux'
 import { setToken } from '../../../../redux/reducers/jwtReducer'
 import { RotatingLines } from 'react-loader-spinner'
 
-export default function SchoolOTP({ email, resendOTP }) {
+export default function SchoolOTP({ email, resendOTP, closeModal }) {
   const [modalIsOpen, setIsOpen] = useState(false)
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
   const dispatch = useDispatch()
@@ -29,6 +29,7 @@ export default function SchoolOTP({ email, resendOTP }) {
   }
 
   function openModal() {
+    closeModal()
     setIsOpen(true)
   }
 
@@ -99,8 +100,9 @@ export default function SchoolOTP({ email, resendOTP }) {
         >
           {mutation.isPending ? (
             <RotatingLines
+              strokeColor='#275dad'
               type='Oval'
-              style={{ color: '#FFF' }}
+              style={{ color: '#FFF', backgroundColor: '#275DAD' }}
               height={20}
               width={20}
             />

@@ -94,7 +94,7 @@ export default function ForgotPassword() {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='form-group my-4'>
-          <label>Email address</label>
+          <label style={{ border: 'none' }}>Email address</label>
           <input
             type='email'
             style={{ padding: '1.3rem .5rem' }}
@@ -123,7 +123,7 @@ export default function ForgotPassword() {
         </button>
       </form>
 
-      <p className='remember-details text-center'>
+      <p  className='remember-details text-center'>
         Remember your details? <Link to='/'>Sign in</Link>
       </p>
 

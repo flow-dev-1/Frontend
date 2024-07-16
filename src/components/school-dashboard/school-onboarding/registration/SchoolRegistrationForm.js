@@ -18,6 +18,8 @@ import PhoneInput, {
   getCountryCallingCode,
 } from 'react-phone-number-input'
 import SchoolOTP from '../../modals/school-onboarding-modals/SchoolOTP'
+import flags from 'react-phone-number-input/flags'
+import { lgas } from '../../../states/lgas'
 Modal.setAppElement('#root') // Set the root element for the modal
 
 export default function SchoolRegistrationForm() {
@@ -150,6 +152,22 @@ export default function SchoolRegistrationForm() {
     setIsOpen(false)
   }
 
+  const [availableLGAs, setAvailableLGAs] = useState([])
+
+  const selectedState = watch('state')
+
+  useEffect(() => {
+    setIsNigeria(selectedCountry === 'Nigeria')
+  }, [selectedCountry])
+
+  useEffect(() => {
+    if (isNigeria && selectedState) {
+      setAvailableLGAs(lgas[selectedState] || [])
+    } else {
+      setAvailableLGAs([])
+    }
+  }, [isNigeria, selectedState])
+
   return (
     <div className='registration-page'>
       <div className='top-section'>
@@ -161,7 +179,9 @@ export default function SchoolRegistrationForm() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='form-section'>
           <div className='form-group'>
-            <label>Name of School *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              Name of School *
+            </label>
             <input
               type='text'
               placeholder='Type here...'
@@ -172,7 +192,9 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>Contact Name *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              Contact Name *
+            </label>
             <input
               type='text'
               placeholder='Type here...'
@@ -183,7 +205,9 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>Contact Email Address *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              Contact Email Address *
+            </label>
             <input
               type='email'
               placeholder='Type here...'
@@ -195,7 +219,9 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>Country *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              Country *
+            </label>
             <select {...register('country')}>
               <option value='Nigeria'>Nigeria</option>
               {countries.map((country) => (
@@ -209,7 +235,7 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>State *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>State *</label>
             {isNigeria ? (
               <select {...register('state')}>
                 <option value=''>Select State</option>
@@ -231,18 +257,31 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>LGA *</label>
-            <input
-              type='text'
-              placeholder='Type here...'
-              {...register('lga')}
-            />
+            <label style={{ border: 'none', paddingLeft: '0' }}>LGA *</label>
+            {isNigeria && availableLGAs.length > 0 ? (
+              <select {...register('lga')}>
+                <option value=''>Select LGA</option>
+                {availableLGAs.map((lga) => (
+                  <option key={lga} value={lga}>
+                    {lga}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type='text'
+                placeholder='Type here...'
+                {...register('lga')}
+              />
+            )}
             {errors.lga && (
               <p className='error-message'>{errors.lga.message}</p>
             )}
           </div>
           <div className='form-group'>
-            <label>School Address *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              School Address *
+            </label>
             <input
               type='text'
               placeholder='Type here...'
@@ -253,7 +292,9 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>Contact Phone Number *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              Contact Phone Number *
+            </label>
             <div className='flex-code-input'>
               <PhoneInput
                 placeholder='Enter phone number'
@@ -283,7 +324,9 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>School Grade *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              School Grade *
+            </label>
             <select {...register('grade')}>
               <option value=''>Select Grade</option>
               <option value='Primary'>Primary</option>
@@ -294,7 +337,9 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>Create Password *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              Create Password *
+            </label>
             <div className='input-with-icon'>
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -318,7 +363,9 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>Confirm Password *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              Confirm Password *
+            </label>
             <div className='input-with-icon'>
               <input
                 type={showConfirmPassword ? 'text' : 'password'}
@@ -340,6 +387,37 @@ export default function SchoolRegistrationForm() {
             {errors.confirmPassword && (
               <p className='error-message'>{errors.confirmPassword.message}</p>
             )}
+          </div>
+          <div className='form-group'>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              School Logo *
+            </label>
+            <div
+              className='file-upload-wrapper enroll'
+              style={{
+                backgroundColor: '#f8f8f8',
+                margin: '0',
+              }}
+            >
+              <input
+                type='file'
+                id='file-upload'
+                className='file-upload-input'
+              />
+              <label
+                style={{ border: 'none', color: '#D6D6D6' }}
+                htmlFor='file-upload'
+                className='file-upload-label'
+              >
+                Upload here...
+                <Icon
+                  icon='ant-design:upload-outlined'
+                  width='24'
+                  style={{ color: '#5B616A', marginLeft: '1.8rem' }}
+                  height='24'
+                />
+              </label>
+            </div>
           </div>
         </div>
 
@@ -371,8 +449,9 @@ export default function SchoolRegistrationForm() {
           >
             {mutation.isPending ? (
               <RotatingLines
+                strokeColor='#275dad'
                 type='Oval'
-                style={{ color: '#FFF' }}
+                style={{ color: '#FFF', backgroundColor: '#275DAD' }}
                 height={20}
                 width={20}
               />
@@ -391,6 +470,7 @@ export default function SchoolRegistrationForm() {
       >
         <SchoolOTP
           isOpen={modalIsOpen}
+          closeModal={closeModal}
           onRequestClose={closeModal}
           resendOTP={handleSubmit(onSubmit)}
           email={new URLSearchParams(location.search).get('email') || email}

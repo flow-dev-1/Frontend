@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react'
 import './course-detail-modal.css'
 import EnrollmentModal from '../Enrollment/EnrollmentModal'
 
-const CourseDetailModal = ({ course, enrolled }) => {
+const CourseDetailModal = ({ course, enrolled, closeModal }) => {
   const [openEnrollModal, setOpenEnrollModal] = useState(false)
   const openEnrollementModal = () => {
     setOpenEnrollModal(true)
@@ -32,10 +32,26 @@ const CourseDetailModal = ({ course, enrolled }) => {
   return (
     <div>
       <div style={{ padding: '20px 50px' }}>
-        <button className='modal-close-button'>
-          <Icon icon='mdi:close' width={24} />
-        </button>
-        <h2 className='modal-title'>Growth Mindset Course Guide</h2>
+        <h2
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+          className='modal-title'
+        >
+          Growth Mindset Course Guide{' '}
+          <button
+            style={{
+              border: 'none',
+              backgroundColor: 'transparent',
+              color: '#5B616A',
+            }}
+            onClick={closeModal}
+          >
+            <Icon icon='mdi:close' width={24} />
+          </button>
+        </h2>
         <p style={{ fontSize: '16px', color: '#4b7e31' }}>Course Overview</p>
         <p style={{ fontSize: '12px', marginBottom: '1rem' }}>
           {course.description}
@@ -75,7 +91,7 @@ const CourseDetailModal = ({ course, enrolled }) => {
             <span style={{ color: '#4b7e31' }}>Developing Self-awareness:</span>
             Students will reflect on their personal strengths, interests, and
             aspirations, recognize their potential for growth, and understand
-             they can and cannot control.
+            they can and cannot control.
           </li>
           <li>
             <span style={{ color: '#4b7e31' }}>Encouraging Collaboration:</span>

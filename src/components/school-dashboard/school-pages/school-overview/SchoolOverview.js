@@ -115,7 +115,7 @@ const SchoolOverview = () => {
           <p className='value'>0</p>
         </div>
       </div>
-
+      <hr />
       <div className='charts'>
         <div
           className='chart'
@@ -289,7 +289,10 @@ const SchoolOverview = () => {
           </div>
         </div>
         <div className='chart bar-chart'>
-          <div style={{ cursor: 'pointer' }} onClick={openNonActiveTeacherModal}>
+          <div
+            style={{ cursor: 'pointer' }}
+            onClick={openNonActiveTeacherModal}
+          >
             <div className='chart-heading'>
               <p>Enrollment Per Course</p>
               <div style={{ cursor: 'pointer' }} className='filter-sort'>

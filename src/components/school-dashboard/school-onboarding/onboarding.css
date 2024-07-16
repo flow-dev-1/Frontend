@@ -59,7 +59,7 @@ input {
   position: absolute;
   top: 0.8rem;
   color: #5b616a;
-  left: 2.5rem;
+  left: 3.5rem;
 }
 
 .flex-code-input .PhoneInputCountry {
@@ -107,7 +107,9 @@ p {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   /* grid-column-gap: 15px; */
-  gap: 10px;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-left: 1rem;
 }
 
 .registration-page .form-group {
@@ -139,6 +141,15 @@ p {
   background-color: #f8f8f8;
   border: 1px solid #ecedf0;
   border-radius: 5px;
+}
+
+input.PhoneInputInput {
+  padding: 9px !important;
+}
+
+div.PhoneInput {
+  border: 1px solid #ecedf0 !important;
+  background-color: #f8f8f8 !important;
 }
 
 .registration-page.sign-in .form-group input,
@@ -243,6 +254,7 @@ input[type='text']::-webkit-input-placeholder:-webkit-autofill {
 .rember-me {
   font-size: 14px;
   text-align: center;
+  margin-left: 1rem;
   line-height: normal;
 }
 
@@ -334,11 +346,42 @@ label {
   font-size: 12px;
 }
 
+input[type='checkbox']:checked {
+  outline: none !important;
+}
+
+input[type="checkbox"] {
+    outline: none !important;
+}
+
+/* Target the checkbox when it is focused */
+input[type='checkbox']:focus {
+  outline: none I !important;
+}
+
 .flex-submit {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: 1rem;
+  margin-left: 3rem;
+}
+
+.form-group .file-upload-wrapper.enroll .file-upload-label {
+  gap: 6rem;
+  background-color: #f8f8f8;
+  align-items: center;
+}
+
+.form-group .file-upload-wrapper.enroll {
+  padding: 6px;
+  background-color: #f8f8f8;
+  border: 1px soild #ecedf0 !important;
+}
+
+.file-upload-wrapper.enroll {
+  background-color: #f8f8f8 !important;
+  border: 1px solid #ecedf0 !important;
 }
 
 .country-code {
@@ -351,26 +394,30 @@ label {
 
 .checkbox {
   width: 15px;
-  height: 15px;
+  height: 14px;
   cursor: pointer;
   position: relative;
   appearance: none;
   -webkit-appearance: none;
   outline: none;
-  background-color: gray;
-
-  border: 1px solid gray;
+  background-color: #f8f8f8;
+  border: 1px solid #ecedf0 !important;
   border-radius: 4px;
+}
+
+.checkbox:focus {
+  outline: none;
+  border: 1px solid #ecedf0;
 }
 
 .checkbox:checked::before {
   content: '';
   position: absolute;
-  top: -1px;
+  top: 0.5px;
   left: 4px;
   width: 5px;
-  height: 12px;
+  height: 9px;
   border: solid #27ae60;
   border-width: 0 1px 1px 0;
-  transform: rotate(45deg);
+  transform: rotate(42deg);
 }
