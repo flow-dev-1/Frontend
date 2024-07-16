@@ -31,7 +31,7 @@ export default function SignupCategory() {
                 navigate('/school/sign-up/registration')
               }}
             >
-              Register Now
+              <Link to={'/school/sign-up/registration'}>Register Now</Link>
             </button>
           </div>
         </div>
@@ -46,7 +46,7 @@ export default function SignupCategory() {
                 navigate('/individual/sign-up')
               }}
             >
-              Register Now
+              <Link to={'/individual/sign-up'}> Register Now</Link>
             </button>
           </div>
         </div>

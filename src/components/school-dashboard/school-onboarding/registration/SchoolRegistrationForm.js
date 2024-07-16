@@ -19,17 +19,28 @@ import PhoneInput, {
 } from 'react-phone-number-input'
 import SchoolOTP from '../../modals/school-onboarding-modals/SchoolOTP'
 Modal.setAppElement('#root') // Set the root element for the modal
+import flags from 'react-phone-number-input/flags'
+import { lgas } from '../../../states/lgas'
 
+import SchoolEmailVerificationSuccessful from '../../modals/school-onboarding-modals/SchoolEmailVerificationSuccessful'
+
+Modal.setAppElement('#root')
 export default function SchoolRegistrationForm() {
+  const [isModalSuccessOpen, setisModalSuccessOpen] = useState(false)
   const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setConfirmShowPassword] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
+
   const location = useLocation()
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
   const [countries, setCountries] = useState([])
   const [isNigeria, setIsNigeria] = useState(true) // State to track if the selected country is Nigeria
   const [email, setEmail] = useState('')
+
+  function openSuccessModal() {
+    setisModalSuccessOpen(true)
+  }
 
   const schema = yup.object().shape({
     school_name: yup.string().required('Name of School is required'),
@@ -57,6 +68,7 @@ export default function SchoolRegistrationForm() {
       .string()
       .oneOf([yup.ref('password'), null], 'Passwords must match')
       .required('Confirm Password is required'),
+    image: yup.mixed().required('School Logo is required'),
   })
 
   const {
@@ -136,10 +148,22 @@ export default function SchoolRegistrationForm() {
       toast.error(error || 'Registration failed')
     },
   })
-
   const onSubmit = (data) => {
     const { confirmPassword, ...formData } = data
-    mutation.mutate(formData)
+    const submissionData = new FormData()
+    console.log(formData)
+
+    Object.keys(formData).forEach((key) => {
+      if (key === 'image') {
+        submissionData.append(key, formData[key][0])
+      } else {
+        submissionData.append(key, formData[key])
+      }
+    })
+
+    console.log(submissionData)
+
+    mutation.mutate(submissionData)
   }
 
   function openModal() {
@@ -150,9 +174,28 @@ export default function SchoolRegistrationForm() {
     setIsOpen(false)
   }
 
+  const [availableLGAs, setAvailableLGAs] = useState([])
+
+  const selectedState = watch('state')
+
+  useEffect(() => {
+    setIsNigeria(selectedCountry === 'Nigeria')
+  }, [selectedCountry])
+
+  useEffect(() => {
+    if (isNigeria && selectedState) {
+      setAvailableLGAs(lgas[selectedState] || [])
+    } else {
+      setAvailableLGAs([])
+    }
+  }, [isNigeria, selectedState])
+
+  const [fileName, setFileName] = useState('')
+  console.log(fileName)
+
   return (
     <div className='registration-page'>
-      <div className='top-section'>
+      <div style={{ paddingTop: '3rem' }} className='top-section'>
         <h2>Register as a school</h2>
         <hr />
         <span>*Indicates Required</span>
@@ -283,9 +326,13 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>School Grade *</label>
-            <select {...register('grade')}>
-              <option value=''>Select Grade</option>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              School Grade *
+            </label>
+            <select {...register('grade')} id='grade-select'>
+              <option value='' selected hidden>
+                Select Grade
+              </option>
               <option value='Primary'>Primary</option>
               <option value='Secondary'>Secondary</option>
             </select>
@@ -341,6 +388,45 @@ export default function SchoolRegistrationForm() {
               <p className='error-message'>{errors.confirmPassword.message}</p>
             )}
           </div>
+          <div className='form-group'>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              School Logo *
+            </label>
+            <div
+              className='file-upload-wrapper enroll'
+              style={{
+                backgroundColor: '#f8f8f8',
+                margin: '0',
+              }}
+            >
+              <input
+                type='file'
+                id='file-upload'
+                className='file-upload-input'
+                onChange={(e) => {
+                  setValue('image', e.target.files)
+                  setFileName(e.target.files[0].name)
+                }}
+                {...register('image')}
+              />
+              <label
+                style={{ border: 'none', color: '#D6D6D6' }}
+                htmlFor='file-upload'
+                className='file-upload-label'
+              >
+                {fileName ? 'filename' : 'Upload here...'}
+                <Icon
+                  icon='ant-design:upload-outlined'
+                  width='24'
+                  style={{ color: '#5B616A', marginLeft: '1.8rem' }}
+                  height='24'
+                />
+              </label>
+            </div>
+            {errors.image && (
+              <p className='error-message'>{errors.image.message}</p>
+            )}
+          </div>
         </div>
 
         <div className='bottom-section'>
@@ -350,7 +436,7 @@ export default function SchoolRegistrationForm() {
             <Link
               className='a'
               to='#'
-              style={{ textDecoration: 'none', color: 'blue' }}
+              style={{ textDecoration: 'none', color: '#257dad' }}
             >
               Terms & Conditions
             </Link>
@@ -390,11 +476,21 @@ export default function SchoolRegistrationForm() {
         shouldCloseOnOverlayClick={false}
       >
         <SchoolOTP
-          isOpen={modalIsOpen}
+          successModal={isModalSuccessOpen}
+          openSuccessModal={openSuccessModal}
           onRequestClose={closeModal}
           resendOTP={handleSubmit(onSubmit)}
           email={new URLSearchParams(location.search).get('email') || email}
         />
+      </Modal>
+      <Modal
+        isOpen={isModalSuccessOpen}
+        contentLabel='Example Modal'
+        className='custom-modal-success'
+        overlayClassName='custom-overlay'
+        shouldCloseOnOverlayClick={false}
+      >
+        <SchoolEmailVerificationSuccessful from='otp' />
       </Modal>
     </div>
   )

@@ -98,21 +98,36 @@ const SchoolOverview = () => {
   return (
     <div className='overview'>
       <div className='top-cards'>
-        <div className='balance'>
+        <div style={{ height: '130px' }} className='balance'>
           <p>Account Balance:</p>
-          <p className='value'>-N4,000,000.00</p>
+          <h6
+            style={{ fontFamily: 'Poppins', fontWeight: '600' }}
+            className='value'
+          >
+            -N4,000,000.00
+          </h6>
           <p id='play'>
             Pay Now <span style={{ fontSize: '18px' }}>+</span>{' '}
           </p>
         </div>
 
-        <div className='stat one'>
+        <div style={{ height: '130px' }} className='stat one'>
           <p className='enroll'>Total Enrolled Teachers</p>
-          <p className='value'>0</p>
+          <h6
+            style={{ fontFamily: 'Poppins', fontWeight: '600' }}
+            className='value'
+          >
+            0
+          </h6>
         </div>
-        <div class='stat'>
+        <div style={{ height: '130px' }} class='stat'>
           <p className='total'>Total Enrolled Students</p>
-          <p className='value'>0</p>
+          <h6
+            style={{ fontFamily: 'Poppins', fontWeight: '600' }}
+            className='value'
+          >
+            0
+          </h6>
         </div>
       </div>
       <hr />

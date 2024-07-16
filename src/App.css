@@ -2,6 +2,7 @@
 
 @import url('https://fonts.cdnfonts.com/css/good-unicorn');
 
+@import url('https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 :root {
   --paragraph-font-family: 'ABeeZee', sans-serif;
   --headings-font-family: 'ABeeZee', sans-serif;
@@ -12,6 +13,10 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+h6 {
+  text-align: left;
 }
 
 /* Body styles */
@@ -358,7 +363,7 @@ input {
   width: 502px;
   height: 540px;
   overflow: hidden;
- 
+
   background-color: #fefefe;
   margin: 0 auto;
   border-radius: 10px;

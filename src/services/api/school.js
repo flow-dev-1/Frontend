@@ -11,15 +11,21 @@ class SchoolOBJ {
     }
   }
 
-  //Register
-  register = async (data) => {
+  register = async (formData) => {
     try {
-      const response = await api.post(`api/schools`, data)
+      const response = await api.post(`api/schools`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
       return response.data
     } catch (err) {
+      console.log(err)
       throw err?.response?.data || err.message
     }
   }
+  //Register
+
   //Get Admins
   getAdmins = async (params) => {
     try {
@@ -137,13 +143,18 @@ class SchoolOBJ {
     }
   }
   //Change Password
-  updateProfile = async (data) => {
-    try {
-      const response = await api.put(`api/admins/profile`, data)
-      return response.data
-    } catch (err) {
-      throw err?.response?.data || err.message
-    }
+  updateProfile = async (formData) => {
+     try {
+       const response = await api.post(`api/schools/profile`, formData, {
+         headers: {
+           'Content-Type': 'multipart/form-data',
+         },
+       })
+       return response.data
+     } catch (err) {
+       console.log(err)
+       throw err?.response?.data || err.message
+     }
   }
   //Update Profile
   changePassword = async (data) => {
@@ -181,7 +192,7 @@ class SchoolOBJ {
     }
   }
   enrolledStudents = async (params1, params2, data) => {
-    console.log(data, "Data 0")
+    console.log(data, 'Data 0')
     try {
       // Check if data is not empty
       const response = await api.post(
@@ -211,7 +222,8 @@ class SchoolOBJ {
     try {
       // Check if data is not empty
       const response = await api.delete(
-        `api/schools/${params1}/users/${params2}/enrollment/${params3}`)
+        `api/schools/${params1}/users/${params2}/enrollment/${params3}`
+      )
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
