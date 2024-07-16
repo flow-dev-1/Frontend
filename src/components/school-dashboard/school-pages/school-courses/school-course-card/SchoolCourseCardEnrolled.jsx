@@ -139,14 +139,13 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
             </button>
             <button
               className={`detailsBtn ${detailsBtnClass}`}
-              onClick={() => navigateToCourse()
-              }
+              onClick={() => navigate(`/school-dashboard/courses/enrolled/${encryptURI(courseData._id)}`)}
               style={{ backgroundColor: darkGreen, color: lightGreen }}
             >
               <span>
                 <Icon icon='vaadin:cart-o' style={{ color: detailsBtnColor }} />
               </span>{' '}
-              View Details
+              View Detail
             </button>
             <div
               style={{
