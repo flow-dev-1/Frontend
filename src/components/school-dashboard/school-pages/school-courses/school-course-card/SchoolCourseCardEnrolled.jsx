@@ -139,10 +139,8 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
             </button>
             <button
               className={`detailsBtn ${detailsBtnClass}`}
-              onClick={(e) => {
-                e.stopPropagation()
-                navigateToCourse()
-              }}
+              onClick={() => navigateToCourse()
+              }
               style={{ backgroundColor: darkGreen, color: lightGreen }}
             >
               <span>
