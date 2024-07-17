@@ -46,6 +46,7 @@ const CourseDetailModal = ({ course, enrolled, closeModal }) => {
               border: 'none',
               backgroundColor: 'transparent',
               color: '#5B616A',
+              cursor: 'pointer',
             }}
             onClick={closeModal}
           >
