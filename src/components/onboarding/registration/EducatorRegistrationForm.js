@@ -329,7 +329,7 @@ export default function EducatorRegistrationForm() {
           <div className='bottom-section'>
             <p style={{ width: '80%', textAlign: 'center' }}>
               Already have an account?{' '}
-              <Link to='/individual/sign-in'>Sign In</Link>
+              <Link to='/sign-in'>Sign In</Link>
             </p>
 
             <button

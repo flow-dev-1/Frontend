@@ -157,7 +157,7 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
               <span>
                 <Icon icon='ri:menu-2-fill' width={20} style={{detailsBtnClass}} />
               </span>{' '}
-              View Details
+              View Detail
             </button>
             <div
               style={{

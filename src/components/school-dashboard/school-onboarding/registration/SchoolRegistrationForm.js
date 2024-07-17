@@ -430,7 +430,9 @@ export default function SchoolRegistrationForm() {
                 id='file-upload'
                 className='file-upload-input'
                 onChange={(e) => {
+                  console.log("Yeahhhhhhhhhhhh")
                   setValue('image', e.target.files)
+                  console.log(e.target.files[0].name)
                   setFileName(e.target.files[0].name)
                 }}
                 {...register('image')}

@@ -21,7 +21,7 @@ const userSlice = createSlice({
         otpModal: false,
       }
     },
-    OtpSuccess: (state, action) => {
+    loginSuccess: (state, action) => {
       return {
         ...state,
         user: action.payload,

@@ -123,8 +123,8 @@ export default function ForgotPassword() {
         </button>
       </form>
 
-      <p  className='remember-details text-center'>
-        Remember your details? <Link to='/'>Sign in</Link>
+      <p className='remember-details text-center'>
+        Remember your details? <Link to='/sign-in'>Sign in</Link>
       </p>
 
       <Modal

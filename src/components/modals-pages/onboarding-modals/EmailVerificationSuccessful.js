@@ -37,7 +37,7 @@ export default function EmailVerificationSuccessful({ from, email }) {
         {from === 'otp' ? (
           <button
             onClick={() => {
-              navigate('/individual/sign-in')
+              navigate('/sign-in')
             }}
             className='btn submit-btn  success '
             style={{ borderRadius: '5px', width: '110%', margin: '.5rem 0' }}
@@ -47,7 +47,7 @@ export default function EmailVerificationSuccessful({ from, email }) {
         ) : from === 'resetPassword' ? (
           <button
             onClick={() => {
-              navigate('/individual/sign-in')
+              navigate('/sign-in')
             }}
             style={{
               borderRadius: '5px',

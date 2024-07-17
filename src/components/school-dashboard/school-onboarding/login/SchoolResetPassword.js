@@ -66,7 +66,7 @@ export default function SchoolResetPassword() {
 
   const closeModal = () => {
     setModalIsOpen(false)
-    navigate('/school/sign-in')
+    navigate('/sign-in')
   }
 
   const onSubmit = ({ password }) => {
