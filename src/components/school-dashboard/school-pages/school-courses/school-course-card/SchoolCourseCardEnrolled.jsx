@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import { encryptURI } from '../../../../../utils/encryption'
+import { Link } from 'react-router-dom'
 
 const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
   const [isOn, setIsOn] = useState(false)
@@ -149,16 +150,26 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
               </span>{' '}
               Review
             </button>
-            <button
-              className={`detailsBtn ${detailsBtnClass}`}
-              onClick={() => navigate(`/school-dashboard/courses/enrolled/${encryptURI(courseData._id)}`)}
-              style={{ backgroundColor: darkGreen, color: lightGreen }}
+            <Link
+              to={`/school-dashboard/courses/enrolled/${encryptURI(
+                courseData._id
+              )}`}
             >
-              <span>
-                <Icon icon='ri:menu-2-fill' width={20} style={{detailsBtnClass}} />
-              </span>{' '}
-              View Detail
-            </button>
+              <button
+                className={`detailsBtn ${detailsBtnClass}`}
+                style={{ backgroundColor: darkGreen, color: lightGreen }}
+              >
+                <span>
+                  <Icon
+                    icon='ri:menu-2-fill'
+                    width={20}
+                    style={{ detailsBtnClass }}
+                  />
+                </span>{' '}
+                View Detail
+              </button>
+            </Link>
+
             <div
               style={{
                 display: 'flex',

@@ -157,7 +157,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
       }
     })
   }, [])
-  // 
+  //
 
   return (
     <Modal
@@ -320,7 +320,12 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                 >
                   Or Upload file here (CSV, Excel) *
                 </label>
-                <div className='file-upload-wrapper'>
+                <div
+                  style={{
+                    position: 'relative',
+                  }}
+                  className='file-upload-wrapper'
+                >
                   <input
                     type='file'
                     id='file-upload'
@@ -328,7 +333,11 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                     onChange={handleFileUpload}
                   />
                   <label
-                    style={{ border: 'none', paddingLeft: '0' }}
+                    style={{
+                      border: 'none',
+                      paddingLeft: '0',
+                     
+                    }}
                     htmlFor='file-upload'
                     className='file-upload-label'
                   >
@@ -337,6 +346,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                       icon='ant-design:upload-outlined'
                       width='24'
                       height='24'
+                      style={{ position: 'absolute', right: '1rem' }}
                     />
                   </label>
                 </div>
