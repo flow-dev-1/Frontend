@@ -160,9 +160,6 @@ const SettingsAddNewTeam = ({ closeModal, openSuccessModal }) => {
               <>Send Invite</>
             )}
           </button>
-          {errorMessage && (
-            <p style={{ color: '#FD483D', fontSize: '12px' }}>{errorMessage}</p>
-          )}
         </form>
       </div>
     </div>
