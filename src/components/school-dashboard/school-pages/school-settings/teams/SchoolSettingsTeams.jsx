@@ -16,6 +16,13 @@ const SchoolSettingsTeams = () => {
   const queryClient = useQueryClient()
   const toastId = useRef(null)
 
+  const closeSuccessModal = () => {
+    setModalIsOpenSuccess(false)
+  }
+  const openSuccessModal = () => {
+    setModalIsOpenSuccess(true)
+  }
+
   const { user } = useSelector((state) => state.user)
 
   let schoolId
@@ -36,7 +43,6 @@ const SchoolSettingsTeams = () => {
 
   const closeModal = () => {
     setModalIsOpen(false)
-    setModalIsOpenSuccess(false)
   }
 
   const handleActionClick = (index) => {
@@ -71,8 +77,6 @@ const SchoolSettingsTeams = () => {
   })
 
   const handleDelete = (adminId) => {
-    if (!window.confirm('Are you sure you want to delete this team member?'))
-      return
     mutation.mutate(adminId)
   }
 
@@ -162,12 +166,16 @@ const SchoolSettingsTeams = () => {
                     <Icon
                       icon='pepicons-pencil:dots-y'
                       width={30}
-                      style={{ color: '#000' }}
+                      style={{ color: '#000', cursor:"pointer" }}
                       onClick={() => handleActionClick(index)}
                     />
                     {showDropdown === index && (
                       <div
-                        style={{ padding: '0rem .5rem', borderRadius: '5px', width:"120px" }}
+                        style={{
+                          padding: '0rem .5rem',
+                          borderRadius: '5px',
+                          width: '120px',
+                        }}
                         className='dropdown'
                       >
                         <button
@@ -190,8 +198,20 @@ const SchoolSettingsTeams = () => {
       </div>
 
       <Modal
-        isOpen={modalIsOpenSuccess}
+        isOpen={modalIsOpen}
         onRequestClose={closeModal}
+        contentLabel='Edit Course'
+        className='send-invite-modal'
+        overlayClassName='custom-overlay'
+      >
+        <SettingsAddNewTeam
+          openSuccessModal={openSuccessModal}
+          closeModal={closeModal}
+        />
+      </Modal>
+      <Modal
+        isOpen={modalIsOpenSuccess}
+        onRequestClose={closeSuccessModal}
         contentLabel='Delete Modal'
         className='custom-modal-success-two'
         overlayClassName='custom-overlay'
@@ -202,25 +222,11 @@ const SchoolSettingsTeams = () => {
               <div className='checkmark'></div>
             </div>
           </div>
-          <h4
-            className='text-center'
-            style={{ color: '#262626', fontSize: '40px' }}
-          >
-            Successful
-          </h4>
-          <p className='text-center' style={{ color: '#262626' }}>
-            You have successfully Deleted a team member.
+          <h4 className='text-center'>Successful</h4>
+          <p className='text-center'>
+            You have successfully invited a teammate.
           </p>
         </div>
-      </Modal>
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel='Edit Course'
-        className='send-invite-modal'
-        overlayClassName='custom-overlay'
-      >
-        <SettingsAddNewTeam closeModal={closeModal} />
       </Modal>
     </div>
   )

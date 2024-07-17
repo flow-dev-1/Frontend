@@ -397,12 +397,14 @@ const SchoolEnrolledStudents = () => {
       >
         <div>
           <div className='close-flex'>
-            <h2 className='text-start'>Add New Student(s)</h2>
-            <Icon
-              width={22}
-              onClick={closeModals}
-              icon='iconamoon:close-thin'
-            />
+            <h2 className='text-start'>Add New Student</h2>
+            <span style={{ cursor: 'pointer' }}>
+              <Icon
+                width={22}
+                onClick={closeModals}
+                icon='iconamoon:close-thin'
+              />
+            </span>
           </div>
 
           <hr style={{ margin: '5px' }} />
@@ -431,7 +433,12 @@ const SchoolEnrolledStudents = () => {
                 <label htmlFor='file-upload'>
                   Or Upload file here (CSV, Excel) *
                 </label>
-                <div className='file-upload-wrapper'>
+                <div
+                  style={{
+                    position: 'relative',
+                  }}
+                  className='file-upload-wrapper'
+                >
                   <input
                     type='file'
                     id='file-upload'
@@ -441,6 +448,7 @@ const SchoolEnrolledStudents = () => {
                   <label htmlFor='file-upload' className='file-upload-label'>
                     Choose file
                     <Icon
+                      style={{ position: 'absolute', right: '1rem' }}
                       icon='ant-design:upload-outlined'
                       width='24'
                       height='24'

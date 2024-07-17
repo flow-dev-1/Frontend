@@ -9,7 +9,7 @@ import PhoneInput, {
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import schoolService from '../../../../services/api/school'
 import { RotatingLines } from 'react-loader-spinner'
@@ -18,6 +18,9 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
   const [countries, setCountries] = useState([])
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
   const [isNigeria, setIsNigeria] = useState(true)
+  const [fileName, setFileName] = useState('')
+  const [selectedFile, setSelectedFile] = useState(null)
+  const queryClient = useQueryClient()
 
   const schema = yup.object().shape({
     school_name: yup.string().required('Name of School is required'),
@@ -26,7 +29,6 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
       .string()
       .email('Invalid Email')
       .required('Contact Email Address is required'),
-
     address: yup.string().required('School Address is required'),
     phone: yup
       .string()
@@ -34,7 +36,6 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
       .test('isValidPhoneNumber', 'Invalid phone number', (value) =>
         isValidPhoneNumber(value)
       ),
-
     image: yup.mixed().required('School Logo is required'),
   })
 
@@ -56,6 +57,7 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
     handleSubmit,
     setValue,
     watch,
+    control,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -79,6 +81,7 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
     onSuccess: (data) => {
       console.log('Profile update successful:')
       toast.success('Profile updated successfully')
+      queryClient.invalidateQueries('myData')
       closeModal()
     },
     onError: (error) => {
@@ -93,8 +96,8 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
     const formData = new FormData()
     for (const key in data) {
       if (key === 'image') {
-        if (data.image && data.image.length > 0) {
-          formData.append('image', data.image[0])
+        if (selectedFile) {
+          formData.append('image', selectedFile)
         }
       } else {
         formData.append(key, data[key])
@@ -156,21 +159,28 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
               Contact Phone Number *
             </label>
             <div className='flex-code-input'>
-              <PhoneInput
-                placeholder='Enter phone number'
-                onChange={(val) => setValue('phone', val)}
-                onCountryChange={(country) => {
-                  if (country) {
-                    setCountryCode(getCountryCallingCode(country))
-                  }
-                }}
-                defaultCountry='NG' // Set the default country (change as needed)
-                style={{
-                  // Full width
-                  border: '1px solid #ccc', // Add border to the input
-                  borderRadius: '5px', // Add border-radius for rounded corners
-                  padding: '1px', // Add padding for better visual appearance
-                }}
+              <Controller
+                name='phone'
+                control={control}
+                defaultValue={school?.phone || ''}
+                render={({ field }) => (
+                  <PhoneInput
+                    placeholder='Enter phone number'
+                    {...field}
+                    onCountryChange={(country) => {
+                      field.onChange('')
+                      if (country) {
+                        setCountryCode(getCountryCallingCode(country))
+                      }
+                    }}
+                    defaultCountry='NG' // Set the default country (change as needed)
+                    style={{
+                      border: '1px solid #ccc', // Add border to the input
+                      borderRadius: '5px', // Add border-radius for rounded corners
+                      padding: '1px', // Add padding for better visual appearance
+                    }}
+                  />
+                )}
               />
               {countryCode && (
                 <span style={{ color: '#5b616a' }} className='country-code'>
@@ -200,23 +210,26 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
             <label htmlFor=''>School Logo *</label>
             <div
               className='file-upload-wrapper enroll'
-              style={{
-                backgroundColor: '#f8f8f8',
-                margin: '0',
-              }}
+              style={{ backgroundColor: '#f8f8f8', margin: '0' }}
             >
               <input
                 type='file'
                 id='file-upload'
                 className='file-upload-input'
-                {...register('image')}
+                accept='image/*'
+                onChange={(e) => {
+                  if (e.target.files.length > 0) {
+                    setSelectedFile(e.target.files[0])
+                    setFileName(e.target.files[0].name)
+                  }
+                }}
               />
               <label
                 style={{ border: 'none', color: '#D6D6D6' }}
                 htmlFor='file-upload'
                 className='file-upload-label'
               >
-                Choose file
+                {fileName || 'Choose file'}
                 <Icon
                   icon='ant-design:upload-outlined'
                   width='24'

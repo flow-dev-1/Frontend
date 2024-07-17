@@ -26,10 +26,13 @@ label {
   gap: 2rem;
 }
 
+.flex-phone div input#contact-name {
+  border: 1px solid #5b616a I !important;
+}
+
 .flex-phone div input {
   padding: 0.5rem 1rem;
   border-radius: 5px;
-  border: none !important;
 }
 .flex-code-input input {
   border: none;

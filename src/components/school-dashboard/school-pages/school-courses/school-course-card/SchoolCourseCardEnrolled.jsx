@@ -13,10 +13,6 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
     setIsOn(!isOn)
   }
 
-  const navigateToCourse = () => {
-    navigate(`/school-dashboard/courses/enrolled/${encryptURI(courseData._id)}`)
-  }
-
   // enrolled color
   const lightGreen = '#D4FFBE'
   const darkGreen = '#4B7E31'

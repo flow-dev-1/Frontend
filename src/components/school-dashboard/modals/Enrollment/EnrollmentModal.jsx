@@ -172,8 +172,11 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
           className='enroll-heading-flex'
           style={{ margin: '0', color: '#5B616A' }}
         >
-          Enroll Student(s)
-          <span onClick={onRequestClose} style={{ color: '#5B616A' }}>
+          Enroll Students
+          <span
+            onClick={onRequestClose}
+            style={{ color: '#5B616A', cursor: 'pointer' }}
+          >
             <Icon icon='material-symbols-light:close' width={22} />
           </span>
         </h2>
@@ -336,7 +339,6 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                     style={{
                       border: 'none',
                       paddingLeft: '0',
-                     
                     }}
                     htmlFor='file-upload'
                     className='file-upload-label'

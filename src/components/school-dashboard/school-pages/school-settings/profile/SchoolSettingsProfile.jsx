@@ -33,6 +33,8 @@ const SchoolSettingsProfile = () => {
     refetchOnWindowFocus: false,
   })
 
+  console.log(data)
+
   const openModal = () => {
     setModalIsOpen(true)
   }
@@ -51,15 +53,16 @@ const SchoolSettingsProfile = () => {
     <div className='school-profile'>
       <div className='heading-flex'>
         <div className='school-header'>
-          <div className='school-logo'>
+          <div style={{ width: '180px' }} className='school-logo'>
             <img
-              src={data?.school?.photo ? '' : schoolLogo}
+              style={{ display: 'block', width: '100%' }}
+              src={data?.school?.photo ? data?.school?.photo : schoolLogo}
               alt='School Logo'
             />
           </div>
           <div className='school-info'>
             <h1 className='h1'>{data?.school?.school_name}</h1>
-            <p className='primary'>Primary</p>
+            <p className='primary'>{data?.school?.grade}</p>
             <p>{data?.school?.address}</p>
             <p>
               {data?.school?.lga.toUpperCase()} |{' '}

@@ -21,8 +21,9 @@ const schema = yup.object().shape({
   position: yup.string().required('Position is required'),
 })
 
-const SettingsAddNewTeam = ({ closeModal }) => {
+const SettingsAddNewTeam = ({ closeModal, openSuccessModal }) => {
   const [modalIsOpenSuccess, setModalIsOpenSuccess] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const mutationTriggered = useRef(false)
   const queryClient = useQueryClient()
 
@@ -42,12 +43,14 @@ const SettingsAddNewTeam = ({ closeModal }) => {
   const mutation = useMutation({
     mutationFn: schoolService.adminInvite,
     onSuccess: (data) => {
+      openSuccessModal()
       closeModal()
       queryClient.invalidateQueries(['school-teams'])
       mutationTriggered.current = false
     },
     onError: (error) => {
-      toast.error(error?.message)
+      setErrorMessage(error?.response?.data?.message || 'An error occurred')
+      toast.error(errorMessage)
       mutationTriggered.current = false
     },
   })
@@ -144,9 +147,9 @@ const SettingsAddNewTeam = ({ closeModal }) => {
           <button
             type='submit'
             className='update'
-            disabled={mutation?.isPending}
+            disabled={mutation.isLoading}
           >
-            {mutation?.isPending ? (
+            {mutation.isPending ? (
               <RotatingLines
                 type='Oval'
                 style={{ color: '#FFF' }}
@@ -157,27 +160,11 @@ const SettingsAddNewTeam = ({ closeModal }) => {
               <>Send Invite</>
             )}
           </button>
+          {errorMessage && (
+            <p style={{ color: '#FD483D', fontSize: '12px' }}>{errorMessage}</p>
+          )}
         </form>
       </div>
-      <Modal
-        isOpen={modalIsOpenSuccess}
-        onRequestClose={closeSuccessModal}
-        contentLabel='Delete Modal'
-        className='custom-modal-success-two'
-        overlayClassName='custom-overlay'
-      >
-        <div className='succes-modal-content'>
-          <div className='success-icon icon-with-bg'>
-            <div class='circle'>
-              <div class='checkmark'></div>
-            </div>
-          </div>
-          <h4 className='text-center'>Successfull</h4>
-          <p className='text-center'>
-            You have successfully invited a teammate.
-          </p>
-        </div>
-      </Modal>
     </div>
   )
 }
