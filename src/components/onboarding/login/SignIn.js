@@ -52,10 +52,10 @@ export default function SignIn() {
       dispatch(setToken(data?.token))
       dispatch(loginSuccess(data?.user))
       localStorage.setItem('Flow-Auth-Token', data?.token)
-      if (data.accountType == "School") {
-        navigate("/school-dashboard", { replace: true })
+      if (data.accountType == 'School') {
+        navigate('/school-dashboard', { replace: true })
       } else {
-        navigate("/dashboard", { replace: true })
+        navigate('/dashboard', { replace: true })
       }
     },
     onError: (error) => {
@@ -154,7 +154,7 @@ export default function SignIn() {
           </div>
         </form>
         <p className='text-center'>
-          Don’t have an account? <Link to='/individual/sign-up'>Sign Up</Link>
+          Don’t have an account? <Link to='/'>Sign Up</Link>
         </p>
       </div>
     </div>

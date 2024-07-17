@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 
 import './category.css'
-import individualImage from '../../../assets/onboarding-individual.png'
-import schoolImage from '../../../assets/onboarding-school.png'
+import individualImage from '../../../assets/onboarding-individual.jpg'
+import schoolImage from '../../../assets/onboarding-school.jpg'
 
 export default function SignupCategory() {
   const navigate = useNavigate()
@@ -25,14 +25,16 @@ export default function SignupCategory() {
           <img src={schoolImage} alt='School' className='card-image' />
           <div className='card-content'>
             <h2> For Schools</h2>
-            <button
-              className='btn signup-button'
-              onClick={() => {
-                navigate('/school/sign-up/registration')
-              }}
-            >
-              <Link to={'/school/sign-up/registration'}>Register Now</Link>
-            </button>
+            <Link to={'/school/sign-up/registration'}>
+              <button
+                className='btn signup-button'
+                onClick={() => {
+                  navigate('/school/sign-up/registration')
+                }}
+              >
+                Register Now
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -40,14 +42,9 @@ export default function SignupCategory() {
           <img src={individualImage} alt='School' className='card-image' />
           <div className='card-content'>
             <h2> For Individuals</h2>
-            <button
-              className='btn signup-button'
-              onClick={() => {
-                navigate('/individual/sign-up')
-              }}
-            >
-              <Link to={'/individual/sign-up'}> Register Now</Link>
-            </button>
+            <Link to={'/individual/sign-up'}>
+              <button className='btn signup-button'>Register Now</button>
+            </Link>
           </div>
         </div>
       </div>

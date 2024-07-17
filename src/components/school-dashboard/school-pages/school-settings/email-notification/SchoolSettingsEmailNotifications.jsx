@@ -80,8 +80,6 @@ const SchooolSettingsEmailNotifications = () => {
   })
 
   const handleDelete = (adminId) => {
-    if (!window.confirm('Are you sure you want to delete this team member?'))
-      return
     mutation.mutate(adminId)
   }
 

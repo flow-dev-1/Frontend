@@ -42,7 +42,7 @@ const SettingsAddNewTeam = ({ closeModal }) => {
   const mutation = useMutation({
     mutationFn: schoolService.adminInvite,
     onSuccess: (data) => {
-      setModalIsOpenSuccess(true)
+      closeModal()
       queryClient.invalidateQueries(['school-teams'])
       mutationTriggered.current = false
     },
@@ -127,7 +127,7 @@ const SettingsAddNewTeam = ({ closeModal }) => {
                 onChange={(e) => setValue('position', e.target.value)}
               >
                 <option value=''>Select...</option>
-                {['Admin', 'Student'].map((role, i) => (
+                {['Superadmin', 'Students', 'Teachers'].map((role, i) => (
                   <option key={i} value={role}>
                     {role}
                   </option>
@@ -163,7 +163,7 @@ const SettingsAddNewTeam = ({ closeModal }) => {
         isOpen={modalIsOpenSuccess}
         onRequestClose={closeSuccessModal}
         contentLabel='Delete Modal'
-        className='send-invite-modal'
+        className='custom-modal-success-two'
         overlayClassName='custom-overlay'
       >
         <div className='succes-modal-content'>

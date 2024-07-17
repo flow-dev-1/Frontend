@@ -276,6 +276,20 @@ p span,
   font-size: 14px;
 }
 
+.PhoneInputInput {
+  border: none !important;
+}
+
+.file-upload-wrapper.enroll {
+  gap: 0;
+}
+
+.file-upload-label .iconify {
+  position: absolute;
+  right: 1rem;
+  margin: 0 !important;
+}
+
 .registration-page.sign-in .submit-btn,
 .registration-page.sign-in .submit-btn:hover {
   width: 300px;
@@ -378,6 +392,7 @@ input[type='checkbox']:focus {
 }
 
 .form-group .file-upload-wrapper.enroll {
+  position: relative;
   padding: 6px;
   background-color: #f8f8f8;
   border: 1px soild #ecedf0 !important;

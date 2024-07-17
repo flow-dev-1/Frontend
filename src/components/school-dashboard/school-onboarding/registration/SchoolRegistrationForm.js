@@ -191,6 +191,7 @@ export default function SchoolRegistrationForm() {
 
   const [fileName, setFileName] = useState('')
   console.log(fileName)
+  const [selectedFile, setSelectedFile] = useState(null)
 
   return (
     <div className='registration-page'>
@@ -246,7 +247,10 @@ export default function SchoolRegistrationForm() {
             <label style={{ border: 'none', paddingLeft: '0' }}>
               Country *
             </label>
-            <select {...register('country')}>
+            <select
+              style={{ backgroundColor: '#fff' }}
+              {...register('country')}
+            >
               <option value='Nigeria'>Nigeria</option>
               {countries.map((country) => (
                 <option key={country.cca2} value={country.name.common}>
@@ -337,7 +341,10 @@ export default function SchoolRegistrationForm() {
                 }}
               />
               {countryCode && (
-                <span style={{ color: '#5b616a' }} className='country-code'>
+                <span
+                  style={{ color: '#5b616a', top: '.79rem' }}
+                  className='country-code'
+                >
                   +{countryCode}
                 </span>
               )}
@@ -423,26 +430,29 @@ export default function SchoolRegistrationForm() {
               style={{
                 backgroundColor: '#f8f8f8',
                 margin: '0',
+                gap: '0',
+                width: '96%',
               }}
             >
               <input
                 type='file'
                 id='file-upload'
                 className='file-upload-input'
+                accept='image/*' // Accept only image files
                 onChange={(e) => {
-                  console.log("Yeahhhhhhhhhhhh")
-                  setValue('image', e.target.files)
-                  console.log(e.target.files[0].name)
-                  setFileName(e.target.files[0].name)
+                  if (e.target.files.length > 0) {
+                    setValue('image', e.target.files)
+                    setSelectedFile(e.target.files[0])
+                    setFileName(e.target.files[0].name)
+                  }
                 }}
-                {...register('image')}
               />
               <label
                 style={{ border: 'none', color: '#D6D6D6' }}
                 htmlFor='file-upload'
                 className='file-upload-label'
               >
-                {fileName ? 'filename' : 'Upload here...'}
+                {fileName ? fileName : 'Upload here...'}
                 <Icon
                   icon='ant-design:upload-outlined'
                   width='24'
@@ -458,7 +468,7 @@ export default function SchoolRegistrationForm() {
         </div>
 
         <div className='bottom-section'>
-          <p className='terms-and-conditions'>
+          <p style={{ fontSize: '14px' }} className='terms-and-conditions'>
             <input className='checkbox' type='checkbox' required />
             By ticking this box, you agree with our{' '}
             <Link
@@ -472,10 +482,10 @@ export default function SchoolRegistrationForm() {
         </div>
         <hr className='my-0' />
         <div className='flex-submit'>
-          <p className='have-account'>
+          <p style={{ fontSize: '14px' }} className='have-account'>
             Already have an account?{' '}
-            <span id='span'>
-              <Link to='/school/sign-in'>Sign In</Link>
+            <span style={{ color: '#257dad', fontSize: '14px' }} id='span'>
+              <Link to='/sign-in'>Sign In</Link>
             </span>
           </p>
           <button

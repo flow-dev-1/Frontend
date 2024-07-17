@@ -175,13 +175,6 @@ const SchoolEnrolledStudents = () => {
   }
 
   const onSubmit = (data) => {
-    if (
-      !window.confirm(
-        'Are you sure you want to enroll the students for this course?'
-      )
-    )
-      return
-
     const emailsArray = data.students
       .split(',')
       .map((email) => email.trim())
