@@ -366,7 +366,7 @@ export default function InvitedAdminRegistration() {
               <div className='bottom-section'>
                 <p>
                   Already have an account?{' '}
-                  <Link to='/individual/sign-in'>Sign In</Link>
+                  <Link to='/sign-in'>Sign In</Link>
                 </p>
 
                 <button

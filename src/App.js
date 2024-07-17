@@ -53,7 +53,7 @@ function App() {
 
           <Route element={<OnboardingRootLayout />}>
             <Route index element={<SignupCategory />} />
-            <Route path='sign-in' element={<SigninCategory />} />
+            {/* <Route path='sign-in' element={<SigninCategory />} /> */}
 
             <Route
               path='/individual/sign-up'
@@ -67,7 +67,7 @@ function App() {
 
             <Route
               path='/invited-user'
-              element={<InvitedAdminRegistration />}
+              element={<InvitedUserRegistration />}
             />
 
             <Route
@@ -83,7 +83,7 @@ function App() {
               path='/individual/sign-up/educators'
               element={<EducatorRegistrationForm />}
             />
-            <Route path='/individual/sign-in' element={<SignIn />} />
+            <Route path='/sign-in' element={<SignIn />} />
             <Route
               path='/individual/forgot-password'
               element={<ForgotPassword />}
@@ -96,7 +96,7 @@ function App() {
               path='/school/sign-up/registration'
               element={<SchoolRegistrationForm />}
             />
-            <Route path='/school/sign-in' element={<SchoolSignIn />} />
+            {/* <Route path='/school/sign-in' element={<SchoolSignIn />} /> */}
             <Route
               path='/school/forgot-password'
               element={<SchoolForgotPassword />}

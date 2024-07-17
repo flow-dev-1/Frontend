@@ -40,7 +40,7 @@ export default function Navbar() {
             <button
               className='btn navbar-btn light-btn'
               onClick={() => {
-                navigate('/individual/sign-in')
+                navigate('/sign-in')
               }}
             >
               Sign In

@@ -10,6 +10,7 @@ import { toast } from 'react-toastify'
 import { RotatingLines } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
 import { setToken } from '../../../redux/reducers/jwtReducer'
+import { loginSuccess } from '../../../redux/reducers/userReducer'
 
 export default function SignIn() {
   const navigate = useNavigate()
@@ -46,10 +47,16 @@ export default function SignIn() {
   const mutation = useMutation({
     mutationFn: userService.login, // Assuming userService.register is your API call function
     onSuccess: (data) => {
-      console.log('Login successful:', data)
+      console.log(data)
       toast.success(data.message)
       dispatch(setToken(data?.token))
-      navigate('/dashboard', { replace: true })
+      dispatch(loginSuccess(data?.user))
+      localStorage.setItem('Flow-Auth-Token', data?.token)
+      if (data.accountType == "School") {
+        navigate("/school-dashboard", { replace: true })
+      } else {
+        navigate("/dashboard", { replace: true })
+      }
     },
     onError: (error) => {
       console.error('Registration error:', error)
@@ -124,7 +131,7 @@ export default function SignIn() {
               style={{ marginLeft: '0' }}
               className='d-flex align-items-center mb-2 me-auto rember-me'
             >
-              <input className='checkbox' type='checkbox' required />
+              <input className='checkbox' type='checkbox' />
               Remember Me
             </div>
             <button

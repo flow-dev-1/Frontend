@@ -17,13 +17,14 @@ Modal.setAppElement('#root') // This is to avoid screen readers issues with Reac
 
 const SchoolAllCourses = () => {
   const { user } = useSelector((state) => state.user)
+  console.log(user)
   const [courses, setCourses] = useState([])
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [selectedCourse, setSelectedCourse] = useState(null)
   let schoolId
 
   // ToDO: Do a check if its a school or a user
-  if (user.isSchool) {
+  if (user?.isSchool) {
     schoolId = user._id
   }
 
@@ -50,7 +51,7 @@ const SchoolAllCourses = () => {
   useEffect(() => {
     if (!data) return
     setCourses(data.courses)
-    return () => {}
+    return () => { }
   }, [data])
 
   const openModal = (course) => {

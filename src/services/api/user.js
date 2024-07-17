@@ -1,7 +1,7 @@
 import api from '../index.js'
 
 class UserOBJ {
- 
+
   //Register
   register = async (userType, data) => {
     try {
@@ -78,7 +78,7 @@ class UserOBJ {
   //Login
   login = async (data) => {
     try {
-      const response = await api.post(`api/users/login`, data)
+      const response = await api.post(`api/login`, data)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
@@ -86,7 +86,7 @@ class UserOBJ {
   }
   forgotPassword = async (data) => {
     try {
-      const response = await api.post(`api/users/forgot-password`, data)
+      const response = await api.post(`api/forgot-password`, data)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
@@ -94,7 +94,7 @@ class UserOBJ {
   }
   resetPassword = async (data) => {
     try {
-      const response = await api.put(`api/users/password`, data)
+      const response = await api.put(`api/password`, data)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message

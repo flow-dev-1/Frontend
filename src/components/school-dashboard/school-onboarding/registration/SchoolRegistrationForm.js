@@ -18,7 +18,6 @@ import PhoneInput, {
   getCountryCallingCode,
 } from 'react-phone-number-input'
 import SchoolOTP from '../../modals/school-onboarding-modals/SchoolOTP'
-Modal.setAppElement('#root') // Set the root element for the modal
 import flags from 'react-phone-number-input/flags'
 import { lgas } from '../../../states/lgas'
 
@@ -204,7 +203,9 @@ export default function SchoolRegistrationForm() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='form-section'>
           <div className='form-group'>
-            <label>Name of School *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              Name of School *
+            </label>
             <input
               type='text'
               placeholder='Type here...'
@@ -215,7 +216,9 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>Contact Name *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              Contact Name *
+            </label>
             <input
               type='text'
               placeholder='Type here...'
@@ -226,7 +229,9 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>Contact Email Address *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              Contact Email Address *
+            </label>
             <input
               type='email'
               placeholder='Type here...'
@@ -238,7 +243,9 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>Country *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              Country *
+            </label>
             <select {...register('country')}>
               <option value='Nigeria'>Nigeria</option>
               {countries.map((country) => (
@@ -252,7 +259,7 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>State *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>State *</label>
             {isNigeria ? (
               <select {...register('state')}>
                 <option value=''>Select State</option>
@@ -274,18 +281,31 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>LGA *</label>
-            <input
-              type='text'
-              placeholder='Type here...'
-              {...register('lga')}
-            />
+            <label style={{ border: 'none', paddingLeft: '0' }}>LGA *</label>
+            {isNigeria && availableLGAs.length > 0 ? (
+              <select {...register('lga')}>
+                <option value=''>Select LGA</option>
+                {availableLGAs.map((lga) => (
+                  <option key={lga} value={lga}>
+                    {lga}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type='text'
+                placeholder='Type here...'
+                {...register('lga')}
+              />
+            )}
             {errors.lga && (
               <p className='error-message'>{errors.lga.message}</p>
             )}
           </div>
           <div className='form-group'>
-            <label>School Address *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              School Address *
+            </label>
             <input
               type='text'
               placeholder='Type here...'
@@ -296,7 +316,9 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>Contact Phone Number *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              Contact Phone Number *
+            </label>
             <div className='flex-code-input'>
               <PhoneInput
                 placeholder='Enter phone number'
@@ -341,7 +363,9 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>Create Password *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              Create Password *
+            </label>
             <div className='input-with-icon'>
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -365,7 +389,9 @@ export default function SchoolRegistrationForm() {
             )}
           </div>
           <div className='form-group'>
-            <label>Confirm Password *</label>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              Confirm Password *
+            </label>
             <div className='input-with-icon'>
               <input
                 type={showConfirmPassword ? 'text' : 'password'}
@@ -404,7 +430,9 @@ export default function SchoolRegistrationForm() {
                 id='file-upload'
                 className='file-upload-input'
                 onChange={(e) => {
+                  console.log("Yeahhhhhhhhhhhh")
                   setValue('image', e.target.files)
+                  console.log(e.target.files[0].name)
                   setFileName(e.target.files[0].name)
                 }}
                 {...register('image')}
@@ -457,8 +485,9 @@ export default function SchoolRegistrationForm() {
           >
             {mutation.isPending ? (
               <RotatingLines
+                strokeColor='#275dad'
                 type='Oval'
-                style={{ color: '#FFF' }}
+                style={{ color: '#FFF', backgroundColor: '#275DAD' }}
                 height={20}
                 width={20}
               />

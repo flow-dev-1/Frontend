@@ -116,7 +116,7 @@ export default function InvitedUserRegistration() {
         setValue('dob', dob.toISOString().split('T')[0]) // Format to YYYY-MM-DD
       }
     }
-    return () => {}
+    return () => { }
   }, [data])
 
   const togglePasswordVisibility = () => {
@@ -451,7 +451,7 @@ export default function InvitedUserRegistration() {
               <div className='bottom-section'>
                 <p>
                   Already have an account?{' '}
-                  <Link to='/individual/sign-in'>Sign In</Link>
+                  <Link to='/sign-in'>Sign In</Link>
                 </p>
 
                 <button

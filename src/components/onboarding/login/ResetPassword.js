@@ -66,7 +66,7 @@ export default function ResetPassword() {
 
   const closeModal = () => {
     setModalIsOpen(false)
-    navigate('/individual/sign-in')
+    navigate('/sign-in')
   }
 
   const onSubmit = ({ password }) => {

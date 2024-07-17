@@ -28,7 +28,7 @@ export default function SigninCategory() {
             <button
               className='btn signup-button'
               onClick={() => {
-                navigate('/school/sign-in')
+                navigate('/sign-in')
               }}
             >
               Sign In
@@ -43,7 +43,7 @@ export default function SigninCategory() {
             <button
               className='btn signup-button'
               onClick={() => {
-                navigate('/individual/sign-in')
+                navigate('/sign-in')
               }}
             >
               Sign In
