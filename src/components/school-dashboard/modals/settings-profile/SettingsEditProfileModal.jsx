@@ -6,7 +6,7 @@ import PhoneInput, {
   isValidPhoneNumber,
   getCountryCallingCode,
 } from 'react-phone-number-input'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useMutation } from '@tanstack/react-query'
@@ -17,6 +17,7 @@ import { RotatingLines } from 'react-loader-spinner'
 const SettingsEditProfileModal = ({ closeModal, school }) => {
   const [countries, setCountries] = useState([])
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
+  const [isNigeria, setIsNigeria] = useState(true)
 
   const schema = yup.object().shape({
     school_name: yup.string().required('Name of School is required'),
@@ -25,9 +26,7 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
       .string()
       .email('Invalid Email')
       .required('Contact Email Address is required'),
-    country: yup.string().required('Country is required'),
-    state: yup.string().required('State is required'),
-    lga: yup.string().required('LGA is required'),
+
     address: yup.string().required('School Address is required'),
     phone: yup
       .string()
@@ -35,15 +34,8 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
       .test('isValidPhoneNumber', 'Invalid phone number', (value) =>
         isValidPhoneNumber(value)
       ),
-    grade: yup.string().required('School Grade is required'),
-    password: yup
-      .string()
-      .min(8, 'Password must be at least 8 characters')
-      .required('Password is required'),
-    confirmPassword: yup
-      .string()
-      .oneOf([yup.ref('password'), null], 'Passwords must match')
-      .required('Confirm Password is required'),
+
+    image: yup.mixed().required('School Logo is required'),
   })
 
   useEffect(() => {
@@ -63,6 +55,7 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -70,18 +63,21 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
       school_name: school?.school_name || '',
       contact_name: school?.contact_name || '',
       email: school?.email || '',
-      country: school?.country || 'Nigeria',
-      state: school?.state || '',
-      lga: school?.lga || '',
       address: school?.address || '',
       phone: school?.phone || '',
+      image: school?.image || '',
     },
   })
 
+  const selectedCountry = watch('country')
+  useEffect(() => {
+    setIsNigeria(selectedCountry === 'Nigeria')
+  }, [selectedCountry])
+
   const mutation = useMutation({
-    // mutationFn: schoolService.updateProfile, // Define this API call in your service
+    mutationFn: schoolService.updateProfile,
     onSuccess: (data) => {
-      console.log('Profile update successful:', data)
+      console.log('Profile update successful:')
       toast.success('Profile updated successfully')
       closeModal()
     },
@@ -93,7 +89,18 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
   })
 
   const handleUpdate = (data) => {
-    mutation.mutate(data)
+    console.log('Form data:', data) // Debugging
+    const formData = new FormData()
+    for (const key in data) {
+      if (key === 'image') {
+        if (data.image && data.image.length > 0) {
+          formData.append('image', data.image[0])
+        }
+      } else {
+        formData.append(key, data[key])
+      }
+    }
+    mutation.mutate(formData)
   }
 
   return (
@@ -131,11 +138,12 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
             )}
           </div>
         </div>
-        <div className='flex-row'>
-          <div>
+        <div className='flex-phone'>
+          <div style={{ width: '100%' }}>
             <label>Contact Name *</label>
             <input
               type='text'
+              style={{ width: '100%' }}
               placeholder='Type here...'
               {...register('contact_name')}
             />
@@ -143,12 +151,14 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
               <p className='error-message'>{errors.contact_name.message}</p>
             )}
           </div>
-          <div className='form-group'>
-            <label>Contact Phone Number *</label>
+          <div style={{ width: '100%' }} className='form-group'>
+            <label style={{ border: 'none', paddingLeft: '0' }}>
+              Contact Phone Number *
+            </label>
             <div className='flex-code-input'>
               <PhoneInput
                 placeholder='Enter phone number'
-                {...register('phone')}
+                onChange={(val) => setValue('phone', val)}
                 onCountryChange={(country) => {
                   if (country) {
                     setCountryCode(getCountryCallingCode(country))
@@ -156,9 +166,10 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
                 }}
                 defaultCountry='NG' // Set the default country (change as needed)
                 style={{
-                  border: '1px solid #ccc',
-                  borderRadius: '5px',
-                  padding: '1px',
+                  // Full width
+                  border: '1px solid #ccc', // Add border to the input
+                  borderRadius: '5px', // Add border-radius for rounded corners
+                  padding: '1px', // Add padding for better visual appearance
                 }}
               />
               {countryCode && (
@@ -186,7 +197,7 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
             )}
           </div>
           <div className='upload'>
-            <label htmlFor=''>School Logo</label>
+            <label htmlFor=''>School Logo *</label>
             <div
               className='file-upload-wrapper enroll'
               style={{
@@ -198,6 +209,7 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
                 type='file'
                 id='file-upload'
                 className='file-upload-input'
+                {...register('image')}
               />
               <label
                 style={{ border: 'none', color: '#D6D6D6' }}
@@ -213,19 +225,27 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
                 />
               </label>
             </div>
+            {errors.image && (
+              <p className='error-message'>{errors.image.message}</p>
+            )}
           </div>
         </div>
         <hr />
         <button
           className='update fix'
-          style={{ padding: '.3rem 0' }}
+          style={{
+            padding: '.3rem 0',
+            backgroundColor: mutation.isPending ? '#fff' : '',
+            border: mutation.isPending ? '#1px solid #275dad' : '',
+          }}
           type='submit'
           disabled={mutation.isPending}
         >
           {mutation.isPending ? (
             <RotatingLines
+              strokeColor='#275dad'
               type='Oval'
-              style={{ color: '#FFF', backgroundColor: '#275DAD' }}
+              style={{ color: '#FFF', backgroundColor: '#FFF' }}
               height={20}
               width={20}
             />

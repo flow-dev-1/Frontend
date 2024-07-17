@@ -20,8 +20,8 @@ const SchoolSettingsTeams = () => {
 
   let schoolId
 
-  if (user.isSchool) {
-    schoolId = user._id
+  if (user?.isSchool) {
+    schoolId = user?._id
   }
 
   const { data, isLoading, isError } = useQuery({

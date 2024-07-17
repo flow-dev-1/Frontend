@@ -133,28 +133,20 @@ class SchoolOBJ {
       throw err?.response?.data || err.message
     }
   }
-  //Update Profile
-  updateProfile = async (data) => {
-    try {
-      const response = await api.put(`api/admins/profile`, data)
-      return response.data
-    } catch (err) {
-      throw err?.response?.data || err.message
-    }
-  }
+
   //Change Password
   updateProfile = async (formData) => {
-     try {
-       const response = await api.post(`api/schools/profile`, formData, {
-         headers: {
-           'Content-Type': 'multipart/form-data',
-         },
-       })
-       return response.data
-     } catch (err) {
-       console.log(err)
-       throw err?.response?.data || err.message
-     }
+    try {
+      const response = await api.put(`api/schools/profile`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      return response.data
+    } catch (err) {
+      console.log(err)
+      throw err?.response?.data || err.message
+    }
   }
   //Update Profile
   changePassword = async (data) => {

@@ -23,8 +23,8 @@ const SchoolAllCourses = () => {
   let schoolId
 
   // ToDO: Do a check if its a school or a user
-  if (user.isSchool) {
-    schoolId = user._id
+  if (user?.isSchool) {
+    schoolId = user?._id
   }
 
   const { data, isLoading, isError } = useQuery({
