@@ -384,11 +384,11 @@ export default function SchoolRegistrationForm() {
                 className='password-toggle'
                 onClick={togglePasswordVisibility}
               >
-                <Icon
-                  icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
-                  className='eye-icon'
-                  width={20}
-                />
+             <Icon
+                    icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
+                    className='eye-icon'
+                    width={24}
+                  />
               </div>
             </div>
             {errors.password && (

@@ -18,7 +18,7 @@ import PhoneInput, {
   isValidPhoneNumber,
   getCountryCallingCode,
 } from 'react-phone-number-input'
-import EducatorOtpModal from '../../modals-pages/onboarding-modals/EducatorOtpModal'
+import { lgas } from '../../states/lgas'
 import StudentOtpModal from '../../modals-pages/onboarding-modals/StudentOtpModal'
 
 Modal.setAppElement('#root') // Set the root element for the modal
@@ -31,6 +31,8 @@ export default function EducatorRegistrationForm() {
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
   const [countries, setCountries] = useState([])
   const [isNigeria, setIsNigeria] = useState(true)
+  const [availableLGAs, setAvailableLGAs] = useState([]) // State to manage the list of LGAs
+
   // State to track if the selected country is Nigeria
   const [email, setEmail] = useState('')
 
@@ -75,6 +77,9 @@ export default function EducatorRegistrationForm() {
     },
   })
 
+  const selectedCountry = watch('country')
+  const selectedState = watch('state')
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
@@ -106,8 +111,16 @@ export default function EducatorRegistrationForm() {
     fetchCountries()
   }, [])
 
+  useEffect(() => {
+    if (isNigeria && selectedState) {
+      setAvailableLGAs(lgas[selectedState] || [])
+    } else {
+      setAvailableLGAs([])
+    }
+  }, [isNigeria, selectedState])
+
   // Watch for changes in the country field
-  const selectedCountry = watch('country')
+
   useEffect(() => {
     setIsNigeria(selectedCountry === 'Nigeria')
   }, [selectedCountry])
@@ -159,9 +172,14 @@ export default function EducatorRegistrationForm() {
 
   return (
     <div>
-      <div className='registration-page'>
-        <div className='top-section'>
-          <h2>Register as an Educator</h2>
+      <div className='registration-page overflow-hidden'>
+        <div className='top-section mt-2'>
+          <h2 className='d-flex justify-content-between align-center'>
+            Register as an Educator
+            <>
+              <Icon icon='radix-icons:cross-1' width={24}/>
+            </>
+          </h2>
           <hr />
           <span>*Indicates Required</span>
         </div>
@@ -169,7 +187,7 @@ export default function EducatorRegistrationForm() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='form-section'>
             <div className='form-group'>
-              <label>First Name *</label>
+              <label>Full Name *</label>
               <input
                 type='text'
                 placeholder='Type here...'
@@ -179,17 +197,7 @@ export default function EducatorRegistrationForm() {
                 <p className='error-message'>{errors.firstName.message}</p>
               )}
             </div>
-            <div className='form-group'>
-              <label>Last Name *</label>
-              <input
-                type='text'
-                placeholder='Type here...'
-                {...register('lastName')}
-              />
-              {errors.lastName && (
-                <p className='error-message'>{errors.lastName.message}</p>
-              )}
-            </div>
+
             <div className='form-group'>
               <label>Email Address *</label>
               <input
@@ -222,7 +230,10 @@ export default function EducatorRegistrationForm() {
                   }}
                 />
                 {countryCode && (
-                  <span style={{ color: '#5b616a' }} className='country-code'>
+                  <span
+                    style={{ color: '#5b616a' }}
+                    className='country-code register'
+                  >
                     +{countryCode}
                   </span>
                 )}
@@ -267,17 +278,30 @@ export default function EducatorRegistrationForm() {
                 <p className='error-message'>{errors.state.message}</p>
               )}
             </div>
+            {/* LGA */}
             <div className='form-group'>
               <label>LGA *</label>
-              <input
-                type='text'
-                placeholder='Type here...'
-                {...register('lga')}
-              />
+              {isNigeria && availableLGAs.length > 0 ? (
+                <select {...register('lga')}>
+                  <option value=''>Select LGA</option>
+                  {availableLGAs.map((lga) => (
+                    <option key={lga} value={lga}>
+                      {lga}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type='text'
+                  placeholder='Type here...'
+                  {...register('lga')}
+                />
+              )}
               {errors.lga && (
                 <p className='error-message'>{errors.lga.message}</p>
               )}
             </div>
+
             <div className='form-group'>
               <label>Gender *</label>
               <select {...register('gender')}>
@@ -314,8 +338,9 @@ export default function EducatorRegistrationForm() {
                   onClick={togglePasswordVisibility}
                 >
                   <Icon
-                    icon={showPassword ? 'mdi:eye-off' : 'mdi:eye'}
+                    icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
                     className='eye-icon'
+                    width={20}
                   />
                 </div>
               </div>
@@ -326,10 +351,9 @@ export default function EducatorRegistrationForm() {
           </div>
 
           <hr className='my-4' />
-          <div className='bottom-section'>
+          <div className='bottom-section mb-0'>
             <p style={{ width: '80%', textAlign: 'center' }}>
-              Already have an account?{' '}
-              <Link to='/sign-in'>Sign In</Link>
+              Already have an account? <Link to='/sign-in'>Sign In</Link>
             </p>
 
             <button

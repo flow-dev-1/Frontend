@@ -16,7 +16,27 @@ input:focus {
   border: 1px solid #275dad !important;
 }
 
-#border-red { 
+.country-code.register {
+  top: 0.75rem !important;
+}
+
+#root
+  > div.root-layout
+  > div
+  > div
+  > form
+  > div.form-section
+  > div:nth-child(3)
+  > div
+  > div
+  > div
+  > div.PhoneInputCountrySelectArrow {
+  position: relative;
+  left: 2.8rem;
+  top: -0.75px;
+}
+
+#border-red {
   border: 1px solid #fd483d !important;
 }
 
