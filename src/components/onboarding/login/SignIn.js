@@ -73,24 +73,35 @@ export default function SignIn() {
         <p className='text-center'>
           Enter your details to explore our offerings.
         </p>
+        <p className='text-center'>
+          <span className='span-role'>Students</span> - Use Student ID
+        </p>
+        <p className='text-center mb-3'>
+          <span className='span-role'>Administrators & Educators </span> - Use
+          Email
+        </p>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className='form-section d-flex flex-column align-items-center '>
+          <div
+            style={{ marginTop: '0' }}
+            className='form-section d-flex flex-column align-items-center individual-signup'
+          >
             <div className='form-group'>
-              <label style={{ border: 'none' }}>Email *</label>
+              <label style={{ border: 'none' }}>Email address/Student ID</label>
               <input
+                id={errors.email && 'border-red'}
                 style={{ width: '100%', padding: '1rem .7rem' }}
                 type='email'
                 {...register('email', { required: true })}
-                placeholder='Enter email address'
+                placeholder='Enter email address/Student ID'
               />
               {errors.email && (
-                <p className='error-message'>Email is required</p>
+                <p className='error-message text-end'>Email is required</p>
               )}
             </div>
-            <div className='form-group my-3'>
+            <div className='form-group'>
               <div className='d-flex align-items-center justify-content-between'>
-                <label style={{ border: 'none' }}>Create Password *</label>
+                <label style={{ border: 'none' }}>Password *</label>
                 <Link
                   to='/individual/forgot-password'
                   className='forgot-password'
@@ -101,12 +112,13 @@ export default function SignIn() {
 
               <div
                 style={{ width: '100%' }}
+                id={errors.password && 'border-red'}
                 className='d-flex align-items-center input-with-icon'
               >
                 <input
                   style={{ width: '100%', padding: '1rem .7rem' }}
                   type={showPassword ? 'text' : 'password'}
-                  placeholder='Type here...'
+                  placeholder='Enter password'
                   {...register('password', { required: true })}
                 />
                 <div
@@ -116,15 +128,15 @@ export default function SignIn() {
                   <Icon
                     icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
                     className='eye-icon'
-                    width={20}
+                    width={24}
                   />
                 </div>
               </div>
               {errors.password && (
-                <p className='error-message'>Password is required</p>
+                <p className='error-message text-end'>Password is required</p>
               )}
               {showPasswordError && (
-                <p className='error-message'>Incorrect email or password</p>
+                <p className='error-message '>Incorrect email or password</p>
               )}
             </div>
             <div
