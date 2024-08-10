@@ -341,6 +341,10 @@ export default function EducatorRegistrationForm() {
                     icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
                     className='eye-icon'
                     width={20}
+                  />  <Icon
+                    icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
+                    className='eye-icon'
+                    width={20}
                   />
                 </div>
               </div>

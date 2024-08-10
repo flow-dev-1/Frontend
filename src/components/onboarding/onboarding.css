@@ -20,6 +20,21 @@ input:focus {
   top: 0.75rem !important;
 }
 
+.action-btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.action-btns button {
+  display: block;
+  padding: 0.2rem 4rem;
+  border: none;
+  background-color: none;
+}
+
 #root
   > div.root-layout
   > div
