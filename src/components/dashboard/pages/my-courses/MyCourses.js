@@ -1,22 +1,49 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import courses from '../../json-files/CoursesData'
-import CourseCard from '../../reusable/CourseCard'
+import React from 'react'
+import MyCourseCard from '../../reusable/MyCourseCard'
 import { Icon } from '@iconify/react'
-import femaleprofileImage from '../../../../assets/user-profile-image.png'
-import maleprofileImage from '../../../../assets/male-profile-image.png'
 import './course.css'
+import courseOne from '../../../../assets/course1.png'
+import courseTwo from '../../../../assets/course2.png'
+import courseThree from '../../../../assets/course3.png'
 
-import { useSelector } from 'react-redux'
+const courses = [
+  {
+    id: 1,
+    title: 'Max the Explorer Monkey: Growth Mindset',
+    description:
+      'The curriculum combines engaging educational content, interactive activities, and reflective discussions to...',
+    viewed: 1548,
+    likes: 98,
+    progress: 0,
+    image: courseOne, // Replace with actual image path or URL
+  },
+  {
+    id: 2,
+    title: 'Max the Explorer Monkey: Growth Mindset',
+    description:
+      'The curriculum combines engaging educational content, interactive activities, and reflective discussions to...',
+    viewed: 1548,
+    likes: 98,
+    progress: 10,
+    image: courseTwo, // Replace with actual image path or URL
+  },
+  {
+    id: 3,
+    title: 'Max the Explorer Monkey: Growth Mindset',
+    description:
+      'The curriculum combines engaging educational content, interactive activities, and reflective discussions to...',
+    viewed: 1548,
+    likes: 98,
+    progress: 100,
+    image: courseThree, // Replace with actual image path or URL
+  },
+]
 
 export default function MyCourses() {
-  const navigate = useNavigate()
-  const { user } = useSelector((state) => state.user)
-
   return (
-    <div className='overview w-100'>
+    <div className='w-100'>
       <div className='browse-all-courses-text container-fluid'>
-        <p>Browse through all the courses currently available on FLOW.</p>
+        <p>Enrolled Courses</p>
       </div>
 
       <div className='search-bar'>
@@ -63,12 +90,10 @@ export default function MyCourses() {
         </form>
       </div>
 
-      <div className='courses-list row row-cols-1 row-cols-md-3 g-4 '>
-        {courses
-          .filter((course) => !course.enrolled)
-          .map((course) => (
-            <CourseCard key={course.id} course={course} />
-          ))}
+      <div className='courses-list row row-cols-1 row-cols-md-3 g-4'>
+        {courses.map((course) => (
+          <MyCourseCard key={course.id} course={course} />
+        ))}
       </div>
     </div>
   )
