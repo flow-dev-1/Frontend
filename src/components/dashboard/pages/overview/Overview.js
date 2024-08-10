@@ -14,7 +14,7 @@ export default function IndividualOverview() {
   const { user } = useSelector((state) => state.user)
 
   return (
-    <div className='overview w-100'>
+    <div className='overview-student w-100'>
       <div className='width d-flex align-items-center justify-content-between'>
         <div>
           <h2>Hi {user?.first_name?.trim()}! </h2>

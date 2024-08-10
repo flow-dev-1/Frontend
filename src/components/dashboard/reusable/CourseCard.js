@@ -36,11 +36,8 @@ const CourseCard = ({ course }) => {
 
   return (
     <div className='reusable-course-card'>
-      {/* <div  > */}
-
       <div className='course-card' style={{ height: '100%', width: '100%' }}>
         <div className='course-details'>
-          {/* <img src={course.image} alt="" className='' /> */}
           <img
             src={course.image}
             alt=''
@@ -51,95 +48,54 @@ const CourseCard = ({ course }) => {
             }
           />
           <div className='px-3 py-2'>
-            <h3>{course.title}</h3>
+            <h3 style={{ color: '#329BD6', fontSize: '24px' }}>
+              Max the Explorer Monkey:{' '}
+            </h3>
+            <h3 style={{ fontSize: '24px' }}>{course.title}</h3>
             {course.subtitle && <h4>{course.subtitle}</h4>}
             <p>{course.description}</p>
             <div className='d-flex icons'>
               <span>
-                <Icon icon='fluent:people-24-regular' /> {course.viewed}
+                <Icon icon='solar:user-linear' />
+                {course.viewed}
               </span>
               <span>
-                <Icon icon='mingcute:thumb-up-line' /> {course.likes}
+                <Icon icon='mingcute:thumb-up-line' /> {course.likes} %
               </span>
             </div>
           </div>
         </div>
-        <div className='course-card-btn d-flex'>
-          {enrolled ? (
-            <>
-              <button
-                style={
-                  enrolled
-                    ? {
-                        backgroundColor: '#d4ffbe',
-                        color: '#8eae7e',
-                        display: 'flex',
-                        padding: '.2rem 8px',
-                      }
-                    : {
-                        backgroundColor: '#5CE1E6',
-                        color: '#275DAD',
-                        display: 'flex',
-                        padding: '.2rem 8px',
-                      }
-                }
-                className='btn card-btn  preview'
-                onClick={() => openModal('course')}
-              >
-                <Icon icon='prime:eye' /> Review
-              </button>
-              <button
-                className='btn card-btn cart'
-                onClick={() => openModal('payment')}
-              >
-                ₦{course.amount}
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                className='btn card-btn enrolled preview'
-                onClick={() => openModal('course')}
-                style={
-                  enrolled
-                    ? {
-                        backgroundColor: '#d4ffbe',
-                        color: '#8eae7e',
-                        padding: '5px 3px',
-                      }
-                    : {
-                        backgroundColor: '#5CE1E6',
-                        color: '#fff',
-                        padding: '5px 3px',
-                      }
-                }
-              >
-                <Icon icon='prime:eye' /> Review
-              </button>
-              <button
-                className='btn card-btn enrolled cart'
-                onClick={() => openPage(course)}
-              >
-                <Icon icon='prime:play-circle' />
-                {/* <Icon
-                  icon='vaadin:cart-o'
-                  width={20}
-                  style={{ color: 'ffff' }}
-                />
-                N 1200 */}
-                Start
-              </button>
-              {/* <p className='mb-0'> 0% {<br />} Done</p> */}
-              <p className='mb-0'>
-                <span className='percentage'>0%</span> Done
-              </p>
-            </>
-          )}
-          {/* <button
-              className='btn card-btn cart'
-              onClick={() => openModal('payment')}>
-              <Icon icon="f7:cart" /> N{course.amount}
-            </button> */}
+        <div className='course-card-btn d-flex' style={{ width: '90%' }}>
+          <button
+            style={{
+              backgroundColor: '#fff',
+              border: '1px solid #329BD6',
+              color: '#329BD6',
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '.4rem',
+              padding: '.5rem 8px',
+            }}
+            className='btn card-btn preview'
+            onClick={() => openModal('course')}
+          >
+            <Icon icon='prime:eye' /> Review
+          </button>
+          <button
+            style={{
+              backgroundColor: '#329BD6',
+              color: '#fff',
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '.4rem',
+              padding: '.5rem 8px',
+            }}
+            className='btn card-btn cart'
+            onClick={() => openModal('payment')}
+          >
+            <Icon icon='mdi:cart-outline' />
+            {course.amount}
+          </button>
         </div>
       </div>
 
