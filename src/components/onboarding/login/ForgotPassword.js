@@ -85,19 +85,26 @@ export default function ForgotPassword() {
   return (
     <div
       className='registration-page two overflow-hidden'
-      style={{ width: '450px', height: '450px' }}
+      style={{ width: '450px', height: '450px', paddingTop: '3rem' }}
     >
-      <h2 className='head-text text-center'>Forgot Password?</h2>
+      <h2 className='head-text text-center my-1'>Forgot Password?</h2>
       <p className='head-p text-center'>
         Enter your email address you registered with.
+      </p>
+      <p className='text-center'>
+        <span className='span-role'>Students</span> - Use Student ID
+      </p>
+      <p className='text-center'>
+        <span className='span-role'>Administrators & Educators </span> - Use
+        Email
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='form-group my-4'>
-          <label style={{ border: 'none' }}>Email address</label>
+          <label style={{ border: 'none' }}>Email address/Student ID</label>
           <input
             type='email'
-            style={{ padding: '1.3rem .5rem' }}
+            style={{ padding: '1.1rem 2rem' }}
             {...register('email', { required: true })}
             placeholder='Enter email address'
           />
