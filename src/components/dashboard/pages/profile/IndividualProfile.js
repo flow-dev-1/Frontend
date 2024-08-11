@@ -8,6 +8,7 @@ import Modal from 'react-modal'
 import EditProfileModal from '../../../modals-pages/dashboard-modals/EditProfileModal'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import StudentRegistrationProfile from '../../../modals-pages/dashboard-modals/profile/StudentRegistrationProfile'
 
 export default function IndividualProfile() {
   const [modalIsOpen, setIsOpen] = useState(false)
@@ -109,7 +110,7 @@ export default function IndividualProfile() {
         contentLabel='Edit Profile Modal'
         shouldCloseOnOverlayClick={true}
       >
-        <EditProfileModal onClose={closeModal} />
+        <StudentRegistrationProfile onClose={closeModal} />
       </Modal>
     </>
   )

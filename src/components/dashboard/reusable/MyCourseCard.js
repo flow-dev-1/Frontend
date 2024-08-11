@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Icon } from '@iconify/react'
 import './reusable.css'
 import Modal from 'react-modal'
+import ReviewCourseInfoModal from '../../modals-pages/dashboard-modals/ReviewCourseInfoModal'
 
 const MyCourseCard = ({ course }) => {
   const [modalIsOpen, setIsOpen] = useState(false)
@@ -134,11 +135,7 @@ const MyCourseCard = ({ course }) => {
         shouldCloseOnOverlayClick={true}
       >
         {modalType === 'review' && (
-          <div>
-            <h2>Course Review</h2>
-            {/* Insert course review content */}
-            <button onClick={closeModal}>Close</button>
-          </div>
+          <ReviewCourseInfoModal course={course} onClose={closeModal} />
         )}
         {modalType === 'feedback' && (
           <div>
