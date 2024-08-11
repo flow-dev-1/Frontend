@@ -53,21 +53,43 @@ const MyCourseCard = ({ course }) => {
           </div>
         </div>
         <div className='course-card-btn d-flex'>
-          <button
-            style={{
-              backgroundColor: '#fff',
-              border: '1px solid #329BD6',
-              color: '#329BD6',
-              display: 'flex',
-              justifyContent: 'center',
-              gap: '.4rem',
-              padding: '.5rem 8px',
-            }}
-            className='btn card-btn preview'
-            onClick={() => openModal('review')}
-          >
-            <Icon icon='prime:eye' /> Review
-          </button>
+          {/* Review/Feedback Button */}
+          {course.progress === 100 ? (
+            <button
+              style={{
+                backgroundColor: '#fff',
+                color: '#329BD6',
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '.4rem',
+                padding: '.5rem 8px',
+                border: '1px solid #329bd6',
+              }}
+              className='btn card-btn feedback'
+              onClick={() => openModal('feedback')}
+            >
+              <Icon icon='hugeicons:comment-01' /> Feedback
+            </button>
+          ) : (
+            <button
+              style={{
+                backgroundColor: '#fff',
+                border: '1px solid #329BD6',
+                color: '#329BD6',
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '.4rem',
+                width: '120px',
+                padding: '.5rem 8px',
+              }}
+              className='btn card-btn preview'
+              onClick={() => openModal('review')}
+            >
+              <Icon icon='prime:eye' /> Review
+            </button>
+          )}
+
+          {/* Start/Resume/Completed Button */}
           <button
             style={{
               backgroundColor: course.progress === 100 ? '#fff' : '#329BD6',
@@ -75,8 +97,8 @@ const MyCourseCard = ({ course }) => {
               display: 'flex',
               justifyContent: 'center',
               gap: '.4rem',
+              width: '120px',
               padding: '.5rem 8px',
-              border: course.progress === 100 ? '1px solid #50AA50' : 'none',
             }}
             className='btn card-btn start-resume'
             onClick={handleButtonClick}
@@ -92,11 +114,12 @@ const MyCourseCard = ({ course }) => {
               ? 'Start'
               : 'Resume'}
           </button>
-          {course.progress >= 0 && (
+          {/* Comment Icon - Only appears when resuming */}
+          {course.progress > 0 && course.progress < 100 && (
             <Icon
-              icon='hugeicons:comment-01'
               style={{ color: '#329BD6' }}
-              width={50}
+              width={40}
+              icon='hugeicons:comment-01'
             />
           )}
         </div>

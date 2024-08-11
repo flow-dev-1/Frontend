@@ -177,7 +177,7 @@ export default function EducatorRegistrationForm() {
           <h2 className='d-flex justify-content-between align-center'>
             Register as an Educator
             <>
-              <Icon icon='radix-icons:cross-1' width={24}/>
+              <Icon icon='radix-icons:cross-1' width={24} />
             </>
           </h2>
           <hr />
@@ -338,10 +338,6 @@ export default function EducatorRegistrationForm() {
                   onClick={togglePasswordVisibility}
                 >
                   <Icon
-                    icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
-                    className='eye-icon'
-                    width={20}
-                  />  <Icon
                     icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
                     className='eye-icon'
                     width={20}
