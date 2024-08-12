@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import Modal from 'react-modal'
-import EmailVerificationSuccessful from './EmailVerificationSuccessful'
 import { useMutation } from '@tanstack/react-query'
 import userService from '../../../services/api/user'
 import { useDispatch } from 'react-redux'

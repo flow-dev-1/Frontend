@@ -306,3 +306,25 @@ select.PhoneInputCountrySelect {
 .flex-code-input .PhoneInput {
   padding-left: 0.7rem !important;
 }
+
+.add-more-student {
+  display: flex;
+  justify-content: end;
+  margin-top: 2rem;
+  margin-right: 0.7rem;
+}
+.add-more-student button {
+  border: none;
+  display: block;
+  background-color: #5ce1e6;
+  color: #275dad;
+  border-radius: 8px;
+  padding: 0.3rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.add-more-student button span {
+  color: #275dad !important;
+}

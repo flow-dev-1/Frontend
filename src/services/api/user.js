@@ -13,6 +13,17 @@ class UserOBJ {
       throw err?.response?.data || err.message
     }
   }
+  individualRegister = async (data) => {
+    try {
+      const response = await api.post(
+        `api/users/register?type=Individual`,
+        data
+      )
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
 
   getInvitedUser = async (auth_token) => {
     try {
@@ -23,6 +34,15 @@ class UserOBJ {
           Authorization: `Bearer ${auth_token}`,
         },
       })
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+  getUserId = async () => {
+    try {
+      // Check if data is not empty
+      const response = await api.get('api/id')
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message

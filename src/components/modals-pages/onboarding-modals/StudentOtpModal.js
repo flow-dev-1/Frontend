@@ -8,7 +8,12 @@ import { toast } from 'react-toastify'
 import userService from '../../../services/api/user'
 import { RotatingLines } from 'react-loader-spinner'
 
-export default function StudentOtpModal({ email, resendOTP }) {
+export default function StudentOtpModal({
+  email,
+  resendOTP,
+  closeModal,
+  setOpenSuccessModal,
+}) {
   const dispatch = useDispatch()
   const [modalIsOpen, setIsOpen] = useState(false)
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
@@ -63,7 +68,8 @@ export default function StudentOtpModal({ email, resendOTP }) {
       toast.dismiss()
       toast.success(data.message)
       dispatch(clearToken())
-      openModal()
+      closeModal()
+      setOpenSuccessModal(true)
     },
     onError: (error) => {
       console.error('Registration error:', error)
