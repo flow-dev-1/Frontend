@@ -19,7 +19,8 @@ import PhoneInput, {
   getCountryCallingCode,
 } from 'react-phone-number-input'
 import { lgas } from '../../states/lgas'
-import StudentOtpModal from '../../modals-pages/onboarding-modals/StudentOtpModal'
+import EmailVerificationSuccessful from '../../modals-pages/onboarding-modals/EmailVerificationSuccessful'
+import EducatorOtpModal from '../../modals-pages/onboarding-modals/EducatorOtpModal'
 
 Modal.setAppElement('#root') // Set the root element for the modal
 
@@ -27,6 +28,7 @@ export default function EducatorRegistrationForm() {
   const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
+  const [openSuccessModal, setOpenSuccessModal] = useState(false)
   const [formData, setFormData] = useState(null)
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
   const [countries, setCountries] = useState([])
@@ -37,8 +39,7 @@ export default function EducatorRegistrationForm() {
   const [email, setEmail] = useState('')
 
   const schema = yup.object().shape({
-    firstName: yup.string().required('First Name is required'),
-    lastName: yup.string().required('Last Name is required'),
+    fullName: yup.string().required('Full Name is required'),
     email: yup
       .string()
       .email('Invalid Email')
@@ -58,10 +59,6 @@ export default function EducatorRegistrationForm() {
       .string()
       .min(8, 'Password must be at least 8 characters')
       .required('Password is required'),
-    // confirmPassword: yup
-    //   .string()
-    //   .oneOf([yup.ref('password'), null], 'Passwords must match')
-    //   .required('Confirm Password is required'),
   })
 
   const {
@@ -126,7 +123,7 @@ export default function EducatorRegistrationForm() {
   }, [selectedCountry])
 
   const mutation = useMutation({
-    mutationFn: (data) => userService.register('School', data),
+    mutationFn: (data) => userService.register('Individaul', data),
     onSuccess: (data) => {
       console.log('Registration successful:', data)
       toast.success(data.message)
@@ -141,21 +138,17 @@ export default function EducatorRegistrationForm() {
       toast.error(error || 'Registration failed')
     },
   })
-
   const onSubmit = (data) => {
     console.log('data')
     const formData = {
-      first_name: data.firstName.trim(),
-      last_name: data.lastName.trim(),
+      fullName: data.fullName, // Combine first and last name
       email: data.email,
       phone: data.phoneNumber,
+      gender: data.gender,
       country: data.country,
       state: data.state,
       lga: data.lga,
-      gender: data.gender,
-      // age: new Date().getFullYear() - new Date(data.dob).getFullYear(),
       DOB: data.dob,
-      grade: 'Educator',
       password: data.password,
     }
     setFormData(formData)
@@ -191,10 +184,10 @@ export default function EducatorRegistrationForm() {
               <input
                 type='text'
                 placeholder='Type here...'
-                {...register('firstName')}
+                {...register('fullName')}
               />
-              {errors.firstName && (
-                <p className='error-message'>{errors.firstName.message}</p>
+              {errors.fullName && (
+                <p className='error-message'>{errors.fullName.message}</p>
               )}
             </div>
 
@@ -384,11 +377,23 @@ export default function EducatorRegistrationForm() {
         className='custom-modal-otp'
         overlayClassName='custom-overlay'
       >
-        <StudentOtpModal
+        <EducatorOtpModal
           resendOTP={handleSubmit(onSubmit)}
           email={email}
+          setOpenSuccessModal={setOpenSuccessModal}
           closeModal={closeModal}
         />
+      </Modal>
+
+      <Modal
+        isOpen={openSuccessModal}
+        // onRequestClose={closeModal}
+        contentLabel='Example Modal'
+        className='custom-modal-success-two'
+        overlayClassName='custom-overlay'
+        shouldCloseOnOverlayClick={false}
+      >
+        <EmailVerificationSuccessful from='otp' />
       </Modal>
     </div>
   )

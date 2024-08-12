@@ -8,7 +8,12 @@ import { clearToken } from '../../../redux/reducers/jwtReducer'
 import { toast } from 'react-toastify'
 import { RotatingLines } from 'react-loader-spinner'
 
-export default function EducatorOtpModal({ email, resendOTP }) {
+export default function EducatorOtpModal({
+  email,
+  resendOTP,
+  closeModal,
+  setOpenSuccessModal,
+}) {
   const dispatch = useDispatch()
   const [modalIsOpen, setIsOpen] = useState(false)
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
@@ -56,17 +61,18 @@ export default function EducatorOtpModal({ email, resendOTP }) {
   }
 
   const mutation = useMutation({
-    mutationFn: userService.verifyAccount, // Assuming userService.register is your API call function
+    mutationFn: userService.educatorVerifyToken, // Assuming userService.register is your API call function
     onSuccess: (data) => {
       console.log('OTP Verification:', data)
       toast.success(data.message)
       dispatch(clearToken())
-      openModal()
+      closeModal()
+      setOpenSuccessModal(true)
     },
     onError: (error) => {
       console.error('Registration error:', error)
+      toast.error(error?.message || error || 'verification failed')
       toast.dismiss()
-      toast.error(error?.message || error || 'Registration failed')
     },
   })
 
@@ -129,16 +135,6 @@ export default function EducatorOtpModal({ email, resendOTP }) {
           )}
         </p>
       </div>
-      <Modal
-        isOpen={modalIsOpen}
-        // onRequestClose={closeModal}
-        contentLabel='Example Modal'
-        className='custom-modal'
-        overlayClassName='custom-overlay'
-        shouldCloseOnOverlayClick={false}
-      >
-        <EmailVerificationSuccessful from='otp' />
-      </Modal>
     </div>
   )
 }

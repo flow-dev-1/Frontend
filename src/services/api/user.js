@@ -1,12 +1,11 @@
 import api from '../index.js'
 
 class UserOBJ {
-
   //Register
   register = async (userType, data) => {
     try {
       const response = await api.post(
-        `api/users/register?type=${userType}`,
+        `api/educator/register?type=${userType}`,
         data
       )
       return response.data
@@ -69,6 +68,14 @@ class UserOBJ {
   verifyToken = async (data) => {
     try {
       const response = await api.post(`api/users/verify-token`, data)
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+  educatorVerifyToken = async (data) => {
+    try {
+      const response = await api.patch(`api/educator/verify-account`, data)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
