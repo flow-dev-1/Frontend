@@ -23,7 +23,9 @@ export default function SignIn() {
   }
 
   const schema = yup.object().shape({
-    email: yup.string().required('Your Full Name is Required!'),
+    usernameOrEmail: yup
+      .string()
+      .required('Email address/Student ID is required!'),
     password: yup
       .string()
       .min(6, 'Password must be at least 6 characters')
@@ -45,24 +47,23 @@ export default function SignIn() {
   }
 
   const mutation = useMutation({
-    mutationFn: userService.login, // Assuming userService.register is your API call function
+    mutationFn: userService.login, // Assuming userService.login is your API call function
     onSuccess: (data) => {
-      console.log(data)
       toast.success(data.message)
       dispatch(setToken(data?.token))
       dispatch(loginSuccess(data?.user))
       localStorage.setItem('Flow-Auth-Token', data?.token)
-      if (data.accountType == 'School') {
+      if (data.accountType === 'School') {
         navigate('/school-dashboard', { replace: true })
       } else {
         navigate('/dashboard', { replace: true })
       }
     },
     onError: (error) => {
-      console.error('Registration error:', error)
+      console.error('Login error:', error)
       toast.dismiss()
       toast.error(error?.message)
-      toast.error(error || 'Registration failed')
+      toast.error('Login failed')
     },
   })
 
@@ -89,14 +90,16 @@ export default function SignIn() {
             <div className='form-group'>
               <label style={{ border: 'none' }}>Email address/Student ID</label>
               <input
-                id={errors.email && 'border-red'}
+                id={errors.usernameOrEmail && 'border-red'}
                 style={{ width: '100%', padding: '1rem .7rem' }}
-                type='email'
-                {...register('email', { required: true })}
+                type='text'
+                {...register('usernameOrEmail', { required: true })}
                 placeholder='Enter email address/Student ID'
               />
-              {errors.email && (
-                <p className='error-message text-end'>Email is required</p>
+              {errors.usernameOrEmail && (
+                <p className='error-message text-end'>
+                  {errors.usernameOrEmail.message}
+                </p>
               )}
             </div>
             <div className='form-group'>
@@ -133,7 +136,9 @@ export default function SignIn() {
                 </div>
               </div>
               {errors.password && (
-                <p className='error-message text-end'>Password is required</p>
+                <p className='error-message text-end'>
+                  {errors.password.message}
+                </p>
               )}
               {showPasswordError && (
                 <p className='error-message '>Incorrect email or password</p>
