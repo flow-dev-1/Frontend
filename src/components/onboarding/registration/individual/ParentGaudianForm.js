@@ -18,7 +18,7 @@ export default function ParentGuardianForm({ onSubmit, setStep, initialData }) {
   const [availableLGAs, setAvailableLGAs] = useState([])
 
   const schema = yup.object().shape({
-    fullName: yup.string().required('Full Name is required'),
+    guardianFullName: yup.string().required('Full Name is required'),
     email: yup
       .string()
       .email('Invalid Email')
@@ -105,10 +105,10 @@ export default function ParentGuardianForm({ onSubmit, setStep, initialData }) {
             <input
               type='text'
               placeholder='Type here...'
-              {...register('fullName')}
+              {...register('guardianFullName')}
             />
-            {errors.fullName && (
-              <p className='error-message'>{errors.fullName.message}</p>
+            {errors.guardianFullName && (
+              <p className='error-message'>{errors.guardianFullName.message}</p>
             )}
           </div>
           <div className='form-group'>
@@ -217,8 +217,8 @@ export default function ParentGuardianForm({ onSubmit, setStep, initialData }) {
             style={{
               backgroundColor: '#275DAD',
               borderRadius: '5px',
-              color:"#fff",
-              border:"none",
+              color: '#fff',
+              border: 'none',
               padding: '.3rem ',
               display: 'block',
               width: '100%',

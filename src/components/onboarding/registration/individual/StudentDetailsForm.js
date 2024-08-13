@@ -89,37 +89,51 @@ export default function StudentDetailsForm({
   }
 
   const addStudentHandler = async (studentData) => {
-    // Fetch new user ID for the student
-    const userId = await userService.getUserId()
+    try {
+      // Fetch new user ID for the student
+      const userId = await userService.getUserId()
 
-    const newStudent = {
-      userId: userId?.userId || 'N/A',
-      ...studentData,
-      DOB: formatDate(studentData.DOB),
+      const newStudent = {
+        userId: userId?.userId || 'N/A',
+        ...studentData,
+        DOB: formatDate(studentData.DOB),
+      }
+
+      setStudents((prevStudents) => [...prevStudents, newStudent]) // Add new student to array
+      setCurrentStudentId(userId?.userId || 'N/A') // Set the current student ID
+      reset() // Reset form for new student input
+    } catch (error) {
+      console.error('Error adding student:', error)
     }
-
-    setStudents((prevStudents) => [...prevStudents, newStudent]) // Add new student to array
-    setCurrentStudentId(userId?.userId || 'N/A') // Set the current student ID
-    reset() // Reset form for new student input
   }
 
   const submitHandler = async () => {
-    // Handle the addition of the last student
-    await handleSubmit(addStudentHandler)()
+    // Directly call handleSubmit to get the latest form data and add it to the students array
+    handleSubmit(async (studentData) => {
+      try {
+        // Fetch new user ID for the student
+        const userId = await userService.getUserId()
 
-    // Ensure the students array is not empty before submitting
-    if (students.length === 0) {
-      console.log('No students to submit')
-      return
-    }
+        const newStudent = {
+          userId: userId?.userId || 'N/A',
+          ...studentData,
+          DOB: formatDate(studentData.DOB),
+        }
 
-    const completeFormData = {
-      ...parentFormData,
-      student: [...students], // Make sure this key matches what the backend expects
-    }
+        // Add the new student to the array
+        const updatedStudents = [...students, newStudent]
 
-    console.log('Submitting form data:', completeFormData)
-    mutation.mutate(completeFormData)
+        const completeFormData = {
+          ...parentFormData,
+          student: updatedStudents, // This key should match what the backend expects
+        }
+
+        console.log('Submitting form data:', completeFormData)
+        mutation.mutate(completeFormData)
+      } catch (error) {
+        console.error('Error adding student:', error)
+      }
+    })()
   }
 
   function openModal() {
@@ -253,43 +267,42 @@ export default function StudentDetailsForm({
               </span>
             </button>
           </div>
-
-          <div className='action-btns'>
-            <button
-              style={{
-                backgroundColor: '#fff',
-                color: '#275DAD',
-                border: '1px solid #275DAD',
-                borderRadius: '5px',
-              }}
-              onClick={() => setStep(1)}
-              disabled={isLoading}
-            >
-              Back
-            </button>
-            <button
-              style={{
-                backgroundColor: '#275DAD',
-                color: '#fff',
-                borderRadius: '5px',
-              }}
-              type='button'
-              onClick={submitHandler}
-              disabled={isLoading}
-            >
-              {mutation.isPending ? (
-                <RotatingLines
-                  type='Oval'
-                  style={{ color: '#FFF' }}
-                  height={20}
-                  width={20}
-                />
-              ) : (
-                'Submit'
-              )}
-            </button>
-          </div>
         </form>
+        <div className='action-btns'>
+          <button
+            style={{
+              backgroundColor: '#fff',
+              color: '#275DAD',
+              border: '1px solid #275DAD',
+              borderRadius: '5px',
+            }}
+            onClick={() => setStep(1)}
+            disabled={isLoading}
+          >
+            Back
+          </button>
+          <button
+            style={{
+              backgroundColor: '#275DAD',
+              color: '#fff',
+              borderRadius: '5px',
+            }}
+            type='button'
+            onClick={submitHandler}
+            disabled={isLoading}
+          >
+            {mutation.isPending ? (
+              <RotatingLines
+                type='Oval'
+                style={{ color: '#FFF' }}
+                height={20}
+                width={20}
+              />
+            ) : (
+              'Submit'
+            )}
+          </button>
+        </div>
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
