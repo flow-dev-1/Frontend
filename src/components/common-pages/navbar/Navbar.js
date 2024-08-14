@@ -50,7 +50,7 @@ export default function Navbar() {
             <button
               className='btn navbar-btn dark-btn'
               onClick={() => {
-                navigate('/')
+                navigate('/sign-up')
               }}
             >
               Sign Up

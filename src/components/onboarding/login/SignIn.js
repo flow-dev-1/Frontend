@@ -52,6 +52,7 @@ export default function SignIn() {
       toast.success(data.message)
       dispatch(setToken(data?.token))
       dispatch(loginSuccess(data?.user))
+      console.log(data)
       localStorage.setItem('Flow-Auth-Token', data?.token)
       if (data.accountType === 'School') {
         navigate('/school-dashboard', { replace: true })
@@ -105,10 +106,7 @@ export default function SignIn() {
             <div className='form-group'>
               <div className='d-flex align-items-center justify-content-between'>
                 <label style={{ border: 'none' }}>Password *</label>
-                <Link
-                  to='/individual/forgot-password'
-                  className='forgot-password'
-                >
+                <Link to='/forgot-password' className='forgot-password'>
                   Forgot Password?
                 </Link>
               </div>

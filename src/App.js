@@ -52,9 +52,10 @@ function App() {
           {/*   Onboarding Routes */}
 
           <Route element={<OnboardingRootLayout />}>
-            <Route index element={<SignupCategory />} />
+            <Route index element={<SignIn />} />
             {/* <Route path='sign-in' element={<SigninCategory />} /> */}
 
+            <Route path='/sign-up' element={<SignupCategory />} />
             <Route
               path='/individual/sign-up'
               element={<IndividualCategory />}
@@ -65,10 +66,7 @@ function App() {
               element={<StudentRegistrationForm />}
             />
 
-            <Route
-              path='/invited-user'
-              element={<InvitedUserRegistration />}
-            />
+            <Route path='/invited-user' element={<InvitedUserRegistration />} />
 
             <Route
               path='/invited-admin'
@@ -84,14 +82,8 @@ function App() {
               element={<EducatorRegistrationForm />}
             />
             <Route path='/sign-in' element={<SignIn />} />
-            <Route
-              path='/individual/forgot-password'
-              element={<ForgotPassword />}
-            />
-            <Route
-              path='/individual/reset-password'
-              element={<ResetPassword />}
-            />
+            <Route path='/forgot-password' element={<ForgotPassword />} />
+            <Route path='/reset-password' element={<ResetPassword />} />
             <Route
               path='/school/sign-up/registration'
               element={<SchoolRegistrationForm />}

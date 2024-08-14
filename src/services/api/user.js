@@ -79,7 +79,7 @@ class UserOBJ {
 
   verifyAccount = async (data) => {
     try {
-      const response = await api.patch(`api/users/verify-account`, data)
+      const response = await api.patch(`api/verify-account`, data)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
@@ -87,7 +87,7 @@ class UserOBJ {
   }
   verifyToken = async (data) => {
     try {
-      const response = await api.post(`api/users/verify-token`, data)
+      const response = await api.patch(`api/verify-token`, data)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message

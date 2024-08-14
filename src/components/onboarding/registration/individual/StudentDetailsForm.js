@@ -15,7 +15,14 @@ import { toast } from 'react-toastify'
 
 // Schema definition
 const studentSchema = yup.object().shape({
-  fullName: yup.string().required('Full Name is required'),
+  fullName: yup
+    .string()
+    .matches(
+      /^[A-Z][a-z]*\s[A-Z][a-z]*$/,
+      'Full Name must be in the format "FirstName LastName", with each part capitalized'
+    )
+    .required('Full Name is required')
+    .trim(),
   grade: yup.string().required('School Grade is required'),
   gender: yup.string().required('Gender is required'),
   DOB: yup.date().required('Date of Birth is required'),
@@ -30,11 +37,12 @@ export default function StudentDetailsForm({
   setStep,
   parentFormData,
 }) {
-  const [students, setStudents] = useState([]) // State to track added students
-  const [currentStudentId, setCurrentStudentId] = useState('') // State to track current student ID
+  const [students, setStudents] = useState([]) // Track added students
+  const [currentStudentId, setCurrentStudentId] = useState('') // Track current student ID
   const [isLoading, setIsLoading] = useState(true) // Loading state for fetching user ID
   const [modalIsOpen, setIsOpen] = useState(false)
   const [openSuccessModal, setOpenSuccessModal] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const {
     register,
     handleSubmit,
@@ -47,8 +55,8 @@ export default function StudentDetailsForm({
   const dispatch = useDispatch()
 
   useEffect(() => {
-    // Fetch new user ID on component mount
-    const fetchUserId = async () => {
+    // Generate the initial ID when the component mounts
+    const generateInitialStudentId = async () => {
       setIsLoading(true)
       try {
         const userId = await userService.getUserId()
@@ -59,10 +67,9 @@ export default function StudentDetailsForm({
         setIsLoading(false)
       }
     }
-    fetchUserId()
+    generateInitialStudentId()
   }, [])
 
-  // Define mutation to post the form data
   const mutation = useMutation({
     mutationFn: (data) => userService.individualRegister(data),
     onSuccess: (data) => {
@@ -78,54 +85,64 @@ export default function StudentDetailsForm({
     },
   })
 
-  // Date format function (MM/DD/YYYY)
   const formatDate = (date) => {
     const d = new Date(date)
     const month = String(d.getMonth() + 1).padStart(2, '0')
     const day = String(d.getDate()).padStart(2, '0')
     const year = d.getFullYear()
-
     return `${month}/${day}/${year}`
   }
 
   const addStudentHandler = async (studentData) => {
     try {
-      // Fetch new user ID for the student
-      const userId = await userService.getUserId()
+      // Ensure the current ID is unique before adding the student
+      if (
+        !currentStudentId ||
+        students.some((s) => s.userId === currentStudentId)
+      ) {
+        throw new Error('Duplicate or invalid ID detected')
+      }
 
       const newStudent = {
-        userId: userId?.userId || 'N/A',
+        userId: currentStudentId,
         ...studentData,
         DOB: formatDate(studentData.DOB),
       }
 
-      setStudents((prevStudents) => [...prevStudents, newStudent]) // Add new student to array
-      setCurrentStudentId(userId?.userId || 'N/A') // Set the current student ID
-      reset() // Reset form for new student input
+      setStudents((prevStudents) => [...prevStudents, newStudent])
+
+      // Fetch a new student ID for the next student
+      const userId = await userService.getUserId()
+      setCurrentStudentId(userId?.userId || 'N/A')
+
+      reset() // Reset the form for new student input
     } catch (error) {
       console.error('Error adding student:', error)
+      toast.error('Failed to add student. Please try again.')
     }
   }
 
   const submitHandler = async () => {
-    // Directly call handleSubmit to get the latest form data and add it to the students array
     handleSubmit(async (studentData) => {
       try {
-        // Fetch new user ID for the student
-        const userId = await userService.getUserId()
+        if (
+          !currentStudentId ||
+          students.some((s) => s.userId === currentStudentId)
+        ) {
+          throw new Error('Duplicate or invalid ID detected')
+        }
 
         const newStudent = {
-          userId: userId?.userId || 'N/A',
+          userId: currentStudentId,
           ...studentData,
           DOB: formatDate(studentData.DOB),
         }
 
-        // Add the new student to the array
         const updatedStudents = [...students, newStudent]
 
         const completeFormData = {
           ...parentFormData,
-          student: updatedStudents, // This key should match what the backend expects
+          student: updatedStudents,
         }
 
         console.log('Submitting form data:', completeFormData)
@@ -215,6 +232,7 @@ export default function StudentDetailsForm({
             <div className='form-group'>
               <label>School Grade *</label>
               <select {...register('grade')} disabled={isLoading}>
+                <option value=''>Select grade</option>
                 <option value='Primary'>Primary</option>
                 <option value='Secondary'>Secondary</option>
               </select>
@@ -225,6 +243,7 @@ export default function StudentDetailsForm({
             <div className='form-group'>
               <label>Gender *</label>
               <select {...register('gender')} disabled={isLoading}>
+                <option value=''>Select gender</option>
                 <option value='male'>Male</option>
                 <option value='female'>Female</option>
               </select>
@@ -243,27 +262,32 @@ export default function StudentDetailsForm({
               <label>Password *</label>
               <div className='d-flex align-items-center input-with-icon'>
                 <input
-                  type='password'
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder='Type here...'
                   {...register('password')}
                   disabled={isLoading}
                 />
-                <Icon icon={'ph:eye-light'} className='eye-icon' width={20} />
+
+                <Icon
+                  onClick={() => setShowPassword(!showPassword)}
+                  icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
+                  width={20}
+                />
               </div>
               {errors.password && (
                 <p className='error-message'>{errors.password.message}</p>
               )}
             </div>
           </div>
-
           <div className='add-more-student'>
             <button
-              type='button'
-              onClick={handleSubmit(addStudentHandler)}
+              style={{ marginTop: '0' }}
+              type='submit'
+              className='add-more-student'
               disabled={isLoading}
             >
-              Add Student
               <span>
-                <Icon width={20} icon='majesticons:plus-line' />
+                Add Student <Icon icon='majesticons:plus-line' width={24} />
               </span>
             </button>
           </div>
@@ -328,20 +352,6 @@ export default function StudentDetailsForm({
           <EmailVerificationSuccessful from='otp' />
         </Modal>
       </div>
-
-      {/* Loading Overlay */}
-      {isLoading && (
-        <div className='loading-overlay'>
-          <RotatingLines
-            type='Oval'
-            style={{ color: '#FFF' }}
-            height={50}
-            strokeColor='#275DAD'
-            strokeWidth='5'
-            width={50}
-          />
-        </div>
-      )}
     </div>
   )
 }

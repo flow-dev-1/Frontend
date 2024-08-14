@@ -59,7 +59,7 @@ export default function EducatorOtpModal({
   }
 
   const mutation = useMutation({
-    mutationFn: userService.educatorVerifyToken, // Assuming userService.register is your API call function
+    mutationFn: userService.verifyAccount, // Assuming userService.register is your API call function
     onSuccess: (data) => {
       console.log('OTP Verification:', data)
       toast.success(data.message)

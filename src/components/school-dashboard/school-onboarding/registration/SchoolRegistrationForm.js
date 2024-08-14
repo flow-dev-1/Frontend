@@ -67,7 +67,7 @@ export default function SchoolRegistrationForm() {
       .string()
       .oneOf([yup.ref('password'), null], 'Passwords must match')
       .required('Confirm Password is required'),
-    image: yup.mixed().required('School Logo is required'),
+    image: yup.mixed(), // Change this line to make the image optional
   })
 
   const {
@@ -150,17 +150,14 @@ export default function SchoolRegistrationForm() {
   const onSubmit = (data) => {
     const { confirmPassword, ...formData } = data
     const submissionData = new FormData()
-    console.log(formData)
 
     Object.keys(formData).forEach((key) => {
-      if (key === 'image') {
+      if (key === 'image' && formData[key]) {
         submissionData.append(key, formData[key][0])
       } else {
         submissionData.append(key, formData[key])
       }
     })
-
-    console.log(submissionData)
 
     mutation.mutate(submissionData)
   }
@@ -384,11 +381,11 @@ export default function SchoolRegistrationForm() {
                 className='password-toggle'
                 onClick={togglePasswordVisibility}
               >
-             <Icon
-                    icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
-                    className='eye-icon'
-                    width={24}
-                  />
+                <Icon
+                  icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
+                  className='eye-icon'
+                  width={24}
+                />
               </div>
             </div>
             {errors.password && (
@@ -423,7 +420,7 @@ export default function SchoolRegistrationForm() {
           </div>
           <div className='form-group'>
             <label style={{ border: 'none', paddingLeft: '0' }}>
-              School Logo *
+              School Logo
             </label>
             <div
               className='file-upload-wrapper enroll'
@@ -444,6 +441,10 @@ export default function SchoolRegistrationForm() {
                     setValue('image', e.target.files)
                     setSelectedFile(e.target.files[0])
                     setFileName(e.target.files[0].name)
+                  } else {
+                    setValue('image', null) // Clear the value if no file is selected
+                    setSelectedFile(null)
+                    setFileName('')
                   }
                 }}
               />

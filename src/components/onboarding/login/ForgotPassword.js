@@ -9,9 +9,10 @@ import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { RotatingLines } from 'react-loader-spinner'
 import '../onboarding.css'
-import userService from '../../../services/api/user' // Adjust import path as per your project structure
-import { setToken } from '../../../redux/reducers/userReducer'
+import userService from '../../../services/api/user' // Adjust the import path as per your project structure
+import { setToken } from '../../../redux/reducers/jwtReducer'
 import { useDispatch } from 'react-redux'
+
 
 export default function ForgotPassword() {
   const [modalIsOpen, setModalIsOpen] = useState(false)
@@ -36,16 +37,24 @@ export default function ForgotPassword() {
     const queryCode = urlParams.get('c')
 
     if (resetToken && queryCode) {
-      mutate({ code: queryCode })
+      verifyTokenMutation.mutate({ code: queryCode })
+      console.log(resetToken)
+      dispatch(setToken(resetToken))
       localStorage.setItem('Flow-Auth-Token', resetToken)
     }
   }, [location.search])
 
   const schema = yup.object().shape({
-    email: yup
+    usernameOrEmail: yup
       .string()
-      .required('Enter a valid email')
-      .email('Enter a valid email address'),
+      .required('Enter a valid email or Student ID')
+      .test(
+        'valid-email-or-id',
+        'Enter a valid email address or Student ID',
+        (value) =>
+          yup.string().email().isValidSync(value) || // Check if it's a valid email
+          /^[A-Za-z]{3}\d{4}$/.test(value) // Check if it's a valid student ID (e.g., FLS4674)
+      ),
   })
 
   const {
@@ -58,19 +67,19 @@ export default function ForgotPassword() {
 
   const passwordResetMutation = useMutation({
     mutationFn: userService.forgotPassword,
-    onSuccess: (data) => {
-      openModal()
+    onSuccess: () => {
+      toast.success('An email has been sent to your account')
     },
     onError: (error) => {
       toast.error(error.message)
     },
   })
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: userService.verifyToken,
+  const verifyTokenMutation = useMutation({
+    mutationFn: userService.verifyAccount,
     onSuccess: (data) => {
       toast.success(data?.message)
-      navigate('/individual/reset-password')
+      navigate('/reset-password')
     },
     onError: (error) => {
       toast.error(error.message)
@@ -78,7 +87,7 @@ export default function ForgotPassword() {
   })
 
   const onSubmit = (data) => {
-    setEmail(data.email)
+    setEmail(data.usernameOrEmail)
     passwordResetMutation.mutate(data)
   }
 
@@ -103,12 +112,14 @@ export default function ForgotPassword() {
         <div className='form-group my-4'>
           <label style={{ border: 'none' }}>Email address/Student ID</label>
           <input
-            type='email'
+            type='text'
             style={{ padding: '1.1rem 2rem' }}
-            {...register('email', { required: true })}
-            placeholder='Enter email address'
+            {...register('usernameOrEmail', { required: true })}
+            placeholder='Enter email address or Student ID'
           />
-          {errors.email && <p className='error-message'>Email is required</p>}
+          {errors.usernameOrEmail && (
+            <p className='error-message'>{errors.usernameOrEmail.message}</p>
+          )}
         </div>
         <button
           className='btn submit-btn forgot'
@@ -142,7 +153,7 @@ export default function ForgotPassword() {
         overlayClassName='custom-overlay'
         shouldCloseOnOverlayClick={true}
       >
-        <EmailVerificationSuccessful from='restPassword' email={email} />
+        <EmailVerificationSuccessful from='resetPassword' email={email} />
       </Modal>
     </div>
   )

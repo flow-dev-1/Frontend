@@ -18,7 +18,14 @@ export default function ParentGuardianForm({ onSubmit, setStep, initialData }) {
   const [availableLGAs, setAvailableLGAs] = useState([])
 
   const schema = yup.object().shape({
-    guardianFullName: yup.string().required('Full Name is required'),
+    guardianFullName: yup
+    .string()
+    .matches(
+      /^[A-Z][a-z]*\s[A-Z][a-z]*$/,
+      'Full Name must be in the format "FirstName LastName", with each part capitalized'
+    )
+    .required('Full Name is required')
+    .trim(),
     email: yup
       .string()
       .email('Invalid Email')
