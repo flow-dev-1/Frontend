@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import Modal from 'react-modal'
 import '../onboarding.css'
@@ -34,7 +34,7 @@ export default function EducatorRegistrationForm() {
   const [countries, setCountries] = useState([])
   const [isNigeria, setIsNigeria] = useState(true)
   const [availableLGAs, setAvailableLGAs] = useState([]) // State to manage the list of LGAs
-
+  const navigate = useNavigate()
   // State to track if the selected country is Nigeria
   const [email, setEmail] = useState('')
 
@@ -170,7 +170,11 @@ export default function EducatorRegistrationForm() {
           <h2 className='d-flex justify-content-between align-center'>
             Register as an Educator
             <>
-              <Icon icon='radix-icons:cross-1' width={24} />
+              <Icon
+                icon='radix-icons:cross-1'
+                onClick={() => navigate('/', { replace: true })}
+                width={24}
+              />
             </>
           </h2>
           <hr />
@@ -372,13 +376,12 @@ export default function EducatorRegistrationForm() {
 
       <Modal
         isOpen={modalIsOpen}
-        onRequestClose={closeModal}
+        shouldCloseOnOverlayClick={false}
         contentLabel='Registration Modal'
         className='custom-modal-otp'
         overlayClassName='custom-overlay'
       >
         <EducatorOtpModal
-          resendOTP={handleSubmit(onSubmit)}
           email={email}
           setOpenSuccessModal={setOpenSuccessModal}
           closeModal={closeModal}

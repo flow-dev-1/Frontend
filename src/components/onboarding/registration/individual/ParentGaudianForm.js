@@ -10,22 +10,22 @@ import 'react-phone-number-input/style.css'
 import { Icon } from '@iconify/react'
 import { lgas } from '../../../states/lgas'
 import { states } from '../../../states'
-
+import { Navigate, useNavigate } from 'react-router-dom'
 export default function ParentGuardianForm({ onSubmit, setStep, initialData }) {
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
   const [countries, setCountries] = useState([])
   const [isNigeria, setIsNigeria] = useState(initialData?.country === 'Nigeria')
   const [availableLGAs, setAvailableLGAs] = useState([])
-
+  const navigate = useNavigate()
   const schema = yup.object().shape({
     guardianFullName: yup
-    .string()
-    .matches(
-      /^[A-Z][a-z]*\s[A-Z][a-z]*$/,
-      'Full Name must be in the format "FirstName LastName", with each part capitalized'
-    )
-    .required('Full Name is required')
-    .trim(),
+      .string()
+      .matches(
+        /^[A-Z][a-z]*\s[A-Z][a-z]*$/,
+        'Full Name must be in the format "FirstName LastName", with each part capitalized'
+      )
+      .required('Full Name is required')
+      .trim(),
     email: yup
       .string()
       .email('Invalid Email')
@@ -100,7 +100,11 @@ export default function ParentGuardianForm({ onSubmit, setStep, initialData }) {
       <div className='top-section mt-2'>
         <h2 className='d-flex justify-content-between align-center'>
           Parent/Guardian Information
-          <Icon icon='radix-icons:cross-1' width={24} />
+          <Icon
+            icon='radix-icons:cross-1'
+            onClick={() => navigate('/', { replace: true })}
+            width={24}
+          />
         </h2>
         <hr />
         <span>*Indicates Required</span>

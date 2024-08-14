@@ -12,6 +12,7 @@ import Modal from 'react-modal'
 import { useDispatch } from 'react-redux'
 import { setToken } from '../../../../redux/reducers/jwtReducer'
 import { toast } from 'react-toastify'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 // Schema definition
 const studentSchema = yup.object().shape({
@@ -43,6 +44,7 @@ export default function StudentDetailsForm({
   const [modalIsOpen, setIsOpen] = useState(false)
   const [openSuccessModal, setOpenSuccessModal] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -186,7 +188,11 @@ export default function StudentDetailsForm({
         <div className='top-section mt-2'>
           <h2 className='d-flex justify-content-between align-center'>
             Student Details {students.length + 1} {/* Display student number */}
-            <Icon icon='radix-icons:cross-1' width={24} />
+            <Icon
+              icon='radix-icons:cross-1'
+              onClick={() => navigate('/', { replace: true })}
+              width={24}
+            />
           </h2>
           <hr />
           <span>*Indicates Required</span>
@@ -329,10 +335,10 @@ export default function StudentDetailsForm({
         </div>
         <Modal
           isOpen={modalIsOpen}
-          onRequestClose={closeModal}
           contentLabel='Registration Modal'
           className='custom-modal-otp'
           overlayClassName='custom-overlay'
+          shouldCloseOnOverlayClick={false}
         >
           <StudentOtpModal
             resendOTP={handleSubmit(onSubmit)}
