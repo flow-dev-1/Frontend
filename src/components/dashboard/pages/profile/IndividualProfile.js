@@ -11,6 +11,7 @@ import { useQuery } from '@tanstack/react-query'
 import userService from '../../../../services/api/user'
 import EducatorProfileModal from './EducatorProfileModal'
 import StudentUpdateProfileModal from './StudentUpdateProfileModal'
+import Loading from '../../../loader/Loader'
 
 export default function IndividualProfile({ onClose }) {
   const [modalIsOpen, setIsOpen] = useState(false)
@@ -28,7 +29,7 @@ export default function IndividualProfile({ onClose }) {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['individual-profile'],
     queryFn: fetchProfile,
-    refetchOnMount: false,
+    refetchOnMount: true,
     refetchOnWindowFocus: false,
   })
 
@@ -42,7 +43,13 @@ export default function IndividualProfile({ onClose }) {
     setIsOpen(false)
   }
 
-  console.log(userType?.accountType)
+  if (isLoading) {
+    return <Loading />
+  }
+  if (isError) {
+    return <div>An error occured while loading...</div>
+  }
+
   const user =
     userType?.accountType === 'Educator' ? data?.educator : data?.user || {}
 

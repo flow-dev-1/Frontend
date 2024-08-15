@@ -30,6 +30,7 @@ export default function StudentDetailsFormModal({
   setStep,
   parentFormData,
   user,
+  onClose,
 }) {
   const navigate = useNavigate()
 
@@ -115,11 +116,7 @@ export default function StudentDetailsFormModal({
         <div className='top-section mt-2'>
           <h2 className='d-flex justify-content-between align-center'>
             Student Details
-            <Icon
-              icon='radix-icons:cross-1'
-              onClick={() => navigate('/', { replace: true })}
-              width={24}
-            />
+            <Icon icon='radix-icons:cross-1' onClick={onClose} width={24} />
           </h2>
           <hr />
           <span>*Indicates Required</span>

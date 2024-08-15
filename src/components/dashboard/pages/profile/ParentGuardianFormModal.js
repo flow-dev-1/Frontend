@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom'
 export default function ParentGuardianFormModal({
   onSubmit,
   setStep,
+  onClose,
   initialData,
 }) {
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
@@ -107,11 +108,7 @@ export default function ParentGuardianFormModal({
       <div className='top-section mt-2'>
         <h2 className='d-flex justify-content-between align-center'>
           Parent/Guardian Information
-          <Icon
-            icon='radix-icons:cross-1'
-            onClick={() => navigate('/', { replace: true })}
-            width={24}
-          />
+          <Icon icon='radix-icons:cross-1' onClick={onClose} width={24} />
         </h2>
         <hr />
         <span>*Indicates Required</span>

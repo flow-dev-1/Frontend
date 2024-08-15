@@ -3,7 +3,7 @@ import ParentGuardianFormModal from './ParentGuardianFormModal'
 import StudentDetailsFormModal from './StudentDetailFormModal'
 import './onboarding-profile.css'
 
-export default function StudentUpdateProfileModal({ user }) {
+export default function StudentUpdateProfileModal({ user, onClose }) {
   const [step, setStep] = useState(1) // Step 1 for Parent/Guardian Info, Step 2 for Student Details
   const [parentFormData, setParentFormData] = useState(user) // State to store form data
 
@@ -30,12 +30,14 @@ export default function StudentUpdateProfileModal({ user }) {
           onSubmit={handleParentFormSubmit}
           setStep={setStep}
           user={user}
+          onClose={onClose}
           initialData={parentFormData} // Pass the form data as initial values
         />
       )}
       {step === 2 && (
         <StudentDetailsFormModal
           onSubmit={onSubmit}
+          onClose={onClose}
           user={user}
           setStep={setStep}
           parentFormData={parentFormData}
