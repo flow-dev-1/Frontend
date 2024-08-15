@@ -16,6 +16,9 @@ const SchooolSettingsEmailNotifications = () => {
   const [selectedMember, setSelectedMember] = useState(null)
   const [selectedTable, setSelectedTable] = useState(null)
 
+  const closeSuccessModal = () => {
+    setModalIsOpenSuccess(false)
+  }
   const queryClient = useQueryClient()
   const toastId = useRef(null)
 
@@ -79,6 +82,10 @@ const SchooolSettingsEmailNotifications = () => {
     },
   })
 
+  function openSuccessModal() {
+    setModalIsOpenSuccess(true)
+  }
+
   const handleDelete = (adminId) => {
     mutation.mutate(adminId)
   }
@@ -130,9 +137,7 @@ const SchooolSettingsEmailNotifications = () => {
           {teamMembers.map((member, index) => (
             <tr key={member.id}>
               <td>{index + 1}</td>
-              <td>
-                {member.first_name} {member.last_name}
-              </td>
+              <td>{member.fullName}</td>
               <td>{member.email}</td>
               {/* <td>{member.position}</td> */}
               <td
@@ -195,7 +200,36 @@ const SchooolSettingsEmailNotifications = () => {
         className='send-invite-modal'
         overlayClassName='custom-overlay'
       >
-        <SettingsAddEmailNotificationModal closeModal={closeModal} />
+        <SettingsAddEmailNotificationModal
+          openSuccessModal={openSuccessModal}
+          closeModal={closeModal}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={modalIsOpenSuccess}
+        onRequestClose={closeSuccessModal}
+        contentLabel='Delete Modal'
+        className='custom-modal-success-two'
+        overlayClassName='custom-overlay'
+      >
+        <div className='succes-modal-content'>
+          <div className='success-icon icon-with-bg'>
+            <div className='circle'>
+              <div className='checkmark'></div>
+            </div>
+            :
+          </div>
+          <h4
+            className='text-center'
+            style={{ color: '#262626', fontSize: '40px' }}
+          >
+            Successful
+          </h4>
+          <p className='text-center' style={{ color: '#262626' }}>
+            You have successfully invited a teammate.
+          </p>
+        </div>
       </Modal>
     </div>
   )

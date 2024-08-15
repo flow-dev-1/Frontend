@@ -21,14 +21,16 @@ const schema = yup.object().shape({
   position: yup.string().required('Position is required'),
 })
 
-const SettingsAddEmailNotificationModal = ({ closeModal }) => {
+const SettingsAddEmailNotificationModal = ({
+  closeModal,
+  openSuccessModal,
+}) => {
   const [modalIsOpenSuccess, setModalIsOpenSuccess] = useState(false)
   const mutationTriggered = useRef(false)
   const queryClient = useQueryClient()
 
   const closeSuccessModal = () => {
     setModalIsOpenSuccess(false)
-    closeModal()
   }
 
   const {
@@ -43,7 +45,8 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
   const mutation = useMutation({
     mutationFn: schoolService.emailAdminInvite,
     onSuccess: (data) => {
-      setModalIsOpenSuccess(true)
+      closeModal()
+      openSuccessModal()
       queryClient.invalidateQueries(['school-email-team'])
       mutationTriggered.current = false
     },
@@ -56,7 +59,18 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
   const onSubmit = (data) => {
     if (!mutationTriggered.current) {
       mutationTriggered.current = true
-      mutation.mutate(data)
+
+      // Combine first_name and last_name to create fullName
+      const fullName = `${data.first_name} ${data.last_name}`
+
+      // Create the data object to send in the mutation
+      const payload = {
+        fullName,
+        email: data.email,
+        position: data.position,
+      }
+
+      mutation.mutate(payload)
     }
   }
 
@@ -165,7 +179,7 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
           </button>
         </form>
       </div>
-      <Modal
+      {/* <Modal
         isOpen={modalIsOpenSuccess}
         onRequestClose={closeSuccessModal}
         contentLabel='Delete Modal'
@@ -189,7 +203,7 @@ const SettingsAddEmailNotificationModal = ({ closeModal }) => {
             You have successfully invited a teammate.
           </p>
         </div>
-      </Modal>
+      </Modal> */}
     </div>
   )
 }
