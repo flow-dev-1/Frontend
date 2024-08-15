@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import './settings-profile.css'
-import logo from '../../../../../assets/school-logo.png'
-import { Icon } from '@iconify/react'
 import SettingsEditProfileModal from '../../../modals/settings-profile/SettingsEditProfileModal'
 import Modal from 'react-modal'
 import NG from '../../../../../assets/Flag_of_Nigeria.png'

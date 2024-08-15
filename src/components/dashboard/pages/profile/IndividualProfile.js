@@ -2,18 +2,36 @@ import React, { useState } from 'react'
 import femaleprofileImage from '../../../../assets/user-profile-image.png'
 import maleprofileImage from '../../../../assets/male-profile-image.png'
 import flag from '../../../../assets/Flag_of_Nigeria.png'
-import { Icon } from '@iconify/react'
 import './profile.css'
 import Modal from 'react-modal'
-import EditProfileModal from '../../../modals-pages/dashboard-modals/EditProfileModal'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import StudentRegistrationProfile from '../../../modals-pages/dashboard-modals/profile/StudentRegistrationProfile'
+import { useQuery } from '@tanstack/react-query'
+import userService from '../../../../services/api/user'
+import EducatorProfileModal from './EducatorProfileModal'
 
 export default function IndividualProfile() {
   const [modalIsOpen, setIsOpen] = useState(false)
-  const { user } = useSelector((state) => state.user)
+  const { userType } = useSelector((state) => state.user)
   const navigate = useNavigate()
+
+  const fetchProfile = () => {
+    if (userType?.accountType === 'Educator') {
+      return userService.getMyProfileEducator()
+    } else {
+      return userService.getMyProfileIndividual()
+    }
+  }
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['individual-profile'],
+    queryFn: fetchProfile,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  })
+
+  console.log(data)
 
   const openModal = () => {
     setIsOpen(true)
@@ -21,6 +39,16 @@ export default function IndividualProfile() {
 
   const closeModal = () => {
     setIsOpen(false)
+  }
+
+  console.log(userType?.accountType)
+  const user =
+    userType?.accountType === 'Educator' ? data?.educator : data?.user || {}
+
+  // Format the date
+  const formatDate = (dateString) => {
+    const date = new Date(dateString)
+    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
   }
 
   return (
@@ -45,19 +73,32 @@ export default function IndividualProfile() {
             </div>
 
             <div className='about-user-info mx-4'>
-              <h2>{user?.name || 'Morayo Ojikutu'}</h2>
+              <h2>{user?.fullName || 'Morayo Ojikutu'}</h2>
               <div className='user-details'>
-                <div className='green-spring-div primary'>Primary</div>
+                <div className='green-spring-div primary'>
+                  {userType?.accountType === 'Educator'
+                    ? 'Educator'
+                    : user?.grade}
+                </div>
               </div>
 
               <div className='user-details'>
-                <div className='green-spring-div school'>School Name</div>
-                <div className='green-spring-div student'>Student</div>
+                <div className='green-spring-div school'>
+                  {user?.userType || 'Individual'}
+                </div>
+                <div className='green-spring-div student'>
+                  {userType?.accountType === 'Educator'
+                    ? 'Educator'
+                    : 'Student'}
+                </div>
               </div>
 
-              <p>LGA | STATE</p>
               <p>
-                NIGERIA{' '}
+                {user?.lga?.toUpperCase()} | {user?.state?.toUpperCase()}{' '}
+              </p>
+              <p></p>
+              <p>
+                {user?.country?.toUpperCase()}
                 <img src={flag} alt='Nigeria Flag' className='flag-img' />
               </p>
             </div>
@@ -69,36 +110,55 @@ export default function IndividualProfile() {
         </div>
 
         <div className='user-other-info'>
-          <p>
-            <span className='label'>Student ID: </span>
-            <span>{user?.id || 'CIS34524'}</span>
-          </p>
+          {/* Conditionally render Student ID and Email based on account type */}
+          {userType?.accountType !== 'Educator' && (
+            <p>
+              <span className='label'>Student ID:</span>
+              <span>{user?.userId} </span>
+            </p>
+          )}
+
+          {userType?.accountType === 'Educator' && (
+            <p>
+              <span className='label'>Email:</span>
+              <span>{user?.email} </span>
+            </p>
+          )}
+
           <p>
             <span className='label'>D.O.B: </span>
-            <span>{user?.dob || '22/08/2000'}</span>
+            <span>{user?.DOB && formatDate(user.DOB)} </span>
+          </p>
+          <p>
+            <span className='label'>Phone: </span>
+            <span>{user?.phone} </span>
           </p>
           <p>
             <span className='label'>Gender: </span>
-            <span>{user?.gender || 'Female'}</span>
+            <span>{user?.gender} </span>
           </p>
         </div>
+        {userType?.accountType === 'Individual' ? (
+          <div className='user-parent-info'>
+            <h3 style={{ fontSize: '40px' }}>Parent/Guardian Information</h3>
+            <hr className='my-1' />
+            <p>
+              <span className='label'>Full Name: </span>
+              <span>{user?.guardianFullName} </span>
+            </p>
+            <p>
+              <span className='label'>Email Address: </span>
+              <span>{user?.email}</span>
+            </p>
+            <p>
+              <span className='label'>Phone Number: </span>
+              <span>{user?.phone}</span>
+            </p>
+          </div>
+        ) : (
+          ''
+        )}
 
-        <div className='user-parent-info'>
-          <h3 style={{ fontSize: '40px' }}>Parent/Guardian Information</h3>
-          <hr className='my-1' />
-          <p>
-            <span className='label'>Full Name: </span>
-            <span>Mrs Jane Doe</span>
-          </p>
-          <p>
-            <span className='label'>Email Address: </span>
-            <span>Janedoe@gmail.com</span>
-          </p>
-          <p>
-            <span className='label'>Phone Number: </span>
-            <span>+2348149878476</span>
-          </p>
-        </div>
         <hr />
       </div>
 
@@ -108,9 +168,13 @@ export default function IndividualProfile() {
         className='custom-modal'
         overlayClassName='custom-overlay'
         contentLabel='Edit Profile Modal'
-        shouldCloseOnOverlayClick={true}
+        shouldCloseOnOverlayClick={closeModal}
       >
-        <StudentRegistrationProfile onClose={closeModal} />
+        {userType?.accountType === 'Educator' ? (
+          <EducatorProfileModal user={user} onClose={closeModal} />
+        ) : (
+          <StudentRegistrationProfile user={user} onClose={closeModal} />
+        )}
       </Modal>
     </>
   )

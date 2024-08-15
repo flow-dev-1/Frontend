@@ -129,11 +129,39 @@ class UserOBJ {
   }
 
   //update profile
-  updateProfile = async (data) => {
+  updateProfileEducator = async (data) => {
+    try {
+      // Check if data is not empty
+
+      const response = await api.patch('api/educator/profile', data)
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+  updateProfileIndividual = async (data) => {
     try {
       // Check if data is not empty
 
       const response = await api.put('api/users/profile', data)
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+  getMyProfileIndividual = async () => {
+    try {
+      // Check if data is not empty
+      const response = await api.get(`api/users/me`)
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+  getMyProfileEducator = async () => {
+    try {
+      // Check if data is not empty
+      const response = await api.get(`api/educator/me`)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message

@@ -11,6 +11,7 @@ import { RotatingLines } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
 import { setToken } from '../../../redux/reducers/jwtReducer'
 import { loginSuccess } from '../../../redux/reducers/userReducer'
+import { loginData } from '../../../redux/reducers/userReducer'
 
 export default function SignIn() {
   const navigate = useNavigate()
@@ -52,7 +53,7 @@ export default function SignIn() {
       toast.success(data.message)
       dispatch(setToken(data?.token))
       dispatch(loginSuccess(data?.user))
-      console.log(data)
+      dispatch(loginData(data))
       localStorage.setItem('Flow-Auth-Token', data?.token)
       if (data.accountType === 'School') {
         navigate('/school-dashboard', { replace: true })
