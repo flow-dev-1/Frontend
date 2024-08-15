@@ -1,16 +1,15 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Modal from 'react-modal'
-import excelDoc from '../../../../assets/flow-doc.xlsx'
 import { Icon } from '@iconify/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import * as XLSX from 'xlsx'
-import userService from '../../../../services/api/school'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useSelector } from 'react-redux'
 import { RotatingLines } from 'react-loader-spinner'
+import userService from '../../../../services/api/school'
+import * as XLSX from 'xlsx'
 
 const generateTimeOptions = () => {
   const times = []
@@ -62,32 +61,24 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
     handleSubmit,
     setValue,
     getValues,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   })
 
   const { user } = useSelector((state) => state.user)
-
-  let params1
-  if (user.isSchool) {
-    params1 = user._id
-  }
-
+  const params1 = user?.isSchool ? user._id : null
   const params2 = course?._id
 
   const mutation = useMutation({
     mutationFn: (value) =>
       userService.enrolledStudents(params1, params2, value),
-    onSuccess: (data) => {
-      console.log('Mutation success:', data)
+    onSuccess: () => {
       toast.success('Enrollment successful')
       queryClient.invalidateQueries(['school-enrolled-courses'])
       onRequestClose()
     },
     onError: (error) => {
-      console.error('Mutation error:', error)
       toast.error(error?.message || 'Enrollment failed')
     },
   })
@@ -111,23 +102,18 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
           .flat()
           .filter((email) => typeof email === 'string' && validateEmail(email))
         const currentEmails = getValues('students').trim()
-        const currentEmailsArray = currentEmails
-          ? currentEmails.split(',').map((email) => email.trim())
-          : []
-        const mergedEmails = [...new Set([...currentEmailsArray, ...emails])]
+        const mergedEmails = [
+          ...new Set([
+            ...(currentEmails
+              ? currentEmails.split(',').map((email) => email.trim())
+              : []),
+            ...emails,
+          ]),
+        ]
         setValue('students', mergedEmails.join(', '))
       }
       reader.readAsArrayBuffer(file)
     }
-  }
-
-  const handleExcelDownload = () => {
-    const link = document.createElement('a')
-    link.href = excelDoc
-    link.download = 'template.xlsx'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
   }
 
   const onSubmit = (data) => {
@@ -139,25 +125,13 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
       return
 
     const emailsArray = data.students
-
       .split(',')
       .map((email) => email.trim())
-      .filter((email) => validateEmail(email))
+      .filter((email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
     const finalData = { ...data, students: emailsArray }
 
     mutation.mutate(finalData)
   }
-
-  useEffect(() => {
-    const selectElements = document.querySelectorAll('select')
-    selectElements.forEach((select) => {
-      const firstOption = select.options[0]
-      if (firstOption) {
-        firstOption.style.color = '#D6D6D6'
-      }
-    })
-  }, [])
-  //
 
   return (
     <Modal
@@ -181,205 +155,227 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
           </span>
         </h2>
         <hr style={{ margin: '5px' }} />
-        <div>
-          <p
-            style={{ color: '#FD483D', fontSize: '12px', marginBottom: '2rem' }}
-          >
-            *Indicates Required
-          </p>
-        </div>
-        <div>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className='class-input'>
-              <label
-                htmlFor='stdClass'
-                style={{ border: 'none', paddingLeft: '0' }}
-              >
-                Class *
-              </label>
-              <div id='stdClass'>
-                <select
-                  style={{ border: '1px solid #5b616a' }}
-                  name='stdClass'
-                  {...register('stdClass')}
-                >
-                  <option value=''>Choose</option>
-                  {classOptions.map((className, index) => (
-                    <option key={index} value={className}>
-                      {className}
-                    </option>
-                  ))}
-                </select>
-              </div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className='class-input'>
+            <label
+              htmlFor='stdClass'
+              style={{ border: 'none', paddingLeft: '0' }}
+            >
+              Class *
+            </label>
+            <select
+              style={{ border: '1px solid #5b616a' }}
+              name='stdClass'
+              {...register('stdClass')}
+            >
+              <option value=''>Choose</option>
+              {classOptions.map((className, index) => (
+                <option key={index} value={className}>
+                  {className}
+                </option>
+              ))}
+            </select>
+            {errors.stdClass && (
+              <p className='error-message'>{errors.stdClass.message}</p>
+            )}
+          </div>
 
-              {errors.stdClass && (
-                <p className='error-message'>{errors.stdClass.message}</p>
+          <div className='select-flex'>
+            <div>
+              <label
+                style={{ border: 'none', paddingLeft: '0' }}
+                htmlFor='dayOfWeek'
+              >
+                Day of the Week *
+              </label>
+              <select
+                style={{ border: '1px solid #5b616a' }}
+                name='dayOfWeek'
+                {...register('dayOfWeek')}
+              >
+                <option value=''>Choose</option>
+                {daysOfWeek.map((day, index) => (
+                  <option key={index} value={day}>
+                    {day}
+                  </option>
+                ))}
+              </select>
+              {errors.dayOfWeek && (
+                <p className='error-message'>{errors.dayOfWeek.message}</p>
               )}
             </div>
+            <div>
+              <label
+                style={{ border: 'none', paddingLeft: '0' }}
+                htmlFor='startTime'
+              >
+                Start Time *
+              </label>
+              <select
+                name='startTime'
+                style={{ border: '1px solid #5b616a' }}
+                {...register('startTime')}
+              >
+                <option value=''>Choose</option>
+                {timeOptions.map((time, index) => (
+                  <option key={index} value={time}>
+                    {time}
+                  </option>
+                ))}
+              </select>
+              {errors.startTime && (
+                <p className='error-message'>{errors.startTime.message}</p>
+              )}
+            </div>
+            <div>
+              <label
+                style={{ border: 'none', paddingLeft: '0' }}
+                htmlFor='endTime'
+              >
+                End Time *
+              </label>
+              <select
+                style={{ border: '1px solid #5b616a' }}
+                name='endTime'
+                {...register('endTime')}
+              >
+                <option value=''>Choose</option>
+                {timeOptions.map((time, index) => (
+                  <option key={index} value={time}>
+                    {time}
+                  </option>
+                ))}
+              </select>
+              {errors.endTime && (
+                <p className='error-message'>{errors.endTime.message}</p>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <p style={{ fontSize: '14px', color: '#329BD6' }}>
+              For single invite, kindly use the fields below.
+            </p>
             <div className='select-flex'>
               <div>
-                <label
-                  style={{ border: 'none', paddingLeft: '0' }}
-                  htmlFor='dayOfWeek'
-                >
-                  Day of the Week *
-                </label>
-                <div id='dayOfWeek'>
-                  <select
-                    style={{ border: '1px solid #5b616a' }}
-                    name='dayOfWeek'
-                    {...register('dayOfWeek')}
-                  >
-                    <option value=''>Choose</option>
-                    {daysOfWeek.map((day, index) => (
-                      <option key={index} value={day}>
-                        {day}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {errors.dayOfWeek && (
-                  <p className='error-message'>{errors.dayOfWeek.message}</p>
-                )}
-              </div>
-              <div>
-                <label
-                  style={{ border: 'none', paddingLeft: '0' }}
-                  htmlFor='startTime'
-                >
-                  Start Time *
-                </label>
-                <div id='startTime'>
-                  <select
-                    name='startTime'
-                    style={{ border: '1px solid #5b616a' }}
-                    {...register('startTime')}
-                  >
-                    <option value=''>Choose</option>
-                    {timeOptions.map((time, index) => (
-                      <option key={index} value={time}>
-                        {time}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {errors.startTime && (
-                  <p className='error-message'>{errors.startTime.message}</p>
-                )}
-              </div>
-              <div>
-                <label
-                  style={{ border: 'none', paddingLeft: '0' }}
-                  htmlFor='endTime'
-                >
-                  End Time *
-                </label>
-                <div id='endTime'>
-                  <select
-                    style={{ border: '1px solid #5b616a' }}
-                    name='endTime'
-                    {...register('endTime')}
-                  >
-                    <option value=''>Choose</option>
-                    {timeOptions.map((time, index) => (
-                      <option key={index} value={time}>
-                        {time}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {errors.endTime && (
-                  <p className='error-message'>{errors.endTime.message}</p>
-                )}
-              </div>
-            </div>
-            <div className='text-area'>
-              <div className='div'>
-                <label
-                  style={{ border: 'none', paddingLeft: '0' }}
-                  htmlFor='students'
-                >
-                  Student Email *
-                </label>
-                <textarea
-                  id='students-textarea'
-                  name='students'
-                  placeholder='Enter email addresses here and separate with a comma'
-                  rows='5'
-                  cols={50}
-                  {...register('students')}
-                />
-                {errors.students && (
-                  <p className='error-message'>{errors.students.message}</p>
-                )}
-              </div>
-              <div className='upload'>
-                <label
-                  style={{ border: 'none', paddingLeft: '0' }}
-                  htmlFor='file-upload'
-                >
-                  Or Upload file here (CSV, Excel) *
-                </label>
-                <div
+                <label htmlFor=''>Parent/Guardian First & Last Name *</label>
+                <input
+                  id='stdClass'
                   style={{
-                    position: 'relative',
+                    display: 'block',
+                    width: '100%',
+                    padding: '.5rem',
                   }}
-                  className='file-upload-wrapper'
-                >
-                  <input
-                    type='file'
-                    id='file-upload'
-                    className='file-upload-input'
-                    onChange={handleFileUpload}
-                  />
-                  <label
-                    style={{
-                      border: 'none',
-                      paddingLeft: '0',
-                    }}
-                    htmlFor='file-upload'
-                    className='file-upload-label'
-                  >
-                    Choose file
-                    <Icon
-                      icon='ant-design:upload-outlined'
-                      width='24'
-                      height='24'
-                      style={{ position: 'absolute', right: '1rem' }}
-                    />
-                  </label>
-                </div>
-                <span
-                  style={{ fontSize: '12px', cursor: 'pointer' }}
-                  onClick={handleExcelDownload}
-                >
-                  Kindly use this Excel template
-                  <Icon icon='vscode-icons:file-type-excel' width={20} />
-                </span>
+                  type='text'
+                  placeholder='Type here...'
+                />
+              </div>
+              <div>
+                <label htmlFor=''>Parent/Guardian Email Address *</label>
+                <input
+                  id='stdClass'
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    padding: '.5rem',
+                  }}
+                  type='text'
+                  placeholder='Type here...'
+                />
+              </div>
+              <div>
+                <label htmlFor=''>Student’s First & Last Name *</label>
+                <input
+                  id='stdClass'
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    padding: '.5rem',
+                  }}
+                  type='text'
+                  placeholder='Type here...'
+                />
               </div>
             </div>
-            <hr />
-            <button
-              className='modal-button'
-              type='submit'
-              disabled={mutation.isPending}
-            >
-              {mutation.isPending ? (
-                <RotatingLines
-                  type='Oval'
-                  style={{ color: '#FFF' }}
-                  height={20}
-                  width={20}
+          </div>
+
+          <p style={{ fontSize: '14px', color: '#329BD6' }}>
+            For multiple students, kindly upload file using the sheet (Excel)
+            attached below.
+          </p>
+          <div>
+            <div>
+              <div
+                style={{
+                  position: 'relative',
+                  width: '100%',
+                  border: '1px solid   #ECEDF0,',
+                }}
+                className='file-upload-wrapper'
+              >
+                <input
+                  type='file'
+                  id='file-upload'
+                  className='file-upload-input'
                 />
-              ) : (
-                'Enroll'
-              )}
-            </button>
-          </form>
-        </div>
+                <label
+                  style={{
+                    border: 'none',
+                    paddingLeft: '0',
+                    color: '#ECEDF0',
+                  }}
+                  htmlFor='file-upload'
+                  className='file-upload-label'
+                >
+                  Choose file
+                  <Icon
+                    icon='ant-design:upload-outlined'
+                    width='24'
+                    height='24'
+                    style={{
+                      position: 'absolute',
+                      right: '1rem',
+                      color: '#329BD6',
+                    }}
+                  />
+                </label>
+              </div>
+              <span style={{ fontSize: '12px', cursor: 'pointer' }}>
+                Kindly use this Excel template
+                <span>
+                  <Icon icon='vscode-icons:file-type-excel' width={20} />
+                  <Icon
+                    icon='ant-design:download-outlined'
+                    width='24'
+                    height='24'
+                    style={{
+                      right: '1rem',
+                      color: '#329BD6',
+                    }}
+                  />
+                </span>
+              </span>
+            </div>
+          </div>
+          <hr />
+          <button
+            className='modal-button'
+            type='submit'
+            style={{ backgroundColor: '#329BD6' }}
+            disabled={mutation.isPending}
+          >
+            {mutation.isPending ? (
+              <RotatingLines
+                type='Oval'
+                style={{ color: '#FFF' }}
+                height={20}
+                width={20}
+              />
+            ) : (
+              'Send invite'
+            )}
+          </button>
+        </form>
       </div>
     </Modal>
   )
