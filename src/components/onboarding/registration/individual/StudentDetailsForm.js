@@ -18,11 +18,12 @@ import { Navigate, useNavigate } from 'react-router-dom'
 const studentSchema = yup.object().shape({
   fullName: yup
     .string()
-    .matches(
-      /^[A-Z][a-z]*\s[A-Z][a-z]*$/,
-      'Full Name must be in the format "FirstName LastName", with each part capitalized'
-    )
     .required('Full Name is required')
+    .test(
+      'is-three-words-or-less',
+      'Full Name must contain between 1 and 3 words',
+      (value) => value && value.trim().split(/\s+/).length <= 3
+    )
     .trim(),
   grade: yup.string().required('School Grade is required'),
   gender: yup.string().required('Gender is required'),

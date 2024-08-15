@@ -20,11 +20,12 @@ export default function ParentGuardianForm({ onSubmit, setStep, initialData }) {
   const schema = yup.object().shape({
     guardianFullName: yup
       .string()
-      .matches(
-        /^[A-Z][a-z]*\s[A-Z][a-z]*$/,
-        'Full Name must be in the format "FirstName LastName", with each part capitalized'
-      )
       .required('Full Name is required')
+      .test(
+        'is-three-words-or-less',
+        'Full Name must contain between 1 and 3 words',
+        (value) => value && value.trim().split(/\s+/).length <= 3
+      )
       .trim(),
     email: yup
       .string()

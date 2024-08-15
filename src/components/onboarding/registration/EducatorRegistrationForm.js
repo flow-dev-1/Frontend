@@ -46,7 +46,7 @@ export default function EducatorRegistrationForm() {
         'is-three-words-or-less',
         'Full Name must contain between 1 and 3 words',
         (value) => value && value.trim().split(/\s+/).length <= 3
-      ),
+      ).trim(),
     email: yup
       .string()
       .email('Invalid Email')
