@@ -16,7 +16,7 @@ import { toast } from 'react-toastify'
 import userService from '../../../../services/api/user'
 import { RotatingLines } from 'react-loader-spinner'
 
-export default function EducatorProfileModal({ user }) {
+export default function EducatorProfileModal({ user, onClose }) {
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
   const [countries, setCountries] = useState([])
   const [isNigeria, setIsNigeria] = useState(true)
@@ -65,7 +65,7 @@ export default function EducatorProfileModal({ user }) {
       state: user?.state || '',
       country: user?.country || '',
       lga: user?.lga || '',
-      DOB: user?.DOB && formatDate(user?.DOB),
+      DOB: new Date(user.DOB).toISOString().split('T')[0],
     },
   })
 
@@ -107,6 +107,7 @@ export default function EducatorProfileModal({ user }) {
     mutationFn: userService.updateProfileEducator,
     onSuccess: (data) => {
       toast.success('Profile updated successfully')
+      onClose()
       queryClient.invalidateQueries('individual-profile')
     },
     onError: (error) => {
@@ -119,7 +120,7 @@ export default function EducatorProfileModal({ user }) {
     <div className='registration-page overflow-hidden'>
       <div className='top-section mt-2'>
         <h2 className='d-flex justify-content-between align-center'>
-          Register as an Educator
+          Edit Profile
           <Icon icon='radix-icons:cross-1' width={24} />
         </h2>
         <hr />

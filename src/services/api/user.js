@@ -143,7 +143,7 @@ class UserOBJ {
     try {
       // Check if data is not empty
 
-      const response = await api.put('api/users/profile', data)
+      const response = await api.patch('api/users/profile', data)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message

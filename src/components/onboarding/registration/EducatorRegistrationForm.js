@@ -39,7 +39,14 @@ export default function EducatorRegistrationForm() {
   const [email, setEmail] = useState('')
 
   const schema = yup.object().shape({
-    fullName: yup.string().required('Full Name is required'),
+    fullName: yup
+      .string()
+      .required('Full Name is required')
+      .test(
+        'is-three-words-or-less',
+        'Full Name must contain between 1 and 3 words',
+        (value) => value && value.trim().split(/\s+/).length <= 3
+      ),
     email: yup
       .string()
       .email('Invalid Email')

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import PhoneInput, {
@@ -10,7 +10,8 @@ import 'react-phone-number-input/style.css'
 import { Icon } from '@iconify/react'
 import { lgas } from '../../../states/lgas'
 import { states } from '../../../states'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+
 export default function ParentGuardianFormModal({
   onSubmit,
   setStep,
@@ -21,6 +22,7 @@ export default function ParentGuardianFormModal({
   const [isNigeria, setIsNigeria] = useState(initialData?.country === 'Nigeria')
   const [availableLGAs, setAvailableLGAs] = useState([])
   const navigate = useNavigate()
+
   const schema = yup.object().shape({
     guardianFullName: yup
       .string()
@@ -52,10 +54,11 @@ export default function ParentGuardianFormModal({
     handleSubmit,
     setValue,
     watch,
+    control,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: initialData, // Use initial data for default values
+    defaultValues: initialData,
   })
 
   const selectedCountry = watch('country')
@@ -98,7 +101,7 @@ export default function ParentGuardianFormModal({
 
   return (
     <div
-      className='registration-page overflow-hidden '
+      className='registration-page overflow-hidden'
       style={{ height: '400px' }}
     >
       <div className='top-section mt-2'>
@@ -140,26 +143,28 @@ export default function ParentGuardianFormModal({
           <div className='form-group'>
             <label>Phone Number *</label>
             <div className='flex-code-input'>
-              <PhoneInput
-                placeholder='Enter phone number'
-                onChange={(val) => setValue('phone', val)}
-                defaultCountry='NG'
-                onCountryChange={(country) => {
-                  if (country) {
-                    setCountryCode(getCountryCallingCode(country))
-                  }
-                }}
-                style={{
-                  border: '1px solid #ccc',
-                  borderRadius: '5px',
-                  padding: '1px',
-                }}
+              <Controller
+                name='phone'
+                control={control}
+                render={({ field }) => (
+                  <PhoneInput
+                    placeholder='Enter phone number'
+                    {...field}
+                    onCountryChange={(country) => {
+                      field.onChange('')
+                      setCountryCode(getCountryCallingCode(country))
+                    }}
+                    defaultCountry='NG'
+                    style={{
+                      border: '1px solid #ccc',
+                      borderRadius: '5px',
+                      padding: '1px',
+                    }}
+                  />
+                )}
               />
               {countryCode && (
-                <span
-                  style={{ color: '#5b616a' }}
-                  className='country-code register'
-                >
+                <span style={{ color: '#5b616a' }} className='country-code'>
                   +{countryCode}
                 </span>
               )}

@@ -10,8 +10,9 @@ import StudentRegistrationProfile from '../../../modals-pages/dashboard-modals/p
 import { useQuery } from '@tanstack/react-query'
 import userService from '../../../../services/api/user'
 import EducatorProfileModal from './EducatorProfileModal'
+import StudentUpdateProfileModal from './StudentUpdateProfileModal'
 
-export default function IndividualProfile() {
+export default function IndividualProfile({ onClose }) {
   const [modalIsOpen, setIsOpen] = useState(false)
   const { userType } = useSelector((state) => state.user)
   const navigate = useNavigate()
@@ -170,10 +171,10 @@ export default function IndividualProfile() {
         contentLabel='Edit Profile Modal'
         shouldCloseOnOverlayClick={closeModal}
       >
-        {userType?.accountType === 'Educator' ? (
-          <EducatorProfileModal user={user} onClose={closeModal} />
+        {userType?.accountType !== 'Educator' ? (
+          <StudentUpdateProfileModal user={user} onClose={closeModal} />
         ) : (
-          <StudentRegistrationProfile user={user} onClose={closeModal} />
+          <EducatorProfileModal user={user} onClose={closeModal} />
         )}
       </Modal>
     </>
