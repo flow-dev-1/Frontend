@@ -14,7 +14,6 @@ const Loading = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginLeft: "2rem"
       }}
     >
       <img

@@ -36,7 +36,7 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
       .test('isValidPhoneNumber', 'Invalid phone number', (value) =>
         isValidPhoneNumber(value)
       ),
-    image: yup.mixed().required('School Logo is required'),
+    image: yup.mixed(),
   })
 
   useEffect(() => {
@@ -230,13 +230,13 @@ const SettingsEditProfileModal = ({ closeModal, school }) => {
                 className='file-upload-label'
               >
                 {fileName || 'Choose file'}
-                <Icon
-                  icon='ant-design:upload-outlined'
-                  width='24'
-                  style={{ color: '#5B616A' }}
-                  height='24'
-                />
               </label>
+              <Icon
+                icon='ant-design:upload-outlined'
+                width='24'
+                style={{ color: '#5B616A' }}
+                height='24'
+              />
             </div>
             {errors.image && (
               <p className='error-message'>{errors.image.message}</p>

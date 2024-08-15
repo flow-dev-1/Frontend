@@ -173,7 +173,11 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
                 enrolled.includes(course._id)
                   ? { backgroundColor: '#D4FFBE', color: '#4B7E31' }
                   : course.grade !== 'Educators'
-                  ? { backgroundColor: lightTertiary, color: '#329BD6' }
+                  ? {
+                      backgroundColor: '#fff',
+                      color: '#329BD6',
+                      border: '1px solid #329bd6',
+                    }
                   : { backgroundColor: lightEducator, color: darkEducator }
               }
               className={`reviewBtn ${reviewBtnClass}`}

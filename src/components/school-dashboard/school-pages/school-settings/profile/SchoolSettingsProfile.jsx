@@ -62,7 +62,12 @@ const SchoolSettingsProfile = () => {
           </div>
           <div className='school-info'>
             <h1 className='h1'>{data?.school?.school_name}</h1>
-            <p className='primary'>{data?.school?.grade}</p>
+            <p
+              className='primary'
+              style={{ backgroundColor: '#5CE1E6', color: '#5B616A' }}
+            >
+              {data?.school?.grade}
+            </p>
             <p>{data?.school?.address}</p>
             <p>
               {data?.school?.lga.toUpperCase()} |{' '}
@@ -74,10 +79,12 @@ const SchoolSettingsProfile = () => {
             </p>
           </div>
         </div>
-        <button className='edit-btn' onClick={openModal}>
-          <span>
-            <Icon icon='ic:round-plus' />
-          </span>
+        <button
+          style={{ backgroundColor: '#329BD6', color: '#fff' }}
+          className='edit-btn'
+          onClick={openModal}
+        >
+          <span></span>
           Edit Profile
         </button>
       </div>
@@ -86,7 +93,7 @@ const SchoolSettingsProfile = () => {
         id='banner'
         className='heading banner'
         style={{
-          backgroundColor: '#329bd6',
+          backgroundColor: '#275DAD',
           padding: '1rem',
           borderRadius: '5px',
         }}

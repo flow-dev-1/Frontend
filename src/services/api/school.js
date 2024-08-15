@@ -137,7 +137,7 @@ class SchoolOBJ {
   //Change Password
   updateProfile = async (formData) => {
     try {
-      const response = await api.put(`api/schools/profile`, formData, {
+      const response = await api.patch(`api/schools/profile`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

@@ -32,75 +32,42 @@ const CourseDetailModal = ({ course, enrolled, closeModal }) => {
   return (
     <div>
       <div style={{ padding: '20px 50px' }}>
-        <h2
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-          className='modal-title'
-        >
-          Growth Mindset Course Guide{' '}
-          <button
+        <div className='py-2 px-4'>
+          <div className='course-info-modal-header'>
+            <h2
+              className='mb-0'
+              style={{ fontFamily: 'Caveat, cursive', fontSize: '24px' }}
+            >
+              Growth Mindset
+            </h2>
+            <button
+              className='close-btn'
+              style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+            >
+              <Icon icon='mingcute:close-fill' />
+            </button>
+          </div>
+          <hr className='w-100 h-auto mb-2' />
+          <div
             style={{
-              border: 'none',
-              backgroundColor: 'transparent',
-              color: '#5B616A',
-              cursor: 'pointer',
+              width: '100%',
+              height: '160px',
+              backgroundColor: '#D9D9D9',
+              paddingLeft: '1rem',
             }}
-            onClick={closeModal}
-          >
-            <Icon icon='mdi:close' width={24} />
-          </button>
-        </h2>
-        <p style={{ fontSize: '16px', color: '#4b7e31' }}>Course Overview</p>
-        <p style={{ fontSize: '12px', marginBottom: '1rem' }}>
-          {course.description}
-        </p>
-        <p style={{ fontSize: '16px', color: '#4b7e31' }}>Course Objectives</p>
-
-        <ul className='ul'>
-          <p>
-            Upon completion of the Growth Mindset Course, students will be able
-            to:
-          </p>
-
-          <li>
-            <span style={{ color: '#4b7e31' }}>
-              Understanding the Growth Mindset:
-            </span>
-            Students will develop a deep understanding of the growth mindset and
-            how it contrasts with a fixed mindset. They will learn to identify
-            characteristics and examples of each mindset in various contexts.
-          </li>
-          <li>
-            <span style={{ color: '#4b7e31' }}>
-              Applying the Growth Mindset:
-            </span>
-            Students will learn to apply the principles of a growth mindset in
-            real-life situations and understand the importance of embracing
-            challenges, persevering in the face of setbacks, and viewing effort
-            as a path to mastery.
-          </li>
-          <li>
-            <span style={{ color: '#4b7e31' }}>Exploring the Human Brain:</span>
-            Students will gain a basic understanding of the human brain, its
-            capacity for growth and change (neuroplasticity), and how this ties
-            in with the growth mindset concept.
-          </li>
-          <li>
-            <span style={{ color: '#4b7e31' }}>Developing Self-awareness:</span>
-            Students will reflect on their personal strengths, interests, and
-            aspirations, recognize their potential for growth, and understand
-            they can and cannot control.
-          </li>
-          <li>
-            <span style={{ color: '#4b7e31' }}>Encouraging Collaboration:</span>
-            Through group activities, students will develop their teamwork,
-            communication, and problem-solving skills, reinforcing the social
-            aspects of a growth mindset.
-          </li>
-        </ul>
+          ></div>
+          <div className='course-info-modal-body'>
+            <p style={{ fontSize: '20px', color: '#275DAD' }}>
+              Course Overview
+            </p>
+            <p style={{ paddingLeft: '.5rem' }}>{course.description}</p>
+            <div className='mt-4'>
+              <p style={{ fontSize: '20px', color: '#275DAD' }}>
+                Course Objectives
+              </p>
+            </div>
+          </div>
+        </div>
 
         <EnrollmentModal
           isOpen={openEnrollModal}
@@ -118,7 +85,7 @@ const CourseDetailModal = ({ course, enrolled, closeModal }) => {
             justifyContent: 'center',
             gap: '4rem',
             width: '100%',
-            backgroundColor: '#275DAD',
+            backgroundColor: '#329BD6',
             padding: '1rem',
           }}
           className='modal-footer'
@@ -129,13 +96,17 @@ const CourseDetailModal = ({ course, enrolled, closeModal }) => {
           <button
             onClick={openEnrollementModal}
             style={{
-              backgroundColor: '#5CE1E6',
-              color: '#275DAD',
-              borderRadius: '30px',
+              backgroundColor: '#fff',
+              color: '#329BD6',
+              padding: '8px 32px',
+              borderRadius: '4px',
+              border: 'none',
+              cursor: 'pointer',
             }}
             className='purchase-button'
           >
-            <Icon icon='mdi:cart' width={24} /> {course.currency} {course.cost}
+            <Icon icon='mdi:cart' style={{ color: '#329BD6' }} width={24} />{' '}
+            {course.currency} {course.cost}
           </button>
         </div>
       )}
