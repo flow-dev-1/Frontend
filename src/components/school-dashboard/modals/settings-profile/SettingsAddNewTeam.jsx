@@ -1,14 +1,11 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Icon } from '@iconify/react'
-import './settings-modal.css'
 import { RotatingLines } from 'react-loader-spinner'
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
-import Modal from 'react-modal'
+import './settings-modal.css'
 import schoolService from '../../../../services/api/school'
 
 const schema = yup.object().shape({
@@ -22,15 +19,10 @@ const schema = yup.object().shape({
 })
 
 const SettingsAddNewTeam = ({ closeModal, openSuccessModal }) => {
-  const [modalIsOpenSuccess, setModalIsOpenSuccess] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const mutationTriggered = useRef(false)
   const queryClient = useQueryClient()
 
-  const closeSuccessModal = () => {
-    setModalIsOpenSuccess(false)
-    closeModal()
-  }
   const {
     register,
     handleSubmit,
@@ -42,7 +34,7 @@ const SettingsAddNewTeam = ({ closeModal, openSuccessModal }) => {
 
   const mutation = useMutation({
     mutationFn: schoolService.adminInvite,
-    onSuccess: (data) => {
+    onSuccess: () => {
       openSuccessModal()
       closeModal()
       queryClient.invalidateQueries(['school-teams'])
@@ -58,13 +50,24 @@ const SettingsAddNewTeam = ({ closeModal, openSuccessModal }) => {
   const onSubmit = (data) => {
     if (!mutationTriggered.current) {
       mutationTriggered.current = true
-      mutation.mutate(data)
+
+      // Combine first_name and last_name to create fullName
+      const fullName = `${data.first_name} ${data.last_name}`
+
+      // Create the data object to send in the mutation
+      const payload = {
+        fullName,
+        email: data.email,
+        position: data.position,
+      }
+
+      mutation.mutate(payload)
     }
   }
 
   return (
     <div className='' onSubmit={handleSubmit(onSubmit)}>
-      <div className='edit-course-container '>
+      <div className='edit-course-container'>
         <div className='header' style={{ border: 'none' }}>
           <p
             className='team-heading'
@@ -79,7 +82,7 @@ const SettingsAddNewTeam = ({ closeModal, openSuccessModal }) => {
         </p>
         <hr />
         <form className='form-borders' onSubmit={handleSubmit(onSubmit)}>
-          <div className='flex-row '>
+          <div className='flex-row'>
             <div>
               <label>First Name *</label>
               <input

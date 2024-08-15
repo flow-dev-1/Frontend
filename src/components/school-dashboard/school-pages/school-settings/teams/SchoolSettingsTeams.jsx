@@ -124,7 +124,7 @@ const SchoolSettingsTeams = () => {
             {adminData?.map((admin, index) => (
               <tr key={admin._id}>
                 <td>{index + 1}</td>
-                <td>{`${admin.first_name} ${admin.last_name}`}</td>
+                <td>{`${admin.fullName} `}</td>
                 <td>{admin.email}</td>
                 <td>
                   {admin.school === data?.teams?._id
@@ -166,7 +166,7 @@ const SchoolSettingsTeams = () => {
                     <Icon
                       icon='pepicons-pencil:dots-y'
                       width={30}
-                      style={{ color: '#000', cursor:"pointer" }}
+                      style={{ color: '#000', cursor: 'pointer' }}
                       onClick={() => handleActionClick(index)}
                     />
                     {showDropdown === index && (
