@@ -51,7 +51,7 @@ const SchoolAllCourses = () => {
   useEffect(() => {
     if (!data) return
     setCourses(data.courses)
-    return () => { }
+    return () => {}
   }, [data])
 
   const openModal = (course) => {
@@ -63,6 +63,8 @@ const SchoolAllCourses = () => {
     setModalIsOpen(false)
     setSelectedCourse(null)
   }
+
+  console.log(data)
 
   return (
     <div className='my-container'>
@@ -132,7 +134,7 @@ const SchoolAllCourses = () => {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel='Course Detail Modal'
-        className='custom-modal-otp-variant'
+        className='custom-modal-otp-variant-2'
         overlayClassName='custom-overlay'
       >
         <CourseDetailModal

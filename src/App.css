@@ -215,6 +215,17 @@ li {
   padding: 0;
   overflow: hidden;
 }
+.custom-modal-otp-variant-2 {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fefefe;
+  margin: 0 auto;
+  border-radius: 10px;
+  padding: 0;
+  overflow: hidden;
+}
 
 .custom-modal-otp-two {
   width: 60%;

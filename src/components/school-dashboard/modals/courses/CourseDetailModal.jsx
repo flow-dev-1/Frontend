@@ -32,7 +32,7 @@ const CourseDetailModal = ({ course, enrolled, closeModal }) => {
   return (
     <div>
       <div style={{ padding: '20px 50px' }}>
-        <div className='py-2 px-4'>
+        <div>
           <div className='course-info-modal-header'>
             <h2
               className='mb-0'

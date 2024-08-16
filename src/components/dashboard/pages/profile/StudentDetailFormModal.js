@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Icon } from '@iconify/react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import userService from '../../../../services/api/user'
 import { RotatingLines } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
@@ -34,7 +34,7 @@ export default function StudentDetailsFormModal({
   onClose,
 }) {
   const navigate = useNavigate()
-
+  const queryClient = useQueryClient()
   const {
     register,
     handleSubmit,
@@ -56,9 +56,8 @@ export default function StudentDetailsFormModal({
     mutationFn: (data) => userService.updateProfileIndividual(data),
     onSuccess: (data) => {
       console.log('Form submitted successfully', data)
+      queryClient.invalidateQueries('individual-profile')
       toast.success(data.message)
-      dispatch(setToken(data?.token))
-      localStorage.setItem('Flow-Auth-Token', data?.token)
       setStep(2)
     },
     onError: (error) => {
@@ -75,13 +74,10 @@ export default function StudentDetailsFormModal({
   }
 
   const submitHandler = handleSubmit((studentData) => {
-    const formattedStudentData = {
-      ...studentData,
-      DOB: formatDate(studentData.DOB),
-    }
-
-    // Destructure to remove unwanted properties
+    // Destructure to remove unwanted properties from parentFormData
     const {
+      grade,
+      DOB,
       updatedAt,
       deletedAt,
       createdAt,
@@ -94,13 +90,17 @@ export default function StudentDetailsFormModal({
       ...sanitizedParentFormData
     } = parentFormData
 
+    console.log(sanitizedParentFormData)
+    // Combine sanitizedParentFormData and studentData into a single object
     const completeFormData = {
       ...sanitizedParentFormData,
-      student: [formattedStudentData],
+      // Psanarent form data
+      // Student data directly included, no nesting under "student"
     }
 
     console.log('Submitting form data:', completeFormData)
-    mutation.mutate(completeFormData)
+
+    mutation.mutate(completeFormData) // Submitting the combined data
   })
 
   const copyToClipboard = (text) => {
