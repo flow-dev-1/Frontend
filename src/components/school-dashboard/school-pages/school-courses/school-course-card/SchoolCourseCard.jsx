@@ -171,7 +171,11 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
               onClick={() => openModal(course)}
               style={
                 enrolled.includes(course._id)
-                  ? { backgroundColor: '#D4FFBE', color: '#4B7E31' }
+                  ? {
+                      backgroundColor: '#fff',
+                      color: '#329BD6',
+                      border: '1px solid #329bd6',
+                    }
                   : course.grade !== 'Educators'
                   ? {
                       backgroundColor: '#fff',
@@ -185,7 +189,7 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
               <span>
                 <Icon
                   icon='solar:eye-linear'
-                  style={{ color: reviewBtnColor }}
+                  style={{ color: '#329BD6' }}
                   width={20}
                 />
               </span>{' '}
@@ -198,7 +202,11 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
               }
               style={
                 enrolled.includes(course._id)
-                  ? { backgroundColor: darkGreen, color: lightGreen }
+                  ? {
+                      backgroundColor: '#329BD6',
+                      color: '#fff',
+                      border: '1px solid #329bd6',
+                    }
                   : course.grade !== 'Educators'
                   ? { backgroundColor: darkTertiary, color: 'white' }
                   : { backgroundColor: darkEducator, color: lightEducator }

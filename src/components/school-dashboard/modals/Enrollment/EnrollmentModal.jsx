@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Modal from 'react-modal'
 import { Icon } from '@iconify/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -7,10 +7,9 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useSelector } from 'react-redux'
-import { RotatingLines } from 'react-loader-spinner'
-import userService from '../../../../services/api/school'
 import * as XLSX from 'xlsx'
-
+import userService from '../../../../services/api/school'
+import { RotatingLines } from 'react-loader-spinner'
 const generateTimeOptions = () => {
   const times = []
   for (let hour = 6; hour <= 18; hour++) {
@@ -22,21 +21,45 @@ const generateTimeOptions = () => {
   return times
 }
 
-const schema = yup.object().shape({
-  stdClass: yup.string().required('Class is required'),
-  dayOfWeek: yup.string().required('Day of the Week is required'),
-  startTime: yup.string().required('Start Time is required'),
-  endTime: yup.string().required('End Time is required'),
-  students: yup.string().test('emails', 'Invalid email(s)', (value) => {
-    const emails = value.split(',').map((email) => email.trim())
-    return emails.every(
-      (email) => !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-    )
-  }),
-})
-
 const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   const queryClient = useQueryClient()
+  const [fileError, setFileError] = useState('')
+  const [isFileUploaded, setIsFileUploaded] = useState(false)
+  const [parsedStudents, setParsedStudents] = useState([])
+  const schemaWithFile = yup.object().shape({
+    stdClass: yup.string().required('Class is required'),
+    dayOfWeek: yup.string().required('Day of the Week is required'),
+    startTime: yup.string().required('Start Time is required'),
+    endTime: yup.string().required('End Time is required'),
+  })
+
+  const schemaWithoutFile = schemaWithFile.shape({
+    students: yup
+      .array()
+      .of(
+        yup.object().shape({
+          email: yup
+            .string()
+            .email('Invalid email')
+            .required('Email is required'),
+          fullName: yup.string().required('Student Name is required'),
+          guardianFullName: yup.string().required('Guardian Name is required'),
+        })
+      )
+      .required('At least one student is required'),
+  })
+
+  // Dynamically determine which schema to use based on the file upload status
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(isFileUploaded ? schemaWithFile : schemaWithoutFile),
+    defaultValues: {
+      students: [{ email: '', fullName: '', guardianFullName: '' }],
+    },
+  })
 
   const classOptions = [
     'Primary 1',
@@ -56,16 +79,6 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
 
   const timeOptions = generateTimeOptions()
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    getValues,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  })
-
   const { user } = useSelector((state) => state.user)
   const params1 = user?.isSchool ? user._id : null
   const params2 = course?._id
@@ -83,39 +96,6 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
     },
   })
 
-  const validateEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return re.test(String(email).toLowerCase())
-  }
-
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        const data = new Uint8Array(event.target.result)
-        const workbook = XLSX.read(data, { type: 'array' })
-        const sheetName = workbook.SheetNames[0]
-        const worksheet = workbook.Sheets[sheetName]
-        const emails = XLSX.utils
-          .sheet_to_json(worksheet, { header: 1 })
-          .flat()
-          .filter((email) => typeof email === 'string' && validateEmail(email))
-        const currentEmails = getValues('students').trim()
-        const mergedEmails = [
-          ...new Set([
-            ...(currentEmails
-              ? currentEmails.split(',').map((email) => email.trim())
-              : []),
-            ...emails,
-          ]),
-        ]
-        setValue('students', mergedEmails.join(', '))
-      }
-      reader.readAsArrayBuffer(file)
-    }
-  }
-
   const onSubmit = (data) => {
     if (
       !window.confirm(
@@ -124,13 +104,76 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
     )
       return
 
-    const emailsArray = data.students
-      .split(',')
-      .map((email) => email.trim())
-      .filter((email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-    const finalData = { ...data, students: emailsArray }
+    // If a file was uploaded, override the students array with parsed data
+    if (isFileUploaded) {
+      data.students = parsedStudents
+    }
 
-    mutation.mutate(finalData)
+    mutation.mutate(data)
+    console.log(data) // Ensure the data is submitted
+  }
+
+  const { reset } = useForm()
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const binaryStr = e.target.result
+      const workbook = XLSX.read(binaryStr, { type: 'binary' })
+      const sheetName = workbook.SheetNames[0]
+      const sheet = workbook.Sheets[sheetName]
+      const jsonData = XLSX.utils.sheet_to_json(sheet, {
+        header: 1,
+        defval: '', // Set default value for empty cells
+      })
+
+      if (jsonData.length <= 1) {
+        setFileError('The uploaded file is empty or invalid')
+        setIsFileUploaded(false)
+        return
+      }
+
+      setFileError('')
+      const headers = jsonData[0].map((header) => header.trim())
+      const studentDataArray = []
+
+      const expectedHeaders = {
+        Email: 'email',
+        fullName: 'fullName',
+        guardianFullName: 'guardianFullName',
+      }
+
+      jsonData.slice(1).forEach((row) => {
+        let studentData = {}
+        headers.forEach((header, index) => {
+          const key = expectedHeaders[header] || header
+          const value = row[index]?.trim()
+          if (value) {
+            studentData[key] = value
+          }
+        })
+        if (Object.keys(studentData).length > 0) {
+          studentDataArray.push(studentData)
+        }
+      })
+
+      setParsedStudents(studentDataArray)
+      setIsFileUploaded(true)
+
+      // Reset form fields
+      reset({
+        stdClass: '',
+        dayOfWeek: '',
+        startTime: '',
+        endTime: '',
+        students: [{ email: '', fullName: '', guardianFullName: '' }],
+      })
+    }
+
+    reader.readAsBinaryString(file)
   }
 
   return (
@@ -252,53 +295,72 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
             </div>
           </div>
 
-          <div>
-            <p style={{ fontSize: '14px', color: '#329BD6' }}>
-              For single invite, kindly use the fields below.
-            </p>
-            <div className='select-flex'>
+          {/* Render student input fields without the ability to add or remove */}
+          {!isFileUploaded && (
+            <div>
+              <p style={{ fontSize: '14px', color: '#329BD6' }}>
+                For single invite, kindly use the fields below.
+              </p>
               <div>
-                <label htmlFor=''>Parent/Guardian First & Last Name *</label>
-                <input
-                  id='stdClass'
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    padding: '.5rem',
-                  }}
-                  type='text'
-                  placeholder='Type here...'
-                />
-              </div>
-              <div>
-                <label htmlFor=''>Parent/Guardian Email Address *</label>
-                <input
-                  id='stdClass'
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    padding: '.5rem',
-                  }}
-                  type='text'
-                  placeholder='Type here...'
-                />
-              </div>
-              <div>
-                <label htmlFor=''>Student’s First & Last Name *</label>
-                <input
-                  id='stdClass'
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    padding: '.5rem',
-                  }}
-                  type='text'
-                  placeholder='Type here...'
-                />
+                <div className='select-flex'>
+                  <div>
+                    <label>Parent/Guardian First & Last Name *</label>
+                    <input
+                      id='stdClass'
+                      style={{
+                        display: 'block',
+                        width: '100%',
+                        padding: '.5rem',
+                      }}
+                      name='students[0].guardianFullName'
+                      {...register('students.0.guardianFullName')}
+                    />
+                    {errors.students?.[0]?.guardianFullName && (
+                      <p className='error-message'>
+                        {errors.students[0].guardianFullName.message}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label>Parent/Guardian Email Address *</label>
+                    <input
+                      id='stdClass'
+                      style={{
+                        display: 'block',
+                        width: '100%',
+                        padding: '.5rem',
+                      }}
+                      name='students[0].email'
+                      {...register('students.0.email')}
+                    />
+                    {errors.students?.[0]?.email && (
+                      <p className='error-message'>
+                        {errors.students[0].email.message}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label>Student’s First & Last Name *</label>
+                    <input
+                      id='stdClass'
+                      style={{
+                        display: 'block',
+                        width: '100%',
+                        padding: '.5rem',
+                      }}
+                      name='students[0].fullName'
+                      {...register('students.0.fullName')}
+                    />
+                    {errors.students?.[0]?.fullName && (
+                      <p className='error-message'>
+                        {errors.students[0].fullName.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-
+          )}
           <p style={{ fontSize: '14px', color: '#329BD6' }}>
             For multiple students, kindly upload file using the sheet (Excel)
             attached below.
@@ -309,13 +371,14 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                 style={{
                   position: 'relative',
                   width: '100%',
-                  border: '1px solid   #ECEDF0,',
+                  border: '1px solid #ECEDF0',
                 }}
                 className='file-upload-wrapper'
               >
                 <input
                   type='file'
                   id='file-upload'
+                  onChange={handleFileUpload}
                   className='file-upload-input'
                 />
                 <label
@@ -339,6 +402,17 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                     }}
                   />
                 </label>
+                {fileError && (
+                  <p
+                    style={{
+                      color: 'red',
+                      marginTop: '10px',
+                      textAlign: 'right',
+                    }}
+                  >
+                    {fileError}
+                  </p>
+                )}
               </div>
               <span style={{ fontSize: '12px', cursor: 'pointer' }}>
                 Kindly use this Excel template
@@ -357,6 +431,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
               </span>
             </div>
           </div>
+
           <hr />
           <button
             className='modal-button'
