@@ -63,6 +63,20 @@ class UserOBJ {
       throw err?.response?.data || err.message
     }
   }
+  getParentDetails = async (auth_token) => {
+    console.log(auth_token)
+    try {
+      const response = await api.get(`api/users/parent`, {
+        headers: {
+          Authorization: `Bearer ${auth_token}`,
+        },
+      })
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+
   registerInvitedAdmin = async (auth_token, data) => {
     console.log(auth_token)
     try {

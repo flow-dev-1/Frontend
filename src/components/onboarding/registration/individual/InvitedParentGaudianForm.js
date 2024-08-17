@@ -12,44 +12,41 @@ import { lgas } from '../../../states/lgas'
 import { states } from '../../../states'
 import { useNavigate } from 'react-router-dom'
 
-export default function ParentGuardianForm({
-  onSubmit,
-  setStep,
-  initialData,
-  email,
-}) {
+// Define validation schema with yup
+const schema = yup.object().shape({
+  guardianFullName: yup
+    .string()
+    .required('Full Name is required')
+    .test(
+      'is-three-words-or-less',
+      'Full Name must contain between 1 and 3 words',
+      (value) => value && value.trim().split(/\s+/).length <= 3
+    )
+    .trim(),
+  email: yup
+    .string()
+    .email('Invalid Email')
+    .required('Email Address is required'),
+  phone: yup
+    .string()
+    .required('Phone Number is required')
+    .test(
+      'isValidPhoneNumber',
+      'Invalid phone number',
+      (value) => value && isValidPhoneNumber(value)
+    ),
+  country: yup.string().required('Country is required'),
+  state: yup.string().required('State is required'),
+  lga: yup.string().required('LGA is required'),
+})
+
+export default function ParentGuardianForm({ onSubmit, initialData, email }) {
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
   const [countries, setCountries] = useState([])
   const [isNigeria, setIsNigeria] = useState(initialData?.country === 'Nigeria')
   const [availableLGAs, setAvailableLGAs] = useState([])
-  const navigate = useNavigate()
 
-  const schema = yup.object().shape({
-    guardianFullName: yup
-      .string()
-      .required('Full Name is required')
-      .test(
-        'is-three-words-or-less',
-        'Full Name must contain between 1 and 3 words',
-        (value) => value && value.trim().split(/\s+/).length <= 3
-      )
-      .trim(),
-    email: yup
-      .string()
-      .email('Invalid Email')
-      .required('Email Address is required'),
-    phone: yup
-      .string()
-      .required('Phone Number is required')
-      .test(
-        'isValidPhoneNumber',
-        'Invalid phone number',
-        (value) => value && isValidPhoneNumber(value)
-      ),
-    country: yup.string().required('Country is required'),
-    state: yup.string().required('State is required'),
-    lga: yup.string().required('LGA is required'),
-  })
+  const navigate = useNavigate()
 
   const {
     register,
@@ -59,11 +56,23 @@ export default function ParentGuardianForm({
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { ...initialData, email }, // Use initial data for default values
+    defaultValues: {},
   })
 
-  const selectedCountry = watch('country')
-  const selectedState = watch('state')
+  useEffect(() => {
+    if (initialData) {
+      // Debugging step: Log initialData to verify its content
+      console.log('Initial Data:', initialData)
+
+      // Update form values when initialData changes
+      setValue('guardianFullName', initialData.fullName || '')
+      setValue('email', initialData.email || email)
+      setValue('phone', initialData.phone || '')
+      setValue('country', initialData.country || 'Nigeria')
+      setValue('state', initialData.state || '')
+      setValue('lga', initialData.lga || '')
+    }
+  }, [initialData, email, setValue])
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -85,16 +94,16 @@ export default function ParentGuardianForm({
   }, [])
 
   useEffect(() => {
-    if (isNigeria && selectedState) {
-      setAvailableLGAs(lgas[selectedState] || [])
+    if (isNigeria && watch('state')) {
+      setAvailableLGAs(lgas[watch('state')] || [])
     } else {
       setAvailableLGAs([])
     }
-  }, [isNigeria, selectedState])
+  }, [isNigeria, watch('state')])
 
   useEffect(() => {
-    setIsNigeria(selectedCountry === 'Nigeria')
-  }, [selectedCountry])
+    setIsNigeria(watch('country') === 'Nigeria')
+  }, [watch('country')])
 
   const submitHandler = (data) => {
     onSubmit(data)
@@ -102,7 +111,7 @@ export default function ParentGuardianForm({
 
   return (
     <div
-      className='registration-page overflow-hidden '
+      className='registration-page overflow-hidden'
       style={{ height: '400px' }}
     >
       <div className='top-section mt-2'>
@@ -136,7 +145,6 @@ export default function ParentGuardianForm({
               type='email'
               placeholder='Type here...'
               {...register('email')}
-              value={email} // Set the value to the email prop
               disabled // Disable the input field
             />
             {errors.email && (
@@ -148,7 +156,10 @@ export default function ParentGuardianForm({
             <div className='flex-code-input'>
               <PhoneInput
                 placeholder='Enter phone number'
-                onChange={(val) => setValue('phone', val)}
+                value={watch('phone')} // Watch and use the form's phone value
+                onChange={(val) =>
+                  setValue('phone', val, { shouldValidate: true })
+                }
                 defaultCountry='NG'
                 onCountryChange={(country) => {
                   if (country) {

@@ -39,10 +39,11 @@ import IndividualSignupCategory from './components/common-pages/individual-signu
 import StudentRegistrationForm from './components/onboarding/registration/StudentRegistrationForm.js'
 import EducatorRegistrationForm from './components/onboarding/registration/EducatorRegistrationForm.js'
 import IndividualCategory from './components/common-pages/sigup-category/IndividualCategory.js'
-import InvitedUserRegistration from './components/onboarding/registration/InvitedUserRegistration.js'
+import InvitedUserRegistration from './components/onboarding/registration/InvitedStudentRegistrationForm.js'
 import Support from './components/dashboard/pages/support/Support.jsx'
 import PayementHistory from './components/dashboard/pages/payment-history/PayementHistory.jsx'
 import InvitedAdminRegistration from './components/onboarding/registration/InvitedAdminRegistration.js'
+import InvitedStudentRegistrationForm from './components/onboarding/registration/InvitedStudentRegistrationForm.js'
 
 function App() {
   return (
@@ -66,7 +67,7 @@ function App() {
               element={<StudentRegistrationForm />}
             />
 
-            <Route path='/invited-user' element={<InvitedUserRegistration />} />
+            <Route path='/invited-user' element={<InvitedStudentRegistrationForm />} />
 
             <Route
               path='/invited-admin'
