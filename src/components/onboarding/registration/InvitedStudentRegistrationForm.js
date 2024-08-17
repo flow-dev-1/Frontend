@@ -33,6 +33,27 @@ export default function InvitedStudentRegistrationForm() {
     enabled: !!t, // Only run the query if token is present
   })
 
+  const students = [
+    {
+      userId: 'CIS442',
+      fullName: 'John Doe',
+      grade: 'Primary',
+      gender: 'male',
+      DOB: '2010-05-14',
+      password: 'ExistingPassword123!', // Simulate a student with an existing password
+      isVerified: false, // This should be set to true if you want to test the disabled password field
+    },
+    {
+      userId: 'CIS443',
+      fullName: 'Jane Smith',
+      grade: 'Secondary',
+      gender: 'female',
+      DOB: '2008-09-21',
+      password: 'AnotherPassword456!', // Another student with an existing password
+      isVerified: true, // This will disable the password field for this student
+    },
+  ]
+
   console.log(data?.data)
   useEffect(() => {
     if (data?.status === 'success') {

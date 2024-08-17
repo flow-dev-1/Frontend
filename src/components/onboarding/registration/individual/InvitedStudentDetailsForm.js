@@ -51,6 +51,7 @@ export default function InvitedStudentDetailsForm({
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm({
     resolver: yupResolver(studentSchema),
     defaultValues: students[formCount], // Pre-fill with student data
@@ -75,7 +76,7 @@ export default function InvitedStudentDetailsForm({
 
   const continueHandler = async (studentData) => {
     try {
-      // Create a new student object with only the required fields
+      // Create a new student object with only the required fields and exclude `isVerified`
       const newStudent = {
         userId: students[formCount].userId,
         fullName: studentData.fullName,
@@ -85,8 +86,15 @@ export default function InvitedStudentDetailsForm({
         password: studentData.password,
       }
 
-      const updatedStudents = [...students]
-      updatedStudents[formCount] = newStudent
+      console.log(newStudent)
+
+      // Exclude `isVerified` field from each student object
+      const updatedStudents = students.map(
+        (student, index) =>
+          index === formCount
+            ? newStudent
+            : { ...student, isVerified: undefined } // Ensure `isVerified` is excluded
+      )
 
       if (formCount < students.length - 1) {
         // If not the last form, move to the next form
@@ -211,8 +219,8 @@ export default function InvitedStudentDetailsForm({
                   type={showPassword ? 'text' : 'password'}
                   placeholder='Type here...'
                   {...register('password')}
+                  disabled={students[formCount].isVerified} // Disable if verified
                 />
-
                 <Icon
                   onClick={() => setShowPassword(!showPassword)}
                   icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
