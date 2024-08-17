@@ -58,6 +58,7 @@ export default function StudentDetailsFormModal({
       console.log('Form submitted successfully', data)
       queryClient.invalidateQueries('individual-profile')
       toast.success(data.message)
+      onClose()
       setStep(2)
     },
     onError: (error) => {
