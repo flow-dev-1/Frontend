@@ -8,6 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useSelector } from 'react-redux'
 import * as XLSX from 'xlsx'
+import excelDoc from '../../../../assets/Flowtemp.xlsx'
 import userService from '../../../../services/api/school'
 import { RotatingLines } from 'react-loader-spinner'
 const generateTimeOptions = () => {
@@ -114,6 +115,15 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   }
 
   const { reset } = useForm()
+
+  const handleExcelDownload = () => {
+    const link = document.createElement('a')
+    link.href = excelDoc
+    link.download = 'template.xlsx'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0]
@@ -414,7 +424,10 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                   </p>
                 )}
               </div>
-              <span style={{ fontSize: '12px', cursor: 'pointer' }}>
+              <span
+                onClick={handleExcelDownload}
+                style={{ fontSize: '12px', cursor: 'pointer' }}
+              >
                 Kindly use this Excel template
                 <span>
                   <Icon icon='vscode-icons:file-type-excel' width={20} />
