@@ -17,6 +17,7 @@ import excelDoc from '../../../../../../assets/flow-doc.xlsx'
 import schoolService from '../../../../../../services/api/school'
 import { RotatingLines } from 'react-loader-spinner'
 import Loading from '../../../../../loader/Loader'
+import AddStudentModal from './AddStudentsModal'
 
 const schema = yup.object().shape({
   students: yup
@@ -65,6 +66,7 @@ const SchoolEnrolledStudents = () => {
   }
   const navigate = useNavigate()
   const { id } = useParams()
+  console.log(schoolId, decryptId(id))
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['school-single-courses'],
@@ -76,7 +78,7 @@ const SchoolEnrolledStudents = () => {
 
   useEffect(() => {
     if (!data) return
-    setData(data.course)
+    setData(data?.course)
     return () => {}
   }, [data])
 
@@ -172,20 +174,6 @@ const SchoolEnrolledStudents = () => {
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
-  }
-
-  const onSubmit = (data) => {
-    const emailsArray = data.students
-      .split(',')
-      .map((email) => email.trim())
-      .filter((email) => validateEmail(email))
-    const finalData = {
-      ...data,
-      students: emailsArray,
-      stdClass: enrollmentData.stdClass,
-    }
-
-    mutation.mutate(finalData)
   }
 
   const deleteMutation = useMutation({
@@ -395,100 +383,7 @@ const SchoolEnrolledStudents = () => {
         className='custom-modal-otp-three'
         overlayClassName='custom-overlay'
       >
-        <div>
-          <div className='close-flex'>
-            <h2 className='text-start'>Add New Student</h2>
-            <span style={{ cursor: 'pointer' }}>
-              <Icon
-                width={22}
-                onClick={closeModals}
-                icon='iconamoon:close-thin'
-              />
-            </span>
-          </div>
-
-          <hr style={{ margin: '5px' }} />
-          <div>
-            <p style={{ color: '#FD483D', fontSize: '12px' }}>
-              *Indicates Required
-            </p>
-          </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className='flex-container'>
-              <div style={{ width: '70%' }}>
-                <label htmlFor=''>Student Email *</label>
-                <textarea
-                  id='student-email'
-                  name='student-email'
-                  placeholder='Enter email addresses here'
-                  rows={3}
-                  cols={50}
-                  {...register('students')}
-                />
-                {errors.students && (
-                  <p className='error-message'>{errors.students.message}</p>
-                )}
-              </div>
-              <div className='upload'>
-                <label htmlFor='file-upload'>
-                  Or Upload file here (CSV, Excel) *
-                </label>
-                <div
-                  style={{
-                    position: 'relative',
-                  }}
-                  className='file-upload-wrapper'
-                >
-                  <input
-                    type='file'
-                    id='file-upload'
-                    className='file-upload-input'
-                    onChange={handleFileUpload}
-                  />
-                  <label htmlFor='file-upload' className='file-upload-label'>
-                    Choose file
-                    <Icon
-                      style={{ position: 'absolute', right: '1rem' }}
-                      icon='ant-design:upload-outlined'
-                      width='24'
-                      height='24'
-                    />
-                  </label>
-                </div>
-                <span
-                  style={{ fontSize: '12px', cursor: 'pointer' }}
-                  onClick={handleExcelDownload}
-                >
-                  Kindly use this Excel template
-                  <Icon icon='vscode-icons:file-type-excel' width={20} />
-                </span>
-              </div>
-            </div>
-            <hr />
-            <button
-              type='submit'
-              disabled={mutation.isPending}
-              className='modal-button'
-              style={{
-                width: '150px',
-                padding: '0.2rem 1rem',
-                fontWeight: '300',
-                fontSize: '14px',
-              }}
-            >
-              {mutation.isPending ? (
-                <RotatingLines
-                  type='Oval'
-                  style={{ color: '#FFF' }}
-                  height={20}
-                  width={20}
-                />
-              ) : (
-                'Send Invite'
-              )}
-            </button>
-          </form>
-        </div>
+        <AddStudentModal onRequestClose={closeModals} />
       </Modal>
 
       <Modal

@@ -94,23 +94,15 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
               justifyContent: 'space-between',
             }}
           >
-            <div className='users-count'>
+            <div style={{ color: '#329bd6' }} className='users-count'>
               <span>
-                <Icon
-                  icon='fluent:people-24-regular'
-                  style={{ color: darkGreen }}
-                  width={20}
-                />{' '}
+                <Icon icon='fluent:people-24-regular' width={20} />{' '}
               </span>
               {course?.courseEnrollment?.length}
             </div>
-            <div className='likes-count'>
+            <div style={{ color: '#329bd6' }} className='likes-count'>
               <span>
-                <Icon
-                  icon='mingcute:thumb-up-line'
-                  style={{ color: darkGreen }}
-                  width={18}
-                />{' '}
+                <Icon icon='mingcute:thumb-up-line' width={18} />{' '}
               </span>
               {likesPercent(
                 course?.likes?.length,
@@ -135,7 +127,11 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
                 e.stopPropagation()
                 openModal(course)
               }}
-              style={{ backgroundColor: '#D4FFBE', color: '#4B7E31' }}
+              style={{
+                backgroundColor: '#fff',
+                color: '#329BD6',
+                border: '1px solid #329bd6',
+              }}
             >
               <span>
                 <Icon
@@ -153,7 +149,11 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
             >
               <button
                 className={`detailsBtn ${detailsBtnClass}`}
-                style={{ backgroundColor: darkGreen, color: lightGreen }}
+                style={{
+                  backgroundColor: '#329BD6',
+                  color: '#fff',
+                  border: '1px solid #329bd6',
+                }}
               >
                 <span>
                   <Icon

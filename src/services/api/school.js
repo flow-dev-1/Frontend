@@ -172,6 +172,7 @@ class SchoolOBJ {
     }
   }
 
+
   getEnrolledCourseData = async (params1, params2) => {
     try {
       // Check if data is not empty
