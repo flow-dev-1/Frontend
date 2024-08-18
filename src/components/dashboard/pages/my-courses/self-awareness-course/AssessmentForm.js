@@ -29,7 +29,7 @@ export default function AssessmentForm({ onSubmit }) {
                 setTimeout(() => {
                     setReviewPopUp(false);
                 }, 10000);
-            }, 8000);
+            }, 6000);
         }
         
         

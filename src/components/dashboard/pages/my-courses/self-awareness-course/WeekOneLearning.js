@@ -61,7 +61,7 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
    const handleNextWeekCourse = () => {
     // Increment currentWeekIndex and navigate to the SelfAwarenessCourse with updated index
     const nextWeekIndex = currentWeekIndex + 1;
-    navigate('/dashboard/my-courses/1', { state: { course, weekIndex: nextWeekIndex } });
+    navigate('/dashboard/self-awareness-course/1', { state: { course, weekIndex: nextWeekIndex } });
 };
 
     const renderStepContent = () => {
@@ -549,7 +549,7 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
                             <AssessmentForm onSubmit={handleNext} />
 
                         </div>
-                        <button className='btn' onClick={handleReviewPopUp}>click here</button>
+                        {/* <button className='btn' onClick={handleReviewPopUp}>click here</button> */}
 
                         <div className='d-flex align-items-center justify-content-around mx-auto '>
                             <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
