@@ -28,6 +28,10 @@ const MyCourseCard = ({ course }) => {
       // Code to start the course
       navigate(`/dashboard/my-courses/${course.id}`, { state: { course } });
     }
+
+    if(course.title === "Self-Awareness"){
+      navigate(`/dashboard/self-awareness-course/${course.id}`, { state: { course } });
+    }
   }
 
   return (

@@ -74,9 +74,9 @@ export default function Dashboard() {
                 </div>
             </div>} */}
       {location.pathname.startsWith('/dashboard/my-courses/') ? (
-        // <SingleCoursePage />
-        <SelfAwarenessCourse />
-      ) : (
+        <SingleCoursePage />
+        // <SelfAwarenessCourse />
+      ) : location.pathname.startsWith('/dashboard/self-awareness-course') ? <SelfAwarenessCourse /> : (
         <div className='dashboard'>
           <Sidebar className='sidebar-content' />
           <div className='dashboard-content'>

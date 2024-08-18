@@ -43,6 +43,7 @@ import InvitedUserRegistration from './components/onboarding/registration/Invite
 import Support from './components/dashboard/pages/support/Support.jsx'
 import PayementHistory from './components/dashboard/pages/payment-history/PayementHistory.jsx'
 import InvitedAdminRegistration from './components/onboarding/registration/InvitedAdminRegistration.js'
+import SelfAwarenessCourse from './components/dashboard/pages/my-courses/self-awareness-course/SelfAwarenessCourse.js'
 
 function App() {
   return (
@@ -112,6 +113,11 @@ function App() {
             <Route
               path='/dashboard/my-courses/:id'
               element={<SingleCoursePage />}
+            />
+
+<Route
+              path='/dashboard/self-awareness-course/:id'
+              element={<SelfAwarenessCourse />}
             />
 
             <Route

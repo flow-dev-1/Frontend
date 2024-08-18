@@ -19,7 +19,7 @@ const courses = [
   },
   {
     id: 2,
-    title: 'Max the Explorer Monkey: Growth Mindset',
+    title: 'Self-Awareness',
     description:
       'The curriculum combines engaging educational content, interactive activities, and reflective discussions to...',
     viewed: 1548,
