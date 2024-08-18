@@ -81,7 +81,7 @@ export default function IndividualProfile({ onClose }) {
             </div>
 
             <div className='about-user-info mx-4'>
-              <h2>{user?.fullName || 'Morayo Ojikutu'}</h2>
+              <h2>{user?.fullName || 'Update'}</h2>
               <div className='user-details'>
                 <div className='green-spring-div primary'>
                   {userType?.accountType === 'Educator'
@@ -102,12 +102,18 @@ export default function IndividualProfile({ onClose }) {
               </div>
 
               <p>
-                {user?.lga?.toUpperCase()} | {user?.state?.toUpperCase()}{' '}
+                {user?.lga?.toUpperCase() || 'Update'} |{' '}
+                {user?.state?.toUpperCase() || 'Update'}{' '}
               </p>
               <p></p>
               <p>
                 {user?.country?.toUpperCase()}
-                <img src={flag} alt='Nigeria Flag' className='flag-img' />
+                <img
+                  src={flag}
+                  alt='Nigeria Flag'
+                  style={{ borderRadius: '2px', width: '30px' }}
+                  className='flag-img'
+                />
               </p>
             </div>
           </div>
@@ -129,21 +135,21 @@ export default function IndividualProfile({ onClose }) {
           {userType?.accountType === 'Educator' && (
             <p>
               <span className='label'>Email:</span>
-              <span>{user?.email} </span>
+              <span>{user?.email || 'Update'} </span>
             </p>
           )}
 
           <p>
             <span className='label'>D.O.B: </span>
-            <span>{user?.DOB && formatDate(user.DOB)} </span>
+            <span>{(user?.DOB && formatDate(user.DOB)) || 'Update'} </span>
           </p>
           <p>
             <span className='label'>Phone: </span>
-            <span>{user?.phone} </span>
+            <span>{user?.phone || 'Update'} </span>
           </p>
           <p>
             <span className='label'>Gender: </span>
-            <span>{user?.gender} </span>
+            <span>{user?.gender || 'Update'} </span>
           </p>
         </div>
         {userType?.accountType === 'Individual' ? (
@@ -152,15 +158,15 @@ export default function IndividualProfile({ onClose }) {
             <hr className='my-1' />
             <p>
               <span className='label'>Full Name: </span>
-              <span>{user?.guardianFullName} </span>
+              <span>{user?.guardianFullName || 'Update'} </span>
             </p>
             <p>
               <span className='label'>Email Address: </span>
-              <span>{user?.email}</span>
+              <span>{user?.email || 'Update'}</span>
             </p>
             <p>
               <span className='label'>Phone Number: </span>
-              <span>{user?.phone}</span>
+              <span>{user?.phone || 'Update'}</span>
             </p>
           </div>
         ) : (

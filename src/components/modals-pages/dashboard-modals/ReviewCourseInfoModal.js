@@ -19,7 +19,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
             className='mb-0'
             style={{ fontFamily: 'Caveat, cursive', fontSize: '24px' }}
           >
-            {course.title}
+            {course?.title}
           </h2>
           <button
             className='close-btn'

@@ -2,44 +2,21 @@ import React from 'react'
 import MyCourseCard from '../../reusable/MyCourseCard'
 import { Icon } from '@iconify/react'
 import './course.css'
-import courseOne from '../../../../assets/course1.png'
-import courseTwo from '../../../../assets/course2.png'
-import courseThree from '../../../../assets/course3.png'
-
-const courses = [
-  {
-    id: 1,
-    title: 'Max the Explorer Monkey: Growth Mindset',
-    description:
-      'The curriculum combines engaging educational content, interactive activities, and reflective discussions to...',
-    viewed: 1548,
-    likes: 98,
-    progress: 0,
-    image: courseOne, // Replace with actual image path or URL
-  },
-  {
-    id: 2,
-    title: 'Max the Explorer Monkey: Growth Mindset',
-    description:
-      'The curriculum combines engaging educational content, interactive activities, and reflective discussions to...',
-    viewed: 1548,
-    likes: 98,
-    progress: 10,
-    image: courseTwo, // Replace with actual image path or URL
-  },
-  {
-    id: 3,
-    title: 'Max the Explorer Monkey: Growth Mindset',
-    description:
-      'The curriculum combines engaging educational content, interactive activities, and reflective discussions to...',
-    viewed: 1548,
-    likes: 98,
-    progress: 100,
-    image: courseThree, // Replace with actual image path or URL
-  },
-]
+import userService from '../../../../services/api/user'
+import { useQuery } from '@tanstack/react-query'
+import Loading from '../../../loader/Loader'
 
 export default function MyCourses() {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['individual-courses-enrolled'],
+    queryFn: () => userService.getIndividualCoursesEnrolled(), // Make sure to call the function
+  })
+
+  console.log(data?.courses)
+
+  if (isLoading) return <Loading /> // Render loading spinner or message
+  if (isError) return <p>Error loading courses. Please try again later.</p> // Handle error state
+
   return (
     <div className='w-100'>
       <div className='browse-all-courses-text container-fluid'>
@@ -66,10 +43,8 @@ export default function MyCourses() {
                 style={{ color: '#4d4d4d' }}
               />
               <select name='' id='' className='sort'>
-                <option value='' selected>
-                  Sort by
-                </option>
                 <option value=''>Sort by</option>
+                {/* Populate sorting options here */}
               </select>
             </label>
           </div>
@@ -78,12 +53,13 @@ export default function MyCourses() {
             <label>
               <Icon icon='gridicons:filter' style={{ color: '#4d4d4d' }} />
               <select name='' id='' className='filter'>
-                <option value='' selected disabled>
+                <option value='' disabled>
                   Filter by
                 </option>
                 <option value=''>All</option>
-                <option value=''>Students</option>
-                <option value=''>Teachers</option>
+                <option value='students'>Students</option>
+                <option value='teachers'>Teachers</option>
+                {/* Populate filter options here */}
               </select>
             </label>
           </div>
@@ -91,7 +67,7 @@ export default function MyCourses() {
       </div>
 
       <div className='courses-list row row-cols-1 row-cols-md-3 g-4'>
-        {courses.map((course) => (
+        {data?.courses?.map((course) => (
           <MyCourseCard key={course.id} course={course} />
         ))}
       </div>

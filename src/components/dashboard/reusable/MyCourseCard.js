@@ -17,10 +17,22 @@ const MyCourseCard = ({ course }) => {
     setIsOpen(false)
   }
 
+  const likesPercent = (likes, courseEnrollment) => {
+    if (likes === 0) return 0
+    return (likes / courseEnrollment) * 100
+  }
+
+  const truncateText = (text, maxLength) => {
+    if (text?.length > maxLength) {
+      return text.slice(0, maxLength) + '...'
+    }
+    return text
+  }
+
   const handleButtonClick = () => {
-    if (course.progress === 100) {
+    if (course?.progress === 100) {
       openModal('feedback')
-    } else if (course.progress > 0 && course.progress < 100) {
+    } else if (course?.progress > 0 && course?.progress < 100) {
       // Code to resume the course
     } else {
       // Code to start the course
@@ -31,24 +43,48 @@ const MyCourseCard = ({ course }) => {
     <div style={{ backgroundColor: '#fff' }} className='reusable-course-card'>
       <div className='course-card' style={{ height: '100%', width: '100%' }}>
         <div className='course-details'>
-          <img src={course.image} alt='' className='course-image' />
+          <div style={{ height: '250px', display: 'block', width: '100%' }}>
+            <img
+              style={{
+                display: 'block',
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+              src={course?.course.image}
+              alt=''
+              className={
+                course?.course.description?.toLowerCase() === 'growth mindset'
+                  ? 'growth-mindset'
+                  : ''
+              }
+            />
+          </div>
+
           <div className='px-3 py-2'>
+            {/* <h3 style={{ color: '#329BD6', fontSize: '24px' }}>
+              Max the Explorer Monkey:{' '}
+            </h3> */}
             <h3 style={{ color: '#329BD6', fontSize: '24px' }}>
-              Max the Explorer Monkey:
+              {course?.course.title}
             </h3>
-            <h3 style={{ fontSize: '24px' }}>{course.title}</h3>
-            {course.subtitle && <h4>{course.subtitle}</h4>}
-            <p>{course.description}</p>
+            {/* {course.subtitle && <h4>{course.subtitle}</h4>} */}
+            <p style={{ height: '70px' }}>
+              {' '}
+              {truncateText(course?.course.description, 100)}
+            </p>
             <div className='d-flex icons'>
               <span>
                 <Icon icon='solar:user-linear' />
-                {course.viewed}
+                {course?.course.courseEnrollment?.length}
               </span>
               <span>
-                <Icon icon='mingcute:thumb-up-line' /> {course.likes}%
-              </span>
-              <span>
-                <Icon icon='bytesize:book' /> {course.progress}%
+                <Icon icon='mingcute:thumb-up-line' />{' '}
+                {likesPercent(
+                  course?.course.likes?.length,
+                  course?.course.courseEnrollment?.length
+                )}{' '}
+                %
               </span>
             </div>
           </div>
@@ -93,7 +129,7 @@ const MyCourseCard = ({ course }) => {
           {/* Start/Resume/Completed Button */}
           <button
             style={{
-              backgroundColor: course.progress === 100 ? '#fff' : '#329BD6',
+              backgroundColor: course?.progress === 100 ? '#fff' : '#329BD6',
               color: course.progress === 100 ? '#50AA50' : '#fff',
               display: 'flex',
               justifyContent: 'center',
@@ -104,19 +140,19 @@ const MyCourseCard = ({ course }) => {
             className='btn card-btn start-resume'
             onClick={handleButtonClick}
           >
-            {course.progress === 100 ? (
+            {course?.progress === 100 ? (
               <Icon width={25} icon='ph:seal-check-thin' />
             ) : (
               <Icon icon='pepicons-print:play-circle' />
             )}
-            {course.progress === 100
+            {course?.progress === 100
               ? 'Completed'
               : course.progress === 0
               ? 'Start'
               : 'Resume'}
           </button>
           {/* Comment Icon - Only appears when resuming */}
-          {course.progress > 0 && course.progress < 100 && (
+          {course?.progress > 0 && course?.progress < 100 && (
             <Icon
               style={{ color: '#329BD6' }}
               width={40}

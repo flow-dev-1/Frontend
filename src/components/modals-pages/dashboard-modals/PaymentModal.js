@@ -82,7 +82,7 @@ export default function PaymentModal({ course, onClose }) {
         <div className="payment-modal-body ">
 
 
-          <p className='p-amount'>₦{course.amount}</p>
+          <p className='p-amount'>₦{course?.cost}</p>
 
           <form action="" onSubmit={handleSubmit(onSubmit)} className='mt-2'>
             <div className="d-flex">

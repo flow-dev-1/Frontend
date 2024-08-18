@@ -172,6 +172,24 @@ class UserOBJ {
       throw err?.response?.data || err.message
     }
   }
+  getIndividualCoursesEnrolled = async () => {
+    try {
+      // Check if data is not empty
+      const response = await api.get(`api/users/courses?type=Enrolled`)
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+  getIndividualCourses = async () => {
+    try {
+      // Check if data is not empty
+      const response = await api.get(`api/users/courses`)
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
   getMyProfileEducator = async () => {
     try {
       // Check if data is not empty

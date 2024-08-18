@@ -21,7 +21,7 @@ export default function CourseInfoModal({ course, onClose }) {
             className='mb-0'
             style={{ fontFamily: 'Caveat, cursive', fontSize: '24px' }}
           >
-            {course.title}
+            {course?.title}
           </h2>
           <button
             className='close-btn'
@@ -42,7 +42,7 @@ export default function CourseInfoModal({ course, onClose }) {
         ></div>
         <div className='course-info-modal-body'>
           <p style={{ fontSize: '20px', color: '#275DAD' }}>Course Overview</p>
-          <p style={{ paddingLeft: '.5rem' }}>{course.description}</p>
+          <p style={{ paddingLeft: '.5rem' }}>{course?.description}</p>
           <div className='mt-4'>
             <p style={{ fontSize: '20px', color: '#275DAD' }}>
               Course Objectives
@@ -65,7 +65,7 @@ export default function CourseInfoModal({ course, onClose }) {
         </div>
       </div>
 
-      {!course.enrolled && (
+      {!course?.enrolled && (
         <div
           className='course-info-modal-footer container-fluid py-2 px-4'
           style={{
@@ -87,7 +87,7 @@ export default function CourseInfoModal({ course, onClose }) {
               cursor: 'pointer',
             }}
           >
-            <Icon icon='f7:cart' width={20} /> N{course.amount}
+            <Icon icon='f7:cart' width={20} /> N{course?.cost}
           </button>
         </div>
       )}

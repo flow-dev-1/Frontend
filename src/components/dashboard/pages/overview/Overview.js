@@ -6,12 +6,25 @@ import { Icon } from '@iconify/react'
 import femaleprofileImage from '../../../../assets/user-profile-image.png'
 import maleprofileImage from '../../../../assets/male-profile-image.png'
 import './overview.css'
+import { useQuery } from '@tanstack/react-query'
+import Loading from '../../../loader/Loader'
+import userService from '../../../../services/api/user'
 
 import { useSelector } from 'react-redux'
 
 export default function IndividualOverview() {
   const navigate = useNavigate()
   const { user } = useSelector((state) => state.user)
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['individual-courses'],
+    queryFn: () => userService.getIndividualCourses(), // Make sure to call the function
+  })
+
+  console.log(data?.courses)
+
+  if (isLoading) return <Loading /> // Render loading spinner or message
+  if (isError) return <p>Error loading courses. Please try again later.</p>
 
   return (
     <div className='overview-student w-100'>
@@ -80,7 +93,7 @@ export default function IndividualOverview() {
       </div>
 
       <div className='courses-list row row-cols-1 row-cols-md-3 g-4'>
-        {courses
+        {data?.courses
           .filter((course) => !course.enrolled)
           .map((course) => (
             <CourseCard key={course.id} course={course} />

@@ -32,35 +32,66 @@ const CourseCard = ({ course }) => {
     setIsOpen(false)
   }
 
+  const likesPercent = (likes, courseEnrollment) => {
+    if (likes === 0) return 0
+    return (likes / courseEnrollment) * 100
+  }
+
+  const truncateText = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...'
+    }
+    return text
+  }
+
   const enrolled = false
 
   return (
     <div className='reusable-course-card'>
       <div className='course-card' style={{ height: '100%', width: '100%' }}>
-        <div className='course-details'>
-          <img
-            src={course.image}
-            alt=''
-            className={
-              course.subtitle.toLowerCase() === 'growth mindset'
-                ? 'growth-mindset'
-                : ''
-            }
-          />
+        <div style={{ height: '400px' }} className='course-details'>
+          <div style={{ height: '250px', display: 'block', width: '100%' }}>
+            <img
+              style={{
+                display: 'block',
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+              src={course?.image}
+              alt=''
+              className={
+                course?.description.toLowerCase() === 'growth mindset'
+                  ? 'growth-mindset'
+                  : ''
+              }
+            />
+          </div>
+
           <div className='px-3 py-2'>
-            <h3 style={{ color: '#329BD6', fontSize: '24px' }}>
+            {/* <h3 style={{ color: '#329BD6', fontSize: '24px' }}>
               Max the Explorer Monkey:{' '}
+            </h3> */}
+            <h3 style={{ color: '#329BD6', fontSize: '24px' }}>
+              {course?.title}
             </h3>
-            <h3 style={{ fontSize: '24px' }}>{course.title}</h3>
-            {course.subtitle && <h4>{course.subtitle}</h4>}
-            <p>{course.description}</p>
+            {/* {course.subtitle && <h4>{course.subtitle}</h4>} */}
+            <p style={{ height: '70px' }}>
+              {' '}
+              {truncateText(course?.description, 100)}
+            </p>
             <div className='d-flex icons'>
               <span>
                 <Icon icon='solar:user-linear' />
-                {course.viewed}
+                {course?.courseEnrollment.length}
               </span>
               <span>
-                <Icon icon='mingcute:thumb-up-line' /> {course.likes} %
+                <Icon icon='mingcute:thumb-up-line' />{' '}
+                {likesPercent(
+                  course?.likes?.length,
+                  course?.courseEnrollment?.length
+                )}{' '}
+                %
               </span>
             </div>
           </div>
@@ -94,7 +125,8 @@ const CourseCard = ({ course }) => {
             onClick={() => openModal('payment')}
           >
             <Icon icon='mdi:cart-outline' />
-            {course.amount}
+            <span>{course?.currency}</span>
+            {course?.cost}
           </button>
         </div>
       </div>

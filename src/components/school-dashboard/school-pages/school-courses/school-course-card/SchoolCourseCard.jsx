@@ -108,7 +108,7 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
           {/* <h3>{course.subtitle}</h3> */}
         </div>
         <p style={{ fontSize: '12px', height: '60px' }}>
-          {truncateText(course.description, 100)}
+          {truncateText(course?.description, 100)}
         </p>
         <div
           style={{
