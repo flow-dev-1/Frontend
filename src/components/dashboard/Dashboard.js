@@ -10,6 +10,19 @@ import logo from '../../assets/logo.png'
 import { loginSuccess, logoutSuccess } from '../../redux/reducers/userReducer'
 import SingleCoursePage from './pages/my-courses/single-course-page/SingleCoursePage'
 import { clearToken } from '../../redux/reducers/jwtReducer'
+import SelfAwarenessCourse from './pages/my-courses/self-awareness-course/SelfAwarenessCourse'
+
+
+
+
+
+
+
+
+
+
+
+
 export default function Dashboard() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -61,7 +74,8 @@ export default function Dashboard() {
                 </div>
             </div>} */}
       {location.pathname.startsWith('/dashboard/my-courses/') ? (
-        <SingleCoursePage />
+        // <SingleCoursePage />
+        <SelfAwarenessCourse />
       ) : (
         <div className='dashboard'>
           <Sidebar className='sidebar-content' />

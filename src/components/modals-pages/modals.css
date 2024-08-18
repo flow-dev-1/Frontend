@@ -184,3 +184,27 @@
 .registration-page.edit-profile .prefilled, .registration-page.edit-profile select.prefilled option {
   color: #808080; /* Grey color */
 }
+
+.review-popup.modal-content {
+  width: fit-content
+}
+
+.review-popup h1.review {
+  background-color: #275DAD;
+ color: #fff;
+  border: 8px solid #5CE1E6;
+  border-radius: 50px;
+  text-align: center;
+  padding: 5px 0;
+}
+
+.review-popup div .review-buttons{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.review-popup div .review-buttons .btn, .review-popup div .review-buttons .btn:focus{
+  outline: none;
+  border: none;
+}

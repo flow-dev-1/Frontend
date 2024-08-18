@@ -3,8 +3,10 @@ import { Icon } from '@iconify/react'
 import './reusable.css'
 import Modal from 'react-modal'
 import ReviewCourseInfoModal from '../../modals-pages/dashboard-modals/ReviewCourseInfoModal'
+import { useNavigate } from 'react-router-dom'
 
 const MyCourseCard = ({ course }) => {
+  const navigate = useNavigate();
   const [modalIsOpen, setIsOpen] = useState(false)
   const [modalType, setModalType] = useState('')
 
@@ -24,6 +26,7 @@ const MyCourseCard = ({ course }) => {
       // Code to resume the course
     } else {
       // Code to start the course
+      navigate(`/dashboard/my-courses/${course.id}`, { state: { course } });
     }
   }
 

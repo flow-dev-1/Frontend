@@ -83,20 +83,21 @@ export default function CourseProgessionOne({ course, onClose, currentWeekIndex 
                         <div className="course-info-modal">
                             <div className="">
                                 <div className="course-info-modal-header ">
-                                    <h2 className='mb-0'>{course.subtitle} Course Guide</h2>
+                                    <h2 className='mb-0'>{course?.subtitle} Course Guide</h2>
 
                                 </div>
                                 <hr className='w-100 h-auto my-0' />
                                 <div className="course-info-modal-body ">
                                     <p className='progress-course-info-p'>Course Overview</p>
-                                    <p>{course.description}</p>
+                                    <p>{course?.description}</p>
                                     <div className="mt-4">
                                         <p className='progress-course-info-p'>Course Objectives</p>
 
                                         Upon completion of the Growth Mindset Course, students will be able to:
                                         <div className="objectives">
                                             <ul>
-                                                {course.objectives.map((objective, index) => (
+                                                {/* {course?.objectives.map((objective, index) => ( */}
+                                                {(course?.objectives || []).map((objective, index) => (
                                                     <li key={index}>
                                                         <p className='progress-course-info-p'>{objective.title}:</p> {objective.description}</li>
                                                 ))}

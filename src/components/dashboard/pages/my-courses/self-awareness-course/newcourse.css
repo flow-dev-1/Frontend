@@ -1,0 +1,461 @@
+.self-awareness .course-links {
+  flex: 2;
+  /* border-radius: 10px; */
+  position: fixed;
+  width: 300px;
+  height: -webkit-fill-available;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0px 4px 15px 0px #0000000d;
+  border: 1px solid #44444440;
+  overflow-y: scroll;
+}
+
+.back-to-course-list {
+  cursor: pointer;
+  color: #5B616A;
+  font-size: 18px;
+  margin-left: 20px;
+}
+
+.self-awareness .course-links::-webkit-scrollbar {
+  width: 0;
+  /* Remove scrollbar width */
+  height: 0;
+  /* Remove scrollbar height */
+}
+
+.self-awareness .about-courses-menu {
+  color: #ffffff;
+  font-size: 14px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.self-awareness .back-to-course-list,
+.self-awareness .refresh {
+  cursor: pointer;
+}
+
+.self-awareness .course-title-text {
+  display: flex;
+  flex-direction: column;
+  /* width: 280px; */
+  padding: 10px;
+  /* background-color: #275DAD; */
+  /* border-radius: 5px; */
+  background-image: url('../../../../../assets/selfawareness-images/course-title-bg.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  /* height: auto; */
+  padding: 20px;
+}
+
+.self-awareness .course-title-text h2 {
+  font-size: 24px;
+  text-wrap: nowrap;
+  color: #fff;
+  letter-spacing: normal;
+  line-height: normal;
+  margin-bottom: 0;
+}
+
+.self-awareness .course-title-text h2.sub-title {
+  color: #5CE1E6;
+}
+
+.self-awareness .about-courses-menu .sub-courses {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  /* align-items: flex-start; */
+}
+
+.self-awareness .about-courses-menu .sub-courses li {
+  width: 280px;
+  display: flex;
+  align-items: center;
+  font-weight: 400;
+  font-size: 12px;
+  color: #c5c4c4;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: transparent;
+  cursor: pointer;
+  margin: 0 0 10px 0;
+}
+
+.self-awareness .about-courses-menu .sub-courses li p.text-wrap {
+  /* text-align: justify; */
+  width: auto;
+}
+
+.self-awareness .about-courses-menu .sub-courses li:hover {
+  background-color: #275cad23;
+  color: #275DAD;
+}
+
+.self-awareness .about-courses-menu .sub-courses li:hover .iconify {
+
+  color: #275DAD;
+}
+
+.self-awareness .about-courses-menu .sub-courses li .iconify {
+  font-size: 18px;
+  margin-right: 20px;
+  color: #D6D6D6;
+}
+
+.self-awareness .about-courses-menu .sub-courses li.active {
+  background-color: transparent;
+  color: #1f60c1;
+}
+
+.self-awareness .about-courses-menu .sub-courses li.active .iconify {
+  color: #1f60c1;
+}
+
+.self-awareness .course-sidebar-content {
+  width: 100%;
+  border-radius: 10px;
+  padding: 40px 10px;
+  /* margin: 50px 0 0 250px ; */
+  margin: 60px 0 0 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.self-awareness .video-div {
+  padding: 0px;
+  background-color: transparent;
+  width: fit-content;
+  border-radius: 15px;
+}
+
+.self-awareness .custom-video,
+.self-awareness .video-thumbnail {
+  width: 800px;
+  height: 400px;
+  /* #ECEDF0 */
+}
+
+.video-thumbnail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ECEDF0;
+  border-radius: 15px;
+}
+
+.self-awareness .play-icon {
+  color: #329BD6;
+  font-size: 32px;
+  z-index: 1000;
+}
+
+.self-awareness .progression-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.self-awareness .pause-play-btn {
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border: 1px solid #ecedf0;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.self-awareness .pause-play-btn .iconify {
+  color: #329BD6;
+  font-size: 32px;
+}
+
+.self-awareness .btn.progress-btn {
+  width: 200px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border: 1px solid #ecedf0;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.self-awareness .btn.progress-btn.btn-light {
+  background-color: #ffffff;
+  color: #329BD6;
+  border: 2px solid #329BD6;
+}
+
+.self-awareness .btn.progress-btn.btn-dark {
+  background-color: #329BD6;
+  color: #ffffff;
+}
+
+.self-awareness .question-box-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.self-awareness .question-box-header h1 {
+  color: #275DAD;
+  font-size: 40px;
+
+}
+
+.self-awareness .question-box-header h2 {
+
+  font-size: 30px;
+
+}
+
+.self-awareness .question-box-header img {
+  max-width: 30%;
+  object-fit: contain;
+}
+
+.self-awareness .question-box {
+  width: 850px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  background: url('../../../../../assets/selfawareness-images/course-bg.png') #6EDEEB;
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border: 10px solid #00BCC3;
+  padding: 10px 30px;
+}
+
+.text-area-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  background: url('../../../../../assets/selfawareness-images/text-area-bg.png');
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.text-area-box textarea {
+  /* height: 150px; */
+  outline: none;
+  background-color: transparent !important;
+  border: none;
+  font-size: 14px;
+}
+
+.text-area-box textarea::placeholder {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.text-area-box textarea:focus {
+  outline: none;
+  border: none;
+}
+
+.text-area-box textarea::-webkit-resizer {
+  appearance: none;
+}
+
+.self-awareness .drag-drop {
+  width: 850px;
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+  border: 10px solid #00BCC3;
+  /* padding: 10px 30px; */
+
+}
+
+.self-awareness .card-slider {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.self-awareness img.slider-img-card {
+  max-width: 80%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.self-awareness .drop-card {
+  flex: 1;
+  background-color: #1f60c1;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.self-awareness .drop-card .drop-card-header {
+  display: flex;
+  color: #fff;
+  text-align: center;
+
+}
+
+.self-awareness .drag-drop .drop-card-header h2 {
+  font-size: 28px;
+  margin-top: 15px
+}
+
+.self-awareness .drop-card .drop-card-header img {
+  width: 80%;
+  height: 80%;
+}
+
+.self-awareness .bucket-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.self-awareness .drop-card .drop-card-header .dragdropArrow
+{
+  transform: scaleX(-1);
+}
+
+.self-awareness .drag-drop .bucket {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.self-awareness .drag-drop .bucket .bucket-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background-color: #fff;
+  border: 3px solid;
+  border-radius: 50px;
+  line-height: 0;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.self-awareness .drag-drop .bucket .bucket-item.yes {
+  color: #50AA50;
+  border-color: #50AA50;
+}
+
+.self-awareness .drag-drop .bucket .bucket-item.no {
+  color: #FD483D;
+  border-color: #FD483D;
+}
+
+.self-awareness .drag-drop .bucket .bucket-item.sometimes {
+  color: #ED8641;
+  border-color: #ED8641;
+}
+
+.self-awareness .refresh,
+.self-awareness .slider-indicator ul,
+.personality-type {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+
+.self-awareness .slider-indicator ul li {
+  width: 20px;
+  height: 10px;
+  background-color: #D6D6D6;
+  margin: 0 3px;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+.self-awareness .slider-indicator ul li.dragged {
+  padding: 0;
+  background-color: #00BCC3;
+}
+
+.slider-img-card {
+  transition: transform 0.2s ease;
+  /* Smooth transition */
+}
+
+.card-item.dragging .slider-img-card {
+  transform: scale(0.5);
+  /* Adjust size while dragging */
+}
+
+/* .card-item.dragging  {
+  transition: transform 0.37s cubic-bezier(0.2, 1, 0.1, 1), opacity 0.37s cubic-bezier(0.2, 1, 0.1, 1);
+ 
+  transform: translate(300px, 100px) !important;
+
+} */
+
+
+.self-awareness .personality-type div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 16px;
+  color: #5B616A;
+  font-weight: bold;
+}
+
+.self-awareness .question-box.personality-question .text-area-box,
+.self-awareness .question-box.assessment .text-area-box {
+  height: auto;
+  background-size: 100% 100%;
+}
+
+.self-awareness .assessment-box {
+  width: auto;
+  height: fit-content;
+  background-color: #275DAD;
+  text-align: center;
+  color: #fff;
+  padding: 10px 0;
+}
+
+.self-awareness .assessment-page .slider-indicator ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.self-awareness .checkbox-questions li img {
+  width: 50px;
+  height: 50px;
+}
+
+.self-awareness .assessment .checkbox-questions li p.question-p {
+  font-size: 20px;
+}
+
+.self-awareness .congrats {
+  background-image: url('../../../../../assets/selfawareness-images/sa-congrats.png');
+}
+
+.self-awareness .congrats h1 {
+
+  color: #fff;
+}
