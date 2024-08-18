@@ -1,15 +1,10 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Icon } from '@iconify/react';
 import celebrate from '../../../../../assets/celebrate.png';
 
 import selfAwareness from '../../../../../assets/selfawareness-images/self-awareness.png';
 import personality from '../../../../../assets/selfawareness-images/personality.png';
-
-import dragdropArrow from '../../../../../assets/selfawareness-images/dragdrop-arrowl.png';
-import bucketYes from '../../../../../assets/selfawareness-images/bucket-yes.png';
-import bucketNo from '../../../../../assets/selfawareness-images/bucket-no.png';
-import bucketSometimes from '../../../../../assets/selfawareness-images/bucket-sometimes.png';
 import emotionalHand from '../../../../../assets/selfawareness-images/emotional.png';
 import analyticHand from '../../../../../assets/selfawareness-images/analytic.png';
 import friendshipHand from '../../../../../assets/selfawareness-images/friendship.png';
@@ -19,6 +14,8 @@ import Modal from 'react-modal';
 import AssessmentForm from './AssessmentForm';
 import { useNavigate } from 'react-router-dom';
 import DragDropComponent from './DragAndDrop';
+import MyFireWorks from './Fireworks';
+
 
 
 
@@ -53,6 +50,8 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
     useEffect(() => {
         console.log("Form Data submitted:", formData);
     }, [formData]);
+
+
 
     const handleReviewPopUp = () => {
         setReviewPopUp(true);
@@ -565,13 +564,14 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
                 //end
                 return (
                     <div className="end-of-course-page">
+                       
 
                         <div className="congrats">
                             <img src={celebrate} alt="celebrate" />
                             <h1>Hurray!</h1>
                             <p className='text-center fs-5'>You have made it to the {<br />} Week {currentWeekIndex + 1}</p>
                         </div>
-
+ <MyFireWorks />
 
                         <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
 

@@ -389,7 +389,7 @@
   cursor: pointer;
 }
 
-.self-awareness .slider-indicator ul li.dragged {
+.self-awareness .slider-indicator ul li.dragged, .self-awareness .slider-indicator ul li.answered {
   padding: 0;
   background-color: #00BCC3;
 }
