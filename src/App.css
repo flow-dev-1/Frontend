@@ -137,7 +137,8 @@ input:-webkit-autofill:active {
 
 .ReactModal__Overlay.custom-overlay {
   width: 100%;
-  height: 100vh;
+  /* height: 100vh; */
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;

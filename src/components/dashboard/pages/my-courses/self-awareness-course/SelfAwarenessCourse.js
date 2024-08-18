@@ -1,11 +1,11 @@
 import React from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Icon } from '@iconify/react'
-import '../course.css'
-import CourseProgessionOne from './CourseProgessionOne'
+import './newcourse.css'
 import courseOne from '../../../../../assets/course1.png'
+import WeekOneLearning from './WeekOneLearning'
 
-function SingleCoursePage() {
+function SelfAwarenessCourse() {
   const { id } = useParams()
   const location = useLocation()
   const course = location?.state?.course
@@ -17,8 +17,8 @@ function SingleCoursePage() {
   const courses = {
     id: 1,
     image: courseOne,
-    title: 'Max the Explorer Monkey',
-    subtitle: 'Growth Mindset',
+    title: 'Alex & Maya',
+    subtitle: 'Self Awareness',
     overviewDescription:
       'The curriculum combines engaging educational content, interactive activities, and reflective discussions to create an environment that nurtures resilience, creativity, and a lifelong love for learning. From understanding the power of "yet" to exploring the potential of the human brain, each weeks session delves into different aspects of the growth mindset.',
     description:
@@ -64,16 +64,12 @@ function SingleCoursePage() {
       },
     ],
     catalogue: [
-      { weekLesson: 'Welcome to FLOW-tastic Adventures with YOU!' },
-      { weekLesson: 'Unleash Your Growth Superpowers!' },
-      { weekLesson: 'Explore Your Amazing Brain - Part 1' },
-      { weekLesson: 'Explore Your Amazing Brain - Part 2' },
-      { weekLesson: 'Dive Deeper into Growth Mindset Magic!' },
-      { weekLesson: 'Master Your Mindset Skills!' },
-      { weekLesson: 'Take Control of what you can!' },
-      { weekLesson: "Embracing the Power of 'Yet'" },
-      { weekLesson: 'Rise to the Marshmallow Challenge!' },
-      { weekLesson: 'Reflect, Evaluate, and Celebrate!' },
+      { weekLesson: 'Introduction to Self-Awareness' },
+      { weekLesson: 'Identifying Strengths and Weaknesses' },
+      { weekLesson: 'Understanding Mindset' },
+      { weekLesson: 'Identifying Values' },
+      { weekLesson: 'Emotional Intelligence and Communication Skills' },
+
     ],
     enrolled: true,
   }
@@ -108,16 +104,17 @@ function SingleCoursePage() {
     const weekIndex = parseInt(activeLink.replace('week', ''), 10) - 1;
     switch (weekIndex) {
       case 0:
+        // return <p>Week one content</p>
         return (
-          <CourseProgessionOne
-            course={course}
-            currentWeekIndex={currentWeekIndex}
-          />
-        )
+        <WeekOneLearning
+          course={course}
+          currentWeekIndex={currentWeekIndex}
+        />
+      )
 
       case 1:
         return <p>Week two content</p>
-      
+
       // Add more cases for other weeks if needed
       default:
         return <p>Select a week to view its content.</p>
@@ -125,21 +122,25 @@ function SingleCoursePage() {
   }
 
   return (
-    <div className='mind-set course-profile'>
+    <div className='self-awareness course-profile '>
       <div className='mt-5 course-links'>
-        <div className='about-courses-menu mt-5'>
+        <div className='about-courses-menu mt-5 '>
           <p
             className='back-to-course-list'
             onClick={() => navigate('/dashboard/my-courses')}
           >
             <Icon icon='fa6-solid:arrow-left-long' className='me-2' />
-            back to course
+            Back to My Courses
           </p>
 
-          <div className='course-title-text mt-3'>
-            <h2>Mind Monkey:</h2>
-            <h2 className='sub-title'> Subtitle</h2>
+          {/* {courses.map((crc, index) => ( */}
+          <div className='course-title-text mt-3' >
+            <h2>
+              {courses.title}
+            </h2>
+            <h2 className='sub-title'> {courses.subtitle}</h2>
           </div>
+
           <ul className='sub-courses mt-2'>
             {courses.catalogue.map((week, index) => (
               // <li
@@ -150,12 +151,12 @@ function SingleCoursePage() {
               //   onClick={() => handleLinkClick('profile', index)}
               // >
               <li
-              key={index}
-              className={
-                `week${index + 1}` === activeLink ? 'active' : '' // Correct class assignment
-              }
-              onClick={() => handleLinkClick(index)} // Pass index correctly
-            >
+                key={index}
+                className={
+                  `week${index + 1}` === activeLink ? 'active' : '' // Correct class assignment
+                }
+                onClick={() => handleLinkClick(index)} // Pass index correctly
+              >
                 <div>
                   <Icon
                     icon='icon-park-outline:check-one'
@@ -177,4 +178,4 @@ function SingleCoursePage() {
   )
 }
 
-export default SingleCoursePage
+export default SelfAwarenessCourse

@@ -43,6 +43,7 @@
 }
 
 .about-courses-menu {
+ 
   color: #ffffff;
   font-size: 14px;
   display: flex;
@@ -132,7 +133,7 @@
   justify-content: center;
 }
 
-.video-div {
+.mind-set .video-div {
   padding: 15px;
   background-color: #4b7e31;
   width: fit-content;
