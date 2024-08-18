@@ -126,6 +126,7 @@ const SchoolAllCourses = () => {
             course={course}
             openModal={openModal}
             enrolled={enrolledDataArray}
+            coursesArray={data}
           />
         ))}
       </div>

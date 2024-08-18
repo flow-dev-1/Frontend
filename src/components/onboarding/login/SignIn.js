@@ -26,12 +26,14 @@ export default function SignIn() {
   const schema = yup.object().shape({
     usernameOrEmail: yup
       .string()
-      .required('Email address/Student ID is required!'),
+      .required('Email address/Student ID is required!')
+      .trim(),
     password: yup
       .string()
       .min(6, 'Password must be at least 6 characters')
       .max(20, 'Password must not exceed 20 characters')
-      .required('Password is required'),
+      .required('Password is required')
+      .trim(),
   })
 
   const {

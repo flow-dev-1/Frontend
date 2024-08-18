@@ -70,6 +70,7 @@ export default function InvitedStudentDetailsForm({
       setStep(2)
     },
     onError: (error) => {
+      toast.error(error.message)
       console.log('Error submitting form', error)
     },
   })

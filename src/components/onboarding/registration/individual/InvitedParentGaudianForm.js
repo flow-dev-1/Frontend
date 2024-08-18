@@ -56,7 +56,9 @@ export default function ParentGuardianForm({ onSubmit, initialData, email }) {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {},
+    defaultValues: {
+      country: 'Nigeria', // Set default country to Nigeria
+    },
   })
 
   useEffect(() => {
@@ -160,7 +162,7 @@ export default function ParentGuardianForm({ onSubmit, initialData, email }) {
                 onChange={(val) =>
                   setValue('phone', val, { shouldValidate: true })
                 }
-                defaultCountry='NG'
+                defaultCountry='NG' // Default to Nigeria
                 onCountryChange={(country) => {
                   if (country) {
                     setCountryCode(getCountryCallingCode(country))

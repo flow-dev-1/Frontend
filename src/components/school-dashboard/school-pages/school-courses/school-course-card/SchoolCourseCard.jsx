@@ -3,10 +3,14 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { encryptURI } from '../../../../../utils/encryption'
 import EnrollmentModal from '../../../modals/Enrollment/EnrollmentModal'
+import { Navigate } from 'react-router-dom'
 
-const SchoolCourseCard = ({ openModal, course, enrolled }) => {
+const SchoolCourseCard = ({ openModal, course, enrolled, coursesArray }) => {
   const [isOn, setIsOn] = useState(false)
   const [openEnrollModal, setOpenEnrollModal] = useState(false)
+  const [courseData] = useState(course)
+  const navigate = useNavigate()
+
   const openEnrollementModal = () => {
     setOpenEnrollModal(true)
   }
@@ -52,12 +56,17 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
   let reviewBtnClass
   let detailsBtnClass
 
-  if (enrolled.includes(course._id)) {
+  // Check if the course is in the enrolled array
+  const isEnrolled = enrolled.includes(course._id)
+
+  if (isEnrolled) {
     reviewBtnColor = darkGreen
     detailsBtnColor = lightGreen
     reviewBtnClass = 'enrolled'
     detailsBtnClass = 'enrolled'
   } else {
+    // Handle the case for non-enrolled courses
+    // You can uncomment the logic below if necessary
     // reviewBtnColor =
     //   course.category.toLowerCase() == 'students' ? darkTertiary : darkEducator
     // detailsBtnColor =
@@ -69,6 +78,18 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
     // detailsBtnClass =
     //   course.category.toLowerCase() == 'students' ? 'not-enrolled' : 'educator'
   }
+
+  console.log(courseData, enrolled)
+  const handleDetailsClick = () => {}
+
+  coursesArray?.courses?.forEach((course) => {
+    if (enrolled.includes(course?._id)) {
+      // navigate(`/school-dashboard/courses/enrolled/${encryptURI(course?._id)}`)
+      console.log(`Course ${course.title} is enrolled ${course._id}`)
+    } else {
+      console.log(`Course ${course.title} is not enrolled`)
+    }
+  })
 
   const likesPercent = (likes, courseEnrollment) => {
     if (likes === 0) return 0
@@ -96,13 +117,7 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
           </div>
         </div>
         <div className='course-card-title' style={{ marginBottom: '0' }}>
-          <h3
-            style={
-              enrolled.includes(course._id)
-                ? { color: '#4B7E31' }
-                : { color: '#329BD6' }
-            }
-          >
+          <h3 style={isEnrolled ? { color: '#4B7E31' } : { color: '#329BD6' }}>
             {course.title}:
           </h3>
           {/* <h3>{course.subtitle}</h3> */}
@@ -117,7 +132,6 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
             justifyContent: 'space-between',
           }}
         >
-          {' '}
           <div
             style={{ margin: '1rem 0', width: '40%' }}
             className='users-review'
@@ -153,7 +167,7 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
               %
             </div>
           </div>
-          {enrolled.includes(course._id) ? (
+          {isEnrolled ? (
             <div
               className={`toggle-switch ${isOn ? 'on' : 'off'}`}
               onClick={handleToggle}
@@ -170,7 +184,7 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
             <button
               onClick={() => openModal(course)}
               style={
-                enrolled.includes(course._id)
+                isEnrolled
                   ? {
                       backgroundColor: '#fff',
                       color: '#329BD6',
@@ -197,11 +211,9 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
             </button>
             <button
               id='reviewBtn'
-              onClick={
-                !enrolled.includes(course._id) ? openEnrollementModal : null
-              }
+              onClick={handleDetailsClick}
               style={
-                enrolled.includes(course._id)
+                isEnrolled
                   ? {
                       backgroundColor: '#329BD6',
                       color: '#fff',
@@ -213,7 +225,7 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
               }
             >
               <span>
-                {enrolled.includes(course._id) ? (
+                {isEnrolled ? (
                   <Icon icon='ri:menu-2-fill' width={20} />
                 ) : (
                   <Icon
@@ -223,11 +235,11 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
                   />
                 )}
               </span>{' '}
-              {enrolled.includes(course._id)
+              {isEnrolled
                 ? '  View Details'
                 : `${course.currency} ${course.cost}`}
             </button>
-            {enrolled.includes(course._id) ? (
+            {isEnrolled ? (
               <div
                 style={{
                   display: 'flex',
@@ -255,4 +267,5 @@ const SchoolCourseCard = ({ openModal, course, enrolled }) => {
     </div>
   )
 }
+
 export default SchoolCourseCard

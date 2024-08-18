@@ -61,7 +61,7 @@ export default function InvitedStudentRegistrationForm() {
         fullName: data?.data?.fullName,
         email: data?.data?.email, // Pre-fill email but it will be non-editable
         phone: data?.data?.phone,
-        country: data?.data?.country,
+        country: data?.data?.country || "Nigeria" ,
         state: data?.data?.state,
         lga: data?.data?.lga,
       })
