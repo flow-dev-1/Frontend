@@ -125,7 +125,7 @@ const CourseCard = ({ course }) => {
             onClick={() => openModal('payment')}
           >
             <Icon icon='mdi:cart-outline' />
-            <span>{course?.currency}</span>
+            {course?.currency}
             {course?.cost}
           </button>
         </div>
