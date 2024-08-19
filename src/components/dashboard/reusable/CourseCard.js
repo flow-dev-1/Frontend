@@ -126,7 +126,7 @@ const CourseCard = ({ course }) => {
           >
             <Icon icon='mdi:cart-outline' />
             {course?.currency}
-            {course?.cost}
+          {course?.cost?.toLocaleString()}
           </button>
         </div>
       </div>

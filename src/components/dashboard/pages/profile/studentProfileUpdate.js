@@ -96,6 +96,7 @@ export default function StudentDetailsFormProfile({
     // Combine sanitizedParentFormData and studentData into a single object
     const completeFormData = {
       ...sanitizedParentFormData,
+      ...studentData
       // Psanarent form data
       // Student data directly included, no nesting under "student"
     };
