@@ -77,10 +77,9 @@ class UserOBJ {
   }
 
   validatePayment = async (auth_token, params) => {
-    console.log(auth_token)
     try {
       const response = await api.post(
-        `validate-transaction?reference${params}`,
+        `validate-transaction?reference=${params}`,
         {
           headers: {
             Authorization: `Bearer ${auth_token}`,
