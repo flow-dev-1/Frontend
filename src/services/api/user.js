@@ -13,6 +13,18 @@ class UserOBJ {
       throw err?.response?.data || err.message
     }
   }
+  courseEnrollment = async (params, data) => {
+    console.log(params)
+    try {
+      const response = await api.post(
+        `api/users/courses/${params}/enroll`,
+        data
+      )
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
   individualRegister = async (data) => {
     try {
       const response = await api.post(
@@ -58,6 +70,23 @@ class UserOBJ {
           Authorization: `Bearer ${auth_token}`,
         },
       })
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+
+  validatePayment = async (auth_token, params) => {
+    console.log(auth_token)
+    try {
+      const response = await api.post(
+        `validate-transaction?reference${params}`,
+        {
+          headers: {
+            Authorization: `Bearer ${auth_token}`,
+          },
+        }
+      )
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
@@ -202,14 +231,13 @@ class UserOBJ {
   getMyPayments = async () => {
     try {
       // Check if data is not empty
-      const response = await api.get(`api/users/payments`);
-      return response.data;
+      const response = await api.get(`api/users/payments`)
+      return response.data
     } catch (err) {
-      throw err?.response?.data || err.message;
+      throw err?.response?.data || err.message
     }
-  };
+  }
 }
-
 
 const user = new UserOBJ()
 export default user
