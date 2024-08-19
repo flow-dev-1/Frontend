@@ -64,8 +64,8 @@ const PayementHistory = () => {
           {data?.payments?.map((payment, index) => (
             <tr key={payment.reference}>
               <td>{index + 1}</td>
-              <td>{payment.paymentDetails.id}</td>
-              <td>{(payment.paymentDetails.amount / 1000).toLocaleString()}</td>
+              <td>{payment.reference}</td>
+              <td>{((payment.paymentDetails.amount)/1000).toLocaleString()}</td>
               <td>{new Date(payment.createdAt).toLocaleDateString()}</td>
               <td>{new Date(payment.createdAt).toLocaleTimeString()}</td>
             </tr>
