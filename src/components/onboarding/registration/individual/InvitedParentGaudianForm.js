@@ -147,7 +147,7 @@ export default function ParentGuardianForm({ onSubmit, initialData, email }) {
               type='email'
               placeholder='Type here...'
               {...register('email')}
-              disabled // Disable the input field
+              // disabled // Disable the input field
             />
             {errors.email && (
               <p className='error-message'>{errors.email.message}</p>

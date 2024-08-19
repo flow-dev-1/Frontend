@@ -137,7 +137,7 @@ export default function ParentGuardianForm({
               placeholder='Type here...'
               {...register('email')}
               value={email} // Set the value to the email prop
-              disabled // Disable the input field
+              // disabled // Disable the input field
             />
             {errors.email && (
               <p className='error-message'>{errors.email.message}</p>
