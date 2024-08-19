@@ -199,7 +199,17 @@ class UserOBJ {
       throw err?.response?.data || err.message
     }
   }
+  getMyPayments = async () => {
+    try {
+      // Check if data is not empty
+      const response = await api.get(`api/users/payments`);
+      return response.data;
+    } catch (err) {
+      throw err?.response?.data || err.message;
+    }
+  };
 }
+
 
 const user = new UserOBJ()
 export default user

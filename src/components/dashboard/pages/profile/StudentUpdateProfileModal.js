@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import ParentGuardianFormModal from './ParentGuardianFormModal'
 import StudentDetailsFormModal from './StudentDetailFormModal'
 import './onboarding-profile.css'
+import ParentGuardianFormUpdate from './parentProfileUpdate'
+import StudentDetailsFormProfile from './studentProfileUpdate'
 
 export default function StudentUpdateProfileModal({ user, onClose }) {
   const [step, setStep] = useState(1) // Step 1 for Parent/Guardian Info, Step 2 for Student Details
@@ -26,7 +28,7 @@ export default function StudentUpdateProfileModal({ user, onClose }) {
   return (
     <div>
       {step === 1 && (
-        <ParentGuardianFormModal
+        <ParentGuardianFormUpdate
           onSubmit={handleParentFormSubmit}
           setStep={setStep}
           user={user}
@@ -35,7 +37,7 @@ export default function StudentUpdateProfileModal({ user, onClose }) {
         />
       )}
       {step === 2 && (
-        <StudentDetailsFormModal
+        <StudentDetailsFormProfile
           onSubmit={onSubmit}
           onClose={onClose}
           user={user}
