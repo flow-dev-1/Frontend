@@ -1,16 +1,16 @@
 
 import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
-import checkedImage from '../../../../../assets/selfawareness-images/checked.png';
-import unCheckedImage from '../../../../../assets/selfawareness-images/not-checked.png';
+import checkedImage from '../../../../../../assets/selfawareness-images/checked.png';
+import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png';
 
-import './newcourse.css'
+import '../newcourse.css'
 import Modal from 'react-modal';
-import ReviewPopUp from '../../../../modals-pages/dashboard-modals/ReviewModal';
+import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModal';
 
 
 
-export default function AssessmentForm({ onSubmit }) {
+export default function WeekOneAssessmentForm({ onSubmit }) {
 
     const [currentIndex, setCurrentIndex] = useState(1);
     const [reviewPopUp, setReviewPopUp] = React.useState(false)
@@ -34,9 +34,6 @@ export default function AssessmentForm({ onSubmit }) {
         
         
     };
-
-
-
 
     const closeReviewPopUp = () => {
         setReviewPopUp(false);

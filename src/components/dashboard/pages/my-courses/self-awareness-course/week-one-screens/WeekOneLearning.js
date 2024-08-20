@@ -1,20 +1,20 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Icon } from '@iconify/react';
-import celebrate from '../../../../../assets/celebrate.png';
+import celebrate from '../../../../../../assets/celebrate.png';
 
-import selfAwareness from '../../../../../assets/selfawareness-images/self-awareness.png';
-import personality from '../../../../../assets/selfawareness-images/personality.png';
-import emotionalHand from '../../../../../assets/selfawareness-images/emotional.png';
-import analyticHand from '../../../../../assets/selfawareness-images/analytic.png';
-import friendshipHand from '../../../../../assets/selfawareness-images/friendship.png';
-import actionHand from '../../../../../assets/selfawareness-images/action.png';
-import ReviewPopUp from '../../../../modals-pages/dashboard-modals/ReviewModal';
+import selfAwareness from '../../../../../../assets/selfawareness-images/self-awareness.png';
+import personality from '../../../../../../assets/selfawareness-images/personality.png';
+import emotionalHand from '../../../../../../assets/selfawareness-images/emotional.png';
+import analyticHand from '../../../../../../assets/selfawareness-images/analytic.png';
+import friendshipHand from '../../../../../../assets/selfawareness-images/friendship.png';
+import actionHand from '../../../../../../assets/selfawareness-images/action.png';
+import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModal';
 import Modal from 'react-modal';
-import AssessmentForm from './AssessmentForm';
+import WeekOneAssessmentForm from './WeekOneAssessmentForm';
 import { useNavigate } from 'react-router-dom';
 import DragDropComponent from './DragAndDrop';
-import MyFireWorks from './Fireworks';
+import MyFireWorks from '../Fireworks';
 
 
 
@@ -546,7 +546,7 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
 
                         <div className="">
 
-                            <AssessmentForm onSubmit={handleNext} />
+                            <WeekOneAssessmentForm onSubmit={handleNext} />
 
                         </div>
                         {/* <button className='btn' onClick={handleReviewPopUp}>click here</button> */}

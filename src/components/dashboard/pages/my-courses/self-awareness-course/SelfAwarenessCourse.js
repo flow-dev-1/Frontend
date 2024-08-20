@@ -3,7 +3,8 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import './newcourse.css'
 import courseOne from '../../../../../assets/course1.png'
-import WeekOneLearning from './WeekOneLearning'
+import WeekOneLearning from './week-one-screens/WeekOneLearning'
+import WeekTwoLearning from './week-two-screens/WeekTwoLearning'
 
 function SelfAwarenessCourse() {
   const { id } = useParams()
@@ -113,7 +114,12 @@ function SelfAwarenessCourse() {
       )
 
       case 1:
-        return <p>Week two content</p>
+        return (
+          <WeekTwoLearning
+            course={course}
+            currentWeekIndex={currentWeekIndex}
+          />
+        )
 
       // Add more cases for other weeks if needed
       default:

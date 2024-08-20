@@ -31,9 +31,10 @@ const MyFireWorks = () => {
 
   return (
     <div>
-      <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, right: 50, height: '75%' }} />
+      <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, right: 60, height: '75%', width: '70%' }} />
     </div>
   );
 };
 
 export default MyFireWorks;
+// , backgroundColor:"red"
