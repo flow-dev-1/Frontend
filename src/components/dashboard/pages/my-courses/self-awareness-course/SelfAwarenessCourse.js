@@ -5,6 +5,7 @@ import './newcourse.css'
 import courseOne from '../../../../../assets/course1.png'
 import WeekOneLearning from './week-one-screens/WeekOneLearning'
 import WeekTwoLearning from './week-two-screens/WeekTwoLearning'
+import WeekThreeLearning from './week-three-screens/WeekThreeLearning'
 
 function SelfAwarenessCourse() {
   const { id } = useParams()
@@ -111,11 +112,19 @@ function SelfAwarenessCourse() {
           course={course}
           currentWeekIndex={currentWeekIndex}
         />
-      )
+      );
 
       case 1:
         return (
           <WeekTwoLearning
+            course={course}
+            currentWeekIndex={currentWeekIndex}
+          />
+        );
+
+        case 2:
+        return (
+          <WeekThreeLearning
             course={course}
             currentWeekIndex={currentWeekIndex}
           />

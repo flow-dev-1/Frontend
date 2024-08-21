@@ -425,7 +425,7 @@
 }
 
 .self-awareness .question-box.personality-question .text-area-box,
-.self-awareness .question-box.assessment .text-area-box {
+.self-awareness .question-box.assessment .text-area-box, .self-awareness .question-box.mindset .text-area-box {
   height: auto;
   background-size: 100% 100%;
 }
@@ -491,4 +491,13 @@
   border-radius: 50px;
   text-align: center;
   width: fit-content;
+}
+
+
+/* Mindset Section */
+.self-awareness .question-box.mindset .scrollable {
+  max-height: 250px;
+  overflow-y: scroll;
+  /* overscroll-behavior-y: none; */
+  scrollbar-width: none;
 }
