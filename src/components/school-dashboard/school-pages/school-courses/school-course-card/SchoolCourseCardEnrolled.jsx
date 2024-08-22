@@ -32,6 +32,8 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
   let reviewBtnClass
   let detailsBtnClass
 
+  console.log(courseData)
+
   // if (course.status.enrolled) {
   //   reviewBtnColor = darkGreen
   //   detailsBtnColor = lightGreen

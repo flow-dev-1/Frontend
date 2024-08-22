@@ -58,6 +58,7 @@ const SchoolCourseCard = ({ openModal, course, enrolled, coursesArray }) => {
 
   // Check if the course is in the enrolled array
   const isEnrolled = enrolled.includes(course._id)
+  console.log(isEnrolled)
 
   if (isEnrolled) {
     reviewBtnColor = darkGreen
@@ -80,16 +81,13 @@ const SchoolCourseCard = ({ openModal, course, enrolled, coursesArray }) => {
   }
 
   console.log(courseData, enrolled)
-  const handleDetailsClick = () => {}
-
-  coursesArray?.courses?.forEach((course) => {
-    if (enrolled.includes(course?._id)) {
-      // navigate(`/school-dashboard/courses/enrolled/${encryptURI(course?._id)}`)
-      console.log(`Course ${course.title} is enrolled ${course._id}`)
-    } else {
-      console.log(`Course ${course.title} is not enrolled`)
+  const handleDetailsClick = () => {
+    if (isEnrolled) {
+      navigate(`/school-dashboard/courses/enrolled/${encryptURI(course?._id)}`)
     }
-  })
+  }
+
+  console.log(isEnrolled)
 
   const likesPercent = (likes, courseEnrollment) => {
     if (likes === 0) return 0

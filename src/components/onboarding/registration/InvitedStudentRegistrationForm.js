@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import ParentGuardianForm from './individual/InvitedParentGaudianForm'
-import StudentDetailsForm from './individual/InvitedStudentDetailsForm'
 import '../onboarding.css'
 import { useDispatch } from 'react-redux'
 import { setToken } from '../../../redux/reducers/jwtReducer'
 import userService from '../../../services/api/user'
 import { useQuery } from '@tanstack/react-query'
+import InivtedParentGuardianForm from './individual/InvitedParentGaudianForm'
+import InvitedStudentDetailsForm from './individual/InvitedStudentDetailsForm'
 
 export default function InvitedStudentRegistrationForm() {
   const [step, setStep] = useState(1) // Step 1 for Parent/Guardian Info, Step 2 for Student Details
@@ -25,10 +25,12 @@ export default function InvitedStudentRegistrationForm() {
 
   const { email, t } = getQueryParams(location.search)
   dispatch(setToken(t))
+  localStorage.setItem('Flow-Auth-Token', t)
+  console.log(t)
 
   // Fetch parent details using the token
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['parent-detail', t], // Add token to queryKey to refetch on token change
+    queryKey: ['parent-detail'], // Add token to queryKey to refetch on token change
     queryFn: () => userService.getParentDetails(t),
     enabled: !!t, // Only run the query if token is present
   })
@@ -61,7 +63,7 @@ export default function InvitedStudentRegistrationForm() {
         fullName: data?.data?.fullName,
         email: data?.data?.email, // Pre-fill email but it will be non-editable
         phone: data?.data?.phone,
-        country: data?.data?.country || "Nigeria" ,
+        country: data?.data?.country || 'Nigeria',
         state: data?.data?.state,
         lga: data?.data?.lga,
       })
@@ -95,7 +97,7 @@ export default function InvitedStudentRegistrationForm() {
   return (
     <div>
       {step === 1 && (
-        <ParentGuardianForm
+        <InivtedParentGuardianForm
           onSubmit={handleParentFormSubmit}
           setStep={setStep}
           initialData={parentFormData} // Pass the form data as initial values
@@ -104,7 +106,7 @@ export default function InvitedStudentRegistrationForm() {
         />
       )}
       {step === 2 && (
-        <StudentDetailsForm
+        <InvitedStudentDetailsForm
           onSubmit={onSubmit}
           setStep={setStep}
           parentFormData={parentFormData}

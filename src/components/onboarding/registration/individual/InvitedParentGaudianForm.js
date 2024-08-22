@@ -40,7 +40,7 @@ const schema = yup.object().shape({
   lga: yup.string().required('LGA is required'),
 })
 
-export default function ParentGuardianForm({ onSubmit, initialData, email }) {
+export default function InivitedParentGuardianForm({ onSubmit, initialData, email }) {
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
   const [countries, setCountries] = useState([])
   const [isNigeria, setIsNigeria] = useState(initialData?.country === 'Nigeria')
@@ -147,7 +147,7 @@ export default function ParentGuardianForm({ onSubmit, initialData, email }) {
               type='email'
               placeholder='Type here...'
               {...register('email')}
-              // disabled // Disable the input field
+              disabled // Disable the input field
             />
             {errors.email && (
               <p className='error-message'>{errors.email.message}</p>

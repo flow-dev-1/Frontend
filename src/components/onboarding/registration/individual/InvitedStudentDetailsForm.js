@@ -28,10 +28,7 @@ const studentSchema = yup.object().shape({
   grade: yup.string().required('School Grade is required'),
   gender: yup.string().required('Gender is required'),
   DOB: yup.date().required('Date of Birth is required'),
-  password: yup
-    .string()
-    .min(8, 'Password must be at least 8 characters')
-    .required('Password is required'),
+  password: yup.string().min(8, 'Password must be at least 8 characters'),
 })
 
 export default function InvitedStudentDetailsForm({
@@ -39,6 +36,7 @@ export default function InvitedStudentDetailsForm({
   setStep,
   parentFormData,
   students,
+  t,
 }) {
   const [formCount, setFormCount] = useState(0) // Start with the first student
   const [modalIsOpen, setIsOpen] = useState(false)
@@ -60,7 +58,7 @@ export default function InvitedStudentDetailsForm({
   const dispatch = useDispatch()
 
   const mutation = useMutation({
-    mutationFn: (data) => userService.individualRegister(data),
+    mutationFn: (data) => userService.registerInvitedUser(t, data),
     onSuccess: (data) => {
       console.log('Form submitted successfully', data)
       toast.success(data.message)
@@ -105,7 +103,7 @@ export default function InvitedStudentDetailsForm({
         // If this is the last form, submit all data
         const completeFormData = {
           ...parentFormData,
-          student: updatedStudents, // Include all students with only required fields
+          students: updatedStudents, // Include all students with only required fields
         }
         console.log('Submitting form data:', completeFormData)
         mutation.mutate(completeFormData)
