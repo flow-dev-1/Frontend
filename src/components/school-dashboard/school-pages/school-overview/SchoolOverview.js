@@ -22,10 +22,6 @@ import schoolService from "../../../../services/api/school";
 import { useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 
-const dataActive = [
-  { name: "Active", value: 40 },
-  { name: "Not Active", value: 10 },
-];
 
 const dataCompletion = [
   { name: "Completed", value: 80 },
@@ -33,13 +29,6 @@ const dataCompletion = [
 ];
 
 
-const dataEnrollment = [
-  { name: "Growth Mindset", value: 10 },
-  { name: "LEAP", value: 35 },
-  { name: "Mind & Money", value: 20 },
-  { name: "Course Name", value: 15 },
-  { name: "Course Name", value: 25 },
-];
 
 const COLORS = ["#17E383", "#652AC433", "#FF8042", "#0088FE"];
 const BAR_COLORS = ["#4bc0c0", "#9966ff", "#ff9f40", "#4b4b4b", "#ff9f40"];
@@ -86,6 +75,12 @@ const SchoolOverview = () => {
   const [totalSudents, setTotalStudents] = useState(0);
   const [totalMales, setTotalMales] = useState(0);
   const [totalFemales, setTotalFemales] = useState(0);
+  const [totalTeachers, setTotalTeachers] = useState(0);
+  
+  const [totalActive, setTotalActive] = useState(0);
+  const [totalNonActive, setTotalNonActive] = useState(0);
+
+
 
   // Functions to open modals
   const openActiveStudentModal = () => setIsActiveStudentModalOpen(true);
@@ -103,15 +98,23 @@ const SchoolOverview = () => {
   
   const { data, isLoading, isError } = useQuery({
     queryKey: ["school-dashboard"],
-    queryFn: () => schoolService.getMyStudents(),
+    queryFn: async () => {
+      const [studentsData, activityData] = await Promise.all([
+        schoolService.getMyStudents(),
+        schoolService.getCoursesWithActivity(),
+      ]);
+      return { studentsData, activityData };
+    },
   });
 
-  // useEffect to update state when data changes
   useEffect(() => {
     if (data) {
-      setTotalStudents(data.totalEnrolledStudents);
-      setTotalMales(data.totalMales);
-      setTotalFemales(data.totalFemales);
+      setTotalStudents(data.studentsData.totalEnrolledStudents);
+      setTotalMales(data.studentsData.totalMales);
+      setTotalFemales(data.studentsData.totalFemales);
+      setTotalTeachers(data.studentsData.totalTeachers);
+      setTotalActive(data.activityData.totalActive);
+      setTotalNonActive(data.activityData.totalNonActive);
     }
   }, [data]);
   
@@ -119,6 +122,20 @@ const SchoolOverview = () => {
     { name: "Male", value: totalMales },
     { name: "Female", value: totalFemales },
   ];
+ console.log(totalActive)
+  const dataActive = [
+    { name: "Active", value: totalActive },
+    { name: "Not Active", value: totalNonActive },
+  ];
+
+  const dataEnrollment = data?.activityData?.dataEnrollment || [
+    { name: "Growth Mindset", value: 10 },
+    { name: "LEAP", value: 35 },
+    { name: "Mind & Money", value: 20 },
+    { name: "Course Name", value: 15 },
+    { name: "Course Name", value: 25 },
+  ];
+
   return (
     <div className="overview">
       <div className="top-cards">
@@ -141,7 +158,7 @@ const SchoolOverview = () => {
             style={{ fontFamily: "Poppins", fontWeight: "600" }}
             className="value"
           >
-            0
+            {totalTeachers}
           </h6>
         </div>
         <div style={{ height: "130px" }} class="stat">
@@ -203,10 +220,10 @@ const SchoolOverview = () => {
               <div className="summary-box">
                 <p className="active">Active/Not-Active</p>
                 <div>
-                  <div className="box"></div> Active - 40
+                  <div className="box"></div> Active - {totalActive}
                 </div>
                 <div>
-                  <div className="box-2"></div> Not-Active - 40
+                  <div className="box-2"></div> Not-Active - {totalNonActive}
                 </div>
               </div>
             </div>
@@ -350,12 +367,12 @@ const SchoolOverview = () => {
           <ResponsiveContainer width="100%" height={400}>
             <BarChart
               data={dataEnrollment}
-              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+              margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
             >
               <XAxis dataKey="name" />
-              <YAxis />
+             <YAxis domain={[10, 'auto']}/>
 
-              <Bar dataKey="value">
+              <Bar dataKey="value" barSize={60}>
                 {dataEnrollment.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}

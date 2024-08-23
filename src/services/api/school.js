@@ -69,6 +69,16 @@ class SchoolOBJ {
     }
   };
 
+  getCoursesWithActivity = async () => {
+    try {
+      // Check if data is not empty
+      const response = await api.get(`api/schools/courses-active`);
+      return response.data;
+    } catch (err) {
+      throw err?.response?.data || err.message;
+    }
+  };
+
   //Send Invite
   adminInvite = async (data) => {
     try {
