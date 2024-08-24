@@ -72,14 +72,12 @@ const SchoolOverview = () => {
   const [totalMales, setTotalMales] = useState(0);
   const [totalFemales, setTotalFemales] = useState(0);
   const [totalTeachers, setTotalTeachers] = useState(0);
-  const [totalActive, setTotalActive] = useState(0);
-  const [totalNonActive, setTotalNonActive] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalCompleted, setTotalCompleted] = useState(0);
   const [totalRemaining, setTotalRemaining] = useState(0);
-
-
   
+  const [totalActive, setTotalActive] = useState(0);
+  const [totalNonActive, setTotalNonActive] = useState(0);
 
 
 
@@ -97,13 +95,13 @@ const SchoolOverview = () => {
   const closeNonActiveStudentModal = () =>
     setIsNonActiveStudentModalOpen(false);
   
+
 const { data, isLoading, isError } = useQuery({
   queryKey: ["school-dashboard"],
   queryFn: async () => schoolService.getGraphData(),
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
+  refetchOnMount: true,
+  refetchOnWindowFocus: true,
 });
-
 
 useEffect(() => {
   if (data) {
@@ -131,13 +129,12 @@ const dataActive = [
   { name: "Not Active", value: totalNonActive },
 ];
 
+const dataEnrollment = data?.dataEnrollment || [];
 
-  const dataEnrollment = data?.dataEnrollment || [];
-  
-  const dataCompletion = [
-    { name: "Completed", value: totalCompleted },
-    { name: "Remaining", value: totalRemaining },
-  ];
+const dataCompletion = [
+  { name: "Completed", value: totalCompleted },
+  { name: "Remaining", value: totalRemaining },
+];
   return (
     <div className="overview">
       <div className="top-cards">
@@ -147,7 +144,7 @@ const dataActive = [
             style={{ fontFamily: "Poppins", fontWeight: "600" }}
             className="value"
           >
-           NGN {totalAmount.toLocaleString()}
+            NGN {totalAmount}
           </h6>
           <p id="play">
             Pay Now <span style={{ fontSize: "18px" }}>+</span>{" "}
@@ -279,7 +276,7 @@ const dataActive = [
             <div className="summary-box">
               <p className="active">Completion Rate</p>
               <div>
-                <div className="box"></div> Completed - {totalCompleted}
+                <div className="box"></div> Completed -{totalCompleted}
               </div>
               <div>
                 <div className="box-2"></div> Remaining - {totalRemaining}

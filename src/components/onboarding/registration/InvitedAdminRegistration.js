@@ -1,47 +1,53 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import Modal from 'react-modal'
 import '../onboarding.css'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import userService from '../../../services/api/user'
 import { states } from '../../states'
 import { RotatingLines } from 'react-loader-spinner'
 import { useDispatch } from 'react-redux'
 import { setToken } from '../../../redux/reducers/jwtReducer'
-import { Link } from 'react-router-dom'
 import 'react-phone-number-input/style.css'
 import PhoneInput, {
   isValidPhoneNumber,
   getCountryCallingCode,
 } from 'react-phone-number-input'
+import { lgas } from '../../states/lgas'
 import EmailVerificationSuccessful from '../../modals-pages/onboarding-modals/EmailVerificationSuccessful'
+import EducatorOtpModal from '../../modals-pages/onboarding-modals/EducatorOtpModal'
 
 Modal.setAppElement('#root') // Set the root element for the modal
 
 export default function InvitedAdminRegistration() {
   const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
+  const [openSuccessModal, setOpenSuccessModal] = useState(false)
   const [formData, setFormData] = useState(null)
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
   const [countries, setCountries] = useState([])
-  const [isNigeria, setIsNigeria] = useState(true) // State to track if the selected country is Nigeria
-  const [step, setStep] = useState(0)
-  const [schGrade, setGrade] = useState('')
-  const [token, setJWTToken] = useState('')
+  const [isNigeria, setIsNigeria] = useState(true)
+  const [availableLGAs, setAvailableLGAs] = useState([]) // State to manage the list of LGAs
   const navigate = useNavigate()
-
+  // State to track if the selected country is Nigeria
   const [email, setEmail] = useState('')
 
   const schema = yup.object().shape({
-    firstName: yup.string().required('First Name is required'),
-    lastName: yup.string().required('Last Name is required'),
+    fullName: yup
+      .string()
+      .required('Full Name is required')
+      .test(
+        'is-three-words-or-less',
+        'Full Name must contain between 1 and 3 words',
+        (value) => value && value.trim().split(/\s+/).length <= 3
+      )
+      .trim(),
     email: yup
       .string()
       .email('Invalid Email')
@@ -76,71 +82,29 @@ export default function InvitedAdminRegistration() {
     },
   })
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['get-invited-user'],
-    queryFn: () => userService.getInvitedUser(token),
-    enabled: !!token,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  })
-
-  useEffect(() => {
-    if (!data) return
-    let userData = data.user
-    if (userData?.isVerified) {
-      setValue('country', userData.country)
-      setValue('firstName', userData.first_name)
-      setValue('lastName', userData.last_name)
-      setValue('email', userData.email)
-      const phone = userData.phone ? userData.phone.trim() : ''
-      setValue('phoneNumber', phone)
-      setValue('state', userData.state)
-      setValue('lga', userData.lga)
-      setValue('gender', userData.gender.toLowerCase())
-      const dob = userData.DOB ? new Date(userData.DOB) : null
-      if (dob instanceof Date && !isNaN(dob)) {
-        setValue('dob', dob.toISOString().split('T')[0]) // Format to YYYY-MM-DD
-      }
-    }
-  }, [data, setValue])
+  const selectedCountry = watch('country')
+  const selectedState = watch('state')
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
   }
-  const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword)
-  }
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
-    const token = urlParams.get('t')
-    const grade = 'Educator'
-    const email = urlParams.get('email')
-    setGrade(grade)
-    setJWTToken(token)
-    localStorage.setItem('Flow-Auth-Token', token)
-    setValue('schoolGrade', grade)
-    setValue('email', email)
-
-    if (token && email) {
-      setStep(1)
-    } else {
-      return navigate('/sign-in', { replace: true })
-    }
-
     const fetchCountries = async () => {
       try {
         const response = await fetch('https://restcountries.com/v3.1/all')
         const data = await response.json()
+        // Sort the countries alphabetically by their common name
         const sortedData = data.sort((a, b) => {
-          const nameA = a.name.common.toUpperCase()
-          const nameB = b.name.common.toUpperCase()
+          const nameA = a.name.common.toUpperCase() // ignore upper and lowercase
+          const nameB = b.name.common.toUpperCase() // ignore upper and lowercase
           if (nameA < nameB) {
             return -1
           }
           if (nameA > nameB) {
             return 1
           }
+          // names must be equal
           return 0
         })
         setCountries(sortedData)
@@ -150,45 +114,51 @@ export default function InvitedAdminRegistration() {
     }
 
     fetchCountries()
-  }, [navigate, setValue])
+  }, [])
 
-  const selectedCountry = watch('country')
+  useEffect(() => {
+    if (isNigeria && selectedState) {
+      setAvailableLGAs(lgas[selectedState] || [])
+    } else {
+      setAvailableLGAs([])
+    }
+  }, [isNigeria, selectedState])
+
+  // Watch for changes in the country field
+
   useEffect(() => {
     setIsNigeria(selectedCountry === 'Nigeria')
   }, [selectedCountry])
 
   const mutation = useMutation({
-    mutationFn: (params) => userService.registerInvitedAdmin(token, params),
-    onSuccess: (res) => {
-      console.log('Registration successful:', res)
-      toast.success(res.message)
+    mutationFn: (data) => userService.register('Individaul', data),
+    onSuccess: (data) => {
+      console.log('Registration successful:', data)
+      toast.success(data.message)
+      dispatch(setToken(data?.token))
+      localStorage.setItem('Flow-Auth-Token', data?.token)
       openModal()
     },
     onError: (error) => {
       console.error('Registration error:', error)
       toast.dismiss()
       toast.error(error?.message)
-      toast.error(error?.error)
       toast.error(error || 'Registration failed')
     },
   })
-
   const onSubmit = (data) => {
+    console.log('data')
     const formData = {
-      first_name: data.firstName.trim(),
-      last_name: data.lastName.trim(),
+      fullName: data.fullName, // Combine first and last name
       email: data.email,
       phone: data.phoneNumber,
+      gender: data.gender,
       country: data.country,
       state: data.state,
       lga: data.lga,
-      gender: data.gender.toLowerCase(),
       DOB: data.dob,
-      grade: schGrade,
       password: data.password,
     }
-
-    console.log(formData)
     setFormData(formData)
     mutation.mutate(formData)
   }
@@ -202,204 +172,240 @@ export default function InvitedAdminRegistration() {
   }
 
   return (
-    <>
-      {step === 1 && (
-        <div>
-          <div className='registration-page'>
-            <div className='top-section'>
-              <h2>
-                Register as{' '}
-                {schGrade !== 'Educator' ? 'a Student' : 'an Educator'}
-              </h2>
-              <hr />
-              <span>*Indicates Required</span>
+    <div>
+      <div className='registration-page overflow-hidden'>
+        <div className='top-section mt-2'>
+          <h2 className='d-flex justify-content-between align-center'>
+            Register as an Educator
+            <>
+              <Icon
+                icon='radix-icons:cross-1'
+                onClick={() => navigate('/', { replace: true })}
+                width={24}
+              />
+            </>
+          </h2>
+          <hr />
+          <span>*Indicates Required</span>
+        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className='form-section'>
+            <div className='form-group'>
+              <label>Full Name *</label>
+              <input
+                type='text'
+                placeholder='Type here...'
+                {...register('fullName')}
+              />
+              {errors.fullName && (
+                <p className='error-message'>{errors.fullName.message}</p>
+              )}
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className='form-section'>
-                <div className='form-group'>
-                  <label>First Name *</label>
-                  <input
-                    type='text'
-                    placeholder='Type here...'
-                    {...register('firstName')}
-                  />
-                  {errors.firstName && (
-                    <p className='error-message'>{errors.firstName.message}</p>
-                  )}
-                </div>
-                <div className='form-group'>
-                  <label>Last Name *</label>
-                  <input
-                    type='text'
-                    placeholder='Type here...'
-                    {...register('lastName')}
-                  />
-                  {errors.lastName && (
-                    <p className='error-message'>{errors.lastName.message}</p>
-                  )}
-                </div>
-                <div className='form-group'>
-                  <label>Email Address *</label>
-                  <input
-                    type='email'
-                    placeholder='Type here...'
-                    {...register('email')}
-                    disabled
-                  />
-                  {errors.email && (
-                    <p className='error-message'>{errors.email.message}</p>
-                  )}
-                </div>
-                <div className='form-group'>
-                  <label>Phone Number *</label>
-                  <div className='flex-code-input'>
-                    <PhoneInput
-                      placeholder='Enter phone number'
-                      value={watch('phoneNumber')}
-                      onChange={(val) => setValue('phoneNumber', val)}
-                      onCountryChange={(country) => {
-                        if (country) {
-                          setCountryCode(getCountryCallingCode(country))
-                        }
-                      }}
-                      defaultCountry='NG' // Set the default country (change as needed)
-                      style={{
-                        border: '1px solid #ccc', // Add border to the input
-                        borderRadius: '5px', // Add border-radius for rounded corners
-                        padding: '1px', // Add padding for better visual appearance
-                      }}
-                    />
-                    {errors.phoneNumber && (
-                      <p className='error-message'>
-                        {errors.phoneNumber.message}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <div className='form-group'>
-                  <label>Country *</label>
-                  <select {...register('country')}>
-                    {countries.map((country) => (
-                      <option key={country.cca2} value={country.name.common}>
-                        {country.name.common}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.country && (
-                    <p className='error-message'>{errors.country.message}</p>
-                  )}
-                </div>
-                <div className='form-group'>
-                  <label>State *</label>
-                  {isNigeria ? (
-                    <select {...register('state')}>
-                      {states.map((state) => (
-                        <option key={state} value={state}>
-                          {state}
-                        </option>
-                      ))}
-                    </select>
-                  ) : (
-                    <input
-                      type='text'
-                      placeholder='Type here...'
-                      {...register('state')}
-                    />
-                  )}
-                  {errors.state && (
-                    <p className='error-message'>{errors.state.message}</p>
-                  )}
-                </div>
-                <div className='form-group'>
-                  <label>LGA *</label>
-                  <input
-                    type='text'
-                    placeholder='Type here...'
-                    {...register('lga')}
-                  />
-                  {errors.lga && (
-                    <p className='error-message'>{errors.lga.message}</p>
-                  )}
-                </div>
-                <div className='form-group'>
-                  <label>Gender *</label>
-                  <select {...register('gender')}>
-                    <option value=''>Select Gender</option>
-                    <option value='male'>Male</option>
-                    <option value='female'>Female</option>
-                  </select>
-                  {errors.gender && (
-                    <p className='error-message'>{errors.gender.message}</p>
-                  )}
-                </div>
-                <div className='form-group'>
-                  <label>Date of Birth *</label>
-                  <input
-                    type='date'
-                    {...register('dob')}
-                    max={new Date().toISOString().split('T')[0]}
-                  />
-                  {errors.dob && (
-                    <p className='error-message'>{errors.dob.message}</p>
-                  )}
-                </div>
-                <div className='form-group'>
-                  <label>Create Password *</label>
-                  <div className='d-flex align-items-center input-with-icon'>
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder='Type here...'
-                      {...register('password')}
-                    />
-                    <Icon
-                      icon={showPassword ? 'mdi:eye-off' : 'mdi:eye'}
-                      onClick={togglePasswordVisibility}
-                      className='password-icon'
-                    />
-                  </div>
-                  {errors.password && (
-                    <p className='error-message'>{errors.password.message}</p>
-                  )}
-                </div>
+            <div className='form-group'>
+              <label>Email Address *</label>
+              <input
+                type='email'
+                placeholder='Type here...'
+                {...register('email')}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {errors.email && (
+                <p className='error-message'>{errors.email.message}</p>
+              )}
+            </div>
+            <div className='form-group'>
+              <label>Phone Number *</label>
+              <div className='flex-code-input'>
+                <PhoneInput
+                  placeholder='Enter phone number'
+                  onChange={(val) => setValue('phoneNumber', val)}
+                  defaultCountry='NG' // Set the default country (change as needed)
+                  onCountryChange={(country) => {
+                    if (country) {
+                      setCountryCode(getCountryCallingCode(country))
+                    }
+                  }}
+                  style={{
+                    // Full width
+                    border: '1px solid #ccc', // Add border to the input
+                    borderRadius: '5px', // Add border-radius for rounded corners
+                    padding: '1px', // Add padding for better visual appearance
+                  }}
+                />
+                {countryCode && (
+                  <span
+                    style={{ color: '#5b616a' }}
+                    className='country-code register'
+                  >
+                    +{countryCode}
+                  </span>
+                )}
               </div>
-              <div className='bottom-section'>
-                <p>
-                  Already have an account?{' '}
-                  <Link to='/sign-in'>Sign In</Link>
-                </p>
+              {errors.phoneNumber && (
+                <p className='error-message'>{errors.phoneNumber.message}</p>
+              )}
+            </div>
+            <div className='form-group'>
+              <label>Country *</label>
+              <select {...register('country')}>
+                <option value='Nigeria'>Nigeria</option>
+                {countries.map((country) => (
+                  <option key={country.cca2} value={country.name.common}>
+                    {country.name.common}
+                  </option>
+                ))}
+              </select>
+              {errors.country && (
+                <p className='error-message'>{errors.country.message}</p>
+              )}
+            </div>
+            <div className='form-group'>
+              <label>State *</label>
+              {isNigeria ? (
+                <select {...register('state')}>
+                  <option value=''>Select State</option>
+                  {states.map((state) => (
+                    <option key={state} value={state}>
+                      {state}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type='text'
+                  placeholder='Type here...'
+                  {...register('state')}
+                />
+              )}
+              {errors.state && (
+                <p className='error-message'>{errors.state.message}</p>
+              )}
+            </div>
+            {/* LGA */}
+            <div className='form-group'>
+              <label>LGA *</label>
+              {isNigeria && availableLGAs.length > 0 ? (
+                <select {...register('lga')}>
+                  <option value=''>Select LGA</option>
+                  {availableLGAs.map((lga) => (
+                    <option key={lga} value={lga}>
+                      {lga}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type='text'
+                  placeholder='Type here...'
+                  {...register('lga')}
+                />
+              )}
+              {errors.lga && (
+                <p className='error-message'>{errors.lga.message}</p>
+              )}
+            </div>
 
-                <button
-                  className='btn submit-btn'
-                  type='submit'
-                  disabled={mutation.isPending}
+            <div className='form-group'>
+              <label>Gender *</label>
+              <select {...register('gender')}>
+                <option value=''>Select Gender</option>
+                <option value='male'>Male</option>
+                <option value='female'>Female</option>
+              </select>
+              {errors.gender && (
+                <p className='error-message'>{errors.gender.message}</p>
+              )}
+            </div>
+            <div className='form-group'>
+              <label>D.O.B *</label>
+              <input
+                type='date'
+                placeholder='Type here...'
+                {...register('dob')}
+              />
+              {errors.dob && (
+                <p className='error-message'>{errors.dob.message}</p>
+              )}
+            </div>
+            <div className='form-group'>
+              <label>Create Password *</label>
+              <div className='d-flex align-items-center input-with-icon'>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder='Type here...'
+                  autoComplete='new-password'
+                  {...register('password')}
+                />
+                <div
+                  className='password-toggle float-right'
+                  onClick={togglePasswordVisibility}
                 >
-                  {mutation.isPending ? (
-                    <RotatingLines
-                      type='Oval'
-                      style={{ color: '#FFF' }}
-                      height={20}
-                      width={20}
-                    />
-                  ) : (
-                    'Submit'
-                  )}
-                </button>
+                  <Icon
+                    icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
+                    className='eye-icon'
+                    width={20}
+                  />
+                </div>
               </div>
-            </form>
+              {errors.password && (
+                <p className='error-message'>{errors.password.message}</p>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+
+          <hr className='my-4' />
+          <div className='bottom-section mb-0'>
+            <p style={{ width: '80%', textAlign: 'center' }}>
+              Already have an account? <Link to='/sign-in'>Sign In</Link>
+            </p>
+
+            <button
+              className='btn submit-btn'
+              type='submit'
+              style={{ borderRadius: '5px', padding: '.3rem ' }}
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending ? (
+                <RotatingLines
+                  type='Oval'
+                  style={{ color: '#FFF' }}
+                  height={20}
+                  width={20}
+                />
+              ) : (
+                'Submit'
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
 
       <Modal
         isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel='Email Verification Successful'
+        shouldCloseOnOverlayClick={false}
+        contentLabel='Registration Modal'
         className='custom-modal-otp'
         overlayClassName='custom-overlay'
       >
+        <EducatorOtpModal
+          email={email}
+          setOpenSuccessModal={setOpenSuccessModal}
+          closeModal={closeModal}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={openSuccessModal}
+        // onRequestClose={closeModal}
+        contentLabel='Example Modal'
+        className='custom-modal-success-two'
+        overlayClassName='custom-overlay'
+        shouldCloseOnOverlayClick={false}
+      >
         <EmailVerificationSuccessful from='otp' />
       </Modal>
-    </>
+    </div>
   )
 }

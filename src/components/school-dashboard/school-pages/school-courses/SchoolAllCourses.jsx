@@ -174,9 +174,10 @@ const SchoolAllCourses = () => {
 
       <Modal
         isOpen={modalIsOpen}
+        style={{ width: '100%' }}
         onRequestClose={closeModal}
         contentLabel='Course Detail Modal'
-        className='custom-modal-otp-variant-2'
+        className='custom-modal-otp-variant'
         overlayClassName='custom-overlay'
       >
         <CourseDetailModal

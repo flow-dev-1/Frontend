@@ -13,53 +13,17 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
     setIsOn(!isOn)
   }
 
-  // enrolled color
+  // Color definitions
   const lightGreen = '#D4FFBE'
   const darkGreen = '#4B7E31'
-
-  // not-enrolled
-  // studentimp
   const lightTertiary = '#FAFAFA'
   const darkTertiary = '#329BD6'
-
-  // educator
   const lightEducator = '#5CE1E6'
   const darkEducator = '#275DAD'
-
-  let reviewBtnColor
-  let detailsBtnColor
-
-  let reviewBtnClass
-  let detailsBtnClass
-
-  console.log(courseData)
-
-  // if (course.status.enrolled) {
-  //   reviewBtnColor = darkGreen
-  //   detailsBtnColor = lightGreen
-  //   reviewBtnClass = 'enrolled'
-  //   detailsBtnClass = 'enrolled'
-  // } else {
-  //   reviewBtnColor =
-  //     course.category.toLowerCase() === 'students' ? darkTertiary : darkEducator
-  //   detailsBtnColor =
-  //     course.category.toLowerCase() === 'students'
-  //       ? lightTertiary
-  //       : lightEducator
-
-  //   reviewBtnClass =
-  //     course.category.toLowerCase() === 'students' ? 'not-enrolled' : 'educator'
-  //   detailsBtnClass =
-  //     course.category.toLowerCase() === 'students' ? 'not-enrolled' : 'educator'
-  // }
 
   const likesPercent = (likes, courseEnrollment) => {
     if (likes === 0) return 0
     return (likes / courseEnrollment) * 100
-  }
-
-  const viewSingleCourse = (url) => {
-    window.open(url, '_blank')
   }
 
   const truncateText = (text, maxLength) => {
@@ -68,6 +32,14 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
     }
     return text
   }
+
+  // Determine the link path based on course grade
+  const linkPath =
+    course.grade === 'Educator'
+      ? `/school-dashboard/courses/enrolled/educators/${encryptURI(
+          courseData._id
+        )}`
+      : `/school-dashboard/courses/enrolled/${encryptURI(courseData._id)}`
 
   return (
     <div style={{ cursor: 'pointer' }}>
@@ -83,7 +55,6 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
           <h3>{course.subtitle}</h3>
         </div>
         <p style={{ fontSize: '12px', height: '60px', marginBottom: '1rem' }}>
-          {' '}
           {truncateText(course.description, 100)}
         </p>
 
@@ -124,7 +95,7 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
         <div className='course-card-buttons'>
           <div className='course-card-buttons-main'>
             <button
-              className={`reviewBtn ${reviewBtnClass}`}
+              className={`reviewBtn`}
               onClick={(e) => {
                 e.stopPropagation()
                 openModal(course)
@@ -136,21 +107,13 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
               }}
             >
               <span>
-                <Icon
-                  icon='solar:eye-linear'
-                  style={{ color: reviewBtnColor }}
-                  width={20}
-                />
+                <Icon icon='solar:eye-linear' width={20} />
               </span>{' '}
               Review
             </button>
-            <Link
-              to={`/school-dashboard/courses/enrolled/${encryptURI(
-                courseData._id
-              )}`}
-            >
+            <Link to={linkPath}>
               <button
-                className={`detailsBtn ${detailsBtnClass}`}
+                className={`detailsBtn`}
                 style={{
                   backgroundColor: '#329BD6',
                   color: '#fff',
@@ -158,11 +121,7 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
                 }}
               >
                 <span>
-                  <Icon
-                    icon='ri:menu-2-fill'
-                    width={20}
-                    style={{ detailsBtnClass }}
-                  />
+                  <Icon icon='ri:menu-2-fill' width={20} />
                 </span>{' '}
                 View Detail
               </button>

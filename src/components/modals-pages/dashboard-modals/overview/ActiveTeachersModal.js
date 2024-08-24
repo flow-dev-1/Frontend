@@ -13,49 +13,51 @@ const ActiveTeachersModal = ({ isOpen, close }) => {
   ]
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={close}
-      contentLabel='Delete Modal'
-      className='custom-modal-dashboard'
-      overlayClassName='custom-overlay'
-    >
-      <div style={{ padding: '3rem 2rem' }}>
-        <h2 style={{ textAlign: 'center', fontSize: '40px' }}>
-          Active Teachers
-        </h2>
-        <p
-          style={{
-            fontSize: '14px',
-            textAlign: 'center',
-            paddingBottom: '10px',
-          }}
-        >
-          List of enrolled teachers
-        </p>
-        <div className='header-green'>
-          <p>Emotional Well-Being</p>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>S/N</th>
-              <th>Name</th>
-              <th>Email Address</th>
-            </tr>
-          </thead>
-          <tbody>
-            {students.map((student, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{student.name}</td>
-                <td>{student.email}</td>
+    <div style={{ borderRadius: '20px' }}>
+      <Modal
+        isOpen={isOpen}
+        onRequestClose={close}
+        contentLabel='Delete Modal'
+        className='custom-modal-dashboard'
+        overlayClassName='custom-overlay'
+      >
+        <div style={{ padding: '3rem 2rem', overflowY: 'scroll' }}>
+          <h2 style={{ textAlign: 'center', fontSize: '40px' }}>
+            Active Teachers
+          </h2>
+          <p
+            style={{
+              fontSize: '14px',
+              textAlign: 'center',
+              paddingBottom: '10px',
+            }}
+          >
+            List of enrolled teachers
+          </p>
+          <div className='header-green'>
+            <p>Emotional Well-Being</p>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>S/N</th>
+                <th>Name</th>
+                <th>Email Address</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </Modal>
+            </thead>
+            <tbody>
+              {students.map((student, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{student.name}</td>
+                  <td>{student.email}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Modal>
+    </div>
   )
 }
 

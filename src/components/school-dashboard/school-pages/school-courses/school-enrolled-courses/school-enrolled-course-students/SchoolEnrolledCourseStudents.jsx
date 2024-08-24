@@ -165,7 +165,10 @@ const SchoolEnrolledCourseStudents = () => {
         className='custom-modal-otp-variant'
         overlayClassName='custom-overlay'
       >
-        <CourseDetailModal course={selectedCourse} />
+        <CourseDetailModal
+          course={selectedCourse}
+          closeModal={closeModal}
+        />
       </Modal>
     </div>
   )
