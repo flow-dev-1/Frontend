@@ -20,7 +20,7 @@ const CourseCard = ({ course }) => {
   }
 
   function openPage(course) {
-    navigate(`/dashboard/my-courses/${course.id}`, { state: { course } })
+    navigate(`/dashboard/my-courses/${course.courseEnrollment[0]}`, { state: { course } })
   }
 
   const openModal = (modalType, course) => {

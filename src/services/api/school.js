@@ -69,6 +69,16 @@ class SchoolOBJ {
     }
   };
 
+  getGraphData = async () => {
+    try {
+      // Check if data is not empty
+      const response = await api.get(`api/schools/graph`);
+      return response.data;
+    } catch (err) {
+      throw err?.response?.data || err.message;
+    }
+  };
+
   getCoursesWithActivity = async () => {
     try {
       // Check if data is not empty

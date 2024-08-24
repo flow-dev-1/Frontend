@@ -23,10 +23,6 @@ import { useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 
 
-const dataCompletion = [
-  { name: "Completed", value: 80 },
-  { name: "Remaining", value: 20 },
-];
 
 
 
@@ -76,9 +72,14 @@ const SchoolOverview = () => {
   const [totalMales, setTotalMales] = useState(0);
   const [totalFemales, setTotalFemales] = useState(0);
   const [totalTeachers, setTotalTeachers] = useState(0);
-  
   const [totalActive, setTotalActive] = useState(0);
   const [totalNonActive, setTotalNonActive] = useState(0);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [totalCompleted, setTotalCompleted] = useState(0);
+  const [totalRemaining, setTotalRemaining] = useState(0);
+
+
+  
 
 
 
@@ -96,46 +97,52 @@ const SchoolOverview = () => {
   const closeNonActiveStudentModal = () =>
     setIsNonActiveStudentModalOpen(false);
   
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["school-dashboard"],
-    queryFn: async () => {
-      const [studentsData, activityData] = await Promise.all([
-        schoolService.getMyStudents(),
-        schoolService.getCoursesWithActivity(),
-      ]);
-      return { studentsData, activityData };
-    },
-  });
+const { data, isLoading, isError } = useQuery({
+  queryKey: ["school-dashboard"],
+  queryFn: async () => {
+    return schoolService.getGraphData(); // Ensure the result is returned
+  },
+});
 
-  useEffect(() => {
-    if (data) {
-      setTotalStudents(data.studentsData.totalEnrolledStudents);
-      setTotalMales(data.studentsData.totalMales);
-      setTotalFemales(data.studentsData.totalFemales);
-      setTotalTeachers(data.studentsData.totalTeachers);
-      setTotalActive(data.activityData.totalActive);
-      setTotalNonActive(data.activityData.totalNonActive);
-    }
-  }, [data]);
-  
-  const dataGender = [
-    { name: "Male", value: totalMales },
-    { name: "Female", value: totalFemales },
-  ];
- console.log(totalActive)
-  const dataActive = [
-    { name: "Active", value: totalActive },
-    { name: "Not Active", value: totalNonActive },
-  ];
+useEffect(() => {
+  if (data) {
+    setTotalStudents(data.totalStudents); // Use the correct key from the backend response
+    setTotalMales(data.totalMales);
+    setTotalFemales(data.totalFemales);
+    // setTotalTeachers(data.totalTeachers); // Uncomment if this is provided
+    setTotalActive(data.active);
+    setTotalNonActive(data.notActive);
+    setTotalAmount(data.totalAmount);
+    setTotalCompleted(data.completed);
+    setTotalRemaining(data.remaining);
+  }
+}, [data]);
 
-  const dataEnrollment = data?.activityData?.dataEnrollment || [
+const dataGender = [
+  { name: "Male", value: totalMales },
+  { name: "Female", value: totalFemales },
+];
+
+console.log(totalActive);
+
+const dataActive = [
+  { name: "Active", value: totalActive },
+  { name: "Not Active", value: totalNonActive },
+];
+
+
+  const dataEnrollment = data?.dataEnrollment || [
     { name: "Growth Mindset", value: 10 },
     { name: "LEAP", value: 35 },
     { name: "Mind & Money", value: 20 },
     { name: "Course Name", value: 15 },
     { name: "Course Name", value: 25 },
   ];
-
+  
+  const dataCompletion = [
+    { name: "Completed", value: totalCompleted },
+    { name: "Remaining", value: totalRemaining },
+  ];
   return (
     <div className="overview">
       <div className="top-cards">
@@ -145,7 +152,7 @@ const SchoolOverview = () => {
             style={{ fontFamily: "Poppins", fontWeight: "600" }}
             className="value"
           >
-            -N4,000,000.00
+           NGN {totalAmount.toLocaleString()}
           </h6>
           <p id="play">
             Pay Now <span style={{ fontSize: "18px" }}>+</span>{" "}
@@ -277,10 +284,10 @@ const SchoolOverview = () => {
             <div className="summary-box">
               <p className="active">Completion Rate</p>
               <div>
-                <div className="box"></div> Completed - 80%
+                <div className="box"></div> Completed - {totalCompleted}
               </div>
               <div>
-                <div className="box-2"></div> Remaining - 40%
+                <div className="box-2"></div> Remaining - {totalRemaining}
               </div>
             </div>
           </div>
@@ -370,7 +377,7 @@ const SchoolOverview = () => {
               margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
             >
               <XAxis dataKey="name" />
-             <YAxis domain={[10, 'auto']}/>
+              <YAxis domain={[10, "auto"]} />
 
               <Bar dataKey="value" barSize={60}>
                 {dataEnrollment.map((entry, index) => (
