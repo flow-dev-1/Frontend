@@ -17,7 +17,7 @@ import excelDoc from '../../../../../../assets/flow-doc.xlsx'
 import schoolService from '../../../../../../services/api/school'
 import { RotatingLines } from 'react-loader-spinner'
 import Loading from '../../../../../loader/Loader'
-import AddStudentModal from './AddStudentsModal'
+import AddEducator from '../../school-course-card/AddEducator'
 
 const schema = yup.object().shape({
   students: yup
@@ -33,7 +33,7 @@ const schema = yup.object().shape({
     .required('At least one email is required'),
 })
 
-const SchoolEnrolledStudents = () => {
+const SchoolEnrolledEducators = () => {
   const queryClient = useQueryClient()
   const { user } = useSelector((state) => state.user)
   const [showCreateModal, setShowCreateModal] = useState(false)
@@ -385,7 +385,7 @@ const SchoolEnrolledStudents = () => {
         className='custom-modal-otp-three'
         overlayClassName='custom-overlay'
       >
-        <AddStudentModal onRequestClose={closeModals} />
+        <AddEducator onRequestClose={closeModals} />
       </Modal>
 
       <Modal
@@ -405,4 +405,4 @@ const SchoolEnrolledStudents = () => {
   )
 }
 
-export default SchoolEnrolledStudents
+export default SchoolEnrolledEducators

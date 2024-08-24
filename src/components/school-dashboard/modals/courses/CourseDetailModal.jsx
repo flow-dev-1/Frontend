@@ -2,18 +2,27 @@ import React, { useState } from 'react'
 import { Icon } from '@iconify/react'
 import './course-detail-modal.css'
 import EnrollmentModal from '../Enrollment/EnrollmentModal'
+import AddEducator from '../../school-pages/school-courses/school-course-card/AddEducator'
 
 const CourseDetailModal = ({ course, enrolled, closeModal }) => {
   const [openEnrollModal, setOpenEnrollModal] = useState(false)
+  const [openEnrollModalEducator, setOpenEnrollModalEducator] = useState(false)
   const openEnrollementModal = () => {
-    setOpenEnrollModal(true)
+    if (course.grade === 'Educator') {
+      setOpenEnrollModalEducator(true)
+    } else {
+      setOpenEnrollModal(true)
+    }
   }
 
   const closeEnrollementModal = () => {
     setOpenEnrollModal(false)
+    setOpenEnrollModalEducator(false)
   }
 
   if (!course) return null
+
+  console.log(course)
 
   const daysOfWeek = [
     'Monday',
@@ -30,7 +39,7 @@ const CourseDetailModal = ({ course, enrolled, closeModal }) => {
   )
 
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       <div style={{ padding: '20px 50px' }}>
         <div>
           <div className='course-info-modal-header'>
@@ -38,24 +47,29 @@ const CourseDetailModal = ({ course, enrolled, closeModal }) => {
               className='mb-0'
               style={{ fontFamily: 'Caveat, cursive', fontSize: '24px' }}
             >
-              Growth Mindset
+              {course.title}
             </h2>
             <button
+              onClick={closeModal}
               className='close-btn'
               style={{ border: 'none', background: 'none', cursor: 'pointer' }}
             >
-              <Icon icon='mingcute:close-fill' />
+              <Icon icon='material-symbols-light:close' width={22} />
             </button>
           </div>
           <hr className='w-100 h-auto mb-2' />
-          <div
-            style={{
-              width: '100%',
-              height: '160px',
-              backgroundColor: '#D9D9D9',
-              paddingLeft: '1rem',
-            }}
-          ></div>
+          <div>
+            <img
+              src={course.image}
+              style={{
+                width: '100%',
+                height: '160px',
+                objectFit: 'cover',
+                display: 'block',
+              }}
+              alt=''
+            />
+          </div>
           <div className='course-info-modal-body'>
             <p style={{ fontSize: '20px', color: '#275DAD' }}>
               Course Overview
@@ -75,6 +89,10 @@ const CourseDetailModal = ({ course, enrolled, closeModal }) => {
           daysOfWeek={daysOfWeek}
           timeOptions={timeOptions}
           course={course}
+        />
+        <AddEducator
+          isOpen={openEnrollModalEducator}
+          onRequestClose={closeEnrollementModal}
         />
       </div>
       {enrolled && !enrolled.includes(course._id) && (

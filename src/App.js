@@ -44,7 +44,7 @@ import Support from './components/dashboard/pages/support/Support.jsx'
 import PayementHistory from './components/dashboard/pages/payment-history/PayementHistory.jsx'
 import InvitedAdminRegistration from './components/onboarding/registration/InvitedAdminRegistration.js'
 import InvitedStudentRegistrationForm from './components/onboarding/registration/InvitedStudentRegistrationForm.js'
-
+import SchoolEnrolledEducators from './components/school-dashboard/school-pages/school-courses/school-enrolled-courses/school-single-enrolled-course-page/SchoolEnrolledEducators.jsx'
 function App() {
   return (
     <BrowserRouter>
@@ -67,7 +67,10 @@ function App() {
               element={<StudentRegistrationForm />}
             />
 
-            <Route path='/invited-user' element={<InvitedStudentRegistrationForm />} />
+            <Route
+              path='/invited-user'
+              element={<InvitedStudentRegistrationForm />}
+            />
 
             <Route
               path='/invited-admin'
@@ -142,6 +145,10 @@ function App() {
           <Route
             path='/school-dashboard/courses/enrolled/:id'
             element={<SchoolEnrolledStudents />}
+          />
+          <Route
+            path='/school-dashboard/courses/enrolled/educators/:id'
+            element={<SchoolEnrolledEducators />}
           />
           <Route
             path='/school-dashboard/courses/enrolled/:id/users/:userId'

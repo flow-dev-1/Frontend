@@ -4,19 +4,26 @@ import { useNavigate } from 'react-router-dom'
 import { encryptURI } from '../../../../../utils/encryption'
 import EnrollmentModal from '../../../modals/Enrollment/EnrollmentModal'
 import { Navigate } from 'react-router-dom'
+import AddEducator from './AddEducator'
 
 const SchoolCourseCard = ({ openModal, course, enrolled, coursesArray }) => {
   const [isOn, setIsOn] = useState(false)
   const [openEnrollModal, setOpenEnrollModal] = useState(false)
+  const [openEnrollModalEducator, setOpenEnrollModalEducator] = useState(false)
   const [courseData] = useState(course)
   const navigate = useNavigate()
 
   const openEnrollementModal = () => {
-    setOpenEnrollModal(true)
+    if (course.grade === 'Educator') {
+      setOpenEnrollModalEducator(true)
+    } else {
+      setOpenEnrollModal(true)
+    }
   }
 
   const closeEnrollementModal = () => {
     setOpenEnrollModal(false)
+    setOpenEnrollModalEducator(false)
   }
 
   const handleToggle = () => {
@@ -80,14 +87,14 @@ const SchoolCourseCard = ({ openModal, course, enrolled, coursesArray }) => {
     //   course.category.toLowerCase() == 'students' ? 'not-enrolled' : 'educator'
   }
 
-  console.log(courseData, enrolled)
   const handleDetailsClick = () => {
     if (isEnrolled) {
       navigate(`/school-dashboard/courses/enrolled/${encryptURI(course?._id)}`)
     }
+    openEnrollementModal()
   }
 
-  console.log(isEnrolled)
+  console.log(enrolled)
 
   const likesPercent = (likes, courseEnrollment) => {
     if (likes === 0) return 0
@@ -254,13 +261,17 @@ const SchoolCourseCard = ({ openModal, course, enrolled, coursesArray }) => {
             )}
           </div>
         </div>
-      </div>
+      </div>{' '}
       <EnrollmentModal
         isOpen={openEnrollModal}
         onRequestClose={closeEnrollementModal}
         daysOfWeek={daysOfWeek}
         timeOptions={timeOptions}
         course={course}
+      />
+      <AddEducator
+        isOpen={openEnrollModalEducator}
+        onRequestClose={closeEnrollementModal}
       />
     </div>
   )
