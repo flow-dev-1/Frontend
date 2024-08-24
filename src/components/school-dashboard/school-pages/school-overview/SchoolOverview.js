@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
-import { Icon } from '@iconify/react'
-import { useState } from 'react'
+import React, { useEffect } from "react";
+import { Icon } from "@iconify/react";
+import { useState } from "react";
 import {
   PieChart,
   Pie,
@@ -12,23 +12,27 @@ import {
   YAxis,
   Tooltip,
   Legend,
-} from 'recharts'
-import './school-overview.css'
-import ActiveStudentsModal from '../../../modals-pages/dashboard-modals/overview/ActiveStudentsModal'
-import NonActiveStudentsModal from '../../../modals-pages/dashboard-modals/overview/NonActiveStudentsModal'
-import ActiveTeachersModal from '../../../modals-pages/dashboard-modals/overview/ActiveTeachersModal'
-import NonActiveTeachersModal from '../../../modals-pages/dashboard-modals/overview/NonActiveTeachersModal'
-import schoolService from '../../../../services/api/school'
-import { useQuery } from '@tanstack/react-query'
+} from "recharts";
+import "./school-overview.css";
+import ActiveStudentsModal from "../../../modals-pages/dashboard-modals/overview/ActiveStudentsModal";
+import NonActiveStudentsModal from "../../../modals-pages/dashboard-modals/overview/NonActiveStudentsModal";
+import ActiveTeachersModal from "../../../modals-pages/dashboard-modals/overview/ActiveTeachersModal";
+import NonActiveTeachersModal from "../../../modals-pages/dashboard-modals/overview/NonActiveTeachersModal";
+import schoolService from "../../../../services/api/school";
+import { useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
+
 
 const dataCompletion = [
-  { name: 'Completed', value: 80 },
-  { name: 'Remaining', value: 20 },
-]
+  { name: "Completed", value: 80 },
+  { name: "Remaining", value: 20 },
+];
 
-const COLORS = ['#17E383', '#652AC433', '#FF8042', '#0088FE']
-const BAR_COLORS = ['#4bc0c0', '#9966ff', '#ff9f40', '#4b4b4b', '#ff9f40']
-const GENDER_COLORS = ['#6f6af8', '#fd46d5'] // New array for gender chart colors
+
+
+const COLORS = ["#17E383", "#652AC433", "#FF8042", "#0088FE"];
+const BAR_COLORS = ["#4bc0c0", "#9966ff", "#ff9f40", "#4b4b4b", "#ff9f40"];
+const GENDER_COLORS = ["#6f6af8", "#fd46d5"]; // New array for gender chart colors
 
 const renderCustomizedLabel = ({
   cx,
@@ -39,158 +43,165 @@ const renderCustomizedLabel = ({
   percent,
   index,
 }) => {
-  const RADIAN = Math.PI / 180
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5
-  const x = cx + radius * Math.cos(-midAngle * RADIAN)
-  const y = cy + radius * Math.sin(-midAngle * RADIAN)
+  const RADIAN = Math.PI / 180;
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
   return (
     <text
       x={x}
       y={y}
-      fill='white'
-      textAnchor={x > cx ? 'start' : 'end'}
-      dominantBaseline='central'
+      fill="white"
+      textAnchor={x > cx ? "start" : "end"}
+      dominantBaseline="central"
       fontSize={10} // Reduced font size
     >
       {`${(percent * 100).toFixed(0)}%`}
     </text>
-  )
-}
+  );
+};
 
 const SchoolOverview = () => {
   const [isActiveStudentModalOpen, setIsActiveStudentModalOpen] =
-    useState(false)
+  useState(false);
   const [isActiveTeacherModalOpen, setIsActiveTeacherModalOpen] =
-    useState(false)
+    useState(false);
   const [isNonActiveTeacherModalOpen, setIsNonActiveTeacherModalOpen] =
-    useState(false)
+    useState(false);
   const [isNonActiveStudentModalOpen, setIsNonActiveStudentModalOpen] =
-    useState(false)
+    useState(false);
 
-  const [totalSudents, setTotalStudents] = useState(0)
-  const [totalMales, setTotalMales] = useState(0)
-  const [totalFemales, setTotalFemales] = useState(0)
-  const [totalTeachers, setTotalTeachers] = useState(0)
+  const [totalSudents, setTotalStudents] = useState(0);
+  const [totalMales, setTotalMales] = useState(0);
+  const [totalFemales, setTotalFemales] = useState(0);
+  const [totalTeachers, setTotalTeachers] = useState(0);
+  
+  const [totalActive, setTotalActive] = useState(0);
+  const [totalNonActive, setTotalNonActive] = useState(0);
 
-  const [totalActive, setTotalActive] = useState(0)
-  const [totalNonActive, setTotalNonActive] = useState(0)
+
 
   // Functions to open modals
-  const openActiveStudentModal = () => setIsActiveStudentModalOpen(true)
-  const openActiveTeacherModal = () => setIsActiveTeacherModalOpen(true)
-  const openNonActiveTeacherModal = () => setIsNonActiveTeacherModalOpen(true)
-  const openNonActiveStudentModal = () => setIsNonActiveStudentModalOpen(true)
+  const openActiveStudentModal = () => setIsActiveStudentModalOpen(true);
+  const openActiveTeacherModal = () => setIsActiveTeacherModalOpen(true);
+  const openNonActiveTeacherModal = () => setIsNonActiveTeacherModalOpen(true);
+  const openNonActiveStudentModal = () => setIsNonActiveStudentModalOpen(true);
 
   // Functions to close modals
-  const closeActiveStudentModal = () => setIsActiveStudentModalOpen(false)
-  const closeActiveTeacherModal = () => setIsActiveTeacherModalOpen(false)
-  const closeNonActiveTeacherModal = () => setIsNonActiveTeacherModalOpen(false)
-  const closeNonActiveStudentModal = () => setIsNonActiveStudentModalOpen(false)
-
+  const closeActiveStudentModal = () => setIsActiveStudentModalOpen(false);
+  const closeActiveTeacherModal = () => setIsActiveTeacherModalOpen(false);
+  const closeNonActiveTeacherModal = () =>
+    setIsNonActiveTeacherModalOpen(false);
+  const closeNonActiveStudentModal = () =>
+    setIsNonActiveStudentModalOpen(false);
+  
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['school-dashboard'],
+    queryKey: ["school-dashboard"],
     queryFn: async () => {
       const [studentsData, activityData] = await Promise.all([
         schoolService.getMyStudents(),
         schoolService.getCoursesWithActivity(),
-      ])
-      return { studentsData, activityData }
+      ]);
+      return { studentsData, activityData };
     },
-  })
+  });
 
   useEffect(() => {
     if (data) {
-      setTotalStudents(data?.studentsData.totalEnrolledStudents)
-      setTotalMales(data?.studentsData.totalMales)
-      setTotalFemales(data?.studentsData.totalFemales)
-      setTotalTeachers(data?.studentsData.totalTeachers)
-      setTotalActive(data?.activityData.totalActive)
-      setTotalNonActive(data?.activityData.totalNonActive)
+      setTotalStudents(data.studentsData.totalEnrolledStudents);
+      setTotalMales(data.studentsData.totalMales);
+      setTotalFemales(data.studentsData.totalFemales);
+      setTotalTeachers(data.studentsData.totalTeachers);
+      setTotalActive(data.activityData.totalActive);
+      setTotalNonActive(data.activityData.totalNonActive);
     }
-  }, [data])
-
+  }, [data]);
+  
   const dataGender = [
-    { name: 'Male', value: totalMales },
-    { name: 'Female', value: totalFemales },
-  ]
-  console.log(totalActive)
+    { name: "Male", value: totalMales },
+    { name: "Female", value: totalFemales },
+  ];
+ console.log(totalActive)
   const dataActive = [
-    { name: 'Active', value: totalActive },
-    { name: 'Not Active', value: totalNonActive },
-  ]
+    { name: "Active", value: totalActive },
+    { name: "Not Active", value: totalNonActive },
+  ];
 
   const dataEnrollment = data?.activityData?.dataEnrollment || [
-    { name: 'Growth Mindset', value: 10 },
-    { name: 'LEAP', value: 35 },
-    { name: 'Mind & Money', value: 20 },
-    { name: 'Course Name', value: 15 },
-    { name: 'Course Name', value: 25 },
-  ]
+    { name: "Growth Mindset", value: 10 },
+    { name: "LEAP", value: 35 },
+    { name: "Mind & Money", value: 20 },
+    { name: "Course Name", value: 15 },
+    { name: "Course Name", value: 25 },
+  ];
 
   return (
-    <div className='overview'>
-      <div className='top-cards'>
-        <div style={{ height: '130px' }} className='balance'>
+    <div className="overview">
+      <div className="top-cards">
+        <div style={{ height: "130px" }} className="balance">
           <p>Account Balance:</p>
           <h6
-            style={{ fontFamily: 'Poppins', fontWeight: '600' }}
-            className='value'
+            style={{ fontFamily: "Poppins", fontWeight: "600" }}
+            className="value"
           >
             -N4,000,000.00
           </h6>
-          <p id='play'>
-            Pay Now <span style={{ fontSize: '18px' }}>+</span>{' '}
+          <p id="play">
+            Pay Now <span style={{ fontSize: "18px" }}>+</span>{" "}
           </p>
         </div>
 
-        <div style={{ height: '130px' }} className='stat one'>
-          <p className='enroll'>Total Enrolled Teachers</p>
+        <div style={{ height: "130px" }} className="stat one">
+          <p className="enroll">Total Enrolled Teachers</p>
           <h6
-            style={{ fontFamily: 'Poppins', fontWeight: '600' }}
-            className='value'
+            style={{ fontFamily: "Poppins", fontWeight: "600" }}
+            className="value"
           >
             {totalTeachers}
           </h6>
         </div>
-        <div style={{ height: '130px' }} class='stat'>
-          <p className='total'>Total Enrolled Students</p>
+        <div style={{ height: "130px" }} class="stat">
+          <p className="total">Total Enrolled Students</p>
           <h6
-            style={{ fontFamily: 'Poppins', fontWeight: '600' }}
-            className='value'
+            style={{ fontFamily: "Poppins", fontWeight: "600" }}
+            className="value"
           >
             {totalSudents}
           </h6>
         </div>
       </div>
       <hr />
-      <div className='charts'>
-        <div className='chart' style={{ cursor: 'pointer' }}>
+      <div className="charts">
+        <div
+          className="chart"
+          style={{ cursor: "pointer" }}
+          onClick={openActiveStudentModal}
+        >
           <div>
-            <div className='chart-heading'>
+            <div className="chart-heading">
               <p>Activity Report</p>
-              <div style={{ cursor: 'pointer' }} className='filter-sort'>
+              <div style={{ cursor: "pointer" }} className="filter-sort">
                 <span>
-                  <Icon icon='octicon:filter-16' />
+                  <Icon icon="octicon:filter-16" />
                 </span>
-                <select style={{ cursor: 'pointer' }}>
-                  <option value='all'>Filter by</option>
-                  <option value='published'>Published</option>
-                  <option value='draft'>Draft</option>
+                <select style={{ cursor: "pointer" }}>
+                  <option value="all">Filter by</option>
+                  <option value="published">Published</option>
+                  <option value="draft">Draft</option>
                 </select>
               </div>
             </div>
             <hr />
 
-            <ResponsiveContainer width='100%' height={250}>
+            <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie
-                  onClick={openActiveStudentModal}
                   data={dataActive}
-                  dataKey='value'
-                  nameKey='name'
-                  cx='50%'
-                  cy='50%'
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
                   outerRadius={120}
                   label={renderCustomizedLabel}
                   labelLine={false}
@@ -204,46 +215,49 @@ const SchoolOverview = () => {
                 </Pie>
               </PieChart>
             </ResponsiveContainer>
-            <div className='students-dash'>students</div>
-            <div className='summary'>
-              <div className='summary-box'>
-                <p className='active'>Active/Not-Active</p>
+            <div className="students-dash">students</div>
+            <div className="summary">
+              <div className="summary-box">
+                <p className="active">Active/Not-Active</p>
                 <div>
-                  <div className='box'></div> Active - {totalActive}
+                  <div className="box"></div> Active - {totalActive}
                 </div>
                 <div>
-                  <div className='box-2'></div> Not-Active - {totalNonActive}
+                  <div className="box-2"></div> Not-Active - {totalNonActive}
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className='chart' style={{ cursor: 'pointer' }}>
+        <div
+          className="chart"
+          style={{ cursor: "pointer" }}
+          onClick={openNonActiveStudentModal}
+        >
           <div>
-            <div className='chart-heading'>
+            <div className="chart-heading">
               <p>Progress Report</p>
-              <div style={{ cursor: 'pointer' }} className='filter-sort'>
+              <div style={{ cursor: "pointer" }} className="filter-sort">
                 <span>
-                  <Icon icon='octicon:filter-16' />
+                  <Icon icon="octicon:filter-16" />
                 </span>
-                <select style={{ cursor: 'pointer' }}>
-                  <option value='all'>Filter by</option>
-                  <option value='published'>Published</option>
-                  <option value='draft'>Draft</option>
+                <select style={{ cursor: "pointer" }}>
+                  <option value="all">Filter by</option>
+                  <option value="published">Published</option>
+                  <option value="draft">Draft</option>
                 </select>
               </div>
             </div>
           </div>
           <hr />
-          <ResponsiveContainer width='100%' height={250}>
+          <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie
-                onClick={openNonActiveStudentModal}
                 data={dataCompletion}
-                dataKey='value'
-                nameKey='name'
-                cx='50%'
-                cy='50%'
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
                 innerRadius={80} // Adjusted innerRadius for increased thickness
                 outerRadius={120} // Adjusted outerRadius for increased thickness
                 label={renderCustomizedLabel}
@@ -258,47 +272,50 @@ const SchoolOverview = () => {
               </Pie>
             </PieChart>
           </ResponsiveContainer>
-          <div className='students-dash'>students</div>
-          <div className='summary'>
-            <div className='summary-box'>
-              <p className='active'>Completion Rate</p>
+          <div className="students-dash">students</div>
+          <div className="summary">
+            <div className="summary-box">
+              <p className="active">Completion Rate</p>
               <div>
-                <div className='box'></div> Completed - 80%
+                <div className="box"></div> Completed - 80%
               </div>
               <div>
-                <div className='box-2'></div> Remaining - 40%
+                <div className="box-2"></div> Remaining - 40%
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className='charts'>
-        <div className='chart two' style={{ cursor: 'pointer' }}>
+      <div className="charts">
+        <div
+          className="chart two"
+          style={{ cursor: "pointer" }}
+          onClick={openActiveTeacherModal}
+        >
           <div>
-            <div className='chart-heading'>
+            <div className="chart-heading">
               <p>Gender Balance</p>
-              <div style={{ cursor: 'pointer' }} className='filter-sort'>
+              <div style={{ cursor: "pointer" }} className="filter-sort">
                 <span>
-                  <Icon icon='octicon:filter-16' />
+                  <Icon icon="octicon:filter-16" />
                 </span>
-                <select style={{ cursor: 'pointer' }}>
-                  <option value='all'>Filter by</option>
-                  <option value='published'>Published</option>
-                  <option value='draft'>Draft</option>
+                <select style={{ cursor: "pointer" }}>
+                  <option value="all">Filter by</option>
+                  <option value="published">Published</option>
+                  <option value="draft">Draft</option>
                 </select>
               </div>
             </div>
           </div>
           <hr />
-          <ResponsiveContainer width='100%' height={250}>
+          <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie
-                onClick={openActiveTeacherModal}
                 data={dataGender}
-                dataKey='value'
-                nameKey='name'
-                cx='50%'
-                cy='50%'
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
                 outerRadius={120}
                 label={renderCustomizedLabel}
                 labelLine={false}
@@ -312,48 +329,50 @@ const SchoolOverview = () => {
               </Pie>
             </PieChart>
           </ResponsiveContainer>
-          <div className='students-dash'>students</div>
-          <div className='summary'>
-            <div className='summary-box'>
-              <p className='active gender'>Gender</p>
+          <div className="students-dash">students</div>
+          <div className="summary">
+            <div className="summary-box">
+              <p className="active gender">Gender</p>
               <div>
-                <div className='box male'></div> Male -{' '}
-                <span className='male'> {totalMales}</span>
+                <div className="box male"></div> Male -{" "}
+                <span className="male"> {totalMales}</span>
               </div>
               <div>
-                <div className='box-2 female'></div> Female -{' '}
-                <span className='female'> {totalFemales}</span>
+                <div className="box-2 female"></div> Female -{" "}
+                <span className="female"> {totalFemales}</span>
               </div>
             </div>
           </div>
         </div>
-        <div className='chart bar-chart'>
-          <div style={{ cursor: 'pointer' }}>
-            <div className='chart-heading'>
+        <div className="chart bar-chart">
+          <div
+            style={{ cursor: "pointer" }}
+            onClick={openNonActiveTeacherModal}
+          >
+            <div className="chart-heading">
               <p>Enrollment Per Course</p>
-              <div style={{ cursor: 'pointer' }} className='filter-sort'>
+              <div style={{ cursor: "pointer" }} className="filter-sort">
                 <span>
-                  <Icon icon='octicon:filter-16' />
+                  <Icon icon="octicon:filter-16" />
                 </span>
-                <select style={{ cursor: 'pointer' }}>
-                  <option value='all'>Filter by</option>
-                  <option value='published'>Published</option>
-                  <option value='draft'>Draft</option>
+                <select style={{ cursor: "pointer" }}>
+                  <option value="all">Filter by</option>
+                  <option value="published">Published</option>
+                  <option value="draft">Draft</option>
                 </select>
               </div>
             </div>
           </div>
           <hr />
-          <ResponsiveContainer width='100%' height={400}>
+          <ResponsiveContainer width="100%" height={400}>
             <BarChart
-              onClick={openNonActiveTeacherModal}
               data={dataEnrollment}
               margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
             >
-              <XAxis dataKey='name' />
-              <YAxis domain={[10, 'auto']} />
+              <XAxis dataKey="name" />
+             <YAxis domain={[10, 'auto']}/>
 
-              <Bar dataKey='value' barSize={60}>
+              <Bar dataKey="value" barSize={60}>
                 {dataEnrollment.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
@@ -382,7 +401,7 @@ const SchoolOverview = () => {
         close={closeNonActiveTeacherModal}
       />
     </div>
-  )
-}
+  );
+};
 
-export default SchoolOverview
+export default SchoolOverview;
