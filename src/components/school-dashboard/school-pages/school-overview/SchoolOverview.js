@@ -99,10 +99,11 @@ const SchoolOverview = () => {
   
 const { data, isLoading, isError } = useQuery({
   queryKey: ["school-dashboard"],
-  queryFn: async () => {
-    return schoolService.getGraphData(); // Ensure the result is returned
-  },
+  queryFn: async () => schoolService.getGraphData(),
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
 });
+
 
 useEffect(() => {
   if (data) {

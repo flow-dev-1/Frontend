@@ -18,18 +18,36 @@ import { useNavigate } from 'react-router-dom'
 const studentSchema = yup.object().shape({
   fullName: yup
     .string()
-    .required('Full Name is required')
+    .required("Full Name is required")
     .test(
-      'is-two-words',
-      'Full Name must contain at least two words separated by a space',
+      "is-two-words",
+      "Full Name must contain at least two words separated by a space",
       (value) => value && value.trim().split(/\s+/).length >= 2
     )
+    .test("not-na", 'Full Name cannot be "N/A"', (value) => value !== "N/A")
     .trim(),
-  grade: yup.string().required('School Grade is required'),
-  gender: yup.string().required('Gender is required'),
-  DOB: yup.date().required('Date of Birth is required'),
-  password: yup.string().min(8, 'Password must be at least 8 characters'),
-})
+  grade: yup
+    .string()
+    .required("School Grade is required")
+    .test("not-na", 'School Grade cannot be "N/A"', (value) => value !== "N/A"),
+  gender: yup
+    .string()
+    .required("Gender is required")
+    .test("not-na", 'Gender cannot be "N/A"', (value) => value !== "N/A"),
+  DOB: yup
+    .date()
+    .required("Date of Birth is required")
+    .test(
+      "not-na",
+      'Date of Birth cannot be "N/A"',
+      (value) => value !== "N/A"
+    ),
+  password: yup
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .test("not-na", 'Password cannot be "N/A"', (value) => value !== "N/A"),
+});
+
 
 export default function InvitedStudentDetailsForm({
   onSubmit,
@@ -44,16 +62,20 @@ export default function InvitedStudentDetailsForm({
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    setValue,
-  } = useForm({
-    resolver: yupResolver(studentSchema),
-    defaultValues: students[formCount], // Pre-fill with student data
-  })
+const {
+  register,
+  handleSubmit,
+  formState: { errors },
+  reset,
+  setValue,
+} = useForm({
+  resolver: yupResolver(studentSchema),
+  defaultValues: {
+    ...students[formCount],
+    userId: undefined, // Ensure userId is not part of the default values
+  },
+});
+
 
   const dispatch = useDispatch()
 
@@ -72,47 +94,81 @@ export default function InvitedStudentDetailsForm({
       console.log('Error submitting form', error)
     },
   })
+const continueHandler = async (studentData) => {
+  try {
+    // Check if any field contains "N/A"
+    const hasNAField = Object.values(studentData).some(
+      (value) => value === "N/A"
+    );
 
-  const continueHandler = async (studentData) => {
-    try {
-      // Create a new student object with only the required fields and exclude `isVerified`
-      const newStudent = {
-        userId: students[formCount].userId,
-        fullName: studentData.fullName,
-        grade: studentData.grade,
-        gender: studentData.gender,
-        DOB: studentData.DOB,
-        password: studentData.password,
-      }
-
-      console.log(newStudent)
-
-      // Exclude `isVerified` field from each student object
-      const updatedStudents = students.map(
-        (student, index) =>
-          index === formCount
-            ? newStudent
-            : { ...student, isVerified: undefined } // Ensure `isVerified` is excluded
-      )
-
-      if (formCount < students.length - 1) {
-        // If not the last form, move to the next form
-        setFormCount((prevCount) => prevCount + 1)
-        reset(updatedStudents[formCount + 1]) // Reset form with the next student's data
-      } else {
-        // If this is the last form, submit all data
-        const completeFormData = {
-          ...parentFormData,
-          students: updatedStudents, // Include all students with only required fields
-        }
-        console.log('Submitting form data:', completeFormData)
-        mutation.mutate(completeFormData)
-      }
-    } catch (error) {
-      console.error('Error adding student:', error)
-      toast.error('Failed to add student. Please try again.')
+    if (hasNAField) {
+      toast.error(
+        'Please fill all fields. Fields with "N/A" must be corrected.'
+      );
+      return;
     }
+
+    // Update the current student's data in the array
+    const updatedStudents = students.map((student, index) => {
+      if (index === formCount) {
+        return {
+          ...student,
+          fullName: studentData.fullName,
+          grade: studentData.grade,
+          gender: studentData.gender,
+          DOB: studentData.DOB,
+          password: studentData.password,
+        };
+      }
+      return student;
+    });
+
+    if (formCount < students.length - 1) {
+      setFormCount((prevCount) => prevCount + 1);
+      reset(updatedStudents[formCount + 1]);
+    } else {
+      const completeFormData = {
+        ...parentFormData,
+        students: updatedStudents.map(
+          ({
+            _id,
+            userId,
+            email,
+            isDeleted,
+            isSchoolAdmin,
+            isVerified,
+            newCourseInvite,
+            resetPassword,
+            updatedAt,
+            guardianFullName,
+            deletedAt,
+            createdAt,
+            userType,
+            DOB,
+            __v,
+            ...rest
+          }) => ({
+            ...rest,
+            DOB: DOB ? new Date(DOB).toISOString() : undefined,
+            // guardianFullName: parentFormData.guardianFullName,
+          })
+        ),
+      };
+      console.log("Submitting form data:", completeFormData);
+      mutation.mutate(completeFormData);
+    }
+  } catch (error) {
+    console.error("Error adding student:", error);
+    toast.error("Failed to add student. Please try again.");
   }
+};
+
+
+
+
+
+
+
 
   function openModal() {
     setIsOpen(true)
