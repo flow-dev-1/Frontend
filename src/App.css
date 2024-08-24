@@ -216,7 +216,7 @@ li {
   padding: 0;
   overflow: hidden;
 }
-.custom-modal-otp-varian-{
+.custom-modal-otp-varian- {
   width: 70%;
   display: flex;
   align-items: center;
@@ -376,20 +376,10 @@ input {
 .custom-modal-dashboard {
   width: 502px;
   height: 540px;
-  overflow-y: scroll;
+  overflow-y: hidden;
   background-color: #fefefe;
   margin: 0 auto;
-  border-radius: 10px;
-  padding: 10px 10px;
-}
-.custom-modal-dashboard {
-  width: 502px;
-  height: 540px;
-  overflow: hidden;
-
-  background-color: #fefefe;
-  margin: 0 auto;
-  border-radius: 10px;
+  border-radius: 20px;
   padding: 10px 10px;
 }
 
@@ -455,7 +445,6 @@ input {
 .custom-modal-dashboard::-webkit-scrollbar-corner {
   background-color: transparent; /* Transparent background for the corner */
 }
-
 
 .add-student {
   position: relative;
