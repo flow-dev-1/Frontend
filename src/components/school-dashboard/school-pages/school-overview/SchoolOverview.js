@@ -144,7 +144,7 @@ const dataCompletion = [
             style={{ fontFamily: "Poppins", fontWeight: "600" }}
             className="value"
           >
-            NGN {totalAmount}
+            NGN {totalAmount.toLocaleString()}
           </h6>
           <p id="play">
             Pay Now <span style={{ fontSize: "18px" }}>+</span>{" "}
