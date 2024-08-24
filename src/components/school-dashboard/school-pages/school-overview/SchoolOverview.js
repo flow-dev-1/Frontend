@@ -131,13 +131,7 @@ const dataActive = [
 ];
 
 
-  const dataEnrollment = data?.dataEnrollment || [
-    { name: "Growth Mindset", value: 10 },
-    { name: "LEAP", value: 35 },
-    { name: "Mind & Money", value: 20 },
-    { name: "Course Name", value: 15 },
-    { name: "Course Name", value: 25 },
-  ];
+  const dataEnrollment = data?.dataEnrollment || [];
   
   const dataCompletion = [
     { name: "Completed", value: totalCompleted },
