@@ -44,26 +44,34 @@ const SettingsAddNewTeam = ({ closeModal, openSuccessModal }) => {
       setErrorMessage(error?.response?.data?.message || 'An error occurred')
       toast.error(errorMessage)
       mutationTriggered.current = false
+      console.log(error)
     },
   })
 
-  const onSubmit = (data) => {
-    if (!mutationTriggered.current) {
-      mutationTriggered.current = true
+const onSubmit = (data) => {
+  if (!mutationTriggered.current) {
+    mutationTriggered.current = true;
 
-      // Combine first_name and last_name to create fullName
-      const fullName = `${data.first_name} ${data.last_name}`
+    // Combine first_name and last_name to create fullName
+    const fullName = `${data.first_name} ${data.last_name}`;
 
-      // Create the data object to send in the mutation
-      const payload = {
-        fullName,
-        email: data.email,
-        position: data.position,
-      }
+    // Remove first_name and last_name from the data object
+    delete data.first_name;
+    delete data.last_name;
 
-      mutation.mutate(payload)
-    }
+    // Create the data object to send in the mutation
+    const payload = {
+      fullName,
+      email: data.email,
+      position: data.position,
+    };
+
+    mutation.mutate(payload);
+
+    console.log(payload); // Logging the payload instead of the original data
   }
+};
+
 
   return (
     <div className='' onSubmit={handleSubmit(onSubmit)}>
