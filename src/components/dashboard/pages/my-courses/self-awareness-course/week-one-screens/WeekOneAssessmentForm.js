@@ -1,46 +1,21 @@
 
 import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
-import checkedImage from '../../../../../assets/selfawareness-images/checked.png';
-import unCheckedImage from '../../../../../assets/selfawareness-images/not-checked.png';
+import checkedImage from '../../../../../../assets/selfawareness-images/checked.png';
+import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png';
 
-import './newcourse.css'
+import '../newcourse.css'
 import Modal from 'react-modal';
-import ReviewPopUp from '../../../../modals-pages/dashboard-modals/ReviewModal';
+import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModal';
 
 
 
-export default function AssessmentForm({ onSubmit }) {
+export default function WeekOneAssessmentForm({ onSubmit,previous }) {
 
     const [currentIndex, setCurrentIndex] = useState(1);
     const [reviewPopUp, setReviewPopUp] = React.useState(false)
 
-    const handleStepClick = (index) => {
-        setCurrentIndex(index);
-        if (currentIndex < currentIndex.length - 1) {
-            setCurrentIndex(currentIndex + 1);
-        }
-
-        if (currentIndex === 5) {
-
-            setTimeout(() => {
-                setReviewPopUp(true);
-    
-                setTimeout(() => {
-                    setReviewPopUp(false);
-                }, 10000);
-            }, 8000);
-        }
-        
-        
-    };
-
-
-
-
-    const closeReviewPopUp = () => {
-        setReviewPopUp(false);
-    };
+   
 
 
     const questionsArray = [
@@ -95,7 +70,39 @@ export default function AssessmentForm({ onSubmit }) {
 
     ];
 
+    const handleNextStepClick = () => {
+        if (currentIndex <= questionsArray.length) {
+            setCurrentIndex(currentIndex + 1);
 
+
+        } else {
+            onSubmit();
+        }
+
+        if (currentIndex === 5) {
+
+            setTimeout(() => {
+                setReviewPopUp(true);
+    
+                setTimeout(() => {
+                    setReviewPopUp(false);
+                }, 10000);
+            }, 6000);
+        }
+        
+        
+    };
+    const handlePreviousStepClick = () => {
+        if (currentIndex > 1) {
+            setCurrentIndex(currentIndex - 1);
+        } else {
+            previous();
+        }
+    };
+
+    const closeReviewPopUp = () => {
+        setReviewPopUp(false);
+    };
 
     const [questionChecked, setQuestionChecked] = useState(
         questionsArray.reduce((acc, _, index) => ({ ...acc, [index]: [] }), {})
@@ -335,10 +342,14 @@ export default function AssessmentForm({ onSubmit }) {
                         <li
                             key={index + 1}
                             className={currentIndex >= index + 1 ? 'answered' : ''}
-                            onClick={() => handleStepClick(index + 1)}
                         ></li>
                     ))}
                 </ul>
+            </div>
+
+            <div className='d-flex align-items-center justify-content-around mx-auto mt-5 ' >
+                <button className='btn progress-btn btn-light' onClick={handlePreviousStepClick}>{"<<<"} Back</button>
+                <button className='btn progress-btn btn-dark' onClick={handleNextStepClick}>Next {">>>"}</button>
             </div>
 
             {reviewPopUp && (

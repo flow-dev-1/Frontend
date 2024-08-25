@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { Icon } from '@iconify/react';
-import dragdropArrow from '../../../../../assets/selfawareness-images/dragdrop-arrowl.png';
-import bucketYes from '../../../../../assets/selfawareness-images/bucket-yes.png';
-import bucketNo from '../../../../../assets/selfawareness-images/bucket-no.png';
-import bucketSometimes from '../../../../../assets/selfawareness-images/bucket-sometimes.png';
-import './newcourse.css';
+import dragdropArrow from '../../../../../../assets/selfawareness-images/dragdrop-arrowl.png';
+import bucketYes from '../../../../../../assets/selfawareness-images/bucket-yes.png';
+import bucketNo from '../../../../../../assets/selfawareness-images/bucket-no.png';
+import bucketSometimes from '../../../../../../assets/selfawareness-images/bucket-sometimes.png';
+import '../newcourse.css';
 
-import cardOne from '../../../../../assets/selfawareness-images/card-one.png';
-import cardTwo from '../../../../../assets/selfawareness-images/card-two.png';
-import cardThree from '../../../../../assets/selfawareness-images/card-three.png';
-import cardFour from '../../../../../assets/selfawareness-images/card-four.png';
-import cardFive from '../../../../../assets/selfawareness-images/card-five.png';
-import cardSix from '../../../../../assets/selfawareness-images/card-six.png';
-import cardSeven from '../../../../../assets/selfawareness-images/card-seven.png';
-import cardEight from '../../../../../assets/selfawareness-images/card-eight.png';
-import cardNine from '../../../../../assets/selfawareness-images/card-nine.png';
-import cardTen from '../../../../../assets/selfawareness-images/card-ten.png';
+import cardOne from '../../../../../../assets/selfawareness-images/card-one.png';
+import cardTwo from '../../../../../../assets/selfawareness-images/card-two.png';
+import cardThree from '../../../../../../assets/selfawareness-images/card-three.png';
+import cardFour from '../../../../../../assets/selfawareness-images/card-four.png';
+import cardFive from '../../../../../../assets/selfawareness-images/card-five.png';
+import cardSix from '../../../../../../assets/selfawareness-images/card-six.png';
+import cardSeven from '../../../../../../assets/selfawareness-images/card-seven.png';
+import cardEight from '../../../../../../assets/selfawareness-images/card-eight.png';
+import cardNine from '../../../../../../assets/selfawareness-images/card-nine.png';
+import cardTen from '../../../../../../assets/selfawareness-images/card-ten.png';
 
 const cardImages = [
     cardOne,

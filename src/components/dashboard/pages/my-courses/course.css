@@ -51,8 +51,9 @@
   flex-direction: column;
 }
 
-.back-to-course-list {
+p.back-to-course-list {
   cursor: pointer;
+  color: #ffffff;
 }
 
 .course-title-text {

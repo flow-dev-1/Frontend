@@ -6,6 +6,42 @@ import userService from '../../../../services/api/user'
 import { useQuery } from '@tanstack/react-query'
 import Loading from '../../../loader/Loader'
 import { useState } from 'react'
+import courseOne from '../../../../assets/course1.png'
+import courseTwo from '../../../../assets/course2.png'
+import courseThree from '../../../../assets/course3.png'
+
+const courses = [
+  {
+    id: 1,
+    title: 'Max the Explorer Monkey: Growth Mindset',
+    description:
+      'The curriculum combines engaging educational content, interactive activities, and reflective discussions to...',
+    viewed: 1548,
+    likes: 98,
+    progress: 0,
+    image: courseOne, // Replace with actual image path or URL
+  },
+  {
+    id: 2,
+    title: 'Self-Awareness',
+    description:
+      'The curriculum combines engaging educational content, interactive activities, and reflective discussions to...',
+    viewed: 1548,
+    likes: 98,
+    progress: 10,
+    image: courseTwo, // Replace with actual image path or URL
+  },
+  {
+    id: 3,
+    title: 'Max the Explorer Monkey: Growth Mindset',
+    description:
+      'The curriculum combines engaging educational content, interactive activities, and reflective discussions to...',
+    viewed: 1548,
+    likes: 98,
+    progress: 100,
+    image: courseThree, // Replace with actual image path or URL
+  },
+]
 
 export default function MyCourses() {
   const [searchQuery, setSearchQuery] = useState('') // State for Search Query

@@ -45,6 +45,8 @@ import PayementHistory from './components/dashboard/pages/payment-history/Payeme
 import InvitedAdminRegistration from './components/onboarding/registration/InvitedAdminRegistration.js'
 import InvitedStudentRegistrationForm from './components/onboarding/registration/InvitedStudentRegistrationForm.js'
 import SchoolEnrolledEducators from './components/school-dashboard/school-pages/school-courses/school-enrolled-courses/school-single-enrolled-course-page/SchoolEnrolledEducators.jsx'
+import SelfAwarenessCourse from './components/dashboard/pages/my-courses/self-awareness-course/SelfAwarenessCourse.js'
+
 function App() {
   return (
     <BrowserRouter>
@@ -116,6 +118,12 @@ function App() {
             <Route
               path='/dashboard/my-courses/:id'
               element={<SingleCoursePage />}
+            />
+            
+
+            <Route
+              path='/dashboard/self-awareness-course/:id'
+              element={<SelfAwarenessCourse />}
             />
 
             <Route

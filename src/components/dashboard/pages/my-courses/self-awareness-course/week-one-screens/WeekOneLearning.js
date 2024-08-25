@@ -1,24 +1,21 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Icon } from '@iconify/react';
-import celebrate from '../../../../../assets/celebrate.png';
+import celebrate from '../../../../../../assets/celebrate.png';
 
-import selfAwareness from '../../../../../assets/selfawareness-images/self-awareness.png';
-import personality from '../../../../../assets/selfawareness-images/personality.png';
-
-import dragdropArrow from '../../../../../assets/selfawareness-images/dragdrop-arrowl.png';
-import bucketYes from '../../../../../assets/selfawareness-images/bucket-yes.png';
-import bucketNo from '../../../../../assets/selfawareness-images/bucket-no.png';
-import bucketSometimes from '../../../../../assets/selfawareness-images/bucket-sometimes.png';
-import emotionalHand from '../../../../../assets/selfawareness-images/emotional.png';
-import analyticHand from '../../../../../assets/selfawareness-images/analytic.png';
-import friendshipHand from '../../../../../assets/selfawareness-images/friendship.png';
-import actionHand from '../../../../../assets/selfawareness-images/action.png';
-import ReviewPopUp from '../../../../modals-pages/dashboard-modals/ReviewModal';
+import selfAwareness from '../../../../../../assets/selfawareness-images/self-awareness.png';
+import personality from '../../../../../../assets/selfawareness-images/personality.png';
+import emotionalHand from '../../../../../../assets/selfawareness-images/emotional.png';
+import analyticHand from '../../../../../../assets/selfawareness-images/analytic.png';
+import friendshipHand from '../../../../../../assets/selfawareness-images/friendship.png';
+import actionHand from '../../../../../../assets/selfawareness-images/action.png';
+import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModal';
 import Modal from 'react-modal';
-import AssessmentForm from './AssessmentForm';
+import WeekOneAssessmentForm from './WeekOneAssessmentForm';
 import { useNavigate } from 'react-router-dom';
 import DragDropComponent from './DragAndDrop';
+import MyFireWorks from '../Fireworks';
+
 
 
 
@@ -54,16 +51,18 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
         console.log("Form Data submitted:", formData);
     }, [formData]);
 
+
+
     const handleReviewPopUp = () => {
         setReviewPopUp(true);
     };
 
-   // Navigation function to handle proceeding to the next week
-   const handleNextWeekCourse = () => {
-    // Increment currentWeekIndex and navigate to the SelfAwarenessCourse with updated index
-    const nextWeekIndex = currentWeekIndex + 1;
-    navigate('/dashboard/my-courses/1', { state: { course, weekIndex: nextWeekIndex } });
-};
+    // Navigation function to handle proceeding to the next week
+    const handleNextWeekCourse = () => {
+        // Increment currentWeekIndex and navigate to the SelfAwarenessCourse with updated index
+        const nextWeekIndex = currentWeekIndex + 1;
+        navigate('/dashboard/self-awareness-course/1', { state: { course, weekIndex: nextWeekIndex } });
+    };
 
     const renderStepContent = () => {
         switch (currentStep) {
@@ -533,6 +532,7 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
                             </div>
                         </div>
 
+
                         <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
                             <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
                             <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
@@ -547,15 +547,13 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
 
                         <div className="">
 
-                            <AssessmentForm onSubmit={handleNext} />
+                            <WeekOneAssessmentForm
+                                previous={() => setCurrentStep(13)}
+                                onSubmit={() => setCurrentStep(15)}
+                            />
 
                         </div>
-                        <button className='btn' onClick={handleReviewPopUp}>click here</button>
-
-                        <div className='d-flex align-items-center justify-content-around mx-auto '>
-                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
-                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
-                        </div>
+                        {/* <button className='btn' onClick={handleReviewPopUp}>click here</button> */}
 
 
                     </div>
@@ -566,12 +564,13 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
                 return (
                     <div className="end-of-course-page">
 
+
                         <div className="congrats">
                             <img src={celebrate} alt="celebrate" />
                             <h1>Hurray!</h1>
                             <p className='text-center fs-5'>You have made it to the {<br />} Week {currentWeekIndex + 1}</p>
                         </div>
-
+                        <MyFireWorks />
 
                         <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
 
