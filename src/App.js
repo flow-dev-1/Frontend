@@ -114,8 +114,9 @@ function App() {
               path='/dashboard/my-courses/:id'
               element={<SingleCoursePage />}
             />
+            
 
-<Route
+            <Route
               path='/dashboard/self-awareness-course/:id'
               element={<SelfAwarenessCourse />}
             />

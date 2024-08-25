@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Fireworks from 'fireworks-js';
 
-const MyFireWorks = () => {
+const MyFireWorks = ({currentWeekIndex}) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {

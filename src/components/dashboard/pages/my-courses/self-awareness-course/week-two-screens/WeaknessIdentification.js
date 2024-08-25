@@ -46,7 +46,7 @@ export default function WeaknessIdentification({ onSubmit }) {
                                     src={questionChecked[index] ? checkedImage : unCheckedImage} // Check if current question is checked
                                     alt=""
                                 />
-                                <p className='question-p ms-2'>{item}</p>
+                                <p className='question-p ms-2 text-nowrap'>{item}</p>
                             </li>
                         ))}
                     </ul>

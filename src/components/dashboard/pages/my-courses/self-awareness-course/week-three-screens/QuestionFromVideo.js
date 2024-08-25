@@ -114,7 +114,7 @@ export default function QuestionFromVideo({ onSubmit, previous }) {
                         <li
                             key={index + 1}
                             className={currentIndex >= index + 1 ? 'answered' : ''}
-                            onClick={() => handleNextStepClick(index + 1)}
+
                         ></li>
                     ))}
                 </ul>

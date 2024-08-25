@@ -4,9 +4,11 @@ import { Icon } from '@iconify/react';
 import { useNavigate } from 'react-router-dom';
 import MyFireWorks from '../Fireworks';
 import celebrate from '../../../../../../assets/celebrate.png';
-import mindset from '../../../../../../assets/selfawareness-images/mindset.png';
-import QuestionFromVideo from './QuestionFromVideo';
-import WeekThreeAssessmentForm from './WeekThreeAssessmentForm';
+import values from '../../../../../../assets/selfawareness-images/values.png';
+import MindSetFlipQuestion from './MindSetFlipQuestion';
+import WeekFourAssessmentForm from './WeekFourAssessmentForm';
+import QuestionAboutPeople from './QuestionAboutPeople';
+import CoreValuesQuestion from './CoreValuesQuestion';
 // import WeaknessIdentification from './WeaknessIdentification';
 // import ScenarioQuestions from './ScenarioQuestions';
 // import WeekTwoAssessmentForm from './WeekTwoAssessmentForm';
@@ -18,7 +20,7 @@ import WeekThreeAssessmentForm from './WeekThreeAssessmentForm';
 
 
 
-export default function WeekThreeLearning({ course, currentWeekIndex }) {
+export default function WeekFourLearning({ course, currentWeekIndex }) {
 
     const [currentStep, setCurrentStep] = useState(1);
     const [formData, setFormData] = useState({
@@ -93,8 +95,8 @@ export default function WeekThreeLearning({ course, currentWeekIndex }) {
                         <div className="question-box py-4">
                             <div className="question-box-header ">
                                 <h1 className='mb-0 '>Question: </h1>
-                                <h2 className='mb-0 ms-3 text-nowrap'>What do you understand by the word </h2>
-                                <img src={mindset} alt="mindset image" className='mx-2' />
+                                <h2 className='mb-0 ms-3 text-nowrap'>What exactly are </h2>
+                                <img src={values} alt="mindset image" className='mx-2' />
                                 <h2 className=''>?</h2>
                             </div>
                             <div className="text-area-box px-4 mt-4">
@@ -142,85 +144,35 @@ export default function WeekThreeLearning({ course, currentWeekIndex }) {
                     </div>
                 );
 
+         
+
+
+
             case 4:
-                // Strength assessment
-                return (
-                    <div className="assessment-page">
-
-                        <div className="assessment question-box py-4">
-
-                            <div className="question-box-header align-items-start">
-                                <h1 className='mb-0 '>Question: </h1>
-                                <h2 className='mb-0 ms-3 text-center'>Do you feel like you have a growth mindset, or do you sometimes find yourself with a fixed mindset? Share your thoughts. It’s okay to be honest, this is all about learning and growing together!</h2>
-                            </div>
-                            <div className="text-area-box px-4 mt-4">
-                                <textarea name="" id="" rows="6" placeholder="Type your answer here..." ></textarea>
-                            </div>
-
-                        </div>
-                        <div className='d-flex align-items-center justify-content-around mx-auto mt-5 '>
-                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
-                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
-                        </div>
-
-
-                    </div>
-                );
-
-
-            case 5:
-                // animation video one
-                return (
-                    <div className="">
-
-                        <div className="video-div">
-                            <div className="video-div">
-                                {videoPlaying ? (
-                                    <iframe
-                                        className="custom-video"
-                                        src="https://www.youtube.com/embed/CW-f1RVjCws"
-                                        title="YouTube video player"
-
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                    />
-                                ) : (
-                                    <div className="video-thumbnail">
-
-                                        <div className="play-button" onClick={() => setVideoPlaying(true)}>
-                                            <Icon icon="carbon:play-outline" className="play-icon" />
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
-                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
-                        </div>
-                    </div>
-                );
-
-
-
-            case 6:
                 // Weaknesses assessment
                 return (
-                    <div className="assessment-page">
+                    <div>
+                           <div className="assessment-page">
 
                         <div className="">
 
-                            <QuestionFromVideo
-                                previous={() => setCurrentStep(5)}
-                                onSubmit={() => setCurrentStep(7)}
+                            <MindSetFlipQuestion
                             />
 
                         </div>
                     </div>
+
+                    <div className='d-flex align-items-center justify-content-around mt-5'>
+                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
+                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
+                        </div>
+                    </div>
+                 
                 );
 
-            case 7:
+                
+
+            case 5:
                 // animation video one
                 return (
 
@@ -255,21 +207,119 @@ export default function WeekThreeLearning({ course, currentWeekIndex }) {
                     </div>
                 );
 
-            case 8:
+                case 6:
                 // assessment
                 return (
                     <div className="assessment-page">
-                        <WeekThreeAssessmentForm
-                         previous={() => setCurrentStep(7)}
-                         onSubmit={() => setCurrentStep(10)}
+                        <QuestionAboutPeople
+                         previous={() => setCurrentStep(5)}
+                         onSubmit={() => setCurrentStep(7)}
+                        />         
+
+
+                    </div>
+                );
+
+                case 7:
+                // animation video one
+                return (
+
+                    <div className="">
+
+                        <div className="video-div">
+                            <div className="video-div">
+                                {videoPlaying ? (
+                                    <iframe
+                                        className="custom-video"
+                                        src="https://www.youtube.com/embed/CW-f1RVjCws"
+                                        title="YouTube video player"
+
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    />
+                                ) : (
+                                    <div className="video-thumbnail">
+
+                                        <div className="play-button" onClick={() => setVideoPlaying(true)}>
+                                            <Icon icon="carbon:play-outline" className="play-icon" />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
+                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
+                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
+                        </div>
+                    </div>
+                );
+
+                case 8:
+                    return(
+                        <div>
+                            <CoreValuesQuestion />
+                            <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
+                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
+                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
+                        </div>
+                        </div>
+                    );
+                    case 9:
+                        // animation video one
+                        return (
+        
+                            <div className="">
+        
+                                <div className="video-div">
+                                    <div className="video-div">
+                                        {videoPlaying ? (
+                                            <iframe
+                                                className="custom-video"
+                                                src="https://www.youtube.com/embed/CW-f1RVjCws"
+                                                title="YouTube video player"
+        
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            />
+                                        ) : (
+                                            <div className="video-thumbnail">
+        
+                                                <div className="play-button" onClick={() => setVideoPlaying(true)}>
+                                                    <Icon icon="carbon:play-outline" className="play-icon" />
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+        
+                                <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
+                                    <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
+                                    <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
+                                </div>
+                            </div>
+                        );
+
+                
+
+            case 10:
+                // assessment
+                return (
+                    <div className="assessment-page">
+                        <WeekFourAssessmentForm
+                         previous={() => setCurrentStep(9)}
+                         onSubmit={() => setCurrentStep(11)}
                         />           
 
 
                     </div>
                 );
+
+
+
           
 
-            case 10:
+            case 11:
                 //end
                 return (
                     <div className="end-of-course-page">

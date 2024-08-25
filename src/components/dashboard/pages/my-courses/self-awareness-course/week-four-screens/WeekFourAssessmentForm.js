@@ -6,75 +6,126 @@ import checkedImage from '../../../../../../assets/selfawareness-images/checked.
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png';
 import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModal';
 
-export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
+export default function WeekFourAssessmentForm({ onSubmit, previous }) {
 
     const [currentIndex, setCurrentIndex] = useState(1);
-    const [reviewPopUp, setReviewPopUp] = React.useState(false)
+    const [reviewPopUp, setReviewPopUp] = React.useState(false);
 
-
-
+    
 
     const questionsArray = [
 
         {
-            title: "Which quality would help you best manage your chores and responsibilities at home well?",
+            title: "What are values?",
             questionList: [
 
-                "Empathy", "Good Listener", "detail-oriented", "responsible"
+                "A. Beliefs and principles that guide our actions and decisions", "B. Emotions and feelings we experience daily", "C. Skills and talents we possess", "D. Goals and dreams we want to achieve"
             ],
         },
 
         {
-            title: "You’ve identified that your weakness is impatience and your classmate asked you to wait for him so you can get lunch together while he uses the toilet. What will you do as someone trying to improve on their weakness?",
+            title: "Why are values important? (Select all that apply)",
             questionList: [
 
-                "Do Nothing", "Wait for him to get lunch together.", "Wait for only 1 minute and leave if he doesn’t show up.", "Tell him you’re hungry and cannot wait. "
+                "A. They help us make decisions", "B. They guide our behavior", "C. They define our talents", "D. They help us understand what is most important to us"
             ],
         },
 
         {
-            title: "You’ve identified your strength is honesty and your class teacher is asking who was making noise. You know it is Adetola, your best friend that was making noise because he is your seatmate. What will you do next?",
+            title: "Which of the following is an example of a value?",
             questionList: [
 
-                "Choose not to say anything ", "Tell the teacher that Adetola was making noise", "Tell Adetola to report himself or else you would.", " Ask to go to the toilet because you don’t want to talk about it"
+                "A. Happiness", "B. Respect.", "C. Excitement", "D. Intelligent "
             ],
         },
 
         {
-            title: "You're trying to solve a difficult puzzle. Which quality would be most helpful in this situation?",
+            title: "How can knowing your values help you in life?",
             questionList: [
 
-                "patience", "self-critical", "optimistic", "brave"
+                "A. It can make you rich", "B.It can help you make choices that align with your beliefs", "C. It can make you more popular", "D. It can give you superpowers"
+            ],
+        },
+
+        {
+            title: "Imagine you value honesty. What would you likely do in a situation where you found a lost wallet?",
+            questionList: [
+
+                "A. Keep the wallet for yourself", "B. Ignore the wallet and walk away", "C. Try to find the owner and return the wallet", "D. Take the money and leave the wallet"
             ],
 
         },
 
         {
-            title: "You realized your best friend, John, has a weakness and you are interested in helping him work on this weakness. What would you do?",
+            title: "6. Imagine you value responsibility, what would you likely do in a situation where the teacher asks the class to clean their lockers but nobody is doing it?",
             questionList: [
 
-                "Ignore it to protect your friendship.", "Tell him about the strengths you have noticed he has and identify how to manage his weakness.", "Tell your other friends about this weakness.", "Tell him about your own weakness in hopes that it will get him to share as well."
+                "A. Wait for the cleaner to come and clean your locker", "B. Do nothing", "C. Clean your locker", "D. Ask your classmate to help you clean your locker"
             ],
         },
 
         {
-            title: "What activity do you enjoy the most, and why do you think you are good at it?",
+            title: "My value can influence how I treat other people",
+            questionList: [
 
+                "True", "False"
+            ],
         },
 
         {
-            title: "When working in a group, what role do you naturally take on (e.g., leader, planner, helper)? Can you give an example?",
+            title: "If Honesty is one of your values, what would be your best response to the following scenario. I accidentally broke my friend's favorite toy. No one saw me doing it. I would rather:",
+            questionList: [
 
+                "A. Say it was someone else.",
+                "B. Pretend nothing happened.",
+                "C. Tell my friend the truth immediately.",
+                "D. Replace the toy with a new one quietly.",
+            ],
         },
-        {
-            title: "Is there a task or subject that you avoid because you find it difficult? Why do you think it’s challenging for you?",
 
+        {
+            title: "Sarah notices a classmate, David, looking downcast while carrying a heavy stack of books. Sarah offers to help David with the books. Sarah remembers she has her own after-school activity but suggests they put David's books in his locker first so he isn't late to his next class.",
+           
+            valuesDetails: [
+                {
+                    title: "Kindness",
+                    scenario: "Sarah remembers she has her own after-school activity but suggest they put David’s books in his locker first so he isn’t lat to his next class."
+                },
+                {
+                    title: "Respect",
+                    scenario: "As they walk, Sarah ask David if everything is alright’ but doesn’t pry if he doesn’t want to talk."
+                },
+                {
+                    title: "Responsibility",
+                    scenario: "Sarah offers to help David with the books."
+                }
+            ],
+        },
+
+        {
+            title: "Alex promised to help Ben with his science project, which is due tomorrow. Despite having a busy schedule, Alex prioritizes helping Ben, honoring their friendship. Alex offers to let Ben use his advanced science equipment at home, knowing it will significantly improve their project. Both Alex and Ben arrive at Alex's house on time, ensuring they have maximum time to work on the project.Match the following statements in the scenario to their respective values.",
+            valuesDetails: [
+                {
+                    title: "Loyalty",
+                    scenario: "Both Alex and Ben arrive at Alex’s house on time, ensuring they have maximum time to work on the project."
+                },
+                {
+                    title: "Punctuality",
+                    scenario: "Alex offers to let Ben use his advanced science equipment at home, knowing it will significantly improve their project."
+                },
+                {
+                    title: "Generosity",
+                    scenario: "Despite having a busy schedule, Alex prioritizes helping Ben, honouring their friendship."
+                }
+            ],
         },
 
 
     ];
 
-    const handleStepClick = () => {
+
+    const handleNextStepClick = () => {
+
         if (currentIndex < questionsArray.length) {
             setCurrentIndex(currentIndex + 1);
 
@@ -83,17 +134,26 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
             onSubmit();
         }
 
-        if (currentIndex === 8) {
-
-            setTimeout(() => {
+    };
+    useEffect(() => {
+        if (currentIndex === questionsArray.length) {
+            const reviewTimeout = setTimeout(() => {
                 setReviewPopUp(true);
 
-                setTimeout(() => {
+                const popupTimeout = setTimeout(() => {
                     setReviewPopUp(false);
-                }, 10000);
-            }, 6000);
+                }, 8000);
+
+                // Cleanup for the popup timeout
+                return () => clearTimeout(popupTimeout);
+            }, 4000);
+
+            // Cleanup for the review timeout
+            return () => clearTimeout(reviewTimeout);
         }
-    };
+    }, [currentIndex, questionsArray.length]);
+
+
     const handlePreviousStepClick = () => {
         if (currentIndex > 1) {
             setCurrentIndex(currentIndex - 1);
@@ -101,7 +161,6 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
             previous();
         }
     };
-
 
     const closeReviewPopUp = () => {
         setReviewPopUp(false);
@@ -135,26 +194,28 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
                         <div className="assessment question-box ">
                             <div className="assessment-box">
                                 <h2>Assessment</h2>
-                                Scenario around your strengths and weaknesses.
+                                Scenario around your values.
                             </div>
                             <div className='d-flex  align-items-start mt-3'>
-                                <h1>1.</h1>
+                                <h1>{currentIndex}.</h1>
 
                                 <h2 className='text-center mb-0 fs-1 ms-3'> {questionsArray[currentIndex - currentIndex].title}</h2>
                             </div>
                             <div className="text-center checkbox-questions">
 
-                                <ul className="p-0 mt-4">
+                                <ul className="p-0 mt-4 d-flex flex-column">
 
                                     {questionsArray[currentIndex - currentIndex].questionList.map((item, index) => (
-                                        <li key={index} className='d-flex flex-column align-items-center my-2'>
-                                            <p className='question-p ms-3'>{item}</p>
+                                        <li key={index} className='d-flex align-items-center'>
+
                                             <img
                                                 onClick={() => handleQuestionCheck(currentIndex - currentIndex, index)}
-                                                className='cursor-pointer mt-2'
+                                                className='cursor-pointer'
                                                 src={questionChecked[currentIndex - currentIndex].includes(index) ? checkedImage : unCheckedImage}
                                                 alt=""
                                             />
+                                            <p className='question-p ms-3'>{item}</p>
+
 
 
                                         </li>
@@ -175,7 +236,7 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
                     <div className="week-two">
                         <div className="assessment question-box py-4">
                             <div className='d-flex  align-items-start mt-3'>
-                                <h1>2.</h1>
+                                <h1>{currentIndex}.</h1>
 
                                 <h2 className='text-center mb-0 fs-1 ms-3'> {questionsArray[currentIndex - 1].title}</h2>
                             </div>
@@ -205,7 +266,7 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
                     <div className="week-two">
                         <div className="assessment question-box py-4">
                             <div className='d-flex  align-items-start mt-3'>
-                                <h1>3.</h1>
+                                <h1>{currentIndex}.</h1>
 
                                 <h2 className='text-center mb-0 fs-1 ms-3'> {questionsArray[currentIndex - 1].title}</h2>
                             </div>
@@ -236,21 +297,23 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
                     <div className="week-two">
                         <div className="assessment question-box py-4">
                             <div className='d-flex  align-items-start mt-3'>
-                                <h1>4.</h1>
+                                <h1>{currentIndex}.</h1>
 
                                 <h2 className='text-center mb-0 fs-1 ms-3'> {questionsArray[currentIndex - 1].title}</h2>
                             </div>
                             <div className="text-center checkbox-questions">
-                                <ul className="p-0 mt-4">
+                                <ul className="p-0 mt-4 d-flex flex-column">
                                     {questionsArray[currentIndex - 1].questionList.map((item, index) => (
-                                        <li key={index} className='d-flex flex-column align-items-center my-2'>
-                                            <p className='question-p ms-3'>{item}</p>
+                                        <li key={index} className='d-flex align-items-center '>
+
                                             <img
                                                 onClick={() => handleQuestionCheck(currentIndex - 1, index)}
-                                                className='cursor-pointer mt-2'
+                                                className='cursor-pointer'
                                                 src={questionChecked[currentIndex - 1].includes(index) ? checkedImage : unCheckedImage}
                                                 alt=""
                                             />
+                                            <p className='question-p ms-3'>{item}</p>
+
                                         </li>
                                     ))}
                                 </ul>
@@ -266,7 +329,7 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
                     <div className="week-two">
                         <div className="assessment question-box py-4">
                             <div className='d-flex  align-items-start mt-3'>
-                                <h1>5.</h1>
+                                <h1>{currentIndex}.</h1>
 
                                 <h2 className='text-center mb-0 fs-1 ms-3'> {questionsArray[currentIndex - 1].title}</h2>
                             </div>
@@ -297,12 +360,25 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
                     <div className="week-two">
                         <div className="assessment question-box py-4">
                             <div className='d-flex  align-items-start mt-3'>
-                                <h1>6.</h1>
+                                <h1>{currentIndex}.</h1>
 
                                 <h2 className='text-center mb-0 fs-1 ms-3'> {questionsArray[currentIndex - 1].title}</h2>
                             </div>
-                            <div className="text-area-box px-4 mt-4">
-                                <textarea name="" id="" rows="6" placeholder="Type your answer here..." ></textarea>
+                            <div className="text-center checkbox-questions">
+                                <ul className="p-0 mt-4 d-flex flex-column">
+                                    {questionsArray[currentIndex - 1].questionList.map((item, index) => (
+                                        <li key={index} className='d-flex align-items-center '>
+
+                                            <img
+                                                onClick={() => handleQuestionCheck(currentIndex - 1, index)}
+                                                className='cursor-pointer'
+                                                src={questionChecked[currentIndex - 1].includes(index) ? checkedImage : unCheckedImage}
+                                                alt=""
+                                            />
+                                            <p className='question-p ms-3'>{item}</p>
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
 
                         </div>
@@ -316,12 +392,25 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
                     <div className="week-two">
                         <div className="assessment question-box py-4">
                             <div className='d-flex  align-items-start mt-3'>
-                                <h1>7.</h1>
+                                <h1>{currentIndex}.</h1>
 
                                 <h2 className='text-center mb-0 fs-1 ms-3'> {questionsArray[currentIndex - 1].title}</h2>
                             </div>
-                            <div className="text-area-box px-4 mt-4">
-                                <textarea name="" id="" rows="6" placeholder="Type your answer here..." ></textarea>
+                            <div className="text-center checkbox-questions">
+                                <ul className="p-0 mt-4 d-flex flex-column">
+                                    {questionsArray[currentIndex - 1].questionList.map((item, index) => (
+                                        <li key={index} className='d-flex align-items-center '>
+
+                                            <img
+                                                onClick={() => handleQuestionCheck(currentIndex - 1, index)}
+                                                className='cursor-pointer'
+                                                src={questionChecked[currentIndex - 1].includes(index) ? checkedImage : unCheckedImage}
+                                                alt=""
+                                            />
+                                            <p className='question-p ms-3'>{item}</p>
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
 
                         </div>
@@ -334,13 +423,81 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
                     <div className="week-two">
                         <div className="assessment question-box py-4">
                             <div className='d-flex  align-items-start mt-3'>
-                                <h1>8.</h1>
+                                <h1>{currentIndex}.</h1>
 
                                 <h2 className='text-center mb-0 fs-1 ms-3'> {questionsArray[currentIndex - 1].title}</h2>
                             </div>
-                            <div className="text-area-box px-4 mt-4">
-                                <textarea name="" id="" rows="6" placeholder="Type your answer here..." ></textarea>
+                            <div className="text-center checkbox-questions">
+                                <ul className="p-0 mt-4 d-flex flex-column">
+                                    {questionsArray[currentIndex - 1].questionList.map((item, index) => (
+                                        <li key={index} className='d-flex align-items-center '>
+
+                                            <img
+                                                onClick={() => handleQuestionCheck(currentIndex - 1, index)}
+                                                className='cursor-pointer'
+                                                src={questionChecked[currentIndex - 1].includes(index) ? checkedImage : unCheckedImage}
+                                                alt=""
+                                            />
+                                            <p className='question-p ms-3'>{item}</p>
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
+
+                        </div>
+                    </div>
+                );
+            case 9:
+                // question nine
+                return (
+                    <div className="week-two">
+                        <div className="assessment question-box py-4">
+                            <div className='d-flex  align-items-start mt-3'>
+                                <h1>{currentIndex}.</h1>
+
+                                <h2 className='text-center mb-0 fs-1 ms-3'> {questionsArray[currentIndex - 1].title}</h2>
+                            </div>
+
+                            {questionsArray[currentIndex - 1].valuesDetails.map((item, index) => (
+                            <div className="d-flex align-items-center justify-content-between mt-2" key={index}>
+                                <div className='values-card'>
+                                    <p >{item.title}</p>
+                                </div>
+
+
+                                <div className='values-scenario'>
+                                    <p >{item.scenario}</p>
+                                </div>
+
+                            </div>
+                            ))}
+
+                        </div>
+                    </div>
+                );
+            case 10:
+                // question 10
+                return (
+                    <div className="week-two">
+                        <div className="assessment question-box py-4">
+                            <div className='d-flex  align-items-start mt-3'>
+                                <h1>{currentIndex}.</h1>
+
+                                <h2 className='text-center mb-0 fs-1 ms-3'> {questionsArray[currentIndex - 1].title}</h2>
+                            </div>
+                            {questionsArray[currentIndex - 1].valuesDetails.map((item, index) => (
+                            <div className="d-flex align-items-center justify-content-between mt-2" key={index}>
+                                <div className='values-card'>
+                                    <p >{item.title}</p>
+                                </div>
+
+
+                                <div className='values-scenario'>
+                                    <p >{item.scenario}</p>
+                                </div>
+
+                            </div>
+                            ))}
 
                         </div>
                     </div>
@@ -362,7 +519,7 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
                         <li
                             key={index + 1}
                             className={currentIndex >= index + 1 ? 'answered' : ''}
-                            
+
                         ></li>
                     ))}
                 </ul>
@@ -370,7 +527,7 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
 
             <div className='d-flex align-items-center justify-content-around mx-auto mt-5 ' >
                 <button className='btn progress-btn btn-light' onClick={handlePreviousStepClick}>{"<<<"} Back</button>
-                <button className='btn progress-btn btn-dark' onClick={handleStepClick}>Next {">>>"}</button>
+                <button className='btn progress-btn btn-dark' onClick={handleNextStepClick}>Next {">>>"}</button>
             </div>
 
             {reviewPopUp && (
@@ -385,7 +542,6 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
                     <ReviewPopUp />
                 </Modal>
             )}
-
 
         </div>
     );

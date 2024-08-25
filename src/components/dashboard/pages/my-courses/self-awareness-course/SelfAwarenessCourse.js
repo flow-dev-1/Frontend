@@ -6,6 +6,8 @@ import courseOne from '../../../../../assets/course1.png'
 import WeekOneLearning from './week-one-screens/WeekOneLearning'
 import WeekTwoLearning from './week-two-screens/WeekTwoLearning'
 import WeekThreeLearning from './week-three-screens/WeekThreeLearning'
+import WeekFourLearning from './week-four-screens/WeekFourLearning'
+import WeekFiveLearning from './week-five-course/WeekFiveLearning'
 
 function SelfAwarenessCourse() {
   const { id } = useParams()
@@ -119,6 +121,7 @@ function SelfAwarenessCourse() {
           <WeekTwoLearning
             course={course}
             currentWeekIndex={currentWeekIndex}
+           
           />
         );
 
@@ -128,7 +131,21 @@ function SelfAwarenessCourse() {
             course={course}
             currentWeekIndex={currentWeekIndex}
           />
-        )
+        );
+        case 3:
+        return (
+          <WeekFourLearning
+            course={course}
+            currentWeekIndex={currentWeekIndex}
+          />
+        );
+        case 4:
+          return (
+            <WeekFiveLearning
+              course={course}
+              currentWeekIndex={currentWeekIndex}
+            />
+          )
 
       // Add more cases for other weeks if needed
       default:

@@ -9,30 +9,12 @@ import weeknessImg from '../../../../../../assets/selfawareness-images/weakness.
 
 
 
-export default function ScenarioQuestions({ onSubmit }) {
+export default function ScenarioQuestions({ onSubmit, previous }) {
 
     const [currentIndex, setCurrentIndex] = useState(1);
     const [reviewPopUp, setReviewPopUp] = React.useState(false)
 
-    const handleStepClick = (index) => {
-        setCurrentIndex(index);
-        if (currentIndex < currentIndex.length - 1) {
-            setCurrentIndex(currentIndex + 1);
-        }
-
-        if (currentIndex === 5) {
-
-            setTimeout(() => {
-                setReviewPopUp(true);
-
-                setTimeout(() => {
-                    setReviewPopUp(false);
-                }, 10000);
-            }, 6000);
-        }
-
-
-    };
+   
 
 
 
@@ -81,7 +63,35 @@ export default function ScenarioQuestions({ onSubmit }) {
 
     ];
 
+    const handleStepClick = (index) => {
+        if (currentIndex < questionsArray.length) {
+            setCurrentIndex(currentIndex + 1);
 
+
+        } else {
+            onSubmit();
+        }
+
+        if (currentIndex === 5) {
+
+            setTimeout(() => {
+                setReviewPopUp(true);
+
+                setTimeout(() => {
+                    setReviewPopUp(false);
+                }, 10000);
+            }, 6000);
+        }
+
+
+    };
+    const handlePreviousStepClick = () => {
+        if (currentIndex > 1) {
+            setCurrentIndex(currentIndex - 1);
+        } else {
+            previous();
+        }
+    };
 
     const [questionChecked, setQuestionChecked] = useState(
         questionsArray.reduce((acc, _, index) => ({ ...acc, [index]: [] }), {})
@@ -314,11 +324,17 @@ export default function ScenarioQuestions({ onSubmit }) {
                         <li
                             key={index + 1}
                             className={currentIndex >= index + 1 ? 'answered' : ''}
-                            onClick={() => handleStepClick(index + 1)}
+                            
                         ></li>
                     ))}
                 </ul>
             </div>
+
+            <div className='d-flex align-items-center justify-content-around mx-auto mt-5 ' >
+                <button className='btn progress-btn btn-light' onClick={handlePreviousStepClick}>{"<<<"} Back</button>
+                <button className='btn progress-btn btn-dark' onClick={handleStepClick}>Next {">>>"}</button>
+            </div>
+
 
 
         </div>

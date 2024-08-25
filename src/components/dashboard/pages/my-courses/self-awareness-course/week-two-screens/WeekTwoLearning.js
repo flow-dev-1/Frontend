@@ -219,7 +219,7 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
                                     )}
                                 </div>
                             </div>
-    
+  
                             <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
                                 <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
                                 <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
@@ -234,15 +234,14 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
 
                         <div className="">
 
-                            <ScenarioQuestions onSubmit={handleNext} />
+                            <ScenarioQuestions 
+                             previous={() => setCurrentStep(6)}
+                             onSubmit={() => setCurrentStep(8)}
+                            />
 
                         </div>
                         {/* <button className='btn' onClick={handleReviewPopUp}>click here</button> */}
 
-                        <div className='d-flex align-items-center justify-content-around mx-auto mt-5 '>
-                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
-                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
-                        </div>
 
 
                     </div>
@@ -288,15 +287,15 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
     
                             <div className="">
     
-                                <WeekTwoAssessmentForm onSubmit={handleNext} />
+                                <WeekTwoAssessmentForm 
+                                   previous={() => setCurrentStep(8)}
+                                   onSubmit={() => setCurrentStep(10)}
+                                    />
     
                             </div>
                             {/* <button className='btn' onClick={handleReviewPopUp}>click here</button> */}
     
-                            <div className='d-flex align-items-center justify-content-around mx-auto mt-5 '>
-                                <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
-                                <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
-                            </div>
+                        
     
     
                         </div>
