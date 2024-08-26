@@ -76,7 +76,7 @@ const SchoolEnrolledStudents = () => {
     // refetchOnWindowFocus: false,
   })
 
-  console.log(data)
+  console.log('Enrolled data ', data)
 
   useEffect(() => {
     if (!data) return

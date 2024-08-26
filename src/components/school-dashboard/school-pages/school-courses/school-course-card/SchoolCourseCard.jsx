@@ -6,7 +6,13 @@ import EnrollmentModal from '../../../modals/Enrollment/EnrollmentModal'
 import { Navigate } from 'react-router-dom'
 import AddEducator from './AddEducator'
 
-const SchoolCourseCard = ({ openModal, course, enrolled, coursesArray }) => {
+const SchoolCourseCard = ({
+  openModal,
+  course,
+  enrolled,
+  coursesArray,
+  enrolledData,
+}) => {
   const [isOn, setIsOn] = useState(false)
   const [openEnrollModal, setOpenEnrollModal] = useState(false)
   const [openEnrollModalEducator, setOpenEnrollModalEducator] = useState(false)
@@ -25,6 +31,8 @@ const SchoolCourseCard = ({ openModal, course, enrolled, coursesArray }) => {
     setOpenEnrollModal(false)
     setOpenEnrollModalEducator(false)
   }
+
+  console.log('Enrolled Array', enrolledData)
 
   const handleToggle = () => {
     setIsOn(!isOn)
@@ -89,7 +97,9 @@ const SchoolCourseCard = ({ openModal, course, enrolled, coursesArray }) => {
 
   const handleDetailsClick = () => {
     if (isEnrolled) {
-      navigate(`/school-dashboard/courses/enrolled/${encryptURI(course?._id)}`)
+      navigate(
+        `/school-dashboard/courses/enrolled/${encryptURI(enrolledData?.courses[0]?._id)}`
+      )
     }
     openEnrollementModal()
   }

@@ -45,6 +45,8 @@ const SchoolAllCourses = () => {
   const enrolledDataArray =
     enrolledData?.courses?.map((item) => item.course._id) || []
 
+    
+
   useEffect(() => {
     if (!data) return
     setCourses(data)
@@ -167,6 +169,8 @@ const SchoolAllCourses = () => {
             course={course}
             openModal={openModal}
             enrolled={enrolledDataArray}
+            enrolledData={enrolledData}
+            
             coursesArray={data}
           />
         ))}
