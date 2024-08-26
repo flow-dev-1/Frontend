@@ -108,7 +108,7 @@ useEffect(() => {
     setTotalStudents(data.totalStudents); // Use the correct key from the backend response
     setTotalMales(data.totalMales);
     setTotalFemales(data.totalFemales);
-    // setTotalTeachers(data.totalTeachers); // Uncomment if this is provided
+    setTotalTeachers(data.totalTeachers); 
     setTotalActive(data.active);
     setTotalNonActive(data.notActive);
     setTotalAmount(data.totalAmount);
@@ -122,7 +122,7 @@ const dataGender = [
   { name: "Female", value: totalFemales },
 ];
 
-console.log(totalActive);
+console.log(data);
 
 const dataActive = [
   { name: "Active", value: totalActive },
