@@ -19,6 +19,7 @@ export default function IndividualOverview() {
   const [sortOption, setSortOption] = useState('') // State for Sort Option
   const [filterOption, setFilterOption] = useState('') // State for Filter Option
 
+  console.log(user?.userType)
   const { data, isLoading, isError } = useQuery({
     queryKey: ['individual-courses'],
     queryFn: () => userService.getIndividualCourses(), // Make sure to call the function

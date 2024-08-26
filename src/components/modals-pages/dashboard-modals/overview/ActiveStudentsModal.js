@@ -2,15 +2,10 @@ import React from 'react'
 import Modal from 'react-modal'
 import './active-non-active-modal.css'
 
-const ActiveStudentsModal = ({ isOpen, close }) => {
-  const students = [
-    { name: 'Jane Doe', email: 'Janedoe@gmail.com' },
-    { name: 'Jane Doe', email: 'Janedoe@gmail.com' },
-    { name: 'Jane Doe', email: 'Janedoe@gmail.com' },
-    { name: 'Jane Doe', email: 'Janedoe@gmail.com' },
-    { name: 'Jane Doe', email: 'Janedoe@gmail.com' },
-    { name: 'John Doe', email: 'Jahndoe@gmail.com' },
-  ]
+const ActiveStudentsModal = ({ isOpen, close, data }) => {
+  // Check if data is provided and validGraphData exists in the data
+  const students = data?.validGraphData || [];
+  const courseTitle = students.length > 0 ? students[0].course.title : 'No Course Available';
 
   return (
     <div style={{ borderRadius: '20px' }}>
@@ -34,8 +29,9 @@ const ActiveStudentsModal = ({ isOpen, close }) => {
           >
             List of enrolled students
           </p>
+          {/* Display the course title dynamically */}
           <div className='header-green'>
-            <p>Growth Mindset</p>
+            <p>{courseTitle}</p>
           </div>
           <table>
             <thead>
@@ -47,10 +43,10 @@ const ActiveStudentsModal = ({ isOpen, close }) => {
             </thead>
             <tbody>
               {students.map((student, index) => (
-                <tr key={index}>
+                <tr key={student._id}>
                   <td>{index + 1}</td>
-                  <td>{student.name}</td>
-                  <td>{student.email}</td>
+                  <td>{student.user.fullName}</td>
+                  <td>{student.user.email}</td>
                 </tr>
               ))}
             </tbody>
@@ -61,4 +57,4 @@ const ActiveStudentsModal = ({ isOpen, close }) => {
   )
 }
 
-export default ActiveStudentsModal
+export default ActiveStudentsModal;
