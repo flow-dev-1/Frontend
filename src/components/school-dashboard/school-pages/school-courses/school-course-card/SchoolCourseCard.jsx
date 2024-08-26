@@ -281,6 +281,7 @@ const SchoolCourseCard = ({
       />
       <AddEducator
         isOpen={openEnrollModalEducator}
+        course={course}
         onRequestClose={closeEnrollementModal}
       />
     </div>

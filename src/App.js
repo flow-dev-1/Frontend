@@ -75,7 +75,7 @@ function App() {
             />
 
             <Route
-              path='/invited-admin'
+              path='/invited-educator'
               element={<InvitedAdminRegistration />}
             />
             {/* <Route

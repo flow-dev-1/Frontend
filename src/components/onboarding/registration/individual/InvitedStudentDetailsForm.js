@@ -1,52 +1,52 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { Icon } from "@iconify/react";
-import { useMutation } from "@tanstack/react-query";
-import userService from "../../../../services/api/user";
-import { RotatingLines } from "react-loader-spinner";
-import EmailVerificationSuccessful from "../../../modals-pages/onboarding-modals/EmailVerificationSuccessful";
-import StudentOtpModal from "../../../modals-pages/onboarding-modals/StudentOtpModal";
-import Modal from "react-modal";
-import { useDispatch } from "react-redux";
-import { setToken } from "../../../../redux/reducers/jwtReducer";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import { Icon } from '@iconify/react'
+import { useMutation } from '@tanstack/react-query'
+import userService from '../../../../services/api/user'
+import { RotatingLines } from 'react-loader-spinner'
+import EmailVerificationSuccessful from '../../../modals-pages/onboarding-modals/EmailVerificationSuccessful'
+import StudentOtpModal from '../../../modals-pages/onboarding-modals/StudentOtpModal'
+import Modal from 'react-modal'
+import { useDispatch } from 'react-redux'
+import { setToken } from '../../../../redux/reducers/jwtReducer'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 // Schema definition
 const studentSchema = yup.object().shape({
   fullName: yup
     .string()
-    .required("Full Name is required")
+    .required('Full Name is required')
     .test(
-      "is-two-words",
-      "Full Name must contain at least two words separated by a space",
+      'is-two-words',
+      'Full Name must contain at least two words separated by a space',
       (value) => value && value.trim().split(/\s+/).length >= 2
     )
-    .test("not-na", 'Full Name cannot be "N/A"', (value) => value !== "N/A")
+    .test('not-na', 'Full Name cannot be "N/A"', (value) => value !== 'N/A')
     .trim(),
   grade: yup
     .string()
-    .required("School Grade is required")
-    .test("not-na", 'School Grade cannot be "N/A"', (value) => value !== "N/A"),
+    .required('School Grade is required')
+    .test('not-na', 'School Grade cannot be "N/A"', (value) => value !== 'N/A'),
   gender: yup
     .string()
-    .required("Gender is required")
-    .test("not-na", 'Gender cannot be "N/A"', (value) => value !== "N/A"),
+    .required('Gender is required')
+    .test('not-na', 'Gender cannot be "N/A"', (value) => value !== 'N/A'),
   DOB: yup
     .date()
-    .required("Date of Birth is required")
+    .required('Date of Birth is required')
     .test(
-      "not-na",
+      'not-na',
       'Date of Birth cannot be "N/A"',
-      (value) => value !== "N/A"
+      (value) => value !== 'N/A'
     ),
   password: yup
     .string()
-    .min(8, "Password must be at least 8 characters")
-    .test("not-na", 'Password cannot be "N/A"', (value) => value !== "N/A"),
-});
+    .min(8, 'Password must be at least 8 characters')
+    .test('not-na', 'Password cannot be "N/A"', (value) => value !== 'N/A'),
+})
 
 export default function InvitedStudentDetailsForm({
   onSubmit,
@@ -55,11 +55,11 @@ export default function InvitedStudentDetailsForm({
   students,
   t,
 }) {
-  const [formCount, setFormCount] = useState(0); // Start with the first student
-  const [modalIsOpen, setIsOpen] = useState(false);
-  const [openSuccessModal, setOpenSuccessModal] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
+  const [formCount, setFormCount] = useState(0) // Start with the first student
+  const [modalIsOpen, setIsOpen] = useState(false)
+  const [openSuccessModal, setOpenSuccessModal] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
 
   const {
     register,
@@ -73,37 +73,38 @@ export default function InvitedStudentDetailsForm({
       ...students[formCount],
       userId: undefined, // Ensure userId is not part of the default values
     },
-  });
+  })
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const mutation = useMutation({
     mutationFn: (data) => userService.registerInvitedUser(t, data),
     onSuccess: (data) => {
-      console.log("Form submitted successfully", data);
-      toast.success(data.message);
-      dispatch(setToken(data?.token));
-      localStorage.setItem("Flow-Auth-Token", data?.token);
-      openModal();
-      setStep(2);
+      console.log('Form submitted successfully', data)
+      toast.success(data.message)
+      dispatch(setToken(data?.token))
+      localStorage.setItem('Flow-Auth-Token', data?.token)
+      openModal()
+      setStep(2)
     },
     onError: (error) => {
-      toast.error(error.message);
-      console.log("Error submitting form", error);
+      toast.error(error.message)
+      console.log('Error submitting form', error)
     },
-  });
+  })
+
   const continueHandler = async (studentData) => {
     try {
       // Check if any field contains "N/A"
       const hasNAField = Object.values(studentData).some(
-        (value) => value === "N/A"
-      );
+        (value) => value === 'N/A'
+      )
 
       if (hasNAField) {
         toast.error(
           'Please fill all fields. Fields with "N/A" must be corrected.'
-        );
-        return;
+        )
+        return
       }
 
       // Update the current student's data in the array
@@ -116,14 +117,14 @@ export default function InvitedStudentDetailsForm({
             gender: studentData.gender,
             DOB: studentData.DOB,
             password: studentData.password,
-          };
+          }
         }
-        return student;
-      });
+        return student
+      })
 
       if (formCount < students.length - 1) {
-        setFormCount((prevCount) => prevCount + 1);
-        reset(updatedStudents[formCount + 1]);
+        setFormCount((prevCount) => prevCount + 1)
+        reset(updatedStudents[formCount + 1])
       } else {
         const completeFormData = {
           ...parentFormData,
@@ -150,41 +151,41 @@ export default function InvitedStudentDetailsForm({
               // guardianFullName: parentFormData.guardianFullName,
             })
           ),
-        };
-        console.log("Submitting form data:", completeFormData);
-        mutation.mutate(completeFormData);
+        }
+        console.log('Submitting form data:', completeFormData)
+        mutation.mutate(completeFormData)
       }
     } catch (error) {
-      console.error("Error adding student:", error);
-      toast.error("Failed to add student. Please try again.");
+      console.error('Error adding student:', error)
+      toast.error('Failed to add student. Please try again.')
     }
-  };
+  }
 
   function openModal() {
-    setIsOpen(true);
+    setIsOpen(true)
   }
 
   function closeModal() {
-    setIsOpen(false);
+    setIsOpen(false)
   }
 
   const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
-    alert("Student ID copied to clipboard!");
-  };
+    navigator.clipboard.writeText(text)
+    alert('Student ID copied to clipboard!')
+  }
 
   return (
     <div
-      className="registration-page add-student overflow-hidden"
-      style={{ height: "450px", position: "relative" }}
+      className='registration-page add-student overflow-hidden'
+      style={{ height: '450px', position: 'relative' }}
     >
-      <div className="form-container">
-        <div className="top-section mt-2">
-          <h2 className="d-flex justify-content-between align-center">
-            {formCount + 1} {/* Display form number */}
+      <div className='form-container'>
+        <div className='top-section mt-2'>
+          <h2 className='d-flex justify-content-between align-center'>
+            Student Details - {formCount + 1} {/* Display form number */}
             <Icon
-              icon="radix-icons:cross-1"
-              onClick={() => navigate("/", { replace: true })}
+              icon='radix-icons:cross-1'
+              onClick={() => navigate('/', { replace: true })}
               width={24}
             />
           </h2>
@@ -198,92 +199,99 @@ export default function InvitedStudentDetailsForm({
           </p>
         </div>
         <form onSubmit={handleSubmit(continueHandler)}>
-          <div className="form-section">
-            <div className="form-group">
+          <div className='form-section'>
+            <div className='form-group'>
               <label>Student's Full Name *</label>
               <input
-                type="text"
-                placeholder="Type here..."
-                {...register("fullName")}
+                type='text'
+                placeholder='Type here...'
+                {...register('fullName')}
               />
               {errors.fullName && (
-                <p className="error-message">{errors.fullName.message}</p>
+                <p className='error-message'>{errors.fullName.message}</p>
               )}
             </div>
-            <div className="form-group">
+            <div className='form-group'>
               <label>Student ID *</label>
-              <div className="d-flex align-items-center input-with-icon">
+              <div className='d-flex align-items-center input-with-icon'>
                 <input
-                  type="text"
-                  value={students[formCount].userId || "N/A"}
+                  type='text'
+                  value={students[formCount].userId || 'N/A'}
                   readOnly
-                  placeholder="CIS442"
+                  placeholder='CIS442'
                 />
                 <Icon
-                  icon={"cil:copy"}
-                  className="eye-icon"
+                  icon={'cil:copy'}
+                  className='eye-icon'
                   width={20}
                   onClick={() => copyToClipboard(students[formCount].userId)}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: 'pointer' }}
                 />
               </div>
             </div>
-            <div className="form-group">
+            <div className='form-group'>
               <label>School Grade *</label>
-              <select {...register("grade")}>
-                <option value="">Select grade</option>
-                <option value="Primary">Primary</option>
-                <option value="Secondary">Secondary</option>
+              <select {...register('grade')}>
+                <option value=''>Select grade</option>
+                <option value='Primary'>Primary</option>
+                <option value='Secondary'>Secondary</option>
               </select>
               {errors.grade && (
-                <p className="error-message">{errors.grade.message}</p>
+                <p className='error-message'>{errors.grade.message}</p>
               )}
             </div>
-            <div className="form-group">
+            <div className='form-group'>
               <label>Gender *</label>
-              <select {...register("gender")}>
-                <option value="">Select gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+              <select {...register('gender')}>
+                <option value=''>Select gender</option>
+                <option value='male'>Male</option>
+                <option value='female'>Female</option>
               </select>
               {errors.gender && (
-                <p className="error-message">{errors.gender.message}</p>
+                <p className='error-message'>{errors.gender.message}</p>
               )}
             </div>
-            <div className="form-group">
+            <div className='form-group'>
               <label>D.O.B *</label>
-              <input type="date" {...register("DOB")} />
+              <input type='date' {...register('DOB')} />
               {errors.DOB && (
-                <p className="error-message">{errors.DOB.message}</p>
+                <p className='error-message'>{errors.DOB.message}</p>
               )}
             </div>
-            <div className="form-group">
+            <div className='form-group'>
               <label>Password *</label>
-              <div className="d-flex align-items-center input-with-icon">
+              <div className='d-flex align-items-center input-with-icon'>
                 <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Type here..."
-                  {...register("password")}
-                  disabled={students[formCount].isVerified} // Disable if verified
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder='Type here...'
+                  {...register('password')}
+                  disabled={
+                    students[formCount].isVerified === true ? true : false
+                  } // Disable if verified
                 />
-                <Icon
-                  onClick={() => setShowPassword(!showPassword)}
-                  icon={showPassword ? "oui:eye-closed" : "ph:eye-light"}
-                  width={20}
-                />
+
+                {students[formCount].isVerified === true ? (
+                  ''
+                ) : (
+                  <Icon
+                    onClick={() => setShowPassword(!showPassword)}
+                    icon={showPassword ? 'oui:eye-closed' : 'ph:eye-light'}
+                    width={20}
+                  />
+                )}
               </div>
               {errors.password && (
-                <p className="error-message">{errors.password.message}</p>
+                <p className='error-message'>{errors.password.message}</p>
               )}
             </div>
           </div>
-          <div className="action-btns">
+          <div className='action-btns'>
             <button
               style={{
-                backgroundColor: "#fff",
-                color: "#275DAD",
-                border: "1px solid #275DAD",
-                borderRadius: "5px",
+                backgroundColor: '#fff',
+                color: '#275DAD',
+                border: '1px solid #275DAD',
+                borderRadius: '5px',
               }}
               onClick={() => setStep(1)}
             >
@@ -291,23 +299,23 @@ export default function InvitedStudentDetailsForm({
             </button>
             <button
               style={{
-                backgroundColor: "#275DAD",
-                color: "#fff",
-                borderRadius: "5px",
+                backgroundColor: '#275DAD',
+                color: '#fff',
+                borderRadius: '5px',
               }}
-              type="submit"
+              type='submit'
             >
-              {mutation.isPending ? (
+              {mutation.isLoading ? (
                 <RotatingLines
-                  type="Oval"
-                  style={{ color: "#FFF" }}
+                  type='Oval'
+                  style={{ color: '#FFF' }}
                   height={20}
                   width={20}
                 />
               ) : formCount < students.length - 1 ? (
-                "Continue"
+                'Continue'
               ) : (
-                "Submit"
+                'Submit'
               )}
             </button>
           </div>
@@ -315,9 +323,9 @@ export default function InvitedStudentDetailsForm({
 
         <Modal
           isOpen={modalIsOpen}
-          contentLabel="Registration Modal"
-          className="custom-modal-otp"
-          overlayClassName="custom-overlay"
+          contentLabel='Registration Modal'
+          className='custom-modal-otp'
+          overlayClassName='custom-overlay'
           shouldCloseOnOverlayClick={false}
         >
           <StudentOtpModal
@@ -330,14 +338,14 @@ export default function InvitedStudentDetailsForm({
 
         <Modal
           isOpen={openSuccessModal}
-          contentLabel="Example Modal"
-          className="custom-modal-success-two"
-          overlayClassName="custom-overlay"
+          contentLabel='Example Modal'
+          className='custom-modal-success-two'
+          overlayClassName='custom-overlay'
           shouldCloseOnOverlayClick={false}
         >
-          <EmailVerificationSuccessful from="otp" />
+          <EmailVerificationSuccessful from='otp' />
         </Modal>
       </div>
     </div>
-  );
+  )
 }

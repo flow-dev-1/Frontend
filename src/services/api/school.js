@@ -239,6 +239,18 @@ class SchoolOBJ {
       throw err?.response?.data || err.message;
     }
   };
+  enrollEducatorsIntoCourse = async (params1, params2, data) => {
+    try {
+      // Check if data is not empty
+      const response = await api.put(
+        `api/schools/${params1}/courses/${params2}/educators`,
+        data
+      );
+      return response.data;
+    } catch (err) {
+      throw err?.response?.data || err.message;
+    }
+  };
 
   unEnrollStudentsFromCourse = async (params1, params2, params3) => {
     try {

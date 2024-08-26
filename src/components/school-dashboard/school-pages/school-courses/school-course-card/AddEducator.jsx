@@ -18,7 +18,7 @@ const AddEducator = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   const queryClient = useQueryClient()
   const [fileError, setFileError] = useState('')
   const [isFileUploaded, setIsFileUploaded] = useState(false)
-  const [parsedStudents, setParsedStudents] = useState([])
+  const [parsedEducators, setParsedEducators] = useState([])
 
   const classOptions = [
     'Primary 1',
@@ -38,7 +38,7 @@ const AddEducator = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
 
   const schemaWithoutFile = yup.object().shape({
     stdClass: yup.string().required('Class is required'),
-    students: yup
+    educators: yup
       .array()
       .of(
         yup.object().shape({
@@ -46,11 +46,10 @@ const AddEducator = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
             .string()
             .email('Invalid email')
             .required('Email is required'),
-          fullName: yup.string().required('Student Name is required'),
-          guardianFullName: yup.string().required('Guardian Name is required'),
+          fullName: yup.string().required('Educator Name is required'),
         })
       )
-      .required('At least one student is required'),
+      .required('At least one educator is required'),
   })
 
   const schemaWithFile = yup.object().shape({
@@ -65,31 +64,29 @@ const AddEducator = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   } = useForm({
     resolver: yupResolver(isFileUploaded ? schemaWithFile : schemaWithoutFile),
     defaultValues: {
-      students: [{ email: '', fullName: '', guardianFullName: '' }],
+      educators: [{ email: '', fullName: '' }],
     },
   })
 
   const { user } = useSelector((state) => state.user)
   let schoolId
 
-  // ToDO: Do a check if its a school or a user
   if (user.isSchool) {
     schoolId = user._id
   }
-  const { id } = useParams()
+  const params1 = user?.isSchool ? user._id : null
+  const params2 = course?._id
 
+  console.log(params1, params2)
   const mutation = useMutation({
-    mutationFn: (data) =>
-      schoolService.enrollStudentsIntoCourse(schoolId, decryptId(id), data),
-    onSuccess: (data) => {
-      console.log('Mutation success:', data)
+    mutationFn: (value) =>
+      schoolService.enrollEducatorsIntoCourse(params1, params2, value),
+    onSuccess: () => {
       toast.success('Enrollment successful')
-      queryClient.invalidateQueries(['school-single-courses'])
-      reset()
+      queryClient.invalidateQueries(['school-enrolled-courses'])
       onRequestClose()
     },
     onError: (error) => {
-      console.error('Mutation error:', error)
       toast.error(error?.message || 'Enrollment failed')
     },
   })
@@ -97,15 +94,16 @@ const AddEducator = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   const onSubmit = (data) => {
     if (
       !window.confirm(
-        'Are you sure you want to enroll the students for this course?'
+        'Are you sure you want to enroll the educators for this course?'
       )
     )
       return
 
     if (isFileUploaded) {
-      data.students = parsedStudents
+      data.educators = parsedEducators
     }
 
+    console.log(data)
     mutation.mutate(data)
   }
 
@@ -141,33 +139,32 @@ const AddEducator = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
 
       setFileError('')
       const headers = jsonData[0].map((header) => header.trim())
-      const studentDataArray = []
+      const educatorDataArray = []
 
       const expectedHeaders = {
         Email: 'email',
         fullName: 'fullName',
-        guardianFullName: 'guardianFullName',
       }
 
       jsonData.slice(1).forEach((row) => {
-        let studentData = {}
+        let educatorData = {}
         headers.forEach((header, index) => {
           const key = expectedHeaders[header] || header
           const value = row[index]?.trim()
           if (value) {
-            studentData[key] = value
+            educatorData[key] = value
           }
         })
-        if (Object.keys(studentData).length > 0) {
-          studentDataArray.push(studentData)
+        if (Object.keys(educatorData).length > 0) {
+          educatorDataArray.push(educatorData)
         }
       })
 
-      setParsedStudents(studentDataArray)
+      setParsedEducators(educatorDataArray)
       setIsFileUploaded(true)
 
       reset({
-        students: [{ email: '', fullName: '', guardianFullName: '' }],
+        educators: [{ email: '', fullName: '' }],
       })
     }
 
@@ -197,6 +194,29 @@ const AddEducator = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
         </h2>
         <hr style={{ margin: '5px' }} />
         <form onSubmit={handleSubmit(onSubmit)}>
+          <div className='class-input'>
+            <label
+              htmlFor='stdClass'
+              style={{ border: 'none', paddingLeft: '0' }}
+            >
+              Class *
+            </label>
+            <select
+              style={{ border: '1px solid #5b616a' }}
+              name='stdClass'
+              {...register('stdClass')}
+            >
+              <option value=''>Choose</option>
+              {classOptions.map((className, index) => (
+                <option key={index} value={className}>
+                  {className}
+                </option>
+              ))}
+            </select>
+            {errors.stdClass && (
+              <p className='error-message'>{errors.stdClass.message}</p>
+            )}
+          </div>
           {!isFileUploaded && (
             <div>
               <p style={{ fontSize: '14px', color: '#329BD6' }}>
@@ -213,12 +233,12 @@ const AddEducator = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                         width: '100%',
                         padding: '.5rem',
                       }}
-                      name='students[0].guardianFullName'
-                      {...register('students.0.guardianFullName')}
+                      name='educators[0].fullName'
+                      {...register('educators.0.fullName')}
                     />
-                    {errors.students?.[0]?.guardianFullName && (
+                    {errors.educators?.[0]?.fullName && (
                       <p className='error-message'>
-                        {errors.students[0].guardianFullName.message}
+                        {errors.educators[0].fullName.message}
                       </p>
                     )}
                   </div>
@@ -231,12 +251,12 @@ const AddEducator = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                         width: '100%',
                         padding: '.5rem',
                       }}
-                      name='students[0].email'
-                      {...register('students.0.email')}
+                      name='educators[0].email'
+                      {...register('educators.0.email')}
                     />
-                    {errors.students?.[0]?.email && (
+                    {errors.educators?.[0]?.email && (
                       <p className='error-message'>
-                        {errors.students[0].email.message}
+                        {errors.educators[0].email.message}
                       </p>
                     )}
                   </div>
@@ -245,7 +265,7 @@ const AddEducator = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
             </div>
           )}
           <p style={{ fontSize: '14px', color: '#329BD6' }}>
-            For multiple students, kindly upload file using the sheet (Excel)
+            For multiple educators, kindly upload file using the sheet (Excel)
             attached below.
           </p>
           <div>

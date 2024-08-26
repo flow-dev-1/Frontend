@@ -55,7 +55,7 @@ export default function MyCourses() {
   console.log(data?.courses)
   const handleSort = (a, b) => {
     if (sortOption === 'az') {
-      return a?.course.title.localeCompare(b.title)
+      return a?.course?.title.localeCompare(b.title)
     } else if (sortOption === 'za') {
       return b?.course.title.localeCompare(a.title)
     }
