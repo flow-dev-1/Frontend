@@ -95,16 +95,30 @@ const SchoolCourseCard = ({
     //   course.category.toLowerCase() == 'students' ? 'not-enrolled' : 'educator'
   }
 
+  console.log(coursesArray)
+  console.log(enrolledData)
+  const courseIndex = coursesArray?.courses.findIndex(
+    (c) => c._id === course._id
+  )
+  console.log(courseIndex)
   const handleDetailsClick = () => {
-    if (isEnrolled) {
-      navigate(
-        `/school-dashboard/courses/enrolled/${encryptURI(enrolledData?.courses[0]?._id)}`
-      )
-    }
-    openEnrollementModal()
-  }
+    // Find the index of the current course in the coursesArray
+    const courseIndex = coursesArray?.courses.findIndex(
+      (c) => c._id === course._id
+    )
+    console.log(courseIndex)
 
-  console.log(enrolled)
+    // Use this index to get the corresponding enrolledData course
+    if (isEnrolled && enrolledData?.courses[courseIndex]) {
+      navigate(
+        `/school-dashboard/courses/enrolled/${encryptURI(
+          enrolledData.courses[courseIndex]._id
+        )}`
+      )
+    } else {
+      openEnrollementModal()
+    }
+  }
 
   const likesPercent = (likes, courseEnrollment) => {
     if (likes === 0) return 0
