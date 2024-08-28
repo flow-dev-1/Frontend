@@ -15,7 +15,7 @@
 
 .self-awareness .back-to-course-list {
   cursor: pointer;
-  color: #5B616A;
+  color: #5b616a;
   font-size: 18px;
   margin-left: 20px;
 }
@@ -65,7 +65,7 @@
 }
 
 .self-awareness .course-title-text h2.sub-title {
-  color: #5CE1E6;
+  color: #5ce1e6;
 }
 
 .self-awareness .about-courses-menu .sub-courses {
@@ -97,18 +97,17 @@
 
 .self-awareness .about-courses-menu .sub-courses li:hover {
   background-color: #275cad23;
-  color: #275DAD;
+  color: #275dad;
 }
 
 .self-awareness .about-courses-menu .sub-courses li:hover .iconify {
-
-  color: #275DAD;
+  color: #275dad;
 }
 
 .self-awareness .about-courses-menu .sub-courses li .iconify {
   font-size: 18px;
   margin-right: 20px;
-  color: #D6D6D6;
+  color: #d6d6d6;
 }
 
 .self-awareness .about-courses-menu .sub-courses li.active {
@@ -149,12 +148,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ECEDF0;
+  background-color: #ecedf0;
   border-radius: 15px;
 }
 
 .self-awareness .play-icon {
-  color: #329BD6;
+  color: #329bd6;
   font-size: 32px;
   z-index: 1000;
 }
@@ -176,7 +175,7 @@
 }
 
 .self-awareness .pause-play-btn .iconify {
-  color: #329BD6;
+  color: #329bd6;
   font-size: 32px;
 }
 
@@ -193,12 +192,12 @@
 
 .self-awareness .btn.progress-btn.btn-light {
   background-color: #ffffff;
-  color: #329BD6;
-  border: 2px solid #329BD6;
+  color: #329bd6;
+  border: 2px solid #329bd6;
 }
 
 .self-awareness .btn.progress-btn.btn-dark {
-  background-color: #329BD6;
+  background-color: #329bd6;
   color: #ffffff;
 }
 
@@ -209,16 +208,14 @@
 }
 
 .self-awareness .question-box-header h1 {
-  color: #275DAD;
+  color: #275dad;
   font-size: 40px;
-
 }
 
 .self-awareness .question-box-header h2 {
   line-height: normal;
   margin-bottom: 0;
   font-size: 40px;
-
 }
 
 .self-awareness .question-box-header img {
@@ -233,12 +230,13 @@
   flex-direction: column;
   justify-content: center;
 
-  background: url('../../../../../assets/selfawareness-images/course-bg.png') #6EDEEB;
+  background: url('../../../../../assets/selfawareness-images/course-bg.png')
+    #6edeeb;
 
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  border: 10px solid #00BCC3;
+  border: 10px solid #00bcc3;
   padding: 10px 30px;
 }
 .self-awareness .question-box.week-two {
@@ -284,9 +282,8 @@
   height: fit-content;
   display: flex;
   justify-content: center;
-  border: 10px solid #00BCC3;
+  border: 10px solid #00bcc3;
   /* padding: 10px 30px; */
-
 }
 
 .self-awareness .card-slider {
@@ -316,7 +313,6 @@
   display: flex;
   color: #fff;
   text-align: center;
-
 }
 
 .self-awareness .drag-drop .drop-card-header h2 {
@@ -337,8 +333,7 @@
   justify-content: space-around;
 }
 
-.self-awareness .drop-card .drop-card-header .dragdropArrow
-{
+.self-awareness .drop-card .drop-card-header .dragdropArrow {
   transform: scaleX(-1);
 }
 
@@ -363,18 +358,18 @@
 }
 
 .self-awareness .drag-drop .bucket .bucket-item.yes {
-  color: #50AA50;
-  border-color: #50AA50;
+  color: #50aa50;
+  border-color: #50aa50;
 }
 
 .self-awareness .drag-drop .bucket .bucket-item.no {
-  color: #FD483D;
-  border-color: #FD483D;
+  color: #fd483d;
+  border-color: #fd483d;
 }
 
 .self-awareness .drag-drop .bucket .bucket-item.sometimes {
-  color: #ED8641;
-  border-color: #ED8641;
+  color: #ed8641;
+  border-color: #ed8641;
 }
 
 .self-awareness .refresh,
@@ -385,19 +380,19 @@
   justify-content: space-around;
 }
 
-
 .self-awareness .slider-indicator ul li {
   width: 20px;
   height: 10px;
-  background-color: #D6D6D6;
+  background-color: #d6d6d6;
   margin: 0 3px;
   border-radius: 30px;
   cursor: pointer;
 }
 
-.self-awareness .slider-indicator ul li.dragged, .self-awareness .slider-indicator ul li.answered {
+.self-awareness .slider-indicator ul li.dragged,
+.self-awareness .slider-indicator ul li.answered {
   padding: 0;
-  background-color: #00BCC3;
+  background-color: #00bcc3;
 }
 
 .slider-img-card {
@@ -417,18 +412,18 @@
 
 } */
 
-
 .self-awareness .personality-type div {
   display: flex;
   flex-direction: column;
   align-items: center;
   font-size: 16px;
-  color: #5B616A;
+  color: #5b616a;
   font-weight: bold;
 }
 
 .self-awareness .question-box.personality-question .text-area-box,
-.self-awareness .question-box.assessment .text-area-box, .self-awareness .question-box.mindset .text-area-box {
+.self-awareness .question-box.assessment .text-area-box,
+.self-awareness .question-box.mindset .text-area-box {
   height: auto;
   background-size: 100% 100%;
 }
@@ -436,7 +431,7 @@
 .self-awareness .assessment-box {
   width: auto;
   height: fit-content;
-  background-color: #275DAD;
+  background-color: #275dad;
   text-align: center;
   color: #fff;
   padding: 10px 0;
@@ -446,22 +441,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
 }
 
 .self-awareness .week-two .checkbox-questions ul {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); 
+  grid-template-columns: repeat(5, 1fr);
   gap: 15px 10px;
 }
 .self-awareness .week-two.scenario .checkbox-questions ul {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); 
+  grid-template-columns: repeat(2, 1fr);
   gap: 0px 0px;
 }
 .self-awareness .week-two.scenario .checkbox-questions.weakness ul {
-
-  grid-template-columns: repeat(1, 1fr); 
+  grid-template-columns: repeat(1, 1fr);
 }
 
 .self-awareness .checkbox-questions li img {
@@ -473,7 +466,8 @@
   height: 35px;
 }
 
-.self-awareness .assessment .checkbox-questions li p.question-p, .self-awareness .week-two .checkbox-questions li p.question-p {
+.self-awareness .assessment .checkbox-questions li p.question-p,
+.self-awareness .week-two .checkbox-questions li p.question-p {
   font-size: 18px;
   /* text-wrap: nowrap; */
   /* max-width: 400px; */
@@ -484,18 +478,16 @@
 }
 
 .self-awareness .congrats h1 {
-
   color: #fff;
 }
 
-.self-awareness .question-box .scenario-number{
-  background-color: #FFF0D7;
-  border: 4px solid #5B616A;
+.self-awareness .question-box .scenario-number {
+  background-color: #fff0d7;
+  border: 4px solid #5b616a;
   border-radius: 50px;
   text-align: center;
   width: fit-content;
 }
-
 
 /* Mindset Section */
 .self-awareness .question-box.mindset .scrollable {
@@ -506,24 +498,22 @@
   scrollbar-width: none;
 }
 
-.self-awareness  .flip-div ul{
+.self-awareness .flip-div ul {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); 
+  grid-template-columns: repeat(4, 1fr);
   gap: 5px;
   padding: 0;
   margin: 0;
   list-style: none;
-
 }
 
-.self-awareness  .flip-div ul li{
- 
+.self-awareness .flip-div ul li {
   display: flex;
   /* width: 280px; */
   padding: 10px;
   /* background-color: #275DAD; */
   /* border-radius: 5px; */
-  background-image: "";
+  background-image: '';
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -547,14 +537,13 @@
   background-image: url('../../../../../assets/selfawareness-images/mindset-images/purple.png');
 }
 
- img.value-description-img{
+img.value-description-img {
   width: 100%;
   height: 100%;
   cursor: pointer;
 }
 
-
-.self-awareness  .week-two .values-card{
+.self-awareness .week-two .values-card {
   width: 200px;
   display: flex;
   align-items: center;
@@ -567,7 +556,6 @@
   font-size: 18px;
   cursor: pointer;
 }
-
 
 .self-awareness .week-two .values-scenario {
   width: 400px;
@@ -582,32 +570,31 @@
   background-size: 100% 100%;
   font-size: 18px;
   cursor: pointer;
-  overflow: hidden; 
+  overflow: hidden;
   box-sizing: border-box;
 }
-
 
 .self-awareness .week-two .values-scenario p {
   text-align: justify;
   padding: 5px;
-  margin: 0; 
-  overflow-wrap: break-word; 
+  margin: 0;
+  overflow-wrap: break-word;
 }
 
 .connector-canvas {
   border: 1px solid #000; /* For debugging visibility */
   position: absolute; /* Or relative based on layout */
 }
-.self-awareness  .week-two .dropdown-select-section{
+.self-awareness .week-two .dropdown-select-section {
   width: 200px;
   display: grid;
   gap: 10px 30px;
   align-items: center;
   /* justify-content: center; */
-  grid-template-columns: repeat(3, 1fr); 
+  grid-template-columns: repeat(3, 1fr);
 }
 
-.self-awareness  .week-two .dropdown-div{
+.self-awareness .week-two .dropdown-div {
   width: 200px;
   display: flex;
   align-items: center;
@@ -619,14 +606,13 @@
   background-size: contain;
 }
 
-.self-awareness  .week-two.scenario .dropdown-div{
+.self-awareness .week-two.scenario .dropdown-div {
   width: 200px;
   background-size: 100% 100%;
 }
 
-
-.emoji-value-option{
-  background-color: #F8F8F8;
+.emoji-value-option {
+  background-color: #f8f8f8;
   /* font-size: 20px; */
   width: 200px;
   /* padding: 5px 10px; */
@@ -635,28 +621,37 @@
   /* top: 50px;
   bottom: 50px; */
   /* display: none; */
-  border: 1px solid #5B616A;
+  border: 1px solid #5b616a;
 }
-.self-awareness  .week-two.scenario .emoji-value-option{
- 
+.self-awareness .week-two.scenario .emoji-value-option {
   width: 300px;
- 
+
   bottom: 0%;
- 
 }
 
-.emoji-value-option li{
+.emoji-value-option li {
   font-size: 16px;
-  color: #5B616A;
-cursor: pointer;
-line-height: normal;
-padding: 5px 10px;
+  color: #5b616a;
+  cursor: pointer;
+  line-height: normal;
+  padding: 5px 10px;
 }
-.emoji-value-option li:hover{
-
+.emoji-value-option li:hover {
   background-color: #5b616a50;
 }
 
+.personality-option {
+  cursor: pointer;
+  padding: 10px;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  transition: border-color 0.3s ease;
+}
+
+.personality-option.selected {
+  border-color: #000; /* Change this to your highlight color */
+  background-color: #f0f0f0; /* Optional: Add a background color */
+}
 
 /* const questionsArray = [
 

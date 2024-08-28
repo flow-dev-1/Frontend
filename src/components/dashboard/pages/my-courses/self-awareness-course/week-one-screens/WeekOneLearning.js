@@ -1,608 +1,286 @@
-
-import React, { useEffect, useRef, useState } from 'react';
-import { Icon } from '@iconify/react';
-import celebrate from '../../../../../../assets/celebrate.png';
-
-import selfAwareness from '../../../../../../assets/selfawareness-images/self-awareness.png';
-import personality from '../../../../../../assets/selfawareness-images/personality.png';
-import emotionalHand from '../../../../../../assets/selfawareness-images/emotional.png';
-import analyticHand from '../../../../../../assets/selfawareness-images/analytic.png';
-import friendshipHand from '../../../../../../assets/selfawareness-images/friendship.png';
-import actionHand from '../../../../../../assets/selfawareness-images/action.png';
-import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModal';
-import Modal from 'react-modal';
-import WeekOneAssessmentForm from './WeekOneAssessmentForm';
-import { useNavigate } from 'react-router-dom';
-import DragDropComponent from './DragAndDrop';
-import MyFireWorks from '../Fireworks';
-
-
-
-
-
-
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import VideoComponent from './VideoComponent'
+import QuestionComponent from './QuestionComponent'
+import DragDropComponent from './DragAndDrop'
+import EndOfCourseComponent from './EndOfCourseComponent'
+import AssessmentForm from './AssessmentForm'
+import ModalComponent from './ModalComponent '
+import celebrate from '../../../../../../assets/celebrate.png'
+import selfAwareness from '../../../../../../assets/selfawareness-images/self-awareness.png'
+import personality from '../../../../../../assets/selfawareness-images/personality.png'
+import emotionalHand from '../../../../../../assets/selfawareness-images/emotional.png'
+import analyticHand from '../../../../../../assets/selfawareness-images/analytic.png'
+import friendshipHand from '../../../../../../assets/selfawareness-images/friendship.png'
+import actionHand from '../../../../../../assets/selfawareness-images/action.png'
+import PersonalityDescriptionComponent from './PersonalityDescriptionComponent'
+import PersonalityQuestionComponent from './PersonalityQuestionComponent '
 
 export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
-
-    const [currentStep, setCurrentStep] = useState(1);
-    const [formData, setFormData] = useState({
-
-        affirmation: '',
-    });
-    const [videoPlaying, setVideoPlaying] = useState(false)
-    const [reviewPopUp, setReviewPopUp] = useState(false)
-    const navigate = useNavigate();
-
-
-    const handleNext = (data) => {
-        setFormData({ ...formData, ...data });
-        setCurrentStep(currentStep + 1);
-    };
-
-    const handlePrevious = () => {
-        setCurrentStep(currentStep - 1);
-    };
-
-    const closeReviewPopUp = () => {
-        setReviewPopUp(false);
-    };
-
-    useEffect(() => {
-        console.log("Form Data submitted:", formData);
-    }, [formData]);
-
-
-
-    const handleReviewPopUp = () => {
-        setReviewPopUp(true);
-    };
-
-    // Navigation function to handle proceeding to the next week
-    const handleNextWeekCourse = () => {
-        // Increment currentWeekIndex and navigate to the SelfAwarenessCourse with updated index
-        const nextWeekIndex = currentWeekIndex + 1;
-        navigate('/dashboard/self-awareness-course/1', { state: { course, weekIndex: nextWeekIndex } });
-    };
-
-    const renderStepContent = () => {
-        switch (currentStep) {
-            case 1:
-                // introductory-video
-                return (
-                    <div className="course-progression-step">
-                        <div className="video-div">
-                            <div className="video-div">
-                                {videoPlaying ? (
-                                    <iframe
-                                        className="custom-video"
-                                        src="https://www.youtube.com/embed/CW-f1RVjCws"
-                                        title="YouTube video player"
-
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                    />
-                                ) : (
-                                    <div className="video-thumbnail">
-
-                                        <div className="play-button" onClick={() => setVideoPlaying(true)}>
-                                            <Icon icon="carbon:play-outline" className="play-icon" />
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className="progression-buttons mt-3">
-                            <button className="btn progress-btn btn-dark" onClick={handleNext}>
-                                Next {">>>"}
-                            </button>
-                        </div>
-                    </div>
-                );
-
-            case 2:
-                //  self-awareness question
-                return (
-                    <div className="">
-                        <div className="question-box py-5">
-                            <div className="question-box-header ">
-                                <h1 className='mb-0 '>Question: </h1>
-                                <h2 className='mb-0 d-flex ms-3'> What do you think</h2>
-                                <img src={selfAwareness} alt="selfAwareness image" className='mx-2' />
-                                <h2 className=''>is?</h2>
-                            </div>
-                            <div className="text-area-box px-4 mt-4">
-                                <textarea name="" id="" rows="6" placeholder="Type your answer here..." />
-                            </div>
-                        </div>
-                        <div className='d-flex align-items-center justify-content-around mt-5'>
-                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
-                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
-                        </div>
-                    </div>
-                );
-
-
-            case 3:
-                // animation video one
-                return (
-                    <div className="">
-
-                        <div className="video-div">
-                            <div className="video-div">
-                                {videoPlaying ? (
-                                    <iframe
-                                        className="custom-video"
-                                        src="https://www.youtube.com/embed/CW-f1RVjCws"
-                                        title="YouTube video player"
-
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                    />
-                                ) : (
-                                    <div className="video-thumbnail">
-
-                                        <div className="play-button" onClick={() => setVideoPlaying(true)}>
-                                            <Icon icon="carbon:play-outline" className="play-icon" />
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
-                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
-                        </div>
-                    </div>
-                );
-
-            case 4:
-                // personality question
-                return (
-                    <div className="personality-page">
-                        <div className="question-box py-5">
-                            <div className="question-box-header ">
-                                <h1 className='mb-0 '>Question: </h1>
-                                <h2 className='mb-0 d-flex ms-3'> What do you understand by the word,</h2>
-                                <img src={personality} alt="personality image" className='mx-2' />
-                                <h2 className=''>?</h2>
-                            </div>
-                            <div className="text-area-box px-4 mt-4">
-                                <textarea name="" id="" rows="6" placeholder="Type your answer here..." ></textarea>
-                            </div>
-                        </div>
-                        <div className='d-flex align-items-center justify-content-around mt-5'>
-                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
-                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
-                        </div>
-                    </div>
-                );
-
-            case 5:
-                //animation video two
-                return (
-                    <div className="">
-
-                        <div className="video-div">
-                            <div className="video-div">
-                                {videoPlaying ? (
-                                    <iframe
-                                        className="custom-video"
-                                        src="https://www.youtube.com/embed/CW-f1RVjCws"
-                                        title="YouTube video player"
-
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                    />
-                                ) : (
-                                    <div className="video-thumbnail">
-
-                                        <div className="play-button" onClick={() => setVideoPlaying(true)}>
-                                            <Icon icon="carbon:play-outline" className="play-icon" />
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
-                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
-                        </div>
-                    </div>
-                );
-
-            case 6:
-                // drag and drop
-                return (
-                    <div className="drag-drop-section">
-                        {/* <div className="drag-drop">
-                            <div className="card-slider">
-                                <img src={cardOne} alt="card" />
-                            </div>
-
-                            <div className="drop-card">
-                                <div className="drop-card-header">
-                                    <img src={dragdropArrow} alt="" />
-                                    <h2>Drag-and-drop the statements on the left into any of these bowls.</h2>
-                                    <img src={dragdropArrow} alt="" className=' dragdropArrow ' />
-                                </div>
-
-                                <div className="bucket-section mt-3 py-2">
-                                    <div className="bucket bucket-yes">
-                                        <div className="yes bucket-item">
-                                            <h3 className='mb-0'>0</h3>
-                                        </div>
-                                        <img src={bucketYes} alt="bucketYes" />
-                                    </div>
-                                    <div className="bucket bucket-yes">
-                                        <div className="no bucket-item">
-                                            <h3 className='mb-0'>2</h3>
-                                        </div>
-                                        <img src={bucketNo} alt="bucketYes" />
-                                    </div>
-                                    <div className="bucket bucket-yes">
-                                        <div className="sometimes bucket-item">
-                                            <h3 className='mb-0'>0</h3>
-                                        </div>
-                                        <img src={bucketSometimes} alt="bucketYes" />
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="refresh">
-                            <div className="slider-indicator">
-                                <ul className="p-0 my-5">
-                                    <li className='answered'></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                </ul>
-                            </div>
-                            <div className='d-flex'>
-                                <Icon icon="system-uicons:refresh" className='mx-3 fs-3' />
-                                Refresh
-                            </div>
-                        </div> */}
-
-                        <DragDropComponent />
-                        <div className='d-flex align-items-center justify-content-around mt-3'>
-                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
-                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
-                        </div>
-                    </div>
-                );
-
-            case 7:
-                // animation video three
-                return (
-                    <div className="">
-
-                        <div className="video-div">
-                            <div className="video-div">
-                                {videoPlaying ? (
-                                    <iframe
-                                        className="custom-video"
-                                        src="https://www.youtube.com/embed/CW-f1RVjCws"
-                                        title="YouTube video player"
-
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                    />
-                                ) : (
-                                    <div className="video-thumbnail">
-
-                                        <div className="play-button" onClick={() => setVideoPlaying(true)}>
-                                            <Icon icon="carbon:play-outline" className="play-icon" />
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
-                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
-                        </div>
-                    </div>
-                );
-
-
-            case 8:
-                // personality description question
-                return (
-                    <div className="">
-                        <div className="question-box">
-                            <div className="question-box-header mt-3">
-                                <h1 className='mb-0 '>Question: </h1>
-                                <h2 className='mb-0 d-flex ms-3 text-left'>Think about yourself, which of these personality colors describe you? Why do you think so?</h2>
-                            </div>
-                            <div className="personality-type mt-5">
-                                <div className="">
-                                    <img src={emotionalHand} alt="emotionalHand image" className='' />
-                                    <p>Emotional</p>
-
-                                </div>
-                                <div className="">
-                                    <img src={analyticHand} alt="analyticHand image" className='' />
-                                    <p>Analytic</p>
-
-                                </div>
-                                <div className="">
-                                    <img src={friendshipHand} alt="friendshipHand image" className='' />
-                                    <p>Friendship</p>
-
-                                </div>
-                                <div className="">
-                                    <img src={actionHand} alt="actionHand image" className='' />
-                                    <p>Action</p>
-
-                                </div>
-                            </div>
-                            <div className="text-area-box px-4 mt-4">
-                                <textarea name="" id="" rows="6" placeholder="Type your answer here..." ></textarea>
-                            </div>
-                        </div>
-
-                        <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
-                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
-                        </div>
-                    </div>
-                );
-
-            case 9:
-                // animation video four
-                return (
-                    <div className="">
-
-                        <div className="video-div">
-                            <div className="video-div">
-                                {videoPlaying ? (
-                                    <iframe
-                                        className="custom-video"
-                                        src="https://www.youtube.com/embed/CW-f1RVjCws"
-                                        title="YouTube video player"
-
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                    />
-                                ) : (
-                                    <div className="video-thumbnail">
-
-                                        <div className="play-button" onClick={() => setVideoPlaying(true)}>
-                                            <Icon icon="carbon:play-outline" className="play-icon" />
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
-                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
-                        </div>
-                    </div>
-                );
-
-            case 10:
-                // personality test video
-                return (
-                    <div className="">
-
-                        <div className="video-div">
-                            <div className="video-div">
-                                {videoPlaying ? (
-                                    <iframe
-                                        className="custom-video"
-                                        src="https://www.youtube.com/embed/CW-f1RVjCws"
-                                        title="YouTube video player"
-
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                    />
-                                ) : (
-                                    <div className="video-thumbnail">
-
-                                        <div className="play-button" onClick={() => setVideoPlaying(true)}>
-                                            <Icon icon="carbon:play-outline" className="play-icon" />
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
-                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
-                        </div>
-                    </div>
-                );
-
-            case 11:
-                // animation video five
-                return (
-                    <div className="">
-
-                        <div className="video-div">
-                            <div className="video-div">
-                                {videoPlaying ? (
-                                    <iframe
-                                        className="custom-video"
-                                        src="https://www.youtube.com/embed/CW-f1RVjCws"
-                                        title="YouTube video player"
-
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                    />
-                                ) : (
-                                    <div className="video-thumbnail">
-
-                                        <div className="play-button" onClick={() => setVideoPlaying(true)}>
-                                            <Icon icon="carbon:play-outline" className="play-icon" />
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
-                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
-                        </div>
-                    </div>
-                );
-
-            case 12:
-                // question and answer about personality
-                return (
-                    <div className="">
-                        <div className="personality-question question-box">
-                            <div className='mt-2'>
-                                <div className="question-box-header">
-                                    <h1 className='mb-0 '>Question: </h1>
-                                    <h2 className='mb-0 d-flex ms-3 text-left'>Did you get the same color as the color you identified for yourself earlier?</h2>
-                                </div>
-                                <div className="text-area-box px-4">
-                                    <textarea name="" id="" rows="3" placeholder="Type your answer here..." ></textarea>
-                                </div>
-                            </div>
-
-                            <div className='mt-4'>
-                                <div className="question-box-header">
-                                    <h1 className='mb-0 '>Question: </h1>
-                                    <h2 className='mb-0 d-flex ms-3 text-left'>What was different? Why do you think this was different?</h2>
-                                </div>
-                                <div className="text-area-box px-4 ">
-                                    <textarea name="" id="" rows="3" placeholder="Type your answer here..." ></textarea>
-                                </div>
-                            </div>
-
-                            <div className='mt-4'>
-                                <div className="question-box-header">
-                                    <h1 className='mb-0 '>Question: </h1>
-                                    <h2 className='mb-0 d-flex ms-3 text-left'>Do you agree with this new result?</h2>
-                                </div>
-                                <div className="text-area-box px-4">
-                                    <textarea name="" id="" rows="3" placeholder="Type your answer here..." ></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
-                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
-                        </div>
-                    </div >
-                );
-
-            case 13:
-                //  animation video six
-                return (
-                    <div className="">
-
-                        <div className="video-div">
-                            <div className="video-div">
-                                {videoPlaying ? (
-                                    <iframe
-                                        className="custom-video"
-                                        src="https://www.youtube.com/embed/CW-f1RVjCws"
-                                        title="YouTube video player"
-
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                    />
-                                ) : (
-                                    <div className="video-thumbnail">
-
-                                        <div className="play-button" onClick={() => setVideoPlaying(true)}>
-                                            <Icon icon="carbon:play-outline" className="play-icon" />
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-
-                        <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-                            <button className='btn progress-btn btn-light' onClick={handlePrevious}>{"<<<"} Back</button>
-                            <button className='btn progress-btn btn-dark' onClick={handleNext}>Next {">>>"}</button>
-                        </div>
-                    </div>
-                );
-
-            case 14:
-                // assessment
-                return (
-                    <div className="assessment-page">
-
-                        <div className="">
-
-                            <WeekOneAssessmentForm
-                                previous={() => setCurrentStep(13)}
-                                onSubmit={() => setCurrentStep(15)}
-                            />
-
-                        </div>
-                        {/* <button className='btn' onClick={handleReviewPopUp}>click here</button> */}
-
-
-                    </div>
-                );
-
-            case 15:
-                //end
-                return (
-                    <div className="end-of-course-page">
-
-
-                        <div className="congrats">
-                            <img src={celebrate} alt="celebrate" />
-                            <h1>Hurray!</h1>
-                            <p className='text-center fs-5'>You have made it to the {<br />} Week {currentWeekIndex + 1}</p>
-                        </div>
-                        <MyFireWorks />
-
-                        <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-
-                            <button className='btn progress-btn btn-dark' onClick={handleNextWeekCourse} >Proceed to {(currentWeekIndex + 1) + 1}</button>
-                        </div>
-                    </div>
-                );
-
-            default:
-                return null;
-        }
-    };
-
-    return (
-        <div className="course-progression-page">
-            {renderStepContent()}
-
-            {reviewPopUp && (
-                <Modal
-                    isOpen={reviewPopUp}
-                    onRequestClose={closeReviewPopUp}
-                    contentLabel="Example Modal"
-                    className="custom-modal"
-                    overlayClassName="custom-overlay"
-                    shouldCloseOnOverlayClick={true}
-                >
-                    <ReviewPopUp />
-                </Modal>
-            )}
-        </div>
-    );
-
-
-
+  const [currentActivity, setCurrentActivity] = useState(1)
+  const [formData, setFormData] = useState([])
+  const [videoPlaying, setVideoPlaying] = useState(false)
+  const [reviewPopUp, setReviewPopUp] = useState(false)
+  const navigate = useNavigate()
+
+  // Load the last activity from localStorage when the component mounts
+  useEffect(() => {
+    const savedActivity = localStorage.getItem('currentActivity')
+    if (savedActivity) {
+      setCurrentActivity(JSON.parse(savedActivity))
+    }
+
+    const savedFormData = localStorage.getItem('activityData')
+    if (savedFormData) {
+      setFormData(JSON.parse(savedFormData))
+    }
+  }, [])
+
+  const handleNext = (data = {}) => {
+    setFormData((prevData) => {
+      const existingData = prevData.find(
+        (item) => item.activity === currentActivity
+      )
+      if (existingData) {
+        const updatedData = prevData.map((item) =>
+          item.activity === currentActivity ? { ...item, ...data } : item
+        )
+        saveDataToLocalStorage(updatedData)
+        return updatedData
+      } else {
+        const updatedData = [
+          ...prevData,
+          { activity: currentActivity, ...data },
+        ]
+        saveDataToLocalStorage(updatedData)
+        return updatedData
+      }
+    })
+
+    // Move to the next activity
+    const nextActivity = currentActivity + 1
+    setCurrentActivity(nextActivity)
+    localStorage.setItem('currentActivity', JSON.stringify(nextActivity))
+  }
+
+  const handleDragDropData = (newBuckets) => {
+    setFormData((prevFormData) => {
+      const existingData = prevFormData.find((item) => item.activity === 6)
+      if (existingData) {
+        const updatedData = prevFormData.map((item) =>
+          item.activity === 6 ? { ...item, dragDropData: newBuckets } : item
+        )
+        saveDataToLocalStorage(updatedData)
+        return updatedData
+      } else {
+        const updatedData = [
+          ...prevFormData,
+          { activity: 6, dragDropData: newBuckets },
+        ]
+        saveDataToLocalStorage(updatedData)
+        return updatedData
+      }
+    })
+  }
+
+  const saveDataToLocalStorage = (data) => {
+    localStorage.setItem('activityData', JSON.stringify(data))
+  }
+
+  const handlePrevious = () => {
+    const prevActivity = currentActivity - 1
+    setCurrentActivity(prevActivity)
+    localStorage.setItem('currentActivity', JSON.stringify(prevActivity))
+  }
+
+  const closeReviewPopUp = () => setReviewPopUp(false)
+
+  useEffect(() => {
+    console.log('Form Data submitted:', formData)
+  }, [formData])
+
+  const handleNextWeekCourse = () => {
+    const nextWeekIndex = currentWeekIndex + 1
+    navigate('/dashboard/self-awareness-course/1', {
+      state: { course, weekIndex: nextWeekIndex },
+    })
+  }
+
+  const renderActivityContent = () => {
+    switch (currentActivity) {
+      case 1:
+        return (
+          <>
+            <VideoComponent
+              videoPlaying={videoPlaying}
+              setVideoPlaying={setVideoPlaying}
+            />
+            <div className='progression-buttons mt-3'>
+              <button
+                className='btn progress-btn btn-dark'
+                onClick={() => handleNext()}
+              >
+                Next {'>>>'}
+              </button>
+            </div>
+          </>
+        )
+
+      case 2:
+        return (
+          <QuestionComponent
+            activityIndex={2}
+            questionText='What do you think?'
+            imageSrc={selfAwareness}
+            altText='is?'
+            onBack={handlePrevious}
+            onNext={(answer) =>
+              handleNext({
+                questionText: 'What do you think?',
+                answers: [answer],
+              })
+            }
+          />
+        )
+
+      case 3:
+      case 5:
+      case 7:
+      case 9:
+      case 10:
+      case 11:
+        return (
+          <>
+            <VideoComponent
+              videoPlaying={videoPlaying}
+              setVideoPlaying={setVideoPlaying}
+            />
+            <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
+              <button
+                className='btn progress-btn btn-light'
+                onClick={handlePrevious}
+              >
+                {'<<<'} Back
+              </button>
+              <button
+                className='btn progress-btn btn-dark'
+                onClick={() => handleNext()}
+              >
+                Next {'>>>'}
+              </button>
+            </div>
+          </>
+        )
+
+      case 4:
+        return (
+          <QuestionComponent
+            activityIndex={4}
+            questionText='What do you understand by the word,'
+            imageSrc={selfAwareness}
+            altText='?'
+            onBack={handlePrevious}
+            onNext={(answer) =>
+              handleNext({
+                questionText: 'What do you understand by the word,',
+                answers: [answer],
+              })
+            }
+          />
+        )
+
+      case 6:
+        return (
+          <div className='drag-drop-section'>
+            <DragDropComponent
+              onBack={handlePrevious}
+              onNext={handleNext}
+              handleDragDropData={handleDragDropData}
+            />
+          </div>
+        )
+
+      case 8:
+        return (
+          <PersonalityDescriptionComponent
+            questionText='What do you understand by the word,'
+            imageSrc={personality}
+            emotionalHand={emotionalHand}
+            analyticHand={analyticHand}
+            friendshipHand={friendshipHand}
+            actionHand={actionHand}
+            altText='?'
+            onBack={handlePrevious}
+            onNext={(selectedPersonality) =>
+              handleNext({
+                selectedPersonality,
+              })
+            }
+          />
+        )
+
+      case 12:
+        return (
+          <QuestionComponent
+            activityIndex={12}
+            questionText='Did you discover something new about yourself through this assessment? What did you learn?'
+            imageSrc=''
+            altText=''
+            onBack={handlePrevious}
+            onNext={(answer) =>
+              handleNext({
+                questionText:
+                  'Did you discover something new about yourself through this assessment? What did you learn?',
+                answers: [answer],
+              })
+            }
+          />
+        )
+
+      case 13:
+        return (
+          <PersonalityQuestionComponent
+            onBack={handlePrevious}
+            onNext={(questions) => handleNext({ questions })}
+            questions={[
+              {
+                questionText:
+                  'Did you get the same color as the color you identified for yourself earlier?',
+              },
+              {
+                questionText:
+                  'What was different? Why do you think this was different?',
+              },
+              {
+                questionText: 'Do you agree with this new result?',
+              },
+            ]}
+          />
+        )
+
+      case 14:
+        return <AssessmentForm setCurrentActivity={setCurrentActivity} />
+
+      case 15:
+        return (
+          <EndOfCourseComponent
+            currentWeekIndex={currentWeekIndex}
+            handleNextWeekCourse={handleNextWeekCourse}
+          />
+        )
+
+      default:
+        return null
+    }
+  }
+
+  return (
+    <div className='week-one-learning'>
+      {renderActivityContent()}
+      <ModalComponent
+        reviewPopUp={reviewPopUp}
+        closeReviewPopUp={closeReviewPopUp}
+      />
+    </div>
+  )
 }

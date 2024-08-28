@@ -73,7 +73,6 @@ function SelfAwarenessCourse() {
       { weekLesson: 'Understanding Mindset' },
       { weekLesson: 'Identifying Values' },
       { weekLesson: 'Emotional Intelligence and Communication Skills' },
-
     ],
     enrolled: true,
   }
@@ -83,69 +82,49 @@ function SelfAwarenessCourse() {
     setCurrentWeekIndex(index)
   }
 
-  // const renderSidebarContent = () => {
-  //   switch (activeLink) {
-  //     case 'weekone':
-  //       return (
-  //         <CourseProgessionOne
-  //           course={course}
-  //           currentWeekIndex={currentWeekIndex}
-  //         />
-  //       )
-
-  //       case 'weektwo' : 
-  //       return (
-  //       <p>week two</p>
-  //       )
-  //     default:
-  //       return null
-  //   }
-  // }
-
   const renderSidebarContent = () => {
-    console.log('Rendering sidebar content:', activeLink);
+    console.log('Rendering sidebar content:', activeLink)
     // Use dynamic matching with `week${index + 1}` for flexibility
-    const weekIndex = parseInt(activeLink.replace('week', ''), 10) - 1;
+    const weekIndex = parseInt(activeLink.replace('week', ''), 10) - 1
     switch (weekIndex) {
       case 0:
         // return <p>Week one content</p>
         return (
-        <WeekOneLearning
-          course={course}
-          currentWeekIndex={currentWeekIndex}
-        />
-      );
+          <WeekOneLearning
+            course={course}
+            currentWeekIndex={currentWeekIndex}
+          />
+        )
 
       case 1:
         return (
           <WeekTwoLearning
             course={course}
             currentWeekIndex={currentWeekIndex}
-           
           />
-        );
+        )
 
-        case 2:
+      case 2:
         return (
           <WeekThreeLearning
             course={course}
             currentWeekIndex={currentWeekIndex}
           />
-        );
-        case 3:
+        )
+      case 3:
         return (
           <WeekFourLearning
             course={course}
             currentWeekIndex={currentWeekIndex}
           />
-        );
-        case 4:
-          return (
-            <WeekFiveLearning
-              course={course}
-              currentWeekIndex={currentWeekIndex}
-            />
-          )
+        )
+      case 4:
+        return (
+          <WeekFiveLearning
+            course={course}
+            currentWeekIndex={currentWeekIndex}
+          />
+        )
 
       // Add more cases for other weeks if needed
       default:
@@ -166,22 +145,13 @@ function SelfAwarenessCourse() {
           </p>
 
           {/* {courses.map((crc, index) => ( */}
-          <div className='course-title-text mt-3' >
-            <h2>
-              {courses.title}
-            </h2>
+          <div className='course-title-text mt-3'>
+            <h2>{courses.title}</h2>
             <h2 className='sub-title'> {courses.subtitle}</h2>
           </div>
 
           <ul className='sub-courses mt-2'>
             {courses.catalogue.map((week, index) => (
-              // <li
-              //   key={index}
-              //   className={
-              //     index === 0 && activeLink === 'weekone' ? 'active' : ''
-              //   }
-              //   onClick={() => handleLinkClick('profile', index)}
-              // >
               <li
                 key={index}
                 className={

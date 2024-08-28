@@ -4,8 +4,9 @@ import './active-non-active-modal.css'
 
 const ActiveStudentsModal = ({ isOpen, close, data }) => {
   // Check if data is provided and validGraphData exists in the data
-  const students = data?.validGraphData || [];
-  const courseTitle = students.length > 0 ? students[0].course.title : 'No Course Available';
+  const students = data?.validGraphData || []
+  const courseTitle =
+    students?.length > 0 ? students[0].course?.title : 'No Course Available'
 
   return (
     <div style={{ borderRadius: '20px' }}>
@@ -43,10 +44,10 @@ const ActiveStudentsModal = ({ isOpen, close, data }) => {
             </thead>
             <tbody>
               {students.map((student, index) => (
-                <tr key={student._id}>
+                <tr key={student?._id}>
                   <td>{index + 1}</td>
-                  <td>{student.user.fullName}</td>
-                  <td>{student.user.email}</td>
+                  <td>{student?.user?.fullName}</td>
+                  <td>{student?.user?.email}</td>
                 </tr>
               ))}
             </tbody>
@@ -57,4 +58,4 @@ const ActiveStudentsModal = ({ isOpen, close, data }) => {
   )
 }
 
-export default ActiveStudentsModal;
+export default ActiveStudentsModal
