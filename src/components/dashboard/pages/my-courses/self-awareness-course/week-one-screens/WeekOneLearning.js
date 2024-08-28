@@ -259,7 +259,12 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
         )
 
       case 14:
-        return <AssessmentForm setCurrentActivity={setCurrentActivity} />
+        return (
+          <AssessmentForm
+            onBack={handlePrevious}
+            setCurrentActivity={setCurrentActivity}
+          />
+        )
 
       case 15:
         return (

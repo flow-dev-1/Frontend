@@ -1,9 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 const PersonalityQuestionComponent = ({ onBack, onNext, questions }) => {
   const [answers, setAnswers] = useState(
     questions.map((question) => ({ ...question, answer: '' }))
   )
+
+  useEffect(() => {
+    // Load the saved state from localStorage when the component mounts
+    const savedState = localStorage.getItem('personalityQuestionState')
+    if (savedState) {
+      const savedAnswers = JSON.parse(savedState)
+      setAnswers(savedAnswers)
+    }
+  }, [])
+
+  useEffect(() => {
+    // Save the state to localStorage whenever answers change
+    localStorage.setItem('personalityQuestionState', JSON.stringify(answers))
+  }, [answers])
 
   const handleInputChange = (event, index) => {
     const newAnswers = [...answers]
