@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 
 const PersonalityDescriptionComponent = ({
@@ -12,9 +12,27 @@ const PersonalityDescriptionComponent = ({
   const [selectedPersonality, setSelectedPersonality] = useState('')
   const [explanation, setExplanation] = useState('')
 
+  useEffect(() => {
+    // Load persisted state from localStorage
+    const savedExplanation = localStorage.getItem('personalityExplanation')
+    const savedPersonality = localStorage.getItem('selectedPersonality')
+    if (savedExplanation) {
+      setExplanation(savedExplanation)
+    }
+    if (savedPersonality) {
+      setSelectedPersonality(savedPersonality)
+    }
+  }, [])
+
+  useEffect(() => {
+    // Persist explanation and selected personality to localStorage whenever they change
+    localStorage.setItem('personalityExplanation', explanation)
+    localStorage.setItem('selectedPersonality', selectedPersonality)
+  }, [explanation, selectedPersonality])
+
   const handlePersonalitySelect = (type) => {
     setSelectedPersonality(type)
-    setExplanation(type) // Update the text area with the selected personality type
+    setExplanation(type) // Set the text area with the selected personality type
   }
 
   const handleExplanationChange = (event) => {
@@ -22,12 +40,10 @@ const PersonalityDescriptionComponent = ({
   }
 
   const handleNext = () => {
-    if (selectedPersonality && explanation) {
-      onNext({ selectedPersonality, explanation })
+    if (explanation.trim()) {
+      onNext({ answer: explanation })
     } else {
-      toast.error(
-        'Please select a personality type and provide an explanation.'
-      )
+      toast.error('Please provide an explanation.')
     }
   }
 
@@ -48,7 +64,7 @@ const PersonalityDescriptionComponent = ({
             }`}
             onClick={() => handlePersonalitySelect('Emotional')}
           >
-            <img src={emotionalHand} alt='emotionalHand image' className='' />
+            <img src={emotionalHand} alt='Emotional' className='' />
             <p>Emotional</p>
           </div>
           <div
@@ -57,7 +73,7 @@ const PersonalityDescriptionComponent = ({
             }`}
             onClick={() => handlePersonalitySelect('Analytic')}
           >
-            <img src={analyticHand} alt='analyticHand image' className='' />
+            <img src={analyticHand} alt='Analytic' className='' />
             <p>Analytic</p>
           </div>
           <div
@@ -66,7 +82,7 @@ const PersonalityDescriptionComponent = ({
             }`}
             onClick={() => handlePersonalitySelect('Friendship')}
           >
-            <img src={friendshipHand} alt='friendshipHand image' className='' />
+            <img src={friendshipHand} alt='Friendship' className='' />
             <p>Friendship</p>
           </div>
           <div
@@ -75,7 +91,7 @@ const PersonalityDescriptionComponent = ({
             }`}
             onClick={() => handlePersonalitySelect('Action')}
           >
-            <img src={actionHand} alt='actionHand image' className='' />
+            <img src={actionHand} alt='Action' className='' />
             <p>Action</p>
           </div>
         </div>

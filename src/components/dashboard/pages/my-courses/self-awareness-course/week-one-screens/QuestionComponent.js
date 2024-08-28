@@ -12,18 +12,20 @@ const QuestionComponent = ({
   // State to manage the user's answer
   const [answer, setAnswer] = useState('')
 
-  // Retrieve the saved answer from localStorage when the component mounts
+  // Retrieve the saved answers array from localStorage when the component mounts
   useEffect(() => {
-    const savedAnswer = localStorage.getItem(`answer_${activityIndex}`)
-    if (savedAnswer) {
-      setAnswer(JSON.parse(savedAnswer))
+    const savedAnswers = JSON.parse(localStorage.getItem('answers')) || []
+    if (savedAnswers[activityIndex]) {
+      setAnswer(savedAnswers[activityIndex])
     }
   }, [activityIndex])
 
   // Save the answer to localStorage whenever it changes
   useEffect(() => {
     if (answer) {
-      localStorage.setItem(`answer_${activityIndex}`, JSON.stringify(answer))
+      const savedAnswers = JSON.parse(localStorage.getItem('answers')) || []
+      savedAnswers[activityIndex] = answer
+      localStorage.setItem('answers', JSON.stringify(savedAnswers))
     }
   }, [answer, activityIndex])
 

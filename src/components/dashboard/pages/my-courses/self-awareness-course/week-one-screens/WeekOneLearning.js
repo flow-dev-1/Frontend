@@ -38,25 +38,27 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
   }, [])
 
   const handleNext = (data = {}) => {
-    setFormData((prevData) => {
-      const existingData = prevData.find(
-        (item) => item.activity === currentActivity
-      )
-      if (existingData) {
-        const updatedData = prevData.map((item) =>
-          item.activity === currentActivity ? { ...item, ...data } : item
+    if (![1, 3, 5, 7, 9, 11].includes(currentActivity)) {
+      setFormData((prevData) => {
+        const existingData = prevData.find(
+          (item) => item.activity === currentActivity
         )
-        saveDataToLocalStorage(updatedData)
-        return updatedData
-      } else {
-        const updatedData = [
-          ...prevData,
-          { activity: currentActivity, ...data },
-        ]
-        saveDataToLocalStorage(updatedData)
-        return updatedData
-      }
-    })
+        if (existingData) {
+          const updatedData = prevData.map((item) =>
+            item.activity === currentActivity ? { ...item, ...data } : item
+          )
+          saveDataToLocalStorage(updatedData)
+          return updatedData
+        } else {
+          const updatedData = [
+            ...prevData,
+            { activity: currentActivity, ...data },
+          ]
+          saveDataToLocalStorage(updatedData)
+          return updatedData
+        }
+      })
+    }
 
     // Move to the next activity
     const nextActivity = currentActivity + 1
@@ -126,25 +128,8 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
             </div>
           </>
         )
-
-      case 2:
-        return (
-          <QuestionComponent
-            activityIndex={2}
-            questionText='What do you think?'
-            imageSrc={selfAwareness}
-            altText='is?'
-            onBack={handlePrevious}
-            onNext={(answer) =>
-              handleNext({
-                questionText: 'What do you think?',
-                answers: [answer],
-              })
-            }
-          />
-        )
-
       case 3:
+
       case 5:
       case 7:
       case 9:
@@ -155,10 +140,10 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
             />
-            <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
+            <div className='progression-buttons mt-3'>
               <button
                 className='btn progress-btn btn-light'
-                onClick={handlePrevious}
+                onClick={() => handlePrevious()}
               >
                 {'<<<'} Back
               </button>
@@ -172,17 +157,30 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
           </>
         )
 
+      case 2:
+        return (
+          <QuestionComponent
+            activityIndex={2}
+            imageSrc={selfAwareness}
+            altText='is?'
+            onBack={handlePrevious}
+            onNext={(answer) =>
+              handleNext({
+                answers: [answer],
+              })
+            }
+          />
+        )
+
       case 4:
         return (
           <QuestionComponent
             activityIndex={4}
-            questionText='What do you understand by the word,'
             imageSrc={selfAwareness}
             altText='?'
             onBack={handlePrevious}
             onNext={(answer) =>
               handleNext({
-                questionText: 'What do you understand by the word,',
                 answers: [answer],
               })
             }
@@ -232,8 +230,6 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
             onBack={handlePrevious}
             onNext={(answer) =>
               handleNext({
-                questionText:
-                  'Did you discover something new about yourself through this assessment? What did you learn?',
                 answers: [answer],
               })
             }
@@ -244,8 +240,8 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
         return (
           <PersonalityQuestionComponent
             onBack={handlePrevious}
-            onNext={(questions) => handleNext({ questions })}
-            questions={[
+            onNext={(answers) => handleNext({ answers })}
+            answers={[
               {
                 questionText:
                   'Did you get the same color as the color you identified for yourself earlier?',

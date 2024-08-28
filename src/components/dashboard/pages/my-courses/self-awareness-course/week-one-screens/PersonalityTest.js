@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png'
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
 import '../newcourse.css'
+import personalityTest from '../../../../../../assets/selfawareness-images/colorTest.png'
 
 export default function PersonalityTest({ onNext, onBack }) {
-  const questionsArray = [
+  const answers = [
     {
       title:
         "You're working on a group project, and it's time to divide the tasks. How do you approach this situation?",
@@ -15,106 +16,124 @@ export default function PersonalityTest({ onNext, onBack }) {
         'D. You focus on making the process enjoyable, suggesting creative ideas and encouraging a fun atmosphere.',
       ],
     },
+    {
+      title:
+        'You find yourself in a leadership position during a team meeting. What is your main focus?',
+      questionList: [
+        'A. Ensuring that tasks are delegated effectively and deadlines are met.',
+        'B. Making sure everyone feels included and their opinions are considered.',
+        'C. Analyzing the team’s skills and assigning tasks accordingly to maximize productivity.',
+        'D. Encouraging a creative approach and fostering a positive team environment.',
+      ],
+    },
+    {
+      title:
+        'When faced with a new and challenging problem, what is your approach?',
+      questionList: [
+        'A. You jump straight in and start tackling the problem with a clear plan.',
+        'B. You gather information and consult with others before taking action.',
+        'C. You take time to understand the problem thoroughly and consider different solutions.',
+        'D. You brainstorm with others to come up with innovative and unconventional solutions.',
+      ],
+    },
     // Add more questions here
   ]
+
   const [currentIndex, setCurrentIndex] = useState(1)
   const [personalityColor, setPersonalityColor] = useState('')
   const [questionChecked, setQuestionChecked] = useState(
-    questionsArray.reduce((acc, _, index) => ({ ...acc, [index]: [] }), {})
+    answers.reduce((acc, _, index) => ({ ...acc, [index]: null }), {})
   )
 
+  useEffect(() => {
+    // Load persisted state from localStorage
+    const savedCurrentIndex = JSON.parse(localStorage.getItem('currentIndex'))
+    const savedPersonalityColor = localStorage.getItem('personalityColor')
+    const savedQuestionChecked = JSON.parse(
+      localStorage.getItem('questionChecked')
+    )
+
+    if (savedCurrentIndex !== null) setCurrentIndex(savedCurrentIndex)
+    if (savedPersonalityColor) setPersonalityColor(savedPersonalityColor)
+    if (savedQuestionChecked) setQuestionChecked(savedQuestionChecked)
+  }, [])
+
+  useEffect(() => {
+    // Persist state to localStorage whenever it changes
+    localStorage.setItem('currentIndex', JSON.stringify(currentIndex))
+    localStorage.setItem('personalityColor', personalityColor)
+    localStorage.setItem('questionChecked', JSON.stringify(questionChecked))
+  }, [currentIndex, personalityColor, questionChecked])
+
   const handleNextStepClick = () => {
-    if (currentIndex < questionsArray.length + 1) {
+    if (currentIndex < answers.length + 1) {
       setCurrentIndex(currentIndex + 1)
     } else {
-      const finalData = [
-        {
-          questionText: 'What is your personality color?',
-          answer: personalityColor,
-        },
-        ...questionsArray.map((question, index) => ({
-          questionText: question.title,
-          answer: questionChecked[index], // Save the selected answers as an array
-          options: question.questionList,
-        })),
-      ]
-      onNext(finalData)
+      const finalData = answers.map((_, index) => ({
+        answer: questionChecked[index], // Only the selected answer index for each question
+      }))
+      onNext(finalData) // Send only the answers array
     }
   }
 
   const handleQuestionCheck = (questionIndex, optionIndex) => {
-    setQuestionChecked((prevState) => {
-      const updated = { ...prevState }
-      if (updated[questionIndex].includes(optionIndex)) {
-        updated[questionIndex] = updated[questionIndex].filter(
-          (i) => i !== optionIndex
-        )
-      } else {
-        updated[questionIndex] = [...updated[questionIndex], optionIndex]
-      }
-      return updated
-    })
+    setQuestionChecked((prevState) => ({
+      ...prevState,
+      [questionIndex]: optionIndex, // Only one option can be selected
+    }))
+  }
+
+  const handleBackClick = () => {
+    if (currentIndex > 1) {
+      setCurrentIndex(currentIndex - 1)
+    } else {
+      onBack() // Go back to the previous screen if at the start
+    }
   }
 
   const renderQuestion = () => {
     if (currentIndex === 1) {
+      // Display the image screen
       return (
-        <div className='assessment question-box py-5'>
-          <div className='mt-2'>
-            <div className='assessment-box'>
-              <h2>Assessment</h2>
-              Personality Test
-            </div>
-            <h2 className='my-5 text-justify mx-auto w-75'>
-              Before we proceed, please select your personality color.
-            </h2>
-            <div className='dropdown-box px-4'>
-              <select
-                className='form-select'
-                value={personalityColor}
-                onChange={(e) => setPersonalityColor(e.target.value)}
-              >
-                <option value=''>Select your color</option>
-                <option value='Green'>Green</option>
-                <option value='Red'>Red</option>
-                <option value='Blue'>Blue</option>
-                <option value='Yellow'>Yellow</option>
-              </select>
-            </div>
-          </div>
+        <div className='assessment question-box'>
+          <img src={personalityTest} alt='Personality Test' />
         </div>
       )
     } else {
       const questionIndex = currentIndex - 2
-      return (
-        <div className='assessment question-box py-4'>
-          <div className='d-flex align-items-start'>
-            <h1>{currentIndex - 1}.</h1>
-            <h2 className='text-center mb-0 fs-1 ms-3'>
-              {questionsArray[questionIndex].title}
-            </h2>
+      if (questionIndex >= 0 && questionIndex < answers.length) {
+        return (
+          <div className='assessment question-box py-4'>
+            <div className='d-flex align-items-start'>
+              <h1>{currentIndex - 1}.</h1>
+              <h2 className='text-center mb-0 fs-1 ms-3'>
+                {answers[questionIndex].title}
+              </h2>
+            </div>
+            <div className='checkbox-questions'>
+              <ul className='p-0'>
+                {answers[questionIndex].questionList.map((item, index) => (
+                  <li key={index} className='d-flex my-3'>
+                    <img
+                      onClick={() => handleQuestionCheck(questionIndex, index)}
+                      className='cursor-pointer'
+                      src={
+                        questionChecked[questionIndex] === index
+                          ? checkedImage
+                          : unCheckedImage
+                      }
+                      alt=''
+                    />
+                    <p className='question-p ms-3'>{item}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <div className='checkbox-questions'>
-            <ul className='p-0'>
-              {questionsArray[questionIndex].questionList.map((item, index) => (
-                <li key={index} className='d-flex my-3'>
-                  <img
-                    onClick={() => handleQuestionCheck(questionIndex, index)}
-                    className='cursor-pointer'
-                    src={
-                      questionChecked[questionIndex].includes(index)
-                        ? checkedImage
-                        : unCheckedImage
-                    }
-                    alt=''
-                  />
-                  <p className='question-p ms-3'>{item}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )
+        )
+      } else {
+        return <div>Error: Question not found.</div>
+      }
     }
   }
 
@@ -124,9 +143,9 @@ export default function PersonalityTest({ onNext, onBack }) {
 
       <div className='slider-indicator'>
         <ul className='p-0 mt-5'>
-          {Array.from({ length: 2 }, (_, index) => (
+          {Array.from({ length: answers.length + 1 }, (_, index) => (
             <li
-              key={index + 1}
+              key={index}
               className={currentIndex >= index + 1 ? 'answered' : ''}
             ></li>
           ))}
@@ -134,7 +153,10 @@ export default function PersonalityTest({ onNext, onBack }) {
       </div>
 
       <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-        <button className='btn progress-btn btn-light' onClick={onBack}>
+        <button
+          className='btn progress-btn btn-light'
+          onClick={handleBackClick}
+        >
           {'<<<'} Back
         </button>
         <button

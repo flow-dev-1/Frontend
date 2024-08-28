@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { Icon } from '@iconify/react'
 import dragdropArrow from '../../../../../../assets/selfawareness-images/dragdrop-arrowl.png'
@@ -32,16 +32,38 @@ const cardImages = [
 ]
 
 const initialCards = [
-  { id: 'card-1', content: 'Card 1', imageIndex: 0 },
-  { id: 'card-2', content: 'Card 2', imageIndex: 1 },
-  { id: 'card-3', content: 'Card 3', imageIndex: 2 },
-  { id: 'card-4', content: 'Card 4', imageIndex: 3 },
-  { id: 'card-5', content: 'Card 5', imageIndex: 4 },
-  { id: 'card-6', content: 'Card 6', imageIndex: 5 },
-  { id: 'card-7', content: 'Card 7', imageIndex: 6 },
-  { id: 'card-8', content: 'Card 8', imageIndex: 7 },
-  { id: 'card-9', content: 'Card 9', imageIndex: 8 },
-  { id: 'card-10', content: 'Card 10', imageIndex: 9 },
+  { id: 'card-1', content: 'I enjoy meeting new people.', imageIndex: 0 },
+  { id: 'card-2', content: 'I like to try new things.', imageIndex: 1 },
+  { id: 'card-3', content: 'I am honest and tell the truth.', imageIndex: 2 },
+  {
+    id: 'card-4',
+    content:
+      'I care a lot about what people think of me and try to make them happy always.',
+    imageIndex: 3,
+  },
+  {
+    id: 'card-5',
+    content: 'I like to solve problems and figure things out.',
+    imageIndex: 4,
+  },
+  { id: 'card-6', content: 'I am kind and help others.', imageIndex: 5 },
+  {
+    id: 'card-7',
+    content: 'I am creative and like to make things.',
+    imageIndex: 6,
+  },
+  { id: 'card-8', content: 'I am brave and face my fears.', imageIndex: 7 },
+  {
+    id: 'card-9',
+    content: 'I am organized and like to keep things tidy.',
+    imageIndex: 8,
+  },
+  {
+    id: 'card-10',
+    content:
+      'I like to make friends but struggle with keeping those friendships.',
+    imageIndex: 9,
+  },
 ]
 
 const initialBuckets = {
@@ -54,11 +76,39 @@ function DragDropComponent({ onBack, onNext }) {
   const [cards, setCards] = useState(initialCards)
   const [buckets, setBuckets] = useState(initialBuckets)
   const [currentCardIndex, setCurrentCardIndex] = useState(0)
+  const [history, setHistory] = useState([]) // To keep track of previous states
+
+  useEffect(() => {
+    // Load persisted state from localStorage
+    const savedCards = JSON.parse(localStorage.getItem('cards'))
+    const savedBuckets = JSON.parse(localStorage.getItem('buckets'))
+    const savedCurrentCardIndex = JSON.parse(
+      localStorage.getItem('currentCardIndex')
+    )
+    const savedHistory = JSON.parse(localStorage.getItem('history')) || []
+
+    if (savedCards) setCards(savedCards)
+    if (savedBuckets) setBuckets(savedBuckets)
+    if (savedCurrentCardIndex !== null)
+      setCurrentCardIndex(savedCurrentCardIndex)
+    if (savedHistory) setHistory(savedHistory)
+  }, [])
+
+  useEffect(() => {
+    // Persist state to localStorage whenever it changes
+    localStorage.setItem('cards', JSON.stringify(cards))
+    localStorage.setItem('buckets', JSON.stringify(buckets))
+    localStorage.setItem('currentCardIndex', JSON.stringify(currentCardIndex))
+    localStorage.setItem('history', JSON.stringify(history))
+  }, [cards, buckets, currentCardIndex, history])
 
   const onDragEnd = (result) => {
     const { destination, source } = result
 
-    if (!destination) return
+    if (!destination) {
+      // If the card is dropped outside of a valid location, revert the position
+      return
+    }
 
     if (source.droppableId === 'card-slider') {
       const newCards = Array.from(cards)
@@ -79,10 +129,14 @@ function DragDropComponent({ onBack, onNext }) {
           ...prev,
           sometimes: [...prev.sometimes, draggedCard],
         }))
+      } else {
+        // Revert card position if drop location is invalid
+        return
       }
 
-      setCards(newCards)
-      if (newCards.length > 0) {
+      const updatedCards = newCards
+      setCards(updatedCards)
+      if (updatedCards.length > 0) {
         setCurrentCardIndex(0)
       } else {
         setCurrentCardIndex(-1) // No more cards to show
@@ -94,11 +148,38 @@ function DragDropComponent({ onBack, onNext }) {
     setCards(initialCards)
     setBuckets(initialBuckets)
     setCurrentCardIndex(0)
+    localStorage.removeItem('cards')
+    localStorage.removeItem('buckets')
+    localStorage.removeItem('currentCardIndex')
+    localStorage.removeItem('history')
   }
 
   const sliderIndicator = (index) => {
     return index >= initialCards.length - cards.length ? '' : 'dragged'
   }
+
+  const handleBack = () => {
+    if (history.length > 0) {
+      const previousState = history.pop()
+      setCards(previousState.cards)
+      setBuckets(previousState.buckets)
+      setCurrentCardIndex(previousState.currentCardIndex)
+      setHistory([...history]) // Update the history state
+    } else {
+      onBack() // Go back to the previous screen if there are no more states in history
+    }
+  }
+
+  const saveStateToHistory = () => {
+    setHistory((prevHistory) => [
+      ...prevHistory,
+      { cards, buckets, currentCardIndex },
+    ])
+  }
+
+  useEffect(() => {
+    saveStateToHistory()
+  }, [cards, buckets, currentCardIndex])
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -212,7 +293,7 @@ function DragDropComponent({ onBack, onNext }) {
         </div>
 
         <div className='d-flex align-items-center justify-content-around mt-3'>
-          <button className='btn progress-btn btn-light' onClick={onBack}>
+          <button className='btn progress-btn btn-light' onClick={handleBack}>
             {'<<<'} Back
           </button>
           <button
