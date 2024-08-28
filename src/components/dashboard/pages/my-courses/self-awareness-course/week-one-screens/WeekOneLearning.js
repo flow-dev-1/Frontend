@@ -5,7 +5,7 @@ import QuestionComponent from './QuestionComponent'
 import DragDropComponent from './DragAndDrop'
 import EndOfCourseComponent from './EndOfCourseComponent'
 import AssessmentForm from './AssessmentForm'
-import ModalComponent from './ModalComponent '
+import ModalComponent from './ModalComponent'
 import celebrate from '../../../../../../assets/celebrate.png'
 import selfAwareness from '../../../../../../assets/selfawareness-images/self-awareness.png'
 import personality from '../../../../../../assets/selfawareness-images/personality.png'
@@ -15,6 +15,7 @@ import friendshipHand from '../../../../../../assets/selfawareness-images/friend
 import actionHand from '../../../../../../assets/selfawareness-images/action.png'
 import PersonalityDescriptionComponent from './PersonalityDescriptionComponent'
 import PersonalityQuestionComponent from './PersonalityQuestionComponent '
+import PersonalityTest from './PersonalityTest'
 
 export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
   const [currentActivity, setCurrentActivity] = useState(1)
@@ -147,7 +148,6 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
       case 5:
       case 7:
       case 9:
-      case 10:
       case 11:
         return (
           <>
@@ -218,6 +218,9 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
             }
           />
         )
+
+      case 10:
+        return <PersonalityTest onBack={handlePrevious} onNext={handleNext} />
 
       case 12:
         return (

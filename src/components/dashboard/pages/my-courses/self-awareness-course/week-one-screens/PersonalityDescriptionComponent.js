@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { toast } from 'react-toastify'
 
 const PersonalityDescriptionComponent = ({
   onBack,
@@ -24,7 +25,9 @@ const PersonalityDescriptionComponent = ({
     if (selectedPersonality && explanation) {
       onNext({ selectedPersonality, explanation })
     } else {
-      alert('Please select a personality type and provide an explanation.')
+      toast.error(
+        'Please select a personality type and provide an explanation.'
+      )
     }
   }
 
