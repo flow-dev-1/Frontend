@@ -16,6 +16,8 @@ import actionHand from '../../../../../../assets/selfawareness-images/action.png
 import PersonalityDescriptionComponent from './PersonalityDescriptionComponent'
 import PersonalityQuestionComponent from './PersonalityQuestionComponent '
 import PersonalityTest from './PersonalityTest'
+import userService from "../../../../../../services/api/user.js";
+import { useQuery } from '@tanstack/react-query'
 
 export default function WeekOneLearning({
   course,
@@ -28,7 +30,14 @@ export default function WeekOneLearning({
   const [videoPlaying, setVideoPlaying] = useState(false)
   const [reviewPopUp, setReviewPopUp] = useState(false)
   const navigate = useNavigate()
-
+  const week = 1
+    const { data, isLoading, isError } = useQuery({
+      queryKey: ["self-awareness-course"],
+      queryFn: async () => userService.getMyActivites(courseId, week),
+      refetchOnMount: true,
+      refetchOnWindowFocus: true
+    });
+    console.log(data)
   // Load the last activity from localStorage when the component mounts
   useEffect(() => {
     const savedActivity = localStorage.getItem('currentActivity')
@@ -165,6 +174,7 @@ export default function WeekOneLearning({
       case 2:
         return (
           <QuestionComponent
+            questionText={'What do you think'}
             activityIndex={2}
             imageSrc={selfAwareness}
             altText='is?'
@@ -180,6 +190,7 @@ export default function WeekOneLearning({
       case 4:
         return (
           <QuestionComponent
+            questionText={'What do you think'}
             activityIndex={4}
             imageSrc={selfAwareness}
             altText='?'

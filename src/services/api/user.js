@@ -263,6 +263,19 @@ class UserOBJ {
       throw err?.response?.data || err.message;
     }
   };
+
+  getMyActivites = async (params1, week) => {
+    try {
+      const response = await api.get(
+        `api/users/course-enrollment/${params1}/get-activity/${week}`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (err) {
+      console.log(err?.response?.data || err.message);
+      throw err?.response?.data || err.message;
+    }
+  };
 }
 
 const user = new UserOBJ()
