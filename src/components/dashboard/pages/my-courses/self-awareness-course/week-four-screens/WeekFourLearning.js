@@ -62,27 +62,27 @@ export default function WeekFourLearning({ course, currentWeekIndex }) {
     setCurrentStep((prevStep) => prevStep + 1)
   }
 
-formData.answers = formData.answers.filter((item) => {
-  // Check if the item is an empty object
-  if (Object.keys(item).length === 0) {
-    return false
-  }
+  formData.answers = formData.answers.filter((item) => {
+    // Check if the item is an empty object
+    if (Object.keys(item).length === 0) {
+      return false
+    }
 
-  // Check if the item is a SyntheticBaseEvent object
-  if (
-    item._reactName === 'onClick' &&
-    item._targetInst === null &&
-    item.type === 'click'
-  ) {
-    return false
-  }
+    // Check if the item is a SyntheticBaseEvent object
+    if (
+      item._reactName === 'onClick' &&
+      item._targetInst === null &&
+      item.type === 'click'
+    ) {
+      return false
+    }
 
-  // If neither condition is met, keep the item
-  return true
-})
+    // If neither condition is met, keep the item
+    return true
+  })
 
-//TODO: post data
-console.log('Filtered Form Data', formData)
+  //TODO: post data
+  console.log('Filtered Form Data', formData)
 
   const handlePrevious = () => {
     setCurrentStep((prevStep) => Math.max(prevStep - 1, 1))
