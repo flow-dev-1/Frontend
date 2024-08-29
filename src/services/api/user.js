@@ -7,75 +7,75 @@ class UserOBJ {
       const response = await api.post(
         `api/educator/register?type=${userType}`,
         data
-      )
-      return response.data
+      );
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
   courseEnrollment = async (params, data) => {
-    console.log(params)
+    console.log(params);
     try {
       const response = await api.post(
         `api/users/courses/${params}/enroll`,
         data
-      )
-      return response.data
+      );
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
   individualRegister = async (data) => {
     try {
       const response = await api.post(
         `api/users/register?type=Individual`,
         data
-      )
-      return response.data
+      );
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
 
   getInvitedUser = async (auth_token) => {
     try {
       // Check if data is not empty
 
-      const response = await api.get('api/users/me', {
+      const response = await api.get("api/users/me", {
         headers: {
-          Authorization: `Bearer ${auth_token}`,
-        },
-      })
-      return response.data
+          Authorization: `Bearer ${auth_token}`
+        }
+      });
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
   getUserId = async () => {
     try {
       // Check if data is not empty
-      const response = await api.get('api/id')
-      return response.data
+      const response = await api.get("api/id");
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
 
   //Register
   registerInvitedUser = async (auth_token, data) => {
-    console.log(auth_token)
-    console.log(data)
+    console.log(auth_token);
+    console.log(data);
     try {
       const response = await api.post(`api/users/invited-user`, data, {
         headers: {
-          Authorization: `Bearer ${auth_token}`,
-        },
-      })
-      return response.data
+          Authorization: `Bearer ${auth_token}`
+        }
+      });
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
 
   validatePayment = async (auth_token, params) => {
     try {
@@ -83,186 +83,186 @@ class UserOBJ {
         `validate-transaction?reference=${params}`,
         {
           headers: {
-            Authorization: `Bearer ${auth_token}`,
-          },
+            Authorization: `Bearer ${auth_token}`
+          }
         }
-      )
-      return response.data
+      );
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
   getParentDetails = async (auth_token) => {
-    console.log(auth_token)
+    console.log(auth_token);
     try {
       const response = await api.get(`api/users/parent`, {
         headers: {
-          Authorization: `Bearer ${auth_token}`,
-        },
-      })
-      return response.data
+          Authorization: `Bearer ${auth_token}`
+        }
+      });
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
 
   registerInvitedAdmin = async (auth_token, data) => {
-    console.log(auth_token)
+    console.log(auth_token);
     try {
       const response = await api.post(`api/users/invited-school-admin`, data, {
         headers: {
-          Authorization: `Bearer ${auth_token}`,
-        },
-      })
-      return response.data
+          Authorization: `Bearer ${auth_token}`
+        }
+      });
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
 
   verifyAccount = async (data) => {
     try {
-      const response = await api.patch(`api/verify-account`, data)
-      return response.data
+      const response = await api.patch(`api/verify-account`, data);
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
   verifyToken = async (data) => {
     try {
-      const response = await api.patch(`api/verify-token`, data)
-      return response.data
+      const response = await api.patch(`api/verify-token`, data);
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
   educatorVerifyToken = async (data) => {
     try {
-      const response = await api.patch(`api/educator/verify-account`, data)
-      return response.data
+      const response = await api.patch(`api/educator/verify-account`, data);
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
 
   //Login
   login = async (data) => {
     try {
-      const response = await api.post(`api/login`, data)
-      return response.data
+      const response = await api.post(`api/login`, data);
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
   forgotPassword = async (data) => {
     try {
-      const response = await api.post(`api/forgot-password`, data)
-      return response.data
+      const response = await api.post(`api/forgot-password`, data);
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
   resetPassword = async (data) => {
     try {
-      const response = await api.put(`api/password`, data)
-      return response.data
+      const response = await api.put(`api/password`, data);
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
 
   //update profile
   updateProfileEducator = async (data) => {
     try {
       // Check if data is not empty
 
-      const response = await api.patch('api/educator/profile', data)
-      return response.data
+      const response = await api.patch("api/educator/profile", data);
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
   updateProfileIndividual = async (data) => {
     try {
       // Check if data is not empty
 
-      const response = await api.patch('api/users/profile', data)
-      return response.data
+      const response = await api.patch("api/users/profile", data);
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
   getMyProfileIndividual = async () => {
     try {
       // Check if data is not empty
-      const response = await api.get(`api/users/me`)
-      return response.data
+      const response = await api.get(`api/users/me`);
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
   getIndividualCoursesEnrolled = async () => {
     try {
       // Check if data is not empty
-      const response = await api.get(`api/users/courses?type=Enrolled`)
-      return response.data
+      const response = await api.get(`api/users/courses?type=Enrolled`);
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
   getIndividualCourses = async () => {
     try {
       // Check if data is not empty
-      const response = await api.get(`api/users/courses`)
-      return response.data
+      const response = await api.get(`api/users/courses`);
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
   getMyProfileEducator = async () => {
     try {
       // Check if data is not empty
-      const response = await api.get(`api/educator/me`)
-      return response.data
+      const response = await api.get(`api/educator/me`);
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
   getMyPayments = async () => {
     try {
       // Check if data is not empty
-      const response = await api.get(`api/users/payments`)
-      return response.data
+      const response = await api.get(`api/users/payments`);
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
-  postMyActivity = async (week, params1) => {
+  };
+  postMyActivity = async (params1, formData) => {
     try {
-      const assessmentData = localStorage.getItem('activityData')
-      if (assessmentData) {
-        const parsedData = JSON.parse(assessmentData)
-        const cleanedData = {
-          week: week,
-          activities: parsedData,
-        }
+      const response = await api.put(
+        `api/users/course-enrollment/${params1}/activity`,
 
-        console.log(cleanedData)
-
-        const response = await api.put(
-          `api/users/course-enrollment/${params1}/activity`,
-
-          cleanedData
-        )
-        console.log(response.data)
-        return response.data
-      } else {
-        throw new Error('No assessment data found in local storage')
-      }
+        formData
+      );
+      console.log(response.data);
+      return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message
+      throw err?.response?.data || err.message;
     }
-  }
+  };
+  postMyAssessment = async (params1, formData) => {
+    try {
+      const response = await api.post(
+        `api/users/course-enrollment/${params1}/assesment`,
+
+        formData
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (err) {
+      throw err?.response?.data || err.message;
+    }
+  };
 }
 
 const user = new UserOBJ()
