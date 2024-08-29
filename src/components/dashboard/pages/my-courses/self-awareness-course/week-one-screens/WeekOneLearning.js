@@ -17,7 +17,12 @@ import PersonalityDescriptionComponent from './PersonalityDescriptionComponent'
 import PersonalityQuestionComponent from './PersonalityQuestionComponent '
 import PersonalityTest from './PersonalityTest'
 
-export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
+export default function WeekOneLearning({
+  course,
+  onClose,
+  currentWeekIndex,
+  courseId,
+}) {
   const [currentActivity, setCurrentActivity] = useState(1)
   const [formData, setFormData] = useState([])
   const [videoPlaying, setVideoPlaying] = useState(false)
@@ -239,6 +244,7 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
       case 13:
         return (
           <PersonalityQuestionComponent
+            formData={formData}
             onBack={handlePrevious}
             onNext={(answers) => handleNext({ answers })}
             answers={[
@@ -260,6 +266,7 @@ export default function WeekOneLearning({ course, onClose, currentWeekIndex }) {
       case 14:
         return (
           <AssessmentForm
+            courseId={courseId}
             onBack={handlePrevious}
             setCurrentActivity={setCurrentActivity}
           />

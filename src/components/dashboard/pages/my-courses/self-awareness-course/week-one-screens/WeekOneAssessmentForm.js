@@ -6,7 +6,12 @@ import '../newcourse.css'
 import Modal from 'react-modal'
 import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModal'
 
-export default function WeekOneAssessmentForm({ onSubmit, previous, onBack }) {
+export default function WeekOneAssessmentForm({
+  onSubmit,
+  previous,
+  onBack,
+  courseId,
+}) {
   const [currentIndex, setCurrentIndex] = useState(1)
   const [reviewPopUp, setReviewPopUp] = useState(false)
   const [personalityColor, setPersonalityColor] = useState('')
@@ -82,6 +87,8 @@ export default function WeekOneAssessmentForm({ onSubmit, previous, onBack }) {
     // Add more questions for Green
   ]
 
+  console.log(courseId)
+
   // Function to get the appropriate questions array based on the selected personality color
   const getQuestionsArray = () => {
     switch (personalityColor) {
@@ -127,31 +134,34 @@ export default function WeekOneAssessmentForm({ onSubmit, previous, onBack }) {
     }))
   }
 
-const saveAssessmentData = () => {
-  const questionsArray = getQuestionsArray();
+  const saveAssessmentData = () => {
+    const questionsArray = getQuestionsArray()
 
-  const dataToSave = questionsArray.map((question, index) => ({
-    answer: questionChecked[index], // Save the selected answer as an index
-    // Include the options for reference if needed
-  }));
+    const dataToSave = questionsArray.map((question, index) => ({
+      answer: questionChecked[index], // Save the selected answer as an index
+      // Include the options for reference if needed
+    }))
 
-  const answers = [
-    {
-      answer: personalityColor,
-    },
-    ...dataToSave,
-  ];
+    const answers = [
+      {
+        answer: personalityColor,
+      },
+      ...dataToSave,
+    ]
 
-  console.log('Answers', answers);
+    console.log('Answers', answers)
+    const week = 1
 
-  // Save data to local storage
-  localStorage.setItem('assessmentData', JSON.stringify({ activities: answers }));
-  const  id = '66c20f5ae02eea5d807d2e94'
-  // Post data to the API
-  userService.postMyActivity(id);
-};
+    // Save data to local storage
+    localStorage.setItem(
+      'assessmentData',
+      JSON.stringify({ assessment: answers })
+    )
+    const id = '66c20f5ae02eea5d807d2e94'
+    // Post data to the API
+    userService.postMyActivity(week, courseId)
+  }
 
-  
   const renderQuestion = () => {
     const questionsArray = getQuestionsArray()
 

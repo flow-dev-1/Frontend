@@ -237,32 +237,33 @@ class UserOBJ {
       throw err?.response?.data || err.message
     }
   }
-postMyActivity = async (params1) => {
-  try {
-    const assessmentData = localStorage.getItem('activityData');
-    if (assessmentData) {
-      const parsedData = JSON.parse(assessmentData);
-      const cleanedData = {
-        activities: parsedData 
-      };
-      
-      console.log(cleanedData);
+  postMyActivity = async (week, params1) => {
+    try {
+      const assessmentData = localStorage.getItem('activityData')
+      if (assessmentData) {
+        const parsedData = JSON.parse(assessmentData)
+        const cleanedData = {
+          week: week,
+          activities: parsedData,
+        }
 
-      const response = await api.put(`api/users/course-enrollment/${params1}/activity`, cleanedData);
-      return response.data;
-    } else {
-      throw new Error('No assessment data found in local storage');
+        console.log(cleanedData)
+
+        const response = await api.put(
+          `api/users/course-enrollment/${params1}/activity`,
+
+          cleanedData
+        )
+        console.log(response.data)
+        return response.data
+      } else {
+        throw new Error('No assessment data found in local storage')
+      }
+    } catch (err) {
+      throw err?.response?.data || err.message
     }
-  } catch (err) {
-    throw err?.response?.data || err.message;
   }
-}
-
-
-
-
 }
 
 const user = new UserOBJ()
 export default user
- 

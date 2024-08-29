@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 
-const PersonalityQuestionComponent = ({ onBack, onNext, answers }) => {
+const PersonalityQuestionComponent = ({ onBack, onNext, answers, formData }) => {
   // Initialize local state with answers containing only the answer fields
   const [localAnswers, setLocalAnswers] = useState(
     answers.map(({ questionText, answer }) => ({

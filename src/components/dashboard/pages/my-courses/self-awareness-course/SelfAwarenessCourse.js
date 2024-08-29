@@ -14,6 +14,7 @@ function SelfAwarenessCourse() {
   const location = useLocation()
   const course = location?.state?.course
   const navigate = useNavigate()
+  console.log(id)
 
   const [activeLink, setActiveLink] = React.useState('week1')
   const [currentWeekIndex, setCurrentWeekIndex] = React.useState(0)
@@ -91,6 +92,7 @@ function SelfAwarenessCourse() {
         // return <p>Week one content</p>
         return (
           <WeekOneLearning
+            courseId={id}
             course={course}
             currentWeekIndex={currentWeekIndex}
           />
