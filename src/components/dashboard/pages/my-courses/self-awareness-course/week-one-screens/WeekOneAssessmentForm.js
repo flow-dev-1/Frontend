@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png'
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
-
+import userService from '../../../../../../services/api/user.js'
 import '../newcourse.css'
 import Modal from 'react-modal'
 import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModal'
@@ -127,26 +127,31 @@ export default function WeekOneAssessmentForm({ onSubmit, previous, onBack }) {
     }))
   }
 
-  const saveAssessmentData = () => {
-    const questionsArray = getQuestionsArray()
+const saveAssessmentData = () => {
+  const questionsArray = getQuestionsArray();
 
-    const dataToSave = questionsArray.map((question, index) => ({
-      answer: questionChecked[index], // Save the selected answer as an index
-      // Include the options for reference
-    }))
+  const dataToSave = questionsArray.map((question, index) => ({
+    answer: questionChecked[index], // Save the selected answer as an index
+    // Include the options for reference if needed
+  }));
 
-    const answers = [
-      {
-        answer: personalityColor,
-      },
-      ...dataToSave,
-    ]
+  const answers = [
+    {
+      answer: personalityColor,
+    },
+    ...dataToSave,
+  ];
 
-    console.log('Answers', answers)
+  console.log('Answers', answers);
 
-    localStorage.setItem('assessmentData', JSON.stringify(answers))
-  }
+  // Save data to local storage
+  localStorage.setItem('assessmentData', JSON.stringify({ activities: answers }));
+  const  id = '66c20f5ae02eea5d807d2e94'
+  // Post data to the API
+  userService.postMyActivity(id);
+};
 
+  
   const renderQuestion = () => {
     const questionsArray = getQuestionsArray()
 
