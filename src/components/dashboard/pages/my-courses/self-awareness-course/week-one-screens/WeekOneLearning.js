@@ -165,6 +165,7 @@ export default function WeekOneLearning({
       case 2:
         return (
           <QuestionComponent
+            questionText={'What do you think'}
             activityIndex={2}
             imageSrc={selfAwareness}
             altText='is?'
@@ -180,6 +181,7 @@ export default function WeekOneLearning({
       case 4:
         return (
           <QuestionComponent
+            questionText={'What do you think'}
             activityIndex={4}
             imageSrc={selfAwareness}
             altText='?'
