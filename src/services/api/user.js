@@ -269,7 +269,6 @@ class UserOBJ {
       const response = await api.get(
         `api/users/course-enrollment/${params1}/get-activity/${week}`
       );
-      console.log(response.data);
       return response.data;
     } catch (err) {
       console.log(err?.response?.data || err.message);

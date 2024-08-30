@@ -10,13 +10,15 @@ import CoreValuesQuestion from './CoreValuesQuestion'
 import VideoComponent from './VideoComponent'
 import QuestionComponent from './QuestionComponent'
 import NavigationButtons from './NavigationButtons'
+import userService from "../../../../../../services/api/user.js";
+
 
 export default function WeekFourLearning({ course, currentWeekIndex }) {
   const [currentStep, setCurrentStep] = useState(() => {
     const savedStep = localStorage.getItem('weekFourCurrentStep')
     return savedStep ? parseInt(savedStep, 10) : 1
   })
-
+  const courseId = course._id
   const [formData, setFormData] = useState(() => {
     const savedData = localStorage.getItem('weekFourFormData')
     return savedData ? JSON.parse(savedData) : { week: 4, answers: [] }
@@ -34,10 +36,26 @@ export default function WeekFourLearning({ course, currentWeekIndex }) {
       const serializableData = { ...formData }
       console.log('Current Form Data:', serializableData)
       localStorage.setItem('weekFourFormData', JSON.stringify(serializableData))
+     handleSubmit()
     } catch (error) {
       console.error('Failed to save to localStorage:', error)
     }
   }, [formData])
+  
+    const handleSubmit = () => {
+      console.log(formData);
+      userService
+        .postMyActivity(courseId, formData)
+        .then((response) => {
+          // If the submission is successful
+          console.log("Submission successful:", response);
+          // handleNextWeekCourse();
+        })
+        .catch((error) => {
+          console.error("Submission failed:", error);
+          // Handle the error if needed
+        });
+    };
 
   const handleNext = (data = {}) => {
     setFormData((prevFormData) => {
@@ -62,27 +80,27 @@ export default function WeekFourLearning({ course, currentWeekIndex }) {
     setCurrentStep((prevStep) => prevStep + 1)
   }
 
-formData.answers = formData.answers.filter((item) => {
-  // Check if the item is an empty object
-  if (Object.keys(item).length === 0) {
-    return false
-  }
+  formData.answers = formData.answers.filter((item) => {
+    // Check if the item is an empty object
+    if (Object.keys(item).length === 0) {
+      return false
+    }
 
-  // Check if the item is a SyntheticBaseEvent object
-  if (
-    item._reactName === 'onClick' &&
-    item._targetInst === null &&
-    item.type === 'click'
-  ) {
-    return false
-  }
+    // Check if the item is a SyntheticBaseEvent object
+    if (
+      item._reactName === 'onClick' &&
+      item._targetInst === null &&
+      item.type === 'click'
+    ) {
+      return false
+    }
 
-  // If neither condition is met, keep the item
-  return true
-})
+    // If neither condition is met, keep the item
+    return true
+  })
 
-//TODO: post data
-console.log('Filtered Form Data', formData)
+  //TODO: post data
+  console.log('Filtered Form Data', formData)
 
   const handlePrevious = () => {
     setCurrentStep((prevStep) => Math.max(prevStep - 1, 1))

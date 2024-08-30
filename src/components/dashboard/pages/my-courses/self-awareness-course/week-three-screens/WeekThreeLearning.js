@@ -13,7 +13,46 @@ import SecondQuestionComponent from "./SecondQuestionComponet.js";
 
 export default function WeekThreeLearning({ course, currentWeekIndex }) {
   const navigate = useNavigate();
-  const courseid = course._id;
+  const courseId = course._id;
+  
+    // const week = 1;
+
+    // // Fetch data using react-query
+    // const { data, isLoading, isError } = useQuery({
+    //   queryKey: ["self-awareness-course"],
+    //   queryFn: async () => userService.getMyActivites(courseId, week),
+    //   refetchOnMount: true,
+    //   refetchOnWindowFocus: true
+    // });
+
+    // useEffect(() => {
+    //   if (data?.activity?.activities?.length > 0) {
+    //     const activities = data.activity.activities;
+    //     console.log(activities);
+
+    //     // Save the fetched data to state
+    //     const lastActivityIndex = activities.length - 1;
+    //     const lastActivity = activities[lastActivityIndex];
+    //     setCurrentActivity(lastActivity?.activity || 1);
+    //     setFormData(activities);
+
+    //     // Save data to localStorage
+    //     localStorage.setItem(
+    //       "currentActivity",
+    //       JSON.stringify(lastActivity?.activity || 1)
+    //     );
+    //     localStorage.setItem("activityData", JSON.stringify(activities));
+    //   } else {
+    //     // Clear localStorage if no data is available
+    //     localStorage.removeItem("currentActivity");
+    //     localStorage.removeItem("activityData");
+
+    //     // Reset state to initial values
+    //     setCurrentActivity(1);
+    //     setFormData([]);
+    //   }
+    // }, [data]);
+
 
   // Retrieve the current step and form data from localStorage, or initialize defaults
   const [currentStep, setCurrentStep] = useState(() => {
@@ -39,7 +78,7 @@ export default function WeekThreeLearning({ course, currentWeekIndex }) {
   useEffect(() => {
     try {
       const serializableData = { ...formData };
-      console.log("Current Step Data:", serializableData);
+      console.log("Current Form Data:", serializableData);
       localStorage.setItem(
         "weekThreeFormData",
         JSON.stringify(serializableData)
@@ -49,55 +88,50 @@ export default function WeekThreeLearning({ course, currentWeekIndex }) {
     }
   }, [formData]);
 
-  const handleNext = (data = {}) => {
-    setFormData((prevFormData) => {
-      const activityIndex = prevFormData.answers.findIndex(
-        (item) => item.activity === data.activity
-      );
+const handleNext = (data = {}) => {
+  setFormData((prevFormData) => {
+    // Filter out video-related data before saving
+    const isVideoStep = [1, 3, 5, 7].includes(currentStep); // Assuming these are video steps
 
-      const updatedAnswers = [...prevFormData.answers];
+    if (isVideoStep) {
+      return prevFormData; // Do not update formData for video steps
+    }
 
-      if (activityIndex > -1) {
-        updatedAnswers[activityIndex] = data;
-      } else {
-        updatedAnswers.push(data);
-      }
+    const activityIndex = prevFormData.answers.findIndex(
+      (item) => item.activity === data.activity
+    );
 
-      const updatedFormData = {
-        ...prevFormData,
-        answers: updatedAnswers // Change `activities` to `answers` to match the existing structure
-      };
-      console.log(updatedFormData);
-      try {
-        JSON.stringify(updatedFormData);
-        return updatedFormData;
-      } catch (error) {
-        console.error("Error serializing formData:", error);
-        return prevFormData;
-      }
-    });
+    const updatedAnswers = [...prevFormData.answers];
 
-    setCurrentStep((prevStep) => prevStep + 1);
-  };
+    if (activityIndex > -1) {
+      updatedAnswers[activityIndex] = data;
+    } else {
+      updatedAnswers.push(data);
+    }
+
+    const updatedFormData = {
+      ...prevFormData,
+      answers: updatedAnswers
+    };
+
+    console.log(updatedFormData); // Log to verify data being saved
+    return updatedFormData;
+  });
+
+  setCurrentStep((prevStep) => prevStep + 1);
+};
+
 
   const handlePrevious = () => {
     setCurrentStep((prevStep) => Math.max(prevStep - 1, 1));
   };
 
   const handleSubmit = () => {
-    const sanitizedFormData = { ...formData };
-    delete sanitizedFormData.activity;
-
-    sanitizedFormData.answers = sanitizedFormData.answers.filter(
-      (answer) => Object.keys(answer).length !== 0
-    );
-
-    console.log("Modified Form Data", sanitizedFormData);
+    console.log(formData);
     userService
-      .postMyActivity(courseid, sanitizedFormData)
+      .postMyActivity(courseId, formData)
       .then((response) => {
         console.log("Submission successful:", response);
-        handleNextWeekCourse();
       })
       .catch((error) => {
         console.error("Submission failed:", error);
@@ -202,10 +236,7 @@ export default function WeekThreeLearning({ course, currentWeekIndex }) {
       case 8:
         return (
           <div className="assessment-page">
-            <WeekThreeAssessmentForm
-              previous={handlePrevious}
-              onSubmit={handleSubmit}
-            />
+            <WeekThreeAssessmentForm previous={handlePrevious} />
           </div>
         );
 
@@ -216,7 +247,7 @@ export default function WeekThreeLearning({ course, currentWeekIndex }) {
               <img src={celebrate} alt="celebrate" />
               <h1>Hurray!</h1>
               <p className="text-center fs-5">
-                You have made it to the {<br />} Week {currentWeekIndex + 1}
+                You have made it to the <br /> Week {currentWeekIndex + 1}
               </p>
             </div>
             <MyFireWorks />
