@@ -1,46 +1,21 @@
-import { useState, useEffect } from "react";
-import NavigationButtons from "./NavigationButtons";
-import { toast } from "react-toastify";
+import { useState, useEffect } from 'react'
+import NavigationButtons from './NavigationButtons'
+import { toast } from 'react-toastify'
 
-const QuestionComponent = ({
-  question,
-  onBack,
-  onNext,
-  onSubmit,
-  activityIndex
-}) => {
-  // State to manage the user's answer
-  const [answer, setAnswer] = useState("");
+const QuestionComponent = ({ question, onBack, onNext, onSubmit }) => {
+  // Initialize state with saved answer from localStorage if available
+  const [answer, setAnswer] = useState(() => {
+    const savedAnswer = localStorage.getItem(`answer_${question.text}`)
+    return savedAnswer || ''
+  })
 
-  // Retrieve the saved answer from localStorage when the component mounts
+  const [error, setError] = useState('') // State to handle error messages
+
   useEffect(() => {
-    try {
-      const savedAnswers = JSON.parse(localStorage.getItem("answers2")) || [];
-      if (Array.isArray(savedAnswers) && savedAnswers[activityIndex]) {
-        setAnswer(savedAnswers[activityIndex]);
-      }
-    } catch (e) {
-      console.error("Error loading answers from localStorage", e);
-    }
-  }, [activityIndex]);
+    // Save the answer to localStorage whenever it changes
+    localStorage.setItem(`answer_${question.text}`, answer)
+  }, [answer, question.text])
 
-  // Save the answer to localStorage whenever it changes
-  useEffect(() => {
-    try {
-      const savedAnswers = JSON.parse(localStorage.getItem("answers2")) || [];
-      savedAnswers[activityIndex] = answer;
-      localStorage.setItem("answers2", JSON.stringify(savedAnswers));
-    } catch (e) {
-      console.error("Error saving answers to localStorage", e);
-    }
-  }, [answer, activityIndex]);
-
-  // Function to handle input change
-  const handleInputChange = (event) => {
-    setAnswer(event.target.value);
-  };
-
-  // Handle the submission of the answer
   const handleSubmit = () => {
     if (answer.trim() === "") {
       toast.error("Please provide an answer before proceeding.");
@@ -53,6 +28,10 @@ const QuestionComponent = ({
     onSubmit(submissionData); // Pass data to parent
     onNext(); // Proceed to the next step
   };
+
+    const handleInputChange = (event) => {
+      setAnswer(event.target.value);
+    };
 
   return (
     <div className="">

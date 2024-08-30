@@ -1,128 +1,108 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import MyFireWorks from "../Fireworks";
-import celebrate from "../../../../../../assets/celebrate.png";
-import selfAwareness from "../../../../../../assets/selfawareness-images/strengthweakness.png";
-import StrengthIdentification from "./StrengthIdentification";
-import WeaknessIdentification from "./WeaknessIdentification";
-import ScenarioQuestions from "./ScenarioQuestions";
-import WeekTwoAssessmentForm from "./WeekTwoAssessmentForm";
-import VideoComponent from "./VideoComponent";
-import QuestionComponent from "./QuestionComponent";
-import NavigationButtons from "./NavigationButtons";
-import userService from "../../../../../../services/api/user.js";
-import { useQuery } from "@tanstack/react-query";
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import MyFireWorks from '../Fireworks'
+import celebrate from '../../../../../../assets/celebrate.png'
+import selfAwareness from '../../../../../../assets/selfawareness-images/strengthweakness.png'
+import StrengthIdentification from './StrengthIdentification'
+import WeaknessIdentification from './WeaknessIdentification'
+import ScenarioQuestions from './ScenarioQuestions'
+import WeekTwoAssessmentForm from './WeekTwoAssessmentForm'
+import VideoComponent from './VideoComponent'
+import QuestionComponent from './QuestionComponent'
+import NavigationButtons from './NavigationButtons'
+import userService from '../../../../../../services/api/user.js'
 
 export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
+  const navigate = useNavigate()
+  const courseid = course._id
+
   const [currentStep, setCurrentStep] = useState(() => {
-    return parseInt(localStorage.getItem("weekTwoCurrentStep"), 10) || 1;
-  });
-  const [formData, setFormData] = useState([]);
-  const [videoPlaying, setVideoPlaying] = useState(false);
-  const navigate = useNavigate();
-  const courseId = "66853bf50118e2e0a02b6a5a";
-  const week = 2;
+    const savedStep = localStorage.getItem('weekTwoCurrentStep')
+    return savedStep ? parseInt(savedStep, 10) : 1 // Default to step 1 if not found
+  })
 
-  // Fetching Data
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["self-awareness-course", courseId, week],
-    queryFn: async () => userService.getMyActivites(courseId, week),
-    refetchOnMount: true,
-    refetchOnWindowFocus: true
-  });
+  const [formData, setFormData] = useState(() => {
+    const savedData = localStorage.getItem('weekTwoFormData')
+    return savedData ? JSON.parse(savedData) : { week: 2, activities: [] }
+  })
 
-  const saveDataToLocalStorage = (data) => {
+  const [videoPlaying, setVideoPlaying] = useState(false)
+
+  useEffect(() => {
+    localStorage.setItem('weekTwoCurrentStep', currentStep)
+  }, [currentStep])
+
+  useEffect(() => {
     try {
-      // Filter out any non-serializable data (like DOM elements or functions)
-      const serializableData = data.map((item) => {
-        const { answers, ...rest } = item;
-
-        // Ensure answers do not include any non-serializable content
-        const cleanedAnswers = answers.map((answer) => {
-          if (typeof answer === "object" && answer !== null) {
-            return JSON.parse(JSON.stringify(answer));
-          }
-          return answer;
-        });
-
-        return { ...rest, answers: cleanedAnswers };
-      });
-
-      if (serializableData.length > 0) {
-        localStorage.setItem(
-          "weekTwoFormData",
-          JSON.stringify(serializableData)
-        );
-      } else {
-        localStorage.removeItem("weekTwoFormData");
-      }
+      const serializableData = { ...formData }
+      console.log('Current Form Data:', serializableData)
+      localStorage.setItem('weekTwoFormData', JSON.stringify(serializableData))
     } catch (error) {
-      console.error("Failed to save data to localStorage:", error);
+      console.error('Failed to save to localStorage:', error)
     }
-  };
+  }, [formData])
 
-  console.log(data);
+  formData.activities = formData?.activities?.filter(
+    (activity) => Object.keys(activity).length !== 0
+  )
 
-  const handleSubmit = async () => {
-    try {
-      const assessmentData = localStorage.getItem("weekTwoFormData");
-      if (assessmentData) {
-        const parsedData = JSON.parse(assessmentData);
-        const filteredData = parsedData.filter(
-          (item) => ![1, 3, 6, 8].includes(item.activity) // Exclude video-related activities
-        );
-        const cleanedData = {
-          week: 2,
-          activities: filteredData
-        };
-        console.log(cleanedData);
-        const response = await userService.postMyActivity(
-          courseId,
-          cleanedData
-        );
-        console.log("Submission successful:", response);
-      }
-    } catch (error) {
-      console.error("Submission failed:", error);
-    }
-  };
+  //Todo Post data
+  console.log('Post this data', formData)
 
   const handleNext = (data = {}) => {
-    setFormData((prevData) => {
-      const existingData = prevData.find(
-        (item) => item.activity === currentStep
-      );
-      let updatedData;
-      if (existingData) {
-        updatedData = prevData.map((item) =>
-          item.activity === currentStep ? { ...item, ...data } : item
-        );
-      } else {
-        updatedData = [...prevData, { activity: currentStep, ...data }];
-      }
-      saveDataToLocalStorage(updatedData); // Save updated data to localStorage
-      return updatedData;
-    });
+    setFormData((prevFormData) => {
+      const activityIndex = prevFormData?.activities?.findIndex(
+        (item) => item.activity === data.activity
+      )
 
-    const nextStep = currentStep + 1;
-    setCurrentStep(nextStep);
-    localStorage.setItem("weekTwoCurrentStep", nextStep);
-  };
+      const updatedActivities = [...prevFormData.activities]
+
+      if (activityIndex > -1) {
+        updatedActivities[activityIndex] = data // Update existing activity
+      } else {
+        updatedActivities.push(data) // Add new activity
+      }
+
+      const updatedFormData = {
+        ...prevFormData,
+        activities: updatedActivities,
+      }
+
+      try {
+        JSON.stringify(updatedFormData)
+        return updatedFormData
+      } catch (error) {
+        console.error('Error serializing formData:', error)
+        return prevFormData
+      }
+    })
+
+    setCurrentStep((prevStep) => prevStep + 1)
+  }
 
   const handlePrevious = () => {
-    if (currentStep > 1) {
-      const prevStep = currentStep - 1;
-      setCurrentStep(prevStep);
-      localStorage.setItem("weekTwoCurrentStep", prevStep);
-    }
-  };
+    setCurrentStep((prevStep) => Math.max(prevStep - 1, 1))
+  }
+
+  const handleSubmit = () => {
+    console.log(formData)
+    userService
+      .postMyActivity(courseid, formData)
+      .then((response) => {
+        console.log('Submission successful:', response)
+        // handleNextWeekCourse(); // Uncomment if needed
+      })
+      .catch((error) => {
+        console.error('Submission failed:', error)
+      })
+  }
 
   const handleNextWeekCourse = () => {
-    const nextWeekIndex = currentWeekIndex + 1;
-    navigate("/dashboard/self-awareness-course/2", {
-      state: { course, weekIndex: nextWeekIndex }
-    });
-  };
+    const nextWeekIndex = currentWeekIndex + 1
+    navigate('/dashboard/self-awareness-course/1', {
+      state: { course, weekIndex: nextWeekIndex },
+    })
+  }
 
   const renderStepContent = () => {
     switch (currentStep) {
@@ -132,61 +112,66 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc="https://www.youtube.com/embed/CW-f1RVjCws"
+              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
             />
             <NavigationButtons onNext={handleNext} isBackDisabled />
           </>
-        );
+        )
       case 2:
         return (
           <QuestionComponent
             question={{
-              text: "What do you understand by",
+              text: 'What do you understand by',
               image: selfAwareness,
-              alt: "selfAwareness image",
-              suffix: "?"
+              alt: 'selfAwareness image',
+              suffix: '?',
             }}
             onBack={handlePrevious}
             onNext={handleNext}
             onSubmit={(data) => handleNext({ answers: data })}
           />
-        );
+        )
       case 3:
         return (
           <>
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc="https://www.youtube.com/embed/CW-f1RVjCws"
+              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
             />
             <NavigationButtons onBack={handlePrevious} onNext={handleNext} />
           </>
-        );
+        )
       case 4:
         return (
-          <StrengthIdentification
-            onBack={handlePrevious}
-            onSubmit={(data) => handleNext({ answers: data })}
-          />
-        );
+          <>
+            <StrengthIdentification
+              onNext={handleNext}
+              onBack={handlePrevious}
+              onSubmit={(data) => handleNext({ activity: 4, answers: data })}
+            />
+          </>
+        )
       case 5:
         return (
-          <WeaknessIdentification
-            onBack={handlePrevious}
-            onSubmit={(data) => handleNext({ answers: data })}
-          />
-        );
+          <>
+            <WeaknessIdentification
+              onBack={handlePrevious}
+              onSubmit={(data) => handleNext({ activity: 5, answers: data })}
+            />
+          </>
+        )
       case 6:
         return (
           <>
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc="https://www.youtube.com/embed/CW-f1RVjCws"
+              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
             />
             <NavigationButtons onBack={handlePrevious} onNext={handleNext} />
           </>
-        );
+        )
       case 7:
         return (
           <ScenarioQuestions
@@ -196,58 +181,29 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
               handleSubmit();
             }}
           />
-        );
+        )
       case 8:
         return (
           <>
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc="https://www.youtube.com/embed/CW-f1RVjCws"
+              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
             />
             <NavigationButtons onBack={handlePrevious} onNext={handleNext} />
           </>
-        );
+        )
       case 9:
         return (
           <WeekTwoAssessmentForm
             previous={handlePrevious}
-            onSubmit={(data) => handleNext({ answers: data })}
+            onSubmit={(data) => handleNext({ activity: 9, answers: data })}
           />
-        );
-      case 10:
-        return (
-          <div className="end-of-course-page">
-            <div className="congrats">
-              <img src={celebrate} alt="celebrate" />
-              <h1>Hurray!</h1>
-              <p className="text-center fs-5">
-                You have made it to Week {currentWeekIndex + 1}!
-              </p>
-            </div>
-            <MyFireWorks />
-            <button
-              className="btn progress-btn btn-dark"
-              onClick={handleNextWeekCourse}
-            >
-              Proceed to Week {currentWeekIndex + 2}
-            </button>
-          </div>
-        );
+        )
       default:
-        return null;
+        return null
     }
-  };
+  }
 
-  return (
-    <div className="course-progression-page">
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : isError ? (
-        <p>Error loading data</p>
-      ) : (
-        renderStepContent()
-      )}
-    </div>
-  );
+  return <div className='course-progression-page'>{renderStepContent()}</div>
 }

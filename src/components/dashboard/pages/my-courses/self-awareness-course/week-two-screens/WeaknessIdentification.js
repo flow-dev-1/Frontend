@@ -40,11 +40,17 @@ export default function StrengthIdentification({ onSubmit, onNext, onBack }) {
   ]
 
   // Initialize state for checked questions and selected answers
-  const [questionChecked, setQuestionChecked] = useState(
-    questionsArray.reduce((acc, _, index) => ({ ...acc, [index]: false }), {})
-  )
-  const [selectedAnswers, setSelectedAnswers] = useState([])
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [questionChecked, setQuestionChecked] = useState(() => {
+    const savedState = JSON.parse(localStorage.getItem('strengthsChecked'))
+    return (
+      savedState ||
+      questionsArray.reduce((acc, _, index) => ({ ...acc, [index]: false }), {})
+    )
+  })
+
+  const [selectedAnswers, setSelectedAnswers] = useState(() => {
+    return JSON.parse(localStorage.getItem('selectedStrengths')) || []
+  })
 
   useEffect(() => {
     // Update selected answers whenever questionChecked state changes
@@ -53,6 +59,9 @@ export default function StrengthIdentification({ onSubmit, onNext, onBack }) {
       .map(([index]) => questionsArray[index])
 
     setSelectedAnswers(answers)
+    // Save the selected answers and checked state to localStorage
+    localStorage.setItem('selectedStrengths', JSON.stringify(answers))
+    localStorage.setItem('strengthsChecked', JSON.stringify(questionChecked))
   }, [questionChecked])
 
   const handleQuestionCheck = (questionIndex) => {
@@ -69,13 +78,9 @@ export default function StrengthIdentification({ onSubmit, onNext, onBack }) {
       return
     }
 
-    setIsSubmitting(true)
     onSubmit({ weaknesses: selectedAnswers }) // Pass the selected answers
-    setIsSubmitting(false)
+    onNext() // Proceed to the next step
   }
-
-  // Check if at least one question is checked
-  const isSubmitDisabled = selectedAnswers.length === 0
 
   return (
     <div className=''>
@@ -83,7 +88,7 @@ export default function StrengthIdentification({ onSubmit, onNext, onBack }) {
         <div className='d-flex align-items-start'>
           <div className='question-box-header mx-auto'>
             <h1 className='mb-0 '>Question: </h1>
-            <h2 className='mb-0 d-flex ms-3'>Identify Your Weakness</h2>
+            <h2 className='mb-0 d-flex ms-3'>Identify Your Weaknesses</h2>
           </div>
         </div>
         <div className='assessment checkbox-questions mt-4'>
@@ -101,7 +106,6 @@ export default function StrengthIdentification({ onSubmit, onNext, onBack }) {
             ))}
           </ul>
         </div>
-        <div className='d-flex justify-content-center mt-4'></div>
       </div>
       <NavigationButtons onBack={onBack} onNext={handleSubmit} />
     </div>
