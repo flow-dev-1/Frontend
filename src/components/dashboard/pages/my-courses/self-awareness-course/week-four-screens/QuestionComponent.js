@@ -3,9 +3,38 @@ import NavigationButtons from './NavigationButtons'
 import { toast } from 'react-toastify'
 
 const QuestionComponent = ({ question, onBack, onNext, onSubmit }) => {
-  const [answer, setAnswer] = useState('')
-  const [error, setError] = useState('') // State to handle error messages
+   const [answer, setAnswer] = useState(() => {
+     const savedData = localStorage.getItem("weekFourFormData");
 
+     if (savedData) {
+       // Parse the JSON string
+       const parsedData = JSON.parse(savedData);
+
+       // Log the entire parsedData to understand its structure
+       console.log("Parsed Data:", parsedData);
+
+       // Access the 'answers' property and find the required data
+       if (parsedData.answers && Array.isArray(parsedData.answers)) {
+         // Find data for activity: 2
+         const activityTwoData = parsedData.answers.find(
+           (item) => item.activity === 2
+         );
+
+         console.log("Data for activity: 2:", activityTwoData);
+
+         return activityTwoData ? activityTwoData.answer || "" : "";
+       } else {
+         console.error(
+           "Parsed data.answers is not an array or does not exist:",
+           parsedData
+         );
+       }
+     }
+
+     return "";
+   });
+  const [error, setError] = useState('') // State to handle error messages
+// weekFourFormData;
   const handleSubmit = () => {
     if (answer.trim() === '') {
       // Check if the answer is empty
