@@ -4,7 +4,7 @@ import Modal from 'react-modal'
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png'
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
 import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModal'
-import userService from "../../../../../../services/api/user.js";
+import userService from '../../../../../../services/api/user.js'
 
 export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
   const [currentIndex, setCurrentIndex] = useState(1)
@@ -109,45 +109,43 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
     setReviewPopUp(false)
   }
 
-const correctAnswerIndices = [3, 1, 2, 0, 2];
+  const correctAnswerIndices = [3, 1, 2, 0, 2]
 
-const handleQuestionCheck = (questionIndex, optionIndex) => {
-  const updatedAnswers = [...assessment.assessment.answers];
-  updatedAnswers[questionIndex] =
-    questionsArray[questionIndex].questionList[optionIndex];
+  const handleQuestionCheck = (questionIndex, optionIndex) => {
+    const updatedAnswers = [...assessment.assessment.answers]
+    updatedAnswers[questionIndex] =
+      questionsArray[questionIndex].questionList[optionIndex]
 
-  const updatedAssessment = {
-    ...assessment,
-    assessment: { ...assessment.assessment, answers: updatedAnswers }
-  };
-
-  setAssessment(updatedAssessment);
-  localStorage.setItem("assessment", JSON.stringify(updatedAssessment));
-  console.log("Assessment updated:", updatedAssessment);
-};
-
-const calculateScore = () => {
-  const correctAnswers = correctAnswerIndices.map(
-    (correctIndex, questionIndex) => {
-      return (
-        questionsArray[questionIndex].questionList[correctIndex] ===
-        assessment.assessment.answers[questionIndex]
-      );
+    const updatedAssessment = {
+      ...assessment,
+      assessment: { ...assessment.assessment, answers: updatedAnswers },
     }
-  );
 
-  const correctCount = correctAnswers.filter(Boolean).length;
-  const percentageScore = (correctCount / correctAnswerIndices.length) * 100;
+    setAssessment(updatedAssessment)
+    localStorage.setItem('assessment', JSON.stringify(updatedAssessment))
+    console.log('Assessment updated:', updatedAssessment)
+  }
 
-  console.log(`Your score is: ${percentageScore}%`);
-  return percentageScore;
-};
+  const calculateScore = () => {
+    const correctAnswers = correctAnswerIndices.map(
+      (correctIndex, questionIndex) => {
+        return (
+          questionsArray[questionIndex].questionList[correctIndex] ===
+          assessment.assessment.answers[questionIndex]
+        )
+      }
+    )
 
-// Example usage:
-// After handling question check, you might want to calculate the score:
-const percentageScore = calculateScore();
+    const correctCount = correctAnswers.filter(Boolean).length
+    const percentageScore = (correctCount / correctAnswerIndices.length) * 100
 
+    console.log(`Your score is: ${percentageScore}%`)
+    return percentageScore
+  }
 
+  // Example usage:
+  // After handling question check, you might want to calculate the score:
+  const percentageScore = calculateScore()
 
   //Todo Asssement
   console.log('Assement to Post', assessment)
@@ -262,7 +260,7 @@ const percentageScore = calculateScore();
         </button>
       </div>
 
-      {reviewPopUp && (
+      {/* {reviewPopUp && (
         <Modal
           isOpen={reviewPopUp}
           onRequestClose={closeReviewPopUp}
@@ -273,7 +271,7 @@ const percentageScore = calculateScore();
         >
           <ReviewPopUp />
         </Modal>
-      )}
+      )} */}
     </div>
   )
 }

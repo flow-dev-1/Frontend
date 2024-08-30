@@ -40,11 +40,17 @@ export default function StrengthIdentification({ onSubmit, onNext, onBack }) {
   ]
 
   // Initialize state for checked questions and selected answers
-  const [questionChecked, setQuestionChecked] = useState(
-    questionsArray.reduce((acc, _, index) => ({ ...acc, [index]: false }), {})
-  )
-  const [selectedAnswers, setSelectedAnswers] = useState([])
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [questionChecked, setQuestionChecked] = useState(() => {
+    const savedState = JSON.parse(localStorage.getItem('strengthsChecked'))
+    return (
+      savedState ||
+      questionsArray.reduce((acc, _, index) => ({ ...acc, [index]: false }), {})
+    )
+  })
+
+  const [selectedAnswers, setSelectedAnswers] = useState(() => {
+    return JSON.parse(localStorage.getItem('selectedStrengths')) || []
+  })
 
   useEffect(() => {
     // Update selected answers whenever questionChecked state changes
@@ -53,6 +59,9 @@ export default function StrengthIdentification({ onSubmit, onNext, onBack }) {
       .map(([index]) => questionsArray[index])
 
     setSelectedAnswers(answers)
+    // Save the selected answers and checked state to localStorage
+    localStorage.setItem('selectedStrengths', JSON.stringify(answers))
+    localStorage.setItem('strengthsChecked', JSON.stringify(questionChecked))
   }, [questionChecked])
 
   const handleQuestionCheck = (questionIndex) => {
@@ -69,13 +78,9 @@ export default function StrengthIdentification({ onSubmit, onNext, onBack }) {
       return
     }
 
-    setIsSubmitting(true)
     onSubmit({ strengths: selectedAnswers }) // Pass the selected answers
-    setIsSubmitting(false)
+    onNext() // Proceed to the next step
   }
-
-  // Check if at least one question is checked
-  const isSubmitDisabled = selectedAnswers.length === 0
 
   return (
     <div className=''>

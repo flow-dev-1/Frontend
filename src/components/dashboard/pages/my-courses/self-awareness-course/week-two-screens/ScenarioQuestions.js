@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../newcourse.css'
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png'
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
@@ -6,11 +6,10 @@ import strengthImg from '../../../../../../assets/selfawareness-images/strength.
 import weeknessImg from '../../../../../../assets/selfawareness-images/weakness.png'
 
 export default function ScenarioQuestions({ onSubmit, previous }) {
-  const [currentIndex, setCurrentIndex] = useState(1)
-  const [reviewPopUp, setReviewPopUp] = React.useState(false)
-
-  const closeReviewPopUp = () => {
-    setReviewPopUp(false)
+  // Load saved data from localStorage
+  const loadSavedData = () => {
+    const savedData = localStorage.getItem('scenarioSelections')
+    return savedData ? JSON.parse(savedData) : null
   }
 
   const questionsArray = [
@@ -56,12 +55,18 @@ export default function ScenarioQuestions({ onSubmit, previous }) {
     },
   ]
 
-  // Initialize states for strength and weakness selections
+  const savedData = loadSavedData()
+
+  // Initialize states for strength, weakness selections, and currentIndex
+  const [currentIndex, setCurrentIndex] = useState(savedData?.currentIndex || 1)
+  const [reviewPopUp, setReviewPopUp] = useState(false)
   const [strengthChecked, setStrengthChecked] = useState(
-    questionsArray.reduce((acc, _, index) => ({ ...acc, [index]: [] }), {})
+    savedData?.strengthChecked ||
+      questionsArray.reduce((acc, _, index) => ({ ...acc, [index]: [] }), {})
   )
   const [weaknessChecked, setWeaknessChecked] = useState(
-    questionsArray.reduce((acc, _, index) => ({ ...acc, [index]: [] }), {})
+    savedData?.weaknessChecked ||
+      questionsArray.reduce((acc, _, index) => ({ ...acc, [index]: [] }), {})
   )
 
   const handleQuestionCheck = (questionIndex, optionIndex, isStrength) => {
@@ -91,6 +96,16 @@ export default function ScenarioQuestions({ onSubmit, previous }) {
       })
     }
   }
+
+  useEffect(() => {
+    // Save the state to localStorage whenever it changes
+    const dataToSave = {
+      currentIndex,
+      strengthChecked,
+      weaknessChecked,
+    }
+    localStorage.setItem('scenarioSelections', JSON.stringify(dataToSave))
+  }, [currentIndex, strengthChecked, weaknessChecked])
 
   const handleStepClick = () => {
     // Validate that at least one strength and one weakness is selected

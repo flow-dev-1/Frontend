@@ -1,10 +1,20 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import NavigationButtons from './NavigationButtons'
 import { toast } from 'react-toastify'
 
 const QuestionComponent = ({ question, onBack, onNext, onSubmit }) => {
-  const [answer, setAnswer] = useState('')
+  // Initialize state with saved answer from localStorage if available
+  const [answer, setAnswer] = useState(() => {
+    const savedAnswer = localStorage.getItem(`answer_${question.text}`)
+    return savedAnswer || ''
+  })
+
   const [error, setError] = useState('') // State to handle error messages
+
+  useEffect(() => {
+    // Save the answer to localStorage whenever it changes
+    localStorage.setItem(`answer_${question.text}`, answer)
+  }, [answer, question.text])
 
   const handleSubmit = () => {
     if (answer.trim() === '') {
