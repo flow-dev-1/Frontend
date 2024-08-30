@@ -10,49 +10,78 @@ import NavigationButtons from "../week-two-screens/NavigationButtons";
 import QuestionComponent from "./QuestionComponent";
 import userService from "../../../../../../services/api/user.js";
 import SecondQuestionComponent from "./SecondQuestionComponet.js";
+import { useQuery } from "@tanstack/react-query";
 
 export default function WeekThreeLearning({ course, currentWeekIndex }) {
+  const [currentActivity, setCurrentActivity] = useState(1);
+
   const navigate = useNavigate();
   const courseId = course._id;
-  
-    // const week = 1;
+  const week = 3;
 
-    // // Fetch data using react-query
-    // const { data, isLoading, isError } = useQuery({
-    //   queryKey: ["self-awareness-course"],
-    //   queryFn: async () => userService.getMyActivites(courseId, week),
-    //   refetchOnMount: true,
-    //   refetchOnWindowFocus: true
-    // });
+  // Fetch data using react-query
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["self-awareness-course"],
+    queryFn: async () => userService.getMyActivites(courseId, week),
+    refetchOnMount: true,
+    refetchOnWindowFocus: true
+  });
 
-    // useEffect(() => {
-    //   if (data?.activity?.activities?.length > 0) {
-    //     const activities = data.activity.activities;
-    //     console.log(activities);
+  useEffect(() => {
+    const formatData = (data) => {
+      const formattedData = [];
 
-    //     // Save the fetched data to state
-    //     const lastActivityIndex = activities.length - 1;
-    //     const lastActivity = activities[lastActivityIndex];
-    //     setCurrentActivity(lastActivity?.activity || 1);
-    //     setFormData(activities);
+      data.activities.forEach((activity) => {
+        activity.answers.forEach((answerObj) => {
+          const formattedObj = {
+            activity: activity.activity,
+            answer: answerObj.answer,
+            answers: {}
+          };
+          formattedData.push(formattedObj);
+          formattedData.push({}); // Add an empty object as the next entry
+        });
+      });
 
-    //     // Save data to localStorage
-    //     localStorage.setItem(
-    //       "currentActivity",
-    //       JSON.stringify(lastActivity?.activity || 1)
-    //     );
-    //     localStorage.setItem("activityData", JSON.stringify(activities));
-    //   } else {
-    //     // Clear localStorage if no data is available
-    //     localStorage.removeItem("currentActivity");
-    //     localStorage.removeItem("activityData");
+      // Handle additionalData if needed
+      if (data?.additionalData) {
+        formattedData.push({
+          activity: data?.additionalData?.activity,
+          answers: data?.additionalData?.answers?.additionalDataForActivity6
+        });
+      }
 
-    //     // Reset state to initial values
-    //     setCurrentActivity(1);
-    //     setFormData([]);
-    //   }
-    // }, [data]);
+      return formattedData;
+    };
 
+    if (data?.activity?.activities?.length > 0) {
+      const formattedData = formatData(data.activity);
+      console.log(formattedData);
+
+      // Save the fetched data to state
+      const lastActivityIndex = formattedData.length - 1;
+      const lastActivity = formattedData[lastActivityIndex];
+      setCurrentActivity(lastActivity?.activity || 1);
+      setFormData(formattedData);
+      console.log("formatted", formattedData);
+
+      // Save data to localStorage
+      localStorage.setItem(
+        "currentActivity",
+        JSON.stringify(lastActivity?.activity || 1)
+      );
+      localStorage.setItem("weekThreeFormData", JSON.stringify(formattedData));
+      console.log("weekThreeFormData", formattedData);
+    } else {
+      // Clear localStorage if no data is available
+      localStorage.removeItem("currentActivity");
+      localStorage.removeItem("weekThreeFormData");
+
+      // Reset state to initial values
+      setCurrentActivity(1);
+      setFormData([]);
+    }
+  }, [data]);
 
   // Retrieve the current step and form data from localStorage, or initialize defaults
   const [currentStep, setCurrentStep] = useState(() => {
@@ -62,10 +91,13 @@ export default function WeekThreeLearning({ course, currentWeekIndex }) {
 
   const [formData, setFormData] = useState(() => {
     const savedData = localStorage.getItem("weekThreeFormData");
-    return savedData
-      ? JSON.parse(savedData)
-      : { week: 3, activity: 1, answers: [] };
+    return savedData ? JSON.parse(savedData) : [];
   });
+
+  // Log the formData after component mounts
+  useEffect(() => {
+    console.log("Retrieved Form Data from localStorage:", formData);
+  }, []);
 
   const [videoPlaying, setVideoPlaying] = useState(false);
 
@@ -77,59 +109,94 @@ export default function WeekThreeLearning({ course, currentWeekIndex }) {
   // Save formData to localStorage whenever it changes
   useEffect(() => {
     try {
-      const serializableData = { ...formData };
-      console.log("Current Form Data:", serializableData);
-      localStorage.setItem(
-        "weekThreeFormData",
-        JSON.stringify(serializableData)
-      );
+      console.log("Current Form Data:", formData);
+      localStorage.setItem("weekThreeFormData", JSON.stringify(formData));
     } catch (error) {
       console.error("Failed to save to localStorage:", error);
     }
   }, [formData]);
 
-const handleNext = (data = {}) => {
-  setFormData((prevFormData) => {
-    // Filter out video-related data before saving
-    const isVideoStep = [1, 3, 5, 7].includes(currentStep); // Assuming these are video steps
+  const handleNext = (data = {}) => {
+    setFormData((prevFormData) => {
+      const isVideoStep = [1, 3, 5, 7].includes(currentStep);
 
-    if (isVideoStep) {
-      return prevFormData; // Do not update formData for video steps
-    }
+      if (isVideoStep) {
+        return prevFormData; // Skip updates for video steps
+      }
 
-    const activityIndex = prevFormData.answers.findIndex(
-      (item) => item.activity === data.activity
-    );
+      // Check if the activity already exists in the formData
+      const existingEntryIndex = prevFormData.findIndex(
+        (item) => item.activity === data.activity
+      );
 
-    const updatedAnswers = [...prevFormData.answers];
+      if (existingEntryIndex !== -1) {
+        // Update the existing entry, only if there's new data
+        const existingData = prevFormData[existingEntryIndex];
+        const updatedData = {
+          ...existingData,
+          ...data,
+          answers: { ...existingData.answers, ...data.answers }
+        };
 
-    if (activityIndex > -1) {
-      updatedAnswers[activityIndex] = data;
-    } else {
-      updatedAnswers.push(data);
-    }
+        const updatedFormData = [...prevFormData];
+        updatedFormData[existingEntryIndex] = updatedData;
+        return updatedFormData;
+      } else {
+        // Add new entry if not found
+        return [...prevFormData, data];
+      }
+    });
 
-    const updatedFormData = {
-      ...prevFormData,
-      answers: updatedAnswers
-    };
-
-    console.log(updatedFormData); // Log to verify data being saved
-    return updatedFormData;
-  });
-
-  setCurrentStep((prevStep) => prevStep + 1);
-};
-
+    setCurrentStep((prevStep) => prevStep + 1);
+  };
 
   const handlePrevious = () => {
     setCurrentStep((prevStep) => Math.max(prevStep - 1, 1));
   };
 
   const handleSubmit = () => {
-    console.log(formData);
+    const activityMap = new Map();
+    let additionalDataForActivity6 = {};
+
+    formData.forEach((item) => {
+      const { activity, answer, answers = {} } = item;
+
+      if (activity) {
+        if (!activityMap.has(activity)) {
+          activityMap.set(activity, { activity, answers: [] });
+        }
+
+        const activityEntry = activityMap.get(activity);
+
+        if (activity === 6) {
+          // Store answers for activity 6 in additionalData
+          Object.keys(answers).forEach((key) => {
+            additionalDataForActivity6[key] = answers[key];
+          });
+        } else {
+          // Handle other activities normally
+          const formattedAnswers = {
+            ...answers,
+            ...(answer && { answer })
+          };
+          activityEntry.answers.push(formattedAnswers);
+        }
+      }
+    });
+
+    const uniqueActivities = Array.from(activityMap.values());
+
+    // Prepare the data to be sent, including additionalData for activity 6
+    const submissionData = {
+      week: 3,
+      activities: uniqueActivities,
+      additionalData: { activity: 6, answers: { additionalDataForActivity6 } }
+    };
+
+    console.log("Submitting Form Data:", submissionData);
+
     userService
-      .postMyActivity(courseId, formData)
+      .postMyActivity(courseId, submissionData)
       .then((response) => {
         console.log("Submission successful:", response);
       })
@@ -216,7 +283,9 @@ const handleNext = (data = {}) => {
           <div className="assessment-page">
             <QuestionFromVideo
               previous={handlePrevious}
-              onSubmit={(answers) => handleNext({ activity: 6, ...answers })}
+              onSubmit={(answers) =>
+                handleNext({ activity: 6, ...answers }, handleSubmit())
+              }
             />
           </div>
         );

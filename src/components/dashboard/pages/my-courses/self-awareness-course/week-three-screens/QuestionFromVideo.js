@@ -3,10 +3,41 @@ import '../newcourse.css'
 
 export default function QuestionFromVideo({ onSubmit, previous }) {
   const [currentIndex, setCurrentIndex] = useState(1)
-  const [answers, setAnswers] = useState({
-    answer1: '',
-    answer2: '',
-  })
+const [answers, setAnswers] = useState(() => {
+  // Retrieve saved data from localStorage
+  const savedData = localStorage.getItem("weekThreeFormData");
+
+  if (savedData) {
+    // Parse the JSON string
+    const parsedData = JSON.parse(savedData);
+
+    // Find data for activity: 6
+    const activitySixData = parsedData.find((item) => item.activity === 6);
+
+    console.log("Data for activity: 6:", activitySixData);
+
+    // Return the existing data or initialize with empty strings
+    return {
+      answer1_1: activitySixData?.answers?.answer1_1 || "",
+      answer1_2: activitySixData?.answers?.answer1_2 || "",
+      answer1_3: activitySixData?.answers?.answer1_3 || "",
+      answer1_4: activitySixData?.answers?.answer1_4 || "",
+      answer1_5: activitySixData?.answers?.answer1_5 || "",
+      answer2: activitySixData?.answers?.answer2 || ""
+    };
+  }
+
+  // Initialize with empty strings if no data is found
+  return {
+    answer1_1: "",
+    answer1_2: "",
+    answer1_3: "",
+    answer1_4: "",
+    answer1_5: "",
+    answer2: ""
+  };
+});
+
 
   const handleInputChange = (event, field) => {
     const { value } = event.target

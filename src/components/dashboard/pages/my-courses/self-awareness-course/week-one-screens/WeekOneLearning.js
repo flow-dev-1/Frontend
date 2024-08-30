@@ -51,7 +51,7 @@ useEffect(() => {
     const lastActivity = activities[lastActivityIndex];
     setCurrentActivity(lastActivity?.activity || 1);
     setFormData(activities);
-
+   console.log("featched", data.activity.activities);
     // Save data to localStorage
     localStorage.setItem(
       "currentActivity",
