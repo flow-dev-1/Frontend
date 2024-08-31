@@ -11,6 +11,7 @@ import QuestionComponent from "./QuestionComponent";
 import userService from "../../../../../../services/api/user.js";
 import SecondQuestionComponent from "./SecondQuestionComponet.js";
 import { useQuery } from "@tanstack/react-query";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function WeekThreeLearning({ course, currentWeekIndex }) {
   const [currentActivity, setCurrentActivity] = useState(1);
@@ -21,7 +22,7 @@ export default function WeekThreeLearning({ course, currentWeekIndex }) {
 
   // Fetch data using react-query
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["self-awareness-course"],
+    queryKey: ["self-awareness-course", courseId, week],
     queryFn: async () => userService.getMyActivites(courseId, week),
     refetchOnMount: true,
     refetchOnWindowFocus: true
@@ -54,9 +55,12 @@ export default function WeekThreeLearning({ course, currentWeekIndex }) {
       return formattedData;
     };
 
-    if (data?.activity?.activities?.length > 0) {
+    if (isError) {
+      toast.success("Welcome, start your learning journey for Week Three");
+    } else if (data?.activity?.activities?.length > 0) {
       const formattedData = formatData(data.activity);
       console.log(formattedData);
+      toast.success("Continuing from your last checkpoint.");
 
       // Save the fetched data to state
       const lastActivityIndex = formattedData.length - 1;
@@ -81,7 +85,7 @@ export default function WeekThreeLearning({ course, currentWeekIndex }) {
       setCurrentActivity(1);
       setFormData([]);
     }
-  }, [data]);
+  }, [data, isError]);
 
   // Retrieve the current step and form data from localStorage, or initialize defaults
   const [currentStep, setCurrentStep] = useState(() => {
@@ -199,6 +203,19 @@ export default function WeekThreeLearning({ course, currentWeekIndex }) {
       .postMyActivity(courseId, submissionData)
       .then((response) => {
         console.log("Submission successful:", response);
+
+        // Clear local storage after successful submission
+        localStorage.removeItem("answers");
+        localStorage.removeItem("answer_What do you understand by");
+        localStorage.removeItem("currentActivity");
+        localStorage.removeItem("weekThreeFormData"); // Assuming you're storing form data for week three
+
+        // Optionally reset state or navigate
+        setFormData([]);
+        setCurrentActivity(1);
+
+        // Optionally handle next week course or any other logic
+        // handleNextWeekCourse(); // Uncomment if needed
       })
       .catch((error) => {
         console.error("Submission failed:", error);

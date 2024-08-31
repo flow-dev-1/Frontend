@@ -12,6 +12,7 @@ import QuestionComponent from "./QuestionComponent";
 import NavigationButtons from "./NavigationButtons";
 import userService from "../../../../../../services/api/user.js";
 import { useQuery } from "@tanstack/react-query";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
   const navigate = useNavigate();
@@ -23,56 +24,50 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
     return savedStep ? parseInt(savedStep, 10) : 1; // Default to step 1 if not found
   });
 
-  const answers = localStorage.getItem("answers");
-  const answersWhat = localStorage.getItem("answer_What do you understand by");
-
-  // console.log(answers);
-  // console.log(answersWhat);
-
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["self-awareness-course"],
-    queryFn: async () => userService.getMyActivites(courseid, week),
+    queryKey: ["self-awareness-course", courseid, week],
+    queryFn: () => userService.getMyActivites(courseid, week),
     refetchOnMount: true,
     refetchOnWindowFocus: true
   });
 
-  console.log(data);
-
   useEffect(() => {
-    if (data?.activity?.activities?.length > 0) {
-      const activities = data.activity.activities;
-      // console.log(activities);
+    if (isError) {
+      toast.success("Welcome, start your learning journey for Week Two");
+    } else if (data?.activity?.activities?.length > 0) {
+      const activities = data?.activity?.activities;
+      console.log(activities);
 
       // Save the fetched data to state
       const lastActivityIndex = activities.length - 1;
       const lastActivity = activities[lastActivityIndex];
       setCurrentActivity(lastActivity?.activity || 1);
       setFormData(activities);
-      // console.log("featched", data.activity.activities);
-      // Save data to localStorage
-      const answers = data?.activity?.additionalData?.answers;
-      const notherAnswer = data?.activity?.additionalData?.notherAnswer;
 
+      // Save data to localStorage
       localStorage.setItem(
-        "currentActivity",
+        "currentActivity2",
         JSON.stringify(lastActivity?.activity || 1)
       );
       localStorage.setItem("weekTwoFormData", JSON.stringify(activities));
+
+      const answers = data?.activity?.additionalData?.answers;
+      const notherAnswer = data?.activity?.additionalData?.notherAnswer;
       localStorage.setItem("answers", JSON.stringify(answers));
       localStorage.setItem(
         "answer_What do you understand by",
         JSON.stringify(notherAnswer)
       );
-    } else if (data.message === "No activity for this student") {
-      // Clear localStorage if no data is available
-      localStorage.removeItem("weekTwoFormData");
-      localStorage.removeItem("weekTwoCurrentStep");
-
-      // Reset state to initial values
+    } else if (data?.message === "No activity for this student") {
+      // If no data is available, reset to the first activity
+      toast.success("Continuing from your last checkpoint.");
       setCurrentActivity(1);
       setFormData([]);
+      localStorage.setItem("currentActivity2", JSON.stringify(1));
+      localStorage.removeItem("weekTwoFormData");
+      toast.success("Welcome, start your learning journey");
     }
-  }, [data]);
+  }, [data, isError]);
 
   const [formData, setFormData] = useState(() => {
     const savedData = localStorage.getItem("weekTwoFormData");
@@ -157,10 +152,23 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
       week: 2
     };
     console.log(formToBeSubmitted);
+
     userService
       .postMyActivity(courseid, formToBeSubmitted)
       .then((response) => {
         console.log("Submission successful:", response);
+
+        // Clear local storage after successful submission
+        localStorage.removeItem("answers");
+        localStorage.removeItem("answer_What do you understand by");
+        localStorage.removeItem("currentActivity");
+        localStorage.removeItem("weekTwoFormData"); // Assuming you're storing form data for week two
+
+        // Optionally reset state or navigate
+        setFormData([]);
+        setCurrentActivity(1);
+
+        // Optionally handle next week course or any other logic
         // handleNextWeekCourse(); // Uncomment if needed
       })
       .catch((error) => {

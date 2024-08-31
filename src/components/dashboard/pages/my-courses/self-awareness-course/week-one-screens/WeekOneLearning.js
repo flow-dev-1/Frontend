@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { toast, ToastContainer } from "react-toastify";
 import VideoComponent from "./VideoComponent";
 import QuestionComponent from "./QuestionComponent";
 import DragDropComponent from "./DragAndDrop";
@@ -17,7 +19,7 @@ import PersonalityDescriptionComponent from "./PersonalityDescriptionComponent";
 import PersonalityQuestionComponent from "./PersonalityQuestionComponent ";
 import PersonalityTest from "./PersonalityTest";
 import userService from "../../../../../../services/api/user.js";
-import { useQuery } from "@tanstack/react-query";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function WeekOneLearning({
   course,
@@ -27,6 +29,10 @@ export default function WeekOneLearning({
 }) {
   const [currentActivity, setCurrentActivity] = useState(1);
   const [formData, setFormData] = useState([]);
+  const [historyData, setHistoryData] = useState([]);
+  // const [formData, setFormData] = useState([]);
+  // const [formData, setFormData] = useState([]);
+
   const [videoPlaying, setVideoPlaying] = useState(false);
   const [reviewPopUp, setReviewPopUp] = useState(false);
   const navigate = useNavigate();
@@ -34,61 +40,155 @@ export default function WeekOneLearning({
 
   // Fetch data using react-query
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["self-awareness-course"],
-    queryFn: async () => userService.getMyActivites(courseId, week),
+    queryKey: ["self-awareness-course", courseId, week],
+    queryFn: () => userService.getMyActivites(courseId, week),
     refetchOnMount: true,
     refetchOnWindowFocus: true
   });
 
+  useEffect(() => {
+    if (isError) {
+      toast.success("Welcome, start your learning journey, today.");
+    } else if (
+      data?.activity?.activities?.length > 0 &&
+      data?.activity?.additionalData
+    ) {
+      const activities = data?.activity?.activities;
+      const history = data?.activity?.additionalData.history;
+      const cards = data?.activity?.additionalData.cards;
+      const buckets = data?.activity?.additionalData.buckets;
+      const selectedPersonality =
+        data?.activity?.additionalData.selectedPersonality;
+      const personalityExplanation =
+        data?.activity?.additionalData.personalityExplanation;
+      const questionChecked = data?.activity?.additionalData.questionChecked;
+      const answersForOne = data?.activity?.additionalData.answersForOne;
 
-useEffect(() => {
-  if (data?.activity?.activities?.length > 0) {
-    const activities = data.activity.activities;
-    console.log(activities);
+      toast.success("Continuing from your last checkpoint.");
 
-    // Save the fetched data to state
-    const lastActivityIndex = activities.length - 1;
-    const lastActivity = activities[lastActivityIndex];
-    setCurrentActivity(lastActivity?.activity || 1);
-    setFormData(activities);
-   console.log("featched", data.activity.activities);
-    // Save data to localStorage
-    localStorage.setItem(
-      "currentActivity",
-      JSON.stringify(lastActivity?.activity || 1)
-    );
-    localStorage.setItem("activityData", JSON.stringify(activities));
-  } else {
-    // Clear localStorage if no data is available
-    localStorage.removeItem("currentActivity");
-    localStorage.removeItem("activityData");
+      // Save the fetched data to state
+      const lastActivityIndex = activities.length - 1;
+      const lastActivity = activities[lastActivityIndex];
+      setCurrentActivity(lastActivity?.activity || 1);
+      setFormData(activities);
 
-    // Reset state to initial values
-    setCurrentActivity(1);
-    setFormData([]);
-  }
-}, [data]);
-
+      // Save data to localStorage
+      localStorage.setItem(
+        "currentActivity",
+        JSON.stringify(lastActivity?.activity || 1)
+      );
+      localStorage.setItem("activityData", JSON.stringify(activities));
+      localStorage.setItem("history", JSON.stringify(history));
+      localStorage.setItem("cards", JSON.stringify(cards));
+      localStorage.setItem("buckets", JSON.stringify(buckets));
+      localStorage.setItem(
+        "selectedPersonality",
+        JSON.stringify(selectedPersonality)
+      );
+      localStorage.setItem(
+        "personalityExplanation",
+        JSON.stringify(personalityExplanation)
+      );
+      localStorage.setItem("questionChecked", JSON.stringify(questionChecked));
+      localStorage.setItem("answersForOne", JSON.stringify(answersForOne));
+    } else if (data?.message === "No activity for this student") {
+      // If no data is available, reset to the first activity
+      setCurrentActivity(1);
+      setFormData([]);
+      localStorage.setItem("currentActivity", JSON.stringify(1));
+      localStorage.removeItem("activityData");
+      localStorage.removeItem("history");
+      localStorage.removeItem("cards");
+      localStorage.removeItem("buckets");
+      localStorage.removeItem("selectedPersonality");
+      localStorage.removeItem("personalityExplanation");
+      localStorage.removeItem("questionChecked");
+      localStorage.removeItem("answersForOne");
+      toast.success("Welcome, start your learning journey");
+    }
+  }, [data, isError]);
 
   const handleSubmit = async () => {
     try {
-      const assessmentData = localStorage.getItem("activityData");
-      if (assessmentData) {
-        const parsedData = JSON.parse(assessmentData);
-        const cleanedData = {
-          week: 1,
-          activities: parsedData
-        };
-        console.log(cleanedData);
-        // Submit the cleaned data to the backend
-        const response = await userService.postMyActivity(
-          courseId,
-          cleanedData
-        );
-        console.log("Submission successful:", response);
-      }
+      // Function to safely stringify data
+      const toJSONString = (data) => {
+        try {
+          return JSON.stringify(data);
+        } catch (e) {
+          console.warn("Stringifying error:", e);
+          return JSON.stringify({});
+        }
+      };
+
+      // Function to safely parse JSON data
+      const safeParse = (data, defaultValue) => {
+        try {
+          return JSON.parse(data);
+        } catch (e) {
+          console.warn("Parsing error:", e);
+          return defaultValue;
+        }
+      };
+
+      // Load and parse data from localStorage
+      const assessmentData = safeParse(
+        localStorage.getItem("activityData"),
+        []
+      );
+      const history = safeParse(localStorage.getItem("history"), {}); // Assuming history is an object
+      const cards = safeParse(localStorage.getItem("cards"), []);
+      const buckets = safeParse(localStorage.getItem("buckets"), {});
+      const selectedPersonality =
+        localStorage.getItem("selectedPersonality") || "";
+      const personalityExplanation =
+        localStorage.getItem("personalityExplanation") || "";
+      const questionChecked = safeParse(
+        localStorage.getItem("questionChecked"),
+        {}
+      );
+      const answersForOne = safeParse(
+        localStorage.getItem("answersForOne"),
+        []
+      );
+
+      // Prepare the cleaned data object
+      const cleanedData = {
+        week: 1,
+        activities: assessmentData,
+        additionalData: {
+          history,
+          cards,
+          buckets,
+          selectedPersonality: selectedPersonality.trim(), // Ensure it's a string
+          personalityExplanation: personalityExplanation.trim(), // Ensure it's a string
+          questionChecked,
+          answersForOne
+        }
+      };
+
+      console.log(cleanedData);
+
+      // Convert the cleaned data to JSON string before submission
+      const cleanedDataJSONString = toJSONString(cleanedData);
+
+      // Submit the cleaned data to the backend
+      const response = await userService.postMyActivity(
+        courseId,
+        cleanedDataJSONString
+      );
+      console.log("Submission successful:", response);
+
+      // Show a success toast
+      toast.success("Your assessment has been saved and recorded.");
+
+      // Clear local storage after successful submission
+      localStorage.clear();
+      // Reset the state if needed
+      setFormData([]);
+      setCurrentActivity(1);
     } catch (error) {
       console.error("Submission failed:", error);
+      toast.error("Submission failed. Please try again later.");
     }
   };
 
@@ -100,7 +200,7 @@ useEffect(() => {
         );
         let updatedData;
         if (existingData) {
-          updatedData = prevData?.map((item) =>
+          updatedData = prevData.map((item) =>
             item.activity === currentActivity ? { ...item, ...data } : item
           );
         } else {
@@ -159,7 +259,7 @@ useEffect(() => {
   const closeReviewPopUp = () => setReviewPopUp(false);
 
   useEffect(() => {
-    console.log("Form Data submitted:", formData);
+    // console.log("Form Data submitted:", formData);
   }, [formData]);
 
   const handleNextWeekCourse = () => {
@@ -170,6 +270,33 @@ useEffect(() => {
   };
 
   const renderActivityContent = () => {
+    if (isLoading) {
+      return <p>Loading...</p>;
+    }
+
+    if (!formData.length && !isLoading && !isError) {
+      // Render basic UI when there is no data
+      return (
+        <div>
+          <p>
+            No activities found. Please start the course to begin your journey.
+          </p>
+          <VideoComponent
+            videoPlaying={videoPlaying}
+            setVideoPlaying={setVideoPlaying}
+          />
+          <div className="progression-buttons mt-3">
+            <button
+              className="btn progress-btn btn-dark"
+              onClick={() => handleNext()}
+            >
+              Next {">>>"}
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     switch (currentActivity) {
       case 1:
         return (
@@ -310,19 +437,9 @@ useEffect(() => {
   };
 
   return (
-    <div className="week-one-learning">
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : isError ? (
-        <p>Error loading data</p>
-      ) : (
-        renderActivityContent()
-      )}
-      <ModalComponent
-        imageSrc={celebrate}
-        show={reviewPopUp}
-        handleClose={closeReviewPopUp}
-      />
+    <div>
+      {renderActivityContent()}
+      {reviewPopUp && <ModalComponent onClose={closeReviewPopUp} />}
     </div>
   );
 }
