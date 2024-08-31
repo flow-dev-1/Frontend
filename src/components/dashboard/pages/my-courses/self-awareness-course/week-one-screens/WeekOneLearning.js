@@ -29,9 +29,6 @@ export default function WeekOneLearning({
 }) {
   const [currentActivity, setCurrentActivity] = useState(1);
   const [formData, setFormData] = useState([]);
-  const [historyData, setHistoryData] = useState([]);
-  // const [formData, setFormData] = useState([]);
-  // const [formData, setFormData] = useState([]);
 
   const [videoPlaying, setVideoPlaying] = useState(false);
   const [reviewPopUp, setReviewPopUp] = useState(false);
@@ -96,14 +93,6 @@ export default function WeekOneLearning({
       setCurrentActivity(1);
       setFormData([]);
       localStorage.setItem("currentActivity", JSON.stringify(1));
-      localStorage.removeItem("activityData");
-      localStorage.removeItem("history");
-      localStorage.removeItem("cards");
-      localStorage.removeItem("buckets");
-      localStorage.removeItem("selectedPersonality");
-      localStorage.removeItem("personalityExplanation");
-      localStorage.removeItem("questionChecked");
-      localStorage.removeItem("answersForOne");
       toast.success("Welcome, start your learning journey");
     }
   }, [data, isError]);
@@ -146,6 +135,7 @@ export default function WeekOneLearning({
         localStorage.getItem("questionChecked"),
         {}
       );
+      const currentCardIndex = localStorage.getItem("currentCardIndex");
       const answersForOne = safeParse(
         localStorage.getItem("answersForOne"),
         []
@@ -159,14 +149,15 @@ export default function WeekOneLearning({
           history,
           cards,
           buckets,
-          selectedPersonality: selectedPersonality.trim(), // Ensure it's a string
-          personalityExplanation: personalityExplanation.trim(), // Ensure it's a string
+          selectedPersonality: selectedPersonality, // Ensure it's a string
+          personalityExplanation: personalityExplanation, // Ensure it's a string
           questionChecked,
-          answersForOne
+          answersForOne,
+          currentCardIndex: Number(currentCardIndex)
         }
       };
 
-      console.log(cleanedData);
+      // console.log(cleanedData);
 
       // Convert the cleaned data to JSON string before submission
       const cleanedDataJSONString = toJSONString(cleanedData);
@@ -180,9 +171,15 @@ export default function WeekOneLearning({
 
       // Show a success toast
       toast.success("Your assessment has been saved and recorded.");
-
-      // Clear local storage after successful submission
-      localStorage.clear();
+       localStorage.setItem("currentActivity", JSON.stringify(1));
+       localStorage.removeItem("activityData");
+       localStorage.removeItem("history");
+       localStorage.removeItem("cards");
+       localStorage.removeItem("buckets");
+       localStorage.removeItem("selectedPersonality");
+       localStorage.removeItem("personalityExplanation");
+       localStorage.removeItem("questionChecked");
+       localStorage.removeItem("answersForOne");
       // Reset the state if needed
       setFormData([]);
       setCurrentActivity(1);

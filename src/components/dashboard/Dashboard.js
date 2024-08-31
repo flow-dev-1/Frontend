@@ -1,32 +1,21 @@
-import { Outlet, Link, useLocation } from 'react-router-dom'
-import './dashboard.css'
-import Sidebar from './sidebar/SideBar'
-import userService from '../../services/api/user'
-import { useQuery } from '@tanstack/react-query'
-import { useDispatch } from 'react-redux'
-import { useEffect } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
-import logo from '../../assets/logo.png'
-import { loginSuccess, logoutSuccess } from '../../redux/reducers/userReducer'
-import SingleCoursePage from './pages/my-courses/single-course-page/SingleCoursePage'
-import { clearToken } from '../../redux/reducers/jwtReducer'
-import SelfAwarenessCourse from './pages/my-courses/self-awareness-course/SelfAwarenessCourse'
-
-
-
-
-
-
-
-
-
-
-
+import { Outlet, Link, useLocation } from "react-router-dom";
+import "./dashboard.css";
+import Sidebar from "./sidebar/SideBar";
+import userService from "../../services/api/user";
+import { useQuery } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import logo from "../../assets/logo.png";
+import { loginSuccess, logoutSuccess } from "../../redux/reducers/userReducer";
+import SingleCoursePage from "./pages/my-courses/single-course-page/SingleCoursePage";
+import { clearToken } from "../../redux/reducers/jwtReducer";
+import SelfAwarenessCourse from "./pages/my-courses/self-awareness-course/SelfAwarenessCourse";
 
 export default function Dashboard() {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const location = useLocation()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Get the JWT token from local storage
   // const auth_token =
@@ -42,25 +31,29 @@ export default function Dashboard() {
     // localStorage.removeItem('Flow-Auth-Token');
     localStorage.clear();
     dispatch(logoutSuccess());
-    dispatch(clearToken())
-    navigate('/sign-in', { replace: true })
+    dispatch(clearToken());
+    navigate("/sign-in", { replace: true });
   };
 
   return (
     // <div className="dashboard">
     <div
       className={
-        location.pathname === '/dashboard/my-courses'
-          ? 'course-page'
-          : 'dashboard'
+        location.pathname === "/dashboard/my-courses"
+          ? "course-page"
+          : "dashboard"
       }
     >
-      <nav className='navbar'>
-        <div className='container'>
-          <Link to='/dashboard' className='navbar-logo'>
-            <img src={logo} alt='' />
+      <nav className="navbar">
+        <div className="container">
+          <Link to="/dashboard" className="navbar-logo">
+            <img src={logo} alt="" />
           </Link>
-          <div className='navbar-logo' onClick={logOut} style={{ cursor: 'pointer' }}>
+          <div
+            className="navbar-logo"
+            onClick={logOut}
+            style={{ cursor: "pointer" }}
+          >
             Logout
           </div>
         </div>
@@ -73,13 +66,15 @@ export default function Dashboard() {
                     <Outlet />
                 </div>
             </div>} */}
-      {location.pathname.startsWith('/dashboard/my-courses/') ? (
+      {location.pathname.startsWith("/dashboard/my-courses/") ? (
         <SingleCoursePage />
-        // <SelfAwarenessCourse />
-      ) : location.pathname.startsWith('/dashboard/self-awareness-course') ? <SelfAwarenessCourse /> : (
-        <div className='dashboard'>
-          <Sidebar className='sidebar-content' />
-          <div className='dashboard-content'>
+      ) : // <SelfAwarenessCourse />
+      location.pathname.startsWith("/dashboard/self-awareness-course") ? (
+        <SelfAwarenessCourse />
+      ) : (
+        <div className="dashboard">
+          <Sidebar className="sidebar-content" />
+          <div className="dashboard-content">
             <Outlet />
           </div>
         </div>
@@ -92,5 +87,5 @@ export default function Dashboard() {
                 </div>
             </div> */}
     </div>
-  )
+  );
 }

@@ -32,8 +32,8 @@ useEffect(() => {
 
   useEffect(() => {
     // Persist explanation and selected personality to localStorage whenever they change
-    localStorage.setItem('personalityExplanation', explanation.toString())
-    localStorage.setItem('selectedPersonality', selectedPersonality.toString())
+    localStorage.setItem('personalityExplanation', explanation)
+    localStorage.setItem('selectedPersonality', selectedPersonality)
   }, [explanation, selectedPersonality])
 
   const handlePersonalitySelect = (type) => {

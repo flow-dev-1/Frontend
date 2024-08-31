@@ -34,9 +34,13 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
   useEffect(() => {
     if (isError) {
       toast.success("Welcome, start your learning journey for Week Two");
-    } else if (data?.activity?.activities?.length > 0) {
+    } else if (
+      data?.activity?.activities?.length > 0 &&
+      data?.activity?.additionalData
+    ) {
       const activities = data?.activity?.activities;
-      console.log(activities);
+      const additionalData = data?.activity?.additionalData;
+      // console.log(data?.activity?.additionalData);
 
       // Save the fetched data to state
       const lastActivityIndex = activities.length - 1;
@@ -137,17 +141,34 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
     setCurrentStep((prevStep) => Math.max(prevStep - 1, 1));
   };
 
+  // Function to safely parse JSON data
+  const safeParse = (data, defaultValue) => {
+    try {
+      return JSON.parse(data);
+    } catch (e) {
+      console.warn("Parsing error:", e);
+      return defaultValue;
+    }
+  };
+
   const handleSubmit = () => {
-    console.log(formData);
+    // console.log(formData);
     const answers = localStorage.getItem("answers");
     const notherAnswer = localStorage.getItem(
       "answer_What do you understand by"
     );
+    const scenarioSelections = safeParse(localStorage.getItem("scenarioSelections"),[] );
+    const strengthsChecked = safeParse(localStorage.getItem("strengthsChecked"), {});
+    const selectedStrengths = safeParse(localStorage.getItem("selectedStrengths"), {});
+
     const formToBeSubmitted = {
       activities: formData,
       additionalData: {
         answers,
-        notherAnswer
+        notherAnswer,
+        scenarioSelections,
+        strengthsChecked,
+        selectedStrengths
       },
       week: 2
     };
