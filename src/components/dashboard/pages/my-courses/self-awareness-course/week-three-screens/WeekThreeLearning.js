@@ -194,7 +194,7 @@ export default function WeekThreeLearning({ course, currentWeekIndex }) {
     const submissionData = {
       week: 3,
       activities: uniqueActivities,
-      additionalData: { activity: 6, answers: { additionalDataForActivity6 } }
+      additionalData: { formData}
     };
 
     console.log("Submitting Form Data:", submissionData);

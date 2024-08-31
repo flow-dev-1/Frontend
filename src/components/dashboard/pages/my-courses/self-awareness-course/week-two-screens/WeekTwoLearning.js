@@ -17,11 +17,12 @@ import { toast, ToastContainer } from "react-toastify";
 export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
   const navigate = useNavigate();
   const courseid = course._id;
-  const [currentActivity, setCurrentActivity] = useState(1);
   const week = 2;
+
+  const [currentActivity, setCurrentActivity] = useState(1);
   const [currentStep, setCurrentStep] = useState(() => {
     const savedStep = localStorage.getItem("weekTwoCurrentStep");
-    return savedStep ? parseInt(savedStep, 10) : 1; // Default to step 1 if not found
+    return savedStep ? parseInt(savedStep, 10) : 1;
   });
 
   const { data, isLoading, isError } = useQuery({
@@ -31,48 +32,6 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
     refetchOnWindowFocus: true
   });
 
-  useEffect(() => {
-    if (isError) {
-      toast.success("Welcome, start your learning journey for Week Two");
-    } else if (
-      data?.activity?.activities?.length > 0 &&
-      data?.activity?.additionalData
-    ) {
-      const activities = data?.activity?.activities;
-      const additionalData = data?.activity?.additionalData;
-      // console.log(data?.activity?.additionalData);
-
-      // Save the fetched data to state
-      const lastActivityIndex = activities.length - 1;
-      const lastActivity = activities[lastActivityIndex];
-      setCurrentActivity(lastActivity?.activity || 1);
-      setFormData(activities);
-
-      // Save data to localStorage
-      localStorage.setItem(
-        "currentActivity2",
-        JSON.stringify(lastActivity?.activity || 1)
-      );
-      localStorage.setItem("weekTwoFormData", JSON.stringify(activities));
-
-      const answers = data?.activity?.additionalData?.answers;
-      const notherAnswer = data?.activity?.additionalData?.notherAnswer;
-      localStorage.setItem("answers", JSON.stringify(answers));
-      localStorage.setItem(
-        "answer_What do you understand by",
-        JSON.stringify(notherAnswer)
-      );
-    } else if (data?.message === "No activity for this student") {
-      // If no data is available, reset to the first activity
-      toast.success("Continuing from your last checkpoint.");
-      setCurrentActivity(1);
-      setFormData([]);
-      localStorage.setItem("currentActivity2", JSON.stringify(1));
-      localStorage.removeItem("weekTwoFormData");
-      toast.success("Welcome, start your learning journey");
-    }
-  }, [data, isError]);
-
   const [formData, setFormData] = useState(() => {
     const savedData = localStorage.getItem("weekTwoFormData");
     return savedData ? JSON.parse(savedData) : { week: 2, activities: [] };
@@ -80,30 +39,72 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
 
   const [videoPlaying, setVideoPlaying] = useState(false);
 
+useEffect(() => {
+  if (isError) {
+    toast.success("Welcome, start your learning journey for Week Two");
+  } else if (
+    data?.activity?.activities?.length > 0 &&
+    data?.activity?.additionalData
+  ) {
+    const activities = data?.activity?.activities;
+    const additionalData = data?.activity?.additionalData;
+
+    const lastActivityIndex = activities.length - 1;
+    const lastActivity = activities[lastActivityIndex];
+    setCurrentActivity(lastActivity?.activity || 1);
+    setFormData({ ...formData, activities });
+
+    // Save data to localStorage
+    localStorage.setItem(
+      "currentActivity2",
+      JSON.stringify(lastActivity?.activity || 1)
+    );
+    localStorage.setItem("weekTwoFormData", JSON.stringify(activities));
+    localStorage.setItem(
+      "scenarioSelections",
+      JSON.stringify(additionalData.scenarioSelections)
+    );
+    localStorage.setItem(
+      "strengthsChecked",
+      JSON.stringify(additionalData.strengthsChecked)
+    );
+    localStorage.setItem(
+      "selectedStrengths",
+      JSON.stringify(additionalData.selectedStrengths)
+    );
+    localStorage.setItem("answers", JSON.stringify(additionalData.answers));
+    localStorage.setItem(
+      "answer_What do you understand by",
+      JSON.stringify(additionalData.notherAnswer)
+    );
+  } else if (data?.message === "No activity for this student") {
+    toast.success("Continuing from your last checkpoint.");
+    setCurrentActivity(1);
+    setFormData({ week: 2, activities: [] });
+    localStorage.setItem("currentActivity2", JSON.stringify(1));
+    localStorage.removeItem("weekTwoFormData");
+  }
+}, [data, isError]);
+
+
   useEffect(() => {
     localStorage.setItem("weekTwoCurrentStep", currentStep);
   }, [currentStep]);
 
   useEffect(() => {
     try {
-      const serializableData = { ...formData };
-      console.log("Current Form Data:", serializableData);
-      localStorage.setItem("weekTwoFormData", JSON.stringify(serializableData));
+      localStorage.setItem("weekTwoFormData", JSON.stringify(formData));
     } catch (error) {
       console.error("Failed to save to localStorage:", error);
     }
   }, [formData]);
 
-  formData.activities = Array.isArray(formData.activities)
-    ? formData.activities.filter(
-        (activity) => Object.keys(activity).length !== 0
-      )
-    : []; // Ensure activities is always an array
-
-  // Todo Post data
-  console.log("Post this data", formData);
-
   const handleNext = (data = {}) => {
+    if (data.videoSrc) {
+      setCurrentStep((prevStep) => prevStep + 1);
+      return;
+    }
+
     setFormData((prevFormData) => {
       const activityIndex = prevFormData?.activities?.findIndex(
         (item) => item.activity === data.activity
@@ -111,27 +112,21 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
 
       const updatedActivities = Array.isArray(prevFormData.activities)
         ? [...prevFormData.activities]
-        : []; // Ensure activities is always an array
+        : [];
 
       if (activityIndex > -1) {
-        updatedActivities[activityIndex] = data; // Update existing activity
+        updatedActivities[activityIndex] = data;
       } else {
-        updatedActivities.push(data); // Add new activity
+        updatedActivities.push(data);
       }
 
       const updatedFormData = {
-        week: "2",
         ...prevFormData,
-        activities: updatedActivities
+        activities: updatedActivities,
+        week: 2
       };
 
-      try {
-        JSON.stringify(updatedFormData); // Check for serializability
-        return updatedFormData;
-      } catch (error) {
-        console.error("Error serializing formData:", error);
-        return prevFormData;
-      }
+      return updatedFormData;
     });
 
     setCurrentStep((prevStep) => prevStep + 1);
@@ -141,7 +136,6 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
     setCurrentStep((prevStep) => Math.max(prevStep - 1, 1));
   };
 
-  // Function to safely parse JSON data
   const safeParse = (data, defaultValue) => {
     try {
       return JSON.parse(data);
@@ -152,17 +146,25 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
   };
 
   const handleSubmit = () => {
-    // console.log(formData);
-    const answers = localStorage.getItem("answers");
+    const answers = safeParse(localStorage.getItem("answers"), []);
     const notherAnswer = localStorage.getItem(
       "answer_What do you understand by"
     );
-    const scenarioSelections = safeParse(localStorage.getItem("scenarioSelections"),[] );
-    const strengthsChecked = safeParse(localStorage.getItem("strengthsChecked"), {});
-    const selectedStrengths = safeParse(localStorage.getItem("selectedStrengths"), {});
+    const scenarioSelections = safeParse(
+      localStorage.getItem("scenarioSelections"),
+      []
+    );
+    const strengthsChecked = safeParse(
+      localStorage.getItem("strengthsChecked"),
+      {}
+    );
+    const selectedStrengths = safeParse(
+      localStorage.getItem("selectedStrengths"),
+      {}
+    );
 
     const formToBeSubmitted = {
-      activities: formData,
+      activities: formData.activities,
       additionalData: {
         answers,
         notherAnswer,
@@ -179,18 +181,13 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
       .then((response) => {
         console.log("Submission successful:", response);
 
-        // Clear local storage after successful submission
         localStorage.removeItem("answers");
         localStorage.removeItem("answer_What do you understand by");
-        localStorage.removeItem("currentActivity");
-        localStorage.removeItem("weekTwoFormData"); // Assuming you're storing form data for week two
+        localStorage.removeItem("currentActivity2");
+        localStorage.removeItem("weekTwoFormData");
 
-        // Optionally reset state or navigate
-        setFormData([]);
+        setFormData({ week: 2, activities: [] });
         setCurrentActivity(1);
-
-        // Optionally handle next week course or any other logic
-        // handleNextWeekCourse(); // Uncomment if needed
       })
       .catch((error) => {
         console.error("Submission failed:", error);
@@ -228,7 +225,7 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
             }}
             onBack={handlePrevious}
             onNext={handleNext}
-            onSubmit={(data) => handleNext({ answers: data })}
+            onSubmit={(data) => handleNext({ activity: 2, answers: data })}
           />
         );
       case 3:
@@ -244,22 +241,18 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
         );
       case 4:
         return (
-          <>
-            <StrengthIdentification
-              onNext={handleNext}
-              onBack={handlePrevious}
-              onSubmit={(data) => handleNext({ activity: 4, answers: data })}
-            />
-          </>
+          <StrengthIdentification
+            onNext={handleNext}
+            onBack={handlePrevious}
+            onSubmit={(data) => handleNext({ activity: 4, answers: data })}
+          />
         );
       case 5:
         return (
-          <>
-            <WeaknessIdentification
-              onBack={handlePrevious}
-              onSubmit={(data) => handleNext({ activity: 5, answers: data })}
-            />
-          </>
+          <WeaknessIdentification
+            onBack={handlePrevious}
+            onSubmit={(data) => handleNext({ activity: 5, answers: data })}
+          />
         );
       case 6:
         return (
@@ -277,27 +270,17 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
           <ScenarioQuestions
             previous={handlePrevious}
             onSubmit={(data) => {
-              handleNext({ answers: data });
+              handleNext({ activity: 7, answers: data });
               handleSubmit();
             }}
           />
         );
       case 8:
         return (
-          <>
-            <VideoComponent
-              videoPlaying={videoPlaying}
-              setVideoPlaying={setVideoPlaying}
-              videoSrc="https://www.youtube.com/embed/CW-f1RVjCws"
-            />
-            <NavigationButtons onBack={handlePrevious} onNext={handleNext} />
-          </>
-        );
-      case 9:
-        return (
           <WeekTwoAssessmentForm
             previous={handlePrevious}
-            onSubmit={(data) => handleNext({ activity: 9, answers: data })}
+            submit={handleSubmit}
+            celebrate={<MyFireWorks />}
           />
         );
       default:
@@ -305,5 +288,11 @@ export default function WeekTwoLearning({ course, onClose, currentWeekIndex }) {
     }
   };
 
-  return <div className="course-progression-page">{renderStepContent()}</div>;
+  return (
+    <div>
+      <ToastContainer />
+      <h1>Week 2: Learning</h1>
+      {renderStepContent()}
+    </div>
+  );
 }
