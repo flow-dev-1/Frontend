@@ -12,17 +12,6 @@ import SingleCoursePage from './pages/my-courses/single-course-page/SingleCourse
 import { clearToken } from '../../redux/reducers/jwtReducer'
 import SelfAwarenessCourse from './pages/my-courses/self-awareness-course/SelfAwarenessCourse'
 
-
-
-
-
-
-
-
-
-
-
-
 export default function Dashboard() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -40,11 +29,11 @@ export default function Dashboard() {
 
   const logOut = () => {
     // localStorage.removeItem('Flow-Auth-Token');
-    localStorage.clear();
-    dispatch(logoutSuccess());
+    localStorage.clear()
+    dispatch(logoutSuccess())
     dispatch(clearToken())
     navigate('/sign-in', { replace: true })
-  };
+  }
 
   return (
     // <div className="dashboard">
@@ -60,7 +49,11 @@ export default function Dashboard() {
           <Link to='/dashboard' className='navbar-logo'>
             <img src={logo} alt='' />
           </Link>
-          <div className='navbar-logo' onClick={logOut} style={{ cursor: 'pointer' }}>
+          <div
+            className='navbar-logo'
+            onClick={logOut}
+            style={{ cursor: 'pointer' }}
+          >
             Logout
           </div>
         </div>
@@ -75,8 +68,10 @@ export default function Dashboard() {
             </div>} */}
       {location.pathname.startsWith('/dashboard/my-courses/') ? (
         <SingleCoursePage />
-        // <SelfAwarenessCourse />
-      ) : location.pathname.startsWith('/dashboard/self-awareness-course') ? <SelfAwarenessCourse /> : (
+      ) : // <SelfAwarenessCourse />
+      location.pathname.startsWith('/dashboard/self-awareness-course') ? (
+        <SelfAwarenessCourse />
+      ) : (
         <div className='dashboard'>
           <Sidebar className='sidebar-content' />
           <div className='dashboard-content'>

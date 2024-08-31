@@ -46,6 +46,7 @@ import InvitedAdminRegistration from './components/onboarding/registration/Invit
 import InvitedStudentRegistrationForm from './components/onboarding/registration/InvitedStudentRegistrationForm.js'
 import SchoolEnrolledEducators from './components/school-dashboard/school-pages/school-courses/school-enrolled-courses/school-single-enrolled-course-page/SchoolEnrolledEducators.jsx'
 import SelfAwarenessCourse from './components/dashboard/pages/my-courses/self-awareness-course/SelfAwarenessCourse.js'
+import SelfAwarenessFeedback from './components/dashboard/pages/my-courses/self-awareness-feedback/SelfAwarenessFeedback.js'
 
 function App() {
   return (
@@ -111,6 +112,10 @@ function App() {
             <Route path='/dashboard/profile' element={<IndividualProfile />} />
             <Route path='/dashboard/support' element={<Support />} />
             <Route
+              path='/dashboard/feedback/self-awareness'
+              element={<SelfAwarenessFeedback />}
+            />
+            <Route
               path='/dashboard/payment-history'
               element={<PayementHistory />}
             />
@@ -119,7 +124,6 @@ function App() {
               path='/dashboard/my-courses/:id'
               element={<SingleCoursePage />}
             />
-            
 
             <Route
               path='/dashboard/self-awareness-course/:id'

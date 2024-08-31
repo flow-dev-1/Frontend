@@ -163,14 +163,17 @@ const MyCourseCard = ({ course }) => {
               ? 'Start'
               : 'Resume'}
           </button>
-          {/* Comment Icon - Only appears when resuming */}
-          {course?.progress > 0 && course?.progress < 100 && (
+          {/* Comment Icon - Only appears when resuming  {course?.progress > 0 && course?.progress < 100 && ( */}
+          {
             <Icon
+              onClick={() =>
+                navigate(`/dashboard/feedback/self-awareness`)
+              }
               style={{ color: '#329BD6' }}
               width={40}
               icon='hugeicons:comment-01'
             />
-          )}
+          }
         </div>
       </div>
 
