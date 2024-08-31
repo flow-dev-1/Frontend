@@ -17,42 +17,45 @@ const QuestionComponent = ({ question, onBack, onNext, onSubmit }) => {
   }, [answer, question.text])
 
   const handleSubmit = () => {
-    if (answer.trim() === '') {
-      // Check if the answer is empty
-      toast.error('Please provide an answer before proceeding.')
-      return // Exit function if the answer is empty
+    if (answer.trim() === "") {
+      toast.error("Please provide an answer before proceeding.");
+      return;
     }
 
-    setError('') // Clear any previous error message
-    onSubmit({ answer }) // Submit the answer
-    onNext() // Go to the next step
-  }
+    const submissionData = { answers: [answer] }; // Ensure answers is an array
+    console.log("Submitting answer:", submissionData); // Log the data
+
+    onSubmit(submissionData); // Pass data to parent
+    onNext(); // Proceed to the next step
+  };
+
+    const handleInputChange = (event) => {
+      setAnswer(event.target.value);
+    };
 
   return (
-    <div className=''>
-      <div className='question-box py-4'>
-        <div className='question-box-header'>
-          <h1 className='mb-0'>Question: </h1>
-          <h2 className='mb-0 ms-3 text-nowrap'>{question.text}</h2>
+    <div className="">
+      <div className="question-box py-4">
+        <div className="question-box-header">
+          <h1 className="mb-0">Question:</h1>
+          <h2 className="mb-0 ms-3 text-nowrap">{question.text}</h2>
           {question.image && (
-            <img src={question.image} alt={question.alt} className='mx-2' />
+            <img src={question.image} alt={question.alt} className="mx-2" />
           )}
-          <h2 className=''>{question.suffix}</h2>
+          <h2 className="">{question.suffix}</h2>
         </div>
-        <div className='text-area-box px-4 mt-4'>
+        <div className="text-area-box px-4 mt-4">
           <textarea
-            rows='6'
-            placeholder='Type your answer here...'
+            rows="6"
+            placeholder="Type your answer here..."
             value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
+            onChange={handleInputChange}
           />
         </div>
-
-        {/* Display error message if any */}
       </div>
       <NavigationButtons onBack={onBack} onNext={handleSubmit} />
     </div>
-  )
-}
+  );
+};
 
-export default QuestionComponent
+export default QuestionComponent;

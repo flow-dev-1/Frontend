@@ -5,6 +5,7 @@ import userService from '../../../../../../services/api/user.js'
 import '../newcourse.css'
 import Modal from 'react-modal'
 import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModal'
+import { toast, ToastContainer } from "react-toastify";
 
 export default function WeekOneAssessmentForm({
   onSubmit,
@@ -100,6 +101,9 @@ export default function WeekOneAssessmentForm({
         // Submit the cleaned data to the backend
         const response = await userService.postMyActivity(courseId, cleanedData)
         // If the submission is successful
+        if ((response.message = "You have already taken the assessment")) {
+          toast.done("You have already taken the test")
+        }
         console.log('Submission successful:', response)
       }
     } catch (error) {

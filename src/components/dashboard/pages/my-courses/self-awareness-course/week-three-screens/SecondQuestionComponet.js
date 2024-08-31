@@ -3,7 +3,25 @@ import NavigationButtons from './NavigationsButtons'
 import { toast } from 'react-toastify'
 
 const SecondQuestionComponent = ({ question, onBack, onNext, onSubmit }) => {
-  const [answer, setAnswer] = useState('')
+      const [answer, setAnswer] = useState(() => {
+        const savedData = localStorage.getItem("weekThreeFormData");
+
+        if (savedData) {
+          // Parse the JSON string
+          const parsedData = JSON.parse(savedData);
+
+          // Find data for activity: 2
+          const activityTwoData = parsedData.find(
+            (item) => item.activity === 4
+          );
+
+          console.log("Data for activity: 4:", activityTwoData);
+
+          return activityTwoData ? activityTwoData.answer || "" : "";
+        }
+
+        return "";
+      });
   const [error, setError] = useState('') // State to handle error messages
 
   const handleSubmit = () => {
