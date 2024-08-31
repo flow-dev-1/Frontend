@@ -13,9 +13,9 @@ import { clearToken } from '../../redux/reducers/jwtReducer'
 import SelfAwarenessCourse from './pages/my-courses/self-awareness-course/SelfAwarenessCourse'
 
 export default function Dashboard() {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const location = useLocation()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Get the JWT token from local storage
   // const auth_token =
@@ -39,15 +39,15 @@ export default function Dashboard() {
     // <div className="dashboard">
     <div
       className={
-        location.pathname === '/dashboard/my-courses'
-          ? 'course-page'
-          : 'dashboard'
+        location.pathname === "/dashboard/my-courses"
+          ? "course-page"
+          : "dashboard"
       }
     >
-      <nav className='navbar'>
-        <div className='container'>
-          <Link to='/dashboard' className='navbar-logo'>
-            <img src={logo} alt='' />
+      <nav className="navbar">
+        <div className="container">
+          <Link to="/dashboard" className="navbar-logo">
+            <img src={logo} alt="" />
           </Link>
           <div
             className='navbar-logo'
@@ -66,7 +66,7 @@ export default function Dashboard() {
                     <Outlet />
                 </div>
             </div>} */}
-      {location.pathname.startsWith('/dashboard/my-courses/') ? (
+      {location.pathname.startsWith("/dashboard/my-courses/") ? (
         <SingleCoursePage />
       ) : // <SelfAwarenessCourse />
       location.pathname.startsWith('/dashboard/self-awareness-course') ? (
@@ -87,5 +87,5 @@ export default function Dashboard() {
                 </div>
             </div> */}
     </div>
-  )
+  );
 }

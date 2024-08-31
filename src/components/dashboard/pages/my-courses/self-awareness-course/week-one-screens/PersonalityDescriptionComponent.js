@@ -12,17 +12,23 @@ const PersonalityDescriptionComponent = ({
   const [selectedPersonality, setSelectedPersonality] = useState('')
   const [explanation, setExplanation] = useState('')
 
-  useEffect(() => {
-    // Load persisted state from localStorage
-    const savedExplanation = localStorage.getItem('personalityExplanation')
-    const savedPersonality = localStorage.getItem('selectedPersonality')
-    if (savedExplanation) {
-      setExplanation(savedExplanation)
-    }
-    if (savedPersonality) {
-      setSelectedPersonality(savedPersonality)
-    }
-  }, [])
+useEffect(() => {
+  // Load persisted state from localStorage
+  const savedExplanation = localStorage.getItem("personalityExplanation");
+  const savedPersonality = localStorage.getItem("selectedPersonality");
+
+  // Check if savedExplanation exists and trim any extra quotes before setting the state
+  if (savedExplanation !== null) {
+    setExplanation(savedExplanation.replace(/^"|"$/g, ""));
+  }
+
+  // Check if savedPersonality exists and trim any extra quotes before setting the state
+  if (savedPersonality !== null && savedPersonality !== "undefined") {
+    setSelectedPersonality(savedPersonality.replace(/^"|"$/g, ""));
+  }
+}, []);
+
+
 
   useEffect(() => {
     // Persist explanation and selected personality to localStorage whenever they change
