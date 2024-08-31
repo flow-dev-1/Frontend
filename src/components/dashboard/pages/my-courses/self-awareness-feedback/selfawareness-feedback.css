@@ -1,0 +1,92 @@
+.feedback-container {
+  font-family: 'ABeeZee', sans-serif;
+}
+
+.week-title-container,
+.final-report-container {
+  padding: 15px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  cursor: pointer;
+  width: 100%;
+}
+
+.week-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.week-title,
+.final-report-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.final-report-container {
+  background-color: #00cec9;
+  color: white;
+  border-bottom: none;
+}
+
+.download-link {
+  color: white;
+  text-decoration: underline;
+  margin-right: 10px;
+  font-weight: normal;
+}
+
+.arrow {
+  font-size: 16px;
+  margin-left: 10px;
+  transition: transform 0.3s ease;
+}
+
+.arrow.right {
+  transform: rotate(0deg);
+}
+
+.arrow.down {
+  transform: rotate(90deg);
+}
+
+.week-content {
+  background-color: #fff;
+}
+
+.activity-container {
+  margin-bottom: 10px;
+
+  background-color: #fff;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.activity-header {
+  background-color: #ffeaa7;
+  padding: 8px;
+  font-weight: bold;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.qa-section {
+  padding: 8px 0;
+}
+
+.qa-pair {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.label {
+  font-weight: bold;
+  color: #555;
+}

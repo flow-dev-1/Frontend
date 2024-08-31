@@ -1,16 +1,16 @@
-import { Outlet, Link, useLocation } from "react-router-dom";
-import "./dashboard.css";
-import Sidebar from "./sidebar/SideBar";
-import userService from "../../services/api/user";
-import { useQuery } from "@tanstack/react-query";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import logo from "../../assets/logo.png";
-import { loginSuccess, logoutSuccess } from "../../redux/reducers/userReducer";
-import SingleCoursePage from "./pages/my-courses/single-course-page/SingleCoursePage";
-import { clearToken } from "../../redux/reducers/jwtReducer";
-import SelfAwarenessCourse from "./pages/my-courses/self-awareness-course/SelfAwarenessCourse";
+import { Outlet, Link, useLocation } from 'react-router-dom'
+import './dashboard.css'
+import Sidebar from './sidebar/SideBar'
+import userService from '../../services/api/user'
+import { useQuery } from '@tanstack/react-query'
+import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom'
+import logo from '../../assets/logo.png'
+import { loginSuccess, logoutSuccess } from '../../redux/reducers/userReducer'
+import SingleCoursePage from './pages/my-courses/single-course-page/SingleCoursePage'
+import { clearToken } from '../../redux/reducers/jwtReducer'
+import SelfAwarenessCourse from './pages/my-courses/self-awareness-course/SelfAwarenessCourse'
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -29,11 +29,11 @@ export default function Dashboard() {
 
   const logOut = () => {
     // localStorage.removeItem('Flow-Auth-Token');
-    localStorage.clear();
-    dispatch(logoutSuccess());
-    dispatch(clearToken());
-    navigate("/sign-in", { replace: true });
-  };
+    localStorage.clear()
+    dispatch(logoutSuccess())
+    dispatch(clearToken())
+    navigate('/sign-in', { replace: true })
+  }
 
   return (
     // <div className="dashboard">
@@ -50,9 +50,9 @@ export default function Dashboard() {
             <img src={logo} alt="" />
           </Link>
           <div
-            className="navbar-logo"
+            className='navbar-logo'
             onClick={logOut}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: 'pointer' }}
           >
             Logout
           </div>
@@ -69,12 +69,12 @@ export default function Dashboard() {
       {location.pathname.startsWith("/dashboard/my-courses/") ? (
         <SingleCoursePage />
       ) : // <SelfAwarenessCourse />
-      location.pathname.startsWith("/dashboard/self-awareness-course") ? (
+      location.pathname.startsWith('/dashboard/self-awareness-course') ? (
         <SelfAwarenessCourse />
       ) : (
-        <div className="dashboard">
-          <Sidebar className="sidebar-content" />
-          <div className="dashboard-content">
+        <div className='dashboard'>
+          <Sidebar className='sidebar-content' />
+          <div className='dashboard-content'>
             <Outlet />
           </div>
         </div>
