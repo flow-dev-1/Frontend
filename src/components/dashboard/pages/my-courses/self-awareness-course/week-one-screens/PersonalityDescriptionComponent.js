@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 
 const PersonalityDescriptionComponent = ({
@@ -7,38 +7,23 @@ const PersonalityDescriptionComponent = ({
   emotionalHand,
   friendshipHand,
   analyticHand,
+  formData,
   actionHand,
 }) => {
-  const [selectedPersonality, setSelectedPersonality] = useState('')
+  // Find the form data for activity 8 (or whichever activity this is)
+  const activityData =
+    formData?.activities?.find((act) => act.activity === 8) || {}
+  console.log(activityData)
+
+  const initialPersonality = activityData.answer.selectedPersonality || ''
+  const initialExplanation = activityData.answer.explanation || ''
+
+  const [selectedPersonality, setSelectedPersonality] =
+    useState(initialPersonality)
   const [explanation, setExplanation] = useState('')
-
-useEffect(() => {
-  // Load persisted state from localStorage
-  const savedExplanation = localStorage.getItem("personalityExplanation");
-  const savedPersonality = localStorage.getItem("selectedPersonality");
-
-  // Check if savedExplanation exists and trim any extra quotes before setting the state
-  if (savedExplanation !== null) {
-    setExplanation(savedExplanation.replace(/^"|"$/g, ""));
-  }
-
-  // Check if savedPersonality exists and trim any extra quotes before setting the state
-  if (savedPersonality !== null && savedPersonality !== "undefined") {
-    setSelectedPersonality(savedPersonality.replace(/^"|"$/g, ""));
-  }
-}, []);
-
-
-
-  useEffect(() => {
-    // Persist explanation and selected personality to localStorage whenever they change
-    localStorage.setItem('personalityExplanation', explanation)
-    localStorage.setItem('selectedPersonality', selectedPersonality)
-  }, [explanation, selectedPersonality])
 
   const handlePersonalitySelect = (type) => {
     setSelectedPersonality(type)
-    setExplanation(type) // Set the text area with the selected personality type
   }
 
   const handleExplanationChange = (event) => {
@@ -47,7 +32,7 @@ useEffect(() => {
 
   const handleNext = () => {
     if (explanation.trim()) {
-      onNext({ answer: explanation })
+      onNext({ selectedPersonality, explanation })
     } else {
       toast.error('Please provide an explanation.')
     }

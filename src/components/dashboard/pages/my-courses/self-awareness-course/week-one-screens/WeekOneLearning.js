@@ -227,10 +227,11 @@ export default function WeekOneLearning({
             friendshipHand={friendshipHand}
             actionHand={actionHand}
             altText='?'
+            formData={formData}
             onBack={handlePrevious}
-            onNext={(selectedPersonality) =>
+            onNext={(answer) =>
               handleNext({
-                selectedPersonality,
+                answer,
               })
             }
           />
