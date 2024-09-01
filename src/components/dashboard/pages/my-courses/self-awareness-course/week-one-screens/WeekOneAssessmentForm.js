@@ -1,26 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png'
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
 import userService from '../../../../../../services/api/user.js'
 import '../newcourse.css'
 import Modal from 'react-modal'
 import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModal'
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from 'react-toastify'
 
 export default function WeekOneAssessmentForm({
   onSubmit,
-  previous,
+  onNext,
   onBack,
   courseId,
 }) {
   const [currentIndex, setCurrentIndex] = useState(1)
   const [reviewPopUp, setReviewPopUp] = useState(false)
   const [personalityColor, setPersonalityColor] = useState('')
-
-  // Initialize questionChecked with an array of null values to allow only one selection per question
-  const [questionChecked, setQuestionChecked] = useState(
-    Array.from({ length: 4 }, () => null) // Adjust the length according to the maximum number of questions in any color array
-  )
+  const [questionChecked, setQuestionChecked] = useState([])
 
   const questionsArrayRed = [
     {
@@ -47,6 +43,26 @@ export default function WeekOneAssessmentForm({
   ]
 
   const questionsArrayBlue = [
+    {
+      title:
+        "You're working on a group project, and it's time to divide the tasks. How do you approach this situation?",
+      questionList: [
+        'A. You immediately take charge, assigning tasks to ensure everything is done efficiently.',
+        'B. You suggest a detailed plan, making sure everyone understands their responsibilities and feels comfortable.',
+        "C. You prefer to discuss everyone's strengths and weaknesses first, ensuring tasks are assigned according to individual abilities.",
+        'D. You focus on making the process enjoyable, suggesting creative ideas and encouraging a fun atmosphere.',
+      ],
+    },
+    {
+      title:
+        "You're working on a group project, and it's time to divide the tasks. How do you approach this situation?",
+      questionList: [
+        'A. You immediately take charge, assigning tasks to ensure everything is done efficiently.',
+        'B. You suggest a detailed plan, making sure everyone understands their responsibilities and feels comfortable.',
+        "C. You prefer to discuss everyone's strengths and weaknesses first, ensuring tasks are assigned according to individual abilities.",
+        'D. You focus on making the process enjoyable, suggesting creative ideas and encouraging a fun atmosphere.',
+      ],
+    },
     {
       title:
         "You're working on a group project, and it's time to divide the tasks. How do you approach this situation?",
@@ -88,33 +104,6 @@ export default function WeekOneAssessmentForm({
     // Add more questions for Green
   ]
 
-  const handleSubmit = async () => {
-    try {
-      const assessmentData = localStorage.getItem('activityData')
-      if (assessmentData) {
-        const parsedData = JSON.parse(assessmentData)
-        const cleanedData = {
-          week: 1,
-          activities: parsedData,
-        }
-        console.log(cleanedData)
-        // Submit the cleaned data to the backend
-        const response = await userService.postMyActivity(courseId, cleanedData)
-        // If the submission is successful
-        if ((response.message = "You have already taken the assessment")) {
-          toast.done("You have already taken the test")
-        }
-        console.log('Submission successful:', response)
-      }
-    } catch (error) {
-      console.error('Submission failed:', error)
-      // Handle the error if needed
-    }
-  }
-
-  console.log(courseId)
-
-  // Function to get the appropriate questions array based on the selected personality color
   const getQuestionsArray = () => {
     switch (personalityColor) {
       case 'Red':
@@ -132,11 +121,24 @@ export default function WeekOneAssessmentForm({
 
   const handleNextStepClick = () => {
     const questionsArray = getQuestionsArray()
+    const questionIndex = currentIndex - 2
+
+    // Check if the user has selected an answer for the current question
+    if (
+      questionIndex >= 0 &&
+      questionIndex < questionsArray.length &&
+      questionChecked[questionIndex] === undefined
+    ) {
+      toast.error('Please select an answer before proceeding.')
+      return
+    }
+
+    // Proceed to the next step if valid
     if (currentIndex < questionsArray.length + 1) {
       setCurrentIndex(currentIndex + 1)
-      handleSubmit()
     } else {
       saveAssessmentData()
+      onNext()
       setReviewPopUp(true) // Show review popup immediately
     }
   }
@@ -149,40 +151,36 @@ export default function WeekOneAssessmentForm({
     }
   }
 
-  const closeReviewPopUp = () => {
-    setReviewPopUp(false)
-  }
-
   const handleQuestionCheck = (questionIndex, optionIndex) => {
-    setQuestionChecked((prevState) => ({
-      ...prevState,
-      [questionIndex]: optionIndex, // Allow only one option to be selected
-    }))
+    setQuestionChecked((prevState) => {
+      const newState = [...prevState]
+      newState[questionIndex] = optionIndex
+      return newState
+    })
   }
-
   const saveAssessmentData = () => {
     const questionsArray = getQuestionsArray()
 
-    const dataToSave = questionsArray.map((question, index) => ({
-      answer: questionChecked[index], // Save the selected answer as an index
-      // Include the options for reference if needed
-    }))
+    // Format data to match the required structure
+    const formattedData = {
+      week: 1,
+      assessments: questionsArray.map((_, index) => ({
+        answer:
+          questionChecked[index] !== undefined ? questionChecked[index] : null, // Save the selected answer as an index or null if not selected
+      })),
+    }
 
-    const answers = [
-      {
-        answer: personalityColor,
-      },
-      ...dataToSave,
-    ]
+    console.log('Formatted Data', formattedData)
 
-    console.log('Answers', answers)
-
-    // Basic marking
-    const correctAnswers = dataToSave.map(() => 0) // Assuming correct answers are at index 0
+    // Basic marking (for demonstration purposes)
+    const correctAnswers = questionsArray.map(() => 0) // Assuming correct answers are at index 0
     const totalQuestions = correctAnswers.length
-    const correctCount = dataToSave.reduce((count, current, index) => {
-      return current.answer === correctAnswers[index] ? count + 1 : count
-    }, 0)
+    const correctCount = formattedData.assessments.reduce(
+      (count, current, index) => {
+        return current.answer === correctAnswers[index] ? count + 1 : count
+      },
+      0
+    )
 
     const percentage = (correctCount / totalQuestions) * 100
     console.log(`Correct Answers: ${correctCount} / ${totalQuestions}`)
@@ -190,15 +188,11 @@ export default function WeekOneAssessmentForm({
 
     // Save data to local storage
     localStorage.setItem(
-      'assessmentData',
-      JSON.stringify({ week: 1, assessment: answers, percentage })
+      'weekOneAssessmentData',
+      JSON.stringify({ week: 1, assessment: formattedData, percentage })
     )
-    const formData = {
-      week: 1,
-      rating: percentage.toString(),
-    }
+
     // Post data to the API (if needed)
-    userService.postMyAssessment(courseId, formData)
   }
 
   const renderQuestion = () => {
@@ -301,18 +295,6 @@ export default function WeekOneAssessmentForm({
           Next {'>>>'}
         </button>
       </div>
-      {reviewPopUp && (
-        <Modal
-          isOpen={reviewPopUp}
-          onRequestClose={closeReviewPopUp}
-          contentLabel='Example Modal'
-          className='custom-modal'
-          overlayClassName='custom-overlay'
-          shouldCloseOnOverlayClick={true}
-        >
-          <ReviewPopUp />
-        </Modal>
-      )}
     </div>
   )
 }

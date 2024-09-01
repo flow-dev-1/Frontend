@@ -17,6 +17,7 @@ import PersonalityDescriptionComponent from './PersonalityDescriptionComponent'
 import PersonalityQuestionComponent from './PersonalityQuestionComponent'
 import PersonalityTest from './PersonalityTest'
 import 'react-toastify/dist/ReactToastify.css'
+import WeekOneAssessmentForm from './WeekOneAssessmentForm'
 import AssessmentForm from './AssessmentForm'
 
 export default function WeekOneLearning({
@@ -81,10 +82,10 @@ export default function WeekOneLearning({
       return { ...prevData, activities: updatedActivities }
     })
 
-    const isLastActivity = currentActivity >= 13
-
+    // Check if it's the last activity defined and go to the default case
+    const isLastActivity = currentActivity >= 14
     if (isLastActivity) {
-      handleSubmit()
+      setCurrentActivity(15) // This will trigger the default case in renderActivityContent
     } else {
       const nextActivity = currentActivity + 1
       setCurrentActivity(nextActivity)
@@ -100,7 +101,7 @@ export default function WeekOneLearning({
 
   const handleNextWeekCourse = () => {
     const nextWeekIndex = currentWeekIndex + 1
-    navigate('/dashboard/self-awareness-course/1', {
+    navigate(`/dashboard/self-awareness-course/${courseId}`, {
       state: { course, weekIndex: nextWeekIndex },
     })
   }
@@ -108,28 +109,6 @@ export default function WeekOneLearning({
   console.log(formData)
 
   const renderActivityContent = () => {
-    if (!formData.activities.length) {
-      return (
-        <div>
-          <p>
-            No activities found. Please start the course to begin your journey.
-          </p>
-          <VideoComponent
-            videoPlaying={videoPlaying}
-            setVideoPlaying={setVideoPlaying}
-          />
-          <div className='progression-buttons mt-3'>
-            <button
-              className='btn progress-btn btn-dark'
-              onClick={() => handleNext()}
-            >
-              Next {'>>>'}
-            </button>
-          </div>
-        </div>
-      )
-    }
-
     switch (currentActivity) {
       case 1:
         return (
@@ -147,6 +126,22 @@ export default function WeekOneLearning({
               </button>
             </div>
           </>
+        )
+      case 2:
+        return (
+          <QuestionComponent
+            questionText={'What do you think'}
+            activityIndex={currentActivity}
+            imageSrc={selfAwareness}
+            formData={formData}
+            altText='is?'
+            onBack={handlePrevious}
+            onNext={(answers) =>
+              handleNext({
+                answers,
+              })
+            }
+          />
         )
       case 3:
       case 5:
@@ -174,22 +169,6 @@ export default function WeekOneLearning({
               </button>
             </div>
           </>
-        )
-      case 2:
-        return (
-          <QuestionComponent
-            questionText={'What do you think'}
-            activityIndex={currentActivity}
-            imageSrc={selfAwareness}
-            formData={formData}
-            altText='is?'
-            onBack={handlePrevious}
-            onNext={(answers) =>
-              handleNext({
-                answers,
-              })
-            }
-          />
         )
       case 4:
         return (
@@ -289,7 +268,13 @@ export default function WeekOneLearning({
         )
 
       case 14:
-        return <AssessmentForm setCurrentActivity={setCurrentActivity} />
+        return (
+          <WeekOneAssessmentForm
+            onBack={handlePrevious}
+            handleNextWeekCourse={handleNextWeekCourse}
+            onNext={handleNext}
+          />
+        )
 
       default:
         return (
