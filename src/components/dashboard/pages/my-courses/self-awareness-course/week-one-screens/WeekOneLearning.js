@@ -90,7 +90,6 @@ export default function WeekOneLearning({
     }
   }
 
-
   const handlePrevious = () => {
     const prevActivity = currentActivity - 1
     setCurrentActivity(prevActivity)
@@ -211,6 +210,7 @@ export default function WeekOneLearning({
         return (
           <div className='drag-drop-section'>
             <DragDropComponent
+              activityIndex={currentActivity}
               formData={formData}
               onBack={handlePrevious}
               onNext={handleNext}
@@ -223,6 +223,7 @@ export default function WeekOneLearning({
             questionText='What do you understand by the word,'
             imageSrc={personality}
             emotionalHand={emotionalHand}
+            activityIndex={currentActivity}
             analyticHand={analyticHand}
             friendshipHand={friendshipHand}
             actionHand={actionHand}
@@ -237,7 +238,14 @@ export default function WeekOneLearning({
           />
         )
       case 10:
-        return <PersonalityTest onBack={handlePrevious} onNext={handleNext} />
+        return (
+          <PersonalityTest
+            activityIndex={currentActivity}
+            formData={formData}
+            onBack={handlePrevious}
+            onNext={handleNext}
+          />
+        )
       case 12:
         return (
           <QuestionComponent
@@ -248,9 +256,10 @@ export default function WeekOneLearning({
             onBack={handlePrevious}
             onNext={(answer) =>
               handleNext({
-                answers: [answer],
+                answer,
               })
             }
+            formData={formData}
           />
         )
       case 13:

@@ -15,12 +15,12 @@ const PersonalityDescriptionComponent = ({
     formData?.activities?.find((act) => act.activity === 8) || {}
   console.log(activityData)
 
-  const initialPersonality = activityData.answer.selectedPersonality || ''
-  const initialExplanation = activityData.answer.explanation || ''
+  const initialPersonality = activityData?.answer?.selectedPersonality || ''
+  const initialExplanation = activityData?.answer?.explanation || ''
 
   const [selectedPersonality, setSelectedPersonality] =
     useState(initialPersonality)
-  const [explanation, setExplanation] = useState('')
+  const [explanation, setExplanation] = useState(initialExplanation) // Initialize with initialExplanation
 
   const handlePersonalitySelect = (type) => {
     setSelectedPersonality(type)
@@ -90,7 +90,7 @@ const PersonalityDescriptionComponent = ({
           <textarea
             rows='6'
             placeholder='Type your answer here...'
-            value={explanation}
+            value={explanation} // Use explanation state variable here
             onChange={handleExplanationChange}
           ></textarea>
         </div>
