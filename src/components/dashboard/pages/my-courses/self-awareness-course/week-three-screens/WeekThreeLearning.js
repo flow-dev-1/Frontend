@@ -189,7 +189,8 @@ export default function WeekThreeLearning({ course, currentWeekIndex }) {
     });
 
     const uniqueActivities = Array.from(activityMap.values());
-
+    const dataFromLocalStorage = localStorage.getItem("weekThreeFormData");
+    console.log(dataFromLocalStorage)
     // Prepare the data to be sent, including additionalData for activity 6
     const submissionData = {
       week: 3,
