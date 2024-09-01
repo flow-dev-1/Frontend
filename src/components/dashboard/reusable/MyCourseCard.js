@@ -44,10 +44,10 @@ const MyCourseCard = ({ course }) => {
 
     console.log(course)
 
-    if (course?.course.title === 'My new Course') {
+    if (course?.course.title === "Self Awareness") {
       navigate(`/dashboard/self-awareness-course/${course?.course._id}`, {
-        state: { course },
-      })
+        state: { course }
+      });
     }
   }
 
