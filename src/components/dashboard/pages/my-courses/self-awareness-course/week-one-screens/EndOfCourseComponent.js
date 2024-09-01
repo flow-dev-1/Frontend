@@ -4,13 +4,15 @@ import MyFireWorks from '../Fireworks'
 import celebrate from '../../../../../../assets/celebrate.png'
 
 const EndOfCourseComponent = ({ currentWeekIndex, handleNextWeekCourse }) => {
+  currentWeekIndex = 0
+  console.log(currentWeekIndex)
   return (
     <div className='end-of-course-page'>
       <div className='congrats'>
         <img src={celebrate} alt='celebrate' />
         <h1>Hurray!</h1>
         <p className='text-center fs-5'>
-          You have made it to the <br /> Week {currentWeekIndex + 1}
+          You have made it to the end of <br /> Week {currentWeekIndex + 1}
         </p>
       </div>
       <MyFireWorks />

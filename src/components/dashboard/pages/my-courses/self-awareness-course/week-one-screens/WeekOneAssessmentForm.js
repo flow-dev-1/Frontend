@@ -198,8 +198,8 @@ export default function WeekOneAssessmentForm({
     userService
       .postMyAssessment(courseId, stringifiedFormData)
       .then((response) => {
-        if (response.data.message === "You have already taken the assessment") {
-          toast.error(response.data.message); // Show error toast with the message
+        if (response.message === "You have already taken the assessment") {
+          toast.error("You have already taken the assessment"); // Show error toast with the message
         } else {
           console.log("Submission successful:", response);
           toast.success("Submission successful!"); // Optional: Show success message
@@ -207,7 +207,7 @@ export default function WeekOneAssessmentForm({
       })
       .catch((error) => {
         console.error("Submission failed:", error);
-        toast.error("Submission failed. Please try again later."); // General error message
+        // toast.error("Submission failed. Please try again later."); // General error message
       });
   };
 
