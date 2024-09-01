@@ -15,12 +15,12 @@ const QuestionComponent = ({
 
   useEffect(() => {
     // Find the data for the current activity
-    const currentActivityData = formData.activities.find(
-      (item) => item.activity === activityIndex
+    const currentActivityData = formData?.activities?.find(
+      (item) => item?.activity === activityIndex
     )
     console.log(formData)
 
-    if (currentActivityData && currentActivityData.answers) {
+    if (currentActivityData && currentActivityData?.answers) {
       // Set the answer from formData if it exists
       setAnswers(currentActivityData.answers[0] || '')
     } else {

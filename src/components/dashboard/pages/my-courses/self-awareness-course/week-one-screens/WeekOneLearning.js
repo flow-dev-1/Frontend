@@ -17,6 +17,7 @@ import PersonalityDescriptionComponent from './PersonalityDescriptionComponent'
 import PersonalityQuestionComponent from './PersonalityQuestionComponent'
 import PersonalityTest from './PersonalityTest'
 import 'react-toastify/dist/ReactToastify.css'
+import AssessmentForm from './AssessmentForm'
 
 export default function WeekOneLearning({
   course,
@@ -89,7 +90,6 @@ export default function WeekOneLearning({
       setCurrentActivity(nextActivity)
     }
   }
-
 
   const handlePrevious = () => {
     const prevActivity = currentActivity - 1
@@ -200,9 +200,9 @@ export default function WeekOneLearning({
             formData={formData}
             altText='is?'
             onBack={handlePrevious}
-            onNext={(answer) =>
+            onNext={(answers) =>
               handleNext({
-                answers: [answer],
+                answers,
               })
             }
           />
@@ -211,6 +211,7 @@ export default function WeekOneLearning({
         return (
           <div className='drag-drop-section'>
             <DragDropComponent
+              activityIndex={currentActivity}
               formData={formData}
               onBack={handlePrevious}
               onNext={handleNext}
@@ -223,6 +224,7 @@ export default function WeekOneLearning({
             questionText='What do you understand by the word,'
             imageSrc={personality}
             emotionalHand={emotionalHand}
+            activityIndex={currentActivity}
             analyticHand={analyticHand}
             friendshipHand={friendshipHand}
             actionHand={actionHand}
@@ -237,30 +239,58 @@ export default function WeekOneLearning({
           />
         )
       case 10:
-        return <PersonalityTest onBack={handlePrevious} onNext={handleNext} />
+        return (
+          <PersonalityTest
+            activityIndex={currentActivity}
+            formData={formData}
+            onBack={handlePrevious}
+            onNext={handleNext}
+          />
+        )
+
       case 12:
         return (
           <QuestionComponent
             activityIndex={12}
             questionText='Did you discover something new about yourself through this assessment? What did you learn?'
             imageSrc=''
+            formData={formData}
             altText=''
             onBack={handlePrevious}
-            onNext={(answer) =>
+            onNext={(answers) =>
               handleNext({
-                answers: [answer],
+                answers,
               })
             }
           />
         )
+
       case 13:
         return (
           <PersonalityQuestionComponent
-            formData={formData}
             onBack={handlePrevious}
             onNext={(answers) => handleNext({ answers })}
+            activityIndex={currentActivity}
+            questions={[
+              {
+                questionText:
+                  'Did you get the same color as the color you identified for yourself earlier?',
+              },
+              {
+                questionText:
+                  'What was different? Why do you think this was different?',
+              },
+              {
+                questionText: 'Do you agree with this new result?',
+              },
+            ]}
+            formData={formData}
           />
         )
+
+      case 14:
+        return <AssessmentForm setCurrentActivity={setCurrentActivity} />
+
       default:
         return (
           <EndOfCourseComponent
