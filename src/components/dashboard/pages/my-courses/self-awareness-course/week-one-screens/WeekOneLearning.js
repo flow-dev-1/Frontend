@@ -90,17 +90,6 @@ export default function WeekOneLearning({
     }
   }
 
-  const handleDragDropData = (newBuckets) => {
-    setFormData((prevFormData) => {
-      const updatedActivities = prevFormData.activities.map((item) =>
-        item.activity === 6 ? { ...item, dragDropData: newBuckets } : item
-      )
-      if (!updatedActivities.find((item) => item.activity === 6)) {
-        updatedActivities.push({ activity: 6, dragDropData: newBuckets })
-      }
-      return { ...prevFormData, activities: updatedActivities }
-    })
-  }
 
   const handlePrevious = () => {
     const prevActivity = currentActivity - 1
@@ -115,6 +104,8 @@ export default function WeekOneLearning({
       state: { course, weekIndex: nextWeekIndex },
     })
   }
+
+  console.log(formData)
 
   const renderActivityContent = () => {
     if (!formData.activities.length) {
@@ -220,9 +211,9 @@ export default function WeekOneLearning({
         return (
           <div className='drag-drop-section'>
             <DragDropComponent
+              formData={formData}
               onBack={handlePrevious}
               onNext={handleNext}
-              handleDragDropData={handleDragDropData}
             />
           </div>
         )
