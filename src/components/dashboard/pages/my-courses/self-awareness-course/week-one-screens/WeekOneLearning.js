@@ -246,26 +246,12 @@ export default function WeekOneLearning({
             onNext={handleNext}
           />
         )
+     
       case 12:
-        return (
-          <QuestionComponent
-            activityIndex={12}
-            questionText='Did you discover something new about yourself through this assessment? What did you learn?'
-            imageSrc=''
-            altText=''
-            onBack={handlePrevious}
-            onNext={(answer) =>
-              handleNext({
-                answer,
-              })
-            }
-            formData={formData}
-          />
-        )
-      case 13:
         return (
           <PersonalityQuestionComponent
             formData={formData}
+            activityIndex={currentActivity}
             onBack={handlePrevious}
             onNext={(answers) => handleNext({ answers })}
           />
