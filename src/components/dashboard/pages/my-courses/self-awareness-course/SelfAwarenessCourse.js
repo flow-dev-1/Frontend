@@ -17,7 +17,7 @@ function SelfAwarenessCourse() {
   console.log(id)
 
   const [activeLink, setActiveLink] = React.useState('week1')
-  const [currentWeekIndex, setCurrentWeekIndex] = React.useState(0)
+  const [currentWeekIndex, setCurrentWeekIndex] = React.useState(1)
 
   const courses = {
     id: 1,

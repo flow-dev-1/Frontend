@@ -1,4 +1,4 @@
-import api from '../index.js'
+import api from "../index.js";
 
 class UserOBJ {
   //Register
@@ -276,5 +276,5 @@ class UserOBJ {
   };
 }
 
-const user = new UserOBJ()
-export default user
+const user = new UserOBJ();
+export default user;
