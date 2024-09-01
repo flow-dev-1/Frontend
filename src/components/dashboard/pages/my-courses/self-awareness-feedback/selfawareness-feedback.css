@@ -2,6 +2,17 @@
   font-family: 'ABeeZee', sans-serif;
 }
 
+.final-report-title {
+  gap: 1rem;
+  align-items: center;
+}
+
+.final-report-title a {
+  text-decoration: none;
+  font-size: 14px;
+  color: #275dad;
+}
+
 .week-title-container,
 .final-report-container {
   padding: 15px 20px;
@@ -89,4 +100,8 @@
 .label {
   font-weight: bold;
   color: #555;
+}
+
+#badge {
+  background-color: #333;
 }

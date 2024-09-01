@@ -7,6 +7,7 @@ import Week5 from './Week5'
 import './selfawareness-feedback.css'
 import { Icon } from '@iconify/react'
 
+
 const SelfAwarenessFeedback = () => {
   const [expandedWeek, setExpandedWeek] = useState(null) // State to track which week is expanded
 
@@ -135,22 +136,16 @@ const SelfAwarenessFeedback = () => {
             </span>
           </h2>
 
-          <a
-            href='/path/to/pdf'
-            download='SelfAwarenessSummary.pdf'
-            className='download-link'
-          >
-            (Download PDF)
-          </a>
-          <Icon
-            icon={
-              expandedWeek === 6
-                ? 'simple-line-icons:arrow-down'
-                : 'simple-line-icons:arrow-up'
-            }
-            onClick={() => toggleWeek(6)}
-            style={{ cursor: 'pointer' }}
-          />
+          <div>
+            <a
+              href='/path/to/pdf'
+              download='SelfAwarenessSummary.pdf'
+              className='download-link'
+            >
+              (Download PDF)
+            </a>
+            <Icon icon='bi:download' />
+          </div>
         </div>
         {/* Add any content you want to display when the Final Report is expanded */}
       </div>

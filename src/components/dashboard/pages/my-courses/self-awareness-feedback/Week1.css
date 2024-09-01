@@ -29,9 +29,10 @@
 
 div#badge {
   font-size: 12px !important;
-  color: #6c2d2d !important;
+  color: #fff;
   border-radius: 10px !important;
   background-color: '#000';
+  padding: 0.1rem 0.5rem;
 }
 
 .activity-badge {
@@ -249,4 +250,3 @@ div#badge {
 #sometimes {
   background-color: #faaa74;
 }
-
