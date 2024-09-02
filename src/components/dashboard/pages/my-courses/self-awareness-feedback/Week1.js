@@ -1018,7 +1018,8 @@ const Week1 = () => {
   const [assessmentData, setAssessmentData] = useState(null);
   const [assessmentLoading, setAssessmentLoading] = useState(true);
   const [assessmentError, setAssessmentError] = useState(null);
-  const [questionsQuiz, setQuestions] = useState([]);
+  const [quizQuestions, setQuizQuestions] = useState([]); // Renamed from questionsQuiz to quizQuestions
+
   useEffect(() => {
     const fetchAssessmentData = async () => {
       setAssessmentLoading(true);
@@ -1036,9 +1037,9 @@ const Week1 = () => {
   }, [courseId, week]);
 
   const assessments = assessmentData?.existingAssessment.assessments;
-  // console.log(assessments);
   const percent = assessmentData?.existingAssessment.rating;
   const color = assessmentData?.existingAssessment?.personalityColor;
+
   function getQuestionsByColor(color) {
     switch (color) {
       case "Red":
@@ -1053,22 +1054,24 @@ const Week1 = () => {
         return [];
     }
   }
-  function updateCheckedOptions(questionsQuiz, assessments) {
-    return questionsQuiz.map((question, index) => {
-      // Clone the question to avoid mutating the state directly
+
+  function updateCheckedOptions(quizQuestions, assessments) {
+    // Updated the parameter name
+    return quizQuestions.map((question, questionIndex) => {
       const updatedQuestion = { ...question };
+
       updatedQuestion.options = updatedQuestion.options.map(
         (option, optionIndex) => {
-          // console.log(optionIndex.answer)
-          // Check if the option should be marked as checked based on assessments
-          const isChecked = assessments[index]?.answer === optionIndex;
-          // console.log(isChecked)
+          // Check if the current option index matches the answer index in assessments
+          const isChecked = optionIndex === assessments[questionIndex]?.answer;
           return { ...option, checked: isChecked };
         }
       );
+
       return updatedQuestion;
     });
   }
+
   useEffect(() => {
     if (color) {
       const questionsToShow = getQuestionsByColor(color);
@@ -1076,9 +1079,10 @@ const Week1 = () => {
         questionsToShow,
         assessments
       );
-      setQuestions(updatedQuestions);
+      setQuizQuestions(updatedQuestions); // Updated to setQuizQuestions
     }
   }, [color, assessments]);
+
   if (isLoading || assessmentLoading) {
     return <div>Loading...</div>;
   }
@@ -1086,22 +1090,22 @@ const Week1 = () => {
   if (isError || assessmentError) {
     return <div>Error loading data.</div>;
   }
-  // console.log(data?.activity?.activities[5].buckets);
+
   const buckets = data?.activity?.activities[5].buckets;
 
-  // Mapping out the content for each bucket
   const mappedContent = {
     yes: buckets?.yes?.map((item) => item.content),
     no: buckets?.no?.map((item) => item.content),
     sometimes: buckets?.sometimes.map((item) => item.content)
   };
-  // console.log(data?.activity?.activities[9].questionChecked);
+
   const backendAnswers = data?.activity?.activities[9].questionChecked;
   const selectedAnswers = Object.values(backendAnswers).map(
     (item) => item.text
   );
-  // console.log(selectedAnswers)
-  questions = questions.map((question) => {
+
+   questions = questions.map((question) => {
+    // Keeping the original 'questions' name here
     return {
       ...question,
       options: question.options.map((option) => {
@@ -1115,7 +1119,6 @@ const Week1 = () => {
     };
   });
 
-  //  console.log(questions);
   const indexCount = Object.values(backendAnswers).reduce((count, item) => {
     count[item.index] = (count[item.index] || 0) + 1;
     return count;
@@ -1126,7 +1129,6 @@ const Week1 = () => {
     0
   );
 
-  // Map of index to color
   const indexToColor = {
     0: "red",
     1: "green",
@@ -1134,7 +1136,6 @@ const Week1 = () => {
     3: "yellow"
   };
 
-  // Calculate degrees for each color
   personalityFeedback.chartData = Object.keys(indexCount).reduce(
     (data, index) => {
       const color = indexToColor[index];
@@ -1154,7 +1155,7 @@ const Week1 = () => {
       feedback: "Figma ipsum component variant main layer..."
     },
     {
-      activity: 2, // New activity
+      activity: 2,
       question:
         "Drag-and-drop the statements on the left into any of these bowls.",
       answer: mappedContent,
@@ -1162,6 +1163,7 @@ const Week1 = () => {
         "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor..."
     }
   ];
+
   return (
     <div className="week-content">
       {activities?.map((activity, index) => (
@@ -1172,7 +1174,7 @@ const Week1 = () => {
             <span> {activity?.question}</span>
           </p>
 
-          {activity?.answer.yes ? ( // Check if the activity has the special answer format
+          {activity?.answer.yes ? (
             <div
               style={{ width: "90%", margin: "1rem auto" }}
               className="drag-drop-activity"
@@ -1267,50 +1269,41 @@ const Week1 = () => {
       <PersonalityFeedback feedback={personalityFeedback} />
 
       <p className="activity-badge">Activity 4</p>
-      {questionsQuiz.map((q, index) => (
-        <div className="question-block" key={index}>
-          <p className="question d-flex align-items-center gap-2">
-            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
-            <span> {q.question}</span>
-          </p>
-          <div className="options">
-            {q.options.map((option, idx) => (
-              <div className="option" key={idx}>
-                <img
-                  src={option.isCorrect ? checkedImage : unCheckedImage}
-                  alt={option.isCorrect ? "Checked" : "Unchecked"}
-                  style={{ width: "20px", marginRight: "10px" }}
-                />
-                <span style={{ fontSize: "14px" }} className="option-label">
-                  {option.label}
-                </span>
-                <p style={{ width: "120px", textAlign: "center" }}>
-                  {option.isCorrect ? (
-                    <span
-                      style={{ color: "#50AA50" }}
-                      className="d-flex align-items-center justify-content-center gap-1 "
-                    >
-                      <Icon width={17} icon="ph:seal-check-light" />
-                      Correct
-                    </span>
-                  ) : (
-                    <span
-                      style={{ color: "#FD483D" }}
-                      className="d-flex align-items-center justify-content-center gap-1"
-                    >
-                      <Icon width={17} icon="mdi:cross-circle-outline" />
-                      Wrong
-                    </span>
-                  )}
-                </p>
-              </div>
-            ))}
+      {quizQuestions.map(
+        (
+          q,
+          index // Updated to quizQuestions
+        ) => (
+          <div className="question-block" key={index}>
+            <p className="question d-flex align-items-center gap-2">
+              <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
+                Question:
+              </h4>
+              <span> {q.question}</span>
+            </p>
+            <div className="options">
+              {q.options.map((option, idx) => (
+                <div className="option" key={idx}>
+                  <img
+                    src={option.checked ? checkedImage : unCheckedImage}
+                    alt={option.checked ? "Checked" : "Unchecked"}
+                    style={{ width: "20px", marginRight: "10px" }}
+                  />
+                  <span style={{ fontSize: "14px" }} className="option-label">
+                    {option.label}
+                  </span>
+                  <span className={`color-label ${option.color.toLowerCase()}`}>
+                    {option.color}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
-      <FinalReport rate={percent} />
+        )
+      )}
     </div>
   );
 };
 
 export default Week1;
+
