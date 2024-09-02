@@ -20,6 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 import WeekOneAssessmentForm from "./WeekOneAssessmentForm";
 import AssessmentForm from "./AssessmentForm";
 import userService from "../../../../../../services/api/user.js";
+import BuyCoursePopup from "../popUp.jsx";
 
 export default function WeekOneLearning({
   course,
@@ -27,6 +28,7 @@ export default function WeekOneLearning({
   currentWeekIndex,
   courseId
 }) {
+  const [showPopup, setShowPopup] = useState(false);
   const [currentActivity, setCurrentActivity] = useState(() => {
     const savedState = localStorage.getItem(
       `week-${currentWeekIndex}-currentActivity`
@@ -34,6 +36,18 @@ export default function WeekOneLearning({
     return savedState ? JSON.parse(savedState) : 1;
   });
 
+  useEffect(() => {
+    const canSee = localStorage.getItem(`${courseId}-can-see`);
+    console.log(canSee)
+    if (canSee === null) {
+      setShowPopup(true);
+      console.log("i am here")
+    }
+  }, [courseId]);
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+  };
   const [formData, setFormData] = useState(() => {
     const savedState = localStorage.getItem(
       `week-${currentWeekIndex}-activityData`
@@ -63,9 +77,8 @@ export default function WeekOneLearning({
 
   const handleSubmit = async () => {
     try {
-      
       // Your submit logic here
-       const stringifiedFormData = JSON.stringify(formData);
+      const stringifiedFormData = JSON.stringify(formData);
       userService
         .postMyActivity(courseId, stringifiedFormData)
         .then((response) => {
@@ -119,6 +132,9 @@ export default function WeekOneLearning({
   };
 
   const renderActivityContent = () => {
+  //  if (showPopup) {
+  //   return <BuyCoursePopup />;
+  // }
     switch (currentActivity) {
       case 1:
         return (

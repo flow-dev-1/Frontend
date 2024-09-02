@@ -136,7 +136,7 @@ export default function PersonalityTest({
         "A. I dive in headfirst and take immediate action.", // Red
         "B. I analyze the situation and come up with a strategy.", // Green
         "C. I consider how it will impact the people involved and try to keep everyone calm.", // Blue
-        "I make a detailed plan and follow it step by step." // Yellow
+        "D. I make a detailed plan and follow it step by step." // Yellow
       ]
     }
 

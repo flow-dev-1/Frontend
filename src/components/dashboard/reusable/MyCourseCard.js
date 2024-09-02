@@ -48,6 +48,7 @@ const MyCourseCard = ({ course }) => {
       navigate(`/dashboard/self-awareness-course/${course?.course._id}`, {
         state: { course }
       });
+      localStorage.setItem(`${course._id}-can-see`, true);
     }
   }
 
