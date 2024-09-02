@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './FinalReport.css'
 
-const FinalReport = () => {
+const FinalReport = ({rate}) => {
   const [expanded, setExpanded] = useState(false)
 
   const toggleWeek = () => {
@@ -14,7 +14,7 @@ const FinalReport = () => {
         <h4 style={{ fontSize: '20px', color: '#fff' }}>
           Weekly Report
         </h4>
-        <h1 class='icon-box'>100%</h1>
+        <h1 class='icon-box'>{rate}%</h1>
       </div>
 
       <div class='text-box'>
