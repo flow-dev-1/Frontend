@@ -5,52 +5,65 @@ import '../newcourse.css'
 import NavigationButtons from './NavigationButtons'
 import { toast } from 'react-toastify'
 
-export default function StrengthIdentification({ onSubmit, onNext, onBack }) {
+export default function WeaknessIdentification({
+  formData,
+  onNext,
+  onBack,
+  activityIndex,
+}) {
   const questionsArray = [
-    'creative',
-    'energetic',
-    'honest',
-    'responsible',
-    'organized',
-    'patient',
-    'friendly',
-    'confident',
-    'good listener',
-    'team player',
-    'brave',
-    'analytical',
-    'compassionate',
-    'hardworking',
-    'trustworthy',
-    'flexible',
-    'determined',
-    'emphatic',
-    'cooperative',
-    'problem solver',
-    'curious',
-    'dependable',
-    'adaptable',
-    'enthusiastic',
-    'kind',
-    'generous',
-    'respectful',
-    'good communicator',
-    'ability to lead',
-    'detail-oriented',
+    'Anxious',
+    'Insecure',
+    'Pessimistic',
+    'Easily distracted',
+    'Shy',
+    'Jealous',
+    'Talkative',
+    'Forgetful',
+    'Overly competitive',
+    'Rigid',
+    'Passive',
+    'Impulsive',
+    'Overconfident',
+    'Perfectionist',
+    'Stubborn',
+    'Lazy',
+    'Inflexible',
+    'Judgmental',
+    'Procrastinator',
+    'Overly emotional',
+    'Moody',
+    'Sensitive',
+    'Overly critical',
+    'Disorganized',
+    'Too independent',
   ]
 
-  // Initialize state for checked questions and selected answers
-  const [questionChecked, setQuestionChecked] = useState(() => {
-    const savedState = JSON.parse(localStorage.getItem('strengthsChecked'))
-    return (
-      savedState ||
-      questionsArray.reduce((acc, _, index) => ({ ...acc, [index]: false }), {})
-    )
-  })
+  // Find answers for the current activity index in formData
+  const currentActivityData = formData?.activities.find(
+    (item) => item.activity === activityIndex
+  )
 
-  const [selectedAnswers, setSelectedAnswers] = useState(() => {
-    return JSON.parse(localStorage.getItem('selectedStrengths')) || []
-  })
+  // Extract saved answers if they exist
+  const savedAnswers =
+    currentActivityData &&
+    currentActivityData.answers &&
+    currentActivityData.answers.weakness
+      ? currentActivityData.answers.weakness
+      : []
+
+  // Initialize state for checked questions based on savedAnswers
+  const [questionChecked, setQuestionChecked] = useState(() =>
+    questionsArray.reduce(
+      (acc, question, index) => ({
+        ...acc,
+        [index]: savedAnswers.includes(question),
+      }),
+      {}
+    )
+  )
+
+  const [selectedAnswers, setSelectedAnswers] = useState(savedAnswers)
 
   useEffect(() => {
     // Update selected answers whenever questionChecked state changes
@@ -59,9 +72,6 @@ export default function StrengthIdentification({ onSubmit, onNext, onBack }) {
       .map(([index]) => questionsArray[index])
 
     setSelectedAnswers(answers)
-    // Save the selected answers and checked state to localStorage
-    localStorage.setItem('selectedStrengths', JSON.stringify(answers))
-    localStorage.setItem('strengthsChecked', JSON.stringify(questionChecked))
   }, [questionChecked])
 
   const handleQuestionCheck = (questionIndex) => {
@@ -78,8 +88,7 @@ export default function StrengthIdentification({ onSubmit, onNext, onBack }) {
       return
     }
 
-    onSubmit({ weaknesses: selectedAnswers }) // Pass the selected answers
-    onNext() // Proceed to the next step
+    onNext({ weakness: selectedAnswers }) // Proceed to the next step
   }
 
   return (

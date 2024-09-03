@@ -5,8 +5,9 @@ import checkedImage from '../../../../../../assets/selfawareness-images/checked.
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
 import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModal'
 import userService from '../../../../../../services/api/user.js'
+import { toast } from 'react-toastify'
 
-export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
+export default function WeekTwoAssessmentForm({ onBack, onNext }) {
   const [currentIndex, setCurrentIndex] = useState(1)
   const [reviewPopUp, setReviewPopUp] = React.useState(false)
   const [assessment, setAssessment] = useState(() => {
@@ -79,12 +80,14 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
 
   const handleStepClick = () => {
     if (currentIndex < questionsArray.length) {
-      if (assessment.assessment.answers[currentIndex - 1]) {
+      if (assessment.assessment.answers[currentIndex - 1] !== undefined) {
         setCurrentIndex(currentIndex + 1)
       } else {
-        alert('Please answer the question before proceeding.')
+        toast.success('Please answer the question before proceeding.')
       }
     } else {
+      // Optionally handle submission or final step
+      onNext()
     }
 
     if (currentIndex === 8) {
@@ -101,7 +104,7 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
     if (currentIndex > 1) {
       setCurrentIndex(currentIndex - 1)
     } else {
-      previous()
+      onBack()
     }
   }
 
@@ -109,12 +112,9 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
     setReviewPopUp(false)
   }
 
-  const correctAnswerIndices = [3, 1, 2, 0, 2]
-
   const handleQuestionCheck = (questionIndex, optionIndex) => {
     const updatedAnswers = [...assessment.assessment.answers]
-    updatedAnswers[questionIndex] =
-      questionsArray[questionIndex].questionList[optionIndex]
+    updatedAnswers[questionIndex] = optionIndex // Store index instead of text
 
     const updatedAssessment = {
       ...assessment,
@@ -126,43 +126,14 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
     console.log('Assessment updated:', updatedAssessment)
   }
 
-  const calculateScore = () => {
-    const correctAnswers = correctAnswerIndices.map(
-      (correctIndex, questionIndex) => {
-        return (
-          questionsArray[questionIndex].questionList[correctIndex] ===
-          assessment.assessment.answers[questionIndex]
-        )
-      }
-    )
-
-    const correctCount = correctAnswers.filter(Boolean).length
-    const percentageScore = (correctCount / correctAnswerIndices.length) * 100
-
-    console.log(`Your score is: ${percentageScore}%`)
-    return percentageScore
+  const transformAssessmentData = () => {
+    return assessment.assessment.answers.map((answerIndex) => answerIndex)
   }
 
   // Example usage:
   // After handling question check, you might want to calculate the score:
-  const percentageScore = calculateScore()
-
-  //Todo Asssement
-  console.log('Assement to Post', assessment)
-
-  const handleInputChange = (questionIndex, value) => {
-    const updatedAnswers = [...assessment.assessment.answers]
-    updatedAnswers[questionIndex] = value
-
-    const updatedAssessment = {
-      ...assessment,
-      assessment: { ...assessment.assessment, answers: updatedAnswers },
-    }
-
-    setAssessment(updatedAssessment)
-    localStorage.setItem('assessment', JSON.stringify(updatedAssessment))
-    console.log('Assessment updated:', updatedAssessment)
-  }
+  const transformedData = transformAssessmentData()
+  console.log('Transformed Data:', transformedData)
 
   const renderQuestion = () => {
     const questionIndex = currentIndex - 1
@@ -183,23 +154,23 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
               </h2>
             </div>
             <div className='text-center checkbox-questions'>
-              <ul className='p-0 mt-4'>
+              <ul
+                style={{ display: 'flex', flexDirection: 'column' }}
+                className='p-0 mt-4'
+              >
                 {questionData.questionList.map((item, index) => (
-                  <li
-                    key={index}
-                    className='d-flex flex-column align-items-center my-2'
-                  >
-                    <p className='question-p ms-3'>{item}</p>
+                  <li key={index} className='d-flex align-items-center my-2'>
                     <img
                       onClick={() => handleQuestionCheck(questionIndex, index)}
                       className='cursor-pointer mt-2'
                       src={
-                        assessment.assessment.answers[questionIndex] === item
+                        assessment.assessment.answers[questionIndex] === index
                           ? checkedImage
                           : unCheckedImage
                       }
                       alt=''
                     />
+                    <p className='question-p ms-3'>{item}</p>
                   </li>
                 ))}
               </ul>
@@ -222,7 +193,7 @@ export default function WeekTwoAssessmentForm({ onSubmit, previous }) {
                 rows='6'
                 placeholder='Type your answer here...'
                 onChange={(e) =>
-                  handleInputChange(questionIndex, e.target.value)
+                  handleQuestionCheck(questionIndex, e.target.value)
                 }
                 value={assessment.assessment.answers[questionIndex] || ''}
               ></textarea>

@@ -4,7 +4,6 @@ import './reusable.css'
 import Modal from 'react-modal'
 import ReviewCourseInfoModal from '../../modals-pages/dashboard-modals/ReviewCourseInfoModal'
 import { useNavigate } from 'react-router-dom'
-import { compose } from '@reduxjs/toolkit'
 
 const MyCourseCard = ({ course }) => {
   const navigate = useNavigate()
@@ -44,11 +43,11 @@ const MyCourseCard = ({ course }) => {
 
     console.log(course)
 
-    if (course?.course.title === "Self Awareness") {
+    if (course?.course.title === 'Self Awareness') {
       navigate(`/dashboard/self-awareness-course/${course?.course._id}`, {
-        state: { course }
-      });
-      localStorage.setItem(`${course._id}-can-see`, true);
+        state: { course },
+      })
+      localStorage.setItem(`${course._id}-can-see`, true)
     }
   }
 
@@ -75,15 +74,10 @@ const MyCourseCard = ({ course }) => {
           </div>
 
           <div className='px-3 py-2'>
-            {/* <h3 style={{ color: '#329BD6', fontSize: '24px' }}>
-              Max the Explorer Monkey:{' '}
-            </h3> */}
             <h3 style={{ color: '#329BD6', fontSize: '24px' }}>
               {course?.course.title}
             </h3>
-            {/* {course.subtitle && <h4>{course.subtitle}</h4>} */}
             <p style={{ height: '70px' }}>
-              {' '}
               {truncateText(course?.course.description, 100)}
             </p>
             <div className='d-flex icons'>
@@ -168,15 +162,14 @@ const MyCourseCard = ({ course }) => {
               ? 'Start'
               : 'Resume'}
           </button>
-          {/* Comment Icon - Only appears when resuming  {course?.progress > 0 && course?.progress < 100 && ( */}
-          {
+          {course?.progress > 0 && course?.progress < 100 && (
             <Icon
               onClick={() => navigate(`/dashboard/feedback/self-awareness`)}
               style={{ color: '#329BD6' }}
               width={40}
               icon='hugeicons:comment-01'
             />
-          }
+          )}
         </div>
       </div>
 

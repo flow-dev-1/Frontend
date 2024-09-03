@@ -80,7 +80,7 @@ function SelfAwarenessCourse() {
 
   const handleLinkClick = (index) => {
     setActiveLink(`week${index + 1}`)
-    setCurrentWeekIndex(index)
+    setCurrentWeekIndex(index + 1)
   }
 
   const renderSidebarContent = () => {
@@ -101,6 +101,7 @@ function SelfAwarenessCourse() {
       case 1:
         return (
           <WeekTwoLearning
+            courseId={id}
             course={course}
             currentWeekIndex={currentWeekIndex}
           />
