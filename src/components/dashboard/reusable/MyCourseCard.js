@@ -4,6 +4,7 @@ import './reusable.css'
 import Modal from 'react-modal'
 import ReviewCourseInfoModal from '../../modals-pages/dashboard-modals/ReviewCourseInfoModal'
 import { useNavigate } from 'react-router-dom'
+import { encryptURI } from '../../../utils/encryption'
 
 const MyCourseCard = ({ course }) => {
   const navigate = useNavigate()
@@ -42,12 +43,17 @@ const MyCourseCard = ({ course }) => {
     }
 
     console.log(course)
+    const id = course?.course._id
 
     if (course?.course.title === 'Self Awareness') {
-      navigate(`/dashboard/self-awareness-course/${course?.course._id}`, {
+      navigate(`/dashboard/self-awareness-course/${encryptURI(id)}`, {
         state: { course },
       })
       localStorage.setItem(`${course._id}-can-see`, true)
+    } else {
+      navigate(`/dashboard/my-courses/${encryptURI(id)}`, {
+        state: { course },
+      })
     }
   }
 

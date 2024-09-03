@@ -7,20 +7,40 @@ import Modal from 'react-modal'
 import CourseInfoModal from '../../modals-pages/dashboard-modals/CourseInfoModal'
 import PaymentModal from '../../modals-pages/dashboard-modals/PaymentModal'
 import { useNavigate } from 'react-router-dom'
+import { encryptURI } from '../../../utils/encryption'
 
-const CourseCard = ({ course }) => {
+const CourseCard = ({ course, coursesArray, enrolled, enrolledData }) => {
   const navigate = useNavigate()
 
   const [modalIsOpen, setIsOpen] = useState(false)
   const [modalType, setModalType] = useState('')
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    openModal()
-  }
+  console.log(coursesArray)
+  console.log(enrolledData)
+  const courseIndex = coursesArray?.courses.findIndex(
+    (c) => c._id === course._id
+  )
 
-  function openPage(course) {
-    navigate(`/dashboard/my-courses/${course.courseEnrollment[0]}`, { state: { course } })
+  const isEnrolled = enrolled.includes(course._id)
+  console.log(isEnrolled)
+  console.log(courseIndex)
+  const handleCourseClick = () => {
+    // Find the index of the current course in the coursesArray
+    const courseIndex = coursesArray?.courses.findIndex(
+      (c) => c._id === course._id
+    )
+    console.log(courseIndex)
+
+    // Use this index to get the corresponding enrolledData course
+    if (isEnrolled && enrolledData?.courses[courseIndex]) {
+      navigate(
+        `/dashboard/self-awareness-course/${encryptURI(
+          enrolledData.courses[courseIndex]._id
+        )}`
+      )
+    } else {
+      // Handle the case when the course is not enrolled or data is not available
+    }
   }
 
   const openModal = (modalType, course) => {
@@ -43,8 +63,6 @@ const CourseCard = ({ course }) => {
     }
     return text
   }
-
-  const enrolled = false
 
   return (
     <div className='reusable-course-card'>
@@ -69,15 +87,10 @@ const CourseCard = ({ course }) => {
           </div>
 
           <div className='px-3 py-2'>
-            {/* <h3 style={{ color: '#329BD6', fontSize: '24px' }}>
-              Max the Explorer Monkey:{' '}
-            </h3> */}
             <h3 style={{ color: '#329BD6', fontSize: '24px' }}>
               {course?.title}
             </h3>
-            {/* {course.subtitle && <h4>{course.subtitle}</h4>} */}
             <p style={{ height: '70px' }}>
-              {' '}
               {truncateText(course?.description, 100)}
             </p>
             <div className='d-flex icons'>
@@ -96,39 +109,114 @@ const CourseCard = ({ course }) => {
             </div>
           </div>
         </div>
-        <div className='course-card-btn d-flex' style={{ width: '90%' }}>
-          <button
-            style={{
-              backgroundColor: '#fff',
-              border: '1px solid #329BD6',
-              color: '#329BD6',
-              display: 'flex',
-              justifyContent: 'center',
-              gap: '.4rem',
-              padding: '.5rem 8px',
-            }}
-            className='btn card-btn preview'
-            onClick={() => openModal('course')}
-          >
-            <Icon icon='prime:eye' /> Review
-          </button>
-          <button
-            style={{
-              backgroundColor: '#329BD6',
-              color: '#fff',
-              display: 'flex',
-              justifyContent: 'center',
-              gap: '.4rem',
-              padding: '.5rem 8px',
-            }}
-            className='btn card-btn cart'
-            onClick={() => openModal('payment')}
-          >
-            <Icon icon='mdi:cart-outline' />
-            {course?.currency}
-          {course?.cost?.toLocaleString()}
-          </button>
-        </div>
+
+        {enrolled ? (
+          <div className='course-card-btn d-flex'>
+            {/* Review/Feedback Button */}
+            {course.progress === 100 ? (
+              <button
+                style={{
+                  backgroundColor: '#fff',
+                  color: '#329BD6',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  gap: '.4rem',
+                  padding: '.5rem 8px',
+                  border: '1px solid #329bd6',
+                }}
+                className='btn card-btn feedback'
+                onClick={() => openModal('feedback')}
+              >
+                <Icon icon='hugeicons:comment-01' /> Feedback
+              </button>
+            ) : (
+              <button
+                style={{
+                  backgroundColor: '#fff',
+                  border: '1px solid #329BD6',
+                  color: '#329BD6',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  gap: '.4rem',
+                  width: '120px',
+                  padding: '.5rem 8px',
+                }}
+                className='btn card-btn preview'
+                onClick={() => openModal('review')}
+              >
+                <Icon icon='prime:eye' /> Review
+              </button>
+            )}
+
+            {/* Start/Resume/Completed Button */}
+            <button
+              style={{
+                backgroundColor: course?.progress === 100 ? '#fff' : '#329BD6',
+                color: course.progress === 100 ? '#50AA50' : '#fff',
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '.4rem',
+                width: '120px',
+                padding: '.5rem 8px',
+              }}
+              className='btn card-btn start-resume'
+              onClick={handleCourseClick}
+            >
+              {course?.progress === 100 ? (
+                <Icon width={25} icon='ph:seal-check-thin' />
+              ) : (
+                <Icon icon='pepicons-print:play-circle' />
+              )}
+              {course?.progress === 100
+                ? 'Completed'
+                : course.progress === 0
+                ? 'Start'
+                : 'Resume'}
+            </button>
+            {course?.progress > 0 && course?.progress < 100 && (
+              <Icon
+                onClick={() => navigate(`/dashboard/feedback/self-awareness`)}
+                style={{ color: '#329BD6' }}
+                width={40}
+                icon='hugeicons:comment-01'
+              />
+            )}
+          </div>
+        ) : (
+          <div className='course-card-btn d-flex' style={{ width: '90%' }}>
+            <button
+              style={{
+                backgroundColor: '#fff',
+                border: '1px solid #329BD6',
+                color: '#329BD6',
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '.4rem',
+                padding: '.5rem 8px',
+              }}
+              className='btn card-btn preview'
+              onClick={() => openModal('course')}
+            >
+              <Icon icon='prime:eye' /> Review
+            </button>
+            <button
+              style={{
+                backgroundColor: '#329BD6',
+                color: '#fff',
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '.4rem',
+                padding: '.5rem 8px',
+              }}
+              className='btn card-btn cart'
+              onClick={() => openModal('payment')}
+            >
+              <Icon icon='mdi:cart-outline' />
+              {course?.currency}
+              {course?.cost?.toLocaleString()}
+            </button>
+          </div>
+        )}
       </div>
 
       <Modal
