@@ -8,6 +8,7 @@ import FinalReport from "./FinalReport";
 import userService from "../../../../../services/api/user";
 import { useQuery } from "@tanstack/react-query";
 
+
 let questions = [
   {
     question:
@@ -1052,9 +1053,8 @@ const Week1 = () => {
   const [assessmentData, setAssessmentData] = useState(null);
   const [assessmentLoading, setAssessmentLoading] = useState(true);
   const [assessmentError, setAssessmentError] = useState(null);
-  const [quizQuestions, setQuizQuestions] = useState([]); 
-  const [ewQuestions, setNewQuizQuestions] = useState([]); 
-
+  const [quizQuestions, setQuizQuestions] = useState([]);
+  const [ewQuestions, setNewQuizQuestions] = useState([]);
 
   useEffect(() => {
     const fetchAssessmentData = async () => {
@@ -1142,37 +1142,33 @@ const Week1 = () => {
   );
   // console.log(selectedAnswers)
 
-
-
-  console.log(questions)
+  console.log(questions);
 
   const indexCount = Object.values(backendAnswers).reduce((count, item) => {
     count[item.index] = (count[item.index] || 0) + 1;
     return count;
   }, {});
 
-  const totalCount = Object.values(indexCount).reduce(
-    (total, count) => total + count,
-    0
-  );
+const totalCount = Object.values(indexCount).reduce(
+  (total, count) => total + count,
+  0
+);
 
-  const indexToColor = {
-    0: "red",
-    1: "green",
-    2: "blue",
-    3: "yellow"
-  };
+const indexToChartData = {
+  0: { name: "Red", color: "#FF0500" },
+  1: { name: "Green", color: "#2CCF4F" },
+  2: { name: "Blue", color: "#0093FF" },
+  3: { name: "Yellow", color: "#FEF900" }
+};
 
-  personalityFeedback.chartData = Object.keys(indexCount).reduce(
-    (data, index) => {
-      const color = indexToColor[index];
-      const count = indexCount[index] || 0;
-      const degree = (count / totalCount) * 360;
-      data[color] = degree;
-      return data;
-    },
-    {}
-  );
+// Create pieChart data array
+const pieChart = Object.keys(indexCount).map((index) => {
+  const { name, color } = indexToChartData[index];
+  const count = indexCount[index] || 0;
+  const value = (count / totalCount) * 360; 
+
+  return { name, value, color };
+});
 
   const activities = [
     {
@@ -1191,18 +1187,18 @@ const Week1 = () => {
     }
   ];
 
- questions = questions.map((question) => {
-   // Keeping the original 'questions' name here
-   return {
-     ...question,
-     options: question.options.map((option) => {
-       return {
-         ...option,
-         checked: selectedAnswers.includes(option.label) // Check if the selected answer matches the option label
-       };
-     })
-   };
- });
+  questions = questions.map((question) => {
+    // Keeping the original 'questions' name here
+    return {
+      ...question,
+      options: question.options.map((option) => {
+        return {
+          ...option,
+          checked: selectedAnswers.includes(option.label) // Check if the selected answer matches the option label
+        };
+      })
+    };
+  });
 
   return (
     <div className="week-content">
@@ -1304,7 +1300,10 @@ const Week1 = () => {
           </div>
         </div>
       ))}
-      <PersonalityFeedback feedback={personalityFeedback} />
+      <PersonalityFeedback
+        feedback={personalityFeedback}
+        chartData={pieChart}
+      />
       <p className="activity-badge">Activity 4</p>
       {quizQuestions.map((q, index) => (
         <div className="question-block" key={index}>
