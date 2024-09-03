@@ -38,10 +38,10 @@ export default function WeekOneLearning({
 
   useEffect(() => {
     const canSee = localStorage.getItem(`${courseId}-can-see`);
-    console.log(canSee)
+    console.log(canSee);
     if (canSee === null) {
       setShowPopup(true);
-      console.log("i am here")
+      console.log("i am here");
     }
   }, [courseId]);
 
@@ -52,9 +52,7 @@ export default function WeekOneLearning({
     const savedState = localStorage.getItem(
       `week-${currentWeekIndex}-activityData`
     );
-    return savedState
-      ? JSON.parse(savedState)
-      : { week: 1, activities: [] };
+    return savedState ? JSON.parse(savedState) : { week: 1, activities: [] };
   });
 
   const [videoPlaying, setVideoPlaying] = useState(false);
@@ -107,10 +105,10 @@ export default function WeekOneLearning({
     });
 
     // Check if it's the last activity defined and go to the default case
-    const isLastActivity = currentActivity >= 14;
+    const isLastActivity = currentActivity >= 15;
     if (isLastActivity) {
       handleSubmit();
-      setCurrentActivity(15); // This will trigger the default case in renderActivityContent
+      setCurrentActivity(16); // This will trigger the default case in renderActivityContent
     } else {
       const nextActivity = currentActivity + 1;
       setCurrentActivity(nextActivity);
@@ -132,185 +130,297 @@ export default function WeekOneLearning({
   };
 
   const renderActivityContent = () => {
-  //  if (showPopup) {
-  //   return <BuyCoursePopup />;
-  // }
-    switch (currentActivity) {
-      case 1:
-        return (
-          <>
-            <VideoComponent
-              videoPlaying={videoPlaying}
-              setVideoPlaying={setVideoPlaying}
-            />
-            <div className="progression-buttons mt-3">
-              <button
-                className="btn progress-btn btn-dark"
-                onClick={() => handleNext()}
-              >
-                Next {">>>"}
-              </button>
-            </div>
-          </>
-        );
-      case 2:
-        return (
-          <QuestionComponent
-            questionText={"What do you think"}
-            activityIndex={currentActivity}
-            imageSrc={selfAwareness}
-            formData={formData}
-            altText="is?"
-            onBack={handlePrevious}
-            onNext={(answers) =>
-              handleNext({
-                answers
-              })
-            }
+    //  if (showPopup) {
+    //   return <BuyCoursePopup />;
+    // }
+  switch (currentActivity) {
+    case 1:
+      return (
+        <>
+          <VideoComponent
+            videoPlaying={videoPlaying}
+            setVideoPlaying={setVideoPlaying}
+            videoSrc="https://www.youtube.com/embed/EsN5-4kFvLw"
           />
-        );
-      case 3:
-      case 5:
-      case 7:
-      case 9:
-      case 11:
-        return (
-          <>
-            <VideoComponent
-              videoPlaying={videoPlaying}
-              setVideoPlaying={setVideoPlaying}
-            />
-            <div className="progression-buttons mt-3">
-              <button
-                className="btn progress-btn btn-light"
-                onClick={() => handlePrevious()}
-              >
-                {"<<<"} Back
-              </button>
-              <button
-                className="btn progress-btn btn-dark"
-                onClick={() => handleNext()}
-              >
-                Next {">>>"}
-              </button>
-            </div>
-          </>
-        );
-      case 4:
-        return (
-          <QuestionComponent
-            questionText={"What do you think"}
-            activityIndex={currentActivity}
-            imageSrc={personality}
-            formData={formData}
-            altText="is?"
-            onBack={handlePrevious}
-            onNext={(answers) =>
-              handleNext({
-                answers
-              })
-            }
-          />
-        );
-      case 6:
-        return (
-          <div className="drag-drop-section">
-            <DragDropComponent
-              activityIndex={currentActivity}
-              formData={formData}
-              onBack={handlePrevious}
-              onNext={handleNext}
-            />
+          <div className="progression-buttons mt-3">
+            <button
+              className="btn progress-btn btn-dark"
+              onClick={() => handleNext()}
+            >
+              Next {">>>"}
+            </button>
           </div>
-        );
-      case 8:
-        return (
-          <PersonalityDescriptionComponent
-            questionText="What do you understand by the word,"
-            imageSrc={personality}
-            emotionalHand={emotionalHand}
-            activityIndex={currentActivity}
-            analyticHand={analyticHand}
-            friendshipHand={friendshipHand}
-            actionHand={actionHand}
-            altText="?"
-            formData={formData}
-            onBack={handlePrevious}
-            onNext={(answer) =>
-              handleNext({
-                answer
-              })
-            }
+        </>
+      );
+
+    case 2:
+      return (
+        <QuestionComponent
+          questionText={"What do you think"}
+          activityIndex={currentActivity}
+          imageSrc={selfAwareness}
+          formData={formData}
+          altText="is?"
+          onBack={handlePrevious}
+          onNext={(answers) => handleNext({ answers })}
+        />
+      );
+
+    case 3:
+      return (
+        <>
+          <VideoComponent
+            videoPlaying={videoPlaying}
+            setVideoPlaying={setVideoPlaying}
+            videoSrc="https://www.youtube.com/embed/ZDk30QSBe98"
           />
-        );
-      case 10:
-        return (
-          <PersonalityTest
+          <div className="progression-buttons mt-3">
+            <button
+              className="btn progress-btn btn-light"
+              onClick={() => handlePrevious()}
+            >
+              {"<<<"} Back
+            </button>
+            <button
+              className="btn progress-btn btn-dark"
+              onClick={() => handleNext()}
+            >
+              Next {">>>"}
+            </button>
+          </div>
+        </>
+      );
+
+    case 4:
+      return (
+        <QuestionComponent
+          questionText={"What do you think"}
+          activityIndex={currentActivity}
+          imageSrc={personality}
+          formData={formData}
+          altText="is?"
+          onBack={handlePrevious}
+          onNext={(answers) => handleNext({ answers })}
+        />
+      );
+
+    case 5:
+      return (
+        <>
+          <VideoComponent
+            videoPlaying={videoPlaying}
+            setVideoPlaying={setVideoPlaying}
+            videoSrc="https://www.youtube.com/embed/VSt6RkMtbZU"
+          />
+          <div className="progression-buttons mt-3">
+            <button
+              className="btn progress-btn btn-light"
+              onClick={() => handlePrevious()}
+            >
+              {"<<<"} Back
+            </button>
+            <button
+              className="btn progress-btn btn-dark"
+              onClick={() => handleNext()}
+            >
+              Next {">>>"}
+            </button>
+          </div>
+        </>
+      );
+
+    case 6:
+      return (
+        <div className="drag-drop-section">
+          <DragDropComponent
             activityIndex={currentActivity}
             formData={formData}
             onBack={handlePrevious}
             onNext={handleNext}
           />
-        );
+        </div>
+      );
 
-      case 12:
-        return (
-          <QuestionComponent
-            activityIndex={12}
-            questionText="Did you discover something new about yourself through this assessment? What did you learn?"
-            imageSrc=""
-            formData={formData}
-            altText=""
-            onBack={handlePrevious}
-            onNext={(answers) =>
-              handleNext({
-                answers
-              })
+    case 7:
+      return (
+        <>
+          <VideoComponent
+            videoPlaying={videoPlaying}
+            setVideoPlaying={setVideoPlaying}
+            videoSrc="https://www.youtube.com/embed/RMrhj7ql3_c"
+          />
+          <div className="progression-buttons mt-3">
+            <button
+              className="btn progress-btn btn-light"
+              onClick={() => handlePrevious()}
+            >
+              {"<<<"} Back
+            </button>
+            <button
+              className="btn progress-btn btn-dark"
+              onClick={() => handleNext()}
+            >
+              Next {">>>"}
+            </button>
+          </div>
+        </>
+      );
+
+    case 8:
+      return (
+        <PersonalityDescriptionComponent
+          questionText="What do you understand by the word,"
+          imageSrc={personality}
+          emotionalHand={emotionalHand}
+          activityIndex={currentActivity}
+          analyticHand={analyticHand}
+          friendshipHand={friendshipHand}
+          actionHand={actionHand}
+          altText="?"
+          formData={formData}
+          onBack={handlePrevious}
+          onNext={(answer) => handleNext({ answer })}
+        />
+      );
+
+    case 9:
+      return (
+        <>
+          <VideoComponent
+            videoPlaying={videoPlaying}
+            setVideoPlaying={setVideoPlaying}
+            videoSrc="https://www.youtube.com/embed/aauo1x7V9js"
+          />
+          <div className="progression-buttons mt-3">
+            <button
+              className="btn progress-btn btn-light"
+              onClick={() => handlePrevious()}
+            >
+              {"<<<"} Back
+            </button>
+            <button
+              className="btn progress-btn btn-dark"
+              onClick={() => handleNext()}
+            >
+              Next {">>>"}
+            </button>
+          </div>
+        </>
+      );
+
+    case 10:
+      return (
+        <PersonalityTest
+          activityIndex={currentActivity}
+          formData={formData}
+          onBack={handlePrevious}
+          onNext={handleNext}
+        />
+      );
+
+    case 11:
+      return (
+        <>
+          <VideoComponent
+            videoPlaying={videoPlaying}
+            setVideoPlaying={setVideoPlaying}
+            videoSrc="https://www.youtube.com/embed/i_wqVuoqK3A"
+          />
+          <div className="progression-buttons mt-3">
+            <button
+              className="btn progress-btn btn-light"
+              onClick={() => handlePrevious()}
+            >
+              {"<<<"} Back
+            </button>
+            <button
+              className="btn progress-btn btn-dark"
+              onClick={() => handleNext()}
+            >
+              Next {">>>"}
+            </button>
+          </div>
+        </>
+      );
+
+    case 12:
+      return (
+        <QuestionComponent
+          activityIndex={12}
+          questionText="Did you discover something new about yourself through this assessment? What did you learn?"
+          imageSrc=""
+          formData={formData}
+          altText=""
+          onBack={handlePrevious}
+          onNext={(answers) => handleNext({ answers })}
+        />
+      );
+    case 13:
+      return (
+        <>
+          <VideoComponent
+            videoPlaying={videoPlaying}
+            setVideoPlaying={setVideoPlaying}
+            videoSrc="https://www.youtube.com/embed/FVFUiM4j0nw"
+          />
+          <div className="progression-buttons mt-3">
+            <button
+              className="btn progress-btn btn-light"
+              onClick={() => handlePrevious()}
+            >
+              {"<<<"} Back
+            </button>
+            <button
+              className="btn progress-btn btn-dark"
+              onClick={() => handleNext()}
+            >
+              Next {">>>"}
+            </button>
+          </div>
+        </>
+      );
+    case 14:
+      return (
+        <PersonalityQuestionComponent
+          onBack={handlePrevious}
+          onNext={(answers) => handleNext({ answers })}
+          activityIndex={currentActivity}
+          questions={[
+            {
+              questionText:
+                "Did you get the same color as the color you identified for yourself earlier?"
+            },
+            {
+              questionText:
+                "What was different? Why do you think this was different?"
+            },
+            {
+              questionText: "Do you agree with this new result?"
             }
-          />
-        );
+          ]}
+          formData={formData}
+        />
+      );
 
-      case 13:
-        return (
-          <PersonalityQuestionComponent
-            onBack={handlePrevious}
-            onNext={(answers) => handleNext({ answers })}
-            activityIndex={currentActivity}
-            questions={[
-              {
-                questionText:
-                  "Did you get the same color as the color you identified for yourself earlier?"
-              },
-              {
-                questionText:
-                  "What was different? Why do you think this was different?"
-              },
-              {
-                questionText: "Do you agree with this new result?"
-              }
-            ]}
-            formData={formData}
-          />
-        );
+    case 15:
+      return (
+        <WeekOneAssessmentForm
+          onBack={handlePrevious}
+          handleNextWeekCourse={handleNextWeekCourse}
+          onNext={handleNext}
+        />
+      );
 
-      case 14:
-        return (
-          <WeekOneAssessmentForm
-            onBack={handlePrevious}
-            handleNextWeekCourse={handleNextWeekCourse}
-            onNext={handleNext}
-          />
-        );
+    default:
+      return (
+        <EndOfCourseComponent
+          onNextWeekCourse={handleNextWeekCourse}
+          onClose={onClose}
+          openReviewPopUp={() => setReviewPopUp(true)}
+        />
+      );
+  }
 
-      default:
-        return (
-          <EndOfCourseComponent
-            onNextWeekCourse={handleNextWeekCourse}
-            onClose={onClose}
-            openReviewPopUp={() => setReviewPopUp(true)}
-          />
-        );
-    }
   };
 
   return (

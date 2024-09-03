@@ -40,9 +40,12 @@ div#badge {
   color: #5b616a;
   font-size: 14px;
   border-radius: 35px;
-  width: 100px;
+  width: 120px;
   text-align: center;
   background-color: #ffeebb;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
 }
 
 .feedback {
