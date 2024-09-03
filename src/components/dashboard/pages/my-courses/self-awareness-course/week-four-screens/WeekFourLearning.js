@@ -1,255 +1,252 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import MyFireWorks from "../Fireworks";
-import celebrate from "../../../../../../assets/celebrate.png";
-import values from "../../../../../../assets/selfawareness-images/values.png";
-import MindSetFlipQuestion from "./MindSetFlipQuestion";
-import WeekFourAssessmentForm from "./WeekFourAssessmentForm";
-import QuestionAboutPeople from "./QuestionAboutPeople";
-import CoreValuesQuestion from "./CoreValuesQuestion";
-import VideoComponent from "./VideoComponent";
-import QuestionComponent from "./QuestionComponent";
-import NavigationButtons from "./NavigationButtons";
-import userService from "../../../../../../services/api/user.js";
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import MyFireWorks from '../Fireworks'
+import celebrate from '../../../../../../assets/celebrate.png'
+import values from '../../../../../../assets/selfawareness-images/values.png'
+import MindSetFlipQuestion from './MindSetFlipQuestion'
+import WeekFourAssessmentForm from './WeekFourAssessmentForm'
+import QuestionAboutPeople from './QuestionAboutPeople'
+import CoreValuesQuestion from './CoreValuesQuestion'
+import VideoComponent from './VideoComponent'
+import QuestionComponent from './QuestionComponent'
+import NavigationButtons from './NavigationButtons'
+import userService from '../../../../../../services/api/user.js'
+import { toast, ToastContainer } from 'react-toastify'
+import EndOfCourseComponent from '../week-three-screens/EndOfCourseComponent.js'
+export default function WeekFourLearning({
+  course,
+  courseId,
+  onClose,
+  currentWeekIndex,
+}) {
+  const [showPopup, setShowPopup] = useState(false)
+  const [currentActivity, setCurrentActivity] = useState(() => {
+    const savedState = localStorage.getItem(
+      `week-${currentWeekIndex}-currentActivity`
+    )
+    return savedState ? JSON.parse(savedState) : 1
+  })
 
-export default function WeekFourLearning({ course, currentWeekIndex }) {
-  const [currentStep, setCurrentStep] = useState(() => {
-    const savedStep = localStorage.getItem("weekFourCurrentStep");
-    return savedStep ? parseInt(savedStep, 10) : 1;
-  });
-  const courseId = course._id;
   const [formData, setFormData] = useState(() => {
-    const savedData = localStorage.getItem("weekFourFormData");
-    return savedData ? JSON.parse(savedData) : { week: 4, answers: [] };
-  });
-  console.log(formData);
+    const savedState = localStorage.getItem(
+      `week-${currentWeekIndex}-activityData`
+    )
+    return savedState
+      ? JSON.parse(savedState)
+      : { week: currentWeekIndex, activities: [] }
+  })
 
-  const [videoPlaying, setVideoPlaying] = useState(false);
-  const navigate = useNavigate();
+  const [videoPlaying, setVideoPlaying] = useState(false)
+  const [reviewPopUp, setReviewPopUp] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    localStorage.setItem("weekFourCurrentStep", currentStep);
-  }, [currentStep]);
+    localStorage.setItem(
+      `week-${currentWeekIndex}-currentActivity`,
+      JSON.stringify(currentActivity)
+    )
+  }, [currentActivity, currentWeekIndex])
 
   useEffect(() => {
-    try {
-      const serializableData = { ...formData };
-      console.log("Current Form Data:", serializableData);
-      localStorage.setItem(
-        "weekFourFormData",
-        JSON.stringify(serializableData)
-      );
-    } catch (error) {
-      console.error("Failed to save to localStorage:", error);
-    }
-  }, [formData]);
+    localStorage.setItem(
+      `week-${currentWeekIndex}-activityData`,
+      JSON.stringify(formData)
+    )
+  }, [formData, currentWeekIndex])
 
-  const handleSubmit = async () => {
-    try {
-      // Log the formData for debugging
-      console.log(formData);
-
-      // Filter out items that do not have an activity index
-      const filteredAnswers = formData.answers.filter(
-        (item) => item.activity !== undefined
-      );
-
-      // Transform formData by renaming 'answers' to 'activities'
-      const updatedData = {
-        week: formData.week, // Keep the week value
-        activities: filteredAnswers // Assign filtered answers to 'activities'
-      };
-
-      console.log(updatedData);
-
-      // Submit the updatedData to the backend
-      const response = await userService.postMyActivity(courseId, updatedData);
-      console.log("Submission successful:", response);
-    } catch (error) {
-      console.error("Submission failed:", error);
-      // Handle the error if needed
-    }
-  };
-
-  const handleNext = (data = {}) => {
-    setFormData((prevFormData) => {
-      const updatedAnswers = [...prevFormData.answers];
-      const currentStepIndex = currentStep - 1;
-
-      // Replace the data for the current step if it exists, otherwise push new data
-      if (updatedAnswers[currentStepIndex]) {
-        updatedAnswers[currentStepIndex] = data;
-      } else {
-        updatedAnswers.push(data);
+  const handleNext = async (data = {}) => {
+    setFormData((prevData) => {
+      const updatedActivities = prevData.activities.map((item) =>
+        item.activity === currentActivity ? { ...item, ...data } : item
+      )
+      if (
+        !updatedActivities.find((item) => item.activity === currentActivity)
+      ) {
+        updatedActivities.push({ activity: currentActivity, ...data })
       }
+      return { ...prevData, activities: updatedActivities }
+    })
 
-      const updatedFormData = {
-        ...prevFormData,
-        answers: updatedAnswers
-      };
-
-      return updatedFormData;
-    });
-
-    setCurrentStep((prevStep) => prevStep + 1);
-  };
-
-  formData.answers = formData.answers.filter((item) => {
-    // Check if the item is an empty object
-    if (Object.keys(item).length === 0) {
-      return false;
+    const isLastActivity = currentActivity >= 9
+    if (isLastActivity) {
+      setCurrentActivity(10)
+    } else {
+      setCurrentActivity((prev) => prev + 1)
     }
-
-    // Check if the item is a SyntheticBaseEvent object
-    if (
-      item._reactName === "onClick" &&
-      item._targetInst === null &&
-      item.type === "click"
-    ) {
-      return false;
-    }
-
-    // If neither condition is met, keep the item
-    return true;
-  });
-
-  //TODO: post data
-  console.log("Filtered Form Data", formData);
+  }
 
   const handlePrevious = () => {
-    setCurrentStep((prevStep) => Math.max(prevStep - 1, 1));
-  };
+    setCurrentActivity((prev) => prev - 1)
+  }
+
+  const closeReviewPopUp = () => setReviewPopUp(false)
 
   const handleNextWeekCourse = () => {
-    const nextWeekIndex = currentWeekIndex + 1;
-    navigate("/dashboard/self-awareness-course/1", {
-      state: { course, weekIndex: nextWeekIndex }
-    });
-  };
+    const nextWeekIndex = currentWeekIndex + 1
+    navigate(`/dashboard/self-awareness-course/${course._id}`, {
+      state: { course, weekIndex: nextWeekIndex },
+    })
+  }
 
-  const renderStepContent = () => {
-    switch (currentStep) {
+  console.log(formData)
+  const renderActivityContent = () => {
+    switch (currentActivity) {
       case 1:
         return (
           <>
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc="https://www.youtube.com/embed/CW-f1RVjCws"
+              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
             />
-            <NavigationButtons onNext={handleNext} isBackDisabled />
+            <NavigationButtons onNext={() => handleNext()} isBackDisabled />
           </>
-        );
+        )
       case 2:
         return (
           <QuestionComponent
-            question={{
-              text: "What exactly are",
-              image: values,
-              alt: "values image",
-              suffix: "?"
-            }}
+            activityIndex={currentActivity}
+            questionText='What exactly are'
+            suffix='?'
+            imageSrc={values}
+            formData={formData}
+            altText='values image'
             onBack={handlePrevious}
-            onNext={handleNext}
-            onSubmit={(data) => handleNext({ activity: 2, ...data })}
+            onNext={(answers) =>
+              handleNext({
+                answers,
+              })
+            }
           />
-        );
+        )
       case 3:
         return (
           <>
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc="https://www.youtube.com/embed/CW-f1RVjCws"
+              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
             />
-            <NavigationButtons onBack={handlePrevious} onNext={handleNext} />
+            <NavigationButtons
+              onBack={handlePrevious}
+              onNext={() => handleNext()}
+            />
           </>
-        );
+        )
       case 4:
         return (
           <MindSetFlipQuestion
-            onNext={handleNext}
+            activityIndex={currentActivity}
+            questionText={
+              'Do you feel like you have a growth mindset, or do you sometimes find yourself with a fixed mindset? Share your thoughts. It’s okay to be honest, this is all about learning and growing together!'
+            }
+            altText={'?'}
+            formData={formData}
             onBack={handlePrevious}
-            onSubmit={(data) => handleNext({ activity: 4, answers: data })}
+            onNext={(answers) =>
+              handleNext({
+                answers,
+              })
+            }
           />
-        );
+        )
       case 5:
         return (
           <>
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc="https://www.youtube.com/embed/CW-f1RVjCws"
+              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
             />
-            <NavigationButtons onBack={handlePrevious} onNext={handleNext} />
+            <NavigationButtons
+              onBack={handlePrevious}
+              onNext={() => handleNext()}
+            />
           </>
-        );
+        )
       case 6:
         return (
-          <QuestionAboutPeople
-            onBack={handlePrevious}
-            onSubmit={(data) => handleNext({ activity: 6, answers: data })}
-          />
-        );
+          <>
+            <QuestionAboutPeople
+              activityIndex={currentActivity}
+              formData={formData}
+              onBack={handlePrevious}
+              onNext={(answers) =>
+                handleNext({
+                  answers,
+                })
+              }
+            />
+          </>
+        )
       case 7:
         return (
           <>
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc="https://www.youtube.com/embed/CW-f1RVjCws"
+              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
             />
-            <NavigationButtons onBack={handlePrevious} onNext={handleNext} />
+            <NavigationButtons
+              onBack={handlePrevious}
+              onNext={() => handleNext()}
+            />
           </>
-        );
+        )
+
       case 8:
         return (
           <>
             <CoreValuesQuestion
-              onNext={handleNext}
+              activityIndex={currentActivity}
+              formData={formData}
               onBack={handlePrevious}
-              onSubmit={(data) =>
-                handleNext({ activity: 8, answers: data }, handleSubmit())
+              onNext={(answers) =>
+                handleNext({
+                  answers,
+                })
               }
             />
           </>
-        );
+        )
+
       case 9:
         return (
           <>
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc="https://www.youtube.com/embed/CW-f1RVjCws"
+              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
             />
-            <NavigationButtons onBack={handlePrevious} onNext={handleNext} />
+            <NavigationButtons
+              onBack={handlePrevious}
+              onNext={() => handleNext()}
+            />
           </>
-        );
+        )
       case 10:
         return (
           <WeekFourAssessmentForm
             onBack={handlePrevious}
-            onSubmit={(data) => handleNext({ activity: 10, answers: data })}
+            handleNextWeekCourse={handleNextWeekCourse}
+            onNext={handleNext}
           />
-        );
-      case 11:
-        return (
-          <div className="end-of-course-page">
-            <div className="congrats">
-              <img src={celebrate} alt="celebrate" />
-              <h1>Hurray!</h1>
-              <p className="text-center fs-5">
-                You have made it to the <br /> Week {currentWeekIndex + 1}
-              </p>
-            </div>
-            <MyFireWorks />
-            <NavigationButtons onNext={handleNextWeekCourse} />
-          </div>
-        );
+        )
       default:
-        return null;
+        return (
+          <EndOfCourseComponent
+            onNextWeekCourse={handleNextWeekCourse}
+            onClose={onClose}
+            openReviewPopUp={() => setReviewPopUp(true)}
+          />
+        )
     }
-  };
+  }
 
-  return <div className="course-progression-page">{renderStepContent()}</div>;
+  return (
+    <div>
+      <ToastContainer />
+      <div className='content-container'>{renderActivityContent()}</div>
+    </div>
+  )
 }

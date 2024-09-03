@@ -32,6 +32,8 @@ const MyCourseCard = ({ course }) => {
     return text
   }
 
+  console.log(course)
+
   const handleButtonClick = () => {
     if (course?.progress === 100) {
       openModal('feedback')

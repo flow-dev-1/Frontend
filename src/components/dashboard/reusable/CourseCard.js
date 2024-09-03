@@ -110,7 +110,7 @@ const CourseCard = ({ course, coursesArray, enrolled, enrolledData }) => {
           </div>
         </div>
 
-        {enrolled ? (
+        {isEnrolled ? (
           <div className='course-card-btn d-flex'>
             {/* Review/Feedback Button */}
             {course.progress === 100 ? (
