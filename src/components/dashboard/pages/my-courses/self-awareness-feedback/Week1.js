@@ -1142,20 +1142,7 @@ const Week1 = () => {
   );
   // console.log(selectedAnswers)
 
-  questions = questions.map((question) => {
-    // Keeping the original 'questions' name here
-    return {
-      ...question,
-      options: question.options.map((option) => {
-        return {
-          ...option,
-          checked: selectedAnswers.includes(option.label)
-            ? true
-            : option.checked
-        };
-      })
-    };
-  });
+
 
   console.log(questions)
 
@@ -1203,6 +1190,19 @@ const Week1 = () => {
         "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor..."
     }
   ];
+
+ questions = questions.map((question) => {
+   // Keeping the original 'questions' name here
+   return {
+     ...question,
+     options: question.options.map((option) => {
+       return {
+         ...option,
+         checked: selectedAnswers.includes(option.label) // Check if the selected answer matches the option label
+       };
+     })
+   };
+ });
 
   return (
     <div className="week-content">
