@@ -8,7 +8,6 @@ import FinalReport from "./FinalReport";
 import userService from "../../../../../services/api/user";
 import { useQuery } from "@tanstack/react-query";
 
-
 let questions = [
   {
     question:
@@ -1008,40 +1007,6 @@ const questionsArrayGreenFormatted = [
   // Add more questions if needed
 ];
 
-const questionsQuiz = [
-  {
-    question: "When I make decisions:",
-    options: [
-      {
-        label: "A. I do it quickly and go with the first impressions.",
-        color: "Red",
-        checked: false, // This is not the correct option
-        isCorrect: false
-      },
-      {
-        label: "B. I think about it, consider the options, and then decide.",
-        color: "Green",
-        checked: true, // This is the correct option
-        isCorrect: true
-      },
-      {
-        label:
-          "C. I listen to my feelings and consider how my decisions will affect others.",
-        color: "Blue",
-        checked: false, // This is not the correct option
-        isCorrect: false
-      },
-      {
-        label:
-          "D. I take it seriously and always try to make the right decision.",
-        color: "Yellow",
-        checked: false, // This is not the correct option
-        isCorrect: false
-      }
-    ]
-  }
-];
-
 const Week1 = () => {
   const week = 1;
   const courseId = "66853bf50118e2e0a02b6a5a";
@@ -1054,7 +1019,6 @@ const Week1 = () => {
   const [assessmentLoading, setAssessmentLoading] = useState(true);
   const [assessmentError, setAssessmentError] = useState(null);
   const [quizQuestions, setQuizQuestions] = useState([]);
-  const [ewQuestions, setNewQuizQuestions] = useState([]);
 
   useEffect(() => {
     const fetchAssessmentData = async () => {
@@ -1149,26 +1113,26 @@ const Week1 = () => {
     return count;
   }, {});
 
-const totalCount = Object.values(indexCount).reduce(
-  (total, count) => total + count,
-  0
-);
+  const totalCount = Object.values(indexCount).reduce(
+    (total, count) => total + count,
+    0
+  );
 
-const indexToChartData = {
-  0: { name: "Red", color: "#FF0500" },
-  1: { name: "Green", color: "#2CCF4F" },
-  2: { name: "Blue", color: "#0093FF" },
-  3: { name: "Yellow", color: "#FEF900" }
-};
+  const indexToChartData = {
+    0: { name: "Red", color: "#FF0500" },
+    1: { name: "Green", color: "#2CCF4F" },
+    2: { name: "Blue", color: "#0093FF" },
+    3: { name: "Yellow", color: "#FEF900" }
+  };
 
-// Create pieChart data array
-const pieChart = Object.keys(indexCount).map((index) => {
-  const { name, color } = indexToChartData[index];
-  const count = indexCount[index] || 0;
-  const value = (count / totalCount) * 100; 
+  // Create pieChart data array
+  const pieChart = Object.keys(indexCount).map((index) => {
+    const { name, color } = indexToChartData[index];
+    const count = indexCount[index] || 0;
+    const value = (count / totalCount) * 100;
 
-  return { name, value, color };
-});
+    return { name, value, color };
+  });
 
   const activities = [
     {
@@ -1179,6 +1143,12 @@ const pieChart = Object.keys(indexCount).map((index) => {
     },
     {
       activity: 2,
+      question: "What do you understand by the word “Personality”?",
+      answer: data?.activity?.activities?.[3].answers[0],
+      feedback: "Figma ipsum component variant main layer..."
+    },
+    {
+      activity: 3,
       question:
         "Drag-and-drop the statements on the left into any of these bowls.",
       answer: mappedContent,
@@ -1186,7 +1156,28 @@ const pieChart = Object.keys(indexCount).map((index) => {
         "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor..."
     }
   ];
+  const activityFour = [
+    {
+      activity: 4,
+      question:
+        "Think about yourself, which of these personality colors describe you? Why do you think so?",
+      selectedPersonality:
+        data?.activity?.activities?.[7].answer?.selectedPersonality,
+      explanation: data?.activity?.activities?.[7].answer?.explanation,
+      feedback: "Figma ipsum component variant main layer..."
+    }
+  ];
+  const activityAnswers = data?.activity?.activities?.[12]?.answers || [];
+  console.log(activityAnswers)
+  // Map through answers to create restActivities
+  const restActivities = activityAnswers.map((answer, index) => ({
+    activity: 4, // Assuming activity number is 4 for all
+    question: answer.questionText,
+    answer: answer.answer,
+    feedback: "Feedback based on this question." // You can customize or provide actual feedback
+  }));
 
+  // console.log(data?.activity?.activities?.[7].answer.selectedPersonality);
   questions = questions.map((question) => {
     // Keeping the original 'questions' name here
     return {
@@ -1274,7 +1265,50 @@ const pieChart = Object.keys(indexCount).map((index) => {
           </p>
         </div>
       ))}
-      <p className="activity-badge">Activity 3</p>
+      {activityFour?.map((activity, index) => (
+        <div style={{ border: "none" }} className="activity" key={index}>
+          <p className="activity-badge">Activity {activity?.activity}</p>
+          <p className="question d-flex align-items-center gap-2">
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
+            <span>{activity?.question}</span>
+          </p>
+
+          <p className="d-flex align-items-center justify-content-between">
+            <div className="answer d-flex align-items-center gap-2">
+              <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>
+              <p style={{ fontSize: "14px" }}>
+                {activity?.selectedPersonality} <br />
+                {activity?.explanation}
+              </p>
+            </div>
+            <Icon
+              style={{ color: "#D6D6D6" }}
+              width={20}
+              icon="hugeicons:comment-01"
+            />
+          </p>
+
+          <p className="feedback">
+            <div id="badge">Feedback:</div>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                gap: "1rem"
+              }}
+            >
+              <div className="feedback-card">{activity?.feedback}</div>
+              <Icon
+                style={{ color: "#275DAD" }}
+                width={20}
+                icon="lucide:edit"
+              />
+            </div>
+          </p>
+        </div>
+      ))}
+      <p className="activity-badge">Activity 5</p>
       {questions.map((q, index) => (
         <div className="question-block" key={index}>
           <p className="question d-flex align-items-center gap-2">
@@ -1304,7 +1338,45 @@ const pieChart = Object.keys(indexCount).map((index) => {
         feedback={personalityFeedback}
         chartData={pieChart}
       />
-      <p className="activity-badge">Activity 4</p>
+      <p className="activity-badge">Activity 6</p>
+      {restActivities.map((activity, index) => (
+        <div style={{ border: "none" }} className="activity" key={index}>
+          <p className="question d-flex align-items-center gap-2">
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
+            <span>{activity.question}</span>
+          </p>
+          <p className="d-flex align-items-center justify-content-between">
+            <div className="answer d-flex align-items-center gap-2">
+              <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>
+              <p style={{ fontSize: "14px" }}>{activity.answer}</p>
+            </div>
+            <Icon
+              style={{ color: "#D6D6D6" }}
+              width={20}
+              icon="hugeicons:comment-01"
+            />
+          </p>
+          <p className="feedback">
+            <div id="badge">Feedback:</div>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                gap: "1rem"
+              }}
+            >
+              <div className="feedback-card">{activity.feedback}</div>
+              <Icon
+                style={{ color: "#275DAD" }}
+                width={20}
+                icon="lucide:edit"
+              />
+            </div>
+          </p>
+        </div>
+      ))}
+      <p className="activity-badge">Assessment 1</p>
       {quizQuestions.map((q, index) => (
         <div className="question-block" key={index}>
           <div className="question d-flex align-items-center gap-2">
