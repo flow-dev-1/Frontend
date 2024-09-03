@@ -3,7 +3,7 @@ import './FinalReport.css'
 
 const FinalReport = ({rate}) => {
   const [expanded, setExpanded] = useState(false)
-
+ console.log(rate)
   const toggleWeek = () => {
     setExpanded(!expanded)
   }

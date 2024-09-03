@@ -54,7 +54,7 @@ export default function WeekOneLearning({
     );
     return savedState
       ? JSON.parse(savedState)
-      : { week: currentWeekIndex, activities: [] };
+      : { week: 1, activities: [] };
   });
 
   const [videoPlaying, setVideoPlaying] = useState(false);

@@ -1007,6 +1007,40 @@ const questionsArrayGreenFormatted = [
   // Add more questions if needed
 ];
 
+const questionsQuiz = [
+  {
+    question: "When I make decisions:",
+    options: [
+      {
+        label: "A. I do it quickly and go with the first impressions.",
+        color: "Red",
+        checked: false, // This is not the correct option
+        isCorrect: false
+      },
+      {
+        label: "B. I think about it, consider the options, and then decide.",
+        color: "Green",
+        checked: true, // This is the correct option
+        isCorrect: true
+      },
+      {
+        label:
+          "C. I listen to my feelings and consider how my decisions will affect others.",
+        color: "Blue",
+        checked: false, // This is not the correct option
+        isCorrect: false
+      },
+      {
+        label:
+          "D. I take it seriously and always try to make the right decision.",
+        color: "Yellow",
+        checked: false, // This is not the correct option
+        isCorrect: false
+      }
+    ]
+  }
+];
+
 const Week1 = () => {
   const week = 1;
   const courseId = "66853bf50118e2e0a02b6a5a";
@@ -1018,7 +1052,9 @@ const Week1 = () => {
   const [assessmentData, setAssessmentData] = useState(null);
   const [assessmentLoading, setAssessmentLoading] = useState(true);
   const [assessmentError, setAssessmentError] = useState(null);
-  const [quizQuestions, setQuizQuestions] = useState([]); // Renamed from questionsQuiz to quizQuestions
+  const [quizQuestions, setQuizQuestions] = useState([]); 
+  const [ewQuestions, setNewQuizQuestions] = useState([]); 
+
 
   useEffect(() => {
     const fetchAssessmentData = async () => {
@@ -1039,7 +1075,7 @@ const Week1 = () => {
   const assessments = assessmentData?.existingAssessment.assessments;
   const percent = assessmentData?.existingAssessment.rating;
   const color = assessmentData?.existingAssessment?.personalityColor;
-
+  // console.log(percent)
   function getQuestionsByColor(color) {
     switch (color) {
       case "Red":
@@ -1100,11 +1136,13 @@ const Week1 = () => {
   };
 
   const backendAnswers = data?.activity?.activities[9].questionChecked;
+  // console.log(backendAnswers)
   const selectedAnswers = Object.values(backendAnswers).map(
     (item) => item.text
   );
+  // console.log(selectedAnswers)
 
-   questions = questions.map((question) => {
+  questions = questions.map((question) => {
     // Keeping the original 'questions' name here
     return {
       ...question,
@@ -1118,6 +1156,8 @@ const Week1 = () => {
       })
     };
   });
+
+  console.log(questions)
 
   const indexCount = Object.values(backendAnswers).reduce((count, item) => {
     count[item.index] = (count[item.index] || 0) + 1;
@@ -1238,7 +1278,6 @@ const Week1 = () => {
           </p>
         </div>
       ))}
-
       <p className="activity-badge">Activity 3</p>
       {questions.map((q, index) => (
         <div className="question-block" key={index}>
@@ -1265,45 +1304,52 @@ const Week1 = () => {
           </div>
         </div>
       ))}
-
       <PersonalityFeedback feedback={personalityFeedback} />
-
       <p className="activity-badge">Activity 4</p>
-      {quizQuestions.map(
-        (
-          q,
-          index // Updated to quizQuestions
-        ) => (
-          <div className="question-block" key={index}>
-            <p className="question d-flex align-items-center gap-2">
-              <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
-                Question:
-              </h4>
-              <span> {q.question}</span>
-            </p>
-            <div className="options">
-              {q.options.map((option, idx) => (
-                <div className="option" key={idx}>
-                  <img
-                    src={option.checked ? checkedImage : unCheckedImage}
-                    alt={option.checked ? "Checked" : "Unchecked"}
-                    style={{ width: "20px", marginRight: "10px" }}
-                  />
-                  <span style={{ fontSize: "14px" }} className="option-label">
-                    {option.label}
-                  </span>
-                  <span className={`color-label ${option.color.toLowerCase()}`}>
-                    {option.color}
-                  </span>
-                </div>
-              ))}
-            </div>
+      {quizQuestions.map((q, index) => (
+        <div className="question-block" key={index}>
+          <div className="question d-flex align-items-center gap-2">
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
+            <span>{q.question}</span>
           </div>
-        )
-      )}
+          <div className="options">
+            {q.options.map((option, idx) => (
+              <div className="option" key={idx}>
+                <img
+                  src={option.checked ? checkedImage : unCheckedImage}
+                  alt={option.isCorrect ? "Checked" : "Unchecked"}
+                  style={{ width: "20px", marginRight: "10px" }}
+                />
+                <span style={{ fontSize: "14px" }} className="option-label">
+                  {option.label}
+                </span>
+                <p style={{ width: "120px", textAlign: "center" }}>
+                  {option.isCorrect ? (
+                    <span
+                      style={{ color: "#50AA50" }}
+                      className="d-flex align-items-center justify-content-center gap-1"
+                    >
+                      <Icon width={17} icon="ph:seal-check-light" />
+                      Correct
+                    </span>
+                  ) : (
+                    <span
+                      style={{ color: "#FD483D" }}
+                      className="d-flex align-items-center justify-content-center gap-1"
+                    >
+                      <Icon width={17} icon="mdi:cross-circle-outline" />
+                      Wrong
+                    </span>
+                  )}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+      <FinalReport rate={percent} />{" "}
     </div>
   );
 };
 
 export default Week1;
-
