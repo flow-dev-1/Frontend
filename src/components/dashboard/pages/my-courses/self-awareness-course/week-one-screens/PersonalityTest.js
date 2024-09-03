@@ -199,10 +199,10 @@ export default function PersonalityTest({
       });
 
       // Calculate the percentages
-      const redPercentage = (colorCount.red / totalQuestions) * 100;
-      const greenPercentage = (colorCount.green / totalQuestions) * 100;
-      const bluePercentage = (colorCount.blue / totalQuestions) * 100;
-      const yellowPercentage = (colorCount.yellow / totalQuestions) * 100;
+      const redPercentage = Math.round((colorCount.red / totalQuestions) * 100);
+      const greenPercentage = Math.round((colorCount.green / totalQuestions) * 100);
+      const bluePercentage = Math.round((colorCount.blue / totalQuestions) * 100);
+      const yellowPercentage = Math.round((colorCount.yellow / totalQuestions) * 100);
 
       // Update the chart data with percentages
       setChartData([
