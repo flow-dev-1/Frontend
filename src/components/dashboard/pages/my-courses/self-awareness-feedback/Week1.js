@@ -1129,7 +1129,7 @@ const Week1 = () => {
   const pieChart = Object.keys(indexCount).map((index) => {
     const { name, color } = indexToChartData[index];
     const count = indexCount[index] || 0;
-    const value = (count / totalCount) * 100;
+    const value = Math.round((count / totalCount)) * 100;
 
     return { name, value, color };
   });
