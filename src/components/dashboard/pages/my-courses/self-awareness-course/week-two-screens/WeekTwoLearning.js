@@ -88,7 +88,7 @@ export default function WeekTwoLearning({
     })
   }
 
-  console.log(formData)
+  // console.log(formData)
   const renderActivityContent = () => {
     switch (currentActivity) {
       case 1:

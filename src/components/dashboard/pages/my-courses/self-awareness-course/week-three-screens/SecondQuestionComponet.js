@@ -1,39 +1,48 @@
-import { useState } from 'react'
-import NavigationButtons from './NavigationsButtons'
-import { toast } from 'react-toastify'
+import React, { useState, useEffect } from 'react'
+import { toast, ToastContainer } from 'react-toastify'
 
-const SecondQuestionComponent = ({ question, onBack, onNext, onSubmit }) => {
-      const [answer, setAnswer] = useState(() => {
-        const savedData = localStorage.getItem("weekThreeFormData");
+const SecondQuestionComponent = ({
+  questionText,
+  imageSrc,
+  altText,
+  formData,
+  onBack,
+  onNext,
+  activityIndex, // Pass this as a prop to identify the activity
+}) => {
+  // State to manage the user's answer
+  const [answers, setAnswers] = useState('')
 
-        if (savedData) {
-          // Parse the JSON string
-          const parsedData = JSON.parse(savedData);
+  useEffect(() => {
+    // Find the data for the current activity
+    const currentActivityData = formData?.activities?.find(
+      (item) => item?.activity === activityIndex
+    )
+    console.log(formData)
 
-          // Find data for activity: 2
-          const activityTwoData = parsedData.find(
-            (item) => item.activity === 4
-          );
-
-          console.log("Data for activity: 4:", activityTwoData);
-
-          return activityTwoData ? activityTwoData.answer || "" : "";
-        }
-
-        return "";
-      });
-  const [error, setError] = useState('') // State to handle error messages
-
-  const handleSubmit = () => {
-    if (answer.trim() === '') {
-      // Check if the answer is empty
-      toast.error('Please provide an answer before proceeding.')
-      return // Exit function if the answer is empty
+    if (currentActivityData && currentActivityData?.answers) {
+      // Set the answer from formData if it exists
+      setAnswers(currentActivityData.answers[0] || '')
+    } else {
+      // Set to empty if no answer is found
+      setAnswers('')
     }
+  }, [activityIndex, formData])
 
-    setError('') // Clear any previous error message
-    onSubmit({ answer }) // Submit the answer
-    onNext() // Go to the next step
+  // Function to handle input change
+  const handleInputChange = (event) => {
+    setAnswers(event.target.value)
+  }
+
+  // Function to handle Next button click
+  const handleNextClick = () => {
+    if (!answers) {
+      // Show a toast message if the answer is empty
+      toast.error('Please provide an answer before continuing.')
+      return
+    }
+    // Pass the answer data back to the parent component
+    onNext([answers])
   }
 
   return (
@@ -42,28 +51,31 @@ const SecondQuestionComponent = ({ question, onBack, onNext, onSubmit }) => {
         <div className='question-box-header'>
           <div>
             <h1 className='mb-0'>Question: </h1>
-            <h2 className='mb-0 ms-3 '>
-              {question.text}
-              {question.suffix}
-            </h2>
+            <h2 className='mb-0 ms-3 '>{questionText}</h2>
           </div>
-
-          {question.image && (
-            <img src={question.image} alt={question.alt} className='mx-2' />
-          )}
         </div>
         <div className='text-area-box px-4 mt-4'>
           <textarea
             rows='6'
             placeholder='Type your answer here...'
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
+            value={answers}
+            onChange={handleInputChange}
           />
         </div>
 
         {/* Display error message if any */}
       </div>
-      <NavigationButtons onBack={onBack} onNext={handleSubmit} />
+      <div className='d-flex align-items-center justify-content-around mt-5'>
+        {onBack && (
+          <button className='btn progress-btn btn-light' onClick={onBack}>
+            {'<<<'} Back
+          </button>
+        )}
+        <button className='btn progress-btn btn-dark' onClick={handleNextClick}>
+          Next {'>>>'}
+        </button>
+      </div>
+      <ToastContainer />
     </div>
   )
 }

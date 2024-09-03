@@ -12,7 +12,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext }) {
   const [reviewPopUp, setReviewPopUp] = React.useState(false)
   const [assessment, setAssessment] = useState(() => {
     // Initialize assessment from localStorage if it exists
-    const storedAssessment = localStorage.getItem('assessment')
+    const storedAssessment = localStorage.getItem('week-two-assesment')
     return storedAssessment
       ? JSON.parse(storedAssessment)
       : { week: 2, assessment: { answers: [] } }
@@ -122,7 +122,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext }) {
     }
 
     setAssessment(updatedAssessment)
-    localStorage.setItem('assessment', JSON.stringify(updatedAssessment))
+    localStorage.setItem('week-two-assessment', JSON.stringify(updatedAssessment))
     console.log('Assessment updated:', updatedAssessment)
   }
 

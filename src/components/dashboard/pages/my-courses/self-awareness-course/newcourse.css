@@ -495,7 +495,6 @@
   overflow-y: scroll;
   overflow-x: hidden;
   /* overscroll-behavior-y: none; */
-  scrollbar-width: none;
 }
 
 .self-awareness .flip-div ul {

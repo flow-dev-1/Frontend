@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../newcourse.css'
-import Modal from 'react-modal'
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png'
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
-import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModal'
+import { toast } from 'react-toastify'
 
-export default function WeekThreeAssessmentForm({ onSubmit, previous }) {
+export default function WeekThreeAssessmentForm({ onNext, onBack }) {
   const [currentIndex, setCurrentIndex] = useState(1)
-  const [reviewPopUp, setReviewPopUp] = React.useState(false)
+  const [selectedAnswers, setSelectedAnswers] = useState({})
 
   const questionsArray = [
     {
@@ -117,464 +116,86 @@ export default function WeekThreeAssessmentForm({ onSubmit, previous }) {
     },
   ]
 
+  useEffect(() => {
+    // Load saved answers from localStorage on component mount
+    const savedAnswers = localStorage.getItem('week-three-Assessment')
+    if (savedAnswers) {
+      setSelectedAnswers(JSON.parse(savedAnswers))
+    }
+  }, [])
+
+  useEffect(() => {
+    // Save answers to localStorage whenever selectedAnswers changes
+    localStorage.setItem(
+      'week-three-assessment',
+      JSON.stringify(selectedAnswers)
+    )
+  }, [selectedAnswers])
+
   const handleNextStepClick = () => {
+    if (!selectedAnswers[currentIndex]) {
+      toast.error('Please select an answer before proceeding.')
+      return
+    }
+
     if (currentIndex < questionsArray.length) {
       setCurrentIndex(currentIndex + 1)
     } else {
-      onSubmit()
+      const result = {
+        week: 3,
+        assessments: { answers: Object.values(selectedAnswers) },
+      }
+      console.log(result) // Handle the result as needed
+      onNext()
     }
-
-    setTimeout(() => {
-      setReviewPopUp(true)
-
-      setTimeout(() => {
-        setReviewPopUp(false)
-      }, 8000)
-    }, 4000)
   }
 
   const handlePreviousStepClick = () => {
     if (currentIndex > 1) {
       setCurrentIndex(currentIndex - 1)
     } else {
-      previous()
+      onBack()
     }
   }
-
-  const closeReviewPopUp = () => {
-    setReviewPopUp(false)
-  }
-
-  const [questionChecked, setQuestionChecked] = useState(
-    questionsArray.reduce((acc, _, index) => ({ ...acc, [index]: [] }), {})
-  )
 
   const handleQuestionCheck = (questionIndex, optionIndex) => {
-    setQuestionChecked((prevState) => {
-      const updated = { ...prevState }
-      // Toggle the checked state for the specific question and option
-      if (updated[questionIndex].includes(optionIndex)) {
-        updated[questionIndex] = updated[questionIndex].filter(
-          (i) => i !== optionIndex
-        )
-      } else {
-        updated[questionIndex] = [...updated[questionIndex], optionIndex]
-      }
-      return updated
-    })
+    setSelectedAnswers((prevState) => ({
+      ...prevState,
+      [questionIndex + 1]: optionIndex,
+    }))
   }
 
-  // Render the appropriate question based on the current index
   const renderQuestion = () => {
-    switch (currentIndex) {
-      case 1:
-        // question one
-        return (
-          <div className='week-two '>
-            <div className='assessment question-box '>
-              <div className='assessment-box'>
-                <h2>Assessment</h2>
-                Scenario around your mindset.
-              </div>
-              <div className='d-flex  align-items-start mt-3'>
-                <h1>{currentIndex}.</h1>
-
-                <h2 className='text-center mb-0 fs-1 ms-3'>
-                  {' '}
-                  {questionsArray[currentIndex - currentIndex].title}
-                </h2>
-              </div>
-              <div className='text-center checkbox-questions'>
-                <ul className='p-0 mt-4 d-flex flex-column'>
-                  {questionsArray[currentIndex - currentIndex].questionList.map(
-                    (item, index) => (
-                      <li key={index} className='d-flex align-items-center'>
-                        <img
-                          onClick={() =>
-                            handleQuestionCheck(
-                              currentIndex - currentIndex,
-                              index
-                            )
-                          }
-                          className='cursor-pointer'
-                          src={
-                            questionChecked[
-                              currentIndex - currentIndex
-                            ].includes(index)
-                              ? checkedImage
-                              : unCheckedImage
-                          }
-                          alt=''
-                        />
-                        <p className='question-p ms-3'>{item}</p>
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            </div>
+    const question = questionsArray[currentIndex - 1]
+    return (
+      <div className='week-two'>
+        <div className='assessment question-box py-4'>
+          <div className='d-flex align-items-start mt-3'>
+            <h1>{currentIndex}.</h1>
+            <h2 className='text-center mb-0 fs-1 ms-3'>{question.title}</h2>
           </div>
-        )
-      case 2:
-        // question two
-        return (
-          <div className='week-two'>
-            <div className='assessment question-box py-4'>
-              <div className='d-flex  align-items-start mt-3'>
-                <h1>{currentIndex}.</h1>
-
-                <h2 className='text-center mb-0 fs-1 ms-3'>
-                  {' '}
-                  {questionsArray[currentIndex - 1].title}
-                </h2>
-              </div>
-              <div className='text-center checkbox-questions'>
-                <ul className='p-0 mt-4 d-flex flex-column'>
-                  {questionsArray[currentIndex - 1].questionList.map(
-                    (item, index) => (
-                      <li key={index} className='d-flex align-items-center '>
-                        <img
-                          onClick={() =>
-                            handleQuestionCheck(currentIndex - 1, index)
-                          }
-                          className='cursor-pointer'
-                          src={
-                            questionChecked[currentIndex - 1].includes(index)
-                              ? checkedImage
-                              : unCheckedImage
-                          }
-                          alt=''
-                        />
-                        <p className='question-p ms-3'>{item}</p>
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            </div>
+          <div className='text-center checkbox-questions'>
+            <ul className='p-0 mt-4 d-flex flex-column'>
+              {question.questionList.map((item, index) => (
+                <li key={index} className='d-flex align-items-center'>
+                  <img
+                    onClick={() => handleQuestionCheck(currentIndex - 1, index)}
+                    className='cursor-pointer'
+                    src={
+                      selectedAnswers[currentIndex] === index
+                        ? checkedImage
+                        : unCheckedImage
+                    }
+                    alt=''
+                  />
+                  <p className='question-p ms-3'>{item}</p>
+                </li>
+              ))}
+            </ul>
           </div>
-        )
-      case 3:
-        // question three
-        return (
-          <div className='week-two'>
-            <div className='assessment question-box py-4'>
-              <div className='d-flex  align-items-start mt-3'>
-                <h1>{currentIndex}.</h1>
-
-                <h2 className='text-center mb-0 fs-1 ms-3'>
-                  {' '}
-                  {questionsArray[currentIndex - 1].title}
-                </h2>
-              </div>
-              <div className='text-center checkbox-questions'>
-                <ul className='p-0 mt-4 d-flex flex-column'>
-                  {questionsArray[currentIndex - 1].questionList.map(
-                    (item, index) => (
-                      <li key={index} className='d-flex align-items-center '>
-                        <img
-                          onClick={() =>
-                            handleQuestionCheck(currentIndex - 1, index)
-                          }
-                          className='cursor-pointer'
-                          src={
-                            questionChecked[currentIndex - 1].includes(index)
-                              ? checkedImage
-                              : unCheckedImage
-                          }
-                          alt=''
-                        />
-                        <p className='question-p ms-3'>{item}</p>
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            </div>
-          </div>
-        )
-
-      case 4:
-        // question four
-        return (
-          <div className='week-two'>
-            <div className='assessment question-box py-4'>
-              <div className='d-flex  align-items-start mt-3'>
-                <h1>{currentIndex}.</h1>
-
-                <h2 className='text-center mb-0 fs-1 ms-3'>
-                  {' '}
-                  {questionsArray[currentIndex - 1].title}
-                </h2>
-              </div>
-              <div className='text-center checkbox-questions'>
-                <ul className='p-0 mt-4 d-flex flex-column'>
-                  {questionsArray[currentIndex - 1].questionList.map(
-                    (item, index) => (
-                      <li key={index} className='d-flex align-items-center '>
-                        <img
-                          onClick={() =>
-                            handleQuestionCheck(currentIndex - 1, index)
-                          }
-                          className='cursor-pointer'
-                          src={
-                            questionChecked[currentIndex - 1].includes(index)
-                              ? checkedImage
-                              : unCheckedImage
-                          }
-                          alt=''
-                        />
-                        <p className='question-p ms-3'>{item}</p>
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            </div>
-          </div>
-        )
-
-      case 5:
-        // question five
-        return (
-          <div className='week-two'>
-            <div className='assessment question-box py-4'>
-              <div className='d-flex  align-items-start mt-3'>
-                <h1>{currentIndex}.</h1>
-
-                <h2 className='text-center mb-0 fs-1 ms-3'>
-                  {' '}
-                  {questionsArray[currentIndex - 1].title}
-                </h2>
-              </div>
-              <div className='text-center checkbox-questions'>
-                <ul className='p-0 mt-4 d-flex flex-column'>
-                  {questionsArray[currentIndex - 1].questionList.map(
-                    (item, index) => (
-                      <li key={index} className='d-flex align-items-center '>
-                        <img
-                          onClick={() =>
-                            handleQuestionCheck(currentIndex - 1, index)
-                          }
-                          className='cursor-pointer'
-                          src={
-                            questionChecked[currentIndex - 1].includes(index)
-                              ? checkedImage
-                              : unCheckedImage
-                          }
-                          alt=''
-                        />
-                        <p className='question-p ms-3'>{item}</p>
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            </div>
-          </div>
-        )
-
-      case 6:
-        // question six
-        return (
-          <div className='week-two'>
-            <div className='assessment question-box py-4'>
-              <div className='d-flex  align-items-start mt-3'>
-                <h1>{currentIndex}.</h1>
-
-                <h2 className='text-center mb-0 fs-1 ms-3'>
-                  {' '}
-                  {questionsArray[currentIndex - 1].title}
-                </h2>
-              </div>
-              <div className='text-center checkbox-questions'>
-                <ul className='p-0 mt-4 d-flex flex-column'>
-                  {questionsArray[currentIndex - 1].questionList.map(
-                    (item, index) => (
-                      <li key={index} className='d-flex align-items-center '>
-                        <img
-                          onClick={() =>
-                            handleQuestionCheck(currentIndex - 1, index)
-                          }
-                          className='cursor-pointer'
-                          src={
-                            questionChecked[currentIndex - 1].includes(index)
-                              ? checkedImage
-                              : unCheckedImage
-                          }
-                          alt=''
-                        />
-                        <p className='question-p ms-3'>{item}</p>
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            </div>
-          </div>
-        )
-
-      case 7:
-        // question seven
-        return (
-          <div className='week-two'>
-            <div className='assessment question-box py-4'>
-              <div className='d-flex  align-items-start mt-3'>
-                <h1>{currentIndex}.</h1>
-
-                <h2 className='text-center mb-0 fs-1 ms-3'>
-                  {' '}
-                  {questionsArray[currentIndex - 1].title}
-                </h2>
-              </div>
-              <div className='text-center checkbox-questions'>
-                <ul className='p-0 mt-4 d-flex flex-column'>
-                  {questionsArray[currentIndex - 1].questionList.map(
-                    (item, index) => (
-                      <li key={index} className='d-flex align-items-center '>
-                        <img
-                          onClick={() =>
-                            handleQuestionCheck(currentIndex - 1, index)
-                          }
-                          className='cursor-pointer'
-                          src={
-                            questionChecked[currentIndex - 1].includes(index)
-                              ? checkedImage
-                              : unCheckedImage
-                          }
-                          alt=''
-                        />
-                        <p className='question-p ms-3'>{item}</p>
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            </div>
-          </div>
-        )
-
-      case 8:
-        // question eight
-        return (
-          <div className='week-two'>
-            <div className='assessment question-box py-4'>
-              <div className='d-flex  align-items-start mt-3'>
-                <h1>{currentIndex}.</h1>
-
-                <h2 className='text-center mb-0 fs-1 ms-3'>
-                  {' '}
-                  {questionsArray[currentIndex - 1].title}
-                </h2>
-              </div>
-              <div className='text-center checkbox-questions'>
-                <ul className='p-0 mt-4 d-flex flex-column'>
-                  {questionsArray[currentIndex - 1].questionList.map(
-                    (item, index) => (
-                      <li key={index} className='d-flex align-items-center '>
-                        <img
-                          onClick={() =>
-                            handleQuestionCheck(currentIndex - 1, index)
-                          }
-                          className='cursor-pointer'
-                          src={
-                            questionChecked[currentIndex - 1].includes(index)
-                              ? checkedImage
-                              : unCheckedImage
-                          }
-                          alt=''
-                        />
-                        <p className='question-p ms-3'>{item}</p>
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            </div>
-          </div>
-        )
-      case 9:
-        // question nine
-        return (
-          <div className='week-two'>
-            <div className='assessment question-box py-4'>
-              <div className='d-flex  align-items-start mt-3'>
-                <h1>{currentIndex}.</h1>
-
-                <h2 className='text-center mb-0 fs-1 ms-3'>
-                  {' '}
-                  {questionsArray[currentIndex - 1].title}
-                </h2>
-              </div>
-              <div className='text-center checkbox-questions'>
-                <ul className='p-0 mt-4 d-flex flex-column'>
-                  {questionsArray[currentIndex - 1].questionList.map(
-                    (item, index) => (
-                      <li key={index} className='d-flex align-items-center '>
-                        <img
-                          onClick={() =>
-                            handleQuestionCheck(currentIndex - 1, index)
-                          }
-                          className='cursor-pointer'
-                          src={
-                            questionChecked[currentIndex - 1].includes(index)
-                              ? checkedImage
-                              : unCheckedImage
-                          }
-                          alt=''
-                        />
-                        <p className='question-p ms-3'>{item}</p>
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            </div>
-          </div>
-        )
-      case 10:
-        // question 10
-        return (
-          <div className='week-two'>
-            <div className='assessment question-box py-4'>
-              <div className='d-flex  align-items-start mt-3'>
-                <h1>{currentIndex}.</h1>
-
-                <h2 className='text-center mb-0 fs-1 ms-3'>
-                  {' '}
-                  {questionsArray[currentIndex - 1].title}
-                </h2>
-              </div>
-              <div className='text-center checkbox-questions'>
-                <ul className='p-0 mt-4 d-flex flex-column'>
-                  {questionsArray[currentIndex - 1].questionList.map(
-                    (item, index) => (
-                      <li key={index} className='d-flex align-items-center '>
-                        <img
-                          onClick={() =>
-                            handleQuestionCheck(currentIndex - 1, index)
-                          }
-                          className='cursor-pointer'
-                          src={
-                            questionChecked[currentIndex - 1].includes(index)
-                              ? checkedImage
-                              : unCheckedImage
-                          }
-                          alt=''
-                        />
-                        <p className='question-p ms-3'>{item}</p>
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            </div>
-          </div>
-        )
-
-      default:
-        return null
-    }
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -592,7 +213,7 @@ export default function WeekThreeAssessmentForm({ onSubmit, previous }) {
         </ul>
       </div>
 
-      <div className='d-flex align-items-center justify-content-around mx-auto mt-5 '>
+      <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
         <button
           className='btn progress-btn btn-light'
           onClick={handlePreviousStepClick}
@@ -606,19 +227,6 @@ export default function WeekThreeAssessmentForm({ onSubmit, previous }) {
           Next {'>>>'}
         </button>
       </div>
-
-      {reviewPopUp && (
-        <Modal
-          isOpen={reviewPopUp}
-          onRequestClose={closeReviewPopUp}
-          contentLabel='Example Modal'
-          className='custom-modal'
-          overlayClassName='custom-overlay'
-          shouldCloseOnOverlayClick={true}
-        >
-          <ReviewPopUp />
-        </Modal>
-      )}
     </div>
   )
 }
