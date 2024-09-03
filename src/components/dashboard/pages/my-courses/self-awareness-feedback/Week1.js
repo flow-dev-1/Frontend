@@ -1165,7 +1165,7 @@ const indexToChartData = {
 const pieChart = Object.keys(indexCount).map((index) => {
   const { name, color } = indexToChartData[index];
   const count = indexCount[index] || 0;
-  const value = (count / totalCount) * 360; 
+  const value = (count / totalCount) * 100; 
 
   return { name, value, color };
 });

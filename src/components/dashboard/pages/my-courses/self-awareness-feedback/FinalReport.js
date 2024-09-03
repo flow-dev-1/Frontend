@@ -1,31 +1,41 @@
-import React, { useState } from 'react'
-import './FinalReport.css'
+import React, { useState } from "react";
+import "./FinalReport.css";
 
-const FinalReport = ({rate}) => {
-  const [expanded, setExpanded] = useState(false)
- console.log(rate)
+const FinalReport = ({ rate }) => {
+  const [expanded, setExpanded] = useState(false);
+
   const toggleWeek = () => {
-    setExpanded(!expanded)
-  }
+    setExpanded(!expanded);
+  };
+
+  // Function to determine the report message based on the rate
+  const getReportMessage = (rate) => {
+    if (rate >= 90) {
+      return "Excellent job! You've demonstrated outstanding performance and dedication.";
+    } else if (rate >= 70) {
+      return "Good work! You're performing well, but there is room for improvement.";
+    } else if (rate >= 50) {
+      return "Satisfactory performance. Consider focusing on areas that need improvement.";
+    } else if (rate >= 30) {
+      return "Needs improvement. Review your goals and strategies to enhance performance.";
+    } else {
+      return "Poor performance. Significant changes and focus are needed to improve.";
+    }
+  };
 
   return (
-    <div class='final-report'>
+    <div className="final-report">
       <div>
-        <h4 style={{ fontSize: '20px', color: '#fff' }}>
-          Weekly Report
-        </h4>
-        <h1 class='icon-box'>{rate}%</h1>
+        <h4 style={{ fontSize: "20px", color: "#fff" }}>Weekly Report</h4>
+        <h1 className="icon-box">{rate}%</h1>
       </div>
 
-      <div class='text-box'>
+      <div className="text-box">
         <br />
-        Figma ipsum component variant main layer. Draft hand plugin arrow line
-        plugin slice. Comment boolean background union stroke subtract underline
-        vector. Italic move undo create pen strikethrough main arrange image.
-        Component font.
+        {getReportMessage(rate)}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FinalReport
+export default FinalReport;
