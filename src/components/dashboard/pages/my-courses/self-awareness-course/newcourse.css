@@ -716,6 +716,9 @@ img.value-description-img {
 .match-item {
   background-color: #f0f0f0;
 }
+.match-item {
+  background-color: #f0f0f0;
+}
 
 /* SVG container styling */
 .svg-container {
@@ -731,6 +734,56 @@ img.value-description-img {
 line {
   stroke: #000;
   stroke-width: 2;
+}
+
+.selected-options-summary {
+  background-color: #f9f9f9; /* Light background */
+  border: 1px solid #ddd; /* Border to separate it */
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.selected-options-summary h3 {
+  margin-bottom: 10px;
+}
+
+.selected-options-summary p {
+  margin: 5px 0;
+  font-size: 1.1em;
+}
+
+.emoji-value-option {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  list-style: none;
+  padding: 0;
+  margin: 5px 0 0 0;
+  width: 200px; /* Adjust as needed */
+  max-height: 200px; /* Optional: to limit height */
+  overflow-y: auto; /* Optional: for scroll */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000; /* Ensure it appears above other elements */
+  transition: all 0.3s ease;
+}
+
+.emoji-value-option li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.emoji-value-option li:hover,
+.emoji-value-option li.selected {
+  background-color: #e0e0e0; /* Highlight color */
+}
+
+.dropdown-div {
+  position: relative; /* To position the dropdown correctly */
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* Adjust positioning and styles as needed */
