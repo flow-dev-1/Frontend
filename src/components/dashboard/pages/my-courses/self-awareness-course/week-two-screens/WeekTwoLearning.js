@@ -70,6 +70,7 @@ export default function WeekTwoLearning({
     const isLastActivity = currentActivity >= 9
     if (isLastActivity) {
       setCurrentActivity(10)
+      handleSubmit()
     } else {
       setCurrentActivity((prev) => prev + 1)
     }
@@ -78,6 +79,23 @@ export default function WeekTwoLearning({
   const handlePrevious = () => {
     setCurrentActivity((prev) => prev - 1)
   }
+    const handleSubmit = async () => {
+      try {
+        // Your submit logic here
+        const stringifiedFormData = JSON.stringify(formData);
+        userService
+          .postMyActivity(courseId, stringifiedFormData)
+          .then((response) => {
+            console.log("Submission successful:", response);
+          })
+          .catch((error) => {
+            console.error("Submission failed:", error);
+          });
+      } catch (error) {
+        console.error("Submission failed:", error);
+        toast.error("Submission failed. Please try again later.");
+      }
+    };
 
   const closeReviewPopUp = () => setReviewPopUp(false)
 
