@@ -1,12 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../newcourse.css'
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png'
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
 import NavigationButtons from './NavigationButtons'
 import { toast } from 'react-toastify'
 
-export default function CoreValuesQuestion({ onBack, onNext, onSubmit }) {
-  const [selectedValues, setSelectedValues] = useState([])
+export default function CoreValuesQuestion({
+  onBack,
+  onNext,
+  formData,
+  activityIndex,
+}) {
+  // Retrieve answers from formData for the current activity index
+  const initialSelectedValues =
+    formData.activities.find(
+      (activity) => activity.activity === activityIndex && activity.answers
+    )?.answers || []
+
+  const [selectedValues, setSelectedValues] = useState(initialSelectedValues)
 
   const questionsArray = [
     'Generosity',
@@ -62,7 +73,7 @@ export default function CoreValuesQuestion({ onBack, onNext, onSubmit }) {
           </div>
           <div className='flip-div'>
             <ul
-              className='p-0 mt-4 '
+              className='p-0 mt-4'
               style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr 1fr 1fr',

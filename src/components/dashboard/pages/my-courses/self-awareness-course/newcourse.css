@@ -677,3 +677,60 @@ img.value-description-img {
 },
 
 ]; */
+/* General container for the matching exercise */
+/* General container for the matching exercise */
+.match {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  margin-top: 20px;
+}
+
+/* Container for left and right columns */
+.matching-container {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+}
+
+/* Left and right columns styling */
+.left-column,
+.right-column {
+  width: 45%;
+}
+
+/* Styling for each matching item */
+.match-item {
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  text-align: center;
+}
+
+/* Default background color */
+.match-item {
+  background-color: #f0f0f0;
+}
+
+/* SVG container styling */
+.svg-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Allow clicks through SVG */
+}
+
+/* Arrow styles */
+line {
+  stroke: #000;
+  stroke-width: 2;
+}
+
+/* Adjust positioning and styles as needed */
