@@ -194,22 +194,6 @@ export default function WeekFourLearning({
       case 8:
         return (
           <>
-            <WeekFiveAssessmentForm
-              activityIndex={currentActivity}
-              formData={formData}
-              onBack={handlePrevious}
-              onNext={(answers) =>
-                handleNext({
-                  answers,
-                })
-              }
-            />
-          </>
-        )
-
-      case 9:
-        return (
-          <>
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
@@ -221,7 +205,7 @@ export default function WeekFourLearning({
             />
           </>
         )
-      case 10:
+      case 9:
         return (
           <WeekFiveAssessmentForm
             onBack={handlePrevious}

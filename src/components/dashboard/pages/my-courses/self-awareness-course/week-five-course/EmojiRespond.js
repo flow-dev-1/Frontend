@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Icon } from '@iconify/react'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import '../newcourse.css'
 
 import emojiSad from '../../../../../../assets/selfawareness-images/emocom-images/sad.png'
@@ -11,46 +13,75 @@ import emojiEnvy from '../../../../../../assets/selfawareness-images/emocom-imag
 import emojiFear from '../../../../../../assets/selfawareness-images/emocom-images/fear.png'
 import emojiJoy from '../../../../../../assets/selfawareness-images/emocom-images/joy.png'
 import emojiNostalgia from '../../../../../../assets/selfawareness-images/emocom-images/nostalgia.png'
+import NavigationButtons from './NavigationButtons'
 
-export default function EmojiRespond() {
+export default function EmojiRespond({ onNext, onBack, formData }) {
   const [openDropdownIndex, setOpenDropdownIndex] = useState(null)
   const [selectedOptions, setSelectedOptions] = useState({})
   const dropdownRefs = useRef([])
 
+  // Emoji data
   const emojis = [
     {
       src: emojiJoy,
       label: 'Joy',
-      options: [emojiHappy, emojiNostalgia, emojiJoy],
+      options: [
+        { src: emojiHappy, label: 'Happy' },
+        { src: emojiNostalgia, label: 'Nostalgia' },
+        { src: emojiJoy, label: 'Joy' },
+      ],
     },
     {
       src: emojiAnxiety,
       label: 'Anxiety',
-      options: [emojiBored, emojiAnxiety, emojiJoy],
+      options: [
+        { src: emojiBored, label: 'Bored' },
+        { src: emojiAnxiety, label: 'Anxiety' },
+        { src: emojiJoy, label: 'Joy' },
+      ],
     },
     {
       src: emojiHappy,
       label: 'Happy',
-      options: [emojiHappy, emojiAnxiety, emojiJoy],
+      options: [
+        { src: emojiHappy, label: 'Happy' },
+        { src: emojiAnxiety, label: 'Anxiety' },
+        { src: emojiJoy, label: 'Joy' },
+      ],
     },
     {
       src: emojiAngry,
       label: 'Angry',
-      options: [emojiAngry, emojiJoy, emojiSad],
+      options: [
+        { src: emojiAngry, label: 'Angry' },
+        { src: emojiJoy, label: 'Joy' },
+        { src: emojiSad, label: 'Sad' },
+      ],
     },
     {
       src: emojiSad,
       label: 'Sad',
-      options: [emojiHappy, emojiAnxiety, emojiSad],
+      options: [
+        { src: emojiHappy, label: 'Happy' },
+        { src: emojiAnxiety, label: 'Anxiety' },
+        { src: emojiSad, label: 'Sad' },
+      ],
     },
   ]
+
+  useEffect(() => {
+    // Prepopulate selectedOptions based on formData
+    if (formData?.activities[5]?.answers) {
+      setSelectedOptions(formData.activities[5].answers)
+    }
+  }, [formData])
 
   const handleEmojiClick = (index) => {
     setOpenDropdownIndex(index === openDropdownIndex ? null : index)
   }
 
   const handleOptionClick = (index, option) => {
-    setSelectedOptions((prev) => ({ ...prev, [index]: option }))
+    setSelectedOptions((prev) => ({ ...prev, [index]: option.label }))
     setOpenDropdownIndex(null) // Close dropdown after selection
   }
 
@@ -71,8 +102,20 @@ export default function EmojiRespond() {
     }
   }, [])
 
+  const handleNextStepClick = () => {
+    const allSelected = emojis.every((_, index) => selectedOptions[index])
+
+    if (!allSelected) {
+      toast.error('Please select an option for each emoji before proceeding.')
+      return
+    }
+
+    onNext(selectedOptions)
+  }
+
   return (
     <div>
+      <ToastContainer />
       <div className='week-two question-box py-4'>
         <div className='align-items-start'>
           <div className='question-box-header mx-auto align-items-start'>
@@ -92,13 +135,23 @@ export default function EmojiRespond() {
               >
                 <div className='dropdown-div'>
                   <img src={emoji.src} alt={emoji.label} />
-                  {/* <span className="selected-option">
-                                        <img src={selectedOptions[index] || ""} alt={emoji.label} />
-                                    </span> */}
+
                   <span className='selected-option'>
                     {selectedOptions[index] ? (
-                      <img src={selectedOptions[index]} alt={emoji.label} />
-                    ) : null}
+                      <>
+                        <img
+                          src={
+                            emoji.options.find(
+                              (option) =>
+                                option.label === selectedOptions[index]
+                            ).src
+                          }
+                          alt={selectedOptions[index]}
+                        />
+                      </>
+                    ) : (
+                      ''
+                    )}
                   </span>
 
                   <Icon
@@ -119,7 +172,8 @@ export default function EmojiRespond() {
                         key={optionIndex}
                         onClick={() => handleOptionClick(index, option)}
                       >
-                        <img src={option} alt='' />
+                        <img src={option.src} alt={option.label} />
+                        <span>{option.label}</span>
                       </li>
                     ))}
                   </ul>
@@ -129,6 +183,7 @@ export default function EmojiRespond() {
           </div>
         </div>
       </div>
+      <NavigationButtons onBack={onBack} onNext={handleNextStepClick} />
     </div>
   )
 }
