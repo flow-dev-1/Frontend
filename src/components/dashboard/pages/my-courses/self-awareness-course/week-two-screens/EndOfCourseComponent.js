@@ -4,8 +4,7 @@ import MyFireWorks from '../Fireworks'
 import celebrate from '../../../../../../assets/celebrate.png'
 
 const EndOfCourseComponent = ({ currentWeekIndex, handleNextWeekCourse }) => {
-  currentWeekIndex = 2
-  console.log(currentWeekIndex)
+  currentWeekIndex = 1
   return (
     <div className='end-of-course-page'>
       <div className='congrats'>
@@ -21,7 +20,7 @@ const EndOfCourseComponent = ({ currentWeekIndex, handleNextWeekCourse }) => {
           className='btn progress-btn btn-dark'
           onClick={handleNextWeekCourse}
         >
-          Proceed to {currentWeekIndex + 1}
+          Proceed to {currentWeekIndex + 2}
         </button>
       </div>
     </div>
