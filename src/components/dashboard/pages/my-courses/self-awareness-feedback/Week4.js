@@ -239,6 +239,8 @@ let questionsQuiz = [
   {
     question:
       "Sarah notices a classmate, David, looking downcast while carrying a heavy stack of books. Sarah offers to help David with the books. Sarah remembers she has her own after-school activity but suggests they put David's books in his locker first so he isn't late to his next class.",
+    instuction:
+      "Instruction: Match the following statements in the scenario to their respective value",
     options: [
       {
         label: "A. Kindness - Sarah offers to help David with the books.",
@@ -418,30 +420,21 @@ const Week4 = () => {
           data?.existingAssessment.assessments[0].answers;
         const matchCount1 = data?.existingAssessment.assessments[0].matchesSet1;
         const matchCount2 = data?.existingAssessment.assessments[0].matchesSet2;
-
+        // toast.success(matchCount1)
+        console.log(data?.existingAssessment.assessments[0].matchesSet1);
+        console.log(matchCount2);
         const combinedArray1 = matchCount1.map((match) => {
           const leftValue = leftItemsArray[0][match.left];
           const rightValue = rightItemsArray[0][match.right];
           return `${leftValue} - ${rightValue}`;
         });
-
-        const combinedArray2 = matchCount2.map((match) => {
-          const leftValue = leftItemsArray[1][match.left];
-          const rightValue = rightItemsArray[1][match.right];
+          const combinedArray = matchCount1.map((match) => {
+          const leftValue = leftItemsArray[0][match.left];
+          const rightValue = rightItemsArray[0][match.right];
           return `${leftValue} - ${rightValue}`;
         });
-        // Helper function to check if a label contains any of the matchCount phrases
-        const isSimilar = (label, phrases) => {
-          const normalizedLabel = label.toLowerCase().trim();
-          return phrases.some((phrase) =>
-            normalizedLabel.includes(phrase.toLowerCase().trim())
-          );
-        };
 
-        // Check if it's the 9th question and update based on matchCount1
-    
-
-        console.log(combinedArray1, combinedArray2);
+        console.log(combinedArray1);
         if (assessmentForChecked && assessmentForChecked.length >= 5) {
           const valuesToCheck = assessmentForChecked;
           console.log(valuesToCheck);
@@ -458,26 +451,32 @@ const Week4 = () => {
                 }
 
                 // Check if it's the 9th question and update based on matchCount1
-                 if (questionsQuiz[9]) {
-                   questionsQuiz[9] = {
-                     ...questionsQuiz[9],
-                     options: questionsQuiz[9].options.map((option) => ({
-                       ...option,
-                       checked: isSimilar(option.label, combinedArray1)
-                     }))
-                   };
-                 }
+                if (index === 9) {
+                  matchCount1.forEach((match) => {
+                    if (match.left === 9 || match.right === 9) {
+                      if (
+                        optionIndex === match.left ||
+                        optionIndex === match.right
+                      ) {
+                        isChecked = true;
+                      }
+                    }
+                  });
+                }
 
                 // Check if it's the 10th question and update based on matchCount2
-              if (questionsQuiz[9]) {
-                questionsQuiz[9] = {
-                  ...questionsQuiz[9],
-                  options: questionsQuiz[9].options.map((option) => ({
-                    ...option,
-                    checked: isSimilar(option.label, combinedArray1)
-                  }))
-                };
-              }
+                if (index === 10) {
+                  matchCount2.forEach((match) => {
+                    if (match.left === 10 || match.right === 10) {
+                      if (
+                        optionIndex === match.left ||
+                        optionIndex === match.right
+                      ) {
+                        isChecked = true;
+                      }
+                    }
+                  });
+                }
 
                 return {
                   ...option,
