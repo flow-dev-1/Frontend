@@ -1,220 +1,360 @@
-import React from 'react'
-import './Week1.css' // Import the CSS file for styling
-import PersonalityFeedback from './PersonalityFeedback'
-import checkedImage from '../../../../../assets/selfawareness-images/checked.png'
-import unCheckedImage from '../../../../../assets/selfawareness-images/not-checked.png'
-import { Icon } from '@iconify/react'
-import FinalReport from './FinalReport'
-
-const activities = [
-  {
-    activity: 1,
-    question: 'What do you think "Self Awareness" is?',
-    answer: 'Figma ipsum component variant main layer...',
-    feedback: 'Figma ipsum component variant main layer...',
-  },
-
-  {
-    activity: 3, // New activity based on image
-    question:
-      'Flip each card to know more about the values. Select the box on each card to pick the values you feel are a big part of who you are.',
-    answer: [
-      'Organized',
-      'Organized',
-      'Organized',
-      'Organized',
-      'Organized',
-      'Organized',
-      'Organized',
-      'Organized',
-      'Organized',
-      'Organized',
-    ],
-    feedback:
-      'Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen.',
-  },
-  {
-    activity: 4, // Another new activity based on image
-    question:
-      'Identify three (3) important people in your life and list their names below.',
-    answer: ['1. Name 1', '2. Name 2', '3. Name 3'],
-    feedback: null, // No feedback provided in the image
-  },
-  {
-    activity: 5, // New activity based on the latest image
-    question:
-      "Is there a sport you dislike? What sport is this? Now imagine you were asked to represent your house in this particular sport, for your School's inter-house sport competition, to win a laptop and a gaming console. How would you go about this?",
-    answer: {
-      strengths: [
-        'Organized',
-        'Organized',
-        'Organized',
-        'Organized',
-        'Organized',
-        'Organized',
-      ],
-      weaknesses: [
-        'Organized',
-        'Organized',
-        'Organized',
-        'Organized',
-        'Organized',
-        'Organized',
-      ],
-    },
-    feedback:
-      'Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen.',
-  },
-]
+import React, { useEffect, useState } from "react";
+import "./Week1.css"; // Import the CSS file for styling
+import PersonalityFeedback from "./PersonalityFeedback";
+import checkedImage from "../../../../../assets/selfawareness-images/checked.png";
+import unCheckedImage from "../../../../../assets/selfawareness-images/not-checked.png";
+import { Icon } from "@iconify/react";
+import FinalReport from "./FinalReport";
+import { useQuery } from "@tanstack/react-query";
+import userService from "../../../../../services/api/user";
 
 const questions = [
   {
-    question: 'When I make decisions:',
+    question: "When I make decisions:",
     options: [
       {
-        label: 'A. I do it quickly and go with the first impressions.',
-        color: 'Red',
-        checked: true,
+        label: "A. I do it quickly and go with the first impressions.",
+        color: "Red",
+        checked: true
       },
       {
-        label: 'B. I think about it, consider the options, and then decide.',
-        color: 'Green',
-        checked: false,
-      },
-      {
-        label:
-          'C. I listen to my feelings and consider how my decisions will affect others.',
-        color: 'Blue',
-        checked: false,
+        label: "B. I think about it, consider the options, and then decide.",
+        color: "Green",
+        checked: false
       },
       {
         label:
-          'D. I take it seriously and always try to make the right decision.',
-        color: 'Yellow',
-        checked: false,
+          "C. I listen to my feelings and consider how my decisions will affect others.",
+        color: "Blue",
+        checked: false
       },
-    ],
-  },
-]
+      {
+        label:
+          "D. I take it seriously and always try to make the right decision.",
+        color: "Yellow",
+        checked: false
+      }
+    ]
+  }
+];
 
-const questionsQuiz = [
+let questionsQuiz = [
   {
-    question: 'When I make decisions:',
+    question:
+      "Which quality would help you best manage your chores and responsibilities at home well?",
     options: [
       {
-        label: 'A. I do it quickly and go with the first impressions.',
-        color: 'Red',
+        label: "A. Empathy",
+        color: "Red",
         checked: false, // This is not the correct option
-        isCorrect: false,
+        isCorrect: false
       },
       {
-        label: 'B. I think about it, consider the options, and then decide.',
-        color: 'Green',
-        checked: true, // This is the correct option
-        isCorrect: true,
+        label: "B. Good Listener",
+        color: "Green",
+        checked: false, // This is not the correct option
+        isCorrect: false
+      },
+      {
+        label: "C. Detail-oriented",
+        color: "Blue",
+        checked: false, // This is not the correct option
+        isCorrect: false
+      },
+      {
+        label: "D. Responsible",
+        color: "Yellow",
+        checked: false, // This is the correct option (assuming)
+        isCorrect: true
+      }
+    ]
+  },
+  {
+    question:
+      "You’ve identified that your weakness is impatience and your classmate asked you to wait for him so you can get lunch together while he uses the toilet. What will you do as someone trying to improve on their weakness?",
+    options: [
+      {
+        label: "A. Do Nothing",
+        color: "Red",
+        checked: false, // This is not the correct option
+        isCorrect: false
+      },
+      {
+        label: "B. Wait for him to get lunch together.",
+        color: "Green",
+        checked: false, // This is the correct option (assuming)
+        isCorrect: true
+      },
+      {
+        label: "C. Wait for only 1 minute and leave if he doesn’t show up.",
+        color: "Blue",
+        checked: false, // This is not the correct option
+        isCorrect: false
+      },
+      {
+        label: "D. Tell him you’re hungry and cannot wait.",
+        color: "Yellow",
+        checked: false, // This is not the correct option
+        isCorrect: false
+      }
+    ]
+  },
+  {
+    question:
+      "You’ve identified your strength is honesty and your class teacher is asking who was making noise. You know it is Adetola, your best friend that was making noise because he is your seatmate. What will you do next?",
+    options: [
+      {
+        label: "A. Choose not to say anything",
+        color: "Red",
+        checked: false, // This is not the correct option
+        isCorrect: false
+      },
+      {
+        label: "B. Tell the teacher that Adetola was making noise",
+        color: "Green",
+        checked: false, // This is the correct option (assuming)
+        isCorrect: true
+      },
+      {
+        label: "C. Tell Adetola to report himself or else you would.",
+        color: "Blue",
+        checked: false, // This is not the correct option
+        isCorrect: false
       },
       {
         label:
-          'C. I listen to my feelings and consider how my decisions will affect others.',
-        color: 'Blue',
+          "D. Ask to go to the toilet because you don’t want to talk about it",
+        color: "Yellow",
         checked: false, // This is not the correct option
-        isCorrect: false,
+        isCorrect: false
+      }
+    ]
+  },
+  {
+    question:
+      "You're trying to solve a difficult puzzle. Which quality would be most helpful in this situation?",
+    options: [
+      {
+        label: "A. Patience",
+        color: "Red",
+        checked: false, // This is the correct option (assuming)
+        isCorrect: true
+      },
+      {
+        label: "B. Self-critical",
+        color: "Green",
+        checked: false, // This is not the correct option
+        isCorrect: false
+      },
+      {
+        label: "C. Optimistic",
+        color: "Blue",
+        checked: false, // This is not the correct option
+        isCorrect: false
+      },
+      {
+        label: "D. Brave",
+        color: "Yellow",
+        checked: false, // This is not the correct option
+        isCorrect: false
+      }
+    ]
+  },
+  {
+    question:
+      "You realized your best friend, John, has a weakness and you are interested in helping him work on this weakness. What would you do?",
+    options: [
+      {
+        label: "A. Ignore it to protect your friendship.",
+        color: "Red",
+        checked: false, // This is not the correct option
+        isCorrect: false
       },
       {
         label:
-          'D. I take it seriously and always try to make the right decision.',
-        color: 'Yellow',
-        checked: false, // This is not the correct option
-        isCorrect: false,
+          "B. Tell him about the strengths you have noticed he has and identify how to manage his weakness.",
+        color: "Green",
+        checked: false, // This is the correct option (assuming)
+        isCorrect: true
       },
-    ],
+      {
+        label: "C. Tell your other friends about this weakness.",
+        color: "Blue",
+        checked: false, // This is not the correct option
+        isCorrect: false
+      },
+      {
+        label:
+          "D. Tell him about your own weakness in hopes that it will get him to share as well.",
+        color: "Yellow",
+        checked: false, // This is not the correct option
+        isCorrect: false
+      }
+    ]
   },
-]
-
-const personalityFeedback = {
-  chartData: {
-    red: 25,
-    green: 25,
-    blue: 25,
-    yellow: 25,
-  },
-  colors: {
-    red: {
-      title: 'Red',
-      traits:
-        'Energetic, action-oriented, competitive, spontaneous, and adventurous.',
-      strengths:
-        'Strong leadership qualities, enjoys taking risks, excels in fast-paced environments.',
-      challenges:
-        'May be impulsive, impatient, and can sometimes overlook details in favor of quick decisions.',
-      challengesExp:
-        'People who align more with the Red personality often thrive in dynamic situations where quick thinking and decisive action are needed. However, they may need to be mindful of their tendency to act before fully considering all consequences.',
-    },
-    green: {
-      title: 'Green',
-      traits: 'Analytical, logical, strategic, and thoughtful.',
-      strengths:
-        'Problem-solving abilities, enjoys intellectual challenges, values precision and accuracy.',
-      challenges:
-        'May overthink or become indecisive, can be perceived as distant or overly critical.',
-      challengesExp:
-        'If you dominantly have a Green personality, you likely excel in situations that require careful thought and analysis. Your logical approach is a valuable asset, but balancing it with consideration for emotional and social factors is important.',
-    },
-    blue: {
-      title: 'Blue',
-      traits: 'Compassionate, empathetic, harmonious, and cooperative.',
-      strengths:
-        'Excellent interpersonal skills, values relationships, excels in teamwork and communication.',
-      challenges:
-        'May struggle with setting boundaries, can be overly sensitive or avoid conflict.',
-      challengesExp:
-        'If your results aligned more with the Blue personality are often the glue that holds groups together, providing support and fostering harmony. However, it’s essential to establish boundaries to avoid becoming overwhelmed by others’ needs.',
-    },
-    yellow: {
-      title: 'Yellow',
-      traits: 'Optimistic, spontaneous, sociable, and enthusiastic.',
-      strengths:
-        'Good at creating a positive atmosphere, enjoys networking, brings energy to group settings.',
-      challenges:
-        'May avoid serious tasks or become easily distracted, struggles with long-term focus.',
-      challengesExp:
-        'If your results aligned more with the Yellow personality, your strength lies in your ability to create order and maintain stability. You are the person others rely on for consistency and thoroughness, though it’s beneficial to remain open to new ideas and changes.',
-    },
-  },
-}
+];
 
 const Week2 = () => {
+  const week = 2;
+  const courseId = "66853bf50118e2e0a02b6a5a";
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["dashboard/feedback/self-awareness", courseId, week],
+    queryFn: () => userService.getMyActivites(courseId, week)
+  });
+
+  const [assessmentData, setAssessmentData] = useState(null);
+  const [assessmentLoading, setAssessmentLoading] = useState(true);
+  const [assessmentError, setAssessmentError] = useState(null);
+
+useEffect(() => {
+  const fetchAndProcessAssessmentData = async () => {
+    setAssessmentLoading(true);
+    try {
+      const data = await userService.getMyAssessment(courseId, week);
+      setAssessmentData(data);
+
+      const assessmentForChecked =
+        data?.existingAssessment?.assessments[0]?.assessment?.answers;
+
+      // Ensure that assessmentForChecked is valid before slicing
+      if (assessmentForChecked && assessmentForChecked.length >= 5) {
+        const valuesToCheck = assessmentForChecked.slice(0, 5);
+        console.log(valuesToCheck);
+
+        questionsQuiz = questionsQuiz.map((question, index) => {
+          return {
+            ...question,
+            options: question.options.map((option, optionIndex) => {
+              return {
+                ...option,
+                checked: optionIndex === valuesToCheck[index]
+              };
+            })
+          };
+        });
+
+        // You might want to update the state with the modified questionsQuiz
+        // console.log(questionsQuiz);
+      } else {
+        console.error("Assessment answers are missing or incomplete.");
+      }
+    } catch (error) {
+      setAssessmentError(error);
+    } finally {
+      setAssessmentLoading(false);
+    }
+  };
+
+  fetchAndProcessAssessmentData();
+}, [courseId, week]);
+
+// console.log(updatedQuestionsQuiz);
+
+  if (isLoading || assessmentLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError || assessmentError) {
+    return <div>Error loading data.</div>;
+  }
+  const strengths = data?.activity?.activities[3].answers.strengths;
+  const weaknesses = data?.activity?.activities[4].answers.weakness;
+
+  const activities = [
+    {
+      activity: 1,
+      question: 'What do you think "Self Awareness" is?',
+      answer: data?.activity?.activities[1].answers[0],
+      feedback: "Figma ipsum component variant main layer..."
+    },
+
+    {
+      activity: 2, // New activity based on image
+      question: "Identify your Strengths.",
+      answer: strengths,
+      feedback:
+        "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
+    },
+    {
+      activity: 3, // New activity based on image
+      question: "Identify your Weaknesses.",
+      answer: weaknesses,
+      feedback:
+        "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
+    },
+    // {
+    //   activity: 4, // Another new activity based on image
+    //   question:
+    //     "Identify three (3) important people in your life and list their names below.",
+    //   answer: ["1. Name 1", "2. Name 2", "3. Name 3"],
+    //   feedback: null // No feedback provided in the image
+    // },
+    {
+      activity: 4, // New activity based on the latest image
+      question:
+        "A friend is feeling sad and needs someone to talk to because they just failed a test.They come to you for support. How would you help?",
+      answer: {
+        strengths: data?.activity?.activities[6].answers.strengths,
+        weaknesses: data?.activity?.activities[6].answers.weaknesses
+      },
+      feedback:
+        "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
+    },
+    {
+      activity: 4, // New activity based on the latest image
+      question:
+        "Imagine you’re working on a group project at school. Your group is struggling to come up with an idea for the project. As a member of the team, how would you help?",
+      answer: {
+        strengths: data?.activity?.activities[6].answers.strengths,
+        weaknesses: data?.activity?.activities[6].answers.weaknesses
+      },
+      feedback:
+        "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
+    },
+    {
+      activity: 4, // New activity based on the latest image
+      question:
+        "Is there a sport you dislike? What sport is this? Now imagine you were asked to represent your house in this particular sport, for your School’s inter-house sport competition, to win a laptop and a gaming console. How would you go about this?",
+      answer: {
+        strengths: data?.activity?.activities[6].answers.strengths,
+        weaknesses: data?.activity?.activities[6].answers.weaknesses
+      },
+      feedback:
+        "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
+    },
+  ];
+  const percentage = assessmentData?.existingAssessment?.rating;
   return (
-    <div className='week-content'>
+    <div className="week-content">
       {activities.map((activity, index) => (
-        <div style={{ border: 'none' }} className='activity' key={index}>
-          <p className='activity-badge'>Activity {activity.activity}</p>
-          <p className='question d-flex align-items-center gap-2'>
-            <h4 style={{ color: '#275DAD', marginTop: '.3rem' }}>Question:</h4>
+        <div style={{ border: "none" }} className="activity" key={index}>
+          <p className="activity-badge">Activity {activity.activity}</p>
+          <p className="question d-flex align-items-center gap-2">
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
             <span> {activity.question}</span>
           </p>
 
           {/* Check for answer type and render accordingly */}
           {activity.answer.strengths ? (
             <div
-              style={{ display: 'flex', width: '90%', margin: '1rem auto' }}
-              className='strengths-weaknesses'
+              style={{ display: "flex", width: "90%", margin: "1rem auto" }}
+              className="strengths-weaknesses"
             >
-              <div style={{ width: '100%' }} className='strengths'>
+              <div style={{ width: "100%" }} className="strengths">
                 <h5
                   style={{
-                    color: '#fff',
-                    textAlign: 'center',
-                    padding: '1rem',
+                    color: "#fff",
+                    textAlign: "center",
+                    padding: "1rem"
                   }}
-                  id='yes'
+                  id="yes"
                 >
                   Strengths
                 </h5>
                 <ul
                   style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr 1fr',
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr 1fr"
                   }}
                 >
                   {activity.answer.strengths.map((item, idx) => (
@@ -222,21 +362,21 @@ const Week2 = () => {
                   ))}
                 </ul>
               </div>
-              <div style={{ width: '100%' }} className='weaknesses'>
+              <div style={{ width: "100%" }} className="weaknesses">
                 <h5
-                  id='no'
+                  id="no"
                   style={{
-                    color: '#fff',
-                    textAlign: 'center',
-                    padding: '1rem',
+                    color: "#fff",
+                    textAlign: "center",
+                    padding: "1rem"
                   }}
                 >
                   Weaknesses
                 </h5>
                 <ul
                   style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr 1fr',
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr 1fr"
                   }}
                 >
                   {activity.answer.weaknesses.map((item, idx) => (
@@ -248,21 +388,21 @@ const Week2 = () => {
           ) : Array.isArray(activity.answer) ? (
             <div
               style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr 1fr"
               }}
-              className='answer-options'
+              className="answer-options"
             >
               {activity.answer.map((item, idx) => (
                 <div>
-                  <p style={{ fontSize: '14px' }} className='answer-option'>
+                  <p style={{ fontSize: "14px" }} className="answer-option">
                     {item}
                   </p>
                 </div>
               ))}
             </div>
           ) : (
-            <div className='answer'>
+            <div className="answer">
               {Array.isArray(activity.answer) ? (
                 <ul>
                   {activity.answer.map((item, idx) => (
@@ -277,90 +417,60 @@ const Week2 = () => {
 
           {/* Conditionally render feedback */}
           {activity.feedback && (
-            <p className='feedback'>
-              <div id='badge'>Feedback:</div>
+            <p className="feedback">
+              <div id="badge">Feedback:</div>
               <div
                 style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem"
                 }}
               >
-                <div className='feedback-card'>{activity.feedback}</div>
+                <div className="feedback-card">{activity.feedback}</div>
                 <Icon
-                  style={{ color: '#275DAD' }}
+                  style={{ color: "#275DAD" }}
                   width={20}
-                  icon='lucide:edit'
+                  icon="lucide:edit"
                 />
               </div>
             </p>
           )}
         </div>
       ))}
-
-      {questions.map((q, index) => (
-        <div className='question-block' key={index}>
-          <p className='activity-badge'>
-            Activity {index + 1 + activities.length}
-          </p>
-          <p className='question d-flex align-items-center gap-2'>
-            <h4 style={{ color: '#275DAD', marginTop: '.3rem' }}>Question:</h4>
+      <p className="activity-badge">Assessment 2</p>
+      {questionsQuiz.map((q, index) => (
+        <div className="question-block" key={index}>
+          <p className="question d-flex align-items-center gap-2">
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
             <span> {q.question}</span>
           </p>
-          <div className='options'>
+          <div className="options">
             {q.options.map((option, idx) => (
-              <div className='option' key={idx}>
+              <div className="option" key={idx}>
                 <img
                   src={option.checked ? checkedImage : unCheckedImage}
-                  alt={option.checked ? 'Checked' : 'Unchecked'}
-                  style={{ width: '20px', marginRight: '10px' }}
+                  alt={option.isCorrect ? "Checked" : "Unchecked"}
+                  style={{ width: "20px", marginRight: "10px" }}
                 />
-                <span style={{ fontSize: '14px' }} className='option-label'>
+                <span style={{ fontSize: "14px" }} className="option-label">
                   {option.label}
                 </span>
-                <span className={`color-label ${option.color.toLowerCase()}`}>
-                  {option.color}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
-
-      {questionsQuiz.map((q, index) => (
-        <div className='question-block' key={index}>
-          <p className='activity-badge'>Activity 4</p>
-          <p className='question d-flex align-items-center gap-2'>
-            <h4 style={{ color: '#275DAD', marginTop: '.3rem' }}>Question:</h4>
-            <span> {q.question}</span>
-          </p>
-          <div className='options'>
-            {q.options.map((option, idx) => (
-              <div className='option' key={idx}>
-                <img
-                  src={option.isCorrect ? checkedImage : unCheckedImage}
-                  alt={option.isCorrect ? 'Checked' : 'Unchecked'}
-                  style={{ width: '20px', marginRight: '10px' }}
-                />
-                <span style={{ fontSize: '14px' }} className='option-label'>
-                  {option.label}
-                </span>
-                <p style={{ width: '120px', textAlign: 'center' }}>
+                <p style={{ width: "120px", textAlign: "center" }}>
                   {option.isCorrect ? (
                     <span
-                      style={{ color: '#50AA50' }}
-                      className='d-flex align-items-center justify-content-center gap-1 '
+                      style={{ color: "#50AA50" }}
+                      className="d-flex align-items-center justify-content-center gap-1 "
                     >
-                      <Icon width={17} icon='ph:seal-check-light' />
+                      <Icon width={17} icon="ph:seal-check-light" />
                       Correct
                     </span>
                   ) : (
                     <span
-                      style={{ color: '#FD483D' }}
-                      className='d-flex align-items-center justify-content-center gap-1'
+                      style={{ color: "#FD483D" }}
+                      className="d-flex align-items-center justify-content-center gap-1"
                     >
-                      <Icon width={17} icon='mdi:cross-circle-outline' />
+                      <Icon width={17} icon="mdi:cross-circle-outline" />
                       Wrong
                     </span>
                   )}
@@ -370,9 +480,9 @@ const Week2 = () => {
           </div>
         </div>
       ))}
-      <FinalReport />
+      <FinalReport rate={percentage} />
     </div>
-  )
-}
+  );
+};
 
-export default Week2
+export default Week2;
