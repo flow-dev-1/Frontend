@@ -88,47 +88,37 @@ function DragDropComponent({ onBack, onNext, formData }) {
     setCurrentCardIndex(0)
   }, [formData])
 
-  const onDragEnd = (result) => {
-    const { destination, source } = result
+const onDragEnd = (result) => {
+  const { destination, source } = result
 
-    if (!destination) {
-      // If the card is dropped outside of a valid location, revert the position
-      return
-    }
-
-    if (source.droppableId === 'card-slider') {
-      const newCards = Array.from(cards)
-      const draggedCard = newCards.splice(currentCardIndex, 1)[0]
-
-      if (destination.droppableId === 'bucket-yes') {
-        setBuckets((prev) => ({
-          ...prev,
-          yes: [...prev.yes, draggedCard],
-        }))
-      } else if (destination.droppableId === 'bucket-no') {
-        setBuckets((prev) => ({
-          ...prev,
-          no: [...prev.no, draggedCard],
-        }))
-      } else if (destination.droppableId === 'bucket-sometimes') {
-        setBuckets((prev) => ({
-          ...prev,
-          sometimes: [...prev.sometimes, draggedCard],
-        }))
-      } else {
-        // Revert card position if drop location is invalid
-        return
-      }
-
-      const updatedCards = newCards
-      setCards(updatedCards)
-      if (updatedCards.length > 0) {
-        setCurrentCardIndex(0)
-      } else {
-        setCurrentCardIndex(-1) // No more cards to show
-      }
-    }
+  if (!destination) {
+    return
   }
+
+  const newCards = Array.from(cards)
+  const draggedCard = newCards.splice(currentCardIndex, 1)[0]
+
+  // Handle precise drop into the specific bucket
+  if (destination.droppableId === 'bucket-yes') {
+    setBuckets((prev) => ({
+      ...prev,
+      yes: [...prev.yes, draggedCard],
+    }))
+  } else if (destination.droppableId === 'bucket-no') {
+    setBuckets((prev) => ({
+      ...prev,
+      no: [...prev.no, draggedCard],
+    }))
+  } else if (destination.droppableId === 'bucket-sometimes') {
+    setBuckets((prev) => ({
+      ...prev,
+      sometimes: [...prev.sometimes, draggedCard],
+    }))
+  }
+
+  setCards(newCards)
+  setCurrentCardIndex(newCards.length > 0 ? 0 : -1)
+}
 
   const onRefresh = () => {
     setCards(initialCards)

@@ -56,6 +56,7 @@ const PersonalityDescriptionComponent = ({
             onClick={() => handlePersonalitySelect('Emotional')}
           >
             <img src={emotionalHand} alt='Emotional' className='' />
+            <p style={{ color: '#026AB7' }}>Blue -</p>
             <p>Emotional</p>
           </div>
           <div
@@ -65,6 +66,7 @@ const PersonalityDescriptionComponent = ({
             onClick={() => handlePersonalitySelect('Analytic')}
           >
             <img src={analyticHand} alt='Analytic' className='' />
+            <p style={{ color: '#008B1E' }}>Green -</p>
             <p>Analytic</p>
           </div>
           <div
@@ -74,6 +76,7 @@ const PersonalityDescriptionComponent = ({
             onClick={() => handlePersonalitySelect('Friendship')}
           >
             <img src={friendshipHand} alt='Friendship' className='' />
+            <p style={{ color: '#FEF900' }}>Yellow -</p>
             <p>Friendship</p>
           </div>
           <div
@@ -83,6 +86,7 @@ const PersonalityDescriptionComponent = ({
             onClick={() => handlePersonalitySelect('Action')}
           >
             <img src={actionHand} alt='Action' className='' />
+            <p style={{ color: '#B12623' }}>Red -</p>
             <p>Action</p>
           </div>
         </div>

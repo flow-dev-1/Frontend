@@ -22,7 +22,7 @@ function SelfAwarenessCourse() {
   const courses = {
     id: 1,
     image: courseOne,
-    title: 'Alex & Maya',
+    title: 'Knowing Yourself Better:',
     subtitle: 'Self Awareness',
     overviewDescription:
       'The curriculum combines engaging educational content, interactive activities, and reflective discussions to create an environment that nurtures resilience, creativity, and a lifelong love for learning. From understanding the power of "yet" to exploring the potential of the human brain, each weeks session delves into different aspects of the growth mindset.',

@@ -401,10 +401,13 @@
 }
 
 .card-item.dragging .slider-img-card {
-  transform: scale(0.5);
+  transform: scale(0.3);
   /* Adjust size while dragging */
 }
 
+.card-item.dragging {
+  transition: transform 0.2s ease-out !important;
+}
 /* .card-item.dragging  {
   transition: transform 0.37s cubic-bezier(0.2, 1, 0.1, 1), opacity 0.37s cubic-bezier(0.2, 1, 0.1, 1);
  
