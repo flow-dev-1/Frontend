@@ -4,7 +4,7 @@ import MyFireWorks from '../Fireworks'
 import celebrate from '../../../../../../assets/celebrate.png'
 
 const EndOfCourseComponent = ({ currentWeekIndex, handleNextWeekCourse }) => {
-  currentWeekIndex = 2
+  currentWeekIndex = 4
   console.log(currentWeekIndex)
   return (
     <div className='end-of-course-page'>
@@ -12,7 +12,7 @@ const EndOfCourseComponent = ({ currentWeekIndex, handleNextWeekCourse }) => {
         <img src={celebrate} alt='celebrate' />
         <h1>Hurray!</h1>
         <p className='text-center fs-5'>
-          You have made it to the end of <br /> Week {currentWeekIndex + 1}
+          You have made it to the end of <br /> Week {currentWeekIndex}
         </p>
       </div>
       <MyFireWorks />
@@ -21,7 +21,7 @@ const EndOfCourseComponent = ({ currentWeekIndex, handleNextWeekCourse }) => {
           className='btn progress-btn btn-dark'
           onClick={handleNextWeekCourse}
         >
-          Proceed to {currentWeekIndex + 1 + 1}
+          Proceed to {currentWeekIndex + 1}
         </button>
       </div>
     </div>
