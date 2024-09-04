@@ -11,14 +11,16 @@ import emojiEnvy from '../../../../../../assets/selfawareness-images/emocom-imag
 import emojiFear from '../../../../../../assets/selfawareness-images/emocom-images/fear.png'
 import emojiJoy from '../../../../../../assets/selfawareness-images/emocom-images/joy.png'
 import emojiNostalgia from '../../../../../../assets/selfawareness-images/emocom-images/nostalgia.png'
+import { toast } from 'react-toastify'
 
-export default function EmojiEmotionMatch({ onBack, onComplete }) {
+export default function EmojiEmotionMatch({
+  onBack,
+  onNext,
+  activityIndex,
+  formData,
+}) {
   const [openDropdownIndex, setOpenDropdownIndex] = useState(null)
-  const [selectedOptions, setSelectedOptions] = useState(() => {
-    // Retrieve stored state from localStorage if it exists
-    const savedState = localStorage.getItem('emojiMatchAnswers')
-    return savedState ? JSON.parse(savedState) : {}
-  })
+  const [selectedOptions, setSelectedOptions] = useState({})
   const dropdownRefs = useRef([])
 
   const emojis = [
@@ -45,28 +47,43 @@ export default function EmojiEmotionMatch({ onBack, onComplete }) {
     'Bored',
   ]
 
+  // Populate selectedOptions from formData on mount
+  useEffect(() => {
+    if (formData && formData.activities) {
+      const activityData = formData.activities.find(
+        (activity) => activity.activity === activityIndex
+      )
+      if (activityData && activityData.answers) {
+        const initialSelectedOptions = activityData.answers.reduce(
+          (acc, answer, index) => {
+            acc[index] = answer
+            return acc
+          },
+          {}
+        )
+        setSelectedOptions(initialSelectedOptions)
+      }
+    }
+  }, [formData, activityIndex])
+
   const handleEmojiClick = (index) => {
     setOpenDropdownIndex(index === openDropdownIndex ? null : index)
   }
 
   const handleOptionClick = (index, option) => {
-    setSelectedOptions((prev) => {
-      const updatedOptions = { ...prev, [index]: option }
-
-      // Save the updated state to localStorage
-      localStorage.setItem('emojiMatchAnswers', JSON.stringify(updatedOptions))
-
-      return updatedOptions
-    })
+    setSelectedOptions((prev) => ({
+      ...prev,
+      [index]: option,
+    }))
     setOpenDropdownIndex(null) // Close dropdown after selection
   }
 
   const handleSubmit = () => {
     if (Object.keys(selectedOptions).length === emojis.length) {
       const answerArray = emojis.map((_, i) => selectedOptions[i])
-      onComplete(answerArray) // Trigger the onComplete callback with selected options
+      onNext(answerArray) // Trigger the onComplete callback with selected options
     } else {
-      alert(
+      toast.error(
         'Please match all emojis with the correct emotions before proceeding.'
       )
     }

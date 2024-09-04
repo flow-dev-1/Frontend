@@ -7,370 +7,243 @@ import WeekFiveAssessmentForm from './WeekFiveAssessmentForm'
 import EmojiEmotionMatch from './EmojiEmotionMatch'
 import WeekFiveScenarioQuestions from './WeekFiveScenarioQuestions'
 import EmojiRespond from './EmojiRespond'
-
-export default function WeekFiveLearning({ course, currentWeekIndex }) {
-  const navigate = useNavigate()
-  const courseid = course._id
-
-  const [currentStep, setCurrentStep] = useState(() => {
-    const savedStep = localStorage.getItem('weekFiveCurrentStep')
-    return savedStep ? parseInt(savedStep, 10) : 1 // Default to step 1 if not found
+import EndOfCourseComponent from './EndOfCourseComponent'
+import NavigationButtons from './NavigationButtons'
+import VideoComponent from './VideoComponent'
+import { ToastContainer } from 'react-toastify'
+export default function WeekFourLearning({
+  course,
+  courseId,
+  onClose,
+  currentWeekIndex,
+}) {
+  const [showPopup, setShowPopup] = useState(false)
+  const [currentActivity, setCurrentActivity] = useState(() => {
+    const savedState = localStorage.getItem(
+      `week-${currentWeekIndex}-currentActivity`
+    )
+    return savedState ? JSON.parse(savedState) : 1
   })
 
   const [formData, setFormData] = useState(() => {
-    const savedData = localStorage.getItem('weekFiveFormData')
-    return savedData ? JSON.parse(savedData) : { week: 5, activities: [] }
+    const savedState = localStorage.getItem(
+      `week-${currentWeekIndex}-activityData`
+    )
+    return savedState
+      ? JSON.parse(savedState)
+      : { week: currentWeekIndex, activities: [] }
   })
 
   const [videoPlaying, setVideoPlaying] = useState(false)
+  const [reviewPopUp, setReviewPopUp] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    localStorage.setItem('weekFiveCurrentStep', currentStep)
-  }, [currentStep])
+    localStorage.setItem(
+      `week-${currentWeekIndex}-currentActivity`,
+      JSON.stringify(currentActivity)
+    )
+  }, [currentActivity, currentWeekIndex])
 
   useEffect(() => {
-    try {
-      const serializableData = { ...formData }
-      console.log('Current Form Data:', serializableData)
-      localStorage.setItem('weekFiveFormData', JSON.stringify(serializableData))
-    } catch (error) {
-      console.error('Failed to save to localStorage:', error)
-    }
-  }, [formData])
+    localStorage.setItem(
+      `week-${currentWeekIndex}-activityData`,
+      JSON.stringify(formData)
+    )
+  }, [formData, currentWeekIndex])
 
-  formData.activities = formData.activities.filter(
-    (activity) => Object.keys(activity).length !== 0
-  )
-
-  // Handle the next step and data submission
-  const handleNext = (data = {}) => {
-    setFormData((prevFormData) => {
-      const activityIndex = prevFormData.activities.findIndex(
-        (item) => item.activity === data.activity
+  const handleNext = async (data = {}) => {
+    setFormData((prevData) => {
+      const updatedActivities = prevData.activities.map((item) =>
+        item.activity === currentActivity ? { ...item, ...data } : item
       )
-
-      const updatedActivities = [...prevFormData.activities]
-
-      if (activityIndex > -1) {
-        updatedActivities[activityIndex] = data // Update existing activity
-      } else {
-        updatedActivities.push(data) // Add new activity
+      if (
+        !updatedActivities.find((item) => item.activity === currentActivity)
+      ) {
+        updatedActivities.push({ activity: currentActivity, ...data })
       }
-
-      const updatedFormData = {
-        ...prevFormData,
-        activities: updatedActivities,
-      }
-
-      try {
-        JSON.stringify(updatedFormData)
-        return updatedFormData
-      } catch (error) {
-        console.error('Error serializing formData:', error)
-        return prevFormData
-      }
+      return { ...prevData, activities: updatedActivities }
     })
 
-    setCurrentStep((prevStep) => prevStep + 1)
+    const isLastActivity = currentActivity >= 9
+    if (isLastActivity) {
+      setCurrentActivity(10)
+    } else {
+      setCurrentActivity((prev) => prev + 1)
+    }
   }
 
   const handlePrevious = () => {
-    setCurrentStep((prevStep) => Math.max(prevStep - 1, 1))
+    setCurrentActivity((prev) => prev - 1)
   }
+
+  const closeReviewPopUp = () => setReviewPopUp(false)
 
   const handleNextWeekCourse = () => {
     const nextWeekIndex = currentWeekIndex + 1
-    navigate('/dashboard/self-awareness-course/1', {
+    navigate(`/dashboard/self-awareness-course/${course._id}`, {
       state: { course, weekIndex: nextWeekIndex },
     })
   }
 
-  const backToCourse = () => {
-    navigate('/dashboard/my-courses', { replace: true })
-  }
   console.log(formData)
-
-  const renderStepContent = () => {
-    switch (currentStep) {
+  const renderActivityContent = () => {
+    switch (currentActivity) {
       case 1:
-        // introductory-video
         return (
-          <div className='course-progression-step'>
-            <div className='video-div'>
-              {videoPlaying ? (
-                <iframe
-                  className='custom-video'
-                  src='https://www.youtube.com/embed/CW-f1RVjCws'
-                  title='YouTube video player'
-                  allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                  allowFullScreen
-                />
-              ) : (
-                <div className='video-thumbnail'>
-                  <div
-                    className='play-button'
-                    onClick={() => setVideoPlaying(true)}
-                  >
-                    <Icon icon='carbon:play-outline' className='play-icon' />
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className='progression-buttons mt-3'>
-              <button
-                className='btn progress-btn btn-dark'
-                onClick={handleNext}
-              >
-                Next {'>>>'}
-              </button>
-            </div>
-          </div>
+          <>
+            <VideoComponent
+              videoPlaying={videoPlaying}
+              setVideoPlaying={setVideoPlaying}
+              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
+            />
+            <NavigationButtons onNext={() => handleNext()} isBackDisabled />
+          </>
         )
-
       case 2:
-        // self-awareness question
         return (
-          <div className=''>
-            <EmojiEmotionMatch
-              onComplete={(answers) =>
-                handleNext({ activity: 2, answers })
-              }
-              onBack={handlePrevious}
-            />
-           
-          </div>
+          <EmojiEmotionMatch
+            activityIndex={currentActivity}
+            questionText='What exactly are'
+            suffix='?'
+            formData={formData}
+            altText='values image'
+            onBack={handlePrevious}
+            onNext={(answers) =>
+              handleNext({
+                answers,
+              })
+            }
+          />
         )
-
       case 3:
-        // introductory-video
         return (
-          <div className='course-progression-step'>
-            <div className='video-div'>
-              {videoPlaying ? (
-                <iframe
-                  className='custom-video'
-                  src='https://www.youtube.com/embed/CW-f1RVjCws'
-                  title='YouTube video player'
-                  allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                  allowFullScreen
-                />
-              ) : (
-                <div className='video-thumbnail'>
-                  <div
-                    className='play-button'
-                    onClick={() => setVideoPlaying(true)}
-                  >
-                    <Icon icon='carbon:play-outline' className='play-icon' />
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className='d-flex align-items-center justify-content-around mt-5'>
-              <button
-                className='btn progress-btn btn-light'
-                onClick={handlePrevious}
-              >
-                {'<<<'} Back
-              </button>
-              <button
-                className='btn progress-btn btn-dark'
-                onClick={handleNext}
-              >
-                Next {'>>>'}
-              </button>
-            </div>
-          </div>
-        )
-
-      case 4:
-        // self-awareness scenario questions
-        return (
-          <div className=''>
-            <WeekFiveScenarioQuestions
-              previous={handlePrevious}
-              onSubmit={(data) => handleNext({ activity: 4, answers: data })}
+          <>
+            <VideoComponent
+              videoPlaying={videoPlaying}
+              setVideoPlaying={setVideoPlaying}
+              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
             />
-          </div>
+            <NavigationButtons
+              onBack={handlePrevious}
+              onNext={() => handleNext()}
+            />
+          </>
         )
-
+      case 4:
+        return (
+          <WeekFiveScenarioQuestions
+            activityIndex={currentActivity}
+            questionText={
+              'Do you feel like you have a growth mindset, or do you sometimes find yourself with a fixed mindset? Share your thoughts. It’s okay to be honest, this is all about learning and growing together!'
+            }
+            altText={'?'}
+            formData={formData}
+            onBack={handlePrevious}
+            onNext={(answers) =>
+              handleNext({
+                answers,
+              })
+            }
+          />
+        )
       case 5:
-        // introductory-video
         return (
-          <div className='course-progression-step'>
-            <div className='video-div'>
-              {videoPlaying ? (
-                <iframe
-                  className='custom-video'
-                  src='https://www.youtube.com/embed/CW-f1RVjCws'
-                  title='YouTube video player'
-                  allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                  allowFullScreen
-                />
-              ) : (
-                <div className='video-thumbnail'>
-                  <div
-                    className='play-button'
-                    onClick={() => setVideoPlaying(true)}
-                  >
-                    <Icon icon='carbon:play-outline' className='play-icon' />
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className='d-flex align-items-center justify-content-around mt-5'>
-              <button
-                className='btn progress-btn btn-light'
-                onClick={handlePrevious}
-              >
-                {'<<<'} Back
-              </button>
-              <button
-                className='btn progress-btn btn-dark'
-                onClick={handleNext}
-              >
-                Next {'>>>'}
-              </button>
-            </div>
-          </div>
+          <>
+            <VideoComponent
+              videoPlaying={videoPlaying}
+              setVideoPlaying={setVideoPlaying}
+              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
+            />
+            <NavigationButtons
+              onBack={handlePrevious}
+              onNext={() => handleNext()}
+            />
+          </>
         )
-
       case 6:
-        // self-awareness emoji respond
         return (
-          <div className=''>
-            <EmojiRespond />
-            <div className='d-flex align-items-center justify-content-around mt-5'>
-              <button
-                className='btn progress-btn btn-light'
-                onClick={handlePrevious}
-              >
-                {'<<<'} Back
-              </button>
-              <button
-                className='btn progress-btn btn-dark'
-                onClick={() =>
-                  handleNext({
-                    activity: 6,
-                    answers: /* gather data here */ {},
-                  })
-                }
-              >
-                Next {'>>>'}
-              </button>
-            </div>
-          </div>
+          <>
+            <EmojiRespond
+              activityIndex={currentActivity}
+              formData={formData}
+              onBack={handlePrevious}
+              onNext={(answers) =>
+                handleNext({
+                  answers,
+                })
+              }
+            />
+          </>
         )
-
       case 7:
-        // introductory-video
         return (
-          <div className='course-progression-step'>
-            <div className='video-div'>
-              {videoPlaying ? (
-                <iframe
-                  className='custom-video'
-                  src='https://www.youtube.com/embed/CW-f1RVjCws'
-                  title='YouTube video player'
-                  allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                  allowFullScreen
-                />
-              ) : (
-                <div className='video-thumbnail'>
-                  <div
-                    className='play-button'
-                    onClick={() => setVideoPlaying(true)}
-                  >
-                    <Icon icon='carbon:play-outline' className='play-icon' />
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className='d-flex align-items-center justify-content-around mt-5'>
-              <button
-                className='btn progress-btn btn-light'
-                onClick={handlePrevious}
-              >
-                {'<<<'} Back
-              </button>
-              <button
-                className='btn progress-btn btn-dark'
-                onClick={handleNext}
-              >
-                Next {'>>>'}
-              </button>
-            </div>
-          </div>
+          <>
+            <VideoComponent
+              videoPlaying={videoPlaying}
+              setVideoPlaying={setVideoPlaying}
+              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
+            />
+            <NavigationButtons
+              onBack={handlePrevious}
+              onNext={() => handleNext()}
+            />
+          </>
         )
 
       case 8:
-        // assessment form
         return (
-          <div className='assessment-page'>
+          <>
             <WeekFiveAssessmentForm
-              previous={handlePrevious}
-              onSubmit={(data) => {
-                handleNext({ activity: 8, assessment: data })
-              }}
+              activityIndex={currentActivity}
+              formData={formData}
+              onBack={handlePrevious}
+              onNext={(answers) =>
+                handleNext({
+                  answers,
+                })
+              }
             />
-          </div>
+          </>
         )
 
       case 9:
-        // end of the course
         return (
-          <div className='end-of-course-page'>
-            <div className='congrats'>
-              <img src={celebrate} alt='celebrate' />
-              {currentWeekIndex === 4 ? (
-                <div>
-                  <h1>Congratulations!</h1>
-                  <p className='text-center fs-6 w-75 mx-auto'>
-                    We’re proud of the progress you’ve made, and we can’t wait
-                    to see how you apply these lessons in your life.
-                  </p>
-                </div>
-              ) : (
-                <div>
-                  <h1>Hurray!</h1>
-                  <p className='text-center fs-5 '>
-                    You have made it to the {<br />} Week {currentWeekIndex + 1}
-                  </p>
-                </div>
-              )}
-            </div>
-            <MyFireWorks currentWeekIndex={currentWeekIndex} />
-            <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-              {currentWeekIndex === 4 ? (
-                <div>
-                  <button
-                    className='btn progress-btn btn-dark'
-                    onClick={backToCourse}
-                  >
-                    Go to My Courses {'>>>'}
-                  </button>
-                </div>
-              ) : (
-                <div>
-                  <button
-                    className='btn progress-btn btn-dark'
-                    onClick={handleNextWeekCourse}
-                  >
-                    Proceed to Week {currentWeekIndex + 2}
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
+          <>
+            <VideoComponent
+              videoPlaying={videoPlaying}
+              setVideoPlaying={setVideoPlaying}
+              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
+            />
+            <NavigationButtons
+              onBack={handlePrevious}
+              onNext={() => handleNext()}
+            />
+          </>
         )
-
+      case 10:
+        return (
+          <WeekFiveAssessmentForm
+            onBack={handlePrevious}
+            handleNextWeekCourse={handleNextWeekCourse}
+            onNext={handleNext}
+          />
+        )
       default:
-        return null
+        return (
+          <EndOfCourseComponent
+            onNextWeekCourse={handleNextWeekCourse}
+            onClose={onClose}
+            openReviewPopUp={() => setReviewPopUp(true)}
+          />
+        )
     }
   }
 
-  return <div className='course-progression-page'>{renderStepContent()}</div>
+  return (
+    <div>
+      <ToastContainer />
+      <div className='content-container'>{renderActivityContent()}</div>
+    </div>
+  )
 }
