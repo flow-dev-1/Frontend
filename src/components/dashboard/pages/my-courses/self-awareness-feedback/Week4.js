@@ -390,44 +390,22 @@ const Week4 = () => {
   const [assessmentLoading, setAssessmentLoading] = useState(true);
   const [assessmentError, setAssessmentError] = useState(null);
 
-useEffect(() => {
-  const fetchAndProcessAssessmentData = async () => {
-    setAssessmentLoading(true);
-    try {
-      const data = await userService.getMyAssessment(courseId, week);
-      setAssessmentData(data);
-      const assessmentForChecked =
-        data?.existingAssessment.assessments[0].answers;
+  useEffect(() => {
+    const fetchAndProcessAssessmentData = async () => {
+      setAssessmentLoading(true);
+      try {
+        const data = await userService.getMyAssessment(courseId, week);
+        setAssessmentData(data);
+        const assessmentForChecked =
+          data?.existingAssessment.assessments[0].answers;
+        console.log(data?.existingAssessment.assessments[0]);
 
-      console.log(data?.existingAssessment.assessments[0]);
+        // Ensure that assessmentForChecked is valid before slicing
+        if (assessmentForChecked && assessmentForChecked.length >= 5) {
+          const valuesToCheck = assessmentForChecked;
+          console.log(valuesToCheck);
 
-      // Ensure that assessmentForChecked is valid before slicing
-      if (
-        assessmentForChecked &&
-        assessmentForChecked.length >= questionsQuiz.length
-      ) {
-        const valuesToCheck = assessmentForChecked;
-        console.log(valuesToCheck);
-
-        // Map through each question in questionsQuiz
-        questionsQuiz = questionsQuiz.map((question, index) => {
-          // Check if it's a match-type question or a regular quiz question
-          if (question.instruction.includes("Match the actions")) {
-            // It's a match-type question
-            return {
-              ...question,
-              options: question.options.map((option, optionIndex) => {
-                // Determine if this option should be checked based on the user's answers
-                const isChecked =
-                  valuesToCheck.includes(optionIndex) && option.isCorrect;
-                return {
-                  ...option,
-                  checked: isChecked
-                };
-              })
-            };
-          } else {
-            // It's a regular quiz question
+          questionsQuiz = questionsQuiz.map((question, index) => {
             return {
               ...question,
               options: question.options.map((option, optionIndex) => {
@@ -437,22 +415,19 @@ useEffect(() => {
                 };
               })
             };
-          }
-        });
-
-      } else {
-        console.error("Assessment answers are missing or incomplete.");
+          });
+        } else {
+          console.error("Assessment answers are missing or incomplete.");
+        }
+      } catch (error) {
+        setAssessmentError(error);
+      } finally {
+        setAssessmentLoading(false);
       }
-    } catch (error) {
-      setAssessmentError(error);
-    } finally {
-      setAssessmentLoading(false);
-    }
-  };
+    };
 
-  fetchAndProcessAssessmentData();
-}, [courseId, week]);
-
+    fetchAndProcessAssessmentData();
+  }, [courseId, week]);
 
   const percentage = assessmentData?.existingAssessment?.rating;
   // // console.log(updatedQuestionsQuiz);
