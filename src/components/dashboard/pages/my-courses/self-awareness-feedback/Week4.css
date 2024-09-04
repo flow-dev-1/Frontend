@@ -1,0 +1,14 @@
+.answer-options4 {
+  list-style-type: disc;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem; /* Space between items */
+}
+
+.answer-item4 {
+  flex: 1 1 calc(33.333% - 1rem); /* 3 items per row with space between */
+  box-sizing: border-box; /* Ensure padding is included in width */
+  margin-bottom: .5rem;
+  font-size: 14px;
+}

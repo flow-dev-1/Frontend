@@ -32,10 +32,6 @@ export default function CoreValuesQuestion({
     'Forgiveness',
     'Perseverance',
     'Cooperation',
-    'Courage',
-    'Forgiveness',
-    'Perseverance',
-    'Cooperation',
   ]
 
   // Toggle the selection of a question
