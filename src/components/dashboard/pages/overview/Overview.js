@@ -18,11 +18,17 @@ export default function IndividualOverview() {
   const [searchQuery, setSearchQuery] = useState('') // State for Search Query
   const [sortOption, setSortOption] = useState('') // State for Sort Option
   const [filterOption, setFilterOption] = useState('') // State for Filter Option
+  const [selectedCourse, setSelectedCourse] = useState(null)
 
   console.log(user?.userType)
   const { data, isLoading, isError } = useQuery({
     queryKey: ['individual-courses'],
     queryFn: () => userService.getIndividualCourses(), // Make sure to call the function
+  })
+
+  const { data: enrolledData } = useQuery({
+    queryKey: ['individual-courses-enrolled'],
+    queryFn: () => userService.getIndividualCoursesEnrolled(), // Make sure to call the function
   })
 
   const handleSort = (a, b) => {
@@ -33,6 +39,9 @@ export default function IndividualOverview() {
     }
     return 0
   }
+
+  const enrolledDataArray =
+    enrolledData?.courses?.map((item) => item.course._id) || []
 
   console.log(data?.courses)
 
@@ -142,7 +151,13 @@ export default function IndividualOverview() {
 
       <div className='courses-list row row-cols-1 row-cols-md-3 g-4'>
         {filteredCourses?.map((course) => (
-          <CourseCard key={course.id} course={course} />
+          <CourseCard
+            key={course.id}
+            course={course}
+            coursesArray={data}
+            enrolled={enrolledDataArray}
+            enrolledData={enrolledData}
+          />
         ))}
       </div>
     </div>

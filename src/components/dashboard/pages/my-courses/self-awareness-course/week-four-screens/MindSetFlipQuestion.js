@@ -8,7 +8,13 @@ import NavigationButtons from './NavigationButtons'
 
 Modal.setAppElement('#root')
 
-export default function MindSetFlipQuestion({ onSubmit, onBack, onNext }) {
+export default function MindSetFlipQuestion({
+  onSubmit,
+  onBack,
+  onNext,
+  activityIndex,
+  formData,
+}) {
   const [currentChunkIndex, setCurrentChunkIndex] = useState(0)
   const [valueDescription, setValueDescription] = useState(null)
   const [answers, setAnswers] = useState([])
@@ -65,16 +71,44 @@ export default function MindSetFlipQuestion({ onSubmit, onBack, onNext }) {
     return chunks
   }, [])
 
-  const [questionChecked, setQuestionChecked] = useState(
-    questionChunks.reduce((acc, _, index) => ({ ...acc, [index]: [] }), {})
-  )
+  // Extract answers from formData for activity 4, if available
+  const preFilledAnswers =
+    formData.activities.find((activity) => activity.activity === 4)?.answers ||
+    []
+
+  // Initialize questionChecked state based on pre-filled answers
+  const initializeCheckedState = () => {
+    return questionChunks.reduce((acc, chunk, chunkIndex) => {
+      const checkedIndices = chunk.reduce(
+        (checkedIndices, question, questionIndex) => {
+          if (preFilledAnswers.includes(question)) {
+            checkedIndices.push(questionIndex)
+          }
+          return checkedIndices
+        },
+        []
+      )
+      acc[chunkIndex] = checkedIndices
+      return acc
+    }, {})
+  }
+
+  const [questionChecked, setQuestionChecked] = useState(initializeCheckedState)
+
+  // Initialize chunkCompletion state based on pre-filled answers
+  const initializeChunkCompletion = () => {
+    return questionChunks.reduce((acc, chunk, chunkIndex) => {
+      acc[chunkIndex] = questionChecked[chunkIndex].length > 0
+      return acc
+    }, {})
+  }
 
   const [chunkCompletion, setChunkCompletion] = useState(
-    questionChunks.reduce((acc, _, index) => ({ ...acc, [index]: false }), {})
+    initializeChunkCompletion
   )
 
   useEffect(() => {
-    // Check if the current chunk is completed
+    // Update chunk completion if the checked state changes
     setChunkCompletion((prev) => ({
       ...prev,
       [currentChunkIndex]: questionChecked[currentChunkIndex].length > 0,
@@ -122,8 +156,10 @@ export default function MindSetFlipQuestion({ onSubmit, onBack, onNext }) {
               <div className='scrollable'>
                 <div className='flip-div'>
                   <ul
-                    className='p-0 mt-4 d-flex flex-wrap'
+                    className='p-0 mt-4 '
                     style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr 1fr 1fr',
                       justifyContent: 'center',
                     }}
                   >
@@ -133,7 +169,7 @@ export default function MindSetFlipQuestion({ onSubmit, onBack, onNext }) {
                         className='d-flex align-items-center m-2'
                         style={{
                           flex: '0 0 30%',
-                          maxWidth: '25%',
+                          maxWidth: '100%',
                           justifyContent: 'space-between',
                         }}
                       >
@@ -166,33 +202,32 @@ export default function MindSetFlipQuestion({ onSubmit, onBack, onNext }) {
     return null
   }
 
- const handleNextChunk = () => {
-   const checkedItems = questionChecked[currentChunkIndex]
-   if (checkedItems.length === 0) {
-     alert('Please select at least one item before proceeding.')
-     return
-   }
+  const handleNextChunk = () => {
+    const checkedItems = questionChecked[currentChunkIndex]
+    if (checkedItems.length === 0) {
+      alert('Please select at least one item before proceeding.')
+      return
+    }
 
-   // Add checked items from current chunk to the answers array
-   const updatedAnswers = [
-     ...answers,
-     ...checkedItems.map((index) => questionChunks[currentChunkIndex][index]),
-   ]
-   setAnswers(updatedAnswers)
+    // Add checked items from current chunk to the answers array
+    const updatedAnswers = [
+      ...answers,
+      ...checkedItems.map((index) => questionChunks[currentChunkIndex][index]),
+    ]
+    setAnswers(updatedAnswers)
 
-   // Move to the next chunk if not the last one, otherwise submit
-   if (currentChunkIndex < questionChunks.length - 1) {
-     setCurrentChunkIndex(currentChunkIndex + 1)
-   } else {
-     if (Object.values(chunkCompletion).every(Boolean)) {
-       // Submit the form after updating the answers state with the last chunk's answers
-       onSubmit(updatedAnswers)
-     } else {
-       alert('Please complete all chunks before submitting.')
-     }
-   }
- }
-
+    // Move to the next chunk if not the last one, otherwise submit
+    if (currentChunkIndex < questionChunks.length - 1) {
+      setCurrentChunkIndex(currentChunkIndex + 1)
+    } else {
+      if (Object.values(chunkCompletion).every(Boolean)) {
+        // Submit the form after updating the answers state with the last chunk's answers
+        onNext(updatedAnswers)
+      } else {
+        alert('Please complete all chunks before submitting.')
+      }
+    }
+  }
 
   const handlePreviousChunk = () => {
     if (currentChunkIndex > 0) {
@@ -228,10 +263,15 @@ export default function MindSetFlipQuestion({ onSubmit, onBack, onNext }) {
         </Modal>
       )}
 
-      <div className='progress-container'>
-        <span>
-          Progress: {currentChunkIndex + 1} / {questionChunks.length}
-        </span>
+      <div className='slider-indicator'>
+        <ul className='p-0 mt-5'>
+          {questionChunks.map((_, index) => (
+            <li
+              key={index}
+              className={currentChunkIndex >= index ? 'answered' : ''}
+            ></li>
+          ))}
+        </ul>
       </div>
 
       <NavigationButtons

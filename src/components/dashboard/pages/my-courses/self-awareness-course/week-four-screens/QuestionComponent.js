@@ -1,75 +1,79 @@
-import { useState } from 'react'
-import NavigationButtons from './NavigationButtons'
-import { toast } from 'react-toastify'
+import React, { useState, useEffect } from 'react'
+import { toast, ToastContainer } from 'react-toastify'
 
-const QuestionComponent = ({ question, onBack, onNext, onSubmit }) => {
-   const [answer, setAnswer] = useState(() => {
-     const savedData = localStorage.getItem("weekFourFormData");
+const QuestionComponent = ({
+  questionText,
+  imageSrc,
+  altText,
+  formData,
+  onBack,
+  onNext,
+  suffix,
+  activityIndex, // Pass this as a prop to identify the activity
+}) => {
+  // State to manage the user's answer
+  const [answers, setAnswers] = useState('')
 
-     if (savedData) {
-       // Parse the JSON string
-       const parsedData = JSON.parse(savedData);
+  useEffect(() => {
+    // Find the data for the current activity
+    const currentActivityData = formData?.activities?.find(
+      (item) => item?.activity === activityIndex
+    )
+    console.log(formData)
 
-       // Log the entire parsedData to understand its structure
-       console.log("Parsed Data:", parsedData);
-
-       // Access the 'answers' property and find the required data
-       if (parsedData.answers && Array.isArray(parsedData.answers)) {
-         // Find data for activity: 2
-         const activityTwoData = parsedData.answers.find(
-           (item) => item.activity === 2
-         );
-
-         console.log("Data for activity: 2:", activityTwoData);
-
-         return activityTwoData ? activityTwoData.answer || "" : "";
-       } else {
-         console.error(
-           "Parsed data.answers is not an array or does not exist:",
-           parsedData
-         );
-       }
-     }
-
-     return "";
-   });
-  const [error, setError] = useState('') // State to handle error messages
-// weekFourFormData;
-  const handleSubmit = () => {
-    if (answer.trim() === '') {
-      // Check if the answer is empty
-      toast.error('Please provide an answer before proceeding.')
-      return // Exit function if the answer is empty
+    if (currentActivityData && currentActivityData?.answers) {
+      // Set the answer from formData if it exists
+      setAnswers(currentActivityData.answers[0] || '')
+    } else {
+      // Set to empty if no answer is found
+      setAnswers('')
     }
+  }, [activityIndex, formData])
 
-    setError('') // Clear any previous error message
-    onSubmit({ answer }) // Submit the answer
-    onNext() // Go to the next step
+  // Function to handle input change
+  const handleInputChange = (event) => {
+    setAnswers(event.target.value)
+  }
+
+  // Function to handle Next button click
+  const handleNextClick = () => {
+    if (!answers) {
+      // Show a toast message if the answer is empty
+      toast.error('Please provide an answer before continuing.')
+      return
+    }
+    // Pass the answer data back to the parent component
+    onNext([answers])
   }
 
   return (
-    <div className=''>
-      <div className='question-box py-4'>
-        <div className='question-box-header'>
-          <h1 className='mb-0'>Question: </h1>
-          <h2 className='mb-0 ms-3 text-nowrap'>{question.text}</h2>
-          {question.image && (
-            <img src={question.image} alt={question.alt} className='mx-2' />
-          )}
-          <h2 className=''>{question.suffix}</h2>
-        </div>
-        <div className='text-area-box px-4 mt-4'>
-          <textarea
-            rows='6'
-            placeholder='Type your answer here...'
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-          />
-        </div>
-
-        {/* Display error message if any */}
+    <div className='question-box py-5'>
+      <div className='question-box-header'>
+        <h1 className='mb-0'>Question:</h1>
+        <h2 className='mb-0 d-flex ms-3'>{questionText}</h2>
+        {imageSrc && <img src={imageSrc} alt={altText} className='mx-2' />}
+        <h2 className=''>{altText}</h2>
+        {suffix && <h2>{suffix}</h2>}
       </div>
-      <NavigationButtons onBack={onBack} onNext={handleSubmit} />
+      <div className='text-area-box px-4 mt-4'>
+        <textarea
+          rows='6'
+          placeholder='Type your answer here...'
+          value={answers} // Bind the textarea value to state
+          onChange={handleInputChange} // Update state on input change
+        />
+      </div>
+      <div className='d-flex align-items-center justify-content-around mt-5'>
+        {onBack && (
+          <button className='btn progress-btn btn-light' onClick={onBack}>
+            {'<<<'} Back
+          </button>
+        )}
+        <button className='btn progress-btn btn-dark' onClick={handleNextClick}>
+          Next {'>>>'}
+        </button>
+      </div>
+      <ToastContainer />
     </div>
   )
 }
