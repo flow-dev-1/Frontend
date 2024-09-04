@@ -9,6 +9,7 @@ import { Icon } from "@iconify/react";
 import FinalReport from "./FinalReport";
 import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../services/api/user";
+import { toast } from "react-toastify";
 
 let questionsQuiz = [
   {
@@ -238,8 +239,6 @@ let questionsQuiz = [
   {
     question:
       "Sarah notices a classmate, David, looking downcast while carrying a heavy stack of books. Sarah offers to help David with the books. Sarah remembers she has her own after-school activity but suggests they put David's books in his locker first so he isn't late to his next class.",
-    instuction:
-      "Instruction: Match the following statements in the scenario to their respective value",
     options: [
       {
         label: "A. Kindness - Sarah offers to help David with the books.",
@@ -376,6 +375,24 @@ let questionsQuiz = [
   }
 ];
 
+const leftItemsArray = [
+  ["Kindness", "Respect", "Responsibility"],
+  ["Honesty", "Empathy", "Patience"]
+];
+
+const rightItemsArray = [
+  [
+    "Sarah remembers she has her own after-school activity but suggests they put David's books in his locker first so he isn’t late to his next class.",
+    "As they walk, Sarah asks David if everything is alright but doesn’t pry if he doesn’t want to talk.",
+    "Sarah offers to help David with the books."
+  ],
+  [
+    "Tom tells the truth about accidentally breaking the vase.",
+    "Jane listens to her friend's problems without interrupting.",
+    "Emily waits patiently for her turn to speak during a group discussion."
+  ]
+];
+
 const Week4 = () => {
   const week = 4;
   const courseId = "66853bf50118e2e0a02b6a5a";
@@ -396,11 +413,35 @@ const Week4 = () => {
       try {
         const data = await userService.getMyAssessment(courseId, week);
         setAssessmentData(data);
+
         const assessmentForChecked =
           data?.existingAssessment.assessments[0].answers;
-        console.log(data?.existingAssessment.assessments[0]);
+        const matchCount1 = data?.existingAssessment.assessments[0].matchesSet1;
+        const matchCount2 = data?.existingAssessment.assessments[0].matchesSet2;
 
-        // Ensure that assessmentForChecked is valid before slicing
+        const combinedArray1 = matchCount1.map((match) => {
+          const leftValue = leftItemsArray[0][match.left];
+          const rightValue = rightItemsArray[0][match.right];
+          return `${leftValue} - ${rightValue}`;
+        });
+
+        const combinedArray2 = matchCount2.map((match) => {
+          const leftValue = leftItemsArray[1][match.left];
+          const rightValue = rightItemsArray[1][match.right];
+          return `${leftValue} - ${rightValue}`;
+        });
+        // Helper function to check if a label contains any of the matchCount phrases
+        const isSimilar = (label, phrases) => {
+          const normalizedLabel = label.toLowerCase().trim();
+          return phrases.some((phrase) =>
+            normalizedLabel.includes(phrase.toLowerCase().trim())
+          );
+        };
+
+        // Check if it's the 9th question and update based on matchCount1
+    
+
+        console.log(combinedArray1, combinedArray2);
         if (assessmentForChecked && assessmentForChecked.length >= 5) {
           const valuesToCheck = assessmentForChecked;
           console.log(valuesToCheck);
@@ -409,9 +450,38 @@ const Week4 = () => {
             return {
               ...question,
               options: question.options.map((option, optionIndex) => {
+                let isChecked = false;
+
+                // Mark options based on assessmentForChecked
+                if (optionIndex === valuesToCheck[index]) {
+                  isChecked = true;
+                }
+
+                // Check if it's the 9th question and update based on matchCount1
+                 if (questionsQuiz[9]) {
+                   questionsQuiz[9] = {
+                     ...questionsQuiz[9],
+                     options: questionsQuiz[9].options.map((option) => ({
+                       ...option,
+                       checked: isSimilar(option.label, combinedArray1)
+                     }))
+                   };
+                 }
+
+                // Check if it's the 10th question and update based on matchCount2
+              if (questionsQuiz[9]) {
+                questionsQuiz[9] = {
+                  ...questionsQuiz[9],
+                  options: questionsQuiz[9].options.map((option) => ({
+                    ...option,
+                    checked: isSimilar(option.label, combinedArray1)
+                  }))
+                };
+              }
+
                 return {
                   ...option,
-                  checked: optionIndex === valuesToCheck[index]
+                  checked: isChecked
                 };
               })
             };
@@ -478,7 +548,6 @@ const Week4 = () => {
 
           {/* Check if answer is an array, object, or string and render accordingly */}
           {Array.isArray(activity.answer) ? (
-            
             <ul className="answer-options4" style={{ paddingLeft: "1.5rem" }}>
               {activity.answer.map((item, idx) => (
                 <li
