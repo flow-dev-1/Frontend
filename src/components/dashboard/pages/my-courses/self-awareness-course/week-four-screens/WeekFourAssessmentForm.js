@@ -3,7 +3,7 @@ import '../newcourse.css'
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png'
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
 import { toast } from 'react-toastify'
-import userService from '../../../../../../services/api/user.js'
+import userService from '../../../../../../services/api/user.js';
 
 export default function WeekFourAssessmentForm({ onNext, onBack }) {
   const questionsArray = [
