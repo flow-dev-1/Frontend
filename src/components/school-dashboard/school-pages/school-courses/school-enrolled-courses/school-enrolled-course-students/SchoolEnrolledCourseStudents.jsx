@@ -68,9 +68,9 @@ const SchoolEnrolledCourseStudents = () => {
     ?.filter((course) => {
       const searchValue = searchQuery.toLowerCase()
       return (
-        course?.course.title?.toLowerCase().includes(searchValue) ||
-        course?.course.description?.toLowerCase().includes(searchValue) ||
-        course?.course.email?.toLowerCase().includes(searchValue) ||
+        course?.course?.title?.toLowerCase().includes(searchValue) ||
+        course?.course?.description?.toLowerCase().includes(searchValue) ||
+        course?.course?.email?.toLowerCase().includes(searchValue) ||
         course?.phone?.course.toLowerCase().includes(searchValue)
       )
     })
@@ -165,10 +165,7 @@ const SchoolEnrolledCourseStudents = () => {
         className='custom-modal-otp-variant'
         overlayClassName='custom-overlay'
       >
-        <CourseDetailModal
-          course={selectedCourse}
-          closeModal={closeModal}
-        />
+        <CourseDetailModal course={selectedCourse} closeModal={closeModal} />
       </Modal>
     </div>
   )

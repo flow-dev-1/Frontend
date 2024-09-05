@@ -107,7 +107,14 @@ function App() {
           </Route>
 
           {/*   Dashboard Routes */}
-          <Route path='/dashboard' element={<Dashboard />}>
+          <Route
+            path='/dashboard'
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<IndividualOverview />} />
             <Route path='/dashboard/profile' element={<IndividualProfile />} />
             <Route path='/dashboard/support' element={<Support />} />

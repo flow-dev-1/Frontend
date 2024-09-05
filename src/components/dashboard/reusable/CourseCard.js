@@ -8,6 +8,7 @@ import CourseInfoModal from '../../modals-pages/dashboard-modals/CourseInfoModal
 import PaymentModal from '../../modals-pages/dashboard-modals/PaymentModal'
 import { useNavigate } from 'react-router-dom'
 import { encryptURI } from '../../../utils/encryption'
+import ReviewCourseInfoModal from '../../modals-pages/dashboard-modals/ReviewCourseInfoModal'
 
 const CourseCard = ({ course, coursesArray, enrolled, enrolledData }) => {
   const navigate = useNavigate()
@@ -229,6 +230,10 @@ const CourseCard = ({ course, coursesArray, enrolled, enrolledData }) => {
       >
         {modalType === 'course' && (
           <CourseInfoModal course={course} onClose={closeModal} />
+        )}
+
+        {modalType === 'review' && (
+          <ReviewCourseInfoModal course={course} onClose={closeModal} />
         )}
 
         {modalType === 'payment' && (
