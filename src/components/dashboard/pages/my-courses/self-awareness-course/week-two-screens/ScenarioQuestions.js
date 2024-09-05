@@ -137,24 +137,19 @@ export default function ScenarioQuestions({
       setCurrentIndex(currentIndex + 1)
     } else {
       // Prepare data for submission
-      const strengths = questionsArray
-        .map((_, index) =>
-          strengthChecked[index].map(
-            (optionIndex) => questionsArray[index].questionList[optionIndex]
-          )
+      const data = questionsArray.reduce((acc, _, index) => {
+        acc[`strengthsQ${index + 1}`] = strengthChecked[index].map(
+          (optionIndex) => questionsArray[index].questionList[optionIndex]
         )
-        .flat()
-
-      const weaknesses = questionsArray
-        .map((_, index) =>
-          weaknessChecked[index].map(
-            (optionIndex) =>
-              questionsArray[index].questionListNegative[optionIndex]
-          )
+        acc[`weaknessesQ${index + 1}`] = weaknessChecked[index].map(
+          (optionIndex) =>
+            questionsArray[index].questionListNegative[optionIndex]
         )
-        .flat()
+        return acc
+      }, {})
 
-      onNext({ strengths, weaknesses })
+      onNext(data)
+      console.log(data)
     }
   }
 
