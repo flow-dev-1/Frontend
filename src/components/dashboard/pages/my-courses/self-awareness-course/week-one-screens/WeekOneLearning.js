@@ -45,6 +45,7 @@ export default function WeekOneLearning({
       console.log('i am here')
     }
   }, [courseId])
+  // console.log(course.course._id)
 
   const handleClosePopup = () => {
     setShowPopup(false)
@@ -79,13 +80,13 @@ export default function WeekOneLearning({
       // Your submit logic here
       const stringifiedFormData = JSON.stringify(formData)
       userService
-        .postMyActivity(courseId, stringifiedFormData)
+        .postMyActivity(course.course._id, stringifiedFormData)
         .then((response) => {
-          console.log('Submission successful:', response)
+          console.log("Submission successful:", response);
         })
         .catch((error) => {
-          console.error('Submission failed:', error)
-        })
+          console.error("Submission failed:", error);
+        });
     } catch (error) {
       console.error('Submission failed:', error)
       toast.error('Submission failed. Please try again later.')

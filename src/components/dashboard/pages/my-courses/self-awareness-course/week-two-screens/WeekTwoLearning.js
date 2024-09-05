@@ -54,7 +54,7 @@ export default function WeekTwoLearning({
       JSON.stringify(formData)
     )
   }, [formData, currentWeekIndex])
-
+//  console.log(course.course._id)
   const handleNext = async (data = {}) => {
     setFormData((prevData) => {
       const updatedActivities = prevData.activities.map((item) =>
@@ -85,13 +85,13 @@ export default function WeekTwoLearning({
       // Your submit logic here
       const stringifiedFormData = JSON.stringify(formData)
       userService
-        .postMyActivity(courseId, stringifiedFormData)
+        .postMyActivity(course.course._id, stringifiedFormData)
         .then((response) => {
-          console.log('Submission successful:', response)
+          console.log("Submission successful:", response);
         })
         .catch((error) => {
-          console.error('Submission failed:', error)
-        })
+          console.error("Submission failed:", error);
+        });
     } catch (error) {
       console.error('Submission failed:', error)
       toast.error('Submission failed. Please try again later.')
