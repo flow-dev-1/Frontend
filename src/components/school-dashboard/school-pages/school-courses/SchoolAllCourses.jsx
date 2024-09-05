@@ -23,7 +23,7 @@ const SchoolAllCourses = () => {
 
   // ToDO: Do a check if its a school or a user
   if (user?.isSchool) {
-    schoolId = user._id
+    schoolId = user?._id
   }
 
   const { data, isLoading, isError } = useQuery({
@@ -43,7 +43,7 @@ const SchoolAllCourses = () => {
   })
 
   const enrolledDataArray =
-    enrolledData?.courses?.map((item) => item.course._id) || []
+    enrolledData?.courses?.map((item) => item?.course?._id) || []
 
   useEffect(() => {
     if (!data) return

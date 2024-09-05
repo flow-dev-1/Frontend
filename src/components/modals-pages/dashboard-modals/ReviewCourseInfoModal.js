@@ -11,6 +11,8 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
     setIsOpen(false)
   }
 
+  console.log(course)
+
   return (
     <div className='course-info-modal'>
       <div className='py-2 px-4'>
@@ -30,14 +32,18 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
           </button>
         </div>
         <hr className='w-100 h-auto mb-2' />
-        <div
-          style={{
-            width: '100%',
-            height: '160px',
-            backgroundColor: '#D9D9D9',
-            paddingLeft: '1rem',
-          }}
-        ></div>
+        <div>
+          {' '}
+          <img
+            style={{
+              width: '100%',
+              height: '160px',
+              objectFit: 'cover',
+            }}
+            src={course?.course?.image || course?.image}
+            alt=''
+          />
+        </div>
         <div className='course-info-modal-body'>
           <p style={{ fontSize: '20px', color: '#275DAD' }}>Course Overview</p>
           <p style={{ paddingLeft: '.5rem' }}>

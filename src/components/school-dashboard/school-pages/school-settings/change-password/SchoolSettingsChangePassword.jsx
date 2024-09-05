@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -24,6 +24,9 @@ const schema = yup.object().shape({
 
 const SchoolSettingsChangePassword = () => {
   const [modalIsOpenSuccess, setModalIsOpenSuccess] = useState(false)
+  const [showOldPassword, setShowOldPassword] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const toastId = useRef(null)
   const queryClient = useQueryClient()
 
@@ -90,12 +93,17 @@ const SchoolSettingsChangePassword = () => {
             </label>
             <div>
               <input
-                type='password'
+                type={showOldPassword ? 'text' : 'password'}
                 id='old-password'
                 placeholder='Type here...'
                 {...register('oldPassword')}
               />
-              <Icon width={20} icon='fa6-solid:eye' className='icon' />
+              <Icon
+                width={20}
+                icon={showOldPassword ? 'fa6-solid:eye-slash' : 'fa6-solid:eye'}
+                className='icon'
+                onClick={() => setShowOldPassword(!showOldPassword)}
+              />
             </div>
             {errors.oldPassword && (
               <p style={{ color: '#E83151' }}>{errors.oldPassword.message}</p>
@@ -110,12 +118,17 @@ const SchoolSettingsChangePassword = () => {
             </label>
             <div>
               <input
-                type='password'
+                type={showNewPassword ? 'text' : 'password'}
                 id='new-password'
                 placeholder='Type here...'
                 {...register('newPassword')}
               />
-              <Icon icon='fa6-solid:eye' width={20} className='icon' />
+              <Icon
+                icon={showNewPassword ? 'fa6-solid:eye-slash' : 'fa6-solid:eye'}
+                width={20}
+                className='icon'
+                onClick={() => setShowNewPassword(!showNewPassword)}
+              />
             </div>
             {errors.newPassword && (
               <p style={{ color: '#E83151' }}>{errors.newPassword.message}</p>
@@ -130,12 +143,19 @@ const SchoolSettingsChangePassword = () => {
             </label>
             <div>
               <input
-                type='password'
+                type={showConfirmPassword ? 'text' : 'password'}
                 id='confirm-password'
                 placeholder='Type here...'
                 {...register('confirmPassword')}
               />
-              <Icon icon='fa6-solid:eye' width={20} className='icon' />
+              <Icon
+                icon={
+                  showConfirmPassword ? 'fa6-solid:eye-slash' : 'fa6-solid:eye'
+                }
+                width={20}
+                className='icon'
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              />
             </div>
             {errors.confirmPassword && (
               <p style={{ color: '#E83151' }}>

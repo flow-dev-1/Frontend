@@ -8,13 +8,15 @@ import WeekTwoLearning from './week-two-screens/WeekTwoLearning'
 import WeekThreeLearning from './week-three-screens/WeekThreeLearning'
 import WeekFourLearning from './week-four-screens/WeekFourLearning'
 import WeekFiveLearning from './week-five-course/WeekFiveLearning'
+import { decryptId } from '../../../../../utils/encryption'
 
 function SelfAwarenessCourse() {
   const { id } = useParams()
   const location = useLocation()
   const course = location?.state?.course
   const navigate = useNavigate()
-  console.log(id)
+  console.log(decryptId(id))
+  console.log(course)
 
   const [activeLink, setActiveLink] = React.useState('week1')
   const [currentWeekIndex, setCurrentWeekIndex] = React.useState(1)
