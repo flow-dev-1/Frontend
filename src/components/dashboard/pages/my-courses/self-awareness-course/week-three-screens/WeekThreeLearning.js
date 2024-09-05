@@ -76,6 +76,7 @@ export default function WeekThreeLearning({
       setCurrentActivity((prev) => prev + 1)
     }
   }
+  console.log(course.course._id);
 
   const handlePrevious = () => {
     setCurrentActivity((prev) => prev - 1)
@@ -84,17 +85,16 @@ export default function WeekThreeLearning({
   const handleSubmit = async () => {
     try {
       // Your submit logic here
-      const courseId = '66853bf50118e2e0a02b6a5a'
 
       const stringifiedFormData = JSON.stringify(formData)
       userService
-        .postMyActivity(courseId, stringifiedFormData)
+        .postMyActivity(course.course._id, stringifiedFormData)
         .then((response) => {
-          console.log('Submission successful:', response)
+          console.log("Submission successful:", response);
         })
         .catch((error) => {
-          console.error('Submission failed:', error)
-        })
+          console.error("Submission failed:", error);
+        });
     } catch (error) {
       console.error('Submission failed:', error)
       toast.error('Submission failed. Please try again later.')

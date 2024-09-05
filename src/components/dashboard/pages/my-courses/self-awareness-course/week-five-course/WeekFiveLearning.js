@@ -10,7 +10,8 @@ import EmojiRespond from './EmojiRespond'
 import EndOfCourseComponent from './EndOfCourseComponent'
 import NavigationButtons from './NavigationButtons'
 import VideoComponent from './VideoComponent'
-import { ToastContainer } from 'react-toastify'
+import userService from "../../../../../../services/api/user.js";
+import { toast, ToastContainer } from "react-toastify";
 export default function WeekFourLearning({
   course,
   courseId,
@@ -67,6 +68,7 @@ export default function WeekFourLearning({
 
     const isLastActivity = currentActivity >= 9
     if (isLastActivity) {
+      handleSubmit()
       setCurrentActivity(10)
     } else {
       setCurrentActivity((prev) => prev + 1)
@@ -86,7 +88,25 @@ export default function WeekFourLearning({
     })
   }
 
-  console.log(formData)
+   console.log(course.course._id);
+   const handleSubmit = async () => {
+     try {
+       // Your submit logic here
+
+       const stringifiedFormData = JSON.stringify(formData);
+       userService
+         .postMyActivity(course.course._id, stringifiedFormData)
+         .then((response) => {
+           console.log("Submission successful:", response);
+         })
+         .catch((error) => {
+           console.error("Submission failed:", error);
+         });
+     } catch (error) {
+       console.error("Submission failed:", error);
+       toast.error("Submission failed. Please try again later.");
+     }
+   };
   const renderActivityContent = () => {
     switch (currentActivity) {
       case 1:

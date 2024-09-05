@@ -175,7 +175,7 @@ let questionsQuiz = [
           "B. Tell him about the strengths you have noticed he has and identify how to manage his weakness.",
         color: "Green",
         checked: false, // This is the correct option (assuming)
-        isCorrect: true
+        isCorrect: false
       },
       {
         label: "C. Tell your other friends about this weakness.",
@@ -188,10 +188,10 @@ let questionsQuiz = [
           "D. Tell him about your own weakness in hopes that it will get him to share as well.",
         color: "Yellow",
         checked: false, // This is not the correct option
-        isCorrect: false
+        isCorrect: true
       }
     ]
-  },
+  }
 ];
 
 const Week2 = () => {
@@ -206,49 +206,49 @@ const Week2 = () => {
   const [assessmentLoading, setAssessmentLoading] = useState(true);
   const [assessmentError, setAssessmentError] = useState(null);
 
-useEffect(() => {
-  const fetchAndProcessAssessmentData = async () => {
-    setAssessmentLoading(true);
-    try {
-      const data = await userService.getMyAssessment(courseId, week);
-      setAssessmentData(data);
+  useEffect(() => {
+    const fetchAndProcessAssessmentData = async () => {
+      setAssessmentLoading(true);
+      try {
+        const data = await userService.getMyAssessment(courseId, week);
+        setAssessmentData(data);
 
-      const assessmentForChecked =
-        data?.existingAssessment?.assessments[0]?.assessment?.answers;
+        const assessmentForChecked =
+          data?.existingAssessment?.assessments[0]?.assessment?.answers;
+    // console.log(data?.existingAssessment?.assessments[0]?.assessment?.answers[5]);
+        // Ensure that assessmentForChecked is valid before slicing
+        if (assessmentForChecked && assessmentForChecked.length >= 5) {
+          const valuesToCheck = assessmentForChecked.slice(0, 5);
+          console.log(valuesToCheck);
 
-      // Ensure that assessmentForChecked is valid before slicing
-      if (assessmentForChecked && assessmentForChecked.length >= 5) {
-        const valuesToCheck = assessmentForChecked.slice(0, 5);
-        console.log(valuesToCheck);
+          questionsQuiz = questionsQuiz.map((question, index) => {
+            return {
+              ...question,
+              options: question.options.map((option, optionIndex) => {
+                return {
+                  ...option,
+                  checked: optionIndex === valuesToCheck[index]
+                };
+              })
+            };
+          });
 
-        questionsQuiz = questionsQuiz.map((question, index) => {
-          return {
-            ...question,
-            options: question.options.map((option, optionIndex) => {
-              return {
-                ...option,
-                checked: optionIndex === valuesToCheck[index]
-              };
-            })
-          };
-        });
-
-        // You might want to update the state with the modified questionsQuiz
-        // console.log(questionsQuiz);
-      } else {
-        console.error("Assessment answers are missing or incomplete.");
+          // You might want to update the state with the modified questionsQuiz
+          // console.log(questionsQuiz);
+        } else {
+          console.error("Assessment answers are missing or incomplete.");
+        }
+      } catch (error) {
+        setAssessmentError(error);
+      } finally {
+        setAssessmentLoading(false);
       }
-    } catch (error) {
-      setAssessmentError(error);
-    } finally {
-      setAssessmentLoading(false);
-    }
-  };
+    };
 
-  fetchAndProcessAssessmentData();
-}, [courseId, week]);
+    fetchAndProcessAssessmentData();
+  }, [courseId, week]);
 
-// console.log(updatedQuestionsQuiz);
+  // console.log(updatedQuestionsQuiz);
 
   if (isLoading || assessmentLoading) {
     return <div>Loading...</div>;
@@ -259,15 +259,15 @@ useEffect(() => {
   }
   const strengths = data?.activity?.activities[3].answers.strengths;
   const weaknesses = data?.activity?.activities[4].answers.weakness;
-
-  const activities = [
+  const actviity1 = [
     {
       activity: 1,
       question: 'What do you think "Self Awareness" is?',
       answer: data?.activity?.activities[1].answers[0],
       feedback: "Figma ipsum component variant main layer..."
-    },
-
+    }
+  ];
+  const activities = [
     {
       activity: 2, // New activity based on image
       question: "Identify your Strengths.",
@@ -294,8 +294,8 @@ useEffect(() => {
       question:
         "A friend is feeling sad and needs someone to talk to because they just failed a test.They come to you for support. How would you help?",
       answer: {
-        strengths: data?.activity?.activities[6].answers.strengths,
-        weaknesses: data?.activity?.activities[6].answers.weaknesses
+        strengths: data?.activity?.activities[6].answers.strengthsQ1,
+        weaknesses: data?.activity?.activities[6].answers.weaknessesQ1
       },
       feedback:
         "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
@@ -305,8 +305,8 @@ useEffect(() => {
       question:
         "Imagine you’re working on a group project at school. Your group is struggling to come up with an idea for the project. As a member of the team, how would you help?",
       answer: {
-        strengths: data?.activity?.activities[6].answers.strengths,
-        weaknesses: data?.activity?.activities[6].answers.weaknesses
+        strengths: data?.activity?.activities[6].answers.strengthsQ2,
+        weaknesses: data?.activity?.activities[6].answers.weaknessesQ2
       },
       feedback:
         "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
@@ -316,19 +316,97 @@ useEffect(() => {
       question:
         "Is there a sport you dislike? What sport is this? Now imagine you were asked to represent your house in this particular sport, for your School’s inter-house sport competition, to win a laptop and a gaming console. How would you go about this?",
       answer: {
-        strengths: data?.activity?.activities[6].answers.strengths,
-        weaknesses: data?.activity?.activities[6].answers.weaknesses
+        strengths: data?.activity?.activities[6].answers.strengthsQ3,
+        weaknesses: data?.activity?.activities[6].answers.weaknessesQ3
       },
       feedback:
         "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
+    }
+  ];
+  const quizEssay = [
+    {
+      activity: 1,
+      question:
+        "What activity do you enjoy the most, and why do you think you are good at it?",
+      answer: assessmentData?.existingAssessment?.assessments[0]?.assessment?.answers[5],
+      feedback: "Figma ipsum component variant main layer..."
     },
+
+    {
+      activity: 2, // New activity based on image
+      question:
+        "When working in a group, what role do you naturally take on (e.g., leader, planner, helper)? Can you give an example?",
+      answer: assessmentData?.existingAssessment?.assessments[0]?.assessment?.answers[7],
+      feedback:
+        "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
+    },
+    {
+      activity: 3, // New activity based on image
+      question:
+        "Is there a task or subject that you avoid because you find it difficult? Why do you think it’s challenging for you?",
+      answer: assessmentData?.existingAssessment?.assessments[0]?.assessment?.answers[8],
+      feedback:
+        "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
+    }
   ];
   const percentage = assessmentData?.existingAssessment?.rating;
   return (
     <div className="week-content">
+      <p className="activity-badge">Activity 1</p>
+
+      {actviity1.map((activity, index) => (
+        <div style={{ border: "none" }} className="activity" key={index}>
+          <p className="question d-flex align-items-center gap-2">
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
+              Question: {index + 1}
+            </h4>
+            <span> {activity.question}</span>
+          </p>
+
+          {/* Check if answer is an array and render as an ordered list */}
+          {Array.isArray(activity.answer) ? (
+            <ol className="answer-options" style={{ paddingLeft: "1.5rem" }}>
+              {activity.answer.map((item, idx) => (
+                <li
+                  key={idx}
+                  style={{ marginBottom: ".5rem", fontSize: "14px" }}
+                >
+                  {idx + 1}. {item}
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <div className="answer">
+              <p> Answer: {activity.answer}</p>
+            </div>
+          )}
+
+          {/* Conditionally render feedback */}
+          {activity.feedback && (
+            <div className="feedback">
+              <div id="badge">Feedback:</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem"
+                }}
+              >
+                <div className="feedback-card">{activity.feedback}</div>
+                <Icon
+                  style={{ color: "#275DAD" }}
+                  width={20}
+                  icon="lucide:edit"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+      <p className="activity-badge">Activity 2</p>
       {activities.map((activity, index) => (
         <div style={{ border: "none" }} className="activity" key={index}>
-          <p className="activity-badge">Activity {activity.activity}</p>
           <p className="question d-flex align-items-center gap-2">
             <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
             <span> {activity.question}</span>
@@ -442,7 +520,9 @@ useEffect(() => {
       {questionsQuiz.map((q, index) => (
         <div className="question-block" key={index}>
           <p className="question d-flex align-items-center gap-2">
-            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
+              Question: {index + 1}
+            </h4>
             <span> {q.question}</span>
           </p>
           <div className="options">
@@ -478,6 +558,56 @@ useEffect(() => {
               </div>
             ))}
           </div>
+        </div>
+      ))}
+      {quizEssay.map((activity, index) => (
+        <div style={{ border: "none" }} className="activity" key={index}>
+          <p className="question d-flex align-items-center gap-2">
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
+              Question: {index + 6}
+            </h4>
+            <span>{activity.question}</span>
+          </p>
+
+          {/* Check if answer is an array and render as an ordered list */}
+          {Array.isArray(activity.answer) ? (
+            <ol className="answer-options" style={{ paddingLeft: "1.5rem" }}>
+              {activity.answer.map((item, idx) => (
+                <li
+                  key={idx}
+                  style={{ marginBottom: ".5rem", fontSize: "14px" }}
+                >
+                  {idx + 1}. {item}
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <div className="answer">
+              <p> Answer: {activity.answer}</p>
+            </div>
+          )}
+
+          {/* Conditionally render feedback */}
+          {/* {activity.feedback && (
+            <div className="feedback">
+              <div id="badge">Feedback:</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem"
+                }}
+              >
+                <div className="feedback-card">{activity.feedback}</div>
+                <Icon
+                  style={{ color: "#275DAD" }}
+                  width={20}
+                  icon="lucide:edit"
+                />
+              </div>
+            </div>
+          )} */}
         </div>
       ))}
       <FinalReport rate={percentage} />
