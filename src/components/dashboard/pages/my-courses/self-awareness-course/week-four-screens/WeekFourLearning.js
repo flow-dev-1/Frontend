@@ -15,9 +15,10 @@ import { toast, ToastContainer } from 'react-toastify'
 import EndOfCourseComponent from './EndOfCourseComponent'
 export default function WeekFourLearning({
   course,
-  courseId,
   onClose,
   currentWeekIndex,
+  courseId,
+  handleLinkClick,
 }) {
   const [showPopup, setShowPopup] = useState(false)
   const [currentActivity, setCurrentActivity] = useState(() => {
@@ -88,25 +89,25 @@ export default function WeekFourLearning({
       state: { course, weekIndex: nextWeekIndex },
     })
   }
-   const handleSubmit = async () => {
-     try {
-       // Your submit logic here
-       const courseId = "66853bf50118e2e0a02b6a5a";
+  const handleSubmit = async () => {
+    try {
+      // Your submit logic here
+      const courseId = '66853bf50118e2e0a02b6a5a'
 
-       const stringifiedFormData = JSON.stringify(formData);
-       userService
-         .postMyActivity(courseId, stringifiedFormData)
-         .then((response) => {
-           console.log("Submission successful:", response);
-         })
-         .catch((error) => {
-           console.error("Submission failed:", error);
-         });
-     } catch (error) {
-       console.error("Submission failed:", error);
-       toast.error("Submission failed. Please try again later.");
-     }
-   };
+      const stringifiedFormData = JSON.stringify(formData)
+      userService
+        .postMyActivity(courseId, stringifiedFormData)
+        .then((response) => {
+          console.log('Submission successful:', response)
+        })
+        .catch((error) => {
+          console.error('Submission failed:', error)
+        })
+    } catch (error) {
+      console.error('Submission failed:', error)
+      toast.error('Submission failed. Please try again later.')
+    }
+  }
 
   console.log(formData)
   const renderActivityContent = () => {
@@ -257,6 +258,8 @@ export default function WeekFourLearning({
           <EndOfCourseComponent
             onNextWeekCourse={handleNextWeekCourse}
             onClose={onClose}
+            handleLinkClick={handleLinkClick}
+            setCurrentActivity={setCurrentActivity}
             openReviewPopUp={() => setReviewPopUp(true)}
           />
         )

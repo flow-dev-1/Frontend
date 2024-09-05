@@ -173,7 +173,6 @@ export default function EmojiRespond({ onNext, onBack, formData }) {
                         onClick={() => handleOptionClick(index, option)}
                       >
                         <img src={option.src} alt={option.label} />
-                        <span>{option.label}</span>
                       </li>
                     ))}
                   </ul>

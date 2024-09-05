@@ -95,6 +95,7 @@ function SelfAwarenessCourse() {
             courseId={id}
             course={course}
             currentWeekIndex={currentWeekIndex}
+            handleLinkClick={handleLinkClick}
           />
         )
 
@@ -104,6 +105,7 @@ function SelfAwarenessCourse() {
             courseId={id}
             course={course}
             currentWeekIndex={currentWeekIndex}
+            handleLinkClick={handleLinkClick}
           />
         )
 
@@ -112,6 +114,7 @@ function SelfAwarenessCourse() {
           <WeekThreeLearning
             course={course}
             currentWeekIndex={currentWeekIndex}
+            handleLinkClick={handleLinkClick}
           />
         )
       case 3:
@@ -119,6 +122,7 @@ function SelfAwarenessCourse() {
           <WeekFourLearning
             course={course}
             currentWeekIndex={currentWeekIndex}
+            handleLinkClick={handleLinkClick}
           />
         )
       case 4:
@@ -126,6 +130,7 @@ function SelfAwarenessCourse() {
           <WeekFiveLearning
             course={course}
             currentWeekIndex={currentWeekIndex}
+            handleLinkClick={handleLinkClick}
           />
         )
 

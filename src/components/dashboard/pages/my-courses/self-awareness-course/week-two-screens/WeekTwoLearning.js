@@ -18,6 +18,7 @@ export default function WeekTwoLearning({
   courseId,
   onClose,
   currentWeekIndex,
+  handleLinkClick,
 }) {
   const [showPopup, setShowPopup] = useState(false)
   const [currentActivity, setCurrentActivity] = useState(() => {
@@ -79,23 +80,23 @@ export default function WeekTwoLearning({
   const handlePrevious = () => {
     setCurrentActivity((prev) => prev - 1)
   }
-    const handleSubmit = async () => {
-      try {
-        // Your submit logic here
-        const stringifiedFormData = JSON.stringify(formData);
-        userService
-          .postMyActivity(courseId, stringifiedFormData)
-          .then((response) => {
-            console.log("Submission successful:", response);
-          })
-          .catch((error) => {
-            console.error("Submission failed:", error);
-          });
-      } catch (error) {
-        console.error("Submission failed:", error);
-        toast.error("Submission failed. Please try again later.");
-      }
-    };
+  const handleSubmit = async () => {
+    try {
+      // Your submit logic here
+      const stringifiedFormData = JSON.stringify(formData)
+      userService
+        .postMyActivity(courseId, stringifiedFormData)
+        .then((response) => {
+          console.log('Submission successful:', response)
+        })
+        .catch((error) => {
+          console.error('Submission failed:', error)
+        })
+    } catch (error) {
+      console.error('Submission failed:', error)
+      toast.error('Submission failed. Please try again later.')
+    }
+  }
 
   const closeReviewPopUp = () => setReviewPopUp(false)
 
@@ -231,6 +232,8 @@ export default function WeekTwoLearning({
           <EndOfCourseComponent
             onNextWeekCourse={handleNextWeekCourse}
             onClose={onClose}
+            handleLinkClick={handleLinkClick}
+            setCurrentActivity={setCurrentActivity}
             openReviewPopUp={() => setReviewPopUp(true)}
           />
         )

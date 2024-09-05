@@ -249,7 +249,26 @@
   justify-content: center;
   height: 200px;
   background: url('../../../../../assets/selfawareness-images/text-area-bg.png');
-
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.text-area-box-2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  background: url('../../../../../assets/selfawareness-images/match-1.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.text-area-box-3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  background: url('../../../../../assets/selfawareness-images/match-2.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -426,7 +445,9 @@
 
 .self-awareness .question-box.personality-question .text-area-box,
 .self-awareness .question-box.assessment .text-area-box,
-.self-awareness .question-box.mindset .text-area-box {
+.self-awareness .question-box.mindset .text-area-box,
+.text-area-box-2,
+.text-area-box-3 {
   height: auto;
   background-size: 100% 100%;
 }
@@ -696,6 +717,7 @@ img.value-description-img {
   justify-content: space-between;
   position: relative;
   width: 100%;
+  align-items: center;
 }
 
 /* Left and right columns styling */

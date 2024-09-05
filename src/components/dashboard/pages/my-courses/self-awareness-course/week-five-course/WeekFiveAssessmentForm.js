@@ -165,7 +165,7 @@ export default function WeekFivAssessmentForm({ onNext, onBack }) {
           {currentIndex === 0 && (
             <div className='assessment-box'>
               <h2>Assessment</h2>
-              <p>Scenario around your values.</p>
+              <p className='text-center'>Scenario around your values.</p>
             </div>
           )}
           <div className='d-flex align-items-start mt-3'>

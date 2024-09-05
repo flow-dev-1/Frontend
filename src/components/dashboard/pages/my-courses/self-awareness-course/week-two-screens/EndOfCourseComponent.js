@@ -3,7 +3,12 @@ import React from 'react'
 import MyFireWorks from '../Fireworks'
 import celebrate from '../../../../../../assets/celebrate.png'
 
-const EndOfCourseComponent = ({ currentWeekIndex, handleNextWeekCourse }) => {
+const EndOfCourseComponent = ({
+  currentWeekIndex,
+  handleNextWeekCourse,
+  handleLinkClick,
+  setCurrentActivity,
+}) => {
   currentWeekIndex = 1
   return (
     <div className='end-of-course-page'>
@@ -17,10 +22,16 @@ const EndOfCourseComponent = ({ currentWeekIndex, handleNextWeekCourse }) => {
       <MyFireWorks />
       <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
         <button
-          className='btn progress-btn btn-dark'
-          onClick={handleNextWeekCourse}
+          className='btn progress-btn btn-light'
+          onClick={() => setCurrentActivity(1)}
         >
-          Proceed to {currentWeekIndex + 2}
+          {'<<<'} Retake Lesson
+        </button>
+        <button
+          className='btn progress-btn btn-dark'
+          onClick={() => handleLinkClick(2)}
+        >
+          Proceed to {currentWeekIndex + 1 + 1}
         </button>
       </div>
     </div>

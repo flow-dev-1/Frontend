@@ -3,8 +3,13 @@ import React from 'react'
 import MyFireWorks from '../Fireworks'
 import celebrate from '../../../../../../assets/celebrate.png'
 
-const EndOfCourseComponent = ({ currentWeekIndex, handleNextWeekCourse }) => {
-  currentWeekIndex = 4
+const EndOfCourseComponent = ({
+  currentWeekIndex,
+  handleNextWeekCourse,
+  handleLinkClick,
+  setCurrentActivity,
+}) => {
+  currentWeekIndex = 3
   console.log(currentWeekIndex)
   return (
     <div className='end-of-course-page'>
@@ -12,16 +17,22 @@ const EndOfCourseComponent = ({ currentWeekIndex, handleNextWeekCourse }) => {
         <img src={celebrate} alt='celebrate' />
         <h1>Hurray!</h1>
         <p className='text-center fs-5'>
-          You have made it to the end of <br /> Week {currentWeekIndex}
+          You have made it to the end of <br /> Week 4
         </p>
       </div>
       <MyFireWorks />
       <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
         <button
-          className='btn progress-btn btn-dark'
-          onClick={handleNextWeekCourse}
+          className='btn progress-btn btn-light'
+          onClick={() => setCurrentActivity(1)}
         >
-          Proceed to {currentWeekIndex + 1}
+          {'<<<'} Retake Lesson
+        </button>
+        <button
+          className='btn progress-btn btn-dark'
+          onClick={() => handleLinkClick(4)}
+        >
+          Proceed to {currentWeekIndex + 1 + 1}
         </button>
       </div>
     </div>

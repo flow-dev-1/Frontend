@@ -2,25 +2,28 @@
 import React from 'react'
 import MyFireWorks from '../Fireworks'
 import celebrate from '../../../../../../assets/celebrate.png'
+import { useNavigate } from 'react-router-dom'
 
 const EndOfCourseComponent = ({ currentWeekIndex, handleNextWeekCourse }) => {
   currentWeekIndex = 1
+  const navigate = useNavigate()
   return (
     <div className='end-of-course-page'>
       <div className='congrats'>
         <img src={celebrate} alt='celebrate' />
-        <h1>Hurray!</h1>
+        <h1>Congratulations!</h1>
         <p className='text-center fs-5'>
-          You have made it to the end of <br /> Week {currentWeekIndex + 1}
+          We’re proud of the progress you’ve made, and we can’t wait to see how
+          you apply these lessons in your life.
         </p>
       </div>
       <MyFireWorks />
       <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
         <button
           className='btn progress-btn btn-dark'
-          onClick={handleNextWeekCourse}
+          onClick={() => navigate('/dashboard/my-courses')}
         >
-          Proceed to {currentWeekIndex + 2}
+          Go to My Courses {'>>>>'}
         </button>
       </div>
     </div>
