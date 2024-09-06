@@ -1,28 +1,62 @@
-import React, { useState } from "react";
-import { Icon } from "@iconify/react";
+import React, { useState } from 'react'
+import { Icon } from '@iconify/react'
 
 const VideoComponent = ({ videoSrc }) => {
-  const [videoPlaying, setVideoPlaying] = useState(false);
+  const [videoPlaying, setVideoPlaying] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+
+  const handleLoad = () => {
+    setLoading(false)
+    setError(false)
+  }
+
+  const handleError = () => {
+    setLoading(false)
+    setError(true)
+  }
 
   return (
-    <div className="video-div">
-      {videoPlaying ? (
-        <iframe
-          className="custom-video"
-          src={videoSrc}
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      ) : (
-        <div className="video-thumbnail">
-          <div className="play-button" onClick={() => setVideoPlaying(true)}>
-            <Icon icon="carbon:play-outline" className="play-icon" />
-          </div>
+    <div className='video-div'>
+      {loading && !error && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          className='loading-indicator'
+        >
+          <Icon icon='eos-icons:loading' spin={true} width={40} />
+          <span>Loading...</span>
         </div>
       )}
+      {error && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          className='error-message'
+        >
+          <Icon icon='mdi:alert-circle-outline' color='red' width={40} />
+          <span>Failed to load video.</span>
+        </div>
+      )}
+      {!error && (
+        <iframe
+          className='custom-video'
+          src={videoSrc}
+          title='YouTube video player'
+          onLoad={handleLoad}
+          onError={handleError}
+          allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+          allowFullScreen
+        />
+      )}
     </div>
-  );
-};
+  )
+}
 
-export default VideoComponent;
+export default VideoComponent
