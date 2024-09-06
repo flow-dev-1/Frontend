@@ -1019,7 +1019,7 @@ const Week1 = () => {
   const [assessmentLoading, setAssessmentLoading] = useState(true);
   const [assessmentError, setAssessmentError] = useState(null);
   const [quizQuestions, setQuizQuestions] = useState([]);
-
+  console.log(data);
   useEffect(() => {
     const fetchAssessmentData = async () => {
       setAssessmentLoading(true);
@@ -1108,31 +1108,6 @@ const Week1 = () => {
 
   console.log(questions);
 
-  const indexCount = Object.values(backendAnswers).reduce((count, item) => {
-    count[item.index] = (count[item.index] || 0) + 1;
-    return count;
-  }, {});
-
-  const totalCount = Object.values(indexCount).reduce(
-    (total, count) => total + count,
-    0
-  );
-
-  const indexToChartData = {
-    0: { name: "Red", color: "#FF0500" },
-    1: { name: "Green", color: "#2CCF4F" },
-    2: { name: "Blue", color: "#0093FF" },
-    3: { name: "Yellow", color: "#FEF900" }
-  };
-
-  // Create pieChart data array
-  const pieChart = Object.keys(indexCount).map((index) => {
-    const { name, color } = indexToChartData[index];
-    const count = indexCount[index] || 0;
-    const value = Math.round((count / totalCount)) * 100;
-
-    return { name, value, color };
-  });
 
   const activities = [
     {
@@ -1168,7 +1143,7 @@ const Week1 = () => {
     }
   ];
   const activityAnswers = data?.activity?.activities?.[12]?.answers || [];
-  console.log(activityAnswers)
+  console.log(activityAnswers);
   // Map through answers to create restActivities
   const restActivities = activityAnswers.map((answer, index) => ({
     activity: 4, // Assuming activity number is 4 for all
@@ -1190,6 +1165,49 @@ const Week1 = () => {
       })
     };
   });
+
+  
+  const indexCount = questions.reduce((count, question) => {
+    question.options.forEach((option) => {
+      if (option.checked) {
+        const colorIndex = ["Red", "Green", "Blue", "Yellow"].indexOf(
+          option.color
+        );
+        count[colorIndex] = (count[colorIndex] || 0) + 1;
+      }
+    });
+    return count;
+  }, {});
+
+  const totalCount = Object.values(indexCount).reduce(
+    (total, count) => total + count,
+    0
+  );
+
+  // Chart data configuration
+  const indexToChartData = {
+    0: { name: "Red", color: "#FF0500" },
+    1: { name: "Green", color: "#2CCF4F" },
+    2: { name: "Blue", color: "#0093FF" },
+    3: { name: "Yellow", color: "#FEF900" }
+  };
+
+  // Prepare pie chart data
+
+const pieChart = Object.keys(indexToChartData).map((index) => {
+  const { name, color } = indexToChartData[index];
+  const value = indexCount[index] || 0;
+  const percentage =
+    totalCount > 0 ? Math.round((value / totalCount) * 100) : 0; // Round percentage
+  return {
+    name,
+    value: percentage, // Set percentage value
+    color
+  };
+});
+
+  console.log(pieChart);
+
 
   return (
     <div className="week-content">
