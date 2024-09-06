@@ -378,8 +378,8 @@ let questionsQuiz = [
 ];
 
 const leftItemsArray = [
-  ["Kindness", "Respect", "Responsibility"],
-  ["Honesty", "Empathy", "Patience"]
+  ["A. Kindness", "B. Respect", "C. Responsibility"],
+  ["A. Honesty", "B. Empathy", "C. Patience"]
 ];
 
 const rightItemsArray = [
@@ -428,66 +428,92 @@ const Week4 = () => {
           const rightValue = rightItemsArray[0][match.right];
           return `${leftValue} - ${rightValue}`;
         });
-          const combinedArray = matchCount1.map((match) => {
+          const combinedArray2 = matchCount1.map((match) => {
           const leftValue = leftItemsArray[0][match.left];
           const rightValue = rightItemsArray[0][match.right];
           return `${leftValue} - ${rightValue}`;
         });
 
         console.log(combinedArray1);
-        if (assessmentForChecked && assessmentForChecked.length >= 5) {
-          const valuesToCheck = assessmentForChecked;
-          console.log(valuesToCheck);
 
-          questionsQuiz = questionsQuiz.map((question, index) => {
-            return {
-              ...question,
-              options: question.options.map((option, optionIndex) => {
-                let isChecked = false;
+     if (assessmentForChecked && assessmentForChecked.length >= 5) {
+       const valuesToCheck = assessmentForChecked;
+       console.log(valuesToCheck);
 
-                // Mark options based on assessmentForChecked
-                if (optionIndex === valuesToCheck[index]) {
-                  isChecked = true;
-                }
+       questionsQuiz = questionsQuiz.map((question, index) => {
+         return {
+           ...question,
+           options: question.options.map((option, optionIndex) => {
+             let isChecked = false;
 
-                // Check if it's the 9th question and update based on matchCount1
-                if (index === 9) {
-                  matchCount1.forEach((match) => {
-                    if (match.left === 9 || match.right === 9) {
-                      if (
-                        optionIndex === match.left ||
-                        optionIndex === match.right
-                      ) {
-                        isChecked = true;
-                      }
-                    }
-                  });
-                }
+             // Mark options based on assessmentForChecked
+             if (optionIndex === valuesToCheck[index]) {
+               isChecked = true;
+             }
 
-                // Check if it's the 10th question and update based on matchCount2
-                if (index === 10) {
-                  matchCount2.forEach((match) => {
-                    if (match.left === 10 || match.right === 10) {
-                      if (
-                        optionIndex === match.left ||
-                        optionIndex === match.right
-                      ) {
-                        isChecked = true;
-                      }
-                    }
-                  });
-                }
+             // Check if it's the 9th question and update based on combinedArray1
+             if (index === 8) {
+               combinedArray1.forEach((selectedAnswer) => {
+                 question.options.forEach((option) => {
+                   const optionText = option.label.trim().toLowerCase();
+                   const selectedAnswerText = selectedAnswer
+                     .trim()
+                     .toLowerCase();
 
-                return {
-                  ...option,
-                  checked: isChecked
-                };
-              })
-            };
-          });
-        } else {
-          console.error("Assessment answers are missing or incomplete.");
-        }
+                   if (optionText.includes(selectedAnswerText)) {
+                     if (option.isCorrect) {
+                       console.log(`${selectedAnswer} is Correct`);
+                     } else {
+                       console.log(`${selectedAnswer} is Incorrect`);
+                     }
+                   }
+                 });
+               });
+             }
+
+             // Check if it's the 10th question and update based on combinedArray2
+             if (index === 9) {
+               combinedArray2.forEach((selectedAnswer) => {
+                 question.options.forEach((option) => {
+                   const optionText = option.label.trim().toLowerCase();
+                   const selectedAnswerText = selectedAnswer
+                     .trim()
+                     .toLowerCase();
+
+                   if (optionText.includes(selectedAnswerText)) {
+                     if (option.isCorrect) {
+                       console.log(`${selectedAnswer} is Correct`);
+                     } else {
+                       console.log(`${selectedAnswer} is Incorrect`);
+                     }
+                   }
+                 });
+               });
+
+               // Update isChecked based on matchCount2 for the 10th question
+               matchCount2.forEach((match) => {
+                 if (match.left === 10 || match.right === 10) {
+                   if (
+                     optionIndex === match.left ||
+                     optionIndex === match.right
+                   ) {
+                     isChecked = true;
+                   }
+                 }
+               });
+             }
+
+             return {
+               ...option,
+               checked: isChecked
+             };
+           })
+         };
+       });
+     } else {
+       console.error("Assessment answers are missing or incomplete.");
+     }
+
       } catch (error) {
         setAssessmentError(error);
       } finally {
