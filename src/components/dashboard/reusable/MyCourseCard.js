@@ -122,7 +122,7 @@ const MyCourseCard = ({ course }) => {
                 border: '1px solid #329bd6',
               }}
               className='btn card-btn feedback'
-              onClick={() => openModal('feedback')}
+                onClick={() => navigate(`/dashboard/feedback/self-awareness`)}
             >
               <Icon icon='hugeicons:comment-01' /> Feedback
             </button>
