@@ -255,7 +255,7 @@ const Week2 = () => {
   }
 
   if (isError || assessmentError) {
-    return <div>Error loading data.</div>;
+    return <div>Take Activity to see feedback.</div>;
   }
   const strengths = data?.activity?.activities[3].answers.strengths;
   const weaknesses = data?.activity?.activities[4].answers.weakness;

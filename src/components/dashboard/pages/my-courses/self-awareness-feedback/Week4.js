@@ -532,7 +532,7 @@ const Week4 = () => {
   }
 
   if (isError || assessmentError) {
-    return <div>Error loading data.</div>;
+    return <div>Take Activity to see feedback.</div>;
   }
 
   const activities = [

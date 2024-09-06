@@ -1088,7 +1088,7 @@ const Week1 = () => {
   }
 
   if (isError || assessmentError) {
-    return <div>Error loading data.</div>;
+    return <div>Take Activity to see feedback.</div>;
   }
 
   const buckets = data?.activity?.activities[5].buckets;

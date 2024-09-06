@@ -454,7 +454,7 @@ const Week5 = () => {
   }
 
   if (isError || assessmentError) {
-    return <div>Error loading data.</div>;
+    return <div>Take Activity to see feedback.</div>;
   }
   console.log(data?.activity?.activities[5]?.answers)
   const myChecked = data?.activity?.activities[5]?.answers
