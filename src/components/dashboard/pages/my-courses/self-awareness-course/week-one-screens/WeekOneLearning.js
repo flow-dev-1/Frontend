@@ -77,9 +77,6 @@ export default function WeekOneLearning({
 
   const handleSubmit = async () => {
     try {
-      // Your submit logic here
-      const Data = localStorage.getItem("chartData")
-      const chartData = JSON.parse(Data)
       const stringifiedFormData = JSON.stringify(formData)
       userService
         .postMyActivity(course.course._id, stringifiedFormData)

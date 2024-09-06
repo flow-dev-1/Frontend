@@ -1196,9 +1196,12 @@ const Week1 = () => {
 
 const pieChart = Object.keys(indexToChartData).map((index) => {
   const { name, color } = indexToChartData[index];
+  const value = indexCount[index] || 0;
+  const percentage =
+    totalCount > 0 ? Math.round((value / totalCount) * 100) : 0; // Round percentage
   return {
     name,
-    value: indexCount[index] || 0,
+    value: percentage, // Set percentage value
     color
   };
 });
