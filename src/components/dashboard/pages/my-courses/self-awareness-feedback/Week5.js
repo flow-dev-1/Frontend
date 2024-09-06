@@ -341,6 +341,7 @@ let questionsQuiz = [
     ]
   }
 ];
+
 const emojis = [
   { src: emojiHappy, label: "Happy" },
   { src: emojiSad, label: "Sad" },
@@ -351,6 +352,22 @@ const emojis = [
   { src: emojiNostalgia, label: "Nostalgia" },
   { src: emojiEnvy, label: "Envy" },
   { src: emojiBored, label: "Bored" }
+];
+
+const checkList = [
+  { src: emojiHappy, label: "Happy" },
+  { src: emojiSad, label: "Sad" },
+  { src: emojiAngry, label: "Angry" },
+  { src: emojiFear, label: "Fear" },
+  { src: emojiAnxiety, label: "Anxiety" }
+];
+
+const answersForCheck = [
+  { src: emojiHappy, label: "Happy" },
+  { src: emojiHappy, label: "Happy" },
+  { src: emojiJoy, label: "Joy" },
+  { src: emojiHappy, label: "Happy" },
+  { src: emojiHappy, label: "Happy" }
 ];
 
 const Week5 = () => {
@@ -415,16 +432,16 @@ const Week5 = () => {
     data?.activity?.activities[3].answers.IWill[0],
     data?.activity?.activities[3].answers.IWill[0]
   ];
-    const Q2 = [
+  const Q2 = [
     data?.activity?.activities[3].answers.IWill[0],
     data?.activity?.activities[3].answers.IWill[0]
   ];
-    const Q3 = [
-      data?.activity?.activities[3].answers.IWill[0],
-      data?.activity?.activities[3].answers.IWill[0]
-    ];
+  const Q3 = [
+    data?.activity?.activities[3].answers.IWill[0],
+    data?.activity?.activities[3].answers.IWill[0]
+  ];
   console.log(Q1);
-  const activityData = data?.activity?.activities[1].answers
+  const activityData = data?.activity?.activities[1].answers;
   if (isLoading || assessmentLoading) {
     return <div>Loading...</div>;
   }
@@ -432,7 +449,8 @@ const Week5 = () => {
   if (isError || assessmentError) {
     return <div>Error loading data.</div>;
   }
-
+  console.log(data?.activity?.activities[5]?.answers)
+  const myChecked = data?.activity?.activities[5]?.answers
   const activities = [
     {
       question:
@@ -587,17 +605,24 @@ const Week5 = () => {
           {/* Your Answer Column */}
           <div className="your-answers">
             <p className="answer-font">Your answer</p>
-            {emojis.map((emoji, index) => {
-              const activityEmoji = getActivityEmoji(activityData[index]);
+            {checkList.map((check, index) => {
+              const answerEmoji = emojis.find(
+                (emoji) => emoji.label === myChecked[index]
+              );
 
               return (
                 <div key={index} className="emoji-container">
-                  {activityEmoji && (
-                    <div className="activity-emoji">
-                      <img src={activityEmoji.src} alt={activityEmoji.label} />
-                      <p>{activityEmoji.label}</p>
-                    </div>
-                  )}
+                  <div className="dropdown-div">
+                    {/* Display checkList emoji */}
+                    <img src={check.src} alt={check.label} />
+                    <Icon icon="maki:arrow" />
+                    {/* Display corresponding myChecked emoji */}
+                    {answerEmoji && (
+                      <div className="selected-option">
+                        <img src={answerEmoji.src} alt={answerEmoji.label} />
+                      </div>
+                    )}
+                  </div>
                 </div>
               );
             })}
@@ -606,21 +631,23 @@ const Week5 = () => {
           {/* Correct Options Column */}
           <div className="correct-options">
             <p className="correct-font">Correct option</p>
-            {emojis.map((emoji, index) => (
-              <div
-                key={index}
-                ref={(el) => (dropdownRefs.current[index] = el)}
-                className="emoji-container"
-              >
-                <div className="dropdown-div">
-                  <img src={emoji.src} alt={emoji.label} />
-                  <p>{emoji.label}</p>
-                  <span className="selected-option">
-                    {selectedOptions[index] || ""}
-                  </span>
+            {checkList.map((check, index) => {
+              const answerCheck = answersForCheck[index]; // Find corresponding correct answer
+
+              return (
+                <div key={index} className="emoji-container">
+                  <div className="dropdown-div">
+                    {/* Display checkList emoji */}
+                    <img src={check.src} alt={check.label} />
+                    <Icon icon="maki:arrow" />
+                    {/* Display corresponding answersForCheck emoji */}
+                    <div className="selected-option">
+                      <img src={answerCheck.src} alt={answerCheck.label} />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
@@ -630,7 +657,7 @@ const Week5 = () => {
         <div className="question-block" key={index}>
           <p className="question d-flex align-items-center gap-2">
             <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
-              Question {index + 1}:
+              Question:
             </h4>
             <span> {q.question}</span>
           </p>
