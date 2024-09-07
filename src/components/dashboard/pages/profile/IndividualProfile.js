@@ -12,6 +12,7 @@ import userService from '../../../../services/api/user'
 import EducatorProfileModal from './EducatorProfileModal'
 import StudentUpdateProfileModal from './StudentUpdateProfileModal'
 import Loading from '../../../loader/Loader'
+import { Icon } from '@iconify/react'
 
 export default function IndividualProfile({ onClose }) {
   const [modalIsOpen, setIsOpen] = useState(false)
@@ -22,7 +23,7 @@ export default function IndividualProfile({ onClose }) {
     if (userType?.accountType === 'Educator') {
       return userService.getMyProfileEducator()
     } else {
-      console.log(userService.getMyProfileIndividual());
+      console.log(userService.getMyProfileIndividual())
       return userService.getMyProfileIndividual()
     }
   }
@@ -60,6 +61,17 @@ export default function IndividualProfile({ onClose }) {
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
   }
 
+  function toTitleCase(str) {
+    return str.replace(/\w\S*/g, function (txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    })
+  }
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text)
+    alert('Student ID copied to clipboard!')
+  }
+
   return (
     <>
       <div className='individual-profile container-fluid'>
@@ -95,7 +107,10 @@ export default function IndividualProfile({ onClose }) {
                 <div className='green-spring-div school'>
                   {user?.userType || 'Individual'}
                 </div>
-                <div className='green-spring-div student'>
+                <div
+                  style={{ color: '#5B616A' }}
+                  className='green-spring-div student'
+                >
                   {userType?.accountType === 'Educator'
                     ? 'Educator'
                     : 'Student'}
@@ -128,8 +143,17 @@ export default function IndividualProfile({ onClose }) {
           {/* Conditionally render Student ID and Email based on account type */}
           {userType?.accountType !== 'Educator' && (
             <p>
-              <span className='label'>Student ID:</span>
-              <span>{user?.userId} </span>
+              <span className='label'>Student ID: </span>
+              <span>
+                {user?.userId}{' '}
+                <Icon
+                  icon={'cil:copy'}
+                  className='eye-icon'
+                  width={20}
+                  onClick={() => copyToClipboard(user?.userId)}
+                  style={{ cursor: 'pointer' }}
+                />{' '}
+              </span>
             </p>
           )}
 
@@ -144,13 +168,13 @@ export default function IndividualProfile({ onClose }) {
             <span className='label'>D.O.B: </span>
             <span>{(user?.DOB && formatDate(user.DOB)) || 'Add Info'} </span>
           </p>
-          <p>
+          {/* <p>
             <span className='label'>Phone: </span>
             <span>{user?.phone || 'Add Info'} </span>
-          </p>
+          </p> */}
           <p>
             <span className='label'>Gender: </span>
-            <span>{user?.gender || 'Add Info'} </span>
+            <span>{toTitleCase(user?.gender) || 'Add Info'} </span>
           </p>
         </div>
         {userType?.accountType === 'Individual' ? (
