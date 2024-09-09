@@ -88,37 +88,37 @@ function DragDropComponent({ onBack, onNext, formData }) {
     setCurrentCardIndex(0)
   }, [formData])
 
-const onDragEnd = (result) => {
-  const { destination, source } = result
+  const onDragEnd = (result) => {
+    const { destination, source } = result
 
-  if (!destination) {
-    return
+    if (!destination) {
+      return
+    }
+
+    const newCards = Array.from(cards)
+    const draggedCard = newCards.splice(currentCardIndex, 1)[0]
+
+    // Handle precise drop into the specific bucket
+    if (destination.droppableId === 'bucket-yes') {
+      setBuckets((prev) => ({
+        ...prev,
+        yes: [...prev.yes, draggedCard],
+      }))
+    } else if (destination.droppableId === 'bucket-no') {
+      setBuckets((prev) => ({
+        ...prev,
+        no: [...prev.no, draggedCard],
+      }))
+    } else if (destination.droppableId === 'bucket-sometimes') {
+      setBuckets((prev) => ({
+        ...prev,
+        sometimes: [...prev.sometimes, draggedCard],
+      }))
+    }
+
+    setCards(newCards)
+    setCurrentCardIndex(newCards.length > 0 ? 0 : -1)
   }
-
-  const newCards = Array.from(cards)
-  const draggedCard = newCards.splice(currentCardIndex, 1)[0]
-
-  // Handle precise drop into the specific bucket
-  if (destination.droppableId === 'bucket-yes') {
-    setBuckets((prev) => ({
-      ...prev,
-      yes: [...prev.yes, draggedCard],
-    }))
-  } else if (destination.droppableId === 'bucket-no') {
-    setBuckets((prev) => ({
-      ...prev,
-      no: [...prev.no, draggedCard],
-    }))
-  } else if (destination.droppableId === 'bucket-sometimes') {
-    setBuckets((prev) => ({
-      ...prev,
-      sometimes: [...prev.sometimes, draggedCard],
-    }))
-  }
-
-  setCards(newCards)
-  setCurrentCardIndex(newCards.length > 0 ? 0 : -1)
-}
 
   const onRefresh = () => {
     setCards(initialCards)
@@ -256,7 +256,7 @@ const onDragEnd = (result) => {
             </div>
           </div>
         </div>
-        <div className='refresh mt-5'>
+        <div className='refresh mt-3 ml-8'>
           <div className='slider-indicator'>
             <ul className='p-0'>
               {Array.from({ length: initialCards.length }).map((_, index) => (
@@ -264,8 +264,8 @@ const onDragEnd = (result) => {
               ))}
             </ul>
           </div>
-          <div className='d-flex' onClick={onRefresh}>
-            <Icon icon='ion:refresh-outline' />
+          <div className='d-flex justify-content-between' onClick={onRefresh}>
+            <Icon icon='teenyicons:refresh-solid' />
             Refresh
           </div>
         </div>

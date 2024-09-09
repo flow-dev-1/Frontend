@@ -204,12 +204,17 @@
 .self-awareness .question-box-header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
+  gap: .4rem;
 }
 
 .self-awareness .question-box-header h1 {
   color: #275dad;
   font-size: 40px;
+}
+
+.text-area-box.two {
+  height: 90px;
 }
 
 .self-awareness .question-box-header h2 {
@@ -396,8 +401,11 @@
 .personality-type {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
+  width: 400px;
+  margin: 1rem auto;
 }
+
 
 .self-awareness .slider-indicator ul li {
   width: 20px;
