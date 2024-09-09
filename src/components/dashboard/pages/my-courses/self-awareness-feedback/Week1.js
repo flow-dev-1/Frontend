@@ -1224,6 +1224,7 @@ const pieChart = Object.keys(indexToChartData).map((index) => {
               style={{ width: "90%", margin: "1rem auto" }}
               className="drag-drop-activity"
             >
+              <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{"   "}
               <div className="drag-drop-section">
                 <h5 id="yes">YES</h5>
                 <ul>
