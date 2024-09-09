@@ -90,8 +90,11 @@ function Card({ card, index, isDragging }) {
     <div
       ref={drag}
       className={`card-item d-flex align-items-center justify-content-center ${
-        isDraggingCard || isDragging ? 'dragging' : ''
+        isDraggingCard || isDragging ? 'draging' : ''
       }`}
+      style={{
+        cursor: isDraggingCard ? 'grabbing' : 'grab', // Change the cursor based on dragging state
+      }}
     >
       <img
         src={cardImages[card.imageIndex]}
