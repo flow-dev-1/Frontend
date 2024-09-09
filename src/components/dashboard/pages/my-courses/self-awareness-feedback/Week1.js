@@ -1399,7 +1399,7 @@ const pieChart = Object.keys(indexToChartData).map((index) => {
       {quizQuestions.map((q, index) => (
         <div className="question-block" key={index}>
           <div className="question d-flex align-items-center gap-2">
-            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:{" "} {index + 1} </h4>
             <span>{q.question}</span>
           </div>
           <div className="options">

@@ -24,11 +24,15 @@ export default function IndividualOverview() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['individual-courses'],
     queryFn: () => userService.getIndividualCourses(), // Make sure to call the function
+    refetchOnWindowFocus: true, // Refetch when the window regains focus
+    refetchOnMount: true, // Refetch when the component mounts again
   })
 
   const { data: enrolledData } = useQuery({
     queryKey: ['individual-courses-enrolled'],
     queryFn: () => userService.getIndividualCoursesEnrolled(), // Make sure to call the function
+    refetchOnWindowFocus: true, // Refetch when the window regains focus
+    refetchOnMount: true, // Refetch when the component mounts again
   })
 
   const handleSort = (a, b) => {

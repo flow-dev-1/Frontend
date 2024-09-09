@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import Week1 from './Week1'
 import Week2 from './Week2'
 import Week3 from './Week3'
@@ -6,17 +6,46 @@ import Week4 from './Week4'
 import Week5 from './Week5'
 import './selfawareness-feedback.css'
 import { Icon } from '@iconify/react'
-
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 
 const SelfAwarenessFeedback = () => {
   const [expandedWeek, setExpandedWeek] = useState(null) // State to track which week is expanded
+  const contentRef = useRef() // Reference to the entire content
 
   const toggleWeek = (weekNumber) => {
     setExpandedWeek(expandedWeek === weekNumber ? null : weekNumber) // Toggle the week
   }
 
+  // Function to generate PDF
+  const generatePDF = () => {
+    const input = contentRef.current
+
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png')
+      const pdf = new jsPDF('p', 'mm', 'a4')
+      const imgWidth = 210
+      const pageHeight = 295
+      const imgHeight = (canvas.height * imgWidth) / canvas.width
+      let heightLeft = imgHeight
+      let position = 0
+
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
+      heightLeft -= pageHeight
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight
+        pdf.addPage()
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
+        heightLeft -= pageHeight
+      }
+
+      pdf.save('SelfAwarenessFeedback.pdf')
+    })
+  }
+
   return (
-    <div className='feedback-container'>
+    <div ref={contentRef} className='feedback-container'>
       {/* Week 1 */}
       <div className='week-title-container'>
         <div className='week-title'>
@@ -50,7 +79,7 @@ const SelfAwarenessFeedback = () => {
           </h2>
           <Icon
             icon={
-              expandedWeek === 1
+              expandedWeek === 2
                 ? 'simple-line-icons:arrow-up'
                 : 'simple-line-icons:arrow-down'
             }
@@ -70,7 +99,7 @@ const SelfAwarenessFeedback = () => {
           </h2>
           <Icon
             icon={
-              expandedWeek === 1
+              expandedWeek === 3
                 ? 'simple-line-icons:arrow-up'
                 : 'simple-line-icons:arrow-down'
             }
@@ -89,7 +118,7 @@ const SelfAwarenessFeedback = () => {
           </h2>
           <Icon
             icon={
-              expandedWeek === 1
+              expandedWeek === 4
                 ? 'simple-line-icons:arrow-up'
                 : 'simple-line-icons:arrow-down'
             }
@@ -111,7 +140,7 @@ const SelfAwarenessFeedback = () => {
           </h2>
           <Icon
             icon={
-              expandedWeek === 1
+              expandedWeek === 5
                 ? 'simple-line-icons:arrow-up'
                 : 'simple-line-icons:arrow-down'
             }
@@ -137,14 +166,10 @@ const SelfAwarenessFeedback = () => {
           </h2>
 
           <div>
-            <a
-              href='/path/to/pdf'
-              download='SelfAwarenessSummary.pdf'
-              className='download-link'
-            >
+            <a download='SelfAwarenessSummary.pdf' className='download-link'>
               (Download PDF)
             </a>
-            <Icon icon='bi:download' />
+            <Icon onClick={generatePDF} icon='bi:download' />
           </div>
         </div>
         {/* Add any content you want to display when the Final Report is expanded */}

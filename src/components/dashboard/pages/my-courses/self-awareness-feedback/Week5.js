@@ -570,7 +570,8 @@ const Week5 = () => {
               )}
             </ol>
           ) : (
-            <div className="answer">
+            <div className="answer d-flex align-items-center gap-2">
+              <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
               <p>{activity.answer}</p>
             </div>
           )}
@@ -663,9 +664,7 @@ const Week5 = () => {
       {questionsQuiz.map((q, index) => (
         <div className="question-block" key={index}>
           <p className="question d-flex align-items-center gap-2">
-            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
-              Question:
-            </h4>
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:{" "}{index + 1 }</h4>
             <span> {q.question}</span>
           </p>
           <div className="options">
