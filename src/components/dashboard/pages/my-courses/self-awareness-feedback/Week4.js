@@ -532,7 +532,7 @@ const Week4 = () => {
   }
 
   if (isError || assessmentError) {
-    return <div>Error loading data.</div>;
+    return <div>Take Activity to see feedback.</div>;
   }
 
   const activities = [
@@ -596,7 +596,8 @@ const Week4 = () => {
               ))}
             </ol>
           ) : (
-            <div className="answer">
+            <div className="answer d-flex align-items-center gap-2">
+              <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
               <p>{activity.answer}</p>
             </div>
           )}

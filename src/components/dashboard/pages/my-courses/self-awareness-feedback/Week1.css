@@ -16,6 +16,7 @@
 .answer {
   color: #555;
   margin-bottom: 8px;
+  display: flex;
 }
 
 .feedback-card {

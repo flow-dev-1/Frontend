@@ -255,7 +255,7 @@ const Week2 = () => {
   }
 
   if (isError || assessmentError) {
-    return <div>Error loading data.</div>;
+    return <div>Take Activity to see feedback.</div>;
   }
   const strengths = data?.activity?.activities[3].answers.strengths;
   const weaknesses = data?.activity?.activities[4].answers.weakness;
@@ -358,7 +358,7 @@ const Week2 = () => {
         <div style={{ border: "none" }} className="activity" key={index}>
           <p className="question d-flex align-items-center gap-2">
             <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
-              Question: {index + 1}
+              Question: 
             </h4>
             <span> {activity.question}</span>
           </p>
@@ -376,8 +376,9 @@ const Week2 = () => {
               ))}
             </ol>
           ) : (
-            <div className="answer">
-              <p> Answer: {activity.answer}</p>
+            <div className="answer d-flex align-items-center gap-2">
+              <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+              <p> {activity.answer}</p>
             </div>
           )}
 
@@ -404,6 +405,7 @@ const Week2 = () => {
           )}
         </div>
       ))}
+
       <p className="activity-badge">Activity 2</p>
       {activities.map((activity, index) => (
         <div style={{ border: "none" }} className="activity" key={index}>
@@ -480,7 +482,8 @@ const Week2 = () => {
               ))}
             </div>
           ) : (
-            <div className="answer">
+            <div className="answer d-flex align-items-center gap-2">
+              <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
               {Array.isArray(activity.answer) ? (
                 <ul>
                   {activity.answer.map((item, idx) => (
@@ -582,7 +585,8 @@ const Week2 = () => {
               ))}
             </ol>
           ) : (
-            <div className="answer">
+            <div className="answer d-flex align-items-center gap-2">
+              <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
               <p> Answer: {activity.answer}</p>
             </div>
           )}

@@ -20,7 +20,7 @@ const EndOfCourseComponent = ({ currentWeekIndex, handleNextWeekCourse }) => {
       <MyFireWorks />
       <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
         <button
-          className='btn progress-btn btn-dark'
+          className='btn progress-btn btn-dark rounded-3'
           onClick={() => navigate('/dashboard/my-courses')}
         >
           Go to My Courses {'>>>>'}

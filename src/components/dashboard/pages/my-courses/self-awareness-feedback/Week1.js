@@ -1088,7 +1088,7 @@ const Week1 = () => {
   }
 
   if (isError || assessmentError) {
-    return <div>Error loading data.</div>;
+    return <div>Take Activity to see feedback.</div>;
   }
 
   const buckets = data?.activity?.activities[5].buckets;
@@ -1224,6 +1224,7 @@ const pieChart = Object.keys(indexToChartData).map((index) => {
               style={{ width: "90%", margin: "1rem auto" }}
               className="drag-drop-activity"
             >
+              <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{"   "}
               <div className="drag-drop-section">
                 <h5 id="yes">YES</h5>
                 <ul>
@@ -1398,7 +1399,7 @@ const pieChart = Object.keys(indexToChartData).map((index) => {
       {quizQuestions.map((q, index) => (
         <div className="question-block" key={index}>
           <div className="question d-flex align-items-center gap-2">
-            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:{" "} {index + 1} </h4>
             <span>{q.question}</span>
           </div>
           <div className="options">
