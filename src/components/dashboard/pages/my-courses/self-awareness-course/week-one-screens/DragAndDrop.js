@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import React, { useState, useEffect } from 'react'
+import { useDrag, useDrop, DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import { Icon } from '@iconify/react'
 import dragdropArrow from '../../../../../../assets/selfawareness-images/dragdrop-arrowl.png'
 import bucketYes from '../../../../../../assets/selfawareness-images/bucket-yes.png'
@@ -72,63 +73,98 @@ const initialBuckets = {
   sometimes: [],
 }
 
+const ItemTypes = {
+  CARD: 'card',
+}
+
+function Card({ card, index, isDragging }) {
+  const [{ isDraggingCard }, drag] = useDrag({
+    type: ItemTypes.CARD,
+    item: { card, index },
+    collect: (monitor) => ({
+      isDraggingCard: !!monitor.isDragging(),
+    }),
+  })
+
+  return (
+    <div
+      ref={drag}
+      className={`card-item d-flex align-items-center justify-content-center ${
+        isDraggingCard || isDragging ? 'dragging' : ''
+      }`}
+    >
+      <img
+        src={cardImages[card.imageIndex]}
+        alt='card'
+        className='slider-img-card'
+      />
+    </div>
+  )
+}
+
+function Bucket({ type, bucketContent, onDrop }) {
+  const [{ isOver }, drop] = useDrop({
+    accept: ItemTypes.CARD,
+    drop: (item) => onDrop(item, type),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  })
+
+  return (
+    <div
+      ref={drop}
+      className={`bucket bucket-${type}`}
+      style={{ position: 'relative', backgroundColor: isOver ? '#f0f0f0' : '' }}
+    >
+      <div className={`${type} bucket-item`}>
+        <h3 className='mb-0'>{bucketContent.length}</h3>
+      </div>
+      <img
+        src={
+          type === 'yes'
+            ? bucketYes
+            : type === 'no'
+            ? bucketNo
+            : bucketSometimes
+        }
+        alt={`bucket${type}`}
+      />
+    </div>
+  )
+}
+
 function DragDropComponent({ onBack, onNext, formData }) {
   const [cards, setCards] = useState(formData?.cards || initialCards)
   const [buckets, setBuckets] = useState(formData?.buckets || initialBuckets)
-  const [currentCardIndex, setCurrentCardIndex] = useState(0)
   const [history, setHistory] = useState([])
+  const [currentCardIndex, setCurrentCardIndex] = useState(0) // Track current card index
 
   useEffect(() => {
-    // Load persisted state from formData
     if (formData) {
       setCards(formData.cards || initialCards)
       setBuckets(formData.buckets || initialBuckets)
     }
-    // Ensure currentCardIndex is 0 on mount
-    setCurrentCardIndex(0)
   }, [formData])
 
-  const onDragEnd = (result) => {
-    const { destination, source } = result
+  const handleDrop = (item, bucketType) => {
+    const newCards = cards.filter((_, index) => index !== item.index)
+    const droppedCard = item.card
 
-    if (!destination) {
-      return
-    }
-
-    const newCards = Array.from(cards)
-    const draggedCard = newCards.splice(currentCardIndex, 1)[0]
-
-    // Handle precise drop into the specific bucket
-    if (destination.droppableId === 'bucket-yes') {
-      setBuckets((prev) => ({
-        ...prev,
-        yes: [...prev.yes, draggedCard],
-      }))
-    } else if (destination.droppableId === 'bucket-no') {
-      setBuckets((prev) => ({
-        ...prev,
-        no: [...prev.no, draggedCard],
-      }))
-    } else if (destination.droppableId === 'bucket-sometimes') {
-      setBuckets((prev) => ({
-        ...prev,
-        sometimes: [...prev.sometimes, draggedCard],
-      }))
-    }
-
+    setBuckets((prevBuckets) => ({
+      ...prevBuckets,
+      [bucketType]: [...prevBuckets[bucketType], droppedCard],
+    }))
     setCards(newCards)
-    setCurrentCardIndex(newCards.length > 0 ? 0 : -1)
+    setCurrentCardIndex((prevIndex) => prevIndex + 1) // Move to next card
+    saveStateToHistory(newCards, buckets)
   }
 
-  const onRefresh = () => {
-    setCards(initialCards)
-    setBuckets(initialBuckets)
-    setCurrentCardIndex(0)
-  }
-
-  const sliderIndicator = (index) => {
-    const totalCards = cards ? cards.length : 0
-    return index >= initialCards.length - totalCards ? '' : 'dragged'
+  const saveStateToHistory = (cardsState, bucketsState) => {
+    setHistory((prevHistory) => [
+      ...prevHistory,
+      { cards: cardsState, buckets: bucketsState },
+    ])
   }
 
   const handleBack = () => {
@@ -136,67 +172,42 @@ function DragDropComponent({ onBack, onNext, formData }) {
       const previousState = history.pop()
       setCards(previousState.cards)
       setBuckets(previousState.buckets)
-      setCurrentCardIndex(previousState.currentCardIndex)
-      setHistory([...history]) // Update the history state
+      setCurrentCardIndex((prevIndex) => prevIndex - 1) // Move to previous card
+      setHistory([...history])
     } else {
-      onBack() // Go back to the previous screen if there are no more states in history
+      onBack()
     }
   }
 
-  const saveStateToHistory = () => {
-    setHistory((prevHistory) => [
-      ...prevHistory,
-      { cards, buckets, currentCardIndex },
-    ])
+  const onRefresh = () => {
+    setCards(initialCards)
+    setBuckets(initialBuckets)
+    setCurrentCardIndex(0) // Reset to first card
   }
 
-  useEffect(() => {
-    saveStateToHistory()
-  }, [cards, buckets, currentCardIndex])
-
-  // Determine if all cards are categorized
   const areAllCardsCategorized = () => {
     return cards.length === 0
   }
 
+  const sliderIndicator = (index) => {
+    // Check if the card has been categorized by looking in all the buckets
+    const isAnswered =
+      buckets.yes.some((card) => card.imageIndex === index) ||
+      buckets.no.some((card) => card.imageIndex === index) ||
+      buckets.sometimes.some((card) => card.imageIndex === index)
+
+    return isAnswered ? 'answered' : ''
+  }
+
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DndProvider backend={HTML5Backend}>
       <div>
         <div className='drag-drop'>
-          <Droppable droppableId='card-slider' direction='horizontal'>
-            {(provided) => (
-              <div
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                className='card-slider'
-              >
-                {currentCardIndex >= 0 && cards?.length > 0 && (
-                  <Draggable
-                    draggableId={cards[currentCardIndex]?.id}
-                    index={0}
-                  >
-                    {(provided, snapshot) => (
-                      <div
-                        className={`card-item d-flex align-items-center justify-content-center ${
-                          snapshot.isDragging ? 'dragging' : ''
-                        }`}
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <img
-                          src={cardImages[cards[currentCardIndex]?.imageIndex]}
-                          alt='card'
-                          className='slider-img-card'
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                )}
-                {provided.placeholder}
-              </div>
+          <div className='card-slider'>
+            {cards.length > 0 && (
+              <Card card={cards[0]} index={0} isDragging={false} />
             )}
-          </Droppable>
+          </div>
 
           <div className='drop-card'>
             <div className='drop-card-header'>
@@ -209,54 +220,20 @@ function DragDropComponent({ onBack, onNext, formData }) {
             </div>
 
             <div className='bucket-section mt-5 py-2'>
-              <Droppable droppableId='bucket-yes'>
-                {(provided) => (
-                  <div
-                    className='bucket bucket-yes'
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                  >
-                    <div className='yes bucket-item'>
-                      <h3 className='mb-0'>{buckets.yes.length}</h3>
-                    </div>
-                    <img src={bucketYes} alt='bucketYes' />
-                  </div>
-                )}
-              </Droppable>
-
-              <Droppable droppableId='bucket-no'>
-                {(provided) => (
-                  <div
-                    className='bucket bucket-no'
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                  >
-                    <div className='no bucket-item'>
-                      <h3 className='mb-0'>{buckets.no.length}</h3>
-                    </div>
-                    <img src={bucketNo} alt='bucketNo' />
-                  </div>
-                )}
-              </Droppable>
-
-              <Droppable droppableId='bucket-sometimes'>
-                {(provided) => (
-                  <div
-                    className='bucket bucket-sometimes'
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                  >
-                    <div className='sometimes bucket-item'>
-                      <h3 className='mb-0'>{buckets.sometimes.length}</h3>
-                    </div>
-                    <img src={bucketSometimes} alt='bucketSometimes' />
-                  </div>
-                )}
-              </Droppable>
+              {['yes', 'no', 'sometimes'].map((bucketType) => (
+                <Bucket
+                  key={bucketType}
+                  type={bucketType}
+                  bucketContent={buckets[bucketType]}
+                  onDrop={handleDrop}
+                />
+              ))}
             </div>
           </div>
         </div>
+
         <div className='refresh mt-3 ml-8'>
+          {/* Slider Indicator */}
           <div className='slider-indicator'>
             <ul className='p-0'>
               {Array.from({ length: initialCards.length }).map((_, index) => (
@@ -283,7 +260,7 @@ function DragDropComponent({ onBack, onNext, formData }) {
           </button>
         </div>
       </div>
-    </DragDropContext>
+    </DndProvider>
   )
 }
 
