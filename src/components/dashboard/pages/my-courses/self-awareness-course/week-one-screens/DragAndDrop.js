@@ -77,7 +77,7 @@ const ItemTypes = {
   CARD: 'card',
 }
 
-function Card({ card, index, isDragging }) {
+function Card({ card, index }) {
   const [{ isDraggingCard }, drag] = useDrag({
     type: ItemTypes.CARD,
     item: { card, index },
@@ -90,7 +90,7 @@ function Card({ card, index, isDragging }) {
     <div
       ref={drag}
       className={`card-item d-flex align-items-center justify-content-center ${
-        isDraggingCard || isDragging ? 'draging' : ''
+        isDraggingCard ? 'draging' : ''
       }`}
       style={{
         cursor: isDraggingCard ? 'grabbing' : 'grab', // Change the cursor based on dragging state
@@ -133,6 +133,12 @@ function Bucket({ type, bucketContent, onDrop }) {
         }
         alt={`bucket${type}`}
       />
+      {/* Display the cards dropped in the bucket */}
+      <div className="bucket-cards">
+        {bucketContent.map((card, index) => (
+          <Card key={card.id} card={card} index={index} />
+        ))}
+      </div>
     </div>
   )
 }
@@ -141,7 +147,6 @@ function DragDropComponent({ onBack, onNext, formData }) {
   const [cards, setCards] = useState(formData?.cards || initialCards)
   const [buckets, setBuckets] = useState(formData?.buckets || initialBuckets)
   const [history, setHistory] = useState([])
-  const [currentCardIndex, setCurrentCardIndex] = useState(0) // Track current card index
 
   useEffect(() => {
     if (formData) {
@@ -159,7 +164,6 @@ function DragDropComponent({ onBack, onNext, formData }) {
       [bucketType]: [...prevBuckets[bucketType], droppedCard],
     }))
     setCards(newCards)
-    setCurrentCardIndex((prevIndex) => prevIndex + 1) // Move to next card
     saveStateToHistory(newCards, buckets)
   }
 
@@ -175,7 +179,6 @@ function DragDropComponent({ onBack, onNext, formData }) {
       const previousState = history.pop()
       setCards(previousState.cards)
       setBuckets(previousState.buckets)
-      setCurrentCardIndex((prevIndex) => prevIndex - 1) // Move to previous card
       setHistory([...history])
     } else {
       onBack()
@@ -185,7 +188,6 @@ function DragDropComponent({ onBack, onNext, formData }) {
   const onRefresh = () => {
     setCards(initialCards)
     setBuckets(initialBuckets)
-    setCurrentCardIndex(0) // Reset to first card
   }
 
   const areAllCardsCategorized = () => {
@@ -193,7 +195,6 @@ function DragDropComponent({ onBack, onNext, formData }) {
   }
 
   const sliderIndicator = (index) => {
-    // Check if the card has been categorized by looking in all the buckets
     const isAnswered =
       buckets.yes.some((card) => card.imageIndex === index) ||
       buckets.no.some((card) => card.imageIndex === index) ||
@@ -208,7 +209,7 @@ function DragDropComponent({ onBack, onNext, formData }) {
         <div className='drag-drop'>
           <div className='card-slider'>
             {cards.length > 0 && (
-              <Card card={cards[0]} index={0} isDragging={false} />
+              <Card card={cards[0]} index={0} />
             )}
           </div>
 
@@ -236,7 +237,6 @@ function DragDropComponent({ onBack, onNext, formData }) {
         </div>
 
         <div className='refresh mt-3 ml-8'>
-          {/* Slider Indicator */}
           <div className='slider-indicator'>
             <ul className='p-0'>
               {Array.from({ length: initialCards.length }).map((_, index) => (

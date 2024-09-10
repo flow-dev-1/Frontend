@@ -60,122 +60,125 @@ const MyCourseCard = ({ course }) => {
   }
 
   return (
-    <div style={{ backgroundColor: '#fff' }} className='reusable-course-card'>
-      <div className='course-card' style={{ height: '100%', width: '100%' }}>
-        <div className='course-details'>
-          <div style={{ height: '250px', display: 'block', width: '100%' }}>
+    <div style={{ backgroundColor: "#fff" }} className="reusable-course-card">
+      <div className="course-card" style={{ height: "100%", width: "100%" }}>
+        <div className="course-details">
+          <div style={{ height: "250px", display: "block", width: "100%" }}>
             <img
               style={{
-                display: 'block',
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
+                display: "block",
+                width: "100%",
+                height: "100%",
+                objectFit: "cover"
               }}
               src={course?.course.image}
-              alt=''
+              alt=""
               className={
-                course?.course.description?.toLowerCase() === 'growth mindset'
-                  ? 'growth-mindset'
-                  : ''
+                course?.course.description?.toLowerCase() === "growth mindset"
+                  ? "growth-mindset"
+                  : ""
               }
             />
           </div>
 
-          <div className='px-3 py-2'>
-            <h3 style={{ color: '#329BD6', fontSize: '24px' }}>
+          <div className="px-3 py-2">
+            <h3 style={{ color: "#329BD6", fontSize: "24px" }}>
+              Knowing Yourself Better
+            </h3>
+            <h3 style={{ color: "#555", fontSize: "24px" }}>
               {course?.course.title}
             </h3>
-            <p style={{ height: '70px' }}>
+            <p style={{ height: "70px" }}>
               {truncateText(course?.course.description, 100)}
             </p>
-            <div className='d-flex icons'>
+            <div className="d-flex icons">
               <span>
-                <Icon icon='solar:user-linear' />
+                <Icon icon="solar:user-linear" />
                 {course?.course.courseEnrollment?.length}
               </span>
               <span>
-                <Icon icon='mingcute:thumb-up-line' />{' '}
+                <Icon icon="mingcute:thumb-up-line" />{" "}
                 {likesPercent(
                   course?.course.likes?.length,
                   course?.course.courseEnrollment?.length
-                )}{' '}
+                )}{" "}
                 %
               </span>
               <span>
-                <Icon icon='bi:book' />
+                <Icon icon="bi:book" />
                 {course?.progress} %
               </span>
             </div>
           </div>
         </div>
-        <div className='course-card-btn d-flex'>
+        <div className="course-card-btn d-flex">
           {/* Review/Feedback Button */}
           {course.progress === 100 ? (
             <button
               style={{
-                backgroundColor: '#fff',
-                color: '#329BD6',
-                display: 'flex',
-                justifyContent: 'center',
-                gap: '.4rem',
-                padding: '.5rem 8px',
-                border: '1px solid #329bd6',
+                backgroundColor: "#fff",
+                color: "#329BD6",
+                display: "flex",
+                justifyContent: "center",
+                gap: ".4rem",
+                padding: ".5rem 8px",
+                border: "1px solid #329bd6"
               }}
-              className='btn card-btn feedback'
-                onClick={() => navigate(`/dashboard/feedback/self-awareness`)}
+              className="btn card-btn feedback"
+              onClick={() => navigate(`/dashboard/feedback/self-awareness`)}
             >
-              <Icon icon='hugeicons:comment-01' /> Feedback
+              <Icon icon="hugeicons:comment-01" /> Feedback
             </button>
           ) : (
             <button
               style={{
-                backgroundColor: '#fff',
-                border: '1px solid #329BD6',
-                color: '#329BD6',
-                display: 'flex',
-                justifyContent: 'center',
-                gap: '.4rem',
-                width: '120px',
-                padding: '.5rem 8px',
+                backgroundColor: "#fff",
+                border: "1px solid #329BD6",
+                color: "#329BD6",
+                display: "flex",
+                justifyContent: "center",
+                gap: ".4rem",
+                width: "120px",
+                padding: ".5rem 8px"
               }}
-              className='btn card-btn preview'
-              onClick={() => openModal('review')}
+              className="btn card-btn preview"
+              onClick={() => openModal("review")}
             >
-              <Icon icon='prime:eye' /> Review
+              <Icon icon="prime:eye" /> Review
             </button>
           )}
 
           {/* Start/Resume/Completed Button */}
           <button
             style={{
-              backgroundColor: course?.progress === 100 ? '#fff' : '#329BD6',
-              color: course.progress === 100 ? '#50AA50' : '#fff',
-              display: 'flex',
-              justifyContent: 'center',
-              gap: '.4rem',
-              width: '120px',
-              padding: '.5rem 8px',
+              backgroundColor: course?.progress === 100 ? "#fff" : "#329BD6",
+              color: course.progress === 100 ? "#50AA50" : "#fff",
+              display: "flex",
+              justifyContent: "center",
+              gap: ".4rem",
+              width: "120px",
+              padding: ".5rem 8px"
             }}
-            className='btn card-btn start-resume'
+            className="btn card-btn start-resume"
             onClick={handleButtonClick}
           >
             {course?.progress === 100 ? (
-              <Icon width={25} icon='ph:seal-check-thin' />
+              <Icon width={25} icon="ph:seal-check-thin" />
             ) : (
-              <Icon icon='pepicons-print:play-circle' />
+              <Icon icon="pepicons-print:play-circle" />
             )}
             {course?.progress === 100
-              ? 'Completed'
+              ? "Completed"
               : course.progress === 0
-              ? 'Start'
-              : 'Resume'}
+              ? "Start"
+              : "Resume"}
           </button>
           {course?.progress > 0 && course?.progress < 100 && (
             <Icon
               onClick={() => navigate(`/dashboard/feedback/self-awareness`)}
-              style={{ color: '#329BD6' }}
+              style={{ color: "#329BD6" }}
               width={40}
-              icon='hugeicons:comment-01'
+              icon="hugeicons:comment-01"
             />
           )}
         </div>
@@ -184,15 +187,15 @@ const MyCourseCard = ({ course }) => {
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
-        className='custom-modal'
-        overlayClassName='custom-overlay'
-        contentLabel='Example Modal'
+        className="custom-modal"
+        overlayClassName="custom-overlay"
+        contentLabel="Example Modal"
         shouldCloseOnOverlayClick={true}
       >
-        {modalType === 'review' && (
+        {modalType === "review" && (
           <ReviewCourseInfoModal course={course} onClose={closeModal} />
         )}
-        {modalType === 'feedback' && (
+        {modalType === "feedback" && (
           <div>
             <h2>Course Feedback</h2>
             {/* Insert feedback form or content */}
@@ -201,7 +204,7 @@ const MyCourseCard = ({ course }) => {
         )}
       </Modal>
     </div>
-  )
+  );
 }
 
 export default MyCourseCard
