@@ -10,6 +10,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../services/api/user";
+import { useNavigate } from "react-router-dom";
 
 const SelfAwarenessFeedback = () => {
   const week = 1;
@@ -18,6 +19,7 @@ const SelfAwarenessFeedback = () => {
     queryKey: ["dashboard/feedback/self-awareness", courseId, week],
     queryFn: () => userService.getMyActivites(courseId, week)
   });
+    const navigate = useNavigate();
 
   const [assessmentData, setAssessmentData] = useState(null);
   const [assessmentLoading, setAssessmentLoading] = useState(true);
@@ -96,6 +98,13 @@ const SelfAwarenessFeedback = () => {
 
   return (
     <div ref={contentRef} className="feedback-container">
+      <p
+        className="back-to-course-list"
+        onClick={() => navigate("/dashboard/my-courses")}
+      >
+        <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
+        Back to My Courses
+      </p>
       {/* Week 1 */}
       <div className="week-title-container">
         <div className="week-title">
