@@ -94,6 +94,10 @@ function Card({ card, index, isDragging }) {
       }`}
       style={{
         cursor: isDraggingCard ? 'grabbing' : 'grab', // Change the cursor based on dragging state
+        visibility: isDraggingCard ? 'hidden' : 'visible', // Hide the card from its original position when dragging
+        transform: isDraggingCard ? 'scale(0.5)' : 'scale(1)', // Halve the size while dragging
+        opacity: "1", // Keep full opacity during dragging
+        transition: 'transform 0.2s ease, visibility 0s', // Smooth scaling with instant visibility toggle
       }}
     >
       <img
