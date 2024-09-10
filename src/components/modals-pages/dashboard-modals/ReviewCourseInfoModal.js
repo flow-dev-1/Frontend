@@ -1,52 +1,48 @@
-import React, { useState } from 'react'
-import { Icon } from '@iconify/react'
+import React, { useState } from "react";
+import { Icon } from "@iconify/react";
+import course_image from "../../../assets/course-image.png";
+import dot from '../../../assets/radix-icons--dot-filled.svg'
 
 export default function ReviewCourseInfoModal({ course, onClose }) {
-  const [modalIsOpen, setIsOpen] = useState(false)
+  const [modalIsOpen, setIsOpen] = useState(false);
 
   function openModal() {
-    setIsOpen(true)
+    setIsOpen(true);
   }
   function closeModal() {
-    setIsOpen(false)
+    setIsOpen(false);
   }
 
-  console.log(course)
-
   return (
-    <div className='course-info-modal'>
-      <div className='py-2 px-4'>
-        <div className='course-info-modal-header'>
-          <h2
-            className='mb-0'
-            style={{ fontFamily: 'Caveat, cursive', fontSize: '24px' }}
-          >
+    <div className="course-info-modal">
+      <div className="py-2 px-4">
+        <div className="course-info-modal-header">
+          <h2 className="mb-0" style={{ fontSize: "26px" }}>
             {course?.title}
           </h2>
           <button
-            className='close-btn'
+            className="close-btn"
             onClick={onClose}
-            style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+            style={{ border: "none", background: "none", cursor: "pointer" }}
           >
-            <Icon icon='mingcute:close-fill' />
+            <Icon icon="mingcute:close-fill" />
           </button>
         </div>
-        <hr className='w-100 h-auto mb-2' />
+        <hr className="w-100 h-auto mb-2" />
         <div>
-          {' '}
           <img
             style={{
-              width: '100%',
-              height: '160px',
-              objectFit: 'cover',
+              width: "100%",
+              height: "160px",
+              objectFit: "cover"
             }}
-            src={course?.course?.image || course?.image}
-            alt=''
+            src={course_image}
+            alt=""
           />
         </div>
-        <div className='course-info-modal-body'>
-          <p style={{ fontSize: '20px', color: '#275DAD' }}>Course Overview</p>
-          <p style={{ paddingLeft: '.5rem' }}>
+        <div className="course-info-modal-body">
+          <p style={{ fontSize: "20px", color: "#275DAD" }}>Course Overview</p>
+          <p style={{ paddingLeft: ".5rem" }}>
             Values and Goals is a comprehensive 10-week program designed for
             students in Years 3-6, building on the foundation laid in the
             previous term. This course delves deeper into the exploration of
@@ -59,13 +55,81 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
             resilience, and adaptability in the face of challenges while
             maintaining a supportive and collaborative learning environment.
           </p>
-          <div className='mt-4'>
-            <p style={{ fontSize: '20px', color: '#275DAD' }}>
+          <div className="mt-4 course-objectives">
+            <p style={{ fontSize: "20px", color: "#275DAD" }}>
               Course Objectives
             </p>
+            <div className="objectives-scroll">
+              <ul>
+                <li>
+                  <div className=" list">
+                    <img src={dot} />
+                    <p style={{ fontSize: "15px", color: "#275DAD" }}>
+                      Week 1: Introduction to Self-Awareness
+                    </p>
+                  </div>
+                  <p style={{ paddingLeft: ".5rem" }}>
+                    We’ll start by exploring what it means to be self-aware.
+                    You'll take a personality test to discover your unique
+                    traits and identify whether you align with the colors blue,
+                    green, red, or yellow. This will set the foundation for
+                    understanding how your personality influences your behavior.
+                  </p>
+                </li>
+                <li>
+                  <div className=" list">
+                    <img src={dot} />
+                  <p style={{ fontSize: "15px", color: "#275DAD" }}>
+                    Week 2: Identifying Strengths And Weaknesses
+                  </p>
+                  </div>
+                  
+                  <p style={{ paddingLeft: ".5rem" }}>
+                    We’ll focus on identifying your personal strengths and
+                    weaknesses through scenario-based activities.
+                  </p>
+                </li>
+                <li>
+                  <div className=" list">
+                    <img src={dot} />
+                  <p style={{ fontSize: "15px", color: "#275DAD" }}>
+                    Week 3: Understanding Values
+                  </p>
+                  </div>
+                  <p style={{ paddingLeft: ".5rem" }}>
+                    We’ll dive into the importance of values, how they guide
+                    your decisions, and how to identify your core values.
+                  </p>
+                </li>
+                <li>
+                  <div className=" list">
+                    <img src={dot} />
+                  <p style={{ fontSize: "15px", color: "#275DAD" }}>
+                    Week 4: Embracing A Growth Mindset
+                  </p>
+                  </div>
+                  <p style={{ paddingLeft: ".5rem" }}>
+                    We’ll explore the concept of a growth mindset and how to
+                    shift from a fixed mindset to a growth mindset.
+                  </p>
+                </li>
+                <li>
+                  <div className=" list">
+                    <img src={dot} />
+                  <p style={{ fontSize: "15px", color: "#275DAD" }}>
+                    Week 5: Emotional Intelligence
+                  </p>
+                  </div>
+                  <p style={{ paddingLeft: ".5rem" }}>
+                    We’ll learn about emotional intelligence and how to manage
+                    your emotions as well as recognize the emotions of others.
+                  </p>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
