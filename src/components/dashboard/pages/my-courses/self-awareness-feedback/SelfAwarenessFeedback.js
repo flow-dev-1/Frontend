@@ -99,9 +99,9 @@ const SelfAwarenessFeedback = () => {
   return (
     <div ref={contentRef} className="feedback-container">
       {/* Week 1 */}
-      <div>
+      <div style={{ cursor: "pointer" }}>
         <p
-          className=" m-auto  hover:cursor-pointer "
+          className=" m-auto  "
           onClick={() => navigate("/dashboard/my-courses")}
         >
           <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
