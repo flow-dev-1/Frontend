@@ -232,7 +232,6 @@ function DragDropComponent({ onBack, onNext, formData }) {
         </div>
 
         <div className='refresh mt-3 ml-8'>
-          {/* Slider Indicator */}
           <div className='slider-indicator'>
             <ul className='p-0'>
               {Array.from({ length: initialCards.length }).map((_, index) => (
