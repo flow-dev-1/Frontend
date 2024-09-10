@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react";
 import FinalReport from "./FinalReport";
 import userService from "../../../../../services/api/user";
 import { useQuery } from "@tanstack/react-query";
-
+// rgba(253, 72, 61, 0.2);
 let questions = [
   {
     question:
@@ -1106,8 +1106,7 @@ const Week1 = () => {
   );
   // console.log(selectedAnswers)
 
-  console.log(questions);
-
+  // console.log(questions);
 
   const activities = [
     {
@@ -1143,14 +1142,31 @@ const Week1 = () => {
     }
   ];
   const activityAnswers = data?.activity?.activities?.[12]?.answers || [];
-  console.log(activityAnswers);
+  // console.log(activityAnswers);
   // Map through answers to create restActivities
-  const restActivities = activityAnswers.map((answer, index) => ({
-    activity: 4, // Assuming activity number is 4 for all
-    question: answer.questionText,
-    answer: answer.answer,
-    feedback: "Feedback based on this question." // You can customize or provide actual feedback
-  }));
+  const restActivities = [
+    {
+      activity: 4,
+      question: "Do you agree with this new result?",
+      answer: data?.activity?.activities?.[13].answers[2].answer,
+      feedback: "Figma ipsum component variant main layer..."
+    },
+    {
+      activity: 4,
+      question:
+        "Did you get the same color as the color you identified for yourself earlier?",
+      answer: data?.activity?.activities?.[13].answers[0].answer,
+
+      feedback: "Figma ipsum component variant main layer..."
+    },
+    {
+      activity: 4,
+      question: "What was different? Why do you think this was different?",
+      answer: data?.activity?.activities?.[13].answers[1].answer,
+
+      feedback: "Figma ipsum component variant main layer..."
+    }
+  ];
 
   // console.log(data?.activity?.activities?.[7].answer.selectedPersonality);
   questions = questions.map((question) => {
@@ -1166,7 +1182,6 @@ const Week1 = () => {
     };
   });
 
-  
   const indexCount = questions.reduce((count, question) => {
     question.options.forEach((option) => {
       if (option.checked) {
@@ -1194,20 +1209,19 @@ const Week1 = () => {
 
   // Prepare pie chart data
 
-const pieChart = Object.keys(indexToChartData).map((index) => {
-  const { name, color } = indexToChartData[index];
-  const value = indexCount[index] || 0;
-  const percentage =
-    totalCount > 0 ? Math.round((value / totalCount) * 100) : 0; // Round percentage
-  return {
-    name,
-    value: percentage, // Set percentage value
-    color
-  };
-});
+  const pieChart = Object.keys(indexToChartData).map((index) => {
+    const { name, color } = indexToChartData[index];
+    const value = indexCount[index] || 0;
+    const percentage =
+      totalCount > 0 ? Math.round((value / totalCount) * 100) : 0; // Round percentage
+    return {
+      name,
+      value: percentage, // Set percentage value
+      color
+    };
+  });
 
-  console.log(pieChart);
-
+  // console.log(pieChart);
 
   return (
     <div className="week-content">
@@ -1222,14 +1236,20 @@ const pieChart = Object.keys(indexToChartData).map((index) => {
           {activity?.answer.yes ? (
             <div
               style={{ width: "90%", margin: "1rem auto" }}
-              className="drag-drop-activity"
+              className="drag-drop-activity gap-2"
             >
-              <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{"   "}
+              <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>
+              {"   "}
               <div className="drag-drop-section">
                 <h5 id="yes">YES</h5>
                 <ul>
                   {activity?.answer.yes.map((item, idx) => (
-                    <li key={idx}>{item}</li>
+                    <strong>
+                      <li key={idx}>
+                        {" "}
+                        {idx + 1} {item}
+                      </li>
+                    </strong>
                   ))}
                 </ul>
               </div>
@@ -1237,7 +1257,12 @@ const pieChart = Object.keys(indexToChartData).map((index) => {
                 <h5 id="no">NO</h5>
                 <ul>
                   {activity?.answer.no.map((item, idx) => (
-                    <li key={idx}>{item}</li>
+                    <strong>
+                      <li key={idx}>
+                        {" "}
+                        {idx + 1} {item}
+                      </li>
+                    </strong>
                   ))}
                 </ul>
               </div>
@@ -1245,7 +1270,12 @@ const pieChart = Object.keys(indexToChartData).map((index) => {
                 <h5 id="sometimes">SOMETIMES</h5>
                 <ul>
                   {activity?.answer.sometimes.map((item, idx) => (
-                    <li key={idx}>{item}</li>
+                    <strong>
+                      <li key={idx}>
+                        {" "}
+                        {idx + 1} {item}
+                      </li>
+                    </strong>
                   ))}
                 </ul>
               </div>
@@ -1331,7 +1361,9 @@ const pieChart = Object.keys(indexToChartData).map((index) => {
       {questions.map((q, index) => (
         <div className="question-block" key={index}>
           <p className="question d-flex align-items-center gap-2">
-            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
+              Question: {index + 1}{" "}
+            </h4>
             <span> {q.question}</span>
           </p>
           <div className="options">
@@ -1369,11 +1401,11 @@ const pieChart = Object.keys(indexToChartData).map((index) => {
               <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>
               <p style={{ fontSize: "14px" }}>{activity.answer}</p>
             </div>
-            <Icon
+            {/* <Icon
               style={{ color: "#D6D6D6" }}
               width={20}
               icon="hugeicons:comment-01"
-            />
+            /> */}
           </p>
           <p className="feedback">
             <div id="badge">Feedback:</div>
@@ -1386,11 +1418,11 @@ const pieChart = Object.keys(indexToChartData).map((index) => {
               }}
             >
               <div className="feedback-card">{activity.feedback}</div>
-              <Icon
+              {/* <Icon
                 style={{ color: "#275DAD" }}
                 width={20}
                 icon="lucide:edit"
-              />
+              /> */}
             </div>
           </p>
         </div>
@@ -1399,7 +1431,9 @@ const pieChart = Object.keys(indexToChartData).map((index) => {
       {quizQuestions.map((q, index) => (
         <div className="question-block" key={index}>
           <div className="question d-flex align-items-center gap-2">
-            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:{" "} {index + 1} </h4>
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
+              Question: {index + 1}{" "}
+            </h4>
             <span>{q.question}</span>
           </div>
           <div className="options">

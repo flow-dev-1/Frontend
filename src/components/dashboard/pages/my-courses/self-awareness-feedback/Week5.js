@@ -548,27 +548,30 @@ const Week5 = () => {
 
           {/* Check if answer is an array and render conditionally */}
           {Array.isArray(activity.answer) ? (
-            <ol className="answer-options" style={{ paddingLeft: "1.5rem" }}>
-              {activity.answer.length === 2 ? (
-                <>
-                  <li style={{ marginBottom: ".5rem", fontSize: "14px" }}>
-                    <strong> I will </strong> {activity.answer[0]}
-                  </li>
-                  <li style={{ marginBottom: ".5rem", fontSize: "14px" }}>
-                    <strong> I will not </strong> {activity.answer[1]}
-                  </li>
-                </>
-              ) : (
-                activity.answer.map((item, idx) => (
-                  <li
-                    key={idx}
-                    style={{ marginBottom: ".5rem", fontSize: "14px" }}
-                  >
-                    {idx + 1}. {item}
-                  </li>
-                ))
-              )}
-            </ol>
+            <div className="d-flex  gap-2">
+              <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+              <ol className="answer-options" style={{ paddingLeft: "1.5rem" }}>
+                {activity.answer.length === 2 ? (
+                  <>
+                    <li style={{ marginBottom: ".5rem", fontSize: "14px" }}>
+                      <strong> I will </strong> {activity.answer[0]}
+                    </li>
+                    <li style={{ marginBottom: ".5rem", fontSize: "14px" }}>
+                      <strong> I will not </strong> {activity.answer[1]}
+                    </li>
+                  </>
+                ) : (
+                  activity.answer.map((item, idx) => (
+                    <li
+                      key={idx}
+                      style={{ marginBottom: ".5rem", fontSize: "14px" }}
+                    >
+                      {idx + 1}. {item}
+                    </li>
+                  ))
+                )}
+              </ol>
+            </div>
           ) : (
             <div className="answer d-flex align-items-center gap-2">
               <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
@@ -664,7 +667,9 @@ const Week5 = () => {
       {questionsQuiz.map((q, index) => (
         <div className="question-block" key={index}>
           <p className="question d-flex align-items-center gap-2">
-            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:{" "}{index + 1 }</h4>
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
+              Question:{index + 1}
+            </h4>
             <span> {q.question}</span>
           </p>
           <div className="options">
