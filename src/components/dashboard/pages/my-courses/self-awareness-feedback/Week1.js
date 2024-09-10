@@ -1256,11 +1256,11 @@ const pieChart = Object.keys(indexToChartData).map((index) => {
                 <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
                 <p style={{ fontSize: "14px" }}>{activity?.answer}</p>
               </div>
-              <Icon
+              {/* <Icon
                 style={{ color: "#D6D6D6" }}
                 width={20}
                 icon="hugeicons:comment-01"
-              />
+              /> */}
             </p>
           )}
 
@@ -1275,11 +1275,11 @@ const pieChart = Object.keys(indexToChartData).map((index) => {
               }}
             >
               <div className="feedback-card">{activity?.feedback}</div>
-              <Icon
+              {/* <Icon
                 style={{ color: "#275DAD" }}
                 width={20}
                 icon="lucide:edit"
-              />
+              /> */}
             </div>
           </p>
         </div>
@@ -1300,11 +1300,11 @@ const pieChart = Object.keys(indexToChartData).map((index) => {
                 {activity?.explanation}
               </p>
             </div>
-            <Icon
+            {/* <Icon
               style={{ color: "#D6D6D6" }}
               width={20}
               icon="hugeicons:comment-01"
-            />
+            /> */}
           </p>
 
           <p className="feedback">
@@ -1318,11 +1318,11 @@ const pieChart = Object.keys(indexToChartData).map((index) => {
               }}
             >
               <div className="feedback-card">{activity?.feedback}</div>
-              <Icon
+              {/* <Icon
                 style={{ color: "#275DAD" }}
                 width={20}
                 icon="lucide:edit"
-              />
+              /> */}
             </div>
           </p>
         </div>
