@@ -215,7 +215,7 @@ const Week2 = () => {
 
         const assessmentForChecked =
           data?.existingAssessment?.assessments[0]?.assessment?.answers;
-    // console.log(data?.existingAssessment?.assessments[0]?.assessment?.answers[5]);
+        // console.log(data?.existingAssessment?.assessments[0]?.assessment?.answers[5]);
         // Ensure that assessmentForChecked is valid before slicing
         if (assessmentForChecked && assessmentForChecked.length >= 5) {
           const valuesToCheck = assessmentForChecked.slice(0, 5);
@@ -328,7 +328,9 @@ const Week2 = () => {
       activity: 1,
       question:
         "What activity do you enjoy the most, and why do you think you are good at it?",
-      answer: assessmentData?.existingAssessment?.assessments[0]?.assessment?.answers[5],
+      answer:
+        assessmentData?.existingAssessment?.assessments[0]?.assessment
+          ?.answers[5],
       feedback: "Figma ipsum component variant main layer..."
     },
 
@@ -336,7 +338,9 @@ const Week2 = () => {
       activity: 2, // New activity based on image
       question:
         "When working in a group, what role do you naturally take on (e.g., leader, planner, helper)? Can you give an example?",
-      answer: assessmentData?.existingAssessment?.assessments[0]?.assessment?.answers[7],
+      answer:
+        assessmentData?.existingAssessment?.assessments[0]?.assessment
+          ?.answers[7],
       feedback:
         "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
     },
@@ -344,7 +348,9 @@ const Week2 = () => {
       activity: 3, // New activity based on image
       question:
         "Is there a task or subject that you avoid because you find it difficult? Why do you think it’s challenging for you?",
-      answer: assessmentData?.existingAssessment?.assessments[0]?.assessment?.answers[8],
+      answer:
+        assessmentData?.existingAssessment?.assessments[0]?.assessment
+          ?.answers[8],
       feedback:
         "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
     }
@@ -357,9 +363,7 @@ const Week2 = () => {
       {actviity1.map((activity, index) => (
         <div style={{ border: "none" }} className="activity" key={index}>
           <p className="question d-flex align-items-center gap-2">
-            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
-              Question: 
-            </h4>
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
             <span> {activity.question}</span>
           </p>
 
@@ -438,7 +442,13 @@ const Week2 = () => {
                   }}
                 >
                   {activity.answer.strengths.map((item, idx) => (
-                    <li key={idx}>{item}</li>
+                    <div className="d-flex align-items-center gap-2">
+                      <Icon
+                        icon="radix-icons:dot-filled"
+                        style={{ color: "#5B616A" }}
+                      />
+                      <li key={idx}>{item}</li>
+                    </div>
                   ))}
                 </ul>
               </div>
@@ -460,7 +470,13 @@ const Week2 = () => {
                   }}
                 >
                   {activity.answer.weaknesses.map((item, idx) => (
-                    <li key={idx}>{item}</li>
+                    <div className="d-flex align-items-center gap-2">
+                      <Icon
+                        icon="radix-icons:dot-filled"
+                        style={{ color: "#5B616A" }}
+                      />
+                      <li key={idx}>{item}</li>
+                    </div>
                   ))}
                 </ul>
               </div>
@@ -474,7 +490,11 @@ const Week2 = () => {
               className="answer-options"
             >
               {activity.answer.map((item, idx) => (
-                <div>
+                <div className=" d-flex ">
+                  <Icon
+                    icon="radix-icons:dot-filled"
+                    style={{ color: "#5B616A" }}
+                  />
                   <p style={{ fontSize: "14px" }} className="answer-option">
                     {item}
                   </p>
@@ -487,7 +507,13 @@ const Week2 = () => {
               {Array.isArray(activity.answer) ? (
                 <ul>
                   {activity.answer.map((item, idx) => (
-                    <li key={idx}>{item}</li>
+                    <div className="d-flex align-items-center gap-2">
+                      <Icon
+                        icon="radix-icons:dot-filled"
+                        style={{ color: "#5B616A" }}
+                      />
+                      <li key={idx}>{item}</li>
+                    </div>
                   ))}
                 </ul>
               ) : (
@@ -524,7 +550,7 @@ const Week2 = () => {
         <div className="question-block" key={index}>
           <p className="question d-flex align-items-center gap-2">
             <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
-              Question: {index + 1}
+              Question{index + 1}:
             </h4>
             <span> {q.question}</span>
           </p>
@@ -543,7 +569,7 @@ const Week2 = () => {
                   {option.isCorrect ? (
                     <span
                       style={{ color: "#50AA50" }}
-                      className="d-flex align-items-center justify-content-center gap-1 "
+                      className="d-flex align-items-center gap-2 align-items-center justify-content-center gap-1 "
                     >
                       <Icon width={17} icon="ph:seal-check-light" />
                       Correct
@@ -551,7 +577,7 @@ const Week2 = () => {
                   ) : (
                     <span
                       style={{ color: "#FD483D" }}
-                      className="d-flex align-items-center justify-content-center gap-1"
+                      className="d-flex align-items-center gap-2 align-items-center justify-content-center gap-1"
                     >
                       <Icon width={17} icon="mdi:cross-circle-outline" />
                       Wrong
@@ -567,7 +593,7 @@ const Week2 = () => {
         <div style={{ border: "none" }} className="activity" key={index}>
           <p className="question d-flex align-items-center gap-2">
             <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
-              Question: {index + 6}
+              Question{index + 6}:
             </h4>
             <span>{activity.question}</span>
           </p>

@@ -11,6 +11,7 @@
   font-weight: bold;
   color: #5b616a;
   font-size: 14px;
+  width: fit-content;
 }
 
 .answer {
@@ -61,6 +62,7 @@ div#badge {
 
 .question-block {
   margin: 16px 0;
+  /* width: 100%; */
 }
 
 .question-text {
@@ -89,29 +91,33 @@ div#badge {
 }
 
 .color-label {
-  padding: 4px 8px;
+  padding: 2px 4px;
   text-align: center;
   width: 70px;
-  border-radius: 25px;
-  font-size: 12px;
-  color: white;
+  border-radius: 27px;
+  font-size: 13px;
   text-align: center;
 }
 
 .color-label.red {
-  background-color: #f28b82;
+  background-color: rgba(253, 72, 61, 0.2);
+  color: #FD483D;
+
 }
 
 .color-label.green {
-  background-color: #81c995;
+  background-color: #27AE6033;
+  color: #27AE60;
 }
 
 .color-label.blue {
-  background-color: #aecbfa;
+  background-color: #0093FF33;
+  color: #0093FF;
 }
 
 .color-label.yellow {
-  background-color: #fdd663;
+  background-color: #FEF90033;
+  color: #FDC028;
 }
 
 .personality-feedback {

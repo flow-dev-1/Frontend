@@ -428,7 +428,7 @@ const Week4 = () => {
           const rightValue = rightItemsArray[0][match.right];
           return `${leftValue} - ${rightValue}`;
         });
-          const combinedArray2 = matchCount1.map((match) => {
+        const combinedArray2 = matchCount1.map((match) => {
           const leftValue = leftItemsArray[0][match.left];
           const rightValue = rightItemsArray[0][match.right];
           return `${leftValue} - ${rightValue}`;
@@ -436,84 +436,83 @@ const Week4 = () => {
 
         console.log(combinedArray1);
 
-     if (assessmentForChecked && assessmentForChecked.length >= 5) {
-       const valuesToCheck = assessmentForChecked;
-       console.log(valuesToCheck);
+        if (assessmentForChecked && assessmentForChecked.length >= 5) {
+          const valuesToCheck = assessmentForChecked;
+          console.log(valuesToCheck);
 
-       questionsQuiz = questionsQuiz.map((question, index) => {
-         return {
-           ...question,
-           options: question.options.map((option, optionIndex) => {
-             let isChecked = false;
+          questionsQuiz = questionsQuiz.map((question, index) => {
+            return {
+              ...question,
+              options: question.options.map((option, optionIndex) => {
+                let isChecked = false;
 
-             // Mark options based on assessmentForChecked
-             if (optionIndex === valuesToCheck[index]) {
-               isChecked = true;
-             }
+                // Mark options based on assessmentForChecked
+                if (optionIndex === valuesToCheck[index]) {
+                  isChecked = true;
+                }
 
-             // Check if it's the 9th question and update based on combinedArray1
-             if (index === 8) {
-               combinedArray1.forEach((selectedAnswer) => {
-                 question.options.forEach((option) => {
-                   const optionText = option.label.trim().toLowerCase();
-                   const selectedAnswerText = selectedAnswer
-                     .trim()
-                     .toLowerCase();
+                // Check if it's the 9th question and update based on combinedArray1
+                if (index === 8) {
+                  combinedArray1.forEach((selectedAnswer) => {
+                    question.options.forEach((option) => {
+                      const optionText = option.label.trim().toLowerCase();
+                      const selectedAnswerText = selectedAnswer
+                        .trim()
+                        .toLowerCase();
 
-                   if (optionText.includes(selectedAnswerText)) {
-                     if (option.isCorrect) {
-                       console.log(`${selectedAnswer} is Correct`);
-                     } else {
-                       console.log(`${selectedAnswer} is Incorrect`);
-                     }
-                   }
-                 });
-               });
-             }
+                      if (optionText.includes(selectedAnswerText)) {
+                        if (option.isCorrect) {
+                          console.log(`${selectedAnswer} is Correct`);
+                        } else {
+                          console.log(`${selectedAnswer} is Incorrect`);
+                        }
+                      }
+                    });
+                  });
+                }
 
-             // Check if it's the 10th question and update based on combinedArray2
-             if (index === 9) {
-               combinedArray2.forEach((selectedAnswer) => {
-                 question.options.forEach((option) => {
-                   const optionText = option.label.trim().toLowerCase();
-                   const selectedAnswerText = selectedAnswer
-                     .trim()
-                     .toLowerCase();
+                // Check if it's the 10th question and update based on combinedArray2
+                if (index === 9) {
+                  combinedArray2.forEach((selectedAnswer) => {
+                    question.options.forEach((option) => {
+                      const optionText = option.label.trim().toLowerCase();
+                      const selectedAnswerText = selectedAnswer
+                        .trim()
+                        .toLowerCase();
 
-                   if (optionText.includes(selectedAnswerText)) {
-                     if (option.isCorrect) {
-                       console.log(`${selectedAnswer} is Correct`);
-                     } else {
-                       console.log(`${selectedAnswer} is Incorrect`);
-                     }
-                   }
-                 });
-               });
+                      if (optionText.includes(selectedAnswerText)) {
+                        if (option.isCorrect) {
+                          console.log(`${selectedAnswer} is Correct`);
+                        } else {
+                          console.log(`${selectedAnswer} is Incorrect`);
+                        }
+                      }
+                    });
+                  });
 
-               // Update isChecked based on matchCount2 for the 10th question
-               matchCount2.forEach((match) => {
-                 if (match.left === 10 || match.right === 10) {
-                   if (
-                     optionIndex === match.left ||
-                     optionIndex === match.right
-                   ) {
-                     isChecked = true;
-                   }
-                 }
-               });
-             }
+                  // Update isChecked based on matchCount2 for the 10th question
+                  matchCount2.forEach((match) => {
+                    if (match.left === 10 || match.right === 10) {
+                      if (
+                        optionIndex === match.left ||
+                        optionIndex === match.right
+                      ) {
+                        isChecked = true;
+                      }
+                    }
+                  });
+                }
 
-             return {
-               ...option,
-               checked: isChecked
-             };
-           })
-         };
-       });
-     } else {
-       console.error("Assessment answers are missing or incomplete.");
-     }
-
+                return {
+                  ...option,
+                  checked: isChecked
+                };
+              })
+            };
+          });
+        } else {
+          console.error("Assessment answers are missing or incomplete.");
+        }
       } catch (error) {
         setAssessmentError(error);
       } finally {
@@ -574,31 +573,45 @@ const Week4 = () => {
           {/* Check if answer is an array, object, or string and render accordingly */}
           {Array.isArray(activity.answer) ? (
             <ul className="answer-options4" style={{ paddingLeft: "1.5rem" }}>
-              {activity.answer.map((item, idx) => (
-                <li
-                  key={idx}
-                  style={{ marginBottom: ".5rem", fontSize: "14px" }}
-                >
-                  {item}
-                </li>
-              ))}
+              <div className="answer d-flex align-items-center gap-2">
+                <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+                {activity.answer.map((item, idx) => (
+                  <li
+                    key={idx}
+                    style={{ marginBottom: ".5rem", fontSize: "14px" }}
+                  >
+                    <Icon
+                      icon="radix-icons:dot-filled"
+                      style={{ color: "#5B616A" }}
+                    />
+                    {item}
+                  </li>
+                ))}
+              </div>
             </ul>
           ) : typeof activity.answer === "object" &&
             activity.answer !== null ? (
             <ol className="answer-options" style={{ paddingLeft: "1.5rem" }}>
-              {Object.entries(activity.answer).map(([key, value], idx) => (
-                <li
-                  key={idx}
-                  style={{ marginBottom: ".5rem", fontSize: "14px" }}
-                >
-                  <strong>{idx + 1}.</strong> {value}
-                </li>
-              ))}
+              <div className="d-flex  gap-2">
+                <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+                <div>
+                  {Object.entries(activity.answer).map(([key, value], idx) => (
+                    <li
+                      key={idx}
+                      style={{ marginBottom: ".5rem", fontSize: "14px" }}
+                    >
+                      <strong>{idx + 1}.</strong> {value}
+                    </li>
+                  ))}
+                </div>
+              </div>
             </ol>
           ) : (
-            <div className="answer d-flex align-items-center gap-2">
-              <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
-              <p>{activity.answer}</p>
+            <div className="answer d-flex gap-2">
+              <div className="d-flex  gap-2">
+                <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+                <p>{activity.answer}</p>
+              </div>
             </div>
           )}
 
@@ -631,7 +644,7 @@ const Week4 = () => {
         <div className="question-block" key={index}>
           <p className="question d-flex align-items-center gap-2">
             <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
-              Question {index + 1}:
+              Question{index + 1}:
             </h4>
             <span> {q.question}</span>
           </p>

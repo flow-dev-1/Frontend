@@ -416,14 +416,19 @@ const Week3 = () => {
           {/* Check if answer is an array and render as an ordered list */}
           {Array.isArray(activity.answer) ? (
             <ol className="answer-options" style={{ paddingLeft: "1.5rem" }}>
-              {activity.answer.map((item, idx) => (
-                <li
-                  key={idx}
-                  style={{ marginBottom: ".5rem", fontSize: "14px" }}
-                >
-                  {idx + 1}. {item}
-                </li>
-              ))}
+              <div className="d-flex  gap-2">
+                <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+                <div>
+                  {activity.answer.map((item, idx) => (
+                    <li
+                      key={idx}
+                      style={{ marginBottom: ".5rem", fontSize: "14px" }}
+                    >
+                      {idx + 1}. {item}
+                    </li>
+                  ))}
+                </div>
+              </div>
             </ol>
           ) : (
             <div className="answer d-flex align-items-center gap-2">
@@ -445,11 +450,11 @@ const Week3 = () => {
                 }}
               >
                 <div className="feedback-card">{activity.feedback}</div>
-                <Icon
+                {/* <Icon
                   style={{ color: "#275DAD" }}
                   width={20}
                   icon="lucide:edit"
-                />
+                /> */}
               </div>
             </div>
           )}
@@ -461,7 +466,7 @@ const Week3 = () => {
         <div className="question-block" key={index}>
           <p className="question d-flex align-items-center gap-2">
             <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
-              Question {index + 1}:
+              Question{index + 1}:
             </h4>
             <span> {q.question}</span>
           </p>
