@@ -43,7 +43,6 @@
 }
 
 .about-courses-menu {
- 
   color: #ffffff;
   font-size: 14px;
   display: flex;
@@ -573,4 +572,28 @@ label {
 
 .course-card-btn {
   gap: 1rem;
+}
+
+.bucket:hover,
+.bucket.dragging-over {
+  /* Change background color when dragging over */
+  width: 150px;
+  height: 150px;
+}
+
+.bucket-item {
+  position: relative; /* Ensure contents stay within the bucket */
+}
+
+.bucket img {
+  width: 100px; /* Adjust to ensure it fits inside the bucket */
+}
+
+.droppable-placeholder {
+  display: none; /* Ensure placeholder doesn't affect layout */
+}
+
+.card-item.dragging {
+  transform: scale(1); /* Reduce size while dragging */
+  opacity: 1; /* Make the card semi-transparent while dragging */
 }

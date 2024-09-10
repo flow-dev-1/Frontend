@@ -39,7 +39,7 @@ function Sidebar() {
               className={`link ${isActiveLink('/dashboard') ? 'active' : ''}`}
               onClick={closeSidebar}
             >
-              <Icon icon='mdi:view-dashboard' className='sidebar-icon' />
+              <Icon icon='ion:grid-outline' className='sidebar-icon' />
               Overview
             </Link>
           </li>
@@ -52,7 +52,7 @@ function Sidebar() {
               }`}
               onClick={closeSidebar}
             >
-              <Icon icon='iconamoon:profile-fill' className='sidebar-icon' />
+              <Icon icon='uiw:user-add' className='sidebar-icon' />
               Profile
             </Link>
           </li>
@@ -64,7 +64,7 @@ function Sidebar() {
               }`}
               onClick={closeSidebar}
             >
-              <Icon icon='mdi:book-open-variant' className='sidebar-icon' />
+              <Icon icon='bi:book' className='sidebar-icon' />
               My Course
             </Link>
           </li>
@@ -77,7 +77,7 @@ function Sidebar() {
               }`}
               onClick={closeSidebar}
             >
-              <Icon icon='mdi:lifebuoy' className='sidebar-icon' />
+              <Icon icon='ph:users-light' className='sidebar-icon' />
               Support
             </Link>
           </li>
@@ -90,7 +90,7 @@ function Sidebar() {
               }`}
               onClick={closeSidebar}
             >
-              <Icon icon='mdi:credit-card-outline' className='sidebar-icon' />
+              <Icon width={26} icon='solar:dollar-outline' className='sidebar-icon' />
               Payment History
             </Link>
           </li>
