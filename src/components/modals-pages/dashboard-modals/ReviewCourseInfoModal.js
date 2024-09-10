@@ -12,6 +12,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
   function closeModal() {
     setIsOpen(false);
   }
+// console.log(course?.image)
 
   return (
     <div className="course-info-modal">
@@ -36,7 +37,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
               height: "160px",
               objectFit: "cover"
             }}
-            src={course_image}
+            src={course?.image}
             alt=""
           />
         </div>
@@ -79,11 +80,11 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
                 <li>
                   <div className=" list">
                     <img src={dot} />
-                  <p style={{ fontSize: "15px", color: "#275DAD" }}>
-                    Week 2: Identifying Strengths And Weaknesses
-                  </p>
+                    <p style={{ fontSize: "15px", color: "#275DAD" }}>
+                      Week 2: Identifying Strengths And Weaknesses
+                    </p>
                   </div>
-                  
+
                   <p style={{ paddingLeft: ".5rem" }}>
                     We’ll focus on identifying your personal strengths and
                     weaknesses through scenario-based activities.
@@ -92,9 +93,9 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
                 <li>
                   <div className=" list">
                     <img src={dot} />
-                  <p style={{ fontSize: "15px", color: "#275DAD" }}>
-                    Week 3: Understanding Values
-                  </p>
+                    <p style={{ fontSize: "15px", color: "#275DAD" }}>
+                      Week 3: Understanding Values
+                    </p>
                   </div>
                   <p style={{ paddingLeft: ".5rem" }}>
                     We’ll dive into the importance of values, how they guide
@@ -104,9 +105,9 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
                 <li>
                   <div className=" list">
                     <img src={dot} />
-                  <p style={{ fontSize: "15px", color: "#275DAD" }}>
-                    Week 4: Embracing A Growth Mindset
-                  </p>
+                    <p style={{ fontSize: "15px", color: "#275DAD" }}>
+                      Week 4: Embracing A Growth Mindset
+                    </p>
                   </div>
                   <p style={{ paddingLeft: ".5rem" }}>
                     We’ll explore the concept of a growth mindset and how to
@@ -116,9 +117,9 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
                 <li>
                   <div className=" list">
                     <img src={dot} />
-                  <p style={{ fontSize: "15px", color: "#275DAD" }}>
-                    Week 5: Emotional Intelligence
-                  </p>
+                    <p style={{ fontSize: "15px", color: "#275DAD" }}>
+                      Week 5: Emotional Intelligence
+                    </p>
                   </div>
                   <p style={{ paddingLeft: ".5rem" }}>
                     We’ll learn about emotional intelligence and how to manage
