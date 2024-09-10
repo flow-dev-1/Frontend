@@ -99,13 +99,15 @@ const SelfAwarenessFeedback = () => {
   return (
     <div ref={contentRef} className="feedback-container">
       {/* Week 1 */}
-      <p
-        className="back-to-course-list"
-        onClick={() => navigate("/dashboard/my-courses")}
-      >
-        <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
-        Back to My Courses
-      </p>
+      <div>
+        <p
+          className=" m-auto  hover:cursor-pointer "
+          onClick={() => navigate("/dashboard/my-courses")}
+        >
+          <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
+          Back to My Courses
+        </p>
+      </div>
       <div className="week-title-container">
         <div className="week-title">
           <h2 onClick={() => toggleWeek(1)} style={{ fontSize: "24px" }}>
