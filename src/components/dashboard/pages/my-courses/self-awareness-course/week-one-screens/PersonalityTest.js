@@ -231,7 +231,6 @@ export default function PersonalityTest({
     }
   }
 
-  const chartDat = localStorage.setItem("chartData", chartData)
 
   // Handle question selection
   const handleQuestionCheck = (questionIndex, optionIndex) => {

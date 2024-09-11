@@ -43,8 +43,33 @@ const { data, isLoading, isError } = useQuery({
   queryFn: () => userService.getMyActivites(course.course._id, week)
 });
 
+  const [assessmentData, setAssessmentData] = useState(null);
+  const [assessmentLoading, setAssessmentLoading] = useState(true);
+  const [assessmentError, setAssessmentError] = useState(null);
+  const [quizQuestions, setQuizQuestions] = useState([]);
+  console.log(data);
+  useEffect(() => {
+    const fetchAssessmentData = async () => {
+      setAssessmentLoading(true);
+      try {
+        const data = await userService.getMyAssessment(courseId, week);
+        setAssessmentData(data);
+      } catch (error) {
+        setAssessmentError(error);
+      } finally {
+        setAssessmentLoading(false);
+      }
+    };
+
+    fetchAssessmentData();
+  }, [courseId, week]);
+
+  const assessments = assessmentData?.existingAssessment.assessments;
+  const percent = assessmentData?.existingAssessment.rating;
+  const color = assessmentData?.existingAssessment?.personalityColor;
+// console.log(assessments)
 // Check if data.activity exists and save it under one key 'activity1' in local storage
-if (data?.activity) {
+if (data?.activity && assessments) {
   const activities = data.activity.activities;
 
   // Create an object with week and activities
@@ -52,9 +77,20 @@ if (data?.activity) {
     week: week,
     activities: activities
   };
+  const assessmentData = {
+    week:week,
+    percentage:percent,
+    assessments:assessments,
+    personalityColor:color
+  }
 
   // Store the object in local storage under the key 'activity1'
   localStorage.setItem("week-1-activityData", JSON.stringify(activityData));
+  localStorage.setItem(
+    "weekOneAssessmentData",
+    JSON.stringify({ formData: assessmentData })
+  );
+
 
   console.log("Week and activities saved to localStorage under 'activity1'");
 }
