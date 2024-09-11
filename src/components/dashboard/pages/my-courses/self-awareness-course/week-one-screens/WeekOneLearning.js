@@ -37,30 +37,29 @@ export default function WeekOneLearning({
     )
     return savedState ? JSON.parse(savedState) : 1
   })
-const week = 1;
-const { data, isLoading, isError } = useQuery({
-  queryKey: ["dashboard/self-awareness-course", course.course._id, week],
-  queryFn: () => userService.getMyActivites(course.course._id, week)
-});
+  const week = 1
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['dashboard/self-awareness-course', course?.course?._id, week],
+    queryFn: () => userService.getMyActivites(course?.course?._id, week),
+  })
 
-// Check if data.activity exists and save it under one key 'activity1' in local storage
-if (data?.activity) {
-  const activities = data.activity.activities;
+  // Check if data.activity exists and save it under one key 'activity1' in local storage
+  if (data?.activity) {
+    const activities = data.activity.activities
 
-  // Create an object with week and activities
-  const activityData = {
-    week: week,
-    activities: activities
-  };
+    // Create an object with week and activities
+    const activityData = {
+      week: week,
+      activities: activities,
+    }
 
-  // Store the object in local storage under the key 'activity1'
-  localStorage.setItem("week-1-activityData", JSON.stringify(activityData));
+    // Store the object in local storage under the key 'activity1'
+    localStorage.setItem('week-1-activityData', JSON.stringify(activityData))
 
-  console.log("Week and activities saved to localStorage under 'activity1'");
-}
+    console.log("Week and activities saved to localStorage under 'activity1'")
+  }
 
-console.log(data?.activity);
-
+  console.log(data?.activity)
 
   useEffect(() => {
     const canSee = localStorage.getItem(`${courseId}-can-see`)
@@ -106,11 +105,11 @@ console.log(data?.activity);
       userService
         .postMyActivity(course.course._id, stringifiedFormData)
         .then((response) => {
-          console.log("Submission successful:", response);
+          console.log('Submission successful:', response)
         })
         .catch((error) => {
-          console.error("Submission failed:", error);
-        });
+          console.error('Submission failed:', error)
+        })
     } catch (error) {
       console.error('Submission failed:', error)
       toast.error('Submission failed. Please try again later.')

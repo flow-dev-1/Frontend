@@ -30,8 +30,8 @@ export default function WeekTwoLearning({
   })
   const week = 2;
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["dashboard/self-awareness-course", course.course._id, week],
-    queryFn: () => userService.getMyActivites(course.course._id, week)
+    queryKey: ["dashboard/self-awareness-course", course?.course?._id, week],
+    queryFn: () => userService.getMyActivites(course?.course?._id, week)
   });
 
   // Check if data.activity exists and save it under one key 'activity1' in local storage
