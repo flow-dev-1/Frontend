@@ -37,29 +37,66 @@ export default function WeekOneLearning({
     )
     return savedState ? JSON.parse(savedState) : 1
   })
-  const week = 1
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['dashboard/self-awareness-course', course?.course?._id, week],
-    queryFn: () => userService.getMyActivites(course?.course?._id, week),
-  })
+const week = 1;
+const { data, isLoading, isError } = useQuery({
+  queryKey: ["dashboard/self-awareness-course", course.course._id, week],
+  queryFn: () => userService.getMyActivites(course.course._id, week)
+});
 
-  // Check if data.activity exists and save it under one key 'activity1' in local storage
-  if (data?.activity) {
-    const activities = data.activity.activities
+  const [assessmentData, setAssessmentData] = useState(null);
+  const [assessmentLoading, setAssessmentLoading] = useState(true);
+  const [assessmentError, setAssessmentError] = useState(null);
+  const [quizQuestions, setQuizQuestions] = useState([]);
+  console.log(data);
+  useEffect(() => {
+    const fetchAssessmentData = async () => {
+      setAssessmentLoading(true);
+      try {
+        const data = await userService.getMyAssessment(courseId, week);
+        setAssessmentData(data);
+      } catch (error) {
+        setAssessmentError(error);
+      } finally {
+        setAssessmentLoading(false);
+      }
+    };
 
-    // Create an object with week and activities
-    const activityData = {
-      week: week,
-      activities: activities,
-    }
+    fetchAssessmentData();
+  }, [courseId, week]);
 
-    // Store the object in local storage under the key 'activity1'
-    localStorage.setItem('week-1-activityData', JSON.stringify(activityData))
+  const assessments = assessmentData?.existingAssessment.assessments;
+  const percent = assessmentData?.existingAssessment.rating;
+  const color = assessmentData?.existingAssessment?.personalityColor;
+// console.log(assessments)
+// Check if data.activity exists and save it under one key 'activity1' in local storage
+if (data?.activity && assessments) {
+  const activities = data.activity.activities;
 
-    console.log("Week and activities saved to localStorage under 'activity1'")
+  // Create an object with week and activities
+  const activityData = {
+    week: week,
+    activities: activities
+  };
+  const assessmentData = {
+    week:week,
+    percentage:percent,
+    assessments:assessments,
+    personalityColor:personality
   }
 
-  console.log(data?.activity)
+  // Store the object in local storage under the key 'activity1'
+  localStorage.setItem("week-1-activityData", JSON.stringify(activityData));
+  localStorage.setItem(
+    "weekOneAssessmentData",
+    JSON.stringify({ formData: assessmentData })
+  );
+
+
+  console.log("Week and activities saved to localStorage under 'activity1'");
+}
+
+console.log(data?.activity);
+
 
   useEffect(() => {
     const canSee = localStorage.getItem(`${courseId}-can-see`)
@@ -105,11 +142,11 @@ export default function WeekOneLearning({
       userService
         .postMyActivity(course.course._id, stringifiedFormData)
         .then((response) => {
-          console.log('Submission successful:', response)
+          console.log("Submission successful:", response);
         })
         .catch((error) => {
-          console.error('Submission failed:', error)
-        })
+          console.error("Submission failed:", error);
+        });
     } catch (error) {
       console.error('Submission failed:', error)
       toast.error('Submission failed. Please try again later.')

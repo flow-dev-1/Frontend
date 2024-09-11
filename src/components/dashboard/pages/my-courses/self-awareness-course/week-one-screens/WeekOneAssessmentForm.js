@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png'
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
 import userService from '../../../../../../services/api/user.js'
@@ -13,10 +13,26 @@ export default function WeekOneAssessmentForm({
   onBack,
   courseId,
 }) {
-  const [currentIndex, setCurrentIndex] = useState(1)
-  const [reviewPopUp, setReviewPopUp] = useState(false)
-  const [personalityColor, setPersonalityColor] = useState('')
-  const [questionChecked, setQuestionChecked] = useState([])
+  
+
+
+  const data = localStorage.getItem("weekOneAssessmentData")
+  const parsedData = JSON.parse(data)
+  const color = parsedData.formData.personalityColor
+  const assessment = parsedData.formData.assessments;
+
+  const [currentIndex, setCurrentIndex] = useState(1);
+  const [reviewPopUp, setReviewPopUp] = useState(false);
+  const [personalityColor, setPersonalityColor] = useState(color || '');
+  const [questionChecked, setQuestionChecked] = useState([]);
+
+  // Prevent unnecessary re-render by checking if questionChecked is already set
+  useEffect(() => {
+    if (assessment && questionChecked.length === 0) {
+      setQuestionChecked(assessment); 
+    }
+  }, [assessment, questionChecked]);
+
 
   const questionsArrayRed = [
     {
@@ -233,6 +249,7 @@ export default function WeekOneAssessmentForm({
     }
   }
 
+
   const handleNextStepClick = () => {
     const questionsArray = getQuestionsArray()
     const questionIndex = currentIndex - 2
@@ -265,13 +282,8 @@ export default function WeekOneAssessmentForm({
     }
   }
 
-  const handleQuestionCheck = (questionIndex, optionIndex) => {
-    setQuestionChecked((prevState) => {
-      const newState = [...prevState]
-      newState[questionIndex] = optionIndex
-      return newState
-    })
-  }
+
+
   const saveAssessmentData = () => {
     const questionsArray = getQuestionsArray()
 
@@ -334,6 +346,20 @@ export default function WeekOneAssessmentForm({
 
   const renderQuestion = () => {
     const questionsArray = getQuestionsArray()
+
+    const handleQuestionCheck = (questionIndex, optionIndex) => {
+      setQuestionChecked((prevState) => {
+        const updatedChecked = [...prevState]; // Copy the previous state array
+        updatedChecked[questionIndex] = {
+          ...updatedChecked[questionIndex], // Copy the current question's object
+          answer: optionIndex, // Update the answer with the selected option index
+        };
+        return updatedChecked; // Return the updated array
+      });
+    };
+
+
+
 
     if (currentIndex === 1) {
       return (

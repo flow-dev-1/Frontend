@@ -44,9 +44,33 @@ export default function WeekThreeLearning({
     queryFn: () => userService.getMyActivites(course?.course?._id, week),
   })
 
-  // Check if data.activity exists and save it under one key 'activity1' in local storage
-  if (data?.activity) {
-    const activities = data.activity.activities
+      const [assessmentData, setAssessmentData] = useState(null);
+      const [assessmentLoading, setAssessmentLoading] = useState(true);
+      const [assessmentError, setAssessmentError] = useState(null);
+      const [quizQuestions, setQuizQuestions] = useState([]);
+      console.log(data);
+      useEffect(() => {
+        const fetchAssessmentData = async () => {
+          setAssessmentLoading(true);
+          try {
+            const data = await userService.getMyAssessment(courseId, week);
+            setAssessmentData(data);
+          } catch (error) {
+            setAssessmentError(error);
+          } finally {
+            setAssessmentLoading(false);
+          }
+        };
+
+        fetchAssessmentData();
+      }, [courseId, week]);
+
+      const assessments = assessmentData?.existingAssessment.assessments;
+      const percent = assessmentData?.existingAssessment.rating;
+      const color = assessmentData?.existingAssessment?.personalityColor;
+  
+    if (data?.activity) {
+      const activities = data.activity.activities;
 
     // Create an object with week and activities
     const activityData = {
