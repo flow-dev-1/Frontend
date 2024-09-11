@@ -30,8 +30,8 @@ export default function WeekFourLearning({
   })
       const week = 4;
       const { data, isLoading, isError } = useQuery({
-        queryKey: ["dashboard/self-awareness-course", course.course._id, week],
-        queryFn: () => userService.getMyActivites(course.course._id, week)
+        queryKey: ["dashboard/self-awareness-course", course?.course._id, week],
+        queryFn: () => userService.getMyActivites(course?.course._id, week)
       });
 
       // Check if data.activity exists and save it under one key 'activity1' in local storage
@@ -116,7 +116,7 @@ export default function WeekFourLearning({
       state: { course, weekIndex: nextWeekIndex },
     })
   }
-  console.log(course.course._id);
+  console.log(course?.course._id);
   const handleSubmit = async () => {
     try {
       // Your submit logic here

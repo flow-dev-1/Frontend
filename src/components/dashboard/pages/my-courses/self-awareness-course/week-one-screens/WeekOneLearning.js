@@ -81,7 +81,7 @@ if (data?.activity && assessments) {
     week:week,
     percentage:percent,
     assessments:assessments,
-    personalityColor:color
+    personalityColor:personality
   }
 
   // Store the object in local storage under the key 'activity1'
