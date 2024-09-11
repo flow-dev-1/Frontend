@@ -56,36 +56,51 @@ export default function ScenarioQuestions({
   ]
 
   // Helper function to find index of each answer in questionsArray
-  const getSelectedIndexes = (answers, list) => {
-    return answers
-      ? answers
-          .map((answer) => list.indexOf(answer))
-          .filter((index) => index !== -1)
-      : []
-  }
+const getSelectedIndexes = (answers, list) => {
+  return answers
+    ? answers
+        .map((answer) => list.indexOf(answer))
+        .filter((index) => index !== -1)
+    : [];
+};
 
-  // Pre-fill strengthChecked and weaknessChecked states based on formData
-  const [strengthChecked, setStrengthChecked] = useState(() =>
-    questionsArray.reduce((acc, question, index) => {
-      const answers =
-        formData?.activities?.find(
-          (activity) => activity.activity === activityIndex
-        )?.answers?.strengths || []
-      acc[index] = getSelectedIndexes(answers, question.questionList)
-      return acc
-    }, {})
-  )
+// Function to extract the correct answers for strengths or weaknesses
+const getAnswersByQuestion = (activity, questionNumber, type) => {
+  const answers = formData?.activities?.find(
+    (activity) => activity.activity === activityIndex
+  )?.answers;
 
-  const [weaknessChecked, setWeaknessChecked] = useState(() =>
-    questionsArray.reduce((acc, question, index) => {
-      const answers =
-        formData?.activities?.find(
-          (activity) => activity.activity === activityIndex
-        )?.answers?.weaknesses || []
-      acc[index] = getSelectedIndexes(answers, question.questionListNegative)
-      return acc
-    }, {})
-  )
+  return answers ? answers[`${type}Q${questionNumber}`] || [] : [];
+};
+
+// Pre-fill strengthChecked state based on formData
+const [strengthChecked, setStrengthChecked] = useState(() =>
+  questionsArray.reduce((acc, question, index) => {
+    const questionNumber = index + 1; // Assuming questionsArray is ordered
+    const answers = getAnswersByQuestion(
+      activityIndex,
+      questionNumber,
+      "strengths"
+    );
+    acc[index] = getSelectedIndexes(answers, question.questionList);
+    return acc;
+  }, {})
+);
+
+// Pre-fill weaknessChecked state based on formData
+const [weaknessChecked, setWeaknessChecked] = useState(() =>
+  questionsArray.reduce((acc, question, index) => {
+    const questionNumber = index + 1; // Assuming questionsArray is ordered
+    const answers = getAnswersByQuestion(
+      activityIndex,
+      questionNumber,
+      "weaknesses"
+    );
+    acc[index] = getSelectedIndexes(answers, question.questionListNegative);
+    return acc;
+  }, {})
+);
+
 
   const [currentIndex, setCurrentIndex] = useState(1)
   const [reviewPopUp, setReviewPopUp] = useState(false)
