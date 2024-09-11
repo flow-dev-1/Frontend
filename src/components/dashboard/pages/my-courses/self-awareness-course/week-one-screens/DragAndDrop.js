@@ -78,11 +78,11 @@ function DragDropComponent({ onBack, onNext, formData }) {
 
   useEffect(() => {
     if (formData) {
-      setCards(formData.cards || initialCards)
-      setBuckets(formData.buckets || initialBuckets)
+      setCards(formData.activities[5].cards || initialCards);
+      setBuckets(formData.activities[5].buckets || initialBuckets);
     }
   }, [formData])
-
+// console.log(formData.activities[5].buckets)
   const handleOnDragEnd = (result) => {
     if (!result.destination) return
 

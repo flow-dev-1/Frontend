@@ -21,6 +21,7 @@ import WeekOneAssessmentForm from './WeekOneAssessmentForm'
 import AssessmentForm from './AssessmentForm'
 import userService from '../../../../../../services/api/user.js'
 import BuyCoursePopup from '../popUp.jsx'
+import { useQuery } from '@tanstack/react-query'
 
 export default function WeekOneLearning({
   course,
@@ -36,6 +37,30 @@ export default function WeekOneLearning({
     )
     return savedState ? JSON.parse(savedState) : 1
   })
+const week = 1;
+const { data, isLoading, isError } = useQuery({
+  queryKey: ["dashboard/self-awareness-course", course.course._id, week],
+  queryFn: () => userService.getMyActivites(course.course._id, week)
+});
+
+// Check if data.activity exists and save it under one key 'activity1' in local storage
+if (data?.activity) {
+  const activities = data.activity.activities;
+
+  // Create an object with week and activities
+  const activityData = {
+    week: week,
+    activities: activities
+  };
+
+  // Store the object in local storage under the key 'activity1'
+  localStorage.setItem("week-1-activityData", JSON.stringify(activityData));
+
+  console.log("Week and activities saved to localStorage under 'activity1'");
+}
+
+console.log(data?.activity);
+
 
   useEffect(() => {
     const canSee = localStorage.getItem(`${courseId}-can-see`)

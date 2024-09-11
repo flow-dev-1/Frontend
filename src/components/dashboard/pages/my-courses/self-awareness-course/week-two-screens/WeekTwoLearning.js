@@ -12,6 +12,7 @@ import NavigationButtons from './NavigationButtons'
 import userService from '../../../../../../services/api/user.js'
 import { toast, ToastContainer } from 'react-toastify'
 import EndOfCourseComponent from './EndOfCourseComponent.js'
+import { useQuery } from '@tanstack/react-query'
 
 export default function WeekTwoLearning({
   course,
@@ -27,6 +28,27 @@ export default function WeekTwoLearning({
     )
     return savedState ? JSON.parse(savedState) : 1
   })
+  const week = 2;
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["dashboard/self-awareness-course", course.course._id, week],
+    queryFn: () => userService.getMyActivites(course.course._id, week)
+  });
+
+  // Check if data.activity exists and save it under one key 'activity1' in local storage
+  if (data?.activity) {
+    const activities = data.activity.activities;
+
+    // Create an object with week and activities
+    const activityData = {
+      week: week,
+      activities: activities
+    };
+
+    // Store the object in local storage under the key 'activity1'
+    localStorage.setItem("week-2-activityData", JSON.stringify(activityData));
+
+    console.log("Week and activities saved to localStorage under 'activity1'");
+  }
 
   const [formData, setFormData] = useState(() => {
     const savedState = localStorage.getItem(

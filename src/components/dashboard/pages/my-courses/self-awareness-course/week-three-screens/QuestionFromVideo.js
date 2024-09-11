@@ -3,14 +3,19 @@ import '../newcourse.css'
 
 export default function QuestionFromVideo({ formData, onBack, onNext }) {
   const [currentIndex, setCurrentIndex] = useState(1)
-  const [answers, setAnswers] = useState([
-    '',
-    '',
-    '',
-    '',
-    '', // answers for the five lessons
-    '', // answer for the single item to work on
-  ])
+    const initialAnswers = formData?.activities?.find(
+      (activity) => activity.activity === 6
+    )?.answers || [
+      "",
+      "",
+      "",
+      "",
+      "", 
+      "" 
+    ];
+
+  const [answers, setAnswers] = useState(initialAnswers);
+console.log(formData)
 
   const handleInputChange = (event, index) => {
     const { value } = event.target
