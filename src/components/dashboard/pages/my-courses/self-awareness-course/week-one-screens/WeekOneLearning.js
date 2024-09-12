@@ -39,8 +39,8 @@ export default function WeekOneLearning({
   })
 const week = 1;
 const { data, isLoading, isError } = useQuery({
-  queryKey: ["dashboard/self-awareness-course", course?.course?._id, week],
-  queryFn: () => userService.getMyActivites(course?.course?._id, week)
+  queryKey: ["dashboard/self-awareness-course", course?.course._id, week],
+  queryFn: () => userService.getMyActivites(course?.course._id, week)
 });
 
   const [assessmentData, setAssessmentData] = useState(null);
