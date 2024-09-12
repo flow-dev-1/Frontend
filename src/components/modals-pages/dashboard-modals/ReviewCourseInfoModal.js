@@ -60,12 +60,10 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
                     </p>
                   </div>
                   <p style={{ paddingLeft: ".5rem" }}>
-                    We’ll start by exploring what it means to be self-aware.
-                    You'll take a personality test to discover your unique
-                    traits and identify whether you align with the colors blue,
-                    green, red, or yellow. This will set the foundation for
-                    understanding how your personality influences your behavior.
+                     What We’ll Do: We’ll start by exploring what it means to be self-aware. You’ll take a personality test to discover your unique traits and identify whether you align with the colors blue, green, red, or yellow. This will set the foundation for understanding how your personality influences your behavior.
                   </p>
+                  <br/>
+                    <p>Why It Matters: Knowing yourself is the first step in personal growth. Understanding your personality will help you be self-aware better.</p>
                 </li>
                 <li>
                   <div className=" list">
