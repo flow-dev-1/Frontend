@@ -62,3 +62,5 @@ const VideoComponent = ({ videoSrc }) => {
 }
 
 export default VideoComponent
+
+  // < iframe src = "https://drive.google.com/file/d/1ry_zbSKBTR0QM9rVsYoJ8Ntg6oH5sCR1/preview" width = "640" height = "480" allow = "autoplay" ></iframe >

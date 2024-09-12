@@ -200,7 +200,7 @@ console.log(data?.activity);
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/qc5dYAVqelM'
+              videoSrc='https://drive.google.com/file/d/1ry_zbSKBTR0QM9rVsYoJ8Ntg6oH5sCR1/preview'
             />
             <div className='progression-buttons mt-3'>
               <button
