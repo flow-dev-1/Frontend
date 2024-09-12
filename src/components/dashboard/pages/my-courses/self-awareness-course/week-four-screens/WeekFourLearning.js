@@ -145,7 +145,7 @@ export default function WeekFourLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
+              videoSrc='https://www.youtube.com/embed/7HJXYI4zKkI'
             />
             <NavigationButtons onNext={() => handleNext()} isBackDisabled />
           </>
@@ -173,7 +173,7 @@ export default function WeekFourLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
+              videoSrc='https://www.youtube.com/embed/kUXcaebByQw'
             />
             <NavigationButtons
               onBack={handlePrevious}
@@ -204,7 +204,7 @@ export default function WeekFourLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
+              videoSrc='https://www.youtube.com/embed/PzJ4fxBvEAc'
             />
             <NavigationButtons
               onBack={handlePrevious}
@@ -233,7 +233,7 @@ export default function WeekFourLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
+              videoSrc='https://www.youtube.com/embed/_McptOhJHRQ'
             />
             <NavigationButtons
               onBack={handlePrevious}
@@ -264,7 +264,7 @@ export default function WeekFourLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
+              videoSrc='https://www.youtube.com/embed/2OO0YH7VY2I'
             />
             <NavigationButtons
               onBack={handlePrevious}

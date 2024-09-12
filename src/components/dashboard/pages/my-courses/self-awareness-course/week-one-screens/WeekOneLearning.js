@@ -46,8 +46,6 @@ const { data, isLoading, isError } = useQuery({
   const [assessmentData, setAssessmentData] = useState(null);
   const [assessmentLoading, setAssessmentLoading] = useState(true);
   const [assessmentError, setAssessmentError] = useState(null);
-  const [quizQuestions, setQuizQuestions] = useState([]);
-  console.log(data);
   useEffect(() => {
     const fetchAssessmentData = async () => {
       setAssessmentLoading(true);
@@ -202,7 +200,7 @@ console.log(data?.activity);
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/EsN5-4kFvLw'
+              videoSrc='https://www.youtube.com/embed/qc5dYAVqelM'
             />
             <div className='progression-buttons mt-3'>
               <button
@@ -234,7 +232,7 @@ console.log(data?.activity);
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/ZDk30QSBe98'
+              videoSrc='https://www.youtube.com/embed/HW4NNNGvQaY'
             />
             <div className='progression-buttons mt-3'>
               <button
@@ -272,7 +270,7 @@ console.log(data?.activity);
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/VSt6RkMtbZU'
+              videoSrc='https://www.youtube.com/embed/0FpFkjm5j8s'
             />
             <div className='progression-buttons mt-3'>
               <button
@@ -309,7 +307,7 @@ console.log(data?.activity);
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/RMrhj7ql3_c'
+              videoSrc='https://www.youtube.com/embed/3uFusW_Yd3w'
             />
             <div className='progression-buttons mt-3'>
               <button
@@ -351,7 +349,7 @@ console.log(data?.activity);
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/aauo1x7V9js'
+              videoSrc='https://www.youtube.com/embed/vOi9RJeCF8Q'
             />
             <div className='progression-buttons mt-3'>
               <button
@@ -386,7 +384,7 @@ console.log(data?.activity);
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/i_wqVuoqK3A'
+              videoSrc='https://www.youtube.com/embed/uRG7WSV-ut8'
             />
             <div className='progression-buttons mt-3'>
               <button
@@ -423,7 +421,7 @@ console.log(data?.activity);
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/FVFUiM4j0nw'
+              videoSrc='https://www.youtube.com/embed/8h1xMwBwdGw'
             />
             <div className='progression-buttons mt-3'>
               <button

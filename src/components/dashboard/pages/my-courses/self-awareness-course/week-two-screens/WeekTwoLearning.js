@@ -171,7 +171,7 @@ export default function WeekTwoLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
+              videoSrc='https://www.youtube.com/embed/1W-jpmDVsG0'
             />
             <NavigationButtons onNext={() => handleNext()} isBackDisabled />
           </>
@@ -198,7 +198,7 @@ export default function WeekTwoLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
+              videoSrc='https://www.youtube.com/embed/lXuxxm3-M50'
             />
             <NavigationButtons
               onBack={handlePrevious}
@@ -238,7 +238,7 @@ export default function WeekTwoLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
+              videoSrc='https://www.youtube.com/embed/RnRh61bJMSE'
             />
             <NavigationButtons
               onBack={handlePrevious}
@@ -265,7 +265,7 @@ export default function WeekTwoLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/CW-f1RVjCws'
+              videoSrc='https://www.youtube.com/embed/vhSuJnh5mKw'
             />
             <NavigationButtons
               onBack={handlePrevious}
