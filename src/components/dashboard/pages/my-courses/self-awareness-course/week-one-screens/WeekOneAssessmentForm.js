@@ -18,8 +18,8 @@ export default function WeekOneAssessmentForm({
 
   const data = localStorage.getItem("weekOneAssessmentData")
   const parsedData = JSON.parse(data)
-  const color = parsedData.formData.personalityColor
-  const assessment = parsedData.formData.assessments;
+  const color = parsedData?.formData?.personalityColor
+  const assessment = parsedData?.formData?.assessments;
 
   const [currentIndex, setCurrentIndex] = useState(1);
   const [reviewPopUp, setReviewPopUp] = useState(false);
