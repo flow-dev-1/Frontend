@@ -171,7 +171,7 @@ export default function WeekTwoLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/1W-jpmDVsG0'
+              videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-2/FLOW-2_1.mp4'
             />
             <NavigationButtons onNext={() => handleNext()} isBackDisabled />
           </>
@@ -198,7 +198,7 @@ export default function WeekTwoLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/lXuxxm3-M50'
+              videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-2/FLOW-2_2.mp4'
             />
             <NavigationButtons
               onBack={handlePrevious}
@@ -238,7 +238,7 @@ export default function WeekTwoLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/RnRh61bJMSE'
+              videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-2/FLOW-2_3.mp4'
             />
             <NavigationButtons
               onBack={handlePrevious}
@@ -265,7 +265,7 @@ export default function WeekTwoLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/vhSuJnh5mKw'
+              videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-2/FLOW-2_4.mp4'
             />
             <NavigationButtons
               onBack={handlePrevious}

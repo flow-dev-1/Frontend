@@ -139,8 +139,9 @@
 
 .self-awareness .custom-video,
 .self-awareness .video-thumbnail {
-  width: 800px;
-  height: 400px;
+  margin-top: -10px;
+  width: 950px;
+  height: 480px;
   /* #ECEDF0 */
 }
 

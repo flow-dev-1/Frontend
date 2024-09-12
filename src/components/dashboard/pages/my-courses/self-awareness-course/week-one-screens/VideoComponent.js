@@ -1,22 +1,20 @@
-import React, { useState } from 'react'
-import { Icon } from '@iconify/react'
-
-
+import React, { useState } from 'react';
+import { Icon } from '@iconify/react';
 
 const VideoComponent = ({ videoSrc }) => {
-  const [videoPlaying, setVideoPlaying] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
+  const [videoPlaying, setVideoPlaying] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const handleLoad = () => {
-    setLoading(false)
-    setError(false)
-  }
+    setLoading(false);
+    setError(false);
+  };
 
   const handleError = () => {
-    setLoading(false)
-    setError(true)
-  }
+    setLoading(false);
+    setError(true);
+  };
 
   return (
     <div className='video-div'>
@@ -47,20 +45,21 @@ const VideoComponent = ({ videoSrc }) => {
         </div>
       )}
       {!error && (
-        <iframe
+        <video
           className='custom-video'
-          src={videoSrc}
-          title='YouTube video player'
-          onLoad={handleLoad}
+          // width="600"
+          controls
+          controlsList="nodownload noremoteplayback"
+          style={{ pointerEvents: 'auto' }} // Corrected style syntax
+          onCanPlay={handleLoad}
           onError={handleError}
-          allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-          allowFullScreen
-        />
+        >
+          <source src={videoSrc} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default VideoComponent
-
-  // < iframe src = "https://drive.google.com/file/d/1ry_zbSKBTR0QM9rVsYoJ8Ntg6oH5sCR1/preview" width = "640" height = "480" allow = "autoplay" ></iframe >
+export default VideoComponent;

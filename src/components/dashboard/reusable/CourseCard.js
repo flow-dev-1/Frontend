@@ -15,8 +15,8 @@ const CourseCard = ({ course, coursesArray, enrolled, enrolledData }) => {
 
   const [modalIsOpen, setIsOpen] = useState(false)
   const [modalType, setModalType] = useState('')
-  // console.log(course)
-
+  console.log(course)
+  
   console.log(coursesArray)
   console.log(enrolledData)
   const courseIndex = coursesArray?.courses.findIndex(
