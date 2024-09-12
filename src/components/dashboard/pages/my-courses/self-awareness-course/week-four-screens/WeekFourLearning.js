@@ -145,7 +145,7 @@ export default function WeekFourLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/7HJXYI4zKkI'
+              videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-4/FLOW-4_1.mp4'
             />
             <NavigationButtons onNext={() => handleNext()} isBackDisabled />
           </>
@@ -173,7 +173,7 @@ export default function WeekFourLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/kUXcaebByQw'
+              videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-4/FLOW-4_2.mp4'
             />
             <NavigationButtons
               onBack={handlePrevious}
@@ -204,7 +204,7 @@ export default function WeekFourLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/PzJ4fxBvEAc'
+              videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-4/FLOW-4_3.mp4'
             />
             <NavigationButtons
               onBack={handlePrevious}
@@ -233,7 +233,7 @@ export default function WeekFourLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/_McptOhJHRQ'
+              videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-4/FLOW-4_4.mp4'
             />
             <NavigationButtons
               onBack={handlePrevious}
@@ -264,7 +264,7 @@ export default function WeekFourLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/2OO0YH7VY2I'
+              videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-4/FLOW-4_5.mp4'
             />
             <NavigationButtons
               onBack={handlePrevious}

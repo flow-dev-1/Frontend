@@ -200,7 +200,7 @@ console.log(data?.activity);
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://drive.google.com/file/d/1ry_zbSKBTR0QM9rVsYoJ8Ntg6oH5sCR1/preview'
+              videoSrc='https://d3sc34m1n26ele.cloudfront.net/week-1/FLOW+1_1.mp4'
             />
             <div className='progression-buttons mt-3'>
               <button
@@ -232,7 +232,7 @@ console.log(data?.activity);
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/HW4NNNGvQaY'
+              videoSrc='https://d3sc34m1n26ele.cloudfront.net/week-1/FLOW+1_2.mp4'
             />
             <div className='progression-buttons mt-3'>
               <button
@@ -270,7 +270,7 @@ console.log(data?.activity);
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/0FpFkjm5j8s'
+              videoSrc='https://d3sc34m1n26ele.cloudfront.net/week-1/FLOW+1_3.mp4'
             />
             <div className='progression-buttons mt-3'>
               <button
@@ -307,7 +307,7 @@ console.log(data?.activity);
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/3uFusW_Yd3w'
+              videoSrc='https://d3sc34m1n26ele.cloudfront.net/week-1/FLOW+1_4.mp4'
             />
             <div className='progression-buttons mt-3'>
               <button
@@ -349,7 +349,7 @@ console.log(data?.activity);
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/vOi9RJeCF8Q'
+              videoSrc='https://d3sc34m1n26ele.cloudfront.net/week-1/FLOW+1_5.mp4'
             />
             <div className='progression-buttons mt-3'>
               <button
@@ -384,7 +384,7 @@ console.log(data?.activity);
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/uRG7WSV-ut8'
+              videoSrc='https://d3sc34m1n26ele.cloudfront.net/week-1/FLOW+1_6.mp4'
             />
             <div className='progression-buttons mt-3'>
               <button
@@ -421,7 +421,7 @@ console.log(data?.activity);
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-              videoSrc='https://www.youtube.com/embed/8h1xMwBwdGw'
+              videoSrc='https://d3sc34m1n26ele.cloudfront.net/week-1/FLOW+1_7.mp4'
             />
             <div className='progression-buttons mt-3'>
               <button
