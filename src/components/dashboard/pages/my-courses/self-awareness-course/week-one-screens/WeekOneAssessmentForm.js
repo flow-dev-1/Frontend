@@ -25,13 +25,20 @@ export default function WeekOneAssessmentForm({
   const [reviewPopUp, setReviewPopUp] = useState(false);
   const [personalityColor, setPersonalityColor] = useState(color || '');
   const [questionChecked, setQuestionChecked] = useState([]);
+  const [assessmentTaken, setIsAssessmentTaken] = useState(false);
 
-  // Prevent unnecessary re-render by checking if questionChecked is already set
+ 
   useEffect(() => {
-    if (assessment && questionChecked.length === 0) {
-      setQuestionChecked(assessment); 
+    if (data) {
+      toast.info('You have already taken the assessment.');
+      setIsAssessmentTaken(true); // Disable the form if assessment was taken
+    } else {
+      // Load assessments if not already taken
+      if (assessment && questionChecked.length === 0) {
+        setQuestionChecked(assessment);
+      }
     }
-  }, [assessment, questionChecked]);
+  }, [assessment, questionChecked, data]);
 
 
   const questionsArrayRed = [
@@ -254,17 +261,20 @@ export default function WeekOneAssessmentForm({
     const questionsArray = getQuestionsArray()
     const questionIndex = currentIndex - 2
 
-    // Check if the user has selected an answer for the current question
-    if (
-      questionIndex >= 0 &&
-      questionIndex < questionsArray.length &&
-      questionChecked[questionIndex] === undefined
-    ) {
-      toast.error('Please select an answer before proceeding.')
-      return
+    // Prevent checking answers but allow navigation
+    if (!assessmentTaken) {
+      // Check if the user has selected an answer for the current question
+      if (
+        questionIndex >= 0 &&
+        questionIndex < questionsArray.length &&
+        questionChecked[questionIndex] === undefined
+      ) {
+        toast.error('Please select an answer before proceeding.')
+        return
+      }
     }
 
-    // Proceed to the next step if valid
+    // Proceed to the next step
     if (currentIndex < questionsArray.length + 1) {
       setCurrentIndex(currentIndex + 1)
     } else {
