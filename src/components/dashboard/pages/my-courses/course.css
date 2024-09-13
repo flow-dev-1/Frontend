@@ -141,8 +141,8 @@ p.back-to-course-list {
 }
 
 .custom-video {
-  width: 800px;
-  height: 400px;
+  /* width: 800px; */
+  height: 440px;
 }
 
 .progression-buttons {
@@ -596,4 +596,7 @@ label {
 .card-item.dragging {
   transform: scale(1); /* Reduce size while dragging */
   opacity: 1; /* Make the card semi-transparent while dragging */
+}
+.bucket-image:hover {
+  transform: scale(1.4); /* Adjust the scale as needed */
 }

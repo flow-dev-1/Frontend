@@ -48,9 +48,9 @@ const QuestionComponent = ({
   return (
     <div>
       <div className='question-box py-5'>
-        <div className='question-box-header'>
+        <div className='question-box-header m-auto'>
           <h1 className='mb-0'>Question:</h1>
-          <h2 className='mb-0 d-flex ms-3'>{questionText}</h2>
+          <h2 className='mb-0 d-flex ms-2'>{questionText}</h2>
           {imageSrc && <img src={imageSrc} alt={altText} className='mx-2' />}
           <h2 className=''>{altText}</h2>
         </div>

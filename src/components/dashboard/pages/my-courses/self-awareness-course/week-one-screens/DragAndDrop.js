@@ -145,9 +145,8 @@ function DragDropComponent({ onBack, onNext, formData }) {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className={`card-item d-flex align-items-center justify-content-center ${
-                          snapshot.isDragging ? 'draging' : ''
-                        }`}
+                        className={`card-item d-flex align-items-center justify-content-center ${snapshot.isDragging ? 'draging' : ''
+                          }`}
                         style={{
                           cursor: snapshot.isDragging ? 'grabbing' : 'grab',
                           opacity: snapshot.isDragging ? '0.1' : '1',
@@ -186,12 +185,11 @@ function DragDropComponent({ onBack, onNext, formData }) {
                     <div
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                      className={`bucket bucket-${bucketType} ${
-                        snapshot.isDraggingOver ? 'dragging-over' : ''
-                      }`}
+                      className={`bucket bucket-${bucketType} ${snapshot.isDraggingOver ? 'dragging-over' : ''
+                        }`}
                       style={{
                         backgroundColor: snapshot.isDraggingOver
-                          ? '#f0f0f0'
+                          ? '#0000'
                           : '',
                         width: '150px',
                         height: '150px',
@@ -209,11 +207,17 @@ function DragDropComponent({ onBack, onNext, formData }) {
                           bucketType === 'yes'
                             ? bucketYes
                             : bucketType === 'no'
-                            ? bucketNo
-                            : bucketSometimes
+                              ? bucketNo
+                              : bucketSometimes
                         }
                         alt={`bucket-${bucketType}`}
-                        style={{ width: '100px', height: 'auto' }} // Make sure image size fits
+                        // className="bucket-image"
+                        style={{
+                          width: '100px',
+                          height: 'auto',
+                          transition: 'transform 0.3s ease',
+                          transform: snapshot.isDraggingOver ? 'scale(1.4)' : 'scale(1)', // Scale when dragging over
+                        }}
                       />
                       {provided.placeholder && (
                         <div
@@ -243,10 +247,11 @@ function DragDropComponent({ onBack, onNext, formData }) {
             </ul>
           </div>
 
-          <div className='d-flex justify-content-between' onClick={handleReset}>
-            <Icon icon='teenyicons:refresh-solid' />
-            Refresh{' '}
+          <div className="d-flex justify-content-between align-items-center gap-2" onClick={handleReset} style={{ cursor: 'pointer' }}>
+            <Icon className="ml-3" icon="teenyicons:refresh-solid" />
+            <p className="text-3xl mr-2">Refresh{' '}</p>
           </div>
+
         </div>
         <div className='d-flex align-items-center justify-content-around mt-3'>
           <button className='btn progress-btn btn-light' onClick={handleBack}>
