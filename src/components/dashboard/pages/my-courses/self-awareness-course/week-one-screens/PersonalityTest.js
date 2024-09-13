@@ -273,11 +273,12 @@ export default function PersonalityTest({
       if (questionIndex >= 0 && questionIndex < answers.length) {
         return (
           <div className='assessment question-box py-4'>
-            <div className='d-flex align-items-start'>
+            <div className='d-flex align-items-start  '>
               <h1>{currentIndex - 1}.</h1>
-              <h2 className='text-center mb-0 fs-1 ms-3'>
+              <h2 className="text-center mb-0 fs-1 ms-3" style={{ color: '#5B616A' }}>
                 {answers[questionIndex].title}
               </h2>
+
             </div>
             <div className='checkbox-questions'>
               <ul className='p-0'>
@@ -357,7 +358,7 @@ export default function PersonalityTest({
           <Icon width={25} icon='formkit:close' />
         </button>
 
-        <ResponsiveContainer width='100%' height={170}>
+        <ResponsiveContainer width='100%' height={250}>
           <PieChart>
             <Pie
               data={chartData}
@@ -365,7 +366,7 @@ export default function PersonalityTest({
               nameKey='name'
               cx='50%'
               cy='50%'
-              outerRadius={80}
+              outerRadius={95}
               label={({ index }) => chartData[index].name}
             >
               {chartData.map((entry, index) => (
