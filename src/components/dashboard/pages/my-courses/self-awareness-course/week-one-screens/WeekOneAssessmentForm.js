@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png'
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
 import userService from '../../../../../../services/api/user.js'
@@ -13,33 +13,29 @@ export default function WeekOneAssessmentForm({
   onBack,
   courseId,
 }) {
-  
+  const [currentIndex, setCurrentIndex] = useState(1)
+  const [reviewPopUp, setReviewPopUp] = useState(false)
+  const [personalityColor, setPersonalityColor] = useState('')
+  const [questionChecked, setQuestionChecked] = useState([])
 
-
-  const data = localStorage.getItem("weekOneAssessmentData")
-  const parsedData = JSON.parse(data)
-  const color = parsedData?.formData?.personalityColor
-  const assessment = parsedData?.formData?.assessments;
-
-  const [currentIndex, setCurrentIndex] = useState(1);
-  const [reviewPopUp, setReviewPopUp] = useState(false);
-  const [personalityColor, setPersonalityColor] = useState(color || '');
-  const [questionChecked, setQuestionChecked] = useState([]);
-  const [assessmentTaken, setIsAssessmentTaken] = useState(false);
-
- 
   useEffect(() => {
-    if (data) {
-      toast.info('You have already taken the assessment.');
-      setIsAssessmentTaken(true); // Disable the form if assessment was taken
-    } else {
-      // Load assessments if not already taken
-      if (assessment && questionChecked.length === 0) {
-        setQuestionChecked(assessment);
+    // Check if the assessment data is already in localStorage
+    const storedData = localStorage.getItem('weekOneAssessmentData')
+    if (storedData) {
+      const parsedData = JSON.parse(storedData)
+      if (
+        parsedData &&
+        parsedData.formattedData &&
+        parsedData.formattedData.week === 1
+      ) {
+        // Set personality color and persist the answers
+        setPersonalityColor(parsedData.formattedData.personalityColor)
+        setQuestionChecked(
+          parsedData.formattedData.assessments.map((a) => a.answer)
+        )
       }
     }
-  }, [assessment, questionChecked, data]);
-
+  }, [])
 
   const questionsArrayRed = [
     {
@@ -256,25 +252,21 @@ export default function WeekOneAssessmentForm({
     }
   }
 
-
   const handleNextStepClick = () => {
     const questionsArray = getQuestionsArray()
     const questionIndex = currentIndex - 2
 
-    // Prevent checking answers but allow navigation
-    if (!assessmentTaken) {
-      // Check if the user has selected an answer for the current question
-      if (
-        questionIndex >= 0 &&
-        questionIndex < questionsArray.length &&
-        questionChecked[questionIndex] === undefined
-      ) {
-        toast.error('Please select an answer before proceeding.')
-        return
-      }
+    // Check if the user has selected an answer for the current question
+    if (
+      questionIndex >= 0 &&
+      questionIndex < questionsArray.length &&
+      questionChecked[questionIndex] === undefined
+    ) {
+      toast.error('Please select an answer before proceeding.')
+      return
     }
 
-    // Proceed to the next step
+    // Proceed to the next step if valid
     if (currentIndex < questionsArray.length + 1) {
       setCurrentIndex(currentIndex + 1)
     } else {
@@ -292,7 +284,19 @@ export default function WeekOneAssessmentForm({
     }
   }
 
+  const handleQuestionCheck = (questionIndex, optionIndex) => {
+    // If the assessment is already completed, prevent further selection
+    if (localStorage.getItem('weekOneAssessmentData')) {
+      toast.error('You have already taken the assessment.')
+      return
+    }
 
+    setQuestionChecked((prevState) => {
+      const newState = [...prevState]
+      newState[questionIndex] = optionIndex
+      return newState
+    })
+  }
 
   const saveAssessmentData = () => {
     const questionsArray = getQuestionsArray()
@@ -323,53 +327,41 @@ export default function WeekOneAssessmentForm({
     console.log(`Correct Answers: ${correctCount} / ${totalQuestions}`)
     console.log(`Percentage: ${percentage}%`)
     toast.success(`You scored ${percentage}% in the quiz`)
+
     // Save data to local storage
     localStorage.setItem(
       'weekOneAssessmentData',
       JSON.stringify({ formattedData, percentage })
     )
-    const data = {
-      week: formattedData.week,
-      assessments: formattedData.assessments,
-      rating: percentage,
-      percentage,
-      personalityColor: formattedData.personalityColor,
-    }
-    const stringifiedFormData = JSON.stringify(data)
+
     // Post data to the API (if needed)
     const courseId = '66853bf50118e2e0a02b6a5a'
     userService
-      .postMyAssessment(courseId, stringifiedFormData)
+      .postMyAssessment(
+        courseId,
+        JSON.stringify({
+          week: formattedData.week,
+          assessments: formattedData.assessments,
+          rating: percentage,
+          percentage,
+          personalityColor: formattedData.personalityColor,
+        })
+      )
       .then((response) => {
         if (response.message === 'You have already taken the assessment') {
-          toast.error('You have already taken the assessment') // Show error toast with the message
+          toast.error('You have already taken the assessment')
         } else {
           console.log('Submission successful:', response)
-          toast.success('Submission successful!') // Optional: Show success message
+          toast.success('Submission successful!')
         }
       })
       .catch((error) => {
         console.error('Submission failed:', error)
-        // toast.error("Submission failed. Please try again later."); // General error message
       })
   }
 
   const renderQuestion = () => {
     const questionsArray = getQuestionsArray()
-
-    const handleQuestionCheck = (questionIndex, optionIndex) => {
-      setQuestionChecked((prevState) => {
-        const updatedChecked = [...prevState]; // Copy the previous state array
-        updatedChecked[questionIndex] = {
-          ...updatedChecked[questionIndex], // Copy the current question's object
-          answer: optionIndex, // Update the answer with the selected option index
-        };
-        return updatedChecked; // Return the updated array
-      });
-    };
-
-
-
 
     if (currentIndex === 1) {
       return (

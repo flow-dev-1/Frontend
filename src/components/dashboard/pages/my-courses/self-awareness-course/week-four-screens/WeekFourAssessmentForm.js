@@ -3,7 +3,7 @@ import '../newcourse.css'
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png'
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
 import { toast } from 'react-toastify'
-import userService from '../../../../../../services/api/user.js';
+import userService from '../../../../../../services/api/user.js'
 
 export default function WeekFourAssessmentForm({ onNext, onBack }) {
   const questionsArray = [
@@ -123,11 +123,17 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
 
   const [matchesSet1, setMatchesSet1] = useState([])
   const [matchesSet2, setMatchesSet2] = useState([])
-
   const handleQuestionCheck = (optionIndex) => {
+    // Check if the answer for the current question has already been selected and persisted
+    if (answers[currentIndex - 1] !== undefined) {
+      toast.error('You cannot change your answer once selected.')
+      return
+    }
+
+    // Allow the user to select an answer only if it's not already saved
     setAnswers((prevState) => {
       const newAnswers = [...prevState]
-      newAnswers[currentIndex - 1] = optionIndex
+      newAnswers[currentIndex - 1] = optionIndex // Save the selected option
       return newAnswers
     })
   }
@@ -181,14 +187,28 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
 
   const handleLeftItemClick1 = (index) => {
     if (selectedRight1 !== null) {
-      setMatchesSet1((prev) => [
-        ...prev,
-        {
-          left: index,
-          right: selectedRight1,
-          color: colors[matchesSet1.length % colors.length],
+      const newMatch = {
+        left: index,
+        right: selectedRight1,
+        color: colors[matchesSet1.length % colors.length],
+      }
+
+      setMatchesSet1((prev) => [...prev, newMatch])
+
+      // Save updated matches in localStorage
+      const updatedAssessment = {
+        week: 4,
+        assessment: {
+          answers, // Preserve answers
+          matchesSet1: [...matchesSet1, newMatch], // Update the first match set
+          matchesSet2, // Preserve second match set
         },
-      ])
+      }
+      localStorage.setItem(
+        'week-four-assessment',
+        JSON.stringify(updatedAssessment)
+      )
+
       setSelectedLeft1(null)
       setSelectedRight1(null)
     } else {
@@ -215,14 +235,28 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
 
   const handleLeftItemClick2 = (index) => {
     if (selectedRight2 !== null) {
-      setMatchesSet2((prev) => [
-        ...prev,
-        {
-          left: index,
-          right: selectedRight2,
-          color: colors[matchesSet2.length % colors.length],
+      const newMatch = {
+        left: index,
+        right: selectedRight2,
+        color: colors[matchesSet2.length % colors.length],
+      }
+
+      setMatchesSet2((prev) => [...prev, newMatch])
+
+      // Save updated matches in localStorage
+      const updatedAssessment = {
+        week: 4,
+        assessment: {
+          answers, // Preserve answers
+          matchesSet1, // Preserve first match set
+          matchesSet2: [...matchesSet2, newMatch], // Update the second match set
         },
-      ])
+      }
+      localStorage.setItem(
+        'week-four-assessment',
+        JSON.stringify(updatedAssessment)
+      )
+
       setSelectedLeft2(null)
       setSelectedRight2(null)
     } else {
