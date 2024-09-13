@@ -133,16 +133,15 @@
 .self-awareness .video-div {
   padding: 0px;
   background-color: transparent;
-  width: fit-content;
-  border-radius: 15px;
+  width: 870px;
+  height: 480px;
 }
 
 .self-awareness .custom-video,
 .self-awareness .video-thumbnail {
   margin-top: -10px;
-  width: 950px;
+  width: 870px;
   height: 480px;
-  /* #ECEDF0 */
 }
 
 .video-thumbnail {
@@ -204,7 +203,7 @@
 
 .self-awareness .question-box-header {
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   justify-content: start;
   gap: 0.4rem;
 }
@@ -231,7 +230,7 @@
 
 .self-awareness .question-box {
   width: 850px;
-  height: fit-content;
+  height: 440px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -243,7 +242,7 @@
   background-position: center;
   background-size: cover;
   border: 10px solid #00bcc3;
-  padding: 10px 30px;
+  padding: 10px 25px;
 }
 .self-awareness .question-box.week-two {
   width: fit-content;

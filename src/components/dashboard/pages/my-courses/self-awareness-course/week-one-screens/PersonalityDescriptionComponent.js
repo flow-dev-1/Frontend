@@ -41,14 +41,14 @@ const PersonalityDescriptionComponent = ({
   return (
     <div className=''>
       <div className='question-box'>
-        <div className='question-box-header mt-3'>
-          <h1 className='mb-0'>Question:</h1>
-          <h2 className='mb-0 d-flex ms-3 text-left'>
+        <div className='question-box-header mt-1'>
+          <h1>Question:</h1>
+          <h2 className='mb-0 d-flex ms-2 text-left'>
             Think about yourself, which of these personality colors describe
             you? Why do you think so?
           </h2>
         </div>
-        <div className='personality-type mt-5'>
+        <div className='personality-type mt-2'>
           <div
             className={`personality-option ${
               selectedPersonality === 'Emotional' ? 'selected' : ''
@@ -90,7 +90,7 @@ const PersonalityDescriptionComponent = ({
             <p>Action</p>
           </div>
         </div>
-        <div className='text-area-box px-4 mt-4'>
+        <div className='text-area-box px-1'>
           <textarea
             rows='6'
             placeholder='Type your answer here...'

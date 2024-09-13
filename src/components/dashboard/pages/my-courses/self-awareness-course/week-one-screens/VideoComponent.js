@@ -18,19 +18,6 @@ const VideoComponent = ({ videoSrc }) => {
 
   return (
     <div className='video-div'>
-      {loading && !error && (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          className='loading-indicator'
-        >
-          <Icon icon='eos-icons:loading' spin={true} width={40} />
-          <span>Loading...</span>
-        </div>
-      )}
       {error && (
         <div
           style={{
@@ -47,10 +34,10 @@ const VideoComponent = ({ videoSrc }) => {
       {!error && (
         <video
           className='custom-video'
-          // width="600"
+          width="850px"
           controls
           controlsList="nodownload noremoteplayback"
-          style={{ pointerEvents: 'auto' }} // Corrected style syntax
+          style={{ pointerEvents: 'auto' }} 
           onCanPlay={handleLoad}
           onError={handleError}
         >
