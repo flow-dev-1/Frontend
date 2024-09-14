@@ -70,8 +70,8 @@ const PersonalityQuestionComponent = ({
         {answers.map((item, index) => (
           <div key={index} className='mt-4'>
             <div className='question-box-header'>
-              <h1 style={{ fontSize: '29px' }} className='mb-0'>
-                Question {index + 1}:
+              <h1 style={{ fontSize: '32px' }} className='mb-0'>
+                Question{index + 1}:
               </h1>
               <h2
                 style={{ fontSize: '32px' }}
