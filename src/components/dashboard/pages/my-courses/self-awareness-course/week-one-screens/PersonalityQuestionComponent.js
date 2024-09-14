@@ -71,7 +71,7 @@ const PersonalityQuestionComponent = ({
           <div key={index} className='mt-4'>
             <div className='question-box-header'>
               <h1 style={{ fontSize: '32px' }} className='mb-0'>
-                Question {index + 1}:{' '}
+                Question{index + 1}:
               </h1>
               <h2
                 style={{ fontSize: '32px' }}
@@ -82,6 +82,9 @@ const PersonalityQuestionComponent = ({
             </div>
             <div className='text-area-box px-4'>
               <textarea
+                style={{
+                  width: '100%', 
+                }}
                 rows='3'
                 placeholder={`Type your answer ${index + 1} here...`}
                 value={item.answer}

@@ -368,11 +368,11 @@ export default function WeekOneAssessmentForm({
         <div className='assessment question-box py-5'>
           <div className='mt-2'>
             <div className='assessment-box'>
-              <h2>Assessment</h2>
+              <h2 style={{color:'white'}} >Assessment</h2>
               Scenario around your personality colors.
             </div>
             <h2 className='my-5 text-justify mx-auto w-75'>
-              Before we proceed, please select your personality color.
+              Before we proceed, please select the result of your personality test. What is your personality colour?
             </h2>
             <div style={{ height: '70px' }} className='px-4 text-area-box two '>
               <select
