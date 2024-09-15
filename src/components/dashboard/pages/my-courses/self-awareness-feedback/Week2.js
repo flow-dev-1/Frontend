@@ -264,7 +264,7 @@ const Week2 = () => {
       activity: 1,
       question: 'What do you think "Self Awareness" is?',
       answer: data?.activity?.activities[1].answers[0],
-      feedback: "Figma ipsum component variant main layer..."
+      feedback: ""
     }
   ];
   const activities = [
@@ -273,14 +273,14 @@ const Week2 = () => {
       question: "Identify your Strengths.",
       answer: strengths,
       feedback:
-        "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
+        ""
     },
     {
       activity: 3, // New activity based on image
       question: "Identify your Weaknesses.",
       answer: weaknesses,
       feedback:
-        "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
+        ""
     },
     // {
     //   activity: 4, // Another new activity based on image
@@ -298,7 +298,7 @@ const Week2 = () => {
         weaknesses: data?.activity?.activities[6].answers.weaknessesQ1
       },
       feedback:
-        "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
+        ""
     },
     {
       activity: 4, // New activity based on the latest image
@@ -309,7 +309,7 @@ const Week2 = () => {
         weaknesses: data?.activity?.activities[6].answers.weaknessesQ2
       },
       feedback:
-        "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
+        ""
     },
     {
       activity: 4, // New activity based on the latest image
@@ -320,7 +320,7 @@ const Week2 = () => {
         weaknesses: data?.activity?.activities[6].answers.weaknessesQ3
       },
       feedback:
-        "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
+        ""
     }
   ];
   const quizEssay = [
@@ -331,7 +331,7 @@ const Week2 = () => {
       answer:
         assessmentData?.existingAssessment?.assessments[0]?.assessment
           ?.answers[5],
-      feedback: "Figma ipsum component variant main layer..."
+      feedback: ""
     },
 
     {
@@ -342,7 +342,7 @@ const Week2 = () => {
         assessmentData?.existingAssessment?.assessments[0]?.assessment
           ?.answers[7],
       feedback:
-        "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
+        ""
     },
     {
       activity: 3, // New activity based on image
@@ -352,7 +352,7 @@ const Week2 = () => {
         assessmentData?.existingAssessment?.assessments[0]?.assessment
           ?.answers[8],
       feedback:
-        "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor. Style auto arrow blur pen pen variant. Scrolling resizing create invite connection editor union. Strikethrough thumbnail, selection pen."
+        ""
     }
   ];
   const percentage = assessmentData?.existingAssessment?.rating;

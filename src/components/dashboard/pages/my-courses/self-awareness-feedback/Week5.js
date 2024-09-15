@@ -440,13 +440,13 @@ const Week5 = () => {
     data?.activity?.activities[3].answers.IWill[2],
     data?.activity?.activities[3].answers.IWillNot[2]
   ];
-    const Q4 = [
-      data?.activity?.activities[3].answers.IWill[3],
-      data?.activity?.activities[3].answers.IWill[3]
-    ];  const Q5 = [
-      data?.activity?.activities[3].answers.IWill[4],
-      data?.activity?.activities[3].answers.IWillNot[4]
-    ];
+  const Q4 = [
+    data?.activity?.activities[3].answers.IWill[3],
+    data?.activity?.activities[3].answers.IWill[3]
+  ]; const Q5 = [
+    data?.activity?.activities[3].answers.IWill[4],
+    data?.activity?.activities[3].answers.IWillNot[4]
+  ];
   console.log(Q1);
   const activityData = data?.activity?.activities[1].answers;
   if (isLoading || assessmentLoading) {

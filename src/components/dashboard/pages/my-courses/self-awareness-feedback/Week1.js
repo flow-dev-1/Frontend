@@ -1113,13 +1113,13 @@ const Week1 = () => {
       activity: 1,
       question: 'What do you think "Self Awareness" is?',
       answer: data?.activity?.activities?.[1].answers[0],
-      feedback: "Figma ipsum component variant main layer..."
+      feedback: ""
     },
     {
       activity: 2,
       question: "What do you understand by the word “Personality”?",
       answer: data?.activity?.activities?.[3].answers[0],
-      feedback: "Figma ipsum component variant main layer..."
+      feedback: ""
     },
     {
       activity: 3,
@@ -1127,7 +1127,7 @@ const Week1 = () => {
         "Drag-and-drop the statements on the left into any of these bowls.",
       answer: mappedContent,
       feedback:
-        "Figma ipsum component variant main layer. Font duplicate component effect vertical fill list team content editor..."
+        ""
     }
   ];
   const activityFour = [
@@ -1138,7 +1138,7 @@ const Week1 = () => {
       selectedPersonality:
         data?.activity?.activities?.[7].answer?.selectedPersonality,
       explanation: data?.activity?.activities?.[7].answer?.explanation,
-      feedback: "Figma ipsum component variant main layer..."
+      feedback: ""
     }
   ];
   const activityAnswers = data?.activity?.activities?.[12]?.answers || [];
@@ -1149,7 +1149,7 @@ const Week1 = () => {
       activity: 4,
       question: "Do you agree with this new result?",
       answer: data?.activity?.activities?.[13].answers[2].answer,
-      feedback: "Figma ipsum component variant main layer..."
+      feedback: ""
     },
     {
       activity: 4,
@@ -1157,14 +1157,14 @@ const Week1 = () => {
         "Did you get the same color as the color you identified for yourself earlier?",
       answer: data?.activity?.activities?.[13].answers[0].answer,
 
-      feedback: "Figma ipsum component variant main layer..."
+      feedback: ""
     },
     {
       activity: 4,
       question: "What was different? Why do you think this was different?",
       answer: data?.activity?.activities?.[13].answers[1].answer,
 
-      feedback: "Figma ipsum component variant main layer..."
+      feedback: ""
     }
   ];
 
