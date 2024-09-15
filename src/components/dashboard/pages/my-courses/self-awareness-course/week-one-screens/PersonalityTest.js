@@ -264,7 +264,7 @@ export default function PersonalityTest({
     if (currentIndex === 1) {
       return (
         <div className=' question-bot'>
-          <img  src={personalityTest} alt='Personality Test' />
+          <img src={personalityTest} alt='Personality Test' />
         </div>
       )
     } else {
@@ -276,11 +276,10 @@ export default function PersonalityTest({
               <h1 style={{ color: '#5B616A' }}>{currentIndex - 1}.</h1>
               <h2
                 style={{ color: '#5B616A' }}
-                className='text-center mb-0 fs-1 ms-3'
+                className='text-center mb-0 fs-1 ms-3 '
               >
                 {answers[questionIndex].title}
               </h2>
-
             </div>
             <div className='checkbox-questions'>
               <ul className='p-0'>
@@ -296,7 +295,7 @@ export default function PersonalityTest({
                       }
                       alt=''
                     />
-                    <p className='question-p ms-3'>{item}</p>
+                    <p className='question-p ms-3 mt-2'>{item}</p>
                   </li>
                 ))}
               </ul>

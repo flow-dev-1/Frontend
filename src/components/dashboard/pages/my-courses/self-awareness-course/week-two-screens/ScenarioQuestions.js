@@ -56,51 +56,50 @@ export default function ScenarioQuestions({
   ]
 
   // Helper function to find index of each answer in questionsArray
-const getSelectedIndexes = (answers, list) => {
-  return answers
-    ? answers
-        .map((answer) => list.indexOf(answer))
-        .filter((index) => index !== -1)
-    : [];
-};
+  const getSelectedIndexes = (answers, list) => {
+    return answers
+      ? answers
+          .map((answer) => list.indexOf(answer))
+          .filter((index) => index !== -1)
+      : []
+  }
 
-// Function to extract the correct answers for strengths or weaknesses
-const getAnswersByQuestion = (activity, questionNumber, type) => {
-  const answers = formData?.activities?.find(
-    (activity) => activity.activity === activityIndex
-  )?.answers;
+  // Function to extract the correct answers for strengths or weaknesses
+  const getAnswersByQuestion = (activity, questionNumber, type) => {
+    const answers = formData?.activities?.find(
+      (activity) => activity.activity === activityIndex
+    )?.answers
 
-  return answers ? answers[`${type}Q${questionNumber}`] || [] : [];
-};
+    return answers ? answers[`${type}Q${questionNumber}`] || [] : []
+  }
 
-// Pre-fill strengthChecked state based on formData
-const [strengthChecked, setStrengthChecked] = useState(() =>
-  questionsArray.reduce((acc, question, index) => {
-    const questionNumber = index + 1; // Assuming questionsArray is ordered
-    const answers = getAnswersByQuestion(
-      activityIndex,
-      questionNumber,
-      "strengths"
-    );
-    acc[index] = getSelectedIndexes(answers, question.questionList);
-    return acc;
-  }, {})
-);
+  // Pre-fill strengthChecked state based on formData
+  const [strengthChecked, setStrengthChecked] = useState(() =>
+    questionsArray.reduce((acc, question, index) => {
+      const questionNumber = index + 1 // Assuming questionsArray is ordered
+      const answers = getAnswersByQuestion(
+        activityIndex,
+        questionNumber,
+        'strengths'
+      )
+      acc[index] = getSelectedIndexes(answers, question.questionList)
+      return acc
+    }, {})
+  )
 
-// Pre-fill weaknessChecked state based on formData
-const [weaknessChecked, setWeaknessChecked] = useState(() =>
-  questionsArray.reduce((acc, question, index) => {
-    const questionNumber = index + 1; // Assuming questionsArray is ordered
-    const answers = getAnswersByQuestion(
-      activityIndex,
-      questionNumber,
-      "weaknesses"
-    );
-    acc[index] = getSelectedIndexes(answers, question.questionListNegative);
-    return acc;
-  }, {})
-);
-
+  // Pre-fill weaknessChecked state based on formData
+  const [weaknessChecked, setWeaknessChecked] = useState(() =>
+    questionsArray.reduce((acc, question, index) => {
+      const questionNumber = index + 1 // Assuming questionsArray is ordered
+      const answers = getAnswersByQuestion(
+        activityIndex,
+        questionNumber,
+        'weaknesses'
+      )
+      acc[index] = getSelectedIndexes(answers, question.questionListNegative)
+      return acc
+    }, {})
+  )
 
   const [currentIndex, setCurrentIndex] = useState(1)
   const [reviewPopUp, setReviewPopUp] = useState(false)
@@ -180,21 +179,32 @@ const [weaknessChecked, setWeaknessChecked] = useState(() =>
     const currentQuestion = questionsArray[currentIndex - 1]
     return (
       <div className='week-two scenario'>
-        <div className='assessment question-box py-4'>
-          <div className='scenario-number px-4 mb-3 mx-auto'>
+        <div
+          style={{ height: '550px' }}
+          className='assessment question-box py-4'
+        >
+          <div
+            className='scenario-number px-4 mt-8 mb-3 mx-auto'
+            style={{ marginTop: '1rem' }}
+          >
             <h1 className='text-center my-0'>Scenario {currentIndex}</h1>
           </div>
           <div className='question-box-header align-items-start'>
             <h1 className='mb-0 '>Question: </h1>
-            <h2 className='mb-0 ms-3 text-center'>{currentQuestion.title}</h2>
+            <h2
+              style={{ color: '#5B616A', fontSize: '38px' }}
+              className='mb-0 ms-3 text-center'
+            >
+              {currentQuestion.title}
+            </h2>
           </div>
 
-          <div className='d-flex justify-content-around mt-5'>
+          <div className='d-flex justify-content-around mt-2'>
             <div className='text-center checkbox-questions strength'>
               <img src={strengthImg} alt='' />
               <ul className='p-0 mt-4'>
                 {currentQuestion.questionList.map((item, index) => (
-                  <li key={index} className='d-flex my-2'>
+                  <li key={index} className='d-flex my-1'>
                     <img
                       onClick={() =>
                         handleQuestionCheck(currentIndex - 1, index, true)
@@ -245,7 +255,7 @@ const [weaknessChecked, setWeaknessChecked] = useState(() =>
       {renderQuestion()}
 
       <div className='slider-indicator'>
-        <ul className='p-0 mt-5'>
+        <ul className='p-0 mt-2'>
           {Array.from({ length: questionsArray.length }, (_, index) => (
             <li
               key={index + 1}
@@ -255,7 +265,7 @@ const [weaknessChecked, setWeaknessChecked] = useState(() =>
         </ul>
       </div>
 
-      <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
+      <div className='d-flex align-items-center justify-content-around mx-auto mt-2'>
         <button
           className='btn progress-btn btn-light'
           onClick={handlePreviousStepClick}

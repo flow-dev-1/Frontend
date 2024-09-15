@@ -365,7 +365,10 @@ export default function WeekOneAssessmentForm({
 
     if (currentIndex === 1) {
       return (
-        <div style={{justifyContent:"start"}} className='assessment question-box py-4'>
+        <div
+          style={{ justifyContent: 'start' }}
+          className='assessment question-box py-4'
+        >
           <div className=''>
             <div className='assessment-box'>
               <h2 style={{ color: '#FAFAFA' }}>Assessment</h2>
@@ -373,12 +376,15 @@ export default function WeekOneAssessmentForm({
             </div>
             <h2
               style={{ color: '#5B616A' }}
-              className='my-5 text-justify mx-auto w-75'
+              className='my-5 text-center mx-auto w-75'
             >
               Before we proceed, please select the result of your personality
               test. What is your personality colour?
             </h2>
-            <div style={{ height: '70px' }} className='px-4 text-area-box two '>
+            <div
+              style={{ height: '70px', width: '100%' }}
+              className='px-4 text-area-box two '
+            >
               <select
                 style={{ margin: '2rem' }}
                 value={personalityColor}
@@ -401,12 +407,15 @@ export default function WeekOneAssessmentForm({
       return (
         <div className='assessment question-box py-4'>
           <div className='d-flex align-items-start'>
-            <h1>{currentIndex - 1}.</h1>
-            <h2 className='text-center mb-0 fs-1 ms-3'>
+            <h1 style={{ color: '#5B616A' }}>{currentIndex - 1}.</h1>
+            <h2
+              style={{ color: '#5B616A' }}
+              className='text-start mb-0 fs-1 ms-3'
+            >
               {questionsArray[questionIndex].title}
             </h2>
           </div>
-          <div className='checkbox-questions'>
+          <div className='checkbox-questions' style={{marginLeft:"3rem"}}>
             <ul className='p-0'>
               {questionsArray[questionIndex].questionList.map((item, index) => (
                 <li key={index} className='d-flex my-3'>
@@ -420,7 +429,7 @@ export default function WeekOneAssessmentForm({
                     }
                     alt=''
                   />
-                  <p className='question-p ms-3'>{item}</p>
+                  <p className='question-p ms-3 mt-2'>{item}</p>
                 </li>
               ))}
             </ul>

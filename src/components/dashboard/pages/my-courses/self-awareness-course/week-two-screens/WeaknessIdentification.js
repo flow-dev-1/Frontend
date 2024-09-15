@@ -97,7 +97,9 @@ export default function WeaknessIdentification({
         <div className='d-flex align-items-start'>
           <div className='question-box-header mx-auto'>
             <h1 className='mb-0 '>Question: </h1>
-            <h2 className='mb-0 d-flex ms-3'>Identify Your Weaknesses</h2>
+            <h2 className='mb-0 d-flex ms-3' style={{ color: '#5B616A' }}>
+              Identify Your Weaknesses
+            </h2>
           </div>
         </div>
         <div className='assessment checkbox-questions mt-4'>
