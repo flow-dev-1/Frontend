@@ -244,6 +244,19 @@
   border: 10px solid #00bcc3;
   padding: 10px 25px;
 }
+
+.question-bot{
+   width: 850px;
+  /* height: 470px;  */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+    border: 10px solid #00bcc3;
+  padding: 10px 25px;
+}
+
+.question-bot img {}
+
 .self-awareness .question-box.week-two {
   width: fit-content;
 }

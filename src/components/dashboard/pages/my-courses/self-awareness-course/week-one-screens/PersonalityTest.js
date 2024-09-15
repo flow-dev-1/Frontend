@@ -264,8 +264,8 @@ export default function PersonalityTest({
   const renderQuestion = () => {
     if (currentIndex === 1) {
       return (
-        <div className='assessment question-box'>
-          <img src={personalityTest} alt='Personality Test' />
+        <div className=' question-bot'>
+          <img  src={personalityTest} alt='Personality Test' />
         </div>
       )
     } else {
