@@ -205,7 +205,7 @@
   display: flex;
   /* align-items: center; */
   justify-content: start;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
 .self-awareness .question-box-header h1 {
@@ -230,7 +230,7 @@
 
 .self-awareness .question-box {
   width: 850px;
-  height: 440px;
+  height: 470px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -244,6 +244,19 @@
   border: 10px solid #00bcc3;
   padding: 10px 25px;
 }
+
+.question-bot{
+   width: 850px;
+  /* height: 470px;  */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+    border: 10px solid #00bcc3;
+  padding: 10px 25px;
+}
+
+.question-bot img {}
+
 .self-awareness .question-box.week-two {
   width: fit-content;
 }
@@ -456,6 +469,7 @@
 .text-area-box-3 {
   height: auto;
   background-size: 100% 100%;
+  width: 700px;
 }
 
 .self-awareness .assessment-box {

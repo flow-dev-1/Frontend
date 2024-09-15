@@ -88,6 +88,9 @@ const PersonalityQuestionComponent = ({
               style={{ height: '66px', paddingTop: '1.5rem' }}
             >
               <textarea
+                style={{
+                  width: '100%', 
+                }}
                 rows='3'
                 placeholder={`Type your answer ${index + 1} here...`}
                 value={item.answer}
