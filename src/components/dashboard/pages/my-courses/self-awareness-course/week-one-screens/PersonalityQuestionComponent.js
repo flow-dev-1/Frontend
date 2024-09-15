@@ -70,17 +70,23 @@ const PersonalityQuestionComponent = ({
         {answers.map((item, index) => (
           <div key={index} className='mt-4'>
             <div className='question-box-header'>
-              <h1 style={{ fontSize: '32px' }} className='mb-0'>
-                Question {index + 1}:{' '}
+              <h1
+                style={{ fontSize: '32px', color: '#275DAD' }}
+                className='mb-0'
+              >
+                Question:{' '}
               </h1>
               <h2
-                style={{ fontSize: '32px' }}
+                style={{ fontSize: '32px', color: '#5B616A' }}
                 className='mb-0 d-flex  text-left'
               >
                 {item.questionText}
               </h2>
             </div>
-            <div className='text-area-box px-4'>
+            <div
+              className='text-area-box px-4'
+              style={{ height: '66px', paddingTop: '1.5rem' }}
+            >
               <textarea
                 rows='3'
                 placeholder={`Type your answer ${index + 1} here...`}

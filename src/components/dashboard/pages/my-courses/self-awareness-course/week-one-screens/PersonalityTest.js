@@ -231,7 +231,6 @@ export default function PersonalityTest({
     }
   }
 
-
   // Handle question selection
   const handleQuestionCheck = (questionIndex, optionIndex) => {
     const selectedText = answers[questionIndex].questionList[optionIndex]
@@ -274,8 +273,11 @@ export default function PersonalityTest({
         return (
           <div className='assessment question-box py-4'>
             <div className='d-flex align-items-start'>
-              <h1>{currentIndex - 1}.</h1>
-              <h2 className='text-center mb-0 fs-1 ms-3'>
+              <h1 style={{ color: '#5B616A' }}>{currentIndex - 1}.</h1>
+              <h2
+                style={{ color: '#5B616A' }}
+                className='text-center mb-0 fs-1 ms-3'
+              >
                 {answers[questionIndex].title}
               </h2>
             </div>
@@ -350,7 +352,7 @@ export default function PersonalityTest({
           <img width={250} src={personalityHeader} alt='' />
         </div>
         <button
-          style={{ width: '10%', marginLeft: '95%', marginTop:"-8rem" }}
+          style={{ width: '10%', marginLeft: '95%', marginTop: '-8rem' }}
           className='btn '
           onClick={() => setShowModal(false)}
         >

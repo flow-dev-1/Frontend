@@ -365,14 +365,18 @@ export default function WeekOneAssessmentForm({
 
     if (currentIndex === 1) {
       return (
-        <div className='assessment question-box py-5'>
-          <div className='mt-2'>
+        <div style={{justifyContent:"start"}} className='assessment question-box py-4'>
+          <div className=''>
             <div className='assessment-box'>
-              <h2>Assessment</h2>
+              <h2 style={{ color: '#FAFAFA' }}>Assessment</h2>
               Scenario around your personality colors.
             </div>
-            <h2 className='my-5 text-justify mx-auto w-75'>
-              Before we proceed, please select your personality color.
+            <h2
+              style={{ color: '#5B616A' }}
+              className='my-5 text-justify mx-auto w-75'
+            >
+              Before we proceed, please select the result of your personality
+              test. What is your personality colour?
             </h2>
             <div style={{ height: '70px' }} className='px-4 text-area-box two '>
               <select

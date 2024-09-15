@@ -50,9 +50,13 @@ const QuestionComponent = ({
       <div className='question-box py-5'>
         <div className='question-box-header m-auto'>
           <h1 className='mb-0'>Question:</h1>
-          <h2 className='mb-0 d-flex ms-2'>{questionText}</h2>
+          <h2 style={{ color: '#5B616A' }} className='mb-0 d-flex ms-2'>
+            {questionText}
+          </h2>
           {imageSrc && <img src={imageSrc} alt={altText} className='mx-2' />}
-          <h2 className=''>{altText}</h2>
+          <h2 className='' style={{ color: '#5B616A' }}>
+            {altText}
+          </h2>
         </div>
         <div className='text-area-box px-4 mt-4'>
           <textarea
