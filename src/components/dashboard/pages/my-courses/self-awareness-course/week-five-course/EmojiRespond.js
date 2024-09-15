@@ -120,7 +120,7 @@ export default function EmojiRespond({ onNext, onBack, formData }) {
         <div className='align-items-start'>
           <div className='question-box-header mx-auto align-items-start'>
             <h1 className='mb-0'>Instructions:</h1>
-            <h2 className='mb-0 d-flex ms-3'>
+            <h2 style={{ color: '#5B616A' }} className='mb-0 d-flex ms-3'>
               All you need to do is select how you would respond to a colleague
               wearing a facial expression with facial responses.
             </h2>

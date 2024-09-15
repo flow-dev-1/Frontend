@@ -216,16 +216,23 @@ export default function NewAssessmentForm({ onNext, onBack }) {
 
     return (
       <div className='week-two'>
-        <div className='assessment question-box'>
+        <div style={{ height: '550px' }} className='assessment question-box'>
           {currentIndex === 0 && (
-            <div className='assessment-box'>
-              <h2>Assessment</h2>
-              <p className='text-center'>React Basics Quiz</p>
+            <div style={{marginTop:"1rem"}} className='assessment-box'>
+              <h2 style={{ color: '#FAFAFA' }}>Assessment</h2>
+              <p style={{ color: '#FAFAFA' }} className='text-center'>
+                Scenario around your values.
+              </p>
             </div>
           )}
           <div className='d-flex align-items-start mt-3'>
-            <h1>{currentIndex + 1}.</h1>
-            <h2 className='text-center mb-0 fs-1 ms-3'>{question.title}</h2>
+            <h1 style={{ color: '#5B616A' }}>{currentIndex + 1}.</h1>
+            <h2
+              style={{ color: '#5B616A' }}
+              className='text-center mb-0 fs-1 ms-3'
+            >
+              {question.title}
+            </h2>
           </div>
           <div className='text-center checkbox-questions'>
             <ul className='p-0 mt-4 d-flex flex-column'>
