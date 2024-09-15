@@ -184,10 +184,14 @@ export default function WeekTwoAssessmentForm({ onBack, onNext }) {
       return (
         <div className='week-two'>
           <div style={{ height: '550px' }} className='assessment question-box'>
-            <div className='assessment-box'>
-              <h2 style={{ color: '#fafafa' }}>Assessment</h2>
-              Scenario around your strengths and weaknesses.
-            </div>
+            {currentIndex <= 1 && (
+              <div className='assessment-box'>
+                <h2 style={{ color: '#FAFAFA' }}>Assessment</h2>
+                <p style={{ color: '#FAFAFA' }} className='text-center'>
+                  Scenario around your values.
+                </p>
+              </div>
+            )}
             <div className='d-flex align-items-start mt-3'>
               <h1 style={{ color: '#5B616A' }}>{currentIndex}.</h1>
               <h2

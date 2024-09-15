@@ -209,7 +209,18 @@ export default function WeekThreeAssessmentForm({ onNext, onBack }) {
     const question = questionsArray[currentIndex - 1]
     return (
       <div className='week-three'>
-        <div className='assessment question-box py-4'>
+        <div
+          style={{ height: '550px' }}
+          className='assessment question-box py-4'
+        >
+          {currentIndex <= 1 && (
+            <div className='assessment-box'>
+              <h2 style={{ color: '#FAFAFA' }}>Assessment</h2>
+              <p style={{ color: '#FAFAFA' }} className='text-center'>
+                Scenario around your values.
+              </p>
+            </div>
+          )}
           <div className='d-flex align-items-start mt-3'>
             <h1 style={{ color: '#5B616A' }}>{currentIndex}.</h1>
             <h2

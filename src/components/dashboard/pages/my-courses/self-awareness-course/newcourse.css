@@ -728,25 +728,25 @@ img.value-description-img {
 /* General container for the matching exercise */
 .match {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
   position: relative;
   margin-top: 20px;
+  width: 100%;
 }
 
 /* Container for left and right columns */
 .matching-container {
   display: flex;
-  justify-content: space-between;
   position: relative;
-  width: 100%;
   align-items: center;
+  gap: 4rem;
+  width: 100%;
 }
 
 /* Left and right columns styling */
 .left-column,
 .right-column {
-  width: 45%;
+  width: 20%;
 }
 
 /* Styling for each matching item */
