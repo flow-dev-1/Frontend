@@ -211,13 +211,18 @@ export default function WeekThreeAssessmentForm({ onNext, onBack }) {
       <div className='week-three'>
         <div className='assessment question-box py-4'>
           <div className='d-flex align-items-start mt-3'>
-            <h1>{currentIndex}.</h1>
-            <h2 className='text-center mb-0 fs-1 ms-3'>{question.title}</h2>
+            <h1 style={{ color: '#5B616A' }}>{currentIndex}.</h1>
+            <h2
+              style={{ color: '#5B616A' }}
+              className='text-start mb-0 fs-1 ms-3'
+            >
+              {question.title}
+            </h2>
           </div>
           <div className='text-center checkbox-questions'>
             <ul className='p-0 mt-4 d-flex flex-column'>
               {question.questionList.map((item, index) => (
-                <li key={index} className='d-flex align-items-center'>
+                <li key={index} className='d-flex align-items-center my-2'>
                   <img
                     onClick={() => handleQuestionCheck(currentIndex - 1, index)}
                     className='cursor-pointer'

@@ -226,6 +226,7 @@
 .self-awareness .question-box-header img {
   max-width: 40%;
   object-fit: contain;
+  margin-top: -1rem;
 }
 
 .self-awareness .question-box {
@@ -245,17 +246,18 @@
   padding: 10px 25px;
 }
 
-.question-bot{
-   width: 850px;
+.question-bot {
+  width: 850px;
   /* height: 470px;  */
   display: flex;
   flex-direction: column;
-  justify-content: center; 
-    border: 10px solid #00bcc3;
+  justify-content: center;
+  border: 10px solid #00bcc3;
   padding: 10px 25px;
 }
 
-.question-bot img {}
+.question-bot img {
+}
 
 .self-awareness .question-box.week-two {
   width: fit-content;
@@ -265,11 +267,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 200px;
+  height: 250px;
   background: url('../../../../../assets/selfawareness-images/text-area-bg.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
+  width: 100%;
 }
 .text-area-box-2 {
   display: flex;

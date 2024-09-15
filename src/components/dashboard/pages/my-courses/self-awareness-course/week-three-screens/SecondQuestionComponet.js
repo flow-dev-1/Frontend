@@ -50,12 +50,17 @@ const SecondQuestionComponent = ({
       <div className='question-box py-4'>
         <div className='question-box-header'>
           <div>
-            <h1 className='mb-0'>Question: </h1>
-            <h2 className='mb-0 ms-3 '>{questionText}</h2>
+            <h1
+              style={{ display: 'flex', alignItems: 'start' }}
+              className='mb-0'
+            >
+              Question: <div style={{ color: '#5B616A' }}>{questionText}</div>{' '}
+            </h1>
           </div>
         </div>
         <div className='text-area-box px-4 mt-4'>
           <textarea
+            style={{ marginLeft: '3rem' }}
             rows='6'
             placeholder='Type your answer here...'
             value={answers}
