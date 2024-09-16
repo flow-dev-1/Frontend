@@ -5,6 +5,7 @@ import checkedImage from '../../../../../../assets/selfawareness-images/checked.
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
 import imageMap from './imageMapping'
 import NavigationButtons from './NavigationButtons'
+import { toast } from 'react-toastify'
 
 Modal.setAppElement('#root')
 
@@ -147,7 +148,10 @@ export default function MindSetFlipQuestion({
             <div className='mt-2 '>
               <div className='question-box-header align-items-start'>
                 <h1 className='mb-0 '>Instruction: </h1>
-                <h2 className='mb-0 d-flex ms-3 text-left'>
+                <h2
+                  style={{ color: '#5b6161' }}
+                  className='mb-0 d-flex ms-3 text-left'
+                >
                   Flip each card to know more about the values. Select the box
                   on each card to pick the values you feel are a big part of who
                   you are.
@@ -205,7 +209,7 @@ export default function MindSetFlipQuestion({
   const handleNextChunk = () => {
     const checkedItems = questionChecked[currentChunkIndex]
     if (checkedItems.length === 0) {
-      alert('Please select at least one item before proceeding.')
+      toast.error('Please select at least one item before proceeding.')
       return
     }
 

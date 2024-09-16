@@ -43,7 +43,10 @@ const PersonalityDescriptionComponent = ({
       <div className='question-box'>
         <div className='question-box-header mt-1'>
           <h1>Question:</h1>
-          <h2 className='mb-0 d-flex ms-2 text-left'>
+          <h2
+            style={{ color: '#5B616A' }}
+            className='mb-0 d-flex ms-2 text-left'
+          >
             Think about yourself, which of these personality colors describe
             you? Why do you think so?
           </h2>
@@ -90,20 +93,15 @@ const PersonalityDescriptionComponent = ({
             <p>Action</p>
           </div>
         </div>
-        <div className="text-area-box px-5  mr-5">
+        <div className='text-area-box'>
           <textarea
-            rows="6"
-            placeholder="Type your answer here..."
+            rows='6'
+            style={{ width: '70%' }}
+            placeholder='Type your answer here...'
             value={explanation} // Use explanation state variable here
             onChange={handleExplanationChange}
-            style={{
-              width: '100%', // Ensure the textarea takes full width of the parent
-              padding: '20px', // Add some padding for better spacing
-              boxSizing: 'border-box',
-            }}
-          ></textarea>
+          />
         </div>
-
       </div>
 
       <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>

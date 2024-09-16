@@ -112,7 +112,7 @@ export default function EmojiEmotionMatch({
         <div className='align-items-start'>
           <div className='question-box-header mx-auto'>
             <h1 className='mb-0'>Instructions:</h1>
-            <h2 className='mb-0 d-flex ms-3'>
+            <h2 style={{ color: '#5B616A' }} className='mb-0 d-flex ms-3'>
               Kindly match the emojis to the right emotions.
             </h2>
           </div>

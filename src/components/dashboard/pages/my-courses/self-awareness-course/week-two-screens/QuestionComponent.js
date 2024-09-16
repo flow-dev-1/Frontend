@@ -50,11 +50,14 @@ const QuestionComponent = ({
       <div className='question-box py-5'>
         <div className='question-box-header'>
           <h1 className='mb-0'>Question:</h1>
-          <h2 style={{ fontSize: '35px' }} className='mb-0 d-flex ms-3'>
+          <h2
+            style={{ fontSize: '35px', color: '#5B616A' }}
+            className='mb-0 d-flex ms-3'
+          >
             {questionText}
           </h2>
           {imageSrc && <img src={imageSrc} alt={altText} className='mx-2' />}
-          <h2 style={{ fontSize: '35px' }} className=''>
+          <h2 style={{ fontSize: '35px', color: '#5B616A' }} className=''>
             {altText}
           </h2>
         </div>

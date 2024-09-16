@@ -353,16 +353,26 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
         <div className='assessment question-box'>
           {currentIndex <= 1 && (
             <div className='assessment-box'>
-              <h2>Assessment</h2>
-              <p className='text-center'>Scenario around your values.</p>
+              <h2 style={{ color: '#FAFAFA' }}>Assessment</h2>
+              <p style={{ color: '#FAFAFA' }} className='text-center'>
+                Scenario around your values.
+              </p>
             </div>
           )}
           <div className='d-flex align-items-start mt-3'>
-            <h1>{currentIndex}.</h1>
-            <h2 className='text-center mb-0 fs-1 ms-3'>{question.title}</h2>
+            <h1 style={{ color: '#5B616A' }}>{currentIndex}.</h1>
+            <h2
+              style={{ color: '#5B616A' }}
+              className='text-start mb-0 fs-1 ms-3'
+            >
+              {question.title}
+            </h2>
           </div>
           {currentIndex <= 8 && (
-            <div className='text-center checkbox-questions'>
+            <div
+              style={{ marginLeft: '3rem' }}
+              className='text-center checkbox-questions'
+            >
               <ul className='p-0 mt-4 d-flex flex-column'>
                 {question.questionList.map((item, index) => (
                   <li key={index} className='d-flex align-items-center'>
@@ -400,6 +410,7 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
                         ),
                         border: 'none',
                         padding: '1.5rem',
+                        width: '300px',
                       }}
                       onClick={() => handleLeftItemClick1(index)}
                     >
@@ -422,6 +433,8 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
                           matchesSet1
                         ),
                         padding: '1rem',
+                        width: '400px',
+                        marginLeft: '8rem',
                       }}
                       onClick={() => handleRightItemClick1(index)}
                     >
@@ -451,6 +464,7 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
                         border: 'none',
                         textAlign: 'left',
                         padding: '1rem',
+                        width: '300px',
                       }}
                       onClick={() => handleLeftItemClick2(index)}
                     >
@@ -474,6 +488,8 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
                         ),
                         border: 'none',
                         padding: '1rem',
+                        width: '400px',
+                        marginLeft: '8rem',
                       }}
                       onClick={() => handleRightItemClick2(index)}
                     >

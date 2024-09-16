@@ -231,7 +231,6 @@ export default function PersonalityTest({
     }
   }
 
-
   // Handle question selection
   const handleQuestionCheck = (questionIndex, optionIndex) => {
     const selectedText = answers[questionIndex].questionList[optionIndex]
@@ -265,7 +264,7 @@ export default function PersonalityTest({
     if (currentIndex === 1) {
       return (
         <div className=' question-bot'>
-          <img  src={personalityTest} alt='Personality Test' />
+          <img src={personalityTest} alt='Personality Test' />
         </div>
       )
     } else {
@@ -273,12 +272,14 @@ export default function PersonalityTest({
       if (questionIndex >= 0 && questionIndex < answers.length) {
         return (
           <div className='assessment question-box py-4'>
-            <div className='d-flex align-items-start  '>
-              <h1>{currentIndex - 1}.</h1>
-              <h2 className="text-center mb-0 fs-1 ms-3" style={{ color: '#5B616A' }}>
+            <div className='d-flex align-items-start'>
+              <h1 style={{ color: '#5B616A' }}>{currentIndex - 1}.</h1>
+              <h2
+                style={{ color: '#5B616A' }}
+                className='text-center mb-0 fs-1 ms-3 '
+              >
                 {answers[questionIndex].title}
               </h2>
-
             </div>
             <div className='checkbox-questions'>
               <ul className='p-0'>
@@ -294,7 +295,7 @@ export default function PersonalityTest({
                       }
                       alt=''
                     />
-                    <p className='question-p ms-3'>{item}</p>
+                    <p className='question-p ms-3 mt-2'>{item}</p>
                   </li>
                 ))}
               </ul>
@@ -351,7 +352,7 @@ export default function PersonalityTest({
           <img width={250} src={personalityHeader} alt='' />
         </div>
         <button
-          style={{ width: '10%', marginLeft: '95%', marginTop:"-8rem" }}
+          style={{ width: '10%', marginLeft: '95%', marginTop: '-8rem' }}
           className='btn '
           onClick={() => setShowModal(false)}
         >

@@ -167,7 +167,9 @@ export default function WeekFiveScenarioQuestions({
             <h1 className='text-center my-0'>Scenario {currentIndex}</h1>
           </div>
           <div className='question-box-header align-items-start'>
-            <h2 className='mb-0 ms-3 text-center'>{currentQuestion.title}</h2>
+            <h2 style={{ color: '#5B616A' }} className='mb-0 ms-3 text-center'>
+              {currentQuestion.title}
+            </h2>
           </div>
           <div
             className='dropdown-select-section mt-5'
