@@ -173,6 +173,19 @@ select {
   height: 14px;
   border-radius: 4px;
 }
+.box-1 {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  background-color: #17e383;
+}
+
+.box-3 {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  background-color: #6f6af8;
+}
 
 .box {
   background-color: #17e383;
@@ -198,6 +211,7 @@ p.active.gender {
 .chart-heading {
   display: flex;
   align-items: center;
+  gap: 0.85rem;
   justify-content: space-between;
 }
 

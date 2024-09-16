@@ -243,8 +243,8 @@ function DragDropComponent({ onBack, onNext, formData }) {
               {Array.from({ length: initialCards.length }).map((_, index) => (
                 <li
                   key={index}
-                  style={{ width: '40px', height: '0px' }}
-                  className={index < currentIndex ? 'answered' : ''}
+                  style={{ width: '25px', height: '-10px' }}
+                  className={index < currentIndex ? 'answered-drop' : 'p-0'}
                 ></li>
               ))}
             </ul>
