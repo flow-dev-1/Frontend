@@ -35,6 +35,10 @@ export default function IndividualOverview() {
     refetchOnMount: true, // Refetch when the component mounts again
   })
 
+  console.log(enrolledData)
+  const studentOfSchool = user?.newCourseInvite
+  console.log(studentOfSchool)
+
   const handleSort = (a, b) => {
     if (sortOption === 'az') {
       return a.title.localeCompare(b.title)
@@ -161,6 +165,7 @@ export default function IndividualOverview() {
             coursesArray={data}
             enrolled={enrolledDataArray}
             enrolledData={enrolledData}
+            studentOfSchool={studentOfSchool}
           />
         ))}
       </div>

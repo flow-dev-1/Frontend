@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux'
 import { setToken } from '../../../../redux/reducers/jwtReducer'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
+import { logoutSuccess } from '../../../../redux/reducers/userReducer'
 
 // Schema definition
 const studentSchema = yup.object().shape({
@@ -86,6 +87,7 @@ export default function InvitedStudentDetailsForm({
       localStorage.setItem('Flow-Auth-Token', data?.token)
       openModal()
       setStep(2)
+      dispatch(logoutSuccess())
     },
     onError: (error) => {
       toast.error(error.message)
@@ -305,7 +307,7 @@ export default function InvitedStudentDetailsForm({
               }}
               type='submit'
             >
-              {mutation.isLoading ? (
+              {mutation.isPending ? (
                 <RotatingLines
                   type='Oval'
                   style={{ color: '#FFF' }}
