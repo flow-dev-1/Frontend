@@ -353,7 +353,7 @@ const SchoolEnrolledStudents = () => {
                   style={{ cursor: 'pointer' }}
                   onClick={() => navigate(`users/${data?.user?._id}`)}
                 >
-                  {data?.user?.first_name} {data?.user?.last_name}
+                  {data?.user?.fullName} 
                 </td>
                 <td>{data?.user?.email}</td>
                 <td>{data?.user?.phone}</td>
