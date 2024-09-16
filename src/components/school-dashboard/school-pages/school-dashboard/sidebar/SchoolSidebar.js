@@ -51,7 +51,7 @@ function SchoolSidebar() {
                 isActiveLink('/school-dashboard') ? 'active' : ''
               }`}
             >
-              <Icon icon='mdi:view-dashboard' className='sidebar-icon' />
+              <Icon icon='ion:grid-outline' className='sidebar-icon' />
               Overview
             </Link>
           </li>
@@ -61,7 +61,7 @@ function SchoolSidebar() {
               className={`link ${isCoursesOpen ? 'active' : ''}`}
               onClick={toggleCourses}
             >
-              <Icon icon='mdi:book-open-variant' className='sidebar-icon' />
+              <Icon icon='bi:book' className='sidebar-icon' />
               Courses
               <Icon
                 icon={isCoursesOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'}
@@ -105,7 +105,7 @@ function SchoolSidebar() {
                 isActiveLink('/school-dashboard/support') ? 'active' : ''
               }`}
             >
-              <Icon icon='mdi:lifebuoy' className='sidebar-icon' />
+              <Icon icon='ph:users-light' className='sidebar-icon' />
               Support
             </Link>
           </li>
@@ -119,7 +119,11 @@ function SchoolSidebar() {
                   : ''
               }`}
             >
-              <Icon icon='mdi:credit-card-outline' className='sidebar-icon' />
+              <Icon
+                width={26}
+                icon='solar:dollar-outline'
+                className='sidebar-icon'
+              />
               Payment History
             </Link>
           </li>
@@ -129,7 +133,7 @@ function SchoolSidebar() {
               className={`link ${isSettingsOpen ? 'active' : ''}`}
               onClick={toggleSettings}
             >
-              <Icon icon='mdi:cog' className='sidebar-icon' />
+              <Icon icon='ep:setting' className='sidebar-icon' />
               Settings
               <Icon
                 icon={isSettingsOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'}
