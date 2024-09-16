@@ -256,9 +256,6 @@
   padding: 10px 25px;
 }
 
-.question-bot img {
-}
-
 .self-awareness .question-box.week-two {
   width: fit-content;
 }
@@ -434,6 +431,10 @@
 .self-awareness .slider-indicator ul li.dragged,
 .self-awareness .slider-indicator ul li.answered {
   background-color: #00bcc3;
+}
+.self-awareness .slider-indicator ul li.answered-drop {
+  background-color: #00bcc3;
+  padding: 0;
 }
 
 .slider-img-card {
