@@ -361,6 +361,7 @@ const SchoolEnrolledStudents = () => {
                 <td>
                   {new Date().getFullYear() -
                     new Date(data?.user?.DOB).getFullYear()}
+                    
                 </td>
                 <td>{data?.progress}%</td>
                 <td style={{ width: '205px' }}>
