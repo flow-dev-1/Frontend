@@ -96,19 +96,21 @@ const SchoolOverview = () => {
     refetchOnWindowFocus: true
   });
 
+  console.log(data)
   useEffect(() => {
     if (data) {
-      setTotalStudents(data.totalStudents); // Use the correct key from the backend response
-      setTotalMales(data.totalMales);
-      setTotalFemales(data.totalFemales);
-      // setTotalTeachers(data.totalTeachers); // Uncomment if this is provided
-      setTotalActive(data.active);
-      setTotalNonActive(data.notActive);
-      setTotalAmount(data.totalAmount);
-      setTotalCompleted(data.completed);
-      setTotalRemaining(data.remaining);
+      setTotalStudents(data?.totalStudents || 0);
+      setTotalMales(data?.totalMales || 0);
+      setTotalFemales(data?.totalFemales || 0);
+      setTotalTeachers(data?.totalTeachers || 0);
+      setTotalActive(data?.active || 0);
+      setTotalNonActive(data?.notActive || 0);
+      setTotalAmount(data?.totalAmount || 0);
+      setTotalCompleted(data?.completed || 0);
+      setTotalRemaining(data?.remaining || 0);
     }
   }, [data]);
+
 
   const dataGender = [
     { name: "Male", value: totalMales },
@@ -229,7 +231,7 @@ const SchoolOverview = () => {
           <div>
             <div className="chart-heading">
               <p>Progress Report</p>
-              <div style={{ cursor: "pointer" }} className="filter-sort">
+              <div style={{ cursor: "pointer" }} className="filter-sort ">
                 <span>
                   <Icon icon="octicon:filter-16" />
                 </span>
@@ -240,39 +242,39 @@ const SchoolOverview = () => {
                 </select>
               </div>
             </div>
-          </div>
-          <hr />
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={dataCompletion}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                innerRadius={80} // Adjusted innerRadius for increased thickness
-                outerRadius={120} // Adjusted outerRadius for increased thickness
-                label={renderCustomizedLabel}
-                labelLine={false}
-              >
-                {dataCompletion.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="students-dash">students</div>
-          <div className="summary">
-            <div className="summary-box">
-              <p className="active">Completion Rate</p>
-              <div>
-                <div className="box"></div> Completed -{totalCompleted}
-              </div>
-              <div>
-                <div className="box-2"></div> Remaining - {totalRemaining}
+            <hr />
+            <ResponsiveContainer width="100%" height={250}>
+              <PieChart>
+                <Pie
+                  data={dataCompletion}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={80} // Adjusted innerRadius for increased thickness
+                  outerRadius={120} // Adjusted outerRadius for increased thickness
+                  label={renderCustomizedLabel}
+                  labelLine={false}
+                >
+                  {dataCompletion.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="students-dash">students</div>
+            <div className="summary">
+              <div className="summary-box">
+                <p className="active">Completion Rate</p>
+                <div>
+                  <div className="box"></div> Completed -{totalCompleted}
+                </div>
+                <div>
+                  <div className="box-2"></div> Remaining - {totalRemaining}
+                </div>
               </div>
             </div>
           </div>
@@ -285,53 +287,56 @@ const SchoolOverview = () => {
           onClick={openActiveTeacherModal}
         >
           <div>
-            <div className="chart-heading">
-              <p>Gender Balance</p>
-              <div style={{ cursor: "pointer" }} className="filter-sort">
-                <span>
-                  <Icon icon="octicon:filter-16" />
-                </span>
-                <select style={{ cursor: "pointer" }}>
-                  <option value="all">Filter by</option>
-                  <option value="published">Published</option>
-                  <option value="draft">Draft</option>
-                </select>
+            <div>
+              <div className="chart-heading">
+                <p>Gender Balance</p>
+                <div style={{ cursor: "pointer" }} className="filter-sort ms-2">
+                  <span>
+                    <Icon icon="octicon:filter-16" />
+                  </span>
+                  <select style={{ cursor: "pointer" }}>
+                    <option value="all">Filter by</option>
+                    <option value="published">Published</option>
+                    <option value="draft">Draft</option>
+                  </select>
+                </div>
               </div>
+              <hr />
             </div>
-          </div>
-          <hr />
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={dataGender}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={120}
-                label={renderCustomizedLabel}
-                labelLine={false}
-              >
-                {dataGender.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={GENDER_COLORS[index % GENDER_COLORS.length]}
-                  />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="students-dash">students</div>
-          <div className="summary">
-            <div className="summary-box">
-              <p className="active gender">Gender</p>
-              <div>
-                <div className="box male"></div> Male -{" "}
-                <span className="male"> {totalMales}</span>
-              </div>
-              <div>
-                <div className="box-2 female"></div> Female -{" "}
-                <span className="female"> {totalFemales}</span>
+            <ResponsiveContainer width="100%" height={250}>
+              <PieChart>
+                <Pie
+                  data={dataGender}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={80}
+                  outerRadius={120}
+                  label={renderCustomizedLabel}
+                  labelLine={false}
+                >
+                  {dataGender.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={GENDER_COLORS[index % GENDER_COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="students-dash">students</div>
+            <div className="summary">
+              <div className="summary-box">
+                <p className="active gender">Gender</p>
+                <div>
+                  <div className="box male"></div> Male -{" "}
+                  <span className="male"> {totalMales}</span>
+                </div>
+                <div>
+                  <div className="box-2 female"></div> Female -{" "}
+                  <span className="female"> {totalFemales}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -343,7 +348,7 @@ const SchoolOverview = () => {
           >
             <div className="chart-heading">
               <p>Enrollment Per Course</p>
-              <div style={{ cursor: "pointer" }} className="filter-sort">
+              <div style={{ cursor: "pointer" }} className="filter-sort ms-2">
                 <span>
                   <Icon icon="octicon:filter-16" />
                 </span>
@@ -354,26 +359,26 @@ const SchoolOverview = () => {
                 </select>
               </div>
             </div>
-          </div>
-          <hr />
-          <ResponsiveContainer width="100%" height={400}>
-            <BarChart
-              data={dataEnrollment}
-              margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
-            >
-              <XAxis dataKey="name" />
-              <YAxis domain={[10, "auto"]} />
+            <hr />
+            <ResponsiveContainer width="100%" height={400}>
+              <BarChart
+                data={dataEnrollment}
+                margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
+              >
+                <XAxis dataKey="name" />
+                <YAxis domain={[10, "auto"]} />
 
-              <Bar dataKey="value" barSize={60}>
-                {dataEnrollment.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={BAR_COLORS[index % BAR_COLORS.length]}
-                  />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+                <Bar dataKey="value" barSize={60}>
+                  {dataEnrollment.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={BAR_COLORS[index % BAR_COLORS.length]}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
       <ActiveStudentsModal

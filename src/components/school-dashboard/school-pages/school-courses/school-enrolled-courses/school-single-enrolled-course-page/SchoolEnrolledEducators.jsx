@@ -215,7 +215,7 @@ const SchoolEnrolledEducators = () => {
         <button className='back-button' onClick={() => navigate(-1)}>
           <Icon icon='mingcute:arrow-left-line' width={20} /> Back
         </button>
-        <p>Max the Explorer Monkey</p>
+        <p>Self Awareness</p>
         <button className='add-student-button' onClick={handleCreateClick}>
           + Add New Student
         </button>

@@ -18,19 +18,6 @@ const VideoComponent = ({ videoSrc }) => {
 
   return (
     <div className='video-div'>
-      {loading && !error && (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          className='loading-indicator'
-        >
-          <Icon icon='eos-icons:loading' spin={true} width={40} />
-          <span>Loading...</span>
-        </div>
-      )}
       {error && (
         <div
           style={{
