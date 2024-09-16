@@ -56,7 +56,7 @@ export default function InvitedStudentRegistrationForm() {
     },
   ]
 
-  console.log(data?.data)
+  console.log(data)
   useEffect(() => {
     if (data?.status === 'success') {
       setParentFormData({
