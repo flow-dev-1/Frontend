@@ -75,6 +75,7 @@ class SchoolOBJ {
       const response = await api.get(`api/schools/graph`);
       return response.data;
     } catch (err) {
+      console.log(err?.response?.data || err.message)
       throw err?.response?.data || err.message;
     }
   };
