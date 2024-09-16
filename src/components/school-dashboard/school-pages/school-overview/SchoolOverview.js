@@ -226,7 +226,7 @@ const SchoolOverview = () => {
         <div
           className="chart"
           style={{ cursor: "pointer" }}
-          onClick={openNonActiveStudentModal}
+          // onClick={openNonActiveStudentModal}
         >
           <div>
             <div className="chart-heading">
@@ -284,7 +284,7 @@ const SchoolOverview = () => {
         <div
           className="chart two"
           style={{ cursor: "pointer" }}
-          onClick={openActiveTeacherModal}
+          // onClick={openActiveTeacherModal}
         >
           <div>
             <div>
@@ -344,7 +344,7 @@ const SchoolOverview = () => {
         <div className="chart bar-chart">
           <div
             style={{ cursor: "pointer" }}
-            onClick={openNonActiveTeacherModal}
+            // onClick={openNonActiveTeacherModal}
           >
             <div className="chart-heading">
               <p>Enrollment Per Course</p>
