@@ -208,7 +208,7 @@ const SchoolOverview = () => {
             </ResponsiveContainer>
             <div className='students-dash'>students</div>
             <div className='summary'>
-              <div className='summary-box'>
+              <div className='summary-box mt-3'>
                 <p className='active'>Active/Not-Active</p>
                 <div>
                   <div className='box-1'></div> Active - {totalActive}
@@ -264,7 +264,7 @@ const SchoolOverview = () => {
             </ResponsiveContainer>
             <div className='students-dash'>students</div>
             <div className='summary'>
-              <div className='summary-box'>
+              <div className='summary-box mt-3'>
                 <p className='active'>Completion Rate</p>
                 <div>
                   <div className='box-1'></div> Completed -{totalCompleted}
@@ -324,7 +324,7 @@ const SchoolOverview = () => {
             </ResponsiveContainer>
             <div className='students-dash'>students</div>
             <div className='summary'>
-              <div className='summary-box'>
+              <div className='summary-box mt-2'>
                 <p className='active gender'>Gender</p>
                 <div>
                   <div className='box-3 male'></div> Male -{' '}
