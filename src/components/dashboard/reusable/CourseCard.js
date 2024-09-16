@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { encryptURI } from '../../../utils/encryption'
 import ReviewCourseInfoModal from '../../modals-pages/dashboard-modals/ReviewCourseInfoModal'
 
-const CourseCard = ({ course, coursesArray, enrolled, enrolledData }) => {
+const CourseCard = ({ course, coursesArray, enrolled, enrolledData, studentOfSchool }) => {
   const navigate = useNavigate()
 
   const [modalIsOpen, setIsOpen] = useState(false)
@@ -27,23 +27,44 @@ const CourseCard = ({ course, coursesArray, enrolled, enrolledData }) => {
   console.log(isEnrolled)
   console.log(courseIndex)
   const handleCourseClick = () => {
-    // Find the index of the current course in the coursesArray
-    const courseIndex = coursesArray?.courses.findIndex(
-      (c) => c._id === course._id
-    )
-    // console.log(courseIndex)
-
-    // Use this index to get the corresponding enrolledData course
-    if (isEnrolled && enrolledData?.courses[courseIndex]) {
-      navigate(
-        `/dashboard/self-awareness-course/${encryptURI(
-          enrolledData.courses[courseIndex]._id
-        )}`
-      )
-    } else {
-      // Handle the case when the course is not enrolled or data is not available
+    // Ensure coursesArray and course are defined
+    if (!coursesArray || !course) {
+      console.error("coursesArray or course is not defined");
+      return;
     }
-  }
+
+    // Find the index of the current course in the coursesArray
+    const courseIndex = coursesArray.courses.findIndex(
+      (c) => c._id === course._id
+    );
+
+    // Check if the course was found in the array
+    if (courseIndex === -1) {
+      console.error("Course not found in coursesArray");
+      return;
+    }
+
+    // Determine if the course should be accessed
+    if (isEnrolled || studentOfSchool) {
+      const enrolledCourse = enrolledData?.courses[courseIndex];
+      // console.log(course._id)
+      // Ensure enrolledData and enrolledCourse are defined
+      if (enrolledData && enrolledCourse || course._id) {
+        navigate(
+          `/dashboard/self-awareness-course/${encryptURI(enrolledCourse._id || course._id)}`
+        );
+      } else {
+        console.error("Enrolled data or course information is not available");
+        // Handle the case where enrolledData or course information is missing
+      }
+    } else {
+      // Handle the case when the course is not enrolled or the student is not part of the school
+      console.warn("Course is not enrolled and student is not part of the school");
+      // You might want to show a message to the user or handle this case appropriately
+    }
+  };
+
+  // console.log(studentOfSchool)
 
   const openModal = (modalType, course) => {
     setIsOpen(true)
@@ -65,6 +86,7 @@ const CourseCard = ({ course, coursesArray, enrolled, enrolledData }) => {
     }
     return text
   }
+  console.log(course?.progress)
 
   return (
     <div className="reusable-course-card">
@@ -113,7 +135,7 @@ const CourseCard = ({ course, coursesArray, enrolled, enrolledData }) => {
           </div>
         </div>
 
-        {isEnrolled ? (
+        {(isEnrolled || studentOfSchool) ? (
           <div className="course-card-btn d-flex">
             {/* Review/Feedback Button */}
             {course.progress === 100 ? (
@@ -172,11 +194,11 @@ const CourseCard = ({ course, coursesArray, enrolled, enrolledData }) => {
               )}
               {course?.progress === 100
                 ? "Completed"
-                : course.progress === 0
-                ? "Start"
-                : "Resume"}
+                : course?.progress === 0 
+                  ? "Start"
+                  : "Resume"}
             </button>
-            {course?.progress > 0 && course?.progress < 100 && (
+            {course?.progress > 0 && course?.progress < 100  && (
               <Icon
                 onClick={() => navigate(`/dashboard/feedback/self-awareness`)}
                 style={{ color: "#329BD6" }}
@@ -202,24 +224,27 @@ const CourseCard = ({ course, coursesArray, enrolled, enrolledData }) => {
             >
               <Icon icon="prime:eye" /> Review
             </button>
-            <button
-              style={{
-                backgroundColor: "#329BD6",
-                color: "#fff",
-                display: "flex",
-                justifyContent: "center",
-                gap: ".4rem",
-                padding: ".5rem 8px"
-              }}
-              className="btn card-btn cart"
-              onClick={() => openModal("payment")}
-            >
-              <Icon icon="mdi:cart-outline" />
-              {course?.currency}
-              {course?.cost?.toLocaleString()}
-            </button>
+            {!studentOfSchool && (
+              <button
+                style={{
+                  backgroundColor: "#329BD6",
+                  color: "#fff",
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: ".4rem",
+                  padding: ".5rem 8px"
+                }}
+                className="btn card-btn cart"
+                onClick={() => openModal("payment")}
+              >
+                <Icon icon="mdi:cart-outline" />
+                {course?.currency}
+                {course?.cost?.toLocaleString()}
+              </button>
+            )}
           </div>
         )}
+
       </div>
 
       <Modal
