@@ -61,8 +61,8 @@ const SchoolEnrolledStudents = () => {
   let schoolId
 
   // ToDO: Do a check if its a school or a user
-  if (user.isSchool) {
-    schoolId = user._id
+  if (user?.isSchool) {
+    schoolId = user?._id
   }
   const navigate = useNavigate()
   const { id } = useParams()
@@ -75,7 +75,6 @@ const SchoolEnrolledStudents = () => {
     // refetchOnMount: false,
     // refetchOnWindowFocus: false,
   })
-
 
   console.log('Enrolled data ', data)
 
@@ -101,24 +100,24 @@ const SchoolEnrolledStudents = () => {
     }
   }
 
-    const itemsPerPage = 8; // Customize how many items per page
-    const totalItems = enrollmentData?.studentEnrollments?.length || 0;
-    const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8 // Customize how many items per page
+  const totalItems = enrollmentData?.studentEnrollments?.length || 0
+  const [currentPage, setCurrentPage] = useState(1)
 
-    const startItem = (currentPage - 1) * itemsPerPage + 1;
-    const endItem = Math.min(startItem + itemsPerPage - 1, totalItems);
+  const startItem = (currentPage - 1) * itemsPerPage + 1
+  const endItem = Math.min(startItem + itemsPerPage - 1, totalItems)
 
-     const handleNextPage = () => {
-       if (currentPage * itemsPerPage < totalItems) {
-         setCurrentPage(currentPage + 1);
-       }
-     };
+  const handleNextPage = () => {
+    if (currentPage * itemsPerPage < totalItems) {
+      setCurrentPage(currentPage + 1)
+    }
+  }
 
-     const handlePrevPage = () => {
-       if (currentPage > 1) {
-         setCurrentPage(currentPage - 1);
-       }
-     };
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1)
+    }
+  }
 
   function convertTo12HourFormat(time) {
     if (!time) return
@@ -231,100 +230,100 @@ const SchoolEnrolledStudents = () => {
   }
 
   return (
-    <div className="enrolled-course-student">
-      <div className="header">
-        <button className="back-button" onClick={() => navigate(-1)}>
-          <Icon icon="mingcute:arrow-left-line" width={20} /> Back
+    <div className='enrolled-course-student'>
+      <div className='header'>
+        <button className='back-button' onClick={() => navigate(-1)}>
+          <Icon icon='mingcute:arrow-left-line' width={20} /> Back
         </button>
         <p>Self Awareness</p>
-        <button className="add-student-button" onClick={handleCreateClick}>
+        <button className='add-student-button' onClick={handleCreateClick}>
           + Add New Student
         </button>
       </div>
 
-      <div className="image-container">
+      <div className='image-container'>
         <img
-          src={data?.course?.course?.image}
-          alt="Background"
-          className="background-image"
+          src={backgroundImage}
+          alt='Background'
+          className='background-image'
         />
       </div>
-      <div className="info-bar">
-        <div className="info-item">
+      <div className='info-bar'>
+        <div className='info-item'>
           <p>Class Enrolled:</p>
           <p>{enrollmentData.stdClass}</p>
         </div>
-        <div className="info-item">
+        <div className='info-item'>
           <p>Enrollment Date:</p>
           <p>{formatDate(enrollmentData?.createdAt || Date.now())}</p>
         </div>
-        <div className="info-item">
+        <div className='info-item'>
           <p>No. of Students:</p>
           <p>{enrollmentData?.studentEnrollments?.length}</p>
         </div>
-        <div className="info-item">
+        <div className='info-item'>
           <p>Female:</p>
           <p>{genderCount(enrollmentData?.studentEnrollments)?.female}</p>
         </div>
-        <div className="info-item">
+        <div className='info-item'>
           <p>Male:</p>
           <p>{genderCount(enrollmentData?.studentEnrollments)?.male}</p>
         </div>
-        <div className="info-item">
+        <div className='info-item'>
           <p>Day of the Week:</p>
           <p>{enrollmentData?.dayOfWeek}</p>
         </div>
-        <div className="info-item">
+        <div className='info-item'>
           <p>Start Time:</p>
           <p>{convertTo12HourFormat(enrollmentData?.startTime)}</p>
         </div>
-        <div style={{ border: "none" }} className="info-item">
-          <p style={{ border: "none" }}>End Time:</p>
-          <p style={{ border: "none" }}>
+        <div style={{ border: 'none' }} className='info-item'>
+          <p style={{ border: 'none' }}>End Time:</p>
+          <p style={{ border: 'none' }}>
             {convertTo12HourFormat(enrollmentData?.endTime)}
           </p>
         </div>
       </div>
 
-      <div className="search-bar">
-        <form action="" className="search">
-          <div className="search-wrapper">
-            <span className="search-icon">
-              <Icon icon="lets-icons:search" style={{ color: "#4d4d4d" }} />
+      <div className='search-bar'>
+        <form action='' className='search'>
+          <div className='search-wrapper'>
+            <span className='search-icon'>
+              <Icon icon='lets-icons:search' style={{ color: '#4d4d4d' }} />
             </span>
             <input
-              type="text"
-              id="search-input"
-              placeholder="Search by Name, Age, Email, Phone Number"
+              type='text'
+              id='search-input'
+              placeholder='Search by Name, Age, Email, Phone Number'
             />
           </div>
 
-          <div className="d-flex">
-            <div className="filter-sort">
+          <div className='d-flex'>
+            <div className='filter-sort'>
               <label>
-                <Icon icon="gridicons:filter" style={{ color: "#4d4d4d" }} />
-                <select name="" id="" className="filter">
-                  <option value="" selected disabled>
+                <Icon icon='gridicons:filter' style={{ color: '#4d4d4d' }} />
+                <select name='' id='' className='filter'>
+                  <option value='' selected disabled>
                     Filter by
                   </option>
-                  <option value="">All</option>
-                  <option value="">Students</option>
-                  <option value="">Teachers</option>
+                  <option value=''>All</option>
+                  <option value=''>Students</option>
+                  <option value=''>Teachers</option>
                 </select>
               </label>
             </div>
-            <div className="filter-sort">
-              {" "}
+            <div className='filter-sort'>
+              {' '}
               <label>
                 <Icon
-                  icon="ic:outline-sort-by-alpha"
-                  style={{ color: "#4d4d4d" }}
+                  icon='ic:outline-sort-by-alpha'
+                  style={{ color: '#4d4d4d' }}
                 />
-                <select name="" id="" className="sort">
-                  <option value="" selected>
+                <select name='' id='' className='sort'>
+                  <option value='' selected>
                     Sort by
                   </option>
-                  <option value="">Sort by</option>
+                  <option value=''>Sort by</option>
                 </select>
               </label>
             </div>
@@ -332,8 +331,8 @@ const SchoolEnrolledStudents = () => {
         </form>
       </div>
       <hr />
-      <div className="table-container">
-        <table id="my-table" className="students-table">
+      <div className='table-container'>
+        <table id='my-table' className='students-table'>
           <thead>
             <tr>
               <th>S/N</th>
@@ -351,42 +350,42 @@ const SchoolEnrolledStudents = () => {
               <tr key={data._id}>
                 <td>{index + 1}</td>
                 <td
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: 'pointer' }}
                   onClick={() => navigate(`users/${data?.user?._id}`)}
                 >
                   {data?.user?.first_name} {data?.user?.last_name}
                 </td>
                 <td>{data?.user?.email}</td>
                 <td>{data?.user?.phone}</td>
-                <td>{data?.user?.gender === "male" ? "M" : "F"}</td>
+                <td>{data?.user?.gender === 'male' ? 'M' : 'F'}</td>
                 <td>
                   {new Date().getFullYear() -
                     new Date(data?.user?.DOB).getFullYear()}
                 </td>
                 <td>{data?.progress}%</td>
-                <td style={{ width: "205px" }}>
+                <td style={{ width: '205px' }}>
                   <Icon
-                    icon="mynaui:trash"
-                    className="action-icon delete-icon"
+                    icon='mynaui:trash'
+                    className='action-icon delete-icon'
                     style={{
-                      color: "#000000",
-                      display: "inline-block",
-                      marginRight: "7rem"
+                      color: '#000000',
+                      display: 'inline-block',
+                      marginRight: '7rem',
                     }}
                     width={22}
                     onClick={() => {
                       setDeleteUser({
                         user: data.user._id,
-                        enrollId: data._id
-                      });
-                      handleDeleteClick();
+                        enrollId: data._id,
+                      })
+                      handleDeleteClick()
                     }}
                   />
                   <Icon
-                    icon="iconamoon:arrow-right-2-thin"
-                    className="action-icon arrow-icon"
+                    icon='iconamoon:arrow-right-2-thin'
+                    className='action-icon arrow-icon'
                     width={22}
-                    style={{ color: "#000000" }}
+                    style={{ color: '#000000' }}
                   />
                 </td>
               </tr>
@@ -394,22 +393,22 @@ const SchoolEnrolledStudents = () => {
           </tbody>
         </table>
 
-        <div className="nav-btn">
+        <div className='nav-btn'>
           <p>
             {startItem} - {endItem} of {totalItems}
           </p>
           <div>
-            <Icon icon="iconamoon:arrow-left-2-light" width={25} />
-            <Icon icon="iconamoon:arrow-right-2-light" width={25} />
+            <Icon icon='iconamoon:arrow-left-2-light' width={25} />
+            <Icon icon='iconamoon:arrow-right-2-light' width={25} />
           </div>
         </div>
       </div>
       <Modal
         isOpen={showCreateModal}
         onRequestClose={closeModals}
-        contentLabel="Example Modal"
-        className="custom-modal-otp-three"
-        overlayClassName="custom-overlay"
+        contentLabel='Example Modal'
+        className='custom-modal-otp-three'
+        overlayClassName='custom-overlay'
       >
         <AddStudentModal onRequestClose={closeModals} />
       </Modal>
@@ -417,9 +416,9 @@ const SchoolEnrolledStudents = () => {
       <Modal
         isOpen={showDeleteModal}
         onRequestClose={closeModals}
-        contentLabel="Delete Course"
-        className="custom-modal-success"
-        overlayClassName="custom-overlay"
+        contentLabel='Delete Course'
+        className='custom-modal-success'
+        overlayClassName='custom-overlay'
       >
         <DeleteStudentModal
           closeModal={closeModals}
@@ -428,7 +427,7 @@ const SchoolEnrolledStudents = () => {
         />
       </Modal>
     </div>
-  );
+  )
 }
 
 export default SchoolEnrolledStudents

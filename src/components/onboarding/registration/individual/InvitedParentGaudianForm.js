@@ -40,7 +40,11 @@ const schema = yup.object().shape({
   lga: yup.string().required('LGA is required'),
 })
 
-export default function InivitedParentGuardianForm({ onSubmit, initialData, email }) {
+export default function InivitedParentGuardianForm({
+  onSubmit,
+  initialData,
+  email,
+}) {
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
   const [countries, setCountries] = useState([])
   const [isNigeria, setIsNigeria] = useState(initialData?.country === 'Nigeria')
@@ -60,6 +64,8 @@ export default function InivitedParentGuardianForm({ onSubmit, initialData, emai
       country: 'Nigeria', // Set default country to Nigeria
     },
   })
+
+  console.log(initialData)
 
   useEffect(() => {
     if (initialData) {
