@@ -353,7 +353,7 @@ const SchoolEnrolledStudents = () => {
                   style={{ cursor: 'pointer' }}
                   onClick={() => navigate(`users/${data?.user?._id}`)}
                 >
-                  {data?.user?.first_name} {data?.user?.last_name}
+                  {data?.user?.fullName} 
                 </td>
                 <td>{data?.user?.email}</td>
                 <td>{data?.user?.phone}</td>
@@ -361,6 +361,7 @@ const SchoolEnrolledStudents = () => {
                 <td>
                   {new Date().getFullYear() -
                     new Date(data?.user?.DOB).getFullYear()}
+                    
                 </td>
                 <td>{data?.progress}%</td>
                 <td style={{ width: '205px' }}>
