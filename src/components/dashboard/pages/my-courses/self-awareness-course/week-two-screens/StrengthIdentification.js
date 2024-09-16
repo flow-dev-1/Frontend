@@ -12,36 +12,36 @@ export default function StrengthIdentification({
   activityIndex,
 }) {
   const questionsArray = [
-    'creative',
-    'energetic',
-    'honest',
-    'responsible',
-    'organized',
-    'patient',
-    'friendly',
-    'confident',
-    'good listener',
-    'team player',
-    'brave',
-    'analytical',
-    'compassionate',
-    'hardworking',
-    'trustworthy',
-    'flexible',
-    'determined',
-    'emphatic',
-    'cooperative',
-    'problem solver',
-    'curious',
-    'dependable',
-    'adaptable',
-    'enthusiastic',
-    'kind',
-    'generous',
-    'respectful',
-    'good communicator',
-    'ability to lead',
-    'detail-oriented',
+    'Creative',
+    'Energetic',
+    'Honest',
+    'Responsible',
+    'Organized',
+    'Patient',
+    'Friendly',
+    'Confident',
+    'Good listener',
+    'Team player',
+    'Brave',
+    'Analytical',
+    'Compassionate',
+    'Hardworking',
+    'Trustworthy',
+    'Flexible',
+    'Determined',
+    'Emphatic',
+    'Cooperative',
+    'Problem Solver',
+    'Curious',
+    'Dependable',
+    'Adaptable',
+    'Enthusiastic',
+    'Kind',
+    'Generous',
+    'Respectful',
+    'Good Communicator',
+    'Ability to lead',
+    'Detail-oriented',
   ]
 
   // Find answers for the current activity index in formData
@@ -102,7 +102,9 @@ export default function StrengthIdentification({
         <div className='d-flex align-items-start'>
           <div className='question-box-header mx-auto'>
             <h1 className='mb-0 '>Question: </h1>
-            <h2 className='mb-0 d-flex ms-3'>Identify Your Strengths</h2>
+            <h2 className='mb-0 d-flex ms-3 ' style={{ color: '#5B616A' }}>
+              Identify Your Strengths
+            </h2>
           </div>
         </div>
         <div className='assessment checkbox-questions mt-4'>

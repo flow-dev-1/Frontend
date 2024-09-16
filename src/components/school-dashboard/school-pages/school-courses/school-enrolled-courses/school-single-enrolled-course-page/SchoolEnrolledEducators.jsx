@@ -172,7 +172,7 @@ const SchoolEnrolledEducators = () => {
   const handleExcelDownload = () => {
     const link = document.createElement('a')
     link.href = excelDoc
-    link.download = 'template.xlsx'
+    link.download = 'Flowtemp.xlsx'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -215,7 +215,7 @@ const SchoolEnrolledEducators = () => {
         <button className='back-button' onClick={() => navigate(-1)}>
           <Icon icon='mingcute:arrow-left-line' width={20} /> Back
         </button>
-        <p>Max the Explorer Monkey</p>
+        <p>Self Awareness</p>
         <button className='add-student-button' onClick={handleCreateClick}>
           + Add New Student
         </button>

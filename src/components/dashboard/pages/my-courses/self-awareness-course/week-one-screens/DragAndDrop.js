@@ -145,8 +145,9 @@ function DragDropComponent({ onBack, onNext, formData }) {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className={`card-item d-flex align-items-center justify-content-center ${snapshot.isDragging ? 'draging' : ''
-                          }`}
+                        className={`card-item d-flex align-items-center justify-content-center ${
+                          snapshot.isDragging ? 'draging' : ''
+                        }`}
                         style={{
                           cursor: snapshot.isDragging ? 'grabbing' : 'grab',
                           opacity: snapshot.isDragging ? '0.1' : '1',
@@ -171,7 +172,7 @@ function DragDropComponent({ onBack, onNext, formData }) {
           <div className='drop-card'>
             <div className='drop-card-header'>
               <img src={dragdropArrow} alt='' />
-              <h2>
+              <h2 style={{ color: '#FAFAFA' }}>
                 Drag-and-drop the statements on the left into any of these
                 bowls.
               </h2>
@@ -185,12 +186,11 @@ function DragDropComponent({ onBack, onNext, formData }) {
                     <div
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                      className={`bucket bucket-${bucketType} ${snapshot.isDraggingOver ? 'dragging-over' : ''
-                        }`}
+                      className={`bucket bucket-${bucketType} ${
+                        snapshot.isDraggingOver ? 'dragging-over' : ''
+                      }`}
                       style={{
-                        backgroundColor: snapshot.isDraggingOver
-                          ? '#0000'
-                          : '',
+                        backgroundColor: snapshot.isDraggingOver ? '#0000' : '',
                         width: '150px',
                         height: '150px',
                         display: 'flex',
@@ -207,8 +207,8 @@ function DragDropComponent({ onBack, onNext, formData }) {
                           bucketType === 'yes'
                             ? bucketYes
                             : bucketType === 'no'
-                              ? bucketNo
-                              : bucketSometimes
+                            ? bucketNo
+                            : bucketSometimes
                         }
                         alt={`bucket-${bucketType}`}
                         // className="bucket-image"
@@ -216,7 +216,9 @@ function DragDropComponent({ onBack, onNext, formData }) {
                           width: '100px',
                           height: 'auto',
                           transition: 'transform 0.3s ease',
-                          transform: snapshot.isDraggingOver ? 'scale(1.4)' : 'scale(1)', // Scale when dragging over
+                          transform: snapshot.isDraggingOver
+                            ? 'scale(1.4)'
+                            : 'scale(1)', // Scale when dragging over
                         }}
                       />
                       {provided.placeholder && (
@@ -235,23 +237,27 @@ function DragDropComponent({ onBack, onNext, formData }) {
           </div>
         </div>
 
-        <div className='refresh mt-3 ml-8'>
+        <div className='refresh mt-3 ml-12'>
           <div className='slider-indicator'>
-            <ul className='p-0'>
+            <ul>
               {Array.from({ length: initialCards.length }).map((_, index) => (
                 <li
                   key={index}
-                  className={index < currentIndex ? 'answered' : ''}
+                  style={{ width: '25px', height: '-10px' }}
+                  className={index < currentIndex ? 'answered-drop' : 'p-0'}
                 ></li>
               ))}
             </ul>
           </div>
 
-          <div className="d-flex justify-content-between align-items-center gap-2" onClick={handleReset} style={{ cursor: 'pointer' }}>
-            <Icon className="ml-3" icon="teenyicons:refresh-solid" />
-            <p className="text-3xl mr-2">Refresh{' '}</p>
+          <div
+            className='d-flex justify-content-between align-items-center gap-2'
+            onClick={handleReset}
+            style={{ cursor: 'pointer', marginLeft: '4rem' }}
+          >
+            <Icon className='ml-3' icon='teenyicons:refresh-solid' />
+            <p className='text-3xl mr-2'>Refresh </p>
           </div>
-
         </div>
         <div className='d-flex align-items-center justify-content-around mt-3'>
           <button className='btn progress-btn btn-light' onClick={handleBack}>

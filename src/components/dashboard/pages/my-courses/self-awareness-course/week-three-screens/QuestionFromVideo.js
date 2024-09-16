@@ -3,19 +3,12 @@ import '../newcourse.css'
 
 export default function QuestionFromVideo({ formData, onBack, onNext }) {
   const [currentIndex, setCurrentIndex] = useState(1)
-    const initialAnswers = formData?.activities?.find(
-      (activity) => activity.activity === 6
-    )?.answers || [
-      "",
-      "",
-      "",
-      "",
-      "", 
-      "" 
-    ];
+  const initialAnswers = formData?.activities?.find(
+    (activity) => activity.activity === 6
+  )?.answers || ['', '', '', '', '', '']
 
-  const [answers, setAnswers] = useState(initialAnswers);
-console.log(formData)
+  const [answers, setAnswers] = useState(initialAnswers)
+  console.log(formData)
 
   const handleInputChange = (event, index) => {
     const { value } = event.target
@@ -53,7 +46,10 @@ console.log(formData)
             <div className='mt-2'>
               <div className='question-box-header'>
                 <h1 className='mb-0'>Question:</h1>
-                <h2 className='mb-0 d-flex ms-3 text-left'>
+                <h2
+                  style={{ color: '#5B616A' }}
+                  className='mb-0 d-flex ms-3 text-left'
+                >
                   List five (5) lessons you got from the videos you watched
                 </h2>
               </div>
@@ -79,7 +75,10 @@ console.log(formData)
             <div className='mt-2'>
               <div className='question-box-header'>
                 <h1 className='mb-0'>Question:</h1>
-                <h2 className='mb-0 d-flex ms-3 text-left'>
+                <h2
+                  style={{ color: '#5B616A' }}
+                  className='mb-0 d-flex ms-3 text-left'
+                >
                   List one (1) thing you will start working on, even on your
                   growth journey.
                 </h2>

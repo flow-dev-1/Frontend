@@ -63,7 +63,10 @@ export default function CoreValuesQuestion({
         <div className='mt-2'>
           <div className='question-box-header align-items-start'>
             <h1 className='mb-0'>Instruction:</h1>
-            <h2 className='mb-0 d-flex ms-3 text-left'>
+            <h2
+              className='mb-0 d-flex ms-3 text-left'
+              style={{ color: '#5b6161' }}
+            >
               Identify four (4) core values that resonate with you the most.
             </h2>
           </div>

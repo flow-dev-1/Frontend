@@ -83,7 +83,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext }) {
       if (assessment.assessment.answers[currentIndex - 1] !== undefined) {
         setCurrentIndex(currentIndex + 1)
       } else {
-        toast.success('Please answer the question before proceeding.')
+        toast.error('Please answer the question before proceeding.')
       }
     } else {
       // Optionally handle submission or final step
@@ -183,20 +183,30 @@ export default function WeekTwoAssessmentForm({ onBack, onNext }) {
     if (questionData.questionList) {
       return (
         <div className='week-two'>
-          <div className='assessment question-box'>
-            <div className='assessment-box'>
-              <h2>Assessment</h2>
-              Scenario around your strengths and weaknesses.
-            </div>
+          <div style={{ height: '550px' }} className='assessment question-box'>
+            {currentIndex <= 1 && (
+              <div className='assessment-box'>
+                <h2 style={{ color: '#FAFAFA' }}>Assessment</h2>
+                <p style={{ color: '#FAFAFA' }} className='text-center'>
+                  Scenario around your values.
+                </p>
+              </div>
+            )}
             <div className='d-flex align-items-start mt-3'>
-              <h1>{currentIndex}.</h1>
-              <h2 className='text-center mb-0 fs-1 ms-3'>
+              <h1 style={{ color: '#5B616A' }}>{currentIndex}.</h1>
+              <h2
+                style={{ color: '#5B616A' }}
+                className='text-start mb-0 fs-1 ms-3'
+              >
                 {questionData.title}
               </h2>
             </div>
-            <div className='text-center checkbox-questions'>
+            <div
+              style={{ marginLeft: '3rem' }}
+              className='text-center checkbox-questions'
+            >
               <ul
-                style={{ display: 'flex', flexDirection: 'column' }}
+                style={{ display: 'flex', flexDirection: 'column', gap: '0' }}
                 className='p-0 mt-4'
               >
                 {questionData.questionList.map((item, index) => (
@@ -229,23 +239,23 @@ export default function WeekTwoAssessmentForm({ onBack, onNext }) {
         <div className='week-two'>
           <div className='assessment question-box py-4'>
             <div className='d-flex align-items-start mt-3'>
-              <h1>{currentIndex}.</h1>
-              <h2 className='text-center mb-0 fs-1 ms-3'>
+              <h1 style={{ color: '#5B616A' }}>{currentIndex}.</h1>
+              <h2
+                style={{ color: '#5B616A' }}
+                className='text-center mb-0 fs-1 ms-3'
+              >
                 {questionData.title}
               </h2>
             </div>
             <div className='text-area-box px-5 mt-4'>
               <textarea
-                disabled={
-                  assessment.assessment.answers[questionIndex] !== undefined
-                }
                 className='px-3 pt-2'
                 placeholder='Type your answer here...'
                 rows='7'
                 value={assessment.assessment.answers[questionIndex] || ''}
                 onChange={(e) => {
                   const updatedAnswers = [...assessment.assessment.answers]
-                  updatedAnswers[questionIndex] = e.target.value
+                  updatedAnswers[questionIndex] = e.target.value // Capture the full text input
 
                   const updatedAssessment = {
                     ...assessment,

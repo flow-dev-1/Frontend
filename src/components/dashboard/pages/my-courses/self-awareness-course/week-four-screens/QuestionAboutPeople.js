@@ -67,7 +67,10 @@ export default function QuestionAboutPeople({
             <div className='mt-2'>
               <div className='question-box-header align-items-start'>
                 <h1 className='mb-0 '>Question: </h1>
-                <h2 className='mb-0 d-flex ms-3 text-left'>
+                <h2
+                  style={{ color: '#5b6161' }}
+                  className='mb-0 d-flex ms-3 text-left'
+                >
                   Identify three (3) important people in your life and list
                   their names below.
                 </h2>
@@ -109,7 +112,10 @@ export default function QuestionAboutPeople({
             <div className='mt-2'>
               <div className='question-box-header align-items-start'>
                 <h1 className='mb-0 '>Question: </h1>
-                <h2 className='mb-0 d-flex ms-3 text-left'>
+                <h2
+                  style={{ color: '#5b6161' }}
+                  className='mb-0 d-flex ms-3 text-left'
+                >
                   Write out what these people think about you.
                 </h2>
               </div>
@@ -150,7 +156,10 @@ export default function QuestionAboutPeople({
             <div className='mt-2'>
               <div className='question-box-header align-items-start'>
                 <h1 className='mb-0 '>Question: </h1>
-                <h2 className='mb-0 d-flex ms-3 text-left'>
+                <h2
+                  style={{ color: '#5b6161' }}
+                  className='mb-0 d-flex ms-3 text-left'
+                >
                   Are you happy with what these people think about you? If no,
                   what would you like to change? If yes, type “YES” in the box.
                 </h2>
