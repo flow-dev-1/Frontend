@@ -110,7 +110,7 @@ const AddEducator = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   const handleExcelDownload = () => {
     const link = document.createElement('a')
     link.href = excelDoc
-    link.download = 'template.xlsx'
+    link.download = 'Flowtemp.xlsx'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
