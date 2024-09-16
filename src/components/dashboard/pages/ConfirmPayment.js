@@ -34,7 +34,7 @@ const ConfirmPayment = () => {
     if (reference) {
       setReferenceState(reference)
       mutation.mutate()
-      navigate("/dashboard/my-courses")
+      setIsOpen(true)
     } else {
       console.log('Reference not found in URL')
       // Handle the case where the reference is not present in the URL
