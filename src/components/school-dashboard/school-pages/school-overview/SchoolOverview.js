@@ -363,7 +363,11 @@ const SchoolOverview = () => {
                 margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
               >
                 <XAxis dataKey='name' />
-                <YAxis domain={[10, 'auto']} />
+                <YAxis
+                  domain={[1, 'auto']}    
+                  allowDecimals={false}   
+                  tickCount={4}            
+                />
 
                 <Bar dataKey='value' barSize={60}>
                   {dataEnrollment.map((entry, index) => (
