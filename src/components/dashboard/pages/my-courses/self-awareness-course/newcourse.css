@@ -843,4 +843,9 @@ line {
   cursor: grabbing;
 }
 
+.fiveImg {
+  width: 250px;
+  /* margin: auto; */
+}
+
 /* Adjust positioning and styles as needed */
