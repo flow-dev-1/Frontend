@@ -179,7 +179,7 @@ export default function NewAssessmentForm({ onNext, onBack }) {
 
     const percentage = Math.round((correctCount / totalQuestions) * 100)
     toast.success(`You scored ${percentage}% in the quiz`)
-    const courseId = '66853bf50118e2e0a02b6a5b' // Adjust course ID if necessary
+    const courseId = '66853bf50118e2e0a02b6a5a' 
     const dataToSend = {
       rating: percentage,
       assessments: savedAnswers.assessment,
