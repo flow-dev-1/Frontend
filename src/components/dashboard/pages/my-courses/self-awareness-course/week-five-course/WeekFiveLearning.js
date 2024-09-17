@@ -13,6 +13,8 @@ import VideoComponent from './VideoComponent'
 import userService from "../../../../../../services/api/user.js";
 import { toast, ToastContainer } from "react-toastify";
 import { useQuery } from '@tanstack/react-query';
+import QuestionComponent from './QuestionsComponent.js'
+import emoational_image from '../../../../../../assets/selfawareness-images/emotional-intelligence.png'
 
 export default function WeekFourLearning({
   course,
@@ -152,20 +154,17 @@ export default function WeekFourLearning({
             <NavigationButtons onNext={() => handleNext()} isBackDisabled />
           </>
         )
+
       case 2:
         return (
-          <EmojiEmotionMatch
+          <QuestionComponent
+            questionText={'What do you understand by'}
             activityIndex={currentActivity}
-            questionText='What exactly are'
-            suffix='?'
+            imageSrc={emoational_image}
             formData={formData}
-            altText='values image'
+            altText='?'
             onBack={handlePrevious}
-            onNext={(answers) =>
-              handleNext({
-                answers,
-              })
-            }
+            onNext={(answers) => handleNext({ answers })}
           />
         )
       case 3:
@@ -184,13 +183,12 @@ export default function WeekFourLearning({
         )
       case 4:
         return (
-          <WeekFiveScenarioQuestions
+          <EmojiEmotionMatch
             activityIndex={currentActivity}
-            questionText={
-              'Do you feel like you have a growth mindset, or do you sometimes find yourself with a fixed mindset? Share your thoughts. It’s okay to be honest, this is all about learning and growing together!'
-            }
-            altText={'?'}
+            questionText='What exactly are'
+            suffix='?'
             formData={formData}
+            altText='values image'
             onBack={handlePrevious}
             onNext={(answers) =>
               handleNext({
@@ -215,18 +213,20 @@ export default function WeekFourLearning({
         )
       case 6:
         return (
-          <>
-            <EmojiRespond
-              activityIndex={currentActivity}
-              formData={formData}
-              onBack={handlePrevious}
-              onNext={(answers) =>
-                handleNext({
-                  answers,
-                })
-              }
-            />
-          </>
+          <WeekFiveScenarioQuestions
+            activityIndex={currentActivity}
+            questionText={
+              'Do you feel like you have a growth mindset, or do you sometimes find yourself with a fixed mindset? Share your thoughts. It’s okay to be honest, this is all about learning and growing together!'
+            }
+            altText={'?'}
+            formData={formData}
+            onBack={handlePrevious}
+            onNext={(answers) =>
+              handleNext({
+                answers,
+              })
+            }
+          />
         )
       case 7:
         return (
@@ -242,8 +242,22 @@ export default function WeekFourLearning({
             />
           </>
         )
-
       case 8:
+        return (
+          <>
+            <EmojiRespond
+              activityIndex={currentActivity}
+              formData={formData}
+              onBack={handlePrevious}
+              onNext={(answers) =>
+                handleNext({
+                  answers,
+                })
+              }
+            />
+          </>
+        )
+      case 9:
         return (
           <>
             <VideoComponent
@@ -257,7 +271,7 @@ export default function WeekFourLearning({
             />
           </>
         )
-      case 9:
+      case 10:
         return (
           <WeekFiveAssessmentForm
             onBack={handlePrevious}
