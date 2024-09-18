@@ -11,26 +11,40 @@ import html2canvas from "html2canvas";
 import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../services/api/user";
 
-
 const SelfAwarenessFeedback = () => {
-  const week = 1;
+  const weeks = [1, 2, 3, 4, 5]; // List of weeks
   const courseId = "66853bf50118e2e0a02b6a5a";
-  const { data, isLoading: queryLoading } = useQuery({
-    queryKey: ["dashboard/feedback/self-awareness", courseId, week],
-    queryFn: () => userService.getMyActivites(courseId, week)
-  });
 
-  const [assessmentData, setAssessmentData] = useState(null);
+  const [assessmentData, setAssessmentData] = useState({});
   const [assessmentLoading, setAssessmentLoading] = useState(true);
   const [expandedWeek, setExpandedWeek] = useState(null);
   const contentRef = useRef();
+
+  // Fetch data for all weeks
+  const { data, isLoading: queryLoading } = useQuery({
+    queryKey: ["dashboard/feedback/self-awareness", courseId],
+    queryFn: () => Promise.all(weeks.map((week) => userService.getMyActivites(courseId, week))),
+  });
 
   useEffect(() => {
     const fetchAssessmentData = async () => {
       setAssessmentLoading(true);
       try {
-        const data = await userService.getMyAssessment(courseId, week);
-        setAssessmentData(data);
+        // Fetch assessment data for each week
+        const assessmentResults = await Promise.all(
+          weeks.map(async (week) => {
+            const data = await userService.getMyAssessment(courseId, week);
+            return { week, data };
+          })
+        );
+
+        // Organize the assessment data by week
+        const assessmentByWeek = {};
+        assessmentResults.forEach(({ week, data }) => {
+          assessmentByWeek[week] = data;
+        });
+
+        setAssessmentData(assessmentByWeek);
       } catch (error) {
         console.error(error);
       } finally {
@@ -39,7 +53,7 @@ const SelfAwarenessFeedback = () => {
     };
 
     fetchAssessmentData();
-  }, [courseId, week]);
+  }, [courseId]);
 
   const toggleWeek = (weekNumber) => {
     setExpandedWeek(expandedWeek === weekNumber ? null : weekNumber);
