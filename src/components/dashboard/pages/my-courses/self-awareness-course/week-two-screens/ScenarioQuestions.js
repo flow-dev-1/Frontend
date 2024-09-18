@@ -23,35 +23,35 @@ export default function ScenarioQuestions({
         'Problem-Solving',
         'Patience',
       ],
-      questionListNegative: ['talkative', 'selfishness', 'impatience'],
+      questionListNegative: ['Talkative', 'Selfishness', 'Impatience'],
     },
     {
       title:
         'Imagine you’re working on a group project at school. Your group is struggling to come up with an idea for the project. As a member of the team, how would you help?',
       questionList: [
         'Leadership',
-        'communication',
-        'team-work',
+        'Communication',
+        'Team-work',
         'Problem-Solving',
-        'organization',
+        'Organization',
       ],
       questionListNegative: [
-        'impatience',
-        'de-organization',
-        'inability to work with a team',
+        'Impatience',
+        'De-organization',
+        'Inability to work with a team',
       ],
     },
     {
       title:
         'Is there a sport you dislike? What sport is this? Now imagine you were asked to represent your house in this particular sport, for your School’s inter-house sport competition, to win a laptop and a gaming console. How would you go about this?',
       questionList: [
-        'determination',
-        'goal-orientation',
-        'adoptability',
-        'team-spirit',
-        'resilience',
+        'Determination',
+        'Goal-orientation',
+        'Adoptability',
+        'Team-spirit',
+        'Resilience',
       ],
-      questionListNegative: ['laziness', 'easily fed up', 'distraction'],
+      questionListNegative: ['Laziness', 'Easily fed up', 'Distraction'],
     },
   ]
 

@@ -83,7 +83,10 @@ export default function QuestionFromVideo({ formData, onBack, onNext }) {
                   growth journey.
                 </h2>
               </div>
-              <div className='text-area-box px-4 mt-4'>
+              <div
+                className='text-area-box px-4 my-0'
+                style={{ margin: '.5rem 0' }}
+              >
                 <textarea
                   rows='6'
                   placeholder='Type your answer here...'

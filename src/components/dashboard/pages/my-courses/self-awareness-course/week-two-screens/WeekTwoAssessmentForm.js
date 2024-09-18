@@ -25,8 +25,8 @@ export default function WeekTwoAssessmentForm({ onBack, onNext }) {
       questionList: [
         'Empathy',
         'Good Listener',
-        'detail-oriented',
-        'responsible',
+        'Detail-oriented',
+        'Responsible',
       ],
     },
     {
@@ -226,7 +226,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext }) {
                       }
                       alt=''
                     />
-                    <p className='question-p ms-3'>{item}</p>
+                    <p className='question-p ms-3 align-items-center mt-2'>{item}</p>
                   </li>
                 ))}
               </ul>
