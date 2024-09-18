@@ -48,30 +48,29 @@ const SettingsAddNewTeam = ({ closeModal, openSuccessModal }) => {
     },
   })
 
-const onSubmit = (data) => {
-  if (!mutationTriggered.current) {
-    mutationTriggered.current = true;
+  const onSubmit = (data) => {
+    if (!mutationTriggered.current) {
+      mutationTriggered.current = true
 
-    // Combine first_name and last_name to create fullName
-    const fullName = `${data.first_name} ${data.last_name}`;
+      // Combine first_name and last_name to create fullName
+      const fullName = `${data.first_name} ${data.last_name}`
 
-    // Remove first_name and last_name from the data object
-    delete data.first_name;
-    delete data.last_name;
+      // Remove first_name and last_name from the data object
+      delete data.first_name
+      delete data.last_name
 
-    // Create the data object to send in the mutation
-    const payload = {
-      fullName,
-      email: data.email,
-      position: data.position,
-    };
+      // Create the data object to send in the mutation
+      const payload = {
+        fullName,
+        email: data.email,
+        position: data.position,
+      }
 
-    mutation.mutate(payload);
+      mutation.mutate(payload)
 
-    console.log(payload); // Logging the payload instead of the original data
+      console.log(payload) // Logging the payload instead of the original data
+    }
   }
-};
-
 
   return (
     <div className='' onSubmit={handleSubmit(onSubmit)}>
@@ -141,7 +140,7 @@ const onSubmit = (data) => {
                 onChange={(e) => setValue('position', e.target.value)}
               >
                 <option value=''>Select...</option>
-                {['Superadmin', 'Students', 'Teachers'].map((role, i) => (
+                {['Super-admin', 'Children', 'Teachers'].map((role, i) => (
                   <option key={i} value={role}>
                     {role}
                   </option>
