@@ -127,6 +127,27 @@ const SchoolOverview = () => {
     { name: 'Completed', value: totalCompleted },
     { name: 'Remaining', value: totalRemaining },
   ]
+
+  const allValuesZero = dataActive.every(entry => entry.value === 0);
+
+  const renderNoData = () => (
+    <div style={{
+      width: '100%',
+      height: '250px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#f0f0f0'  // Background color when no data
+    }}>
+      <h3 style={{ color: '#888' }}>No Data Available</h3>
+    </div>
+  );
+
+  const allValuesZeroPie2 = dataCompletion.every(entry => entry.value === 0);
+  const allValuesZeroGender = dataGender.every(entry => entry.value === 0);
+  const allValuesZeroBar = dataEnrollment.every(entry => entry.value === 0);
+  
+  
   return (
     <div className='overview'>
       <div className='top-cards'>
@@ -186,25 +207,29 @@ const SchoolOverview = () => {
             <hr />
 
             <ResponsiveContainer width='100%' height={250}>
-              <PieChart>
-                <Pie
-                  data={dataActive}
-                  dataKey='value'
-                  nameKey='name'
-                  cx='50%'
-                  cy='50%'
-                  outerRadius={120}
-                  label={renderCustomizedLabel}
-                  labelLine={false}
-                >
-                  {dataActive.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-              </PieChart>
+              {allValuesZero ? (
+                renderNoData()
+              ) : (
+                <PieChart>
+                  <Pie
+                    data={dataActive}
+                    dataKey='value'
+                    nameKey='name'
+                    cx='50%'
+                    cy='50%'
+                    outerRadius={120}
+                    label={renderCustomizedLabel}
+                    labelLine={false}
+                  >
+                    {dataActive.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                </PieChart>
+              )}
             </ResponsiveContainer>
             <div className='students-dash'>students</div>
             <div className='summary'>
@@ -241,26 +266,30 @@ const SchoolOverview = () => {
             </div>
             <hr />
             <ResponsiveContainer width='100%' height={250}>
-              <PieChart>
-                <Pie
-                  data={dataCompletion}
-                  dataKey='value'
-                  nameKey='name'
-                  cx='50%'
-                  cy='50%'
-                  innerRadius={80} // Adjusted innerRadius for increased thickness
-                  outerRadius={120} // Adjusted outerRadius for increased thickness
-                  label={renderCustomizedLabel}
-                  labelLine={false}
-                >
-                  {dataCompletion.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-              </PieChart>
+              {allValuesZeroPie2 ? (
+                renderNoData()
+              ) : (
+                <PieChart>
+                  <Pie
+                    data={dataCompletion}
+                    dataKey='value'
+                    nameKey='name'
+                    cx='50%'
+                    cy='50%'
+                    innerRadius={80} // Adjusted innerRadius for increased thickness
+                    outerRadius={120} // Adjusted outerRadius for increased thickness
+                    label={renderCustomizedLabel}
+                    labelLine={false}
+                  >
+                    {dataCompletion.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                </PieChart>
+              )}
             </ResponsiveContainer>
             <div className='students-dash'>students</div>
             <div className='summary'>
@@ -301,6 +330,9 @@ const SchoolOverview = () => {
               <hr />
             </div>
             <ResponsiveContainer width='100%' height={250}>
+              {allValuesZeroGender ? (
+                renderNoData()
+              ) : (
               <PieChart>
                 <Pie
                   data={dataGender}
@@ -321,6 +353,7 @@ const SchoolOverview = () => {
                   ))}
                 </Pie>
               </PieChart>
+              )}
             </ResponsiveContainer>
             <div className='students-dash'>students</div>
             <div className='summary'>
@@ -358,6 +391,9 @@ const SchoolOverview = () => {
             </div>
             <hr />
             <ResponsiveContainer width='100%' height={400}>
+              {allValuesZeroBar ? (
+                renderNoData()
+              ) : (
               <BarChart
                 data={dataEnrollment}
                 margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
@@ -378,6 +414,7 @@ const SchoolOverview = () => {
                   ))}
                 </Bar>
               </BarChart>
+              )}
             </ResponsiveContainer>
           </div>
         </div>
