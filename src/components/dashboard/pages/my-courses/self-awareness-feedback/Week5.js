@@ -426,29 +426,36 @@ const Week5 = () => {
     fetchAndProcessAssessmentData();
   }, [courseId, week]);
 
+  const activitiesOne = [
+    {
+      question: " What do you understand by “Emotional Intelligence”?",
+      answer: data?.activity?.activities[1].answers[0]
+    }]
+
   const percentage = assessmentData?.existingAssessment?.rating;
-  // // console.log(updatedQuestionsQuiz);
+  console.log("error", data?.activity?.activities[1].answers[0]);
   const Q1 = [
-    data?.activity?.activities[3].answers.IWill[0],
-    data?.activity?.activities[3].answers.IWillNot[0]
+    data?.activity?.activities[5].answers.IWill[0],
+    data?.activity?.activities[5].answers.IWillNot[0]
   ];
   const Q2 = [
-    data?.activity?.activities[3].answers.IWill[1],
-    data?.activity?.activities[3].answers.IWillNot[1]
+    data?.activity?.activities[5].answers.IWill[1],
+    data?.activity?.activities[5].answers.IWillNot[1]
   ];
   const Q3 = [
-    data?.activity?.activities[3].answers.IWill[2],
-    data?.activity?.activities[3].answers.IWillNot[2]
+    data?.activity?.activities[5].answers.IWill[2],
+    data?.activity?.activities[5].answers.IWillNot[2]
   ];
-    const Q4 = [
-      data?.activity?.activities[3].answers.IWill[3],
-      data?.activity?.activities[3].answers.IWill[3]
-    ];  const Q5 = [
-      data?.activity?.activities[3].answers.IWill[4],
-      data?.activity?.activities[3].answers.IWillNot[4]
-    ];
-  console.log(Q1);
-  const activityData = data?.activity?.activities[1].answers;
+  // FLS9982
+  const Q4 = [
+    data?.activity?.activities[5].answers.IWill[3],
+    data?.activity?.activities[5].answers.IWill[3]
+  ]; const Q5 = [
+    data?.activity?.activities[5].answers.IWill[4],
+    data?.activity?.activities[5].answers.IWillNot[4]
+  ];
+  // console.log(Q1);
+  const activityData = data?.activity?.activities[3].answers;
   if (isLoading || assessmentLoading) {
     return <div>Loading...</div>;
   }
@@ -456,8 +463,8 @@ const Week5 = () => {
   if (isError || assessmentError) {
     return <div>Take Activity to see feedback.</div>;
   }
-  console.log(data?.activity?.activities[5]?.answers)
-  const myChecked = data?.activity?.activities[5]?.answers
+  // console.log(data?.activity?.activities[5]?.answers)
+  const myChecked = data?.activity?.activities[3]?.answers
   const activities = [
     {
       question:
@@ -485,13 +492,90 @@ const Week5 = () => {
       answer: Q5
     }
   ];
+
   const getActivityEmoji = (label) => {
     return emojis.find((emoji) => emoji.label === label);
   };
 
   return (
     <div className="week-content">
-      <p className="activity-badge">Activity 1</p>
+      {activitiesOne.map((activity, index) => (
+        <div style={{ border: "none" }} className="activity" key={index}>
+          <p className="activity-badge">Activity {index + 1}</p>
+          <p className="question d-flex align-items-center gap-2">
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
+            <span>{activity.question}</span>
+          </p>
+
+          {/* Check if answer is an array, object, or string and render accordingly */}
+          {Array.isArray(activity.answer) ? (
+            <ul className="answer-options4" style={{ paddingLeft: "1.5rem" }}>
+              <div className="answer d-flex align-items-center gap-2">
+                <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+                {activity.answer.map((item, idx) => (
+                  <li
+                    key={idx}
+                    style={{ marginBottom: ".5rem", fontSize: "14px" }}
+                  >
+                    <Icon
+                      icon="radix-icons:dot-filled"
+                      style={{ color: "#5B616A" }}
+                    />
+                    {item}
+                  </li>
+                ))}
+              </div>
+            </ul>
+          ) : typeof activity.answer === "object" &&
+            activity.answer !== null ? (
+            <ol className="answer-options" style={{ paddingLeft: "1.5rem" }}>
+              <div className="d-flex  gap-2">
+                <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+                <div>
+                  {Object.entries(activity.answer).map(([key, value], idx) => (
+                    <li
+                      key={idx}
+                      style={{ marginBottom: ".5rem", fontSize: "14px" }}
+                    >
+                      <strong>{idx + 1}.</strong> {value}
+                    </li>
+                  ))}
+                </div>
+              </div>
+            </ol>
+          ) : (
+            <div className="answer d-flex gap-2">
+              <div className="d-flex  gap-2">
+                <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+                <p>{activity.answer}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Conditionally render feedback */}
+          {activity.feedback && (
+            <div className="feedback">
+              <div id="badge">Feedback:</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem"
+                }}
+              >
+                <div className="feedback-card">{activity.feedback}</div>
+                <Icon
+                  style={{ color: "#275DAD" }}
+                  width={20}
+                  icon="lucide:edit"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+      <p className="activity-badge">Activity 2</p>
       <p className="question d-flex align-items-center gap-2">
         <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
         <span>Kindly match the emojis to the right emotions.</span>
@@ -538,7 +622,7 @@ const Week5 = () => {
           </div>
         </div>
       </div>
-      <p className="activity-badge">Activity 2</p>
+      <p className="activity-badge">Activity 3</p>
       {activities.map((activity, index) => (
         <div style={{ border: "none" }} className="activity" key={index}>
           <p className="question d-flex align-items-center gap-2">
@@ -603,7 +687,7 @@ const Week5 = () => {
         </div>
       ))}
 
-      <p className="activity-badge">Activity 3</p>
+      <p className="activity-badge">Activity 4</p>
       <p className="question d-flex align-items-center gap-2">
         <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
         <span>

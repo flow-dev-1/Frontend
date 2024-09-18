@@ -10,35 +10,41 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../services/api/user";
-import { useNavigate } from "react-router-dom";
 
 const SelfAwarenessFeedback = () => {
-  const week = 1;
+  const weeks = [1, 2, 3, 4, 5]; // List of weeks
   const courseId = "66853bf50118e2e0a02b6a5a";
-  const { data, isLoading: queryLoading } = useQuery({
-    queryKey: ["dashboard/feedback/self-awareness", courseId, week],
-    queryFn: () => userService.getMyActivites(courseId, week)
-  });
-    const navigate = useNavigate();
 
-  const [assessmentData, setAssessmentData] = useState(null);
+  const [assessmentData, setAssessmentData] = useState({});
   const [assessmentLoading, setAssessmentLoading] = useState(true);
   const [expandedWeek, setExpandedWeek] = useState(null);
-  const [weeksLoaded, setWeeksLoaded] = useState({
-    week1: false,
-    week2: false,
-    week3: false,
-    week4: false,
-    week5: false
-  });
   const contentRef = useRef();
+
+  // Fetch data for all weeks
+  const { data, isLoading: queryLoading } = useQuery({
+    queryKey: ["dashboard/feedback/self-awareness", courseId],
+    queryFn: () => Promise.all(weeks.map((week) => userService.getMyActivites(courseId, week))),
+  });
 
   useEffect(() => {
     const fetchAssessmentData = async () => {
       setAssessmentLoading(true);
       try {
-        const data = await userService.getMyAssessment(courseId, week);
-        setAssessmentData(data);
+        // Fetch assessment data for each week
+        const assessmentResults = await Promise.all(
+          weeks.map(async (week) => {
+            const data = await userService.getMyAssessment(courseId, week);
+            return { week, data };
+          })
+        );
+
+        // Organize the assessment data by week
+        const assessmentByWeek = {};
+        assessmentResults.forEach(({ week, data }) => {
+          assessmentByWeek[week] = data;
+        });
+
+        setAssessmentData(assessmentByWeek);
       } catch (error) {
         console.error(error);
       } finally {
@@ -47,30 +53,21 @@ const SelfAwarenessFeedback = () => {
     };
 
     fetchAssessmentData();
-  }, [courseId, week]);
+  }, [courseId]);
 
   const toggleWeek = (weekNumber) => {
     setExpandedWeek(expandedWeek === weekNumber ? null : weekNumber);
   };
 
-  const handleWeekLoad = (weekNumber) => {
-    setWeeksLoaded((prev) => ({ ...prev, [`week${weekNumber}`]: true }));
-  };
-
-  const allWeeksLoaded = Object.values(weeksLoaded).every(Boolean);
-
+  // Function to temporarily expand all weeks, generate the PDF, then restore the original state
   const generatePDF = () => {
-    if (!allWeeksLoaded) {
-      return;
-    }
-
     const originalState = expandedWeek;
     setExpandedWeek("all");
     setTimeout(() => {
       const input = contentRef.current;
 
-      html2canvas(input, { scale: 2 }).then((canvas) => {
-        const imgData = canvas.toDataURL("image/jpeg", 0.8); // Compress image quality
+      html2canvas(input).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
         const pdf = new jsPDF("p", "mm", "a4");
         const imgWidth = 210;
         const pageHeight = 295;
@@ -78,36 +75,27 @@ const SelfAwarenessFeedback = () => {
         let heightLeft = imgHeight;
         let position = 0;
 
-        pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
 
         while (heightLeft >= 0) {
           position = heightLeft - imgHeight;
           pdf.addPage();
-          pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
           heightLeft -= pageHeight;
         }
 
         pdf.save("SelfAwarenessFeedback.pdf");
         setExpandedWeek(originalState);
       });
-    }, 1000);
+    }, 1000); // Delay to allow rendering
   };
 
-  const isDataLoaded = !queryLoading && !assessmentLoading && allWeeksLoaded;
+  const isDataLoaded = !queryLoading && !assessmentLoading; // Check if both the query data and assessment data have loaded
 
   return (
     <div ref={contentRef} className="feedback-container">
       {/* Week 1 */}
-      <div style={{ cursor: "pointer" }}>
-        <p
-          className=" m-auto  "
-          onClick={() => navigate("/dashboard/my-courses")}
-        >
-          <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
-          Back to My Courses
-        </p>
-      </div>
       <div className="week-title-container">
         <div className="week-title">
           <h2 onClick={() => toggleWeek(1)} style={{ fontSize: "24px" }}>
@@ -126,9 +114,7 @@ const SelfAwarenessFeedback = () => {
             style={{ cursor: "pointer" }}
           />
         </div>
-        {(expandedWeek === 1 || expandedWeek === "all") && (
-          <Week1 onLoad={() => handleWeekLoad(1)} />
-        )}
+        {(expandedWeek === 1 || expandedWeek === "all") && <Week1 />}
       </div>
 
       {/* Week 2 */}
@@ -150,9 +136,7 @@ const SelfAwarenessFeedback = () => {
             style={{ cursor: "pointer" }}
           />
         </div>
-        {(expandedWeek === 2 || expandedWeek === "all") && (
-          <Week2 onLoad={() => handleWeekLoad(2)} />
-        )}
+        {(expandedWeek === 2 || expandedWeek === "all") && <Week2 />}
       </div>
 
       {/* Week 3 */}
@@ -172,9 +156,7 @@ const SelfAwarenessFeedback = () => {
             style={{ cursor: "pointer" }}
           />
         </div>
-        {(expandedWeek === 3 || expandedWeek === "all") && (
-          <Week3 onLoad={() => handleWeekLoad(3)} />
-        )}
+        {(expandedWeek === 3 || expandedWeek === "all") && <Week3 />}
       </div>
 
       {/* Week 4 */}
@@ -193,9 +175,7 @@ const SelfAwarenessFeedback = () => {
             style={{ cursor: "pointer" }}
           />
         </div>
-        {(expandedWeek === 4 || expandedWeek === "all") && (
-          <Week4 onLoad={() => handleWeekLoad(4)} />
-        )}
+        {(expandedWeek === 4 || expandedWeek === "all") && <Week4 />}
       </div>
 
       {/* Week 5 */}
@@ -217,9 +197,7 @@ const SelfAwarenessFeedback = () => {
             style={{ cursor: "pointer" }}
           />
         </div>
-        {(expandedWeek === 5 || expandedWeek === "all") && (
-          <Week5 onLoad={() => handleWeekLoad(5)} />
-        )}
+        {(expandedWeek === 5 || expandedWeek === "all") && <Week5 />}
       </div>
 
       {/* Final Report Section */}

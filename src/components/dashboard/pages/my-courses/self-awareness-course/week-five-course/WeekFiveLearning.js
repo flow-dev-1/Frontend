@@ -126,7 +126,7 @@ export default function WeekFourLearning({
    const handleSubmit = async () => {
      try {
        // Your submit logic here
-
+     console.log(formData)
        const stringifiedFormData = JSON.stringify(formData);
        userService
          .postMyActivity(course.course._id, stringifiedFormData)
