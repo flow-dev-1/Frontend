@@ -8,9 +8,7 @@
   margin: 0 auto;
   border-radius: 20px;
   padding: 20px 0 0 0;
-
 }
-
 
 .course-info-modal p {
   font-size: 14px;
@@ -28,11 +26,22 @@
   text-align: left;
 }
 
+.overflow-y-modal {
+  overflow-y: auto;
+}
+.overflow-y-modal {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* For smooth scrolling */
+  scrollbar-width: none; /* For Firefox */
+}
+
+.overflow-y-modal::-webkit-scrollbar {
+  display: none; /* Hides scrollbar in Chrome, Safari */
+}
 .course-info-modal-body {
   margin-top: 10px;
   font-size: 14px;
   max-height: 200px;
-  overflow-y: auto;
   padding: 10px;
 }
 
@@ -50,12 +59,12 @@
 .objectives-scroll ul {
   margin: 0;
   padding: 0;
-  list-style-type: disc; 
+  list-style-type: disc;
 }
 
 .course-info-modal-footer {
   display: flex;
-  background-color: #275DAD;
+  background-color: #275dad;
   color: #fff;
   text-align: center;
   justify-content: space-around;
@@ -71,10 +80,6 @@
   color: #aaa;
 }
 
-
-
-
-
 .course-info-modal .objectives ul {
   list-style: disc !important;
   padding-left: 2rem;
@@ -88,22 +93,17 @@
 }
 
 .course-info-modal-footer p {
-
   color: #fff;
   margin-bottom: 0;
 }
 
 .course-info-modal-footer .modal-btn.cart {
-  background-color: #5CE1E6;
-  color: #275DAD;
+  background-color: #5ce1e6;
+  color: #275dad;
   font-size: 16px;
   border-radius: 30px;
   font-weight: 500;
 }
-
-
-
-
 
 .payment-modal.modal-content {
   width: 600px;
@@ -123,7 +123,6 @@
   border: 1px solid #a1a2a4;
   padding: 10px;
   margin-top: 15px;
-
 }
 
 .payment-modal-body .p-amount {
@@ -132,22 +131,19 @@
   font-weight: 800;
   align-items: center;
   line-height: normal;
-  border-bottom: 1px solid #ECEDF0;
+  border-bottom: 1px solid #ecedf0;
 }
 
 .payment-modal-body .form-group {
   display: flex;
   flex-direction: column;
-
 }
 
 .payment-modal-body .form-group label {
   margin-bottom: 5px;
   font-size: 12px;
   text-align: left;
-  color: #5B616A;
-
-
+  color: #5b616a;
 }
 
 .payment-modal-body .form-group input {
@@ -159,24 +155,22 @@
   background-color: #fff;
   margin-bottom: 10px;
   border: 1px solid #707172;
-
 }
 
 .payment-modal-body .form-group input::placeholder {
   font-size: 14px;
-  color: #D6D6D6;
-
+  color: #d6d6d6;
 }
 
 .error-message {
-  color: #FD483D !important;
+  color: #fd483d !important;
   font-size: 12px !important;
 }
 
 .payment-modal-body .payment-btn {
   /* width: 200px; */
   width: calc(100% - 10px);
-  background-color: #63C563;
+  background-color: #63c563;
   color: #fff;
   font-size: 14px;
   margin-top: 10px;
@@ -186,35 +180,36 @@
   max-width: 70%;
 }
 
-.registration-page.edit-profile span{
-  color: #275DAD;
-
+.registration-page.edit-profile span {
+  color: #275dad;
 }
 
-.registration-page.edit-profile .prefilled, .registration-page.edit-profile select.prefilled option {
+.registration-page.edit-profile .prefilled,
+.registration-page.edit-profile select.prefilled option {
   color: #808080; /* Grey color */
 }
 
 .review-popup.modal-content {
-  width: fit-content
+  width: fit-content;
 }
 
 .review-popup h1.review {
-  background-color: #275DAD;
- color: #fff;
-  border: 8px solid #5CE1E6;
+  background-color: #275dad;
+  color: #fff;
+  border: 8px solid #5ce1e6;
   border-radius: 50px;
   text-align: center;
   padding: 5px 0;
 }
 
-.review-popup div .review-buttons{
+.review-popup div .review-buttons {
   display: flex;
   align-items: center;
   justify-content: space-around;
 }
 
-.review-popup div .review-buttons .btn, .review-popup div .review-buttons .btn:focus{
+.review-popup div .review-buttons .btn,
+.review-popup div .review-buttons .btn:focus {
   outline: none;
   border: none;
 }
