@@ -151,11 +151,10 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
       const studentDataArray = []
 
       const expectedHeaders = {
-        Email: 'email',
-        fullName: 'fullName',
-        guardianFullName: 'guardianFullName',
+        Email_Address: 'email',
+        "Child's_fullName": 'fullName',
+        "Guardian's_FullName": 'guardianFullName',
       }
-
       jsonData.slice(1).forEach((row) => {
         let studentData = {}
         headers.forEach((header, index) => {

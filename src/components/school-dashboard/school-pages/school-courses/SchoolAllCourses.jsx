@@ -69,7 +69,7 @@ const SchoolAllCourses = () => {
     return 0
   }
 
-  console.log(courses)
+  console.log(courses, enrolledData)
 
   const filteredCourses = courses?.courses
     ?.filter((course) => {
@@ -163,7 +163,7 @@ const SchoolAllCourses = () => {
       <div className='course-list'>
         {filteredCourses?.map((course) => (
           <SchoolCourseCard
-            key={course._id}
+            key={course?._id}
             course={course}
             openModal={openModal}
             enrolled={enrolledDataArray}

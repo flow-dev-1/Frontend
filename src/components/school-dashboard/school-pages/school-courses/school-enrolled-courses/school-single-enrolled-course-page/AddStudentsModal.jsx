@@ -85,10 +85,11 @@ const AddStudentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   let schoolId
 
   // ToDO: Do a check if its a school or a user
-  if (user.isSchool) {
-    schoolId = user._id
+  if (user?.isSchool) {
+    schoolId = user?._id
   }
   const { id } = useParams()
+  console.log(decryptId(id), schoolId)
 
   const mutation = useMutation({
     mutationFn: (data) =>
@@ -117,7 +118,7 @@ const AddStudentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
     if (isFileUploaded) {
       data.students = parsedStudents
     }
-
+    console.log(data)
     mutation.mutate(data)
   }
 
@@ -156,9 +157,9 @@ const AddStudentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
       const studentDataArray = []
 
       const expectedHeaders = {
-        Email: 'email',
-        fullName: 'fullName',
-        guardianFullName: 'guardianFullName',
+        Email_Address: 'email',
+        "Child's_fullName": 'fullName',
+        "Guardian's_FullName": 'guardianFullName',
       }
 
       jsonData.slice(1).forEach((row) => {
