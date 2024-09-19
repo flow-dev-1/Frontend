@@ -27,44 +27,43 @@ const AddStudentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
     'Primary 4',
     'Primary 5',
     'Primary 6',
-    'JSS 1',
-    'JSS 2',
-    'JSS 3',
-    'SSS 1',
-    'SSS 2',
-    'SSS 3',
+    'Year 7 (JSS 1)',
+    'Year 8 (JSS 2)',
+    'Year 9 (JSS 3)',
+    'Year 10 (SSS 1)',
+    'Year 11 (SSS 2)',
+    'Year 12 (SSS 3)',
     'Educators',
   ]
 
-const schemaWithoutFile = yup.object().shape({
-  stdClass: yup.string().required("Class is required"),
-  students: yup
-    .array()
-    .of(
-      yup.object().shape({
-        email: yup
-          .string()
-          .email("Invalid email")
-          .required("Email is required"),
-        fullName: yup
-          .string()
-          .matches(
-            /^[a-zA-Z]+(?: [a-zA-Z]+)+$/,
-            "Full Name must contain at least two words"
-          )
-          .required("Student Name is required"),
-        guardianFullName: yup
-          .string()
-          .matches(
-            /^[a-zA-Z]+(?: [a-zA-Z]+)+$/,
-            "Guardian Name must contain at least two words"
-          )
-          .required("Guardian Name is required"),
-      })
-    )
-    .required("At least one student is required"),
-});
-
+  const schemaWithoutFile = yup.object().shape({
+    stdClass: yup.string().required('Class is required'),
+    students: yup
+      .array()
+      .of(
+        yup.object().shape({
+          email: yup
+            .string()
+            .email('Invalid email')
+            .required('Email is required'),
+          fullName: yup
+            .string()
+            .matches(
+              /^[a-zA-Z]+(?: [a-zA-Z]+)+$/,
+              'Full Name must contain at least two words'
+            )
+            .required('Student Name is required'),
+          guardianFullName: yup
+            .string()
+            .matches(
+              /^[a-zA-Z]+(?: [a-zA-Z]+)+$/,
+              'Guardian Name must contain at least two words'
+            )
+            .required('Guardian Name is required'),
+        })
+      )
+      .required('At least one student is required'),
+  })
 
   const schemaWithFile = yup.object().shape({
     stdClass: yup.string().required('Class is required'),

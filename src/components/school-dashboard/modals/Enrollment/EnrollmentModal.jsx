@@ -69,12 +69,12 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
     'Primary 4',
     'Primary 5',
     'Primary 6',
-    'JSS 1',
-    'JSS 2',
-    'JSS 3',
-    'SSS 1',
-    'SSS 2',
-    'SSS 3',
+    'Year 7 (JSS 1)',
+    'Year 8 (JSS 2)',
+    'Year 9 (JSS 3)',
+    'Year 10 (SSS 1)',
+    'Year 11 (SSS 2)',
+    'Year 12 (SSS 3)',
     'Educators',
   ]
 
