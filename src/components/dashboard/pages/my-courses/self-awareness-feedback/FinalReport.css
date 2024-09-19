@@ -29,3 +29,51 @@
   font-family: sans-serif;
   width: auto; /* Expand based on content */
 }
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+  z-index: 9999; /* Ensures it stays on top of everything */
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.congrats h1 {
+  color: #50AA50;
+}
+
+.blue-side{
+  margin-top: 10px;
+  background-color: #275DAD;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.blue-side h2{
+  color: white;
+}
+.celebrate{
+  margin: auto;
+  width: 100%;
+  margin-top: 10px;
+}
+.main-img{
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.para{
+padding: 7px;
+}
