@@ -105,6 +105,20 @@ class UserOBJ {
       throw err?.response?.data || err.message;
     }
   };
+  getEducatorDetails = async (auth_token) => {
+    console.log(auth_token);
+    try {
+      const response = await api.get(`api/educator/educator`, {
+        headers: {
+          Authorization: `Bearer ${auth_token}`
+        }
+      });
+      return response.data;
+    } catch (err) {
+      console.log(err?.response?.data || err.message)
+      throw err?.response?.data || err.message;
+    }
+  };
 
   registerInvitedAdmin = async (auth_token, data) => {
     console.log(auth_token);
@@ -257,7 +271,7 @@ class UserOBJ {
 
         formData
       );
-      console.log(response.data);
+      // console.log(response.data);
       return response.data;
     } catch (err) {
       throw err?.response?.data || err.message;
@@ -268,6 +282,18 @@ class UserOBJ {
     try {
       const response = await api.get(
         `api/users/course-enrollment/${params1}/get-activity/${week}`
+      );
+      return response.data;
+    } catch (err) {
+      throw err?.response?.data || err.message;
+    }
+  };
+
+  postAdminEducator = async (formData) => {
+    try {
+      const response = await api.post(
+        `api/educator/invited/admin-educator`,
+        formData
       );
       return response.data;
     } catch (err) {

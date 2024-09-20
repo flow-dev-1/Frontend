@@ -24,7 +24,7 @@ import EducatorOtpModal from '../../modals-pages/onboarding-modals/EducatorOtpMo
 
 Modal.setAppElement('#root') // Set the root element for the modal
 
-export default function InvitedAdminRegistration() {
+export default function InvitedAdminEducatorRegistration() {
   const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
@@ -36,9 +36,42 @@ export default function InvitedAdminRegistration() {
   const [availableLGAs, setAvailableLGAs] = useState([]) // State to manage the list of LGAs
   const navigate = useNavigate()
   // State to track if the selected country is Nigeria
-  const [ email, setEmail] = useState('')
+  const [ setEmail] = useState('')
 
+  const location = useLocation()
 
+  const getQueryParams = (search) => {
+    const params = new URLSearchParams(search)
+    return {
+      email: params.get('email'),
+      t: params.get('t'),
+    }
+  }
+
+  const { email, t } = getQueryParams(location.search)
+  dispatch(setToken(t))
+  localStorage.setItem('Flow-Auth-Token', t)
+  console.log(t)
+
+  // Fetch parent details using the token
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['invited-educator'], // Add token to queryKey to refetch on token change
+    queryFn: () => userService.getEducatorDetails(t),
+    enabled: !!t, // Only run the query if token is present
+  })
+
+  console.log(data?.data[0]?.fullName)
+  useEffect(() => {
+    if (data?.status === 'success') {
+      setValue('fullName', data?.data[0]?.fullName || 'N/A');
+      setValue('email', data?.data[0]?.email || 'N/A');
+      setValue('phoneNumber', data?.data[0]?.phone || 'N/A');
+      setValue('country', 'Nigeria');
+      setValue('state', data?.data[0]?.state || 'N/A');
+      setValue('lga', data?.data[0]?.lga || 'N/A');
+      setValue('gender', data?.data[0]?.gender || 'N/A');
+    }
+  }, [data])
   console.log(formData)
   const schema = yup.object().shape({
     fullName: yup
@@ -133,7 +166,7 @@ export default function InvitedAdminRegistration() {
   }, [selectedCountry])
 
   const mutation = useMutation({
-    mutationFn: (data) => userService.register('Individaul', data),
+    mutationFn: (data) => userService.postAdminEducator(data),
     onSuccess: (data) => {
       console.log('Registration successful:', data)
       toast.success(data.message)
@@ -212,6 +245,7 @@ export default function InvitedAdminRegistration() {
                 placeholder='Type here...'
                 {...register('email')}
                 onChange={(e) => setEmail(e.target.value)}
+                disabled
               />
               {errors.email && (
                 <p className='error-message'>{errors.email.message}</p>

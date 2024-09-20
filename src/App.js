@@ -47,6 +47,7 @@ import InvitedStudentRegistrationForm from './components/onboarding/registration
 import SchoolEnrolledEducators from './components/school-dashboard/school-pages/school-courses/school-enrolled-courses/school-single-enrolled-course-page/SchoolEnrolledEducators.jsx'
 import SelfAwarenessCourse from './components/dashboard/pages/my-courses/self-awareness-course/SelfAwarenessCourse.js'
 import SelfAwarenessFeedback from './components/dashboard/pages/my-courses/self-awareness-feedback/SelfAwarenessFeedback.js'
+import InvitedAdminEducatorRegistration from './components/onboarding/registration/InvitedEducatorRegistrationForm.js'
 
 function App() {
   return (
@@ -78,6 +79,11 @@ function App() {
             <Route
               path='/invited-educator'
               element={<InvitedAdminRegistration />}
+            />
+
+            <Route
+              path='/invited-admin'
+              element={<InvitedAdminEducatorRegistration />}
             />
             {/* <Route
               path='/individual/sign-up/educator-registration'
