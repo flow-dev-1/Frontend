@@ -60,7 +60,7 @@ export default function InvitedAdminEducatorRegistration() {
     enabled: !!t, // Only run the query if token is present
   })
 
-  console.log(data?.data[0]?.fullName)
+  // console.log(data?.data[0]?.fullName)
   useEffect(() => {
     if (data?.status === 'success') {
       setValue('fullName', data?.data[0]?.fullName || 'N/A');
