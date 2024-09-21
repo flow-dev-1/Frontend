@@ -55,7 +55,7 @@ export default function InvitedAdminEducatorRegistration() {
 
   // Fetch parent details using the token
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['invited-educator'], // Add token to queryKey to refetch on token change
+    queryKey: ['invited-admin'], 
     queryFn: () => userService.getEducatorDetails(t),
     enabled: !!t, // Only run the query if token is present
   })
