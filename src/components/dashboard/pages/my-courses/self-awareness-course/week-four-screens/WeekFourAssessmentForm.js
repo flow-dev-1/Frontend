@@ -80,11 +80,13 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
       ],
     },
     {
-      title: 'Match the actions with the values they represent:',
+      title:
+        'Match the following statements in the scenario to their respective values',
       questionList: [],
     },
     {
-      title: 'Match the scenarios with the appropriate responses:',
+      title:
+        'Match the following statements in the scenario to their respective values.',
       questionList: [],
     },
   ]
@@ -95,6 +97,14 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
     "Sarah remembers she has her own after-school activity but suggests they put David's books in his locker first so he isn’t late to his next class.",
     'As they walk, Sarah asks David if everything is alright but doesn’t pry if he doesn’t want to talk.',
     'Sarah offers to help David with the books.',
+    ,
+  ]
+  const leftItemsArray2 = ['Loyalty', 'Punctuality', 'Generousity']
+
+  const rightItemsArray2 = [
+    'Both Alex and Ben arrive at Alex’s house on time, ensuring they have maximum time to work on the project.',
+    'Alex offers to let Ben use his advanced science equipment at home, knowing it will significantly improve their project.',
+    'Despite having a busy schedule, Alex prioritizes helping Ben, honouring their friendship.',
     ,
   ]
 
@@ -125,6 +135,10 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
     console.log(`Matched Left: ${leftIndex}, Right: ${rightIndex}`)
     setMatchesSet1((prev) => [...prev, { left: leftIndex, right: rightIndex }])
   }
+  const handleMatch2 = (leftIndex, rightIndex) => {
+    console.log(`Matched Left: ${leftIndex}, Right: ${rightIndex}`)
+    setMatchesSet2((prev) => [...prev, { left: leftIndex, right: rightIndex }])
+  }
 
   const handleQuestionCheck = (optionIndex) => {
     // Check if the answer for the current question has already been selected and persisted
@@ -144,6 +158,10 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
   const handleNextStepClick = () => {
     // Check if current step requires matching (questions 9 and 10)
     if (currentIndex === 9 && matchesSet1.length !== leftItemsArray.length) {
+      toast.error('Please complete the matching before proceeding.')
+      return
+    }
+    if (currentIndex === 10 && matchesSet2.length !== leftItemsArray2.length) {
       toast.error('Please complete the matching before proceeding.')
       return
     }
@@ -244,8 +262,6 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
   }
   const renderQuestion = () => {
     const question = questionsArray[currentIndex - 1]
-    const leftItems = leftItemsArray[currentIndex - 9] || []
-    const rightItems = rightItemsArray[currentIndex - 9] || []
 
     return (
       <div className='week-two'>
@@ -258,11 +274,11 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
               </p>
             </div>
           )}
-          <div className='d-flex align-items-start mt-3'>
+          <div style={{marginTop:"3rem"}} className='d-flex align-items-start mt-6'>
             <h1 style={{ color: '#5B616A' }}>{currentIndex}.</h1>
             <h2
               style={{ color: '#5B616A' }}
-              className='text-start mb-0 fs-1 ms-3'
+              className='text-start mb-0  fs-1 ms-3'
             >
               {question.title}
             </h2>
@@ -291,12 +307,22 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
               </ul>
             </div>
           )}
-          {(currentIndex === 9 || currentIndex === 10) && (
+          {currentIndex === 9 && (
             <div className='match'>
               <MatchingComponent
                 leftItems={leftItemsArray}
                 rightItems={rightItemsArray}
                 onMatch={handleMatch}
+                onNext={handleNext}
+              />
+            </div>
+          )}
+          {currentIndex === 10 && (
+            <div className='match'>
+              <MatchingComponent
+                leftItems={leftItemsArray2}
+                rightItems={rightItemsArray2}
+                onMatch={handleMatch2}
                 onNext={handleNext}
               />
             </div>

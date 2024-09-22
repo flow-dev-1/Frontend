@@ -43,8 +43,8 @@ const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
     if (clickedOn.attrs.id && clickedOn.attrs.id.startsWith('left-item-')) {
       isDrawing.current = true
       const adjustedStart = {
-        x: pos.x + ARROW_PADDING + 10, // Start arrow exactly at the tip
-        y: pos.y,
+        x: pos.x + ARROW_PADDING + 65, // Start arrow exactly at the tip
+        y: pos.y - 10,
         id: clickedOn.attrs.id,
       }
       startPoint.current = adjustedStart
@@ -143,7 +143,7 @@ const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
     <Stage
       width={800}
       height={400}
-      y={20}
+      y={0}
       ref={stageRef}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
@@ -161,11 +161,11 @@ const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
                 key={`left-${index}`}
                 id={`left-item-${index}`}
                 text={item}
-                x={15}
-                y={15}
+                x={10}
+                y={0}
                 fontSize={16}
-                width={TEXT_WIDTH}
-                height={TEXT_HEIGHT}
+                width={100}
+                height={50}
                 align='center'
                 verticalAlign='middle'
               />
