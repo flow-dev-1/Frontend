@@ -4,6 +4,7 @@ import checkedImage from '../../../../../../assets/selfawareness-images/checked.
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
 import { toast } from 'react-toastify'
 import userService from '../../../../../../services/api/user.js'
+import MatchingComponent from './MatchingComponent.js'
 
 export default function WeekFourAssessmentForm({ onNext, onBack }) {
   const questionsArray = [
@@ -79,32 +80,38 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
       ],
     },
     {
-      title: 'Match the actions with the values they represent:',
+      title:
+        'Match the following statements in the scenario to their respective values',
       questionList: [],
     },
     {
-      title: 'Match the scenarios with the appropriate responses:',
+      title:
+        'Match the following statements in the scenario to their respective values.',
       questionList: [],
     },
   ]
 
-  const leftItemsArray = [
-    ['Kindness', 'Respect', 'Responsibility'],
-    ['Loyalty', 'Punctuality', 'Generosity'],
-  ]
+  const leftItemsArray = ['Kindness', 'Respect', 'Responsibility']
 
   const rightItemsArray = [
-    [
-      "Sarah remembers she has her own after-school activity but suggests they put David's books in his locker first so he isn’t late to his next class.",
-      'As they walk, Sarah asks David if everything is alright but doesn’t pry if he doesn’t want to talk.',
-      'Sarah offers to help David with the books.',
-    ],
-    [
-      'Both Alex and Ben arrive at Alex’s house on time, ensuring they have maximum time to work on the project.',
-      'Alex offers to let Ben use his advanced science equipment at home, knowing it will significantly improve their project.',
-      'Despite having a busy schedule, Alex prioritizes helping Ben, honouring their friendship.',
-    ],
+    "Sarah remembers she has her own after-school activity but suggests they put David's books in his locker first so he isn’t late to his next class.",
+    'As they walk, Sarah asks David if everything is alright but doesn’t pry if he doesn’t want to talk.',
+    'Sarah offers to help David with the books.',
+    ,
   ]
+  const leftItemsArray2 = ['Loyalty', 'Punctuality', 'Generousity']
+
+  const rightItemsArray2 = [
+    'Both Alex and Ben arrive at Alex’s house on time, ensuring they have maximum time to work on the project.',
+    'Alex offers to let Ben use his advanced science equipment at home, knowing it will significantly improve their project.',
+    'Despite having a busy schedule, Alex prioritizes helping Ben, honouring their friendship.',
+    ,
+  ]
+
+  const handleNext = () => {
+    console.log('All items matched. Moving to next screen.')
+    // Navigate to the next screen or handle the next step
+  }
 
   const [currentIndex, setCurrentIndex] = useState(1)
   const [answers, setAnswers] = useState(() => {
@@ -123,6 +130,16 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
 
   const [matchesSet1, setMatchesSet1] = useState([])
   const [matchesSet2, setMatchesSet2] = useState([])
+
+  const handleMatch = (leftIndex, rightIndex) => {
+    console.log(`Matched Left: ${leftIndex}, Right: ${rightIndex}`)
+    setMatchesSet1((prev) => [...prev, { left: leftIndex, right: rightIndex }])
+  }
+  const handleMatch2 = (leftIndex, rightIndex) => {
+    console.log(`Matched Left: ${leftIndex}, Right: ${rightIndex}`)
+    setMatchesSet2((prev) => [...prev, { left: leftIndex, right: rightIndex }])
+  }
+
   const handleQuestionCheck = (optionIndex) => {
     // Check if the answer for the current question has already been selected and persisted
     if (answers[currentIndex - 1] !== undefined) {
@@ -139,19 +156,23 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
   }
 
   const handleNextStepClick = () => {
-    if (
-      (currentIndex === 9 && matchesSet1.length !== leftItemsArray[0].length) ||
-      (currentIndex === 10 && matchesSet2.length !== leftItemsArray[1].length)
-    ) {
+    // Check if current step requires matching (questions 9 and 10)
+    if (currentIndex === 9 && matchesSet1.length !== leftItemsArray.length) {
+      toast.error('Please complete the matching before proceeding.')
+      return
+    }
+    if (currentIndex === 10 && matchesSet2.length !== leftItemsArray2.length) {
       toast.error('Please complete the matching before proceeding.')
       return
     }
 
+    // Ensure users select an answer in earlier questions
     if (answers[currentIndex - 1] === undefined && currentIndex <= 8) {
       toast.error('Please select an answer before proceeding.')
       return
     }
 
+    // Move to the next question or screen
     if (currentIndex < questionsArray.length) {
       setCurrentIndex(currentIndex + 1)
     } else {
@@ -175,111 +196,7 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
     }
     localStorage.setItem('week-four-assessment', JSON.stringify(assessmentData))
     console.log(assessmentData)
-  }, [answers, matchesSet1, matchesSet2])
-
-  const colors = ['#FFB6C1', '#ADD8E6', '#90EE90'] // Colors for pairing
-
-  const [selectedLeft1, setSelectedLeft1] = useState(null)
-  const [selectedRight1, setSelectedRight1] = useState(null)
-
-  const [selectedLeft2, setSelectedLeft2] = useState(null)
-  const [selectedRight2, setSelectedRight2] = useState(null)
-
-  const handleLeftItemClick1 = (index) => {
-    if (selectedRight1 !== null) {
-      const newMatch = {
-        left: index,
-        right: selectedRight1,
-        color: colors[matchesSet1.length % colors.length],
-      }
-
-      setMatchesSet1((prev) => [...prev, newMatch])
-
-      // Save updated matches in localStorage
-      const updatedAssessment = {
-        week: 4,
-        assessment: {
-          answers, // Preserve answers
-          matchesSet1: [...matchesSet1, newMatch], // Update the first match set
-          matchesSet2, // Preserve second match set
-        },
-      }
-      localStorage.setItem(
-        'week-four-assessment',
-        JSON.stringify(updatedAssessment)
-      )
-
-      setSelectedLeft1(null)
-      setSelectedRight1(null)
-    } else {
-      setSelectedLeft1(index)
-    }
-  }
-
-  const handleRightItemClick1 = (index) => {
-    if (selectedLeft1 !== null) {
-      setMatchesSet1((prev) => [
-        ...prev,
-        {
-          left: selectedLeft1,
-          right: index,
-          color: colors[matchesSet1.length % colors.length],
-        },
-      ])
-      setSelectedLeft1(null)
-      setSelectedRight1(null)
-    } else {
-      setSelectedRight1(index)
-    }
-  }
-
-  const handleLeftItemClick2 = (index) => {
-    if (selectedRight2 !== null) {
-      const newMatch = {
-        left: index,
-        right: selectedRight2,
-        color: colors[matchesSet2.length % colors.length],
-      }
-
-      setMatchesSet2((prev) => [...prev, newMatch])
-
-      // Save updated matches in localStorage
-      const updatedAssessment = {
-        week: 4,
-        assessment: {
-          answers, // Preserve answers
-          matchesSet1, // Preserve first match set
-          matchesSet2: [...matchesSet2, newMatch], // Update the second match set
-        },
-      }
-      localStorage.setItem(
-        'week-four-assessment',
-        JSON.stringify(updatedAssessment)
-      )
-
-      setSelectedLeft2(null)
-      setSelectedRight2(null)
-    } else {
-      setSelectedLeft2(index)
-    }
-  }
-
-  const handleRightItemClick2 = (index) => {
-    if (selectedLeft2 !== null) {
-      setMatchesSet2((prev) => [
-        ...prev,
-        {
-          left: selectedLeft2,
-          right: index,
-          color: colors[matchesSet2.length % colors.length],
-        },
-      ])
-      setSelectedLeft2(null)
-      setSelectedRight2(null)
-    } else {
-      setSelectedRight2(index)
-    }
-  }
+  }, [answers, matchesSet1])
 
   const saveWeekFourAssessment = () => {
     const storedData = localStorage.getItem('week-four-assessment')
@@ -301,7 +218,7 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
       return current === correctAnswers[index] ? count + 1 : count
     }, 0)
 
-    // Check Matching Questions
+    // Check Matching Questionsma
     const valuesToCheckForMatchSet1 = savedAnswers.assessment.matchesSet1
     const valuesToCheckForMatchSet2 = savedAnswers.assessment.matchesSet2
 
@@ -345,8 +262,6 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
   }
   const renderQuestion = () => {
     const question = questionsArray[currentIndex - 1]
-    const leftItems = leftItemsArray[currentIndex - 9] || []
-    const rightItems = rightItemsArray[currentIndex - 9] || []
 
     return (
       <div className='week-two'>
@@ -359,11 +274,11 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
               </p>
             </div>
           )}
-          <div className='d-flex align-items-start mt-3'>
+          <div style={{marginTop:"3rem"}} className='d-flex align-items-start mt-6'>
             <h1 style={{ color: '#5B616A' }}>{currentIndex}.</h1>
             <h2
               style={{ color: '#5B616A' }}
-              className='text-start mb-0 fs-1 ms-3'
+              className='text-start mb-0  fs-1 ms-3'
             >
               {question.title}
             </h2>
@@ -394,120 +309,27 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
           )}
           {currentIndex === 9 && (
             <div className='match'>
-              <div className='matching-container'>
-                {/* Left Column */}
-                <div className='left-column '>
-                  {leftItems.map((item, index) => (
-                    <div
-                      id={`left-item-1-${index}`}
-                      key={index}
-                      className='match-item text-area-box-2'
-                      style={{
-                        backgroundColor: getColorForItem(
-                          index,
-                          'left',
-                          matchesSet1
-                        ),
-                        border: 'none',
-                        padding: '1.5rem',
-                        width: '300px',
-                      }}
-                      onClick={() => handleLeftItemClick1(index)}
-                    >
-                      {item}
-                    </div>
-                  ))}
-                </div>
-
-                {/* Right Column */}
-                <div className='right-column'>
-                  {rightItems.map((item, index) => (
-                    <div
-                      id={`right-item-1-${index}`}
-                      key={index}
-                      className='match-item text-area-box-3'
-                      style={{
-                        backgroundColor: getColorForItem(
-                          index,
-                          'right',
-                          matchesSet1
-                        ),
-                        padding: '1rem',
-                        width: '400px',
-                        marginLeft: '8rem',
-                      }}
-                      onClick={() => handleRightItemClick1(index)}
-                    >
-                      {item}
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <MatchingComponent
+                leftItems={leftItemsArray}
+                rightItems={rightItemsArray}
+                onMatch={handleMatch}
+                onNext={handleNext}
+              />
             </div>
           )}
           {currentIndex === 10 && (
             <div className='match'>
-              <div className='matching-container'>
-                {/* Left Column */}
-                <div className='left-column  '>
-                  {leftItems.map((item, index) => (
-                    <div
-                      id={`left-item-2-${index}`}
-                      key={index}
-                      className='match-item text-area-box-2 '
-                      style={{
-                        backgroundColor: getColorForItem(
-                          index,
-                          'left',
-                          matchesSet2
-                        ),
-                        border: 'none',
-                        textAlign: 'left',
-                        padding: '1rem',
-                        width: '300px',
-                      }}
-                      onClick={() => handleLeftItemClick2(index)}
-                    >
-                      {item}
-                    </div>
-                  ))}
-                </div>
-
-                {/* Right Column */}
-                <div className='right-column '>
-                  {rightItems.map((item, index) => (
-                    <div
-                      id={`right-item-2-${index}`}
-                      key={index}
-                      className='match-item text-area-box-3'
-                      style={{
-                        backgroundColor: getColorForItem(
-                          index,
-                          'right',
-                          matchesSet2
-                        ),
-                        border: 'none',
-                        padding: '1rem',
-                        width: '400px',
-                        marginLeft: '8rem',
-                      }}
-                      onClick={() => handleRightItemClick2(index)}
-                    >
-                      {item}
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <MatchingComponent
+                leftItems={leftItemsArray2}
+                rightItems={rightItemsArray2}
+                onMatch={handleMatch2}
+                onNext={handleNext}
+              />
             </div>
           )}
         </div>
       </div>
     )
-  }
-
-  const getColorForItem = (index, side, matches) => {
-    const match = matches.find((match) => match[side] === index)
-    return match ? match.color : 'transparent'
   }
 
   return (
