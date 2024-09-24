@@ -320,7 +320,8 @@ const AddStudentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                 htmlFor='file-upload'
                 className='file-upload-label'
               >
-                Choose file
+                {' '}
+                {isFileUploaded ? 'File ready for upload' : 'Choose file'}
                 <Icon
                   icon='ant-design:upload-outlined'
                   width='24'
@@ -381,6 +382,12 @@ const AddStudentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
             'Send Invite'
           )}
         </button>
+        {isFileUploaded && mutation.isPending && (
+          <p style={{ fontSize: '10px', color: 'red', textAlign: 'right' }}>
+            Depending on the number of students, this process may take <br /> a
+            while. Please wait and do not close this page. Thank you.
+          </p>
+        )}
       </form>
     </div>
   )
