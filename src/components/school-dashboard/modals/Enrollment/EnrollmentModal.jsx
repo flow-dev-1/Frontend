@@ -93,6 +93,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
       onRequestClose()
     },
     onError: (error) => {
+      console.log(error)
       toast.error(error?.message || 'Enrollment failed')
     },
   })
