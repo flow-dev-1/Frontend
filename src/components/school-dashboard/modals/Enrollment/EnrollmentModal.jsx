@@ -109,9 +109,9 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
     if (isFileUploaded) {
       data.students = parsedStudents
     }
-
+    console.log(data)
     mutation.mutate(data)
-    console.log(data) // Ensure the data is submitted
+    // Ensure the data is submitted
   }
 
   const { reset } = useForm()
@@ -119,7 +119,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   const handleExcelDownload = () => {
     const link = document.createElement('a')
     link.href = excelDoc
-    link.download = 'template.xlsx'
+    link.download = 'Flowtemp.xlsx'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
