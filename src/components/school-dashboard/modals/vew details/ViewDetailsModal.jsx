@@ -8,10 +8,8 @@ import schoolService from "../../../../services/api/school";
 
 const ViewDetailsModal = ({
   onClose,
-  enrolledData,
   encryptURI,
-  courseIndex,
-  enrollmentid
+  courseId
 }) => {
   const queryClient = useQueryClient();
   const { user } = useSelector((state) => state.user);
@@ -25,6 +23,7 @@ const ViewDetailsModal = ({
   const handleDeleteClick = () => {
     setShowDeleteModal(true);
   };
+  console.log(courseId)
 
   const [enrollmentData, setData] = useState([]);
   const [groupedData, setGroupedData] = useState([]);
@@ -37,6 +36,13 @@ const ViewDetailsModal = ({
     setShowCreateModal(false);
     setShowDeleteModal(false);
   };
+const selectModal = (id) => {
+  navigate(
+    `/school-dashboard/courses/enrolled/${encryptURI(
+      id
+    )}`
+  );
+};
 
   
   let schoolId;
@@ -48,42 +54,10 @@ const ViewDetailsModal = ({
   const { id } = useParams();
   const { data, isLoading, isError } = useQuery({
     queryKey: ["school-dashboard"],
-    queryFn: () => schoolService.getEnrolledCourseData(schoolId, enrollmentid)
+    queryFn: () => schoolService.getEnrolledDetails(schoolId, courseId)
   });
+ console.log(data?.courses)
 
-  // Function to group data by stdClass
-  const selectModal = ()=>{
-    navigate(
-      `/school-dashboard/courses/enrolled/${encryptURI(
-        enrolledData.courses[courseIndex]._id
-      )}`)
-  }
-  const groupByClass = (enrollments) => {
-    const grouped = {};
-
-    enrollments.forEach((enrollment) => {
-      const { stdClass } = enrollment;
-
-      if (!grouped[stdClass]) {
-        grouped[stdClass] = {
-          stdClass: stdClass || "N/A",
-          studentsCount: 0,
-          dayOfWeek: enrollment.dayOfWeek || "N/A",
-          startTime: enrollment.startTime || "N/A",
-          endTime: enrollment.endTime || "N/A"
-        };
-      }
-      grouped[stdClass].studentsCount += 1; // Increment student count
-    });
-
-    return Object.values(grouped); // Convert the object to an array for rendering
-  };
-
-  useEffect(() => {
-    if (!data) return;
-    const processedData = groupByClass(data?.course?.studentEnrollments || []);
-    setGroupedData(processedData);
-  }, [data]);
 
   return (
     <div className="modal-overlay">
@@ -109,25 +83,32 @@ const ViewDetailsModal = ({
                 </tr>
               </thead>
               <tbody>
-                {groupedData?.map((group, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{group.stdClass}</td>
-                    <td>{group.studentsCount}</td>
-                    <td>{group.dayOfWeek}</td>
-                    <td>{group.startTime}</td>
-                    <td>{group.endTime}</td>
-                    <td>
-                      <Icon
-                        icon="iconamoon:arrow-right-2-thin"
-                        className="action-icon arrow-icon"
-                        width={22}
-                        style={{ color: "#000000" }}
-                        onClick={selectModal}
-                      />
-                    </td>
+                {data && data.courses?.length > 0 ? (
+                  data.courses.map((group, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{group.stdClass}</td>
+                      <td>{group.studentEnrollments?.length || 0}</td>{" "}
+                      {/* Ensure studentEnrollments is defined */}
+                      <td>{group.dayOfWeek}</td>
+                      <td>{group.startTime}</td>
+                      <td>{group.endTime}</td>
+                      <td>
+                        <Icon
+                          icon="iconamoon:arrow-right-2-thin"
+                          className="action-icon arrow-icon"
+                          width={22}
+                          style={{ color: "#000000" }}
+                          onClick={()=>selectModal(group._id)}
+                        />
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7">No data available</td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>

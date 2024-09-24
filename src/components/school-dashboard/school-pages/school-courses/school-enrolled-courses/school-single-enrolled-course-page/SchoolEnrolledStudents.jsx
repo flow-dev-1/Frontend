@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Icon } from '@iconify/react'
-import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import './enrolled-courses.css'
 import backgroundImage from '../../../../../../assets/bg-monky.png' // Make sure to replace with the correct path to the uploaded image
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'

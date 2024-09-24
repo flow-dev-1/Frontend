@@ -249,36 +249,20 @@ const SchoolCourseCard = ({
               </span>{" "}
               Review
             </button>
-            <button
-              id="reviewBtn"
-              onClick={handleDetailsClick}
-              style={
-                isEnrolled
-                  ? {
-                      backgroundColor: "#329BD6",
-                      color: "#fff",
-                      border: "1px solid #329bd6"
-                    }
-                  : course.grade !== "Educators"
-                  ? { backgroundColor: darkTertiary, color: "white" }
-                  : { backgroundColor: darkEducator, color: lightEducator }
-              }
-            >
-              <span>
-                {isEnrolled ? (
+               <button
+                className={`detailsBtn`}
+                style={{
+                  backgroundColor: "#329BD6",
+                  color: "#fff",
+                  border: "1px solid #329bd6"
+                }}
+              >
+                <span>
                   <Icon icon="ri:menu-2-fill" width={20} />
-                ) : (
-                  <Icon
-                    icon="vaadin:cart-o"
-                    width={20}
-                    style={{ color: "ffff" }}
-                  />
-                )}
-              </span>{" "}
-              {isEnrolled
-                ? "  View Details"
-                : `${course.currency} ${course.cost}`}
-            </button>
+                </span>{" "}
+                View Detail
+              </button>
+
             {isEnrolled ? (
               <div
                 style={{
@@ -304,7 +288,7 @@ const SchoolCourseCard = ({
           encryptURI={encryptURI}
           courseIndex={courseIndex}
           enrollmentid={coursedarta}
-          // course={course} // Pass the course data to the modal
+          courseId={course._id} 
           onClose={() => setOpenViewModal(false)}
         />
       )}
