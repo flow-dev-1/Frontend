@@ -6,6 +6,8 @@ import AddEducator from '../../school-pages/school-courses/school-course-card/Ad
 
 const CourseDetailModal = ({ course, enrolled, closeModal }) => {
   const [openEnrollModal, setOpenEnrollModal] = useState(false)
+  const [openDetailsModal, setOpenDetailsModal] = useState(false);
+
   const [openEnrollModalEducator, setOpenEnrollModalEducator] = useState(false)
   const openEnrollementModal = () => {
     if (course.grade === 'Educator') {
@@ -13,6 +15,10 @@ const CourseDetailModal = ({ course, enrolled, closeModal }) => {
     } else {
       setOpenEnrollModal(true)
     }
+  }
+
+  const openVewModel  = () =>{
+    setOpenDetailsModal(true);
   }
 
   const closeEnrollementModal = () => {

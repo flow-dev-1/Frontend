@@ -211,11 +211,12 @@ class SchoolOBJ {
       );
       return response.data;
     } catch (err) {
+      console.log(err?.response?.data || err.message)
       throw err?.response?.data || err.message;
     }
   };
   enrolledStudents = async (params1, params2, data) => {
-    console.log(data, "Data 0");
+    // console.log(data, "Data 0");
     try {
       // Check if data is not empty
       const response = await api.post(
