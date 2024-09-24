@@ -400,7 +400,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                   htmlFor='file-upload'
                   className='file-upload-label'
                 >
-                  Choose file
+                  {isFileUploaded ? 'File ready for upload' : 'Choose file'}
                   <Icon
                     icon='ant-design:upload-outlined'
                     width='24'
@@ -463,6 +463,10 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
               'Send invite'
             )}
           </button>
+          <p style={{ fontSize: '10px' }}>
+            {mutation.isPending &&
+              'Depending on the number of students this process may take a while please wait and do not close this page. Thank you'}
+          </p>
         </form>
       </div>
     </Modal>
