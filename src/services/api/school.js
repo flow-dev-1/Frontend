@@ -234,8 +234,11 @@ class SchoolOBJ {
       // Check if data is not empty
       const response = await api.post(
         `api/schools/${params1}/courses/${params2}/enroll`,
-        data
-      );
+        data,
+        {
+          timeout: 0, // Wait indefinitely for the response
+        }
+      )
       return response.data;
     } catch (err) {
       console.log(err?.response?.data || err.messag)

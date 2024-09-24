@@ -93,6 +93,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
       onRequestClose()
     },
     onError: (error) => {
+      console.log(error)
       toast.error(error?.message || 'Enrollment failed')
     },
   })
@@ -109,9 +110,9 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
     if (isFileUploaded) {
       data.students = parsedStudents
     }
-
+    console.log(data)
     mutation.mutate(data)
-    console.log(data) // Ensure the data is submitted
+    // Ensure the data is submitted
   }
 
   const { reset } = useForm()
@@ -119,7 +120,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   const handleExcelDownload = () => {
     const link = document.createElement('a')
     link.href = excelDoc
-    link.download = 'template.xlsx'
+    link.download = 'Flowtemp.xlsx'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -399,7 +400,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                   htmlFor='file-upload'
                   className='file-upload-label'
                 >
-                  Choose file
+                  {isFileUploaded ? 'File ready for upload' : 'Choose file'}
                   <Icon
                     icon='ant-design:upload-outlined'
                     width='24'
@@ -462,6 +463,10 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
               'Send invite'
             )}
           </button>
+          <p style={{ fontSize: '10px' }}>
+            {mutation.isPending &&
+              'Depending on the number of students this process may take a while please wait and do not close this page. Thank you'}
+          </p>
         </form>
       </div>
     </Modal>
