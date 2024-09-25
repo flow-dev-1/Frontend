@@ -141,6 +141,7 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
             </table>
           </div>
           {/* Cart Button */}
+        </div>
           <button
             id="cartBtn"
             onClick={openEnrollementModal}
@@ -149,13 +150,13 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
               color: "white",
               border: "1px solid #329bd6",
               padding:"5px",
-              borderRadius:"5px"
-              // marginLeft: "10px"
+              borderRadius:"5px",
+              marginLeft: "auto",
+              marginRight:"50px"
             }}
           >
-            <span>+</span> Add a New Class
+            <span>+</span> Add A New Class
           </button>
-        </div>
       </div>
       <EnrollmentModal
         isOpen={openEnrollModal}
