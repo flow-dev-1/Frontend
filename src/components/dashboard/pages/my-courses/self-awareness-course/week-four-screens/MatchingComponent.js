@@ -21,8 +21,6 @@ const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
   const [leftBgImage, setLeftBgImage] = useState(null)
   const [rightBgImage, setRightBgImage] = useState(null)
 
-  const TEXT_WIDTH = 100 // Approximate text width
-  const TEXT_HEIGHT = 20 // Approximate text height
   const ARROW_PADDING = 10 // Padding to prevent arrow from touching text
 
   // Load images manually
@@ -36,105 +34,141 @@ const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
     rightImage.onload = () => setRightBgImage(rightImage)
   }, [])
 
-  // Handle starting the arrow drawing
-  const handleMouseDown = useCallback((e) => {
-    const pos = e.target.getStage().getPointerPosition()
-    const clickedOn = e.target
-    if (clickedOn.attrs.id && clickedOn.attrs.id.startsWith('left-item-')) {
-      isDrawing.current = true
-      const adjustedStart = {
-        x: pos.x + ARROW_PADDING + 65, // Start arrow exactly at the tip
-        y: pos.y - 10,
-        id: clickedOn.attrs.id,
-      }
-      startPoint.current = adjustedStart
-    }
-  }, [])
+  // Handle starting the arrow drawing from the guided arrow's endpoint
+  const handleMouseDown = useCallback((e, index) => {
+    isDrawing.current = true
 
-  // Handle updating the temporary arrow position
-  const handleMouseMove = useCallback((e) => {
-    const pos = e.target.getStage().getPointerPosition()
-    const clickedOn = e.target
-
-    if (clickedOn.attrs.id && clickedOn.attrs.id.startsWith('left-item-')) {
-      // Change the cursor to pointer when hovering over a left item
-      stageRef.current.container().style.cursor = 'pointer'
-    } else {
-      // Reset the cursor when not over a left item
-      stageRef.current.container().style.cursor = 'default'
+    // Arrow starts from the guided arrow's end position
+    startPoint.current = {
+      x: 240, // Fixed starting x position
+      y: 75 + index * 80, // Vertical position based on left item index
+      index,
     }
 
-    if (!isDrawing.current) return
-
-    const adjustedEnd = {
-      x: Math.min(pos.x - ARROW_PADDING, 450 - ARROW_PADDING), // Prevent the arrow from extending beyond the right items
-      y: pos.y,
-    }
-
-    // Update the temporary arrow as the user drags
+    // Create the temporary arrow starting from the fixed point
     setTempArrow({
-      points: [
-        startPoint.current.x,
-        startPoint.current.y,
-        adjustedEnd.x,
-        adjustedEnd.y,
-      ],
-      stroke: 'black',
+      points: [240, startPoint.current.y, 240, startPoint.current.y],
+      stroke: '#5B616A', // Set stroke color to blue
       opacity: 0.5,
     })
   }, [])
 
-  // Handle finalizing the arrow when the mouse is released
-  const handleMouseUp = useCallback(
+  // Handle updating the temporary arrow as the user drags
+  const handleMouseMove = useCallback(
     (e) => {
-      if (!isDrawing.current) return
+      if (!isDrawing.current || !tempArrow) return
 
       const pos = e.target.getStage().getPointerPosition()
-      isDrawing.current = false
-      const startIndex = parseInt(startPoint.current.id.split('-')[2])
+      const adjustedEnd = {
+        x: Math.min(pos.x - ARROW_PADDING, 450 - ARROW_PADDING),
+        y: pos.y,
+      }
 
-      // Check if the arrow ends at one of the right-side items
+      // Update the temporary arrow with the new end position
+      setTempArrow({
+        ...tempArrow,
+        points: [240, startPoint.current.y, adjustedEnd.x, adjustedEnd.y],
+      })
+
+      // Change cursor style on valid right item
       const rightItemIndex = rightItems.findIndex((item, index) => {
-        const itemY = 20 + index * 110 // Calculate Y position of the right item
+        const itemY = 20 + index * 110
         return pos.x >= 450 && pos.y >= itemY && pos.y <= itemY + 100
       })
 
       if (rightItemIndex !== -1) {
-        setArrows((prev) => {
-          // Remove any existing arrow from the same left item
-          const filteredArrows = prev.filter(
-            (arrow) => arrow.leftIndex !== startIndex
-          )
+        // Check if the right item is already matched
+        const isAlreadyMatched = matches.some(
+          (match) => match.right === rightItems[rightItemIndex]
+        )
+        if (!isAlreadyMatched) {
+          stageRef.current.container().style.cursor = 'pointer' // Change cursor to pointer
+        } else {
+          stageRef.current.container().style.cursor = 'not-allowed' // Change cursor to not-allowed if already matched
+        }
+      } else {
+        stageRef.current.container().style.cursor = 'default' // Reset cursor
+      }
+    },
+    [tempArrow, ARROW_PADDING, rightItems, matches]
+  )
 
-          const finalArrow = {
+  // Handle finalizing the arrow when the mouse is released
+  const handleMouseUp = useCallback(
+    (e) => {
+      if (!isDrawing.current || !tempArrow) return
+      isDrawing.current = false
+
+      const pos = e.target.getStage().getPointerPosition()
+      const startIndex = startPoint.current.index
+
+      // Check if the arrow ends at one of the right-side items
+      const rightItemIndex = rightItems.findIndex((item, index) => {
+        const itemY = 20 + index * 110
+        return pos.x >= 450 && pos.y >= itemY && pos.y <= itemY + 100
+      })
+
+      if (rightItemIndex !== -1) {
+        // Check if the right item is already matched
+        const existingMatchIndex = matches.findIndex(
+          (match) => match.right === rightItems[rightItemIndex]
+        )
+
+        if (existingMatchIndex !== -1) {
+          // Remove the existing match if it exists
+          setMatches((prev) => {
+            const newMatches = [...prev]
+            newMatches.splice(existingMatchIndex, 1) // Remove the existing match
+            return newMatches
+          })
+
+          // Remove the existing arrow if it exists
+          setArrows((prev) =>
+            prev.filter((arrow) => arrow.rightIndex !== rightItemIndex)
+          )
+        }
+
+        // Finalize and lock the new arrow
+        setArrows((prev) => {
+          const newArrow = {
             points: tempArrow.points,
-            stroke: 'black',
-            fill: 'black',
+            stroke: '#5B616A', // Set the finalized arrow color to blue
+            fill: '#5B616A',
             opacity: 1,
             leftIndex: startIndex,
             rightIndex: rightItemIndex,
           }
 
-          return [...filteredArrows, finalArrow] // Finalize the new arrow
+          // Remove any previous arrow from the same left item
+          const filteredArrows = prev.filter(
+            (arrow) => arrow.leftIndex !== startIndex
+          )
+          return [...filteredArrows, newArrow]
         })
 
+        // Store the new match
         setMatches((prev) => {
           const newMatch = {
             left: leftItems[startIndex],
             right: rightItems[rightItemIndex],
           }
-          return [...prev, newMatch] // Store the match
+          const updatedMatches = [...prev, newMatch]
+
+          // Check if all left items have been matched
+          if (updatedMatches.length === leftItems.length) {
+            onNext() // Proceed to the next step
+          }
+          return updatedMatches
         })
 
-        onMatch(startIndex, rightItemIndex) // Trigger the onMatch callback with the indices
+        onMatch(startIndex, rightItemIndex)
       }
 
-      setTempArrow(null) // Clear the temporary arrow
+      // Clear the temporary arrow after use
+      setTempArrow(null)
 
-      // If all left items are matched, trigger `onNext`
-      if (matches.length + 1 === leftItems.length) {
-        onNext() // Proceed to the next screen or step
-      }
+      // Reset cursor when mouse up
+      stageRef.current.container().style.cursor = 'default'
     },
     [tempArrow, rightItems, leftItems, matches, onMatch, onNext]
   )
@@ -145,7 +179,6 @@ const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
       height={400}
       y={0}
       ref={stageRef}
-      onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
@@ -153,13 +186,28 @@ const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
         {/* Left Items with Background Image */}
         <Group x={50} y={50}>
           {leftItems.map((item, index) => (
-            <Group key={`left-group-${index}`} x={0} y={index * 80}>
+            <Group
+              key={`left-group-${index}`}
+              x={0}
+              y={index * 80}
+              onMouseDown={(e) => handleMouseDown(e, index)} // Start arrow from anywhere in the group
+              onMouseEnter={() =>
+                (stageRef.current.container().style.cursor = 'pointer')
+              } // Ensure cursor changes to pointer when hovering over left items
+              onMouseLeave={() =>
+                (stageRef.current.container().style.cursor = 'default')
+              } // Reset cursor when leaving
+            >
               {leftBgImage && (
-                <KonvaImage image={leftBgImage} width={200} height={50} />
+                <KonvaImage
+                  id={`left-bg-${index}`}
+                  image={leftBgImage}
+                  width={200}
+                  height={50}
+                />
               )}
               <Text
                 key={`left-${index}`}
-                id={`left-item-${index}`}
                 text={item}
                 x={10}
                 y={0}
@@ -169,12 +217,26 @@ const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
                 align='center'
                 verticalAlign='middle'
               />
+              {/* Guided Arrow */}
+              <Arrow
+                points={[190, 25, 240, 25]} // Arrow guides from left item
+                stroke='#5B616A'
+                fill='#5B616A'
+                opacity={0.7}
+                pointerLength={10}
+                pointerWidth={10}
+                visible={
+                  arrows.some((arrow) => arrow.leftIndex === index)
+                    ? false
+                    : true
+                } // Hide if an arrow exists
+              />
             </Group>
           ))}
         </Group>
 
         {/* Right Items with Background Image */}
-        <Group x={450} y={20}>
+        <Group x={460} y={20}>
           {rightItems.map((item, index) => (
             <Group key={`right-group-${index}`} x={-20} y={index * 110}>
               {rightBgImage && (
@@ -184,10 +246,10 @@ const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
                 key={`right-${index}`}
                 text={item}
                 x={10}
-                y={-30}
+                y={0}
                 fontSize={16}
                 width={300}
-                height={150}
+                height={100}
                 align='center'
                 verticalAlign='middle'
               />
@@ -200,9 +262,11 @@ const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
           <Arrow
             key={`arrow-${index}`}
             points={arrow.points}
-            stroke={arrow.stroke || 'black'}
-            fill={arrow.fill || 'black'}
-            opacity={arrow.opacity || 1}
+            stroke={arrow.stroke}
+            fill={arrow.fill}
+            opacity={arrow.opacity}
+            pointerLength={10}
+            pointerWidth={10}
           />
         ))}
 
@@ -210,9 +274,10 @@ const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
         {tempArrow && (
           <Arrow
             points={tempArrow.points}
-            stroke={tempArrow.stroke || 'black'}
-            fill={tempArrow.fill || 'black'}
-            opacity={tempArrow.opacity || 0.5}
+            stroke={tempArrow.stroke}
+            opacity={tempArrow.opacity}
+            pointerLength={10}
+            pointerWidth={10}
           />
         )}
       </Layer>

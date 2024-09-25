@@ -200,7 +200,6 @@ const SchoolAllCourses = () => {
           course={selectedCourse}
           enrolled={enrolledDataArray}
         />
-        <button onClick={openViewDetailsModal}>View Details</button>
       </Modal>
 
       {/* View Details Modal */}

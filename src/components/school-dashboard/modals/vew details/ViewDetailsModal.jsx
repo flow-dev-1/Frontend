@@ -5,14 +5,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import schoolService from "../../../../services/api/school";
+import EnrollmentModal from "../Enrollment/EnrollmentModal";
 
-const ViewDetailsModal = ({
-  onClose,
-  enrolledData,
-  encryptURI,
-  courseIndex,
-  enrollmentid
-}) => {
+const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
   const queryClient = useQueryClient();
   const { user } = useSelector((state) => state.user);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -21,10 +16,22 @@ const ViewDetailsModal = ({
     user: null,
     enrollId: null
   });
+  const [openEnrollModal, setOpenEnrollModal] = useState(false);
+  const [openViewModal, setOpenViewModal] = useState(false);
+  const [openEnrollModalEducator, setOpenEnrollModalEducator] = useState(false);
+
+  const openEnrollementModal = () => {
+    if (course.grade === "Educator") {
+      setOpenEnrollModalEducator(true);
+    } else {
+      setOpenEnrollModal(true);
+    }
+  };
 
   const handleDeleteClick = () => {
     setShowDeleteModal(true);
   };
+  console.log(courseId);
 
   const [enrollmentData, setData] = useState([]);
   const [groupedData, setGroupedData] = useState([]);
@@ -33,12 +40,40 @@ const ViewDetailsModal = ({
     setShowCreateModal(true);
   };
 
+
+  const lightGreen = "#D4FFBE";
+  const darkGreen = "#4B7E31";
+  const lightTertiary = "#FAFAFA";
+  const darkTertiary = "#329BD6";
+  const lightEducator = "#5CE1E6";
+  const darkEducator = "#275DAD";
+      const daysOfWeek = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ];
+      const timeOptions = Array.from(
+        { length: 10 },
+        (_, i) => `${String(i + 8).padStart(2, "0")}:00`
+      );
+
   const closeModals = () => {
     setShowCreateModal(false);
     setShowDeleteModal(false);
   };
+  const selectModal = (id) => {
+    navigate(`/school-dashboard/courses/enrolled/${encryptURI(id)}`);
+  };
 
-  
+  const closeEnrollementModal = () => {
+    setOpenEnrollModal(false);
+    setOpenEnrollModalEducator(false);
+  };
+
   let schoolId;
   // ToDO: Do a check if its a school or a user
   if (user?.isSchool) {
@@ -48,42 +83,9 @@ const ViewDetailsModal = ({
   const { id } = useParams();
   const { data, isLoading, isError } = useQuery({
     queryKey: ["school-dashboard"],
-    queryFn: () => schoolService.getEnrolledCourseData(schoolId, enrollmentid)
+    queryFn: () => schoolService.getEnrolledDetails(schoolId, courseId)
   });
-
-  // Function to group data by stdClass
-  const selectModal = ()=>{
-    navigate(
-      `/school-dashboard/courses/enrolled/${encryptURI(
-        enrolledData.courses[courseIndex]._id
-      )}`)
-  }
-  const groupByClass = (enrollments) => {
-    const grouped = {};
-
-    enrollments.forEach((enrollment) => {
-      const { stdClass } = enrollment;
-
-      if (!grouped[stdClass]) {
-        grouped[stdClass] = {
-          stdClass: stdClass || "N/A",
-          studentsCount: 0,
-          dayOfWeek: enrollment.dayOfWeek || "N/A",
-          startTime: enrollment.startTime || "N/A",
-          endTime: enrollment.endTime || "N/A"
-        };
-      }
-      grouped[stdClass].studentsCount += 1; // Increment student count
-    });
-
-    return Object.values(grouped); // Convert the object to an array for rendering
-  };
-
-  useEffect(() => {
-    if (!data) return;
-    const processedData = groupByClass(data?.course?.studentEnrollments || []);
-    setGroupedData(processedData);
-  }, [data]);
+  console.log(data?.courses);
 
   return (
     <div className="modal-overlay">
@@ -92,7 +94,7 @@ const ViewDetailsModal = ({
           X
         </button>
         <div className="modal-header">
-          <h2>Enrollment Details</h2>
+          <h2>Enrolled Classes</h2>
         </div>
         <div className="modal-body">
           <div className="table-container">
@@ -109,30 +111,60 @@ const ViewDetailsModal = ({
                 </tr>
               </thead>
               <tbody>
-                {groupedData?.map((group, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{group.stdClass}</td>
-                    <td>{group.studentsCount}</td>
-                    <td>{group.dayOfWeek}</td>
-                    <td>{group.startTime}</td>
-                    <td>{group.endTime}</td>
-                    <td>
-                      <Icon
-                        icon="iconamoon:arrow-right-2-thin"
-                        className="action-icon arrow-icon"
-                        width={22}
-                        style={{ color: "#000000" }}
-                        onClick={selectModal}
-                      />
-                    </td>
+                {data && data.courses?.length > 0 ? (
+                  data.courses.map((group, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{group.stdClass}</td>
+                      <td>{group.studentEnrollments?.length || 0}</td>{" "}
+                      {/* Ensure studentEnrollments is defined */}
+                      <td>{group.dayOfWeek}</td>
+                      <td>{group.startTime}</td>
+                      <td>{group.endTime}</td>
+                      <td>
+                        <Icon
+                          icon="iconamoon:arrow-right-2-thin"
+                          className="action-icon arrow-icon"
+                          width={22}
+                          style={{ color: "#000000" }}
+                          onClick={() => selectModal(group._id)}
+                        />
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7">No data available</td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
+          {/* Cart Button */}
         </div>
+          <button
+            id="cartBtn"
+            onClick={openEnrollementModal}
+            style={{
+              backgroundColor: darkTertiary,
+              color: "white",
+              border: "1px solid #329bd6",
+              padding:"5px",
+              borderRadius:"5px",
+              marginLeft: "auto",
+              marginRight:"50px"
+            }}
+          >
+            <span>+</span> Add A New Class
+          </button>
       </div>
+      <EnrollmentModal
+        isOpen={openEnrollModal}
+        onRequestClose={closeEnrollementModal}
+        daysOfWeek={daysOfWeek}
+        timeOptions={timeOptions}
+        course={course}
+      />
     </div>
   );
 };

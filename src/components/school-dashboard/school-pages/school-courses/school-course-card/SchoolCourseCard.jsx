@@ -249,36 +249,45 @@ const SchoolCourseCard = ({
               </span>{" "}
               Review
             </button>
-            <button
-              id="reviewBtn"
-              onClick={handleDetailsClick}
-              style={
-                isEnrolled
-                  ? {
-                      backgroundColor: "#329BD6",
-                      color: "#fff",
-                      border: "1px solid #329bd6"
-                    }
-                  : course.grade !== "Educators"
-                  ? { backgroundColor: darkTertiary, color: "white" }
-                  : { backgroundColor: darkEducator, color: lightEducator }
-              }
-            >
-              <span>
-                {isEnrolled ? (
-                  <Icon icon="ri:menu-2-fill" width={20} />
-                ) : (
+            {isEnrolled ? (
+              <>
+                {/* View Details Button */}
+                <button
+                  id="viewDetailsBtn"
+                  onClick={handleDetailsClick}
+                  style={{
+                    backgroundColor: "#329BD6",
+                    color: "#fff",
+                    border: "1px solid #329bd6"
+                  }}
+                >
+                  <span>
+                    <Icon icon="ri:menu-2-fill" width={20} />
+                  </span>{" "}
+                  View Details
+                </button>
+              </>
+            ) : (
+              <button
+                id="reviewBtn"
+                onClick={handleDetailsClick}
+                style={
+                  course.grade !== "Educators"
+                    ? { backgroundColor: darkTertiary, color: "white" }
+                    : { backgroundColor: darkEducator, color: lightEducator }
+                }
+              >
+                <span>
                   <Icon
                     icon="vaadin:cart-o"
                     width={20}
-                    style={{ color: "ffff" }}
+                    style={{ color: "white" }}
                   />
-                )}
-              </span>{" "}
-              {isEnrolled
-                ? "  View Details"
-                : `${course.currency} ${course.cost}`}
-            </button>
+                </span>{" "}
+                {`${course.currency} ${course.cost}`}
+              </button>
+            )}
+
             {isEnrolled ? (
               <div
                 style={{
@@ -304,7 +313,8 @@ const SchoolCourseCard = ({
           encryptURI={encryptURI}
           courseIndex={courseIndex}
           enrollmentid={coursedarta}
-          // course={course} // Pass the course data to the modal
+          courseId={course._id}
+          course={course}
           onClose={() => setOpenViewModal(false)}
         />
       )}

@@ -268,7 +268,7 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
         <div className='assessment question-box'>
           {currentIndex <= 1 && (
             <div className='assessment-box'>
-              <h2 style={{ color: '#FAFAFA' }}>Assessment</h2>
+              <h2 style={{ color: '#FAFAFA', textAlign:"center" }}>Assessment</h2>
               <p style={{ color: '#FAFAFA' }} className='text-center'>
                 Scenario around your values.
               </p>

@@ -371,7 +371,7 @@ export default function WeekOneAssessmentForm({
         >
           <div className=''>
             <div className='assessment-box'>
-              <h2 style={{ color: '#FAFAFA' }}>Assessment</h2>
+              <h2 style={{ color: '#FAFAFA', textAlign:"center" }}>Assessment</h2>
               Scenario around your personality colors.
             </div>
             <h2
