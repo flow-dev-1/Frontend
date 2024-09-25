@@ -385,7 +385,7 @@ const SchoolEnrolledStudents = () => {
                 <td>{data?.progress}%</td>
                 <td style={{ width: "205px" }}>
                   <Icon
-                    icon="mynaui:trash"
+                    icon="fluent:delete-32-regular"
                     className="action-icon delete-icon"
                     style={{
                       color: "#000000",
