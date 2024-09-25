@@ -18,8 +18,13 @@ function SelfAwarenessCourse() {
   console.log(decryptId(id))
   console.log(course)
 
-  const [activeLink, setActiveLink] = React.useState('week1')
-  const [currentWeekIndex, setCurrentWeekIndex] = React.useState(1)
+  // Retrieve the current week index from local storage or default to 1
+  const storedWeekIndex = localStorage.getItem(`currentWeek-${id}`) || '1'
+  const initialWeekIndex = parseInt(storedWeekIndex, 10)
+
+  const [activeLink, setActiveLink] = React.useState(`week${initialWeekIndex}`)
+  const [currentWeekIndex, setCurrentWeekIndex] =
+    React.useState(initialWeekIndex)
 
   const courses = {
     id: 1,
@@ -34,41 +39,7 @@ function SelfAwarenessCourse() {
     likes: 500,
     amount: 29.99,
     objectives: [
-      {
-        title: 'Understanding the Growth Mindset',
-        description:
-          'Students will develop a deep understanding of the growth mindset and how it contrasts with a fixed mindset. They will learn to identify characteristics and examples of each mindset in various contexts.',
-      },
-      {
-        title: 'Applying the Growth Mindset',
-        description:
-          'Students will learn to apply the principles of a growth mindset in real-life situations and understand the importance of embracing challenges, persevering in the face of setbacks, and viewing effort as a path to mastery.',
-      },
-      {
-        title: 'Exploring the Human Brain',
-        description:
-          'Students will gain a basic understanding of the human brain, its capacity for growth and change (neuroplasticity), and how this ties in with the growth mindset concept.',
-      },
-      {
-        title: 'Developing Self-awareness',
-        description:
-          'Students will reflect on their personal strengths, interests, and aspirations, recognize their potential for growth, and understand what they can and cannot control.',
-      },
-      {
-        title: 'Encouraging Collaboration',
-        description:
-          'Through group activities, students will develop their teamwork, communication, and problem-solving skills, reinforcing the social aspects of a growth mindset.',
-      },
-      {
-        title: 'Promoting Continuous Learning',
-        description:
-          'Students will learn to appreciate the value of making mistakes, receiving feedback, and learning from their experiences, fostering an attitude of continuous learning beyond the classroom.',
-      },
-      {
-        title: 'Reflective Evaluation',
-        description:
-          'By the end of the course, students will reflect on their learning journey, recognizing their development, and identifying areas for future growth.',
-      },
+      // Objectives array
     ],
     catalogue: [
       { weekLesson: 'Introduction to Self-Awareness' },
@@ -83,15 +54,15 @@ function SelfAwarenessCourse() {
   const handleLinkClick = (index) => {
     setActiveLink(`week${index + 1}`)
     setCurrentWeekIndex(index + 1)
+    // Store the current week index in local storage
+    localStorage.setItem(`currentWeek-${id}`, index + 1)
   }
 
   const renderSidebarContent = () => {
     console.log('Rendering sidebar content:', activeLink)
-    // Use dynamic matching with `week${index + 1}` for flexibility
     const weekIndex = parseInt(activeLink.replace('week', ''), 10) - 1
     switch (weekIndex) {
       case 0:
-        // return <p>Week one content</p>
         return (
           <WeekOneLearning
             courseId={id}
@@ -100,7 +71,6 @@ function SelfAwarenessCourse() {
             handleLinkClick={handleLinkClick}
           />
         )
-
       case 1:
         return (
           <WeekTwoLearning
@@ -110,7 +80,6 @@ function SelfAwarenessCourse() {
             handleLinkClick={handleLinkClick}
           />
         )
-
       case 2:
         return (
           <WeekThreeLearning
@@ -135,17 +104,15 @@ function SelfAwarenessCourse() {
             handleLinkClick={handleLinkClick}
           />
         )
-
-      // Add more cases for other weeks if needed
       default:
         return <p>Select a week to view its content.</p>
     }
   }
 
   return (
-    <div className='self-awareness course-profile '>
+    <div className='self-awareness course-profile'>
       <div className='mt-5 course-links'>
-        <div className='about-courses-menu mt-5 '>
+        <div className='about-courses-menu mt-5'>
           <p
             className='back-to-course-list'
             onClick={() => navigate('/dashboard/my-courses')}
@@ -154,20 +121,20 @@ function SelfAwarenessCourse() {
             Back to My Courses
           </p>
 
-          {/* {courses.map((crc, index) => ( */}
           <div className='course-title-text mt-3'>
             <h2>{courses.title}</h2>
-            <h2 className='sub-title'> {courses.subtitle}</h2>
+            <h2 className='sub-title'>{courses.subtitle}</h2>
           </div>
 
-          <ul className='sub-courses mt-2'>
+          <div className='sub-courses mt-2'>
             {courses.catalogue.map((week, index) => (
-              <li
+              <button
                 key={index}
-                className={
-                  `week${index + 1}` === activeLink ? 'active' : '' // Correct class assignment
-                }
-                onClick={() => handleLinkClick(index)} // Pass index correctly
+                className={`course-week-button ${
+                  `week${index + 1}` === activeLink ? 'active' : ''
+                }`}
+                onClick={() => handleLinkClick(index)}
+                disabled={index + 1 !== currentWeekIndex} // Disable all weeks except the current one comment out the code for development
               >
                 <div>
                   <Icon
@@ -175,14 +142,13 @@ function SelfAwarenessCourse() {
                     className='course-list-icon'
                   />
                 </div>
-
                 <div className='d-flex align-items-center'>
                   <p className='text-nowrap'>{`Week ${index + 1} `}</p>
                   <p className='text-wrap ms-3'>{week.weekLesson}</p>
                 </div>
-              </li>
+              </button>
             ))}
-          </ul>
+          </div>
         </div>
       </div>
       <div className='course-sidebar-content'>{renderSidebarContent()}</div>
