@@ -10,8 +10,14 @@ import {
 import bg from '../../../../../../assets/selfawareness-images/match-1.png'
 import bg2 from '../../../../../../assets/selfawareness-images/match-2.png'
 
-const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
-  const [arrows, setArrows] = useState([]) // Permanent arrows
+const MatchingComponent = ({
+  leftItems,
+  rightItems,
+  onMatch,
+  onNext,
+  arrows,
+  setArrows,
+}) => {
   const [tempArrow, setTempArrow] = useState(null) // Temporary arrow during drawing
   const [matches, setMatches] = useState([]) // Store matched items
   const isDrawing = useRef(false)
@@ -34,24 +40,32 @@ const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
     rightImage.onload = () => setRightBgImage(rightImage)
   }, [])
 
-  // Handle starting the arrow drawing from the guided arrow's endpoint
-  const handleMouseDown = useCallback((e, index) => {
-    isDrawing.current = true
+  // Handle starting the arrow drawing
+  const handleMouseDown = useCallback(
+    (e, index) => {
+      isDrawing.current = true
 
-    // Arrow starts from the guided arrow's end position
-    startPoint.current = {
-      x: 240, // Fixed starting x position
-      y: 75 + index * 80, // Vertical position based on left item index
-      index,
-    }
+      // Remove the existing match and arrow for this left item, if any
+      setArrows((prev) => prev.filter((arrow) => arrow.leftIndex !== index))
+      setMatches((prev) =>
+        prev.filter((match) => match.left !== leftItems[index])
+      )
 
-    // Create the temporary arrow starting from the fixed point
-    setTempArrow({
-      points: [240, startPoint.current.y, 240, startPoint.current.y],
-      stroke: '#5B616A', // Set stroke color to blue
-      opacity: 0.5,
-    })
-  }, [])
+      startPoint.current = {
+        x: 240, // Fixed starting x position
+        y: 75 + index * 80, // Vertical position based on left item index
+        index,
+      }
+
+      // Create the temporary arrow starting from the fixed point
+      setTempArrow({
+        points: [240, startPoint.current.y, 240, startPoint.current.y],
+        stroke: '#5B616A', // Set stroke color to blue
+        opacity: 0.5,
+      })
+    },
+    [leftItems, setArrows]
+  )
 
   // Handle updating the temporary arrow as the user drags
   const handleMouseMove = useCallback(
@@ -69,28 +83,8 @@ const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
         ...tempArrow,
         points: [240, startPoint.current.y, adjustedEnd.x, adjustedEnd.y],
       })
-
-      // Change cursor style on valid right item
-      const rightItemIndex = rightItems.findIndex((item, index) => {
-        const itemY = 20 + index * 110
-        return pos.x >= 450 && pos.y >= itemY && pos.y <= itemY + 100
-      })
-
-      if (rightItemIndex !== -1) {
-        // Check if the right item is already matched
-        const isAlreadyMatched = matches.some(
-          (match) => match.right === rightItems[rightItemIndex]
-        )
-        if (!isAlreadyMatched) {
-          stageRef.current.container().style.cursor = 'pointer' // Change cursor to pointer
-        } else {
-          stageRef.current.container().style.cursor = 'not-allowed' // Change cursor to not-allowed if already matched
-        }
-      } else {
-        stageRef.current.container().style.cursor = 'default' // Reset cursor
-      }
     },
-    [tempArrow, ARROW_PADDING, rightItems, matches]
+    [tempArrow, ARROW_PADDING]
   )
 
   // Handle finalizing the arrow when the mouse is released
@@ -109,68 +103,67 @@ const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
       })
 
       if (rightItemIndex !== -1) {
-        // Check if the right item is already matched
-        const existingMatchIndex = matches.findIndex(
+        const isAlreadyMatched = matches.some(
           (match) => match.right === rightItems[rightItemIndex]
         )
 
-        if (existingMatchIndex !== -1) {
-          // Remove the existing match if it exists
-          setMatches((prev) => {
-            const newMatches = [...prev]
-            newMatches.splice(existingMatchIndex, 1) // Remove the existing match
-            return newMatches
-          })
+        // Check if current matches are less than 3
+        if (matches.length < 3 || isAlreadyMatched) {
+          if (!isAlreadyMatched && matches.length < 3) {
+            const newArrow = {
+              points: tempArrow.points,
+              stroke: '#5B616A', // Set the finalized arrow color to blue
+              fill: '#5B616A',
+              opacity: 1,
+              leftIndex: startIndex,
+              rightIndex: rightItemIndex,
+            }
 
-          // Remove the existing arrow if it exists
-          setArrows((prev) =>
-            prev.filter((arrow) => arrow.rightIndex !== rightItemIndex)
-          )
+            setArrows((prev) => {
+              const filteredArrows = prev.filter(
+                (arrow) => arrow.leftIndex !== startIndex
+              )
+              return [...filteredArrows, newArrow]
+            })
+
+            // Store the match
+            setMatches((prev) => {
+              const newMatch = {
+                left: leftItems[startIndex],
+                right: rightItems[rightItemIndex],
+              }
+              return [...prev, newMatch]
+            })
+
+            onMatch(startIndex, rightItemIndex)
+          }
         }
-
-        // Finalize and lock the new arrow
-        setArrows((prev) => {
-          const newArrow = {
-            points: tempArrow.points,
-            stroke: '#5B616A', // Set the finalized arrow color to blue
-            fill: '#5B616A',
-            opacity: 1,
-            leftIndex: startIndex,
-            rightIndex: rightItemIndex,
-          }
-
-          // Remove any previous arrow from the same left item
-          const filteredArrows = prev.filter(
-            (arrow) => arrow.leftIndex !== startIndex
-          )
-          return [...filteredArrows, newArrow]
-        })
-
-        // Store the new match
-        setMatches((prev) => {
-          const newMatch = {
-            left: leftItems[startIndex],
-            right: rightItems[rightItemIndex],
-          }
-          const updatedMatches = [...prev, newMatch]
-
-          // Check if all left items have been matched
-          if (updatedMatches.length === leftItems.length) {
-            onNext() // Proceed to the next step
-          }
-          return updatedMatches
-        })
-
-        onMatch(startIndex, rightItemIndex)
       }
 
-      // Clear the temporary arrow after use
+      // Clear the temporary arrow
       setTempArrow(null)
 
-      // Reset cursor when mouse up
-      stageRef.current.container().style.cursor = 'default'
+      // Check if all left items are matched
+      if (matches.length === leftItems.length - 1) {
+        const allArrowsValid = arrows.every((arrow) => {
+          return rightItems[arrow.rightIndex] // Validate arrows
+        })
+
+        if (allArrowsValid) {
+          onNext() // Proceed to the next step
+        }
+      }
     },
-    [tempArrow, rightItems, leftItems, matches, onMatch, onNext]
+    [
+      tempArrow,
+      rightItems,
+      leftItems,
+      matches,
+      arrows,
+      setArrows,
+      onMatch,
+      onNext,
+    ]
   )
 
   return (
@@ -190,13 +183,13 @@ const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
               key={`left-group-${index}`}
               x={0}
               y={index * 80}
-              onMouseDown={(e) => handleMouseDown(e, index)} // Start arrow from anywhere in the group
-              onMouseEnter={() =>
-                (stageRef.current.container().style.cursor = 'pointer')
-              } // Ensure cursor changes to pointer when hovering over left items
-              onMouseLeave={() =>
-                (stageRef.current.container().style.cursor = 'default')
-              } // Reset cursor when leaving
+              onMouseDown={(e) => handleMouseDown(e, index)}
+              onMouseEnter={() => {
+                stageRef.current.container().style.cursor = 'pointer' // Set cursor to pointer on hover
+              }}
+              onMouseLeave={() => {
+                stageRef.current.container().style.cursor = 'default' // Reset cursor on leave
+              }}
             >
               {leftBgImage && (
                 <KonvaImage
@@ -246,10 +239,10 @@ const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
                 key={`right-${index}`}
                 text={item}
                 x={10}
-                y={0}
+                y={-30}
                 fontSize={16}
                 width={300}
-                height={100}
+                height={150}
                 align='center'
                 verticalAlign='middle'
               />
@@ -262,20 +255,21 @@ const MatchingComponent = ({ leftItems, rightItems, onMatch, onNext }) => {
           <Arrow
             key={`arrow-${index}`}
             points={arrow.points}
-            stroke={arrow.stroke}
-            fill={arrow.fill}
-            opacity={arrow.opacity}
+            stroke={arrow.stroke || 'black'}
+            fill={arrow.fill || 'black'}
+            opacity={arrow.opacity || 1}
             pointerLength={10}
             pointerWidth={10}
           />
         ))}
 
-        {/* Render temporary arrow */}
+        {/* Render temporary arrow while drawing */}
         {tempArrow && (
           <Arrow
             points={tempArrow.points}
-            stroke={tempArrow.stroke}
-            opacity={tempArrow.opacity}
+            stroke={tempArrow.stroke || '#5B616A'}
+            fill={tempArrow.fill || '#5B616A'}
+            opacity={tempArrow.opacity || 0.5}
             pointerLength={10}
             pointerWidth={10}
           />
