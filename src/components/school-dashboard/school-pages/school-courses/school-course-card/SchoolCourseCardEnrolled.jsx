@@ -186,7 +186,7 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
                     marginLeft: "10px"
                   }}
                 >
-                  <span>+</span> New class
+                  <span>+</span>
                 </button>
               </>
             ) : (

@@ -66,7 +66,7 @@ const selectModal = (id) => {
           X
         </button>
         <div className="modal-header">
-          <h2>Enrollment Details</h2>
+          <h2>Enrolled Classes</h2>
         </div>
         <div className="modal-body">
           <div className="table-container">
@@ -99,7 +99,7 @@ const selectModal = (id) => {
                           className="action-icon arrow-icon"
                           width={22}
                           style={{ color: "#000000" }}
-                          onClick={()=>selectModal(group._id)}
+                          onClick={() => selectModal(group._id)}
                         />
                       </td>
                     </tr>
