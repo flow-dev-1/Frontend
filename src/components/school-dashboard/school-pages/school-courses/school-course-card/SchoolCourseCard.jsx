@@ -158,7 +158,10 @@ const SchoolCourseCard = ({
           </div>
         </div>
         <div className="course-card-title" style={{ marginBottom: "0" }}>
-          <h3 style={isEnrolled ? { color: "#4B7E31" } : { color: "#329BD6" }}>
+          <h3 style={{ color: "#329BD6", fontSize: "24px" }}>
+            Knowing Yourself Better
+          </h3>
+          <h3 style={isEnrolled ? { color: "#555" } : { color: "#329BD6" }}>
             {course.title}:
           </h3>
           {/* <h3>{course.subtitle}</h3> */}
@@ -297,8 +300,8 @@ const SchoolCourseCard = ({
                   fontSize: "12px"
                 }}
               >
-                <span style={{ color: "#50AA50", fontWeight: "400" }}>0 %</span>{" "}
-                <span>Done</span>
+                {/* <span style={{ color: "#50AA50", fontWeight: "400" }}>0 %</span>{" "}
+                <span>Done</span> */}
               </div>
             ) : (
               ""

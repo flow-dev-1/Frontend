@@ -188,40 +188,40 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
 
   return (
     <Modal
-      contentLabel='Enrollment Modal'
+      contentLabel="Enrollment Modal"
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      className='custom-modal-otp-three'
-      overlayClassName='custom-overlay'
+      className="custom-modal-otp-three"
+      overlayClassName="custom-overlay"
     >
       <div>
         <h2
-          className='enroll-heading-flex'
-          style={{ margin: '0', color: '#5B616A' }}
+          className="enroll-heading-flex"
+          style={{ margin: "0", color: "#5B616A" }}
         >
           Enroll Students
           <span
             onClick={onRequestClose}
-            style={{ color: '#5B616A', cursor: 'pointer' }}
+            style={{ color: "#5B616A", cursor: "pointer" }}
           >
-            <Icon icon='material-symbols-light:close' width={22} />
+            <Icon icon="material-symbols-light:close" width={22} />
           </span>
         </h2>
-        <hr style={{ margin: '5px' }} />
+        <hr style={{ margin: "5px" }} />
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className='class-input'>
+          <div className="class-input">
             <label
-              htmlFor='stdClass'
-              style={{ border: 'none', paddingLeft: '0' }}
+              htmlFor="stdClass"
+              style={{ border: "none", paddingLeft: "0" }}
             >
               Class *
             </label>
             <select
-              style={{ border: '1px solid #5b616a' }}
-              name='stdClass'
-              {...register('stdClass')}
+              style={{ border: "1px solid #5b616a" }}
+              name="stdClass"
+              {...register("stdClass")}
             >
-              <option value=''>Choose</option>
+              <option value="">Choose</option>
               {classOptions.map((className, index) => (
                 <option key={index} value={className}>
                   {className}
@@ -229,24 +229,24 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
               ))}
             </select>
             {errors.stdClass && (
-              <p className='error-message'>{errors.stdClass.message}</p>
+              <p className="error-message">{errors.stdClass.message}</p>
             )}
           </div>
 
-          <div className='select-flex'>
+          <div className="select-flex">
             <div>
               <label
-                style={{ border: 'none', paddingLeft: '0' }}
-                htmlFor='dayOfWeek'
+                style={{ border: "none", paddingLeft: "0" }}
+                htmlFor="dayOfWeek"
               >
                 Day of the Week *
               </label>
               <select
-                style={{ border: '1px solid #5b616a' }}
-                name='dayOfWeek'
-                {...register('dayOfWeek')}
+                style={{ border: "1px solid #5b616a" }}
+                name="dayOfWeek"
+                {...register("dayOfWeek")}
               >
-                <option value=''>Choose</option>
+                <option value="">Choose</option>
                 {daysOfWeek.map((day, index) => (
                   <option key={index} value={day}>
                     {day}
@@ -254,22 +254,22 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                 ))}
               </select>
               {errors.dayOfWeek && (
-                <p className='error-message'>{errors.dayOfWeek.message}</p>
+                <p className="error-message">{errors.dayOfWeek.message}</p>
               )}
             </div>
             <div>
               <label
-                style={{ border: 'none', paddingLeft: '0' }}
-                htmlFor='startTime'
+                style={{ border: "none", paddingLeft: "0" }}
+                htmlFor="startTime"
               >
                 Start Time *
               </label>
               <select
-                name='startTime'
-                style={{ border: '1px solid #5b616a' }}
-                {...register('startTime')}
+                name="startTime"
+                style={{ border: "1px solid #5b616a" }}
+                {...register("startTime")}
               >
-                <option value=''>Choose</option>
+                <option value="">Choose</option>
                 {timeOptions.map((time, index) => (
                   <option key={index} value={time}>
                     {time}
@@ -277,22 +277,22 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                 ))}
               </select>
               {errors.startTime && (
-                <p className='error-message'>{errors.startTime.message}</p>
+                <p className="error-message">{errors.startTime.message}</p>
               )}
             </div>
             <div>
               <label
-                style={{ border: 'none', paddingLeft: '0' }}
-                htmlFor='endTime'
+                style={{ border: "none", paddingLeft: "0" }}
+                htmlFor="endTime"
               >
                 End Time *
               </label>
               <select
-                style={{ border: '1px solid #5b616a' }}
-                name='endTime'
-                {...register('endTime')}
+                style={{ border: "1px solid #5b616a" }}
+                name="endTime"
+                {...register("endTime")}
               >
-                <option value=''>Choose</option>
+                <option value="">Choose</option>
                 {timeOptions.map((time, index) => (
                   <option key={index} value={time}>
                     {time}
@@ -300,7 +300,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                 ))}
               </select>
               {errors.endTime && (
-                <p className='error-message'>{errors.endTime.message}</p>
+                <p className="error-message">{errors.endTime.message}</p>
               )}
             </div>
           </div>
@@ -308,25 +308,25 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
           {/* Render student input fields without the ability to add or remove */}
           {!isFileUploaded && (
             <div>
-              <p style={{ fontSize: '14px', color: '#329BD6' }}>
+              <p style={{ fontSize: "14px", color: "#329BD6" }}>
                 For single invite, kindly use the fields below.
               </p>
               <div>
-                <div className='select-flex'>
+                <div className="select-flex">
                   <div>
                     <label>Parent/Guardian First & Last Name *</label>
                     <input
-                      id='stdClass'
+                      id="stdClass"
                       style={{
-                        display: 'block',
-                        width: '100%',
-                        padding: '.5rem',
+                        display: "block",
+                        width: "100%",
+                        padding: ".5rem"
                       }}
-                      name='students[0].guardianFullName'
-                      {...register('students.0.guardianFullName')}
+                      name="students[0].guardianFullName"
+                      {...register("students.0.guardianFullName")}
                     />
                     {errors.students?.[0]?.guardianFullName && (
-                      <p className='error-message'>
+                      <p className="error-message">
                         {errors.students[0].guardianFullName.message}
                       </p>
                     )}
@@ -334,17 +334,17 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                   <div>
                     <label>Parent/Guardian Email Address *</label>
                     <input
-                      id='stdClass'
+                      id="stdClass"
                       style={{
-                        display: 'block',
-                        width: '100%',
-                        padding: '.5rem',
+                        display: "block",
+                        width: "100%",
+                        padding: ".5rem"
                       }}
-                      name='students[0].email'
-                      {...register('students.0.email')}
+                      name="students[0].email"
+                      {...register("students.0.email")}
                     />
                     {errors.students?.[0]?.email && (
-                      <p className='error-message'>
+                      <p className="error-message">
                         {errors.students[0].email.message}
                       </p>
                     )}
@@ -352,17 +352,17 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                   <div>
                     <label>Student’s First & Last Name *</label>
                     <input
-                      id='stdClass'
+                      id="stdClass"
                       style={{
-                        display: 'block',
-                        width: '100%',
-                        padding: '.5rem',
+                        display: "block",
+                        width: "100%",
+                        padding: ".5rem"
                       }}
-                      name='students[0].fullName'
-                      {...register('students.0.fullName')}
+                      name="students[0].fullName"
+                      {...register("students.0.fullName")}
                     />
                     {errors.students?.[0]?.fullName && (
-                      <p className='error-message'>
+                      <p className="error-message">
                         {errors.students[0].fullName.message}
                       </p>
                     )}
@@ -371,7 +371,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
               </div>
             </div>
           )}
-          <p style={{ fontSize: '14px', color: '#329BD6' }}>
+          <p style={{ fontSize: "14px", color: "#329BD6" }}>
             For multiple students, kindly upload file using the sheet (Excel)
             attached below.
           </p>
@@ -379,45 +379,45 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
             <div>
               <div
                 style={{
-                  position: 'relative',
-                  width: '100%',
-                  border: '1px solid #ECEDF0',
+                  position: "relative",
+                  width: "100%",
+                  border: "1px solid #ECEDF0"
                 }}
-                className='file-upload-wrapper'
+                className="file-upload-wrapper"
               >
                 <input
-                  type='file'
-                  id='file-upload'
+                  type="file"
+                  id="file-upload"
                   onChange={handleFileUpload}
-                  className='file-upload-input'
+                  className="file-upload-input"
                 />
                 <label
                   style={{
-                    border: 'none',
-                    paddingLeft: '0',
-                    color: '#ECEDF0',
+                    border: "none",
+                    paddingLeft: "0",
+                    color: "#ECEDF0"
                   }}
-                  htmlFor='file-upload'
-                  className='file-upload-label'
+                  htmlFor="file-upload"
+                  className="file-upload-label"
                 >
-                  {isFileUploaded ? 'File ready for upload' : 'Choose file'}
+                  {isFileUploaded ? "File ready for upload" : "Choose file"}
                   <Icon
-                    icon='ant-design:upload-outlined'
-                    width='24'
-                    height='24'
+                    icon="ant-design:upload-outlined"
+                    width="24"
+                    height="24"
                     style={{
-                      position: 'absolute',
-                      right: '1rem',
-                      color: '#329BD6',
+                      position: "absolute",
+                      right: "1rem",
+                      color: "#329BD6"
                     }}
                   />
                 </label>
                 {fileError && (
                   <p
                     style={{
-                      color: 'red',
-                      marginTop: '10px',
-                      textAlign: 'right',
+                      color: "red",
+                      marginTop: "10px",
+                      textAlign: "right"
                     }}
                   >
                     {fileError}
@@ -426,18 +426,18 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
               </div>
               <span
                 onClick={handleExcelDownload}
-                style={{ fontSize: '12px', cursor: 'pointer' }}
+                style={{ fontSize: "12px", cursor: "pointer" }}
               >
                 Kindly use this Excel template
                 <span>
-                  <Icon icon='vscode-icons:file-type-excel' width={20} />
+                  <Icon icon="vscode-icons:file-type-excel" width={20} />
                   <Icon
-                    icon='ant-design:download-outlined'
-                    width='24'
-                    height='24'
+                    icon="ant-design:download-outlined"
+                    width="24"
+                    height="24"
                     style={{
-                      right: '1rem',
-                      color: '#329BD6',
+                      right: "1rem",
+                      color: "#329BD6"
                     }}
                   />
                 </span>
@@ -447,30 +447,31 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
 
           <hr />
           <button
-            className='modal-button'
-            type='submit'
-            style={{ backgroundColor: '#329BD6' }}
+            className="modal-button"
+            type="submit"
+            style={{ backgroundColor: "#329BD6" }}
             disabled={mutation.isPending}
           >
             {mutation.isPending ? (
               <RotatingLines
-                type='Oval'
-                style={{ color: '#FFF' }}
-                height={20}
-                width={20}
+                strokeColor="white"
+                strokeWidth="5"
+                animationDuration="0.75"
+                width="30"
+                visible={true}
               />
             ) : (
-              'Send invite'
+              "Send invite"
             )}
           </button>
-          <p style={{ fontSize: '10px' }}>
+          <p style={{ fontSize: "10px" }}>
             {mutation.isPending &&
-              'Depending on the number of students this process may take a while please wait and do not close this page. Thank you'}
+              "Depending on the number of students this process may take a while please wait and do not close this page. Thank you"}
           </p>
         </form>
       </div>
     </Modal>
-  )
+  );
 }
 
 export default EnrollmentModal
