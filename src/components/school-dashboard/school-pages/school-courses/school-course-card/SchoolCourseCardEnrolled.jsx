@@ -97,8 +97,13 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
           </div>
         </div>
         <div className="course-card-title" style={{ margin: "0" }}>
-          <h3 style={{ color: "#4B7E31" }}>{course.title}:</h3>
-          <h3>{course.subtitle}</h3>
+          <h3 style={{ color: "#329BD6", fontSize: "24px" }}>
+            Knowing Yourself Better
+          </h3>
+          <h3 style={isEnrolled ? { color: "#555" } : { color: "#329BD6" }}>
+            {course.title}:
+          </h3>
+          {/* <h3>{course.subtitle}</h3> */}
         </div>
         <p style={{ fontSize: "12px", height: "60px", marginBottom: "1rem" }}>
           {truncateText(course.description, 100)}
@@ -128,6 +133,12 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
                 course?.courseEnrollment?.length
               )}
               %
+            </div>
+            <div style={{ color: "#329bd6" }} className="users-count">
+            {/* <span>
+              <Icon icon="bi:book" />
+              0%
+            </span> */}
             </div>
           </div>
 
@@ -196,7 +207,7 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
               </button>
             )}
 
-            <div
+            {/* <div
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -206,7 +217,7 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
             >
               <span style={{ color: "#50AA50", fontWeight: "400" }}>0 %</span>{" "}
               <span>Done</span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -164,8 +164,8 @@ textarea {
   justify-content: center;
   align-items: center;
   flex-direction: column; /* Stack items vertically */
-  padding: 0.2rem 0.2rem; /* Add padding for spacing */
   height: 100%; /* Ensure the items take up full height */
+  min-width: 130px;
 }
 
 .info-item p {
@@ -191,10 +191,7 @@ textarea {
   border-right: 1px solid #fff; /* Border on the second <p> */
 }
 
-.info-p {
-  text-align: center;
-  margin: 0;
-}
+
 
 
 

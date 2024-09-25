@@ -14,13 +14,13 @@ import schoolService from '../../../../../../services/api/school'
 import { RotatingLines } from 'react-loader-spinner'
 import { decryptId } from '../../../../../../utils/encryption'
 
-const AddStudentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
+const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
   const queryClient = useQueryClient()
   const [fileError, setFileError] = useState('')
   const [isFileUploaded, setIsFileUploaded] = useState(false)
   const [parsedStudents, setParsedStudents] = useState([])
 
-  const classOptions = [
+  const classOptions = [classOfficial] || [
     'Primary 1',
     'Primary 2',
     'Primary 3',
@@ -190,32 +190,33 @@ const AddStudentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   return (
     <div>
       <h2
-        className='enroll-heading-flex'
-        style={{ margin: '0', color: '#5B616A' }}
+        className="enroll-heading-flex"
+        style={{ margin: "0", color: "#5B616A" }}
       >
         Add Students
         <span
           onClick={onRequestClose}
-          style={{ color: '#5B616A', cursor: 'pointer' }}
+          style={{ color: "#5B616A", cursor: "pointer" }}
         >
-          <Icon icon='material-symbols-light:close' width={22} />
+          <Icon icon="material-symbols-light:close" width={22} />
         </span>
       </h2>
-      <hr style={{ margin: '5px' }} />
+      <hr style={{ margin: "5px" }} />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='class-input'>
+        <div className="class-input">
           <label
-            htmlFor='stdClass'
-            style={{ border: 'none', paddingLeft: '0' }}
+            htmlFor="stdClass"
+            style={{ border: "none", paddingLeft: "0" }}
           >
             Class *
           </label>
           <select
-            style={{ border: '1px solid #5b616a' }}
-            name='stdClass'
-            {...register('stdClass')}
+            style={{ border: "1px solid #5b616a" }}
+            name="stdClass"
+            {...register("stdClass")}
           >
-            <option value=''>Choose</option>
+           <option value={""}>Choose</option>
+
             {classOptions.map((className, index) => (
               <option key={index} value={className}>
                 {className}
@@ -223,30 +224,30 @@ const AddStudentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
             ))}
           </select>
           {errors.stdClass && (
-            <p className='error-message'>{errors.stdClass.message}</p>
+            <p className="error-message">{errors.stdClass.message}</p>
           )}
         </div>
         {!isFileUploaded && (
           <div>
-            <p style={{ fontSize: '14px', color: '#329BD6' }}>
+            <p style={{ fontSize: "14px", color: "#329BD6" }}>
               For single invite, kindly use the fields below.
             </p>
             <div>
-              <div className='select-flex'>
+              <div className="select-flex">
                 <div>
                   <label>Parent/Guardian First & Last Name *</label>
                   <input
-                    id='stdClass'
+                    id="stdClass"
                     style={{
-                      display: 'block',
-                      width: '100%',
-                      padding: '.5rem',
+                      display: "block",
+                      width: "100%",
+                      padding: ".5rem"
                     }}
-                    name='students[0].guardianFullName'
-                    {...register('students.0.guardianFullName')}
+                    name="students[0].guardianFullName"
+                    {...register("students.0.guardianFullName")}
                   />
                   {errors.students?.[0]?.guardianFullName && (
-                    <p className='error-message'>
+                    <p className="error-message">
                       {errors.students[0].guardianFullName.message}
                     </p>
                   )}
@@ -254,17 +255,17 @@ const AddStudentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                 <div>
                   <label>Parent/Guardian Email Address *</label>
                   <input
-                    id='stdClass'
+                    id="stdClass"
                     style={{
-                      display: 'block',
-                      width: '100%',
-                      padding: '.5rem',
+                      display: "block",
+                      width: "100%",
+                      padding: ".5rem"
                     }}
-                    name='students[0].email'
-                    {...register('students.0.email')}
+                    name="students[0].email"
+                    {...register("students.0.email")}
                   />
                   {errors.students?.[0]?.email && (
-                    <p className='error-message'>
+                    <p className="error-message">
                       {errors.students[0].email.message}
                     </p>
                   )}
@@ -272,17 +273,17 @@ const AddStudentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                 <div>
                   <label>Student’s First & Last Name *</label>
                   <input
-                    id='stdClass'
+                    id="stdClass"
                     style={{
-                      display: 'block',
-                      width: '100%',
-                      padding: '.5rem',
+                      display: "block",
+                      width: "100%",
+                      padding: ".5rem"
                     }}
-                    name='students[0].fullName'
-                    {...register('students.0.fullName')}
+                    name="students[0].fullName"
+                    {...register("students.0.fullName")}
                   />
                   {errors.students?.[0]?.fullName && (
-                    <p className='error-message'>
+                    <p className="error-message">
                       {errors.students[0].fullName.message}
                     </p>
                   )}
@@ -291,7 +292,7 @@ const AddStudentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
             </div>
           </div>
         )}
-        <p style={{ fontSize: '14px', color: '#329BD6' }}>
+        <p style={{ fontSize: "14px", color: "#329BD6" }}>
           For multiple students, kindly upload file using the sheet (Excel)
           attached below.
         </p>
@@ -299,46 +300,46 @@ const AddStudentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
           <div>
             <div
               style={{
-                position: 'relative',
-                width: '100%',
-                border: '1px solid #ECEDF0',
+                position: "relative",
+                width: "100%",
+                border: "1px solid #ECEDF0"
               }}
-              className='file-upload-wrapper'
+              className="file-upload-wrapper"
             >
               <input
-                type='file'
-                id='file-upload'
+                type="file"
+                id="file-upload"
                 onChange={handleFileUpload}
-                className='file-upload-input'
+                className="file-upload-input"
               />
               <label
                 style={{
-                  border: 'none',
-                  paddingLeft: '0',
-                  color: '#ECEDF0',
+                  border: "none",
+                  paddingLeft: "0",
+                  color: "#ECEDF0"
                 }}
-                htmlFor='file-upload'
-                className='file-upload-label'
+                htmlFor="file-upload"
+                className="file-upload-label"
               >
-                {' '}
-                {isFileUploaded ? 'File ready for upload' : 'Choose file'}
+                {" "}
+                {isFileUploaded ? "File ready for upload" : "Choose file"}
                 <Icon
-                  icon='ant-design:upload-outlined'
-                  width='24'
-                  height='24'
+                  icon="ant-design:upload-outlined"
+                  width="24"
+                  height="24"
                   style={{
-                    position: 'absolute',
-                    right: '1rem',
-                    color: '#329BD6',
+                    position: "absolute",
+                    right: "1rem",
+                    color: "#329BD6"
                   }}
                 />
               </label>
               {fileError && (
                 <p
                   style={{
-                    color: 'red',
-                    marginTop: '10px',
-                    textAlign: 'right',
+                    color: "red",
+                    marginTop: "10px",
+                    textAlign: "right"
                   }}
                 >
                   {fileError}
@@ -346,18 +347,18 @@ const AddStudentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
               )}
             </div>
             <span
-              style={{ fontSize: '12px', cursor: 'pointer' }}
+              style={{ fontSize: "12px", cursor: "pointer" }}
               onClick={handleExcelDownload} // Move the onClick here
             >
               Kindly use this Excel template
-              <Icon icon='vscode-icons:file-type-excel' width={20} />
+              <Icon icon="vscode-icons:file-type-excel" width={20} />
               <Icon
-                icon='ant-design:download-outlined'
-                width='24'
-                height='24'
+                icon="ant-design:download-outlined"
+                width="24"
+                height="24"
                 style={{
-                  right: '1rem',
-                  color: '#329BD6',
+                  right: "1rem",
+                  color: "#329BD6"
                 }}
               />
             </span>
@@ -366,31 +367,31 @@ const AddStudentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
 
         <hr />
         <button
-          className='modal-button'
-          type='submit'
-          style={{ backgroundColor: '#329BD6' }}
+          className="modal-button"
+          type="submit"
+          style={{ backgroundColor: "#329BD6" }}
         >
           {mutation.isPending ? (
             <RotatingLines
-              strokeColor='white'
-              strokeWidth='5'
-              animationDuration='0.75'
-              width='30'
+              strokeColor="white"
+              strokeWidth="5"
+              animationDuration="0.75"
+              width="30"
               visible={true}
             />
           ) : (
-            'Send Invite'
+            "Send Invite"
           )}
         </button>
         {isFileUploaded && mutation.isPending && (
-          <p style={{ fontSize: '10px', color: 'red', textAlign: 'right' }}>
+          <p style={{ fontSize: "10px", color: "red", textAlign: "right" }}>
             Depending on the number of students, this process may take <br /> a
             while. Please wait and do not close this page. Thank you.
           </p>
         )}
       </form>
     </div>
-  )
+  );
 }
 
 export default AddStudentModal

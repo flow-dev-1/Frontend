@@ -43,6 +43,8 @@ const SchoolEnrolledStudents = () => {
   const { user } = useSelector((state) => state.user);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [classlist, setClasslist] = useState(false);
+
 
   const [deleteUserCredentials, setDeleteUser] = useState({
     user: null,
@@ -86,6 +88,7 @@ const SchoolEnrolledStudents = () => {
   useEffect(() => {
     if (!data) return;
     setData(data?.course);
+    setClasslist(data?.course?.stdClass)
     return () => {};
   }, [data]);
 
@@ -234,6 +237,7 @@ const SchoolEnrolledStudents = () => {
   if (isError) {
     return <div>An error occured while loading...</div>;
   }
+
 
   return (
     <div className="enrolled-course-student">
@@ -426,7 +430,10 @@ const SchoolEnrolledStudents = () => {
         className="custom-modal-otp-three"
         overlayClassName="custom-overlay"
       >
-        <AddStudentModal onRequestClose={closeModals} />
+        <AddStudentModal
+          classOfficial={classlist}
+          onRequestClose={closeModals}
+        />
       </Modal>
 
       <Modal
