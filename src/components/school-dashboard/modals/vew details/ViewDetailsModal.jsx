@@ -68,7 +68,6 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
   const selectModal = (id) => {
     navigate(`/school-dashboard/courses/enrolled/${encryptURI(id)}`);
   };
-
   const closeEnrollementModal = () => {
     setOpenEnrollModal(false);
     setOpenEnrollModalEducator(false);
@@ -90,11 +89,13 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <button className="modal-close-btn" onClick={onClose}>
-          X
-        </button>
-        <div className="modal-header">
-          <h2>Enrolled Classes</h2>
+        <div className="hediee">
+          <div className="modal-header">
+            <h2>Enrolled Classes</h2>
+          </div>
+          <button className="modal-close-btn" onClick={onClose}>
+            X
+          </button>
         </div>
         <div className="modal-body">
           <div className="table-container">
@@ -104,10 +105,11 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
                   <th>S/N</th>
                   <th>Enrolled Classes</th>
                   <th>No. of Students</th>
+                  <th>Enrollment Date</th>
                   <th>Day of the Week</th>
                   <th>Start Time</th>
                   <th>End Time</th>
-                  <th>Actions</th>
+                  <th> </th>
                 </tr>
               </thead>
               <tbody>
@@ -118,6 +120,14 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
                       <td>{group.stdClass}</td>
                       <td>{group.studentEnrollments?.length || 0}</td>{" "}
                       {/* Ensure studentEnrollments is defined */}
+                      <td>
+                        {new Date(group.createdAt).getUTCDate()} -{" "}
+                        {new Date(group.createdAt).getUTCMonth() + 1} -{" "}
+                        {new Date(group.createdAt)
+                          .getUTCFullYear()
+                          .toString()
+                          .slice(-2)}
+                      </td>
                       <td>{group.dayOfWeek}</td>
                       <td>{group.startTime}</td>
                       <td>{group.endTime}</td>
@@ -142,21 +152,21 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
           </div>
           {/* Cart Button */}
         </div>
-          <button
-            id="cartBtn"
-            onClick={openEnrollementModal}
-            style={{
-              backgroundColor: darkTertiary,
-              color: "white",
-              border: "1px solid #329bd6",
-              padding:"5px",
-              borderRadius:"5px",
-              marginLeft: "auto",
-              marginRight:"50px"
-            }}
-          >
-            <span>+</span> Add A New Class
-          </button>
+        <button
+          id="cartBtn"
+          onClick={openEnrollementModal}
+          style={{
+            backgroundColor: darkTertiary,
+            color: "white",
+            border: "1px solid #329bd6",
+            padding: "5px",
+            borderRadius: "5px",
+            marginLeft: "auto",
+            marginRight: "50px"
+          }}
+        >
+          <span>+</span> Add A New Class
+        </button>
       </div>
       <EnrollmentModal
         isOpen={openEnrollModal}
