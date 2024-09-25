@@ -174,20 +174,6 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
                   </span>{" "}
                   View Details
                 </button>
-
-                {/* Cart Button */}
-                <button
-                  id="cartBtn"
-                  onClick={openEnrollementModal}
-                  style={{
-                    backgroundColor: darkTertiary,
-                    color: "white",
-                    border: "1px solid #329bd6",
-                    marginLeft: "10px"
-                  }}
-                >
-                  <span>+</span>
-                </button>
               </>
             ) : (
               <button
@@ -230,6 +216,7 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
           // enrolledData={enrolledData}
           encryptURI={encryptURI}
           // courseIndex={courseIndex}
+          course={course}
           courseId={course._id}
           onClose={() => setOpenViewModal(false)}
         />

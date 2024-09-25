@@ -251,21 +251,6 @@ const SchoolCourseCard = ({
             </button>
             {isEnrolled ? (
               <>
-                {/* View Details Button */}
-                <button
-                  id="viewDetailsBtn"
-                  onClick={handleDetailsClick}
-                  style={{
-                    backgroundColor: "#329BD6",
-                    color: "#fff",
-                    border: "1px solid #329bd6"
-                  }}
-                >
-                  <span>
-                    <Icon icon="ri:menu-2-fill" width={20} />
-                  </span>{" "}
-                  View Details
-                </button>
 
                 {/* Cart Button */}
                 <button
@@ -278,7 +263,14 @@ const SchoolCourseCard = ({
                     marginLeft: "10px"
                   }}
                 >
-                  <span>+</span>
+                  <span>
+                    <Icon
+                      icon="vaadin:cart-o"
+                      width={20}
+                      style={{ color: "white" }}
+                    />
+                  </span>{" "}
+                  {`${course.currency} ${course.cost}`}
                 </button>
               </>
             ) : (
