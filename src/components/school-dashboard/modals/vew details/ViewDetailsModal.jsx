@@ -65,6 +65,20 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
     setShowCreateModal(false);
     setShowDeleteModal(false);
   };
+    function convertTo12HourFormat(time) {
+      if (!time) return;
+      // Split the time string into hours and minutes
+      const [hour, minute] = time.split(":").map(Number);
+
+      // Determine if it's AM or PM
+      const period = hour >= 12 ? "PM" : "AM";
+
+      // Convert hour from 24-hour to 12-hour format
+      const twelveHour = hour % 12 || 12; // Converts "0" hour to "12"
+
+      // Return the formatted time
+      return `${twelveHour}:${minute.toString().padStart(2, "0")} ${period}`;
+    }
   const selectModal = (id) => {
     navigate(`/school-dashboard/courses/enrolled/${encryptURI(id)}`);
   };
@@ -129,8 +143,8 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
                           .slice(-2)}
                       </td>
                       <td>{group.dayOfWeek}</td>
-                      <td>{group.startTime}</td>
-                      <td>{group.endTime}</td>
+                      <td>{convertTo12HourFormat(group.startTime)}</td>
+                      <td>{convertTo12HourFormat(group.endTime)}</td>
                       <td>
                         <Icon
                           icon="iconamoon:arrow-right-2-thin"
