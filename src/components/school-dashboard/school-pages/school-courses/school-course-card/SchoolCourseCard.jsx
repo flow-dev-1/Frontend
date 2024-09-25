@@ -249,19 +249,44 @@ const SchoolCourseCard = ({
               </span>{" "}
               Review
             </button>
-               <button
-                className={`detailsBtn`}
-                style={{
-                  backgroundColor: "#329BD6",
-                  color: "#fff",
-                  border: "1px solid #329bd6"
-                }}
+            {isEnrolled ? (
+              <>
+                {/* View Details Button */}
+                <button
+                  id="viewDetailsBtn"
+                  onClick={handleDetailsClick}
+                  style={{
+                    backgroundColor: "#329BD6",
+                    color: "#fff",
+                    border: "1px solid #329bd6"
+                  }}
+                >
+                  <span>
+                    <Icon icon="ri:menu-2-fill" width={20} />
+                  </span>{" "}
+                  View Details
+                </button>
+              </>
+            ) : (
+              <button
+                id="reviewBtn"
+                onClick={handleDetailsClick}
+                style={
+                  course.grade !== "Educators"
+                    ? { backgroundColor: darkTertiary, color: "white" }
+                    : { backgroundColor: darkEducator, color: lightEducator }
+                }
               >
                 <span>
-                  <Icon icon="ri:menu-2-fill" width={20} />
+                  <Icon
+                    icon="vaadin:cart-o"
+                    width={20}
+                    style={{ color: "white" }}
+                  />
                 </span>{" "}
-                View Detail
+                {`${course.currency} ${course.cost}`}
               </button>
+            )}
 
             {isEnrolled ? (
               <div
@@ -288,7 +313,8 @@ const SchoolCourseCard = ({
           encryptURI={encryptURI}
           courseIndex={courseIndex}
           enrollmentid={coursedarta}
-          courseId={course._id} 
+          courseId={course._id}
+          course={course}
           onClose={() => setOpenViewModal(false)}
         />
       )}
