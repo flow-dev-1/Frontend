@@ -26,20 +26,22 @@
   background: white;
   border-radius: 8px;
   padding: 20px;
-  width: 80%;
-  max-width: 800px;
+  width: 991px;
+  height: auto;
+  /* max-width: 800px; */
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
   overflow-y: auto;
 }
 
 .modal-close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  /* position: absolute; */
+  margin-bottom: 30px;
+  /* right: 10px;. */
   background: transparent;
   border: none;
-  font-size: 20px;
+  font-size: 25px;
   cursor: pointer;
+    color: #333333;
 }
 
 .modal-header {
@@ -59,13 +61,14 @@
 
 h2{
   text-align: left;
+    color: #5B616A;
 }
 
 th{
   font-weight: 500;
   font-size: 20px;
   font-family: var(--headings-font-family);
-  color: black;
+  color: #333333;
 }
 
 tr {
@@ -74,12 +77,20 @@ tr {
 }
 
 td{
-    font-weight: 100;
-    font-family: var(--headings-font-family);
+  font-size: 13px;
+    /* font-weight: 100; */
+    font-family: 'ABeeZee', sans-serif;
 
 }
 
 .students-table{
   border: 0px;
   border: red;
+}
+
+.hediee{
+  display: flex;
+  width: 90%;
+  justify-content: space-around;
+  margin: auto;
 }
