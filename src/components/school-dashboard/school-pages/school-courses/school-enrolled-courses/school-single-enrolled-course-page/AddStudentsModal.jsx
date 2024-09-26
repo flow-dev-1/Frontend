@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Modal from 'react-modal'
 import { Icon } from '@iconify/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -19,6 +19,7 @@ const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
   const [fileError, setFileError] = useState('')
   const [isFileUploaded, setIsFileUploaded] = useState(false)
   const [parsedStudents, setParsedStudents] = useState([])
+  const [showMessage, setShowMessage] = useState(false)
 
   const classOptions = [classOfficial] || [
     'Primary 1',
@@ -187,6 +188,17 @@ const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
     reader.readAsBinaryString(file)
   }
 
+  useEffect(() => {
+    if (mutation.isPending && isFileUploaded) {
+      setShowMessage(true)
+      const timer = setTimeout(() => {
+        setShowMessage(false)
+      }, 5) // 5 seconds
+
+      return () => clearTimeout(timer) // Cleanup if unmounted or dependencies change
+    }
+  }, [mutation.isPending, isFileUploaded])
+
   return (
     <div>
       <h2
@@ -314,9 +326,9 @@ const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
               />
               <label
                 style={{
-                  border: "none",
-                  paddingLeft: "0",
-                  color: "#ECEDF0"
+                  border: 'none',
+                  paddingLeft: '0',
+                  color: '#41444c',
                 }}
                 htmlFor="file-upload"
                 className="file-upload-label"
@@ -334,18 +346,18 @@ const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
                   }}
                 />
               </label>
-              {fileError && (
-                <p
-                  style={{
-                    color: "red",
-                    marginTop: "10px",
-                    textAlign: "right"
-                  }}
-                >
-                  {fileError}
-                </p>
-              )}
             </div>
+            {fileError && (
+              <p
+                style={{
+                  color: 'red',
+                  marginTop: '10px',
+                  textAlign: 'right',
+                }}
+              >
+                {fileError}
+              </p>
+            )}
             <span
               style={{ fontSize: "12px", cursor: "pointer" }}
               onClick={handleExcelDownload} // Move the onClick here
