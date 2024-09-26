@@ -37,6 +37,18 @@ class SchoolOBJ {
     }
   };
 
+  changeToggle = async (params, fomrData) => {
+    try {
+      // Check if data is not empty
+      const response = await api.post(`api/schools/course-togle/${params}`, fomrData );
+      console.log(response.data)
+      return response.data;
+    } catch (err) {
+      console.log(err?.response?.data || err.message)
+      throw err?.response?.data || err.message;
+    }
+  };
+
   //Get Admins
   getEmailAdmins = async (params) => {
     try {

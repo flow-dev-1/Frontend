@@ -1,91 +1,108 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Icon } from '@iconify/react'
-import { encryptURI } from '../../../../../utils/encryption'
-import { Link } from 'react-router-dom'
-import ViewDetailsModal from '../../../modals/vew details/ViewDetailsModal'
-import EnrollmentModal from '../../../modals/Enrollment/EnrollmentModal'
-import AddEducator from './AddEducator'
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Icon } from "@iconify/react";
+import { encryptURI } from "../../../../../utils/encryption";
+import { Link } from "react-router-dom";
+import ViewDetailsModal from "../../../modals/vew details/ViewDetailsModal";
+import EnrollmentModal from "../../../modals/Enrollment/EnrollmentModal";
+import AddEducator from "./AddEducator";
+import schoolService from "../../../../../services/api/school";
 
 const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
-  const [isOn, setIsOn] = useState(false)
-  const [course] = useState(courseData.course)
-  const navigate = useNavigate()
- const isEnrolled = true
-  const handleToggle = () => {
-    setIsOn(!isOn)
-  }
- const [openEnrollModal, setOpenEnrollModal] = useState(false);
- const [openViewModal, setOpenViewModal] = useState(false);
- const [openEnrollModalEducator, setOpenEnrollModalEducator] = useState(false);
-  // Color definitions
-  const lightGreen = '#D4FFBE'
-  const darkGreen = '#4B7E31'
-  const lightTertiary = '#FAFAFA'
-  const darkTertiary = '#329BD6'
-  const lightEducator = '#5CE1E6'
-  const darkEducator = '#275DAD'
+  const [course] = useState(courseData.course);
+  const navigate = useNavigate();
+  const isEnrolled = true;
+const [isOn, setIsOn] = useState(() => {
+  // Initialize state from localStorage if it exists, otherwise default to false
+  const savedState = localStorage.getItem("toggleState");
+  return savedState ? JSON.parse(savedState) : false;
+});
 
-    const daysOfWeek = [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday"
-    ];
-    const timeOptions = Array.from(
-      { length: 10 },
-      (_, i) => `${String(i + 8).padStart(2, "0")}:00`
-    );
+const handleToggle = (courseId) => {
+  setIsOn((prevIsOn) => {
+    const newIsOn = !prevIsOn;
+    const data = { status: newIsOn ? "Confirmed" : "Deactivated" };
+
+    // Save the new toggle state in localStorage
+    localStorage.setItem("toggleState", JSON.stringify(newIsOn));
+
+    // Call the service with the updated status
+    schoolService.changeToggle(courseId, data);
+
+    return newIsOn;
+  });
+};
+
+
+  const [openEnrollModal, setOpenEnrollModal] = useState(false);
+  const [openViewModal, setOpenViewModal] = useState(false);
+  const [openEnrollModalEducator, setOpenEnrollModalEducator] = useState(false);
+  // Color definitions
+  const lightGreen = "#D4FFBE";
+  const darkGreen = "#4B7E31";
+  const lightTertiary = "#FAFAFA";
+  const darkTertiary = "#329BD6";
+  const lightEducator = "#5CE1E6";
+  const darkEducator = "#275DAD";
+
+  const daysOfWeek = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ];
+  const timeOptions = Array.from(
+    { length: 10 },
+    (_, i) => `${String(i + 8).padStart(2, "0")}:00`
+  );
 
   const likesPercent = (likes, courseEnrollment) => {
-    if (likes === 0) return 0
-    return (likes / courseEnrollment) * 100
-  }
+    if (likes === 0) return 0;
+    return (likes / courseEnrollment) * 100;
+  };
 
-    const handleDetailsClick = () => {
-      // Find the index of the current course in the coursesArray
-  
+  const handleDetailsClick = () => {
+    // Find the index of the current course in the coursesArray
 
-      // Use this index to get the corresponding enrolledData course
-      if (isEnrolled && course) {
-        setOpenViewModal(true);
-        //  console.log(enrolledData?.courses[courseIndex]._id);
-        // navigate(
-        //   `/school-dashboard/courses/enrolled/${encryptURI(
-        //     enrolledData.courses[courseIndex]._id
-        //   )}`
-        // )
-        //  openEnrollementModal();
-      } else {
-        openEnrollementModal();
-      }
-    };
+    // Use this index to get the corresponding enrolledData course
+    if (isEnrolled && course) {
+      setOpenViewModal(true);
+      //  console.log(enrolledData?.courses[courseIndex]._id);
+      // navigate(
+      //   `/school-dashboard/courses/enrolled/${encryptURI(
+      //     enrolledData.courses[courseIndex]._id
+      //   )}`
+      // )
+      //  openEnrollementModal();
+    } else {
+      openEnrollementModal();
+    }
+  };
 
-      const openEnrollementModal = () => {
-        if (course.grade === "Educator") {
-          setOpenEnrollModalEducator(true);
-        } else {
-          setOpenEnrollModal(true);
-        }
-      };
+  const openEnrollementModal = () => {
+    if (course.grade === "Educator") {
+      setOpenEnrollModalEducator(true);
+    } else {
+      setOpenEnrollModal(true);
+    }
+  };
 
-        const closeEnrollementModal = () => {
-          setOpenEnrollModal(false);
-          setOpenEnrollModalEducator(false);
-        };
+  const closeEnrollementModal = () => {
+    setOpenEnrollModal(false);
+    setOpenEnrollModalEducator(false);
+  };
 
   const truncateText = (text, maxLength) => {
     if (text.length > maxLength) {
-      return text.slice(0, maxLength) + '...'
+      return text.slice(0, maxLength) + "...";
     }
-    return text
-  }
+    return text;
+  };
 
   // Determine the link path based on course grade
-
 
   return (
     <div style={{ cursor: "pointer" }}>
@@ -135,7 +152,7 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
               %
             </div>
             <div style={{ color: "#329bd6" }} className="users-count">
-            {/* <span>
+              {/* <span>
               <Icon icon="bi:book" />
               0%
             </span> */}
@@ -144,7 +161,7 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
 
           <div
             className={`toggle-switch ${isOn ? "on" : "off"}`}
-            onClick={handleToggle}
+            onClick={()=>handleToggle(course._id)}
           >
             <div className={isOn ? "onKnob" : "offKnob"}></div>
           </div>
@@ -246,6 +263,6 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
       />
     </div>
   );
-}
+};
 
-export default SchoolCourseCardEnrolled
+export default SchoolCourseCardEnrolled;
