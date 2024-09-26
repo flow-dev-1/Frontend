@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Modal from 'react-modal'
 import { Icon } from '@iconify/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -11,6 +11,7 @@ import * as XLSX from 'xlsx'
 import excelDoc from '../../../../assets/Flowtemp.xlsx'
 import userService from '../../../../services/api/school'
 import { RotatingLines } from 'react-loader-spinner'
+import { isPending } from '@reduxjs/toolkit'
 const generateTimeOptions = () => {
   const times = []
   for (let hour = 6; hour <= 18; hour++) {
@@ -33,6 +34,8 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
     startTime: yup.string().required('Start Time is required'),
     endTime: yup.string().required('End Time is required'),
   })
+
+  const [showMessage, setShowMessage] = useState(false)
 
   const schemaWithoutFile = schemaWithFile.shape({
     students: yup
@@ -185,6 +188,17 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
 
     reader.readAsBinaryString(file)
   }
+
+  useEffect(() => {
+    if (mutation.isPending && isFileUploaded) {
+      setShowMessage(true)
+      const timer = setTimeout(() => {
+        setShowMessage(false)
+      }) // 5 seconds
+
+      return () => clearTimeout(timer) // Cleanup if unmounted or dependencies change
+    }
+  }, [mutation.isPending, isFileUploaded])
 
   return (
     <Modal
@@ -395,7 +409,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                   style={{
                     border: 'none',
                     paddingLeft: '0',
-                    color: '#ECEDF0',
+                    color: '#41444c',
                   }}
                   htmlFor='file-upload'
                   className='file-upload-label'
@@ -463,10 +477,12 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
               'Send invite'
             )}
           </button>
-          <p style={{ fontSize: '10px' }}>
-            {mutation.isPending &&
-              'Depending on the number of students this process may take a while please wait and do not close this page. Thank you'}
-          </p>
+          {isFileUploaded && mutation.isPending && (
+            <p style={{ fontSize: '10px', color: 'red', textAlign: 'right' }}>
+              Depending on the number of students, this process may take <br />{' '}
+              a while. Please wait and do not close this page. Thank you.
+            </p>
+          )}
         </form>
       </div>
     </Modal>
