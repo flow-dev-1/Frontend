@@ -37,8 +37,8 @@ const MyCourseCard = ({ course }) => {
   const handleButtonClick = () => {
     if (course?.progress === 100) {
       openModal('feedback')
-    } else if (course?.progress > 0 && course?.progress < 100) {
-      // Code to resume the course
+    } else if (!course) {
+    alert('Wait for the course to be activated by your School')
     } else {
       // Code to start the course
       navigate(`/dashboard/my-courses/${course.id}`, { state: { course } })

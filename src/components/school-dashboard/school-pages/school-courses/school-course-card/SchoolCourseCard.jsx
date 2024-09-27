@@ -6,6 +6,7 @@ import EnrollmentModal from '../../../modals/Enrollment/EnrollmentModal'
 import { Navigate } from 'react-router-dom'
 import AddEducator from './AddEducator'
 import ViewDetailsModal from '../../../modals/vew details/ViewDetailsModal'
+import schoolService from "../../../../../services/api/school";
 
 const SchoolCourseCard = ({
   openModal,
@@ -14,13 +15,17 @@ const SchoolCourseCard = ({
   coursesArray,
   enrolledData,
 }) => {
-  const [isOn, setIsOn] = useState(false)
   const [openEnrollModal, setOpenEnrollModal] = useState(false)
   const [openViewModal, setOpenViewModal] = useState(false);
   const [openEnrollModalEducator, setOpenEnrollModalEducator] = useState(false)
   console.log(enrolledData);
   const [courseData] = useState(course)
   const navigate = useNavigate()
+  const [isOn, setIsOn] = useState(() => {
+    // Initialize state from localStorage if it exists, otherwise default to false
+    const savedState = localStorage.getItem("toggleState");
+    return savedState ? JSON.parse(savedState) : false;
+  });
 
   const openEnrollementModal = () => {
     if (course.grade === 'Educator') {
@@ -37,9 +42,22 @@ const SchoolCourseCard = ({
 
   console.log('Enrolled Array', enrolledData)
 
-  const handleToggle = () => {
-    setIsOn(!isOn)
-  }
+
+const handleToggle = (courseId) => {
+  setIsOn((prevIsOn) => {
+    const newIsOn = !prevIsOn;
+    const data = { status: newIsOn ? "Confirmed" : "Deactivated" };
+
+    // Save the new toggle state in localStorage
+    localStorage.setItem("toggleState", JSON.stringify(newIsOn));
+
+    // Call the service with the updated status
+    schoolService.changeToggle(courseId, data);
+
+    return newIsOn;
+  });
+};
+
 
   const daysOfWeek = [
     'Monday',
@@ -148,6 +166,8 @@ const SchoolCourseCard = ({
     return text
   }
 
+
+
   return (
     <div>
       <div className="course-card" style={{ height: "480px" }}>
@@ -214,7 +234,7 @@ const SchoolCourseCard = ({
           {isEnrolled ? (
             <div
               className={`toggle-switch ${isOn ? "on" : "off"}`}
-              onClick={handleToggle}
+              onClick={()=>handleToggle(course._id)}
             >
               <div className={isOn ? "onKnob" : "offKnob"}></div>
             </div>
