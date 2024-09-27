@@ -11,6 +11,7 @@ import { Icon } from '@iconify/react'
 import { lgas } from '../../../states/lgas'
 import { states } from '../../../states'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 // Define validation schema with yup
 const schema = yup.object().shape({
@@ -27,23 +28,32 @@ const schema = yup.object().shape({
     .string()
     .email('Invalid Email')
     .required('Email Address is required'),
+  // phone: yup
+  //   .string()
+  //   .required('Phone Number is required')
+  //   .test(
+  //     'isValidPhoneNumber',
+  //     'Invalid phone number',
+  //     (value) => value && isValidPhoneNumber(value)
+  //   ),
   phone: yup
     .string()
-    .required('Phone Number is required')
     .test(
       'isValidPhoneNumber',
       'Invalid phone number',
-      (value) => value && isValidPhoneNumber(value)
+      (value) => value ? isValidPhoneNumber(value) : true // Allow empty values
     ),
   country: yup.string().required('Country is required'),
   state: yup.string().required('State is required'),
-  lga: yup.string().required('LGA is required'),
+  // lga: yup.string().required('LGA is required'),
+  lga: yup.string().nullable() // Allow LGA to be optional
 })
 
 export default function InivitedParentGuardianForm({
   onSubmit,
   initialData,
   email,
+  s
 }) {
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
   const [countries, setCountries] = useState([])
@@ -65,12 +75,8 @@ export default function InivitedParentGuardianForm({
     },
   })
 
-  console.log(initialData)
-
   useEffect(() => {
     if (initialData) {
-      // Debugging step: Log initialData to verify its content
-      console.log('Initial Data:', initialData)
 
       // Update form values when initialData changes
       setValue('guardianFullName', initialData.fullName || '')
@@ -114,6 +120,18 @@ export default function InivitedParentGuardianForm({
   }, [watch('country')])
 
   const submitHandler = (data) => {
+    // Example: Add a default phone number and LGA if the user is from Nigeria and hasn't entered them
+    if (s === "Children's International School") {
+      if (!data.phone) {
+        data.phone = '+2349062684338' // Default phone number for Nigerian users
+      }
+      if (!data.lga) {
+        data.lga = "Lagos Island"; // Default LGA for Nigerian users
+      }
+    } else {
+      if (!data.phone) return toast.error("Please enter a valid phone number!")
+      if (!data.lga) return toast.error("lga is required!")
+    }
     onSubmit(data)
   }
 
