@@ -34,13 +34,11 @@ const SchoolEnrolledCourseStudents = () => {
     refetchOnWindowFocus: false,
   })
 
-  console.log(data)
-
   useEffect(() => {
     if (!data) return
 
     setCourses(data?.courses)
-    return () => {}
+    return () => { }
   }, [data])
 
   const openModal = (course) => {

@@ -89,7 +89,7 @@ const SchoolEnrolledStudents = () => {
     if (!data) return;
     setData(data?.course);
     setClasslist(data?.course?.stdClass)
-    return () => {};
+    return () => { };
   }, [data]);
 
   const formatDate = (isoString) => {
