@@ -52,6 +52,7 @@ export default function SignIn() {
   const mutation = useMutation({
     mutationFn: userService.login, // Assuming userService.login is your API call function
     onSuccess: (data) => {
+      toast.dismiss()
       toast.success(data.message)
       dispatch(setToken(data?.token))
       dispatch(loginSuccess(data?.user))
@@ -66,8 +67,7 @@ export default function SignIn() {
     onError: (error) => {
       console.error('Login error:', error)
       toast.dismiss()
-      toast.error(error?.message)
-      toast.error('Login failed')
+      toast.error(error?.message || "Login failed!")
     },
   })
 

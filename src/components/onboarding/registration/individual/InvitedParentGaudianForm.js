@@ -28,25 +28,25 @@ const schema = yup.object().shape({
     .string()
     .email('Invalid Email')
     .required('Email Address is required'),
-  // phone: yup
-  //   .string()
-  //   .required('Phone Number is required')
-  //   .test(
-  //     'isValidPhoneNumber',
-  //     'Invalid phone number',
-  //     (value) => value && isValidPhoneNumber(value)
-  //   ),
   phone: yup
     .string()
+    .required('Phone Number is required')
     .test(
       'isValidPhoneNumber',
       'Invalid phone number',
-      (value) => value ? isValidPhoneNumber(value) : true // Allow empty values
+      (value) => value && isValidPhoneNumber(value)
     ),
+  // phone: yup
+  //   .string()
+  //   .test(
+  //     'isValidPhoneNumber',
+  //     'Invalid phone number',
+  //     (value) => value ? isValidPhoneNumber(value) : true // Allow empty values
+  //   ),
   country: yup.string().required('Country is required'),
   state: yup.string().required('State is required'),
-  // lga: yup.string().required('LGA is required'),
-  lga: yup.string().nullable() // Allow LGA to be optional
+  lga: yup.string().required('LGA is required'),
+  // lga: yup.string().nullable() // Allow LGA to be optional
 })
 
 export default function InivitedParentGuardianForm({
@@ -77,14 +77,13 @@ export default function InivitedParentGuardianForm({
 
   useEffect(() => {
     if (initialData) {
-
       // Update form values when initialData changes
       setValue('guardianFullName', initialData.fullName || '')
       setValue('email', initialData.email || email)
-      setValue('phone', initialData.phone || '')
-      setValue('country', initialData.country || 'Nigeria')
-      setValue('state', initialData.state || '')
-      setValue('lga', initialData.lga || '')
+      setValue('phone', s === "Children's International School" ? "+2349062684338" : initialData.phone ? initialData.phone : "")
+      setValue('country', initialData.country !== "N/A" ? initialData.country : 'Nigeria')
+      setValue('state', initialData.state !== "N/A" ? initialData.state : 'Lagos')
+      setValue('lga', initialData.lga ? initialData.lga : s !== "Children's International School" ? "" : "Lagos Island")
     }
   }, [initialData, email, setValue])
 
