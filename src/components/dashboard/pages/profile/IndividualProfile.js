@@ -106,7 +106,7 @@ export default function IndividualProfile({ onClose }) {
 
               <div className='user-details'>
                 <div className='green-spring-div school'>
-                  {user?.userType || 'Individual'}
+                  {user?.newCourseInvite?.school?.school_name || 'Individual'}
                 </div>
                 <div
                   style={{ color: '#5B616A' }}

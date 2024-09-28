@@ -228,6 +228,29 @@ class SchoolOBJ {
     }
   };
 
+  getMyProfileIndividualSchool = async (params) => {
+    try {
+      // Check if data is not empty
+      const response = await api.get(`api/schools/student/${params}`);
+      console.log(response.data)
+      return response.data;
+    } catch (err) {
+      throw err?.response?.data || err.message;
+    }
+  };
+
+  getMyProfileEducatorSchool = async (params) => {
+    try {
+      // Check if data is not empty
+      const response = await api.get(`api/schools/educator/${params}`);
+      console.log(response.data)
+      return response.data;
+    } catch (err) {
+      console.log(err?.response?.data || err.message)
+      throw err?.response?.data || err.message;
+    }
+  };
+
   getEnrolledDetails = async (params1, params2) => {
     try {
       const response = await api.get(

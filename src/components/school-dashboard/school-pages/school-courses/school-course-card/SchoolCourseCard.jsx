@@ -40,8 +40,7 @@ const SchoolCourseCard = ({
     setOpenEnrollModalEducator(false)
   }
 
-  console.log('Enrolled Array', enrolledData)
-
+  console.log('Enrolled Array', course)
 
 const handleToggle = (courseId) => {
   setIsOn((prevIsOn) => {

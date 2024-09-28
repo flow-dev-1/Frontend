@@ -406,6 +406,7 @@ const SchoolEnrolledStudents = () => {
                     className="action-icon arrow-icon"
                     width={22}
                     style={{ color: "#000000" }}
+                    onClick={() => navigate(`users/${data?.user?._id}`)}
                   />
                 </td>
               </tr>
