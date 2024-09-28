@@ -55,8 +55,6 @@ export default function IndividualProfile({ onClose }) {
 
   const user =
     userType?.accountType === 'Educator' ? data?.educator : data?.user || {}
-
-  console.log(user)
   // Format the date
   const formatDate = (dateString) => {
     const date = new Date(dateString)

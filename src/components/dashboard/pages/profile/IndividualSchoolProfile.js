@@ -20,14 +20,14 @@ export default function IndividualSchoolProfile({ onClose }) {
     const { userId } = useParams();
     const navigate = useNavigate()
     const [filterOption, setFilterOption] = useState('') // State for Filter Option
-    console.log(userId)
+
 
     const fetchProfile = (params) => {
         if (userType?.user?.grade === 'Educator') {
             return schoolService.getMyProfileEducatorSchool(params);
         } else {
             console.log("Fetching individual school profile");
-            return schoolService.getMyProfileIndividualSchool(params);
+            return schoolService.getStudentProfileIndividual(params);
         }
     }
 
@@ -38,7 +38,7 @@ export default function IndividualSchoolProfile({ onClose }) {
         refetchOnWindowFocus: false,
     });
 
-    console.log(data);
+    console.log(data, "data ooooooo");
 
 
     const openModal = () => {
@@ -58,8 +58,6 @@ export default function IndividualSchoolProfile({ onClose }) {
 
     const user =
         userType?.user?.grade === 'Educator' ? data?.educator : data?.user || {}
-
-    console.log(user)
     // Format the date
     const formatDate = (dateString) => {
         const date = new Date(dateString)
@@ -84,26 +82,26 @@ export default function IndividualSchoolProfile({ onClose }) {
                     <button className="back-button" onClick={() => navigate(-1)}>
                         <Icon icon="mingcute:arrow-left-line" width={20} /> Back
                     </button>
-                                <div className='profilee'>
-                    <label>
-                        <Icon icon='gridicons:filter' style={{ color: '#4d4d4d' }} />
-                        <select
-                            name='filter'
-                            id='filter'
-                            className='filter'
-                            value={filterOption} // Bind filter option to state
-                            onChange={(e) => setFilterOption(e.target.value)} // Update state on filter change
-                        >
-                            <option value='' disabled>
-                                Profile
-                            </option>
-                            <option value=''>All</option>
-                            <option value='Individual'>Students</option>
-                            <option value='General'>General</option>
-                            <option value='Educator'>Teachers</option>
-                        </select>
-                    </label>
-                </div>
+                    <div className='profilee'>
+                        <label>
+                            <Icon icon='gridicons:filter' style={{ color: '#4d4d4d' }} />
+                            <select
+                                name='filter'
+                                id='filter'
+                                className='filter'
+                                value={filterOption} // Bind filter option to state
+                                onChange={(e) => setFilterOption(e.target.value)} // Update state on filter change
+                            >
+                                <option value='' disabled>
+                                    Profile
+                                </option>
+                                <option value=''>All</option>
+                                <option value='Individual'>Students</option>
+                                <option value='General'>General</option>
+                                <option value='Educator'>Teachers</option>
+                            </select>
+                        </label>
+                    </div>
                 </div>
                 <div className='user-basic-info' style={{ padding: '1rem' }}>
                     <div className='about-user'>
@@ -200,7 +198,7 @@ export default function IndividualSchoolProfile({ onClose }) {
           </p> */}
                     <p>
                         <span className='label'>Gender: </span>
-                        <span>{toTitleCase(user?.gender)||'Add Info'} </span>
+                        <span>{toTitleCase(user?.gender) || 'Add Info'} </span>
                     </p>
                 </div>
                 {userType?.accountType === 'Individual' ? (
