@@ -40,7 +40,7 @@ class SchoolOBJ {
   changeToggle = async (params, fomrData) => {
     try {
       // Check if data is not empty
-      const response = await api.post(`api/schools/course-togle/${params}`, fomrData );
+      const response = await api.post(`api/schools/course-togle/${params}`, fomrData);
       console.log(response.data)
       return response.data;
     } catch (err) {
@@ -288,6 +288,16 @@ class SchoolOBJ {
       const response = await api.delete(
         `api/schools/${params1}/users/${params2}/enrollment/${params3}`
       );
+      return response.data;
+    } catch (err) {
+      throw err?.response?.data || err.message;
+    }
+  };
+
+  getStudentProfileIndividual = async (id) => {
+    try {
+      // Check if data is not empty
+      const response = await api.get(`api/users/single-user/${id}`);
       return response.data;
     } catch (err) {
       throw err?.response?.data || err.message;
