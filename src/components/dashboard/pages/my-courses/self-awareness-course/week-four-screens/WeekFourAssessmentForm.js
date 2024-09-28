@@ -7,6 +7,11 @@ import userService from '../../../../../../services/api/user.js'
 import MatchingComponent from './MatchingComponent.js'
 
 export default function WeekFourAssessmentForm({ onNext, onBack }) {
+  const [arrows, setArrows] = useState([]) // State for managing arrows
+  const [arrows2, setArrows2] = useState([]) // State for managing arrows
+
+  // Sample items for matching
+
   const questionsArray = [
     {
       title: 'What are values?',
@@ -133,10 +138,27 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
 
   const handleMatch = (leftIndex, rightIndex) => {
     console.log(`Matched Left: ${leftIndex}, Right: ${rightIndex}`)
+
+    // Check if the matches are complete
+    if (matchesSet1.length === leftItemsArray.length) {
+      // If all matches are made, reset matches and count
+      setMatchesSet1([])
+    }
+
+    // Update the matches
     setMatchesSet1((prev) => [...prev, { left: leftIndex, right: rightIndex }])
   }
+
   const handleMatch2 = (leftIndex, rightIndex) => {
     console.log(`Matched Left: ${leftIndex}, Right: ${rightIndex}`)
+
+    // Check if the matches are complete
+    if (matchesSet2.length === leftItemsArray2.length) {
+      // If all matches are made, reset matches and count
+      setMatchesSet2([])
+    }
+
+    // Update the matches
     setMatchesSet2((prev) => [...prev, { left: leftIndex, right: rightIndex }])
   }
 
@@ -268,13 +290,18 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
         <div className='assessment question-box'>
           {currentIndex <= 1 && (
             <div className='assessment-box'>
-              <h2 style={{ color: '#FAFAFA' }}>Assessment</h2>
+              <h2 style={{ color: '#FAFAFA', textAlign: 'center' }}>
+                Assessment
+              </h2>
               <p style={{ color: '#FAFAFA' }} className='text-center'>
                 Scenario around your values.
               </p>
             </div>
           )}
-          <div style={{marginTop:"3rem"}} className='d-flex align-items-start mt-6'>
+          <div
+            style={{ marginTop: '3rem' }}
+            className='d-flex align-items-start mt-6'
+          >
             <h1 style={{ color: '#5B616A' }}>{currentIndex}.</h1>
             <h2
               style={{ color: '#5B616A' }}
@@ -314,6 +341,8 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
                 rightItems={rightItemsArray}
                 onMatch={handleMatch}
                 onNext={handleNext}
+                arrows={arrows}
+                setArrows={setArrows}
               />
             </div>
           )}
@@ -324,6 +353,8 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
                 rightItems={rightItemsArray2}
                 onMatch={handleMatch2}
                 onNext={handleNext}
+                setArrows={setArrows2}
+                arrows={arrows2}
               />
             </div>
           )}

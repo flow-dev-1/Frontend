@@ -210,8 +210,10 @@ class UserOBJ {
     try {
       // Check if data is not empty
       const response = await api.get(`api/users/me`);
+      console.log(response.data)
       return response.data;
     } catch (err) {
+      console.log(err?.response?.data || err.message)
       throw err?.response?.data || err.message;
     }
   };

@@ -6,6 +6,7 @@ import EnrollmentModal from '../../../modals/Enrollment/EnrollmentModal'
 import { Navigate } from 'react-router-dom'
 import AddEducator from './AddEducator'
 import ViewDetailsModal from '../../../modals/vew details/ViewDetailsModal'
+import schoolService from "../../../../../services/api/school";
 
 const SchoolCourseCard = ({
   openModal,
@@ -14,13 +15,17 @@ const SchoolCourseCard = ({
   coursesArray,
   enrolledData,
 }) => {
-  const [isOn, setIsOn] = useState(false)
   const [openEnrollModal, setOpenEnrollModal] = useState(false)
   const [openViewModal, setOpenViewModal] = useState(false);
   const [openEnrollModalEducator, setOpenEnrollModalEducator] = useState(false)
   console.log(enrolledData);
   const [courseData] = useState(course)
   const navigate = useNavigate()
+  const [isOn, setIsOn] = useState(() => {
+    // Initialize state from localStorage if it exists, otherwise default to false
+    const savedState = localStorage.getItem("toggleState");
+    return savedState ? JSON.parse(savedState) : false;
+  });
 
   const openEnrollementModal = () => {
     if (course.grade === 'Educator') {
@@ -35,11 +40,23 @@ const SchoolCourseCard = ({
     setOpenEnrollModalEducator(false)
   }
 
-  console.log('Enrolled Array', enrolledData)
+  console.log('Enrolled Array', course)
 
-  const handleToggle = () => {
-    setIsOn(!isOn)
-  }
+const handleToggle = (courseId) => {
+  setIsOn((prevIsOn) => {
+    const newIsOn = !prevIsOn;
+    const data = { status: newIsOn ? "Confirmed" : "Deactivated" };
+
+    // Save the new toggle state in localStorage
+    localStorage.setItem("toggleState", JSON.stringify(newIsOn));
+
+    // Call the service with the updated status
+    schoolService.changeToggle(courseId, data);
+
+    return newIsOn;
+  });
+};
+
 
   const daysOfWeek = [
     'Monday',
@@ -148,6 +165,8 @@ const SchoolCourseCard = ({
     return text
   }
 
+
+
   return (
     <div>
       <div className="course-card" style={{ height: "480px" }}>
@@ -158,7 +177,10 @@ const SchoolCourseCard = ({
           </div>
         </div>
         <div className="course-card-title" style={{ marginBottom: "0" }}>
-          <h3 style={isEnrolled ? { color: "#4B7E31" } : { color: "#329BD6" }}>
+          <h3 style={{ color: "#329BD6", fontSize: "24px" }}>
+            Knowing Yourself Better
+          </h3>
+          <h3 style={isEnrolled ? { color: "#555" } : { color: "#329BD6" }}>
             {course.title}:
           </h3>
           {/* <h3>{course.subtitle}</h3> */}
@@ -211,7 +233,7 @@ const SchoolCourseCard = ({
           {isEnrolled ? (
             <div
               className={`toggle-switch ${isOn ? "on" : "off"}`}
-              onClick={handleToggle}
+              onClick={()=>handleToggle(course._id)}
             >
               <div className={isOn ? "onKnob" : "offKnob"}></div>
             </div>
@@ -249,36 +271,45 @@ const SchoolCourseCard = ({
               </span>{" "}
               Review
             </button>
-            <button
-              id="reviewBtn"
-              onClick={handleDetailsClick}
-              style={
-                isEnrolled
-                  ? {
-                      backgroundColor: "#329BD6",
-                      color: "#fff",
-                      border: "1px solid #329bd6"
-                    }
-                  : course.grade !== "Educators"
-                  ? { backgroundColor: darkTertiary, color: "white" }
-                  : { backgroundColor: darkEducator, color: lightEducator }
-              }
-            >
-              <span>
-                {isEnrolled ? (
-                  <Icon icon="ri:menu-2-fill" width={20} />
-                ) : (
+            {isEnrolled ? (
+              <>
+                {/* View Details Button */}
+                <button
+                  id="viewDetailsBtn"
+                  onClick={handleDetailsClick}
+                  style={{
+                    backgroundColor: "#329BD6",
+                    color: "#fff",
+                    border: "1px solid #329bd6"
+                  }}
+                >
+                  <span>
+                    <Icon icon="ri:menu-2-fill" width={20} />
+                  </span>{" "}
+                  View Details
+                </button>
+              </>
+            ) : (
+              <button
+                id="reviewBtn"
+                onClick={handleDetailsClick}
+                style={
+                  course.grade !== "Educators"
+                    ? { backgroundColor: darkTertiary, color: "white" }
+                    : { backgroundColor: darkEducator, color: lightEducator }
+                }
+              >
+                <span>
                   <Icon
                     icon="vaadin:cart-o"
                     width={20}
-                    style={{ color: "ffff" }}
+                    style={{ color: "white" }}
                   />
-                )}
-              </span>{" "}
-              {isEnrolled
-                ? "  View Details"
-                : `${course.currency} ${course.cost}`}
-            </button>
+                </span>{" "}
+                {`${course.currency} ${course.cost}`}
+              </button>
+            )}
+
             {isEnrolled ? (
               <div
                 style={{
@@ -288,8 +319,8 @@ const SchoolCourseCard = ({
                   fontSize: "12px"
                 }}
               >
-                <span style={{ color: "#50AA50", fontWeight: "400" }}>0 %</span>{" "}
-                <span>Done</span>
+                {/* <span style={{ color: "#50AA50", fontWeight: "400" }}>0 %</span>{" "}
+                <span>Done</span> */}
               </div>
             ) : (
               ""
@@ -304,7 +335,8 @@ const SchoolCourseCard = ({
           encryptURI={encryptURI}
           courseIndex={courseIndex}
           enrollmentid={coursedarta}
-          // course={course} // Pass the course data to the modal
+          courseId={course._id}
+          course={course}
           onClose={() => setOpenViewModal(false)}
         />
       )}

@@ -35,6 +35,7 @@ const CourseCard = ({
   const handleCourseClick = () => {
     // Ensure coursesArray and course are defined
     if (!coursesArray || !course) {
+      alert('Wait for the course to be activated by your School')
       console.error('coursesArray or course is not defined')
       return
     }

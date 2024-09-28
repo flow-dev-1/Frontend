@@ -78,6 +78,8 @@ export default function InvitedStudentDetailsForm({
 
   const dispatch = useDispatch()
 
+  // if (students)
+
   const mutation = useMutation({
     mutationFn: (data) => userService.registerInvitedUser(t, data),
     onSuccess: (data) => {

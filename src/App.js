@@ -48,6 +48,7 @@ import SchoolEnrolledEducators from './components/school-dashboard/school-pages/
 import SelfAwarenessCourse from './components/dashboard/pages/my-courses/self-awareness-course/SelfAwarenessCourse.js'
 import SelfAwarenessFeedback from './components/dashboard/pages/my-courses/self-awareness-feedback/SelfAwarenessFeedback.js'
 import InvitedAdminEducatorRegistration from './components/onboarding/registration/InvitedEducatorRegistrationForm.js'
+import IndividualSchoolProfile from './components/dashboard/pages/profile/IndividualSchoolProfile.js'
 
 function App() {
   return (
@@ -177,7 +178,7 @@ function App() {
           />
           <Route
             path='/school-dashboard/courses/enrolled/:id/users/:userId'
-            element={<IndividualProfile />}
+            element={<IndividualSchoolProfile />}
           />
           <Route
             path='/school-dashboard/settings/teams'

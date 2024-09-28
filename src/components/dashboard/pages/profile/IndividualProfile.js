@@ -55,6 +55,7 @@ export default function IndividualProfile({ onClose }) {
   const user =
     userType?.accountType === 'Educator' ? data?.educator : data?.user || {}
 
+    console.log(user)
   // Format the date
   const formatDate = (dateString) => {
     const date = new Date(dateString)
@@ -105,7 +106,7 @@ export default function IndividualProfile({ onClose }) {
 
               <div className='user-details'>
                 <div className='green-spring-div school'>
-                  {user?.userType || 'Individual'}
+                  {user?.newCourseInvite?.school?.school_name || 'Individual'}
                 </div>
                 <div
                   style={{ color: '#5B616A' }}

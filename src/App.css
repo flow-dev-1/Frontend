@@ -200,7 +200,7 @@ li {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #fefefe;
+  /* background-color: #fefefe; */
   margin: 0 auto;
   border-radius: 20px;
   padding: 30px 60px;
@@ -472,3 +472,4 @@ input {
   pointer-events: none;
   opacity: 0.5;
 }
+
