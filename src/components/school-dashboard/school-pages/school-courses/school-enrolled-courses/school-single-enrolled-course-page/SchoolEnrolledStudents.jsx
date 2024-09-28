@@ -73,7 +73,6 @@ const SchoolEnrolledStudents = () => {
   }
   const navigate = useNavigate();
   const { id } = useParams();
-  console.log(schoolId, decryptId(id));
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["school-single-courses"],

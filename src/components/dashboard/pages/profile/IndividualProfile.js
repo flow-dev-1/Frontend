@@ -23,7 +23,7 @@ export default function IndividualProfile({ onClose }) {
     if (userType?.accountType === 'Educator') {
       return userService.getMyProfileEducator()
     } else {
-      console.log(userService.getMyProfileIndividual())
+      console.log(userService.getMyProfileIndividual(),"Woww")
       return userService.getMyProfileIndividual()
     }
   }
@@ -35,7 +35,7 @@ export default function IndividualProfile({ onClose }) {
     refetchOnWindowFocus: false,
   })
 
-  console.log(data)
+  console.log(data,"data ooooooo")
 
   const openModal = () => {
     setIsOpen(true)
@@ -55,7 +55,7 @@ export default function IndividualProfile({ onClose }) {
   const user =
     userType?.accountType === 'Educator' ? data?.educator : data?.user || {}
 
-    console.log(user)
+    console.log(user,"User oooooo")
   // Format the date
   const formatDate = (dateString) => {
     const date = new Date(dateString)
@@ -63,7 +63,8 @@ export default function IndividualProfile({ onClose }) {
   }
 
   function toTitleCase(str) {
-    return str.replace(/\w\S*/g, function (txt) {
+    console.log(str,"Na here o")
+    return str?.replace(/\w\S*/g, function (txt) {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
     })
   }
