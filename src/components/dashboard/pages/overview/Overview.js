@@ -20,7 +20,6 @@ export default function IndividualOverview() {
   const [filterOption, setFilterOption] = useState('') // State for Filter Option
   const [selectedCourse, setSelectedCourse] = useState(null)
 
-  console.log(user?.userType)
   const { data, isLoading, isError } = useQuery({
     queryKey: ['individual-courses'],
     queryFn: () => userService.getIndividualCourses(), // Make sure to call the function
@@ -35,9 +34,8 @@ export default function IndividualOverview() {
     refetchOnMount: true, // Refetch when the component mounts again
   })
 
-  console.log(enrolledData)
   const studentOfSchool = user?.newCourseInvite
-  console.log(studentOfSchool)
+  console.log(enrolledData, "Enrolled datas")
 
   const handleSort = (a, b) => {
     if (sortOption === 'az') {
@@ -50,8 +48,6 @@ export default function IndividualOverview() {
 
   const enrolledDataArray =
     enrolledData?.courses?.map((item) => item.course._id) || []
-
-  console.log(data?.courses)
 
   const filteredCourses = data?.courses
     ?.filter((course) => {

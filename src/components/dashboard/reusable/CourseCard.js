@@ -21,17 +21,13 @@ const CourseCard = ({
 
   const [modalIsOpen, setIsOpen] = useState(false)
   const [modalType, setModalType] = useState('')
-  console.log(course)
 
-  console.log(coursesArray)
-  console.log(enrolledData)
   const courseIndex = coursesArray?.courses.findIndex(
     (c) => c._id === course._id
   )
 
   const isEnrolled = enrolled.includes(course._id)
-  console.log(isEnrolled)
-  console.log(courseIndex)
+
   const handleCourseClick = () => {
     // Ensure coursesArray and course are defined
     if (!coursesArray || !course) {
@@ -45,6 +41,8 @@ const CourseCard = ({
       (c) => c._id === course._id
     )
 
+
+
     // Check if the course was found in the array
     if (courseIndex === -1) {
       console.error('Course not found in coursesArray')
@@ -54,7 +52,7 @@ const CourseCard = ({
     // Determine if the course should be accessed
     if (isEnrolled || studentOfSchool) {
       const enrolledCourse = enrolledData?.courses[courseIndex]
-      // console.log(course._id)
+      // console.log(enrolledCourse, "Enrolled")
       // Ensure enrolledData and enrolledCourse are defined
       if ((enrolledData && enrolledCourse) || course._id) {
         navigate(
@@ -97,7 +95,6 @@ const CourseCard = ({
     }
     return text
   }
-  console.log(course?.progress)
 
   return (
     <div className='reusable-course-card'>
@@ -206,8 +203,8 @@ const CourseCard = ({
               {course?.progress === 100
                 ? 'Completed'
                 : course?.progress === 0
-                ? 'Start'
-                : 'Resume'}
+                  ? 'Start'
+                  : 'Resume'}
             </button>
             {course?.progress > 0 && course?.progress < 100 && (
               <Icon

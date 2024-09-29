@@ -37,15 +37,16 @@ export default function WeekOneLearning({
     )
     return savedState ? JSON.parse(savedState) : 1
   })
-const week = 1;
-const { data, isLoading, isError } = useQuery({
-  queryKey: ["dashboard/self-awareness-course", course?.course._id, week],
-  queryFn: () => userService.getMyActivites(course?.course._id, week)
-});
+  const week = 1;
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["dashboard/self-awareness-course", course?.course._id, week],
+    queryFn: () => userService.getMyActivites(course?.course._id, week)
+  });
 
   const [assessmentData, setAssessmentData] = useState(null);
   const [assessmentLoading, setAssessmentLoading] = useState(true);
   const [assessmentError, setAssessmentError] = useState(null);
+
   useEffect(() => {
     const fetchAssessmentData = async () => {
       setAssessmentLoading(true);
@@ -65,43 +66,37 @@ const { data, isLoading, isError } = useQuery({
   const assessments = assessmentData?.existingAssessment.assessments;
   const percent = assessmentData?.existingAssessment.rating;
   const color = assessmentData?.existingAssessment?.personalityColor;
-// console.log(assessments)
-// Check if data.activity exists and save it under one key 'activity1' in local storage
-if (data?.activity && assessments) {
-  const activities = data.activity.activities;
+  // console.log(assessments)
+  // Check if data.activity exists and save it under one key 'activity1' in local storage
+  if (data?.activity && assessments) {
+    const activities = data.activity.activities;
 
-  // Create an object with week and activities
-  const activityData = {
-    week: week,
-    activities: activities
-  };
-  const assessmentData = {
-    week:week,
-    percentage:percent,
-    assessments:assessments,
-    personalityColor:personality
+    // Create an object with week and activities
+    const activityData = {
+      week: week,
+      activities: activities
+    };
+    const assessmentData = {
+      week: week,
+      percentage: percent,
+      assessments: assessments,
+      personalityColor: personality
+    }
+
+    // Store the object in local storage under the key 'activity1'
+    localStorage.setItem("week-1-activityData", JSON.stringify(activityData));
+    localStorage.setItem(
+      "weekOneAssessmentData",
+      JSON.stringify({ formData: assessmentData })
+    );
+
   }
-
-  // Store the object in local storage under the key 'activity1'
-  localStorage.setItem("week-1-activityData", JSON.stringify(activityData));
-  localStorage.setItem(
-    "weekOneAssessmentData",
-    JSON.stringify({ formData: assessmentData })
-  );
-
-
-  console.log("Week and activities saved to localStorage under 'activity1'");
-}
-
-console.log(data?.activity);
-
 
   useEffect(() => {
     const canSee = localStorage.getItem(`${courseId}-can-see`)
     console.log(canSee)
     if (canSee === null) {
       setShowPopup(true)
-      console.log('i am here')
     }
   }, [courseId])
   // console.log(course.course._id)
@@ -492,7 +487,7 @@ console.log(data?.activity);
         <ModalComponent
           show={reviewPopUp}
           handleClose={closeReviewPopUp}
-          // Additional props for ModalComponent if needed
+        // Additional props for ModalComponent if needed
         />
       </div>
     </div>
