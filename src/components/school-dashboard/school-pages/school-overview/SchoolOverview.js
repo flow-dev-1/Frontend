@@ -21,6 +21,8 @@ import NonActiveTeachersModal from '../../../modals-pages/dashboard-modals/overv
 import schoolService from '../../../../services/api/school'
 import { useSelector } from 'react-redux'
 import { useQuery } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
+import { RotatingLines } from 'react-loader-spinner'
 
 const COLORS = ['#17E383', '#652AC433', '#FF8042', '#0088FE']
 const BAR_COLORS = ['#4bc0c0', '#9966ff', '#ff9f40', '#4b4b4b', '#ff9f40']
@@ -90,31 +92,60 @@ const SchoolOverview = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['school-dashboard'],
     queryFn: async () => schoolService.getGraphData(),
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
+    // refetchOnMount: false,
+    // refetchOnWindowFocus: false,
   })
 
-  console.log(data)
   useEffect(() => {
-    if (data) {
-      setTotalStudents(data?.totalStudents || 0)
-      setTotalMales(data?.totalMales || 0)
-      setTotalFemales(data?.totalFemales || 0)
-      setTotalTeachers(data?.totalTeachers || 0)
-      setTotalActive(data?.active || 0)
-      setTotalNonActive(data?.notActive || 0)
-      setTotalAmount(data?.totalAmount || 0)
-      setTotalCompleted(data?.completed || 0)
-      setTotalRemaining(data?.remaining || 0)
+    toast.dismiss()
+    let toastId;
+
+    if (isLoading) {
+      toastId = toast.info(
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <RotatingLines
+            strokeColor="#FFF"
+            width="20"
+            height="20"
+          />
+          <span style={{ marginLeft: '10px' }}>Loading data, please wait!</span>
+        </div>,
+        { autoClose: false }
+      );
     }
-  }, [data])
+
+    if (data) {
+      // dismiss the loading toast when data is fetched
+      toast.dismiss(toastId);
+      setTotalStudents(data?.totalStudents || 0);
+      setTotalMales(data?.totalMales || 0);
+      setTotalFemales(data?.totalFemales || 0);
+      setTotalTeachers(data?.totalTeachers || 0);
+      setTotalActive(data?.active || 0);
+      setTotalNonActive(data?.notActive || 0);
+      setTotalAmount(data?.totalAmount || 0);
+      setTotalCompleted(data?.completed || 0);
+      setTotalRemaining(data?.remaining || 0);
+    }
+
+    if (isError) {
+      // dismiss the loading toast and show error
+      toast.dismiss(toastId);
+      toast.error("Failed to load data.");
+    }
+
+    // Cleanup: dismiss toast if component unmounts
+    return () => {
+      if (toastId) {
+        toast.dismiss(toastId);
+      }
+    };
+  }, [data, isLoading, isError]);
 
   const dataGender = [
     { name: 'Male', value: totalMales },
     { name: 'Female', value: totalFemales },
   ]
-
-  console.log(totalActive)
 
   const dataActive = [
     { name: 'Active', value: totalActive },
@@ -146,8 +177,8 @@ const SchoolOverview = () => {
   const allValuesZeroPie2 = dataCompletion.every(entry => entry.value === 0);
   const allValuesZeroGender = dataGender.every(entry => entry.value === 0);
   const allValuesZeroBar = dataEnrollment.every(entry => entry.value === 0);
-  
-  
+
+
   return (
     <div className='overview'>
       <div className='top-cards'>
@@ -188,7 +219,7 @@ const SchoolOverview = () => {
         <div
           className='chart'
           style={{ cursor: 'pointer' }}
-          // onClick={openActiveStudentModal}
+        // onClick={openActiveStudentModal}
         >
           <div>
             <div className='chart-heading'>
@@ -248,7 +279,7 @@ const SchoolOverview = () => {
         <div
           className='chart'
           style={{ cursor: 'pointer' }}
-          // onClick={openNonActiveStudentModal}
+        // onClick={openNonActiveStudentModal}
         >
           <div>
             <div className='chart-heading'>
@@ -310,7 +341,7 @@ const SchoolOverview = () => {
         <div
           className='chart two'
           style={{ cursor: 'pointer' }}
-          // onClick={openActiveTeacherModal}
+        // onClick={openActiveTeacherModal}
         >
           <div>
             <div>
@@ -333,26 +364,26 @@ const SchoolOverview = () => {
               {allValuesZeroGender ? (
                 renderNoData()
               ) : (
-              <PieChart>
-                <Pie
-                  data={dataGender}
-                  dataKey='value'
-                  nameKey='name'
-                  cx='50%'
-                  cy='50%'
-                  innerRadius={80}
-                  outerRadius={120}
-                  label={renderCustomizedLabel}
-                  labelLine={false}
-                >
-                  {dataGender.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={GENDER_COLORS[index % GENDER_COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-              </PieChart>
+                <PieChart>
+                  <Pie
+                    data={dataGender}
+                    dataKey='value'
+                    nameKey='name'
+                    cx='50%'
+                    cy='50%'
+                    innerRadius={80}
+                    outerRadius={120}
+                    label={renderCustomizedLabel}
+                    labelLine={false}
+                  >
+                    {dataGender.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={GENDER_COLORS[index % GENDER_COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                </PieChart>
               )}
             </ResponsiveContainer>
             <div className='students-dash'>students</div>
@@ -374,7 +405,7 @@ const SchoolOverview = () => {
         <div className='chart bar-chart'>
           <div
             style={{ cursor: 'pointer' }}
-            // onClick={openNonActiveTeacherModal}
+          // onClick={openNonActiveTeacherModal}
           >
             <div className='chart-heading'>
               <p>Enrollment Per Course</p>
@@ -394,26 +425,26 @@ const SchoolOverview = () => {
               {allValuesZeroBar ? (
                 renderNoData()
               ) : (
-              <BarChart
-                data={dataEnrollment}
-                margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
-              >
-                <XAxis dataKey='name' />
-                <YAxis
-                  domain={[1, 'auto']}    
-                  allowDecimals={false}   
-                  tickCount={4}            
-                />
+                <BarChart
+                  data={dataEnrollment}
+                  margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
+                >
+                  <XAxis dataKey='name' />
+                  <YAxis
+                    domain={[1, 'auto']}
+                    allowDecimals={false}
+                    tickCount={4}
+                  />
 
-                <Bar dataKey='value' barSize={60}>
-                  {dataEnrollment.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={BAR_COLORS[index % BAR_COLORS.length]}
-                    />
-                  ))}
-                </Bar>
-              </BarChart>
+                  <Bar dataKey='value' barSize={60}>
+                    {dataEnrollment.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={BAR_COLORS[index % BAR_COLORS.length]}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
               )}
             </ResponsiveContainer>
           </div>

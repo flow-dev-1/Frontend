@@ -42,20 +42,36 @@ const SchoolCourseCard = ({
 
   console.log('Enrolled Array', course)
 
-const handleToggle = (courseId) => {
-  setIsOn((prevIsOn) => {
-    const newIsOn = !prevIsOn;
-    const data = { status: newIsOn ? "Confirmed" : "Deactivated" };
+  const handleToggle = (courseId) => {
+    setIsOn((prevIsOn) => {
+      const newIsOn = !prevIsOn;
+      const data = { status: newIsOn ? "Confirmed" : "Deactivated" };
 
-    // Save the new toggle state in localStorage
-    localStorage.setItem("toggleState", JSON.stringify(newIsOn));
+      // Save the new toggle state in localStorage
+      localStorage.setItem("toggleState", JSON.stringify(newIsOn));
 
-    // Call the service with the updated status
-    schoolService.changeToggle(courseId, data);
+      // Call the service with the updated status
+      schoolService.changeToggle(courseId, data);
 
-    return newIsOn;
-  });
-};
+      return newIsOn;
+    });
+  };
+
+
+  // const handleToggle = (courseId) => {
+  //   setIsOn((prevIsOn) => {
+  //     const newIsOn = !prevIsOn;
+  //     const data = { status: newIsOn ? "Confirmed" : "Deactivated" };
+
+  //     // Save the new toggle state in localStorage
+  //     localStorage.setItem("toggleState", JSON.stringify(newIsOn));
+
+  //     // Call the service with the updated status
+  //     schoolService.changeToggle(courseId, data);
+
+  //     return newIsOn;
+  //   });
+  // };
 
 
   const daysOfWeek = [
@@ -131,9 +147,9 @@ const handleToggle = (courseId) => {
 
     // Use this index to get the corresponding enrolledData course
     if (isEnrolled && enrolledData?.courses[courseIndex]) {
-     setOpenViewModal(true);
-     setCourseDarta(enrolledData?.courses[courseIndex]._id);
-    //  console.log(enrolledData?.courses[courseIndex]._id);
+      setOpenViewModal(true);
+      setCourseDarta(enrolledData?.courses[courseIndex]._id);
+      //  console.log(enrolledData?.courses[courseIndex]._id);
       // navigate(
       //   `/school-dashboard/courses/enrolled/${encryptURI(
       //     enrolledData.courses[courseIndex]._id
@@ -144,10 +160,10 @@ const handleToggle = (courseId) => {
       openEnrollementModal()
     }
   }
-    
+
   const closeViewModal = () => {
-      setOpenViewModal(false);
-    };
+    setOpenViewModal(false);
+  };
 
   const likesPercent = (likes, courseEnrollment) => {
     if (likes === 0) return 0
@@ -233,7 +249,7 @@ const handleToggle = (courseId) => {
           {isEnrolled ? (
             <div
               className={`toggle-switch ${isOn ? "on" : "off"}`}
-              onClick={()=>handleToggle(course._id)}
+              onClick={() => handleToggle(course._id)}
             >
               <div className={isOn ? "onKnob" : "offKnob"}></div>
             </div>
@@ -248,17 +264,17 @@ const handleToggle = (courseId) => {
               style={
                 isEnrolled
                   ? {
-                      backgroundColor: "#fff",
-                      color: "#329BD6",
-                      border: "1px solid #329bd6"
-                    }
+                    backgroundColor: "#fff",
+                    color: "#329BD6",
+                    border: "1px solid #329bd6"
+                  }
                   : course.grade !== "Educators"
-                  ? {
+                    ? {
                       backgroundColor: "#fff",
                       color: "#329BD6",
                       border: "1px solid #329bd6"
                     }
-                  : { backgroundColor: lightEducator, color: darkEducator }
+                    : { backgroundColor: lightEducator, color: darkEducator }
               }
               className={`reviewBtn ${reviewBtnClass}`}
             >

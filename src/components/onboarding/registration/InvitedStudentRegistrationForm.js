@@ -20,14 +20,14 @@ export default function InvitedStudentRegistrationForm() {
     return {
       email: params.get('email'),
       t: params.get('t'),
+      s: params.get('schoolName')
     }
   }
 
-  const { email, t } = getQueryParams(location.search)
+  const { email, t, s } = getQueryParams(location.search)
+
   dispatch(setToken(t))
   localStorage.setItem('Flow-Auth-Token', t)
-  console.log(t)
-
   // Fetch parent details using the token
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['parent-detail'], // Add token to queryKey to refetch on token change
@@ -35,8 +35,6 @@ export default function InvitedStudentRegistrationForm() {
     enabled: !!t, // Only run the query if token is present
   })
 
-
-  console.log(data)
   useEffect(() => {
     if (data?.status === 'success') {
       setParentFormData({
@@ -83,6 +81,7 @@ export default function InvitedStudentRegistrationForm() {
           initialData={parentFormData} // Pass the form data as initial values
           email={email} // Pass email as a prop
           t={t} // Pass t as a prop
+          s={s} //temporal data for CIS school
         />
       )}
       {step === 2 && (

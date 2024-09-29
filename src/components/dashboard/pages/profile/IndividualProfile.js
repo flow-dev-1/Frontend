@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import femaleprofileImage from '../../../../assets/user-profile-image.png'
 import maleprofileImage from '../../../../assets/male-profile-image.png'
 import flag from '../../../../assets/Flag_of_Nigeria.png'
 import './profile.css'
 import Modal from 'react-modal'
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import StudentRegistrationProfile from '../../../modals-pages/dashboard-modals/profile/StudentRegistrationProfile'
 import { useQuery } from '@tanstack/react-query'
 import userService from '../../../../services/api/user'
@@ -13,29 +13,30 @@ import EducatorProfileModal from './EducatorProfileModal'
 import StudentUpdateProfileModal from './StudentUpdateProfileModal'
 import Loading from '../../../loader/Loader'
 import { Icon } from '@iconify/react'
+import schoolService from '../../../../services/api/school'
 
 export default function IndividualProfile({ onClose }) {
   const [modalIsOpen, setIsOpen] = useState(false)
   const { userType } = useSelector((state) => state.user)
+  const { userId } = useParams();
   const navigate = useNavigate()
 
-  const fetchProfile = () => {
+  const fetchProfile = (id) => {
     if (userType?.accountType === 'Educator') {
-      return userService.getMyProfileEducator()
+      return userService.getMyProfileEducator(id)
     } else {
-      console.log(userService.getMyProfileIndividual())
-      return userService.getMyProfileIndividual()
+
+      return schoolService.getStudentProfileIndividual(id)
     }
   }
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['individual-profile'],
-    queryFn: fetchProfile,
-    refetchOnMount: true,
-    refetchOnWindowFocus: false,
+    queryKey: ['individual-profile', userId],
+    queryFn: () => fetchProfile(userId),
+    enabled: !!userId
   })
 
-  console.log(data)
+  console.log(data, "data ooooooo")
 
   const openModal = () => {
     setIsOpen(true)
@@ -54,8 +55,6 @@ export default function IndividualProfile({ onClose }) {
 
   const user =
     userType?.accountType === 'Educator' ? data?.educator : data?.user || {}
-
-    console.log(user)
   // Format the date
   const formatDate = (dateString) => {
     const date = new Date(dateString)
@@ -63,7 +62,7 @@ export default function IndividualProfile({ onClose }) {
   }
 
   function toTitleCase(str) {
-    return str.replace(/\w\S*/g, function (txt) {
+    return str?.replace(/\w\S*/g, function (txt) {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
     })
   }
