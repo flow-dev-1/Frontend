@@ -48,7 +48,7 @@ import SchoolEnrolledEducators from './components/school-dashboard/school-pages/
 import SelfAwarenessCourse from './components/dashboard/pages/my-courses/self-awareness-course/SelfAwarenessCourse.js'
 import SelfAwarenessFeedback from './components/dashboard/pages/my-courses/self-awareness-feedback/SelfAwarenessFeedback.js'
 import InvitedAdminEducatorRegistration from './components/onboarding/registration/InvitedEducatorRegistrationForm.js'
-import IndividualSchoolProfile from './components/dashboard/pages/profile/IndividualSchoolProfile.js'
+import IndividualSchoolProfile from './components/school-dashboard/school-pages/school-courses/school-enrolled-courses/school-single-enrolled-course-page/IndividualSchoolProfile.jsx'
 
 function App() {
   return (
