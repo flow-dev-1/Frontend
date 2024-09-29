@@ -303,7 +303,7 @@ const SingleStudentEnrolledCoursesCard = ({
         <div className='course-card-buttons'>
           <div className='course-card-buttons-main'>
             <button
-              onClick={() => openModal(course)}
+              onClick={() => navigate('/school-dashboard/courses/feedback')}
               style={
                 isEnrolled
                   ? {
