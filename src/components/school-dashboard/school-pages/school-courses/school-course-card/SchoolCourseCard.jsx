@@ -40,12 +40,11 @@ const SchoolCourseCard = ({
     setOpenEnrollModalEducator(false)
   }
 
-  console.log('Enrolled Array', course)
 
   const handleToggle = (courseId) => {
     setIsOn((prevIsOn) => {
       const newIsOn = !prevIsOn;
-      const data = { status: newIsOn ? "Confirmed" : "Deactivated" };
+      const data = { status: newIsOn ? "Active" : "Deactivated" };
 
       // Save the new toggle state in localStorage
       localStorage.setItem("toggleState", JSON.stringify(newIsOn));

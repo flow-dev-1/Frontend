@@ -9,6 +9,7 @@ import PaymentModal from '../../modals-pages/dashboard-modals/PaymentModal'
 import { useNavigate } from 'react-router-dom'
 import { encryptURI } from '../../../utils/encryption'
 import ReviewCourseInfoModal from '../../modals-pages/dashboard-modals/ReviewCourseInfoModal'
+import { toast } from 'react-toastify'
 
 const CourseCard = ({
   course,
@@ -52,7 +53,10 @@ const CourseCard = ({
     // Determine if the course should be accessed
     if (isEnrolled || studentOfSchool) {
       const enrolledCourse = enrolledData?.courses[courseIndex]
-      // console.log(enrolledCourse, "Enrolled")
+      console.log(enrolledCourse,"Enrolled course")
+      if(enrolledCourse?.schoolCourseEnrollment?.status === "Deactivated"){
+        return toast.info("Course Deavtivated! Please contact admin for support.")
+      }
       // Ensure enrolledData and enrolledCourse are defined
       if ((enrolledData && enrolledCourse) || course._id) {
         navigate(

@@ -24,7 +24,6 @@ export default function IndividualSchoolProfile({ onClose }) {
     if (userType?.user?.grade === 'Educator') {
       return schoolService.getMyProfileEducatorSchool(params)
     } else {
-      console.log('Fetching individual school profile')
       return schoolService.getStudentProfileIndividual(params)
     }
   }
@@ -135,7 +134,7 @@ export default function IndividualSchoolProfile({ onClose }) {
 
                   <div className='user-details'>
                     <div className='green-spring-div school'>
-                      {user?.userType || 'Individual'}
+                      {user?.school?.school_name || 'Individual'}
                     </div>
                     <div
                       style={{ color: '#5B616A' }}

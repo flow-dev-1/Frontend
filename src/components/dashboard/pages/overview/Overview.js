@@ -35,7 +35,6 @@ export default function IndividualOverview() {
   })
 
   const studentOfSchool = user?.newCourseInvite
-  console.log(enrolledData, "Enrolled datas")
 
   const handleSort = (a, b) => {
     if (sortOption === 'az') {
@@ -71,7 +70,6 @@ export default function IndividualOverview() {
     })
     .sort(handleSort)
 
-  console.log(data)
 
   if (isLoading) return <Loading /> // Render loading spinner or message
   if (isError) return <p>Error loading courses. Please try again later.</p>
