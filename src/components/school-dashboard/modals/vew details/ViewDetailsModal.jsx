@@ -115,7 +115,7 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
           <div className="table-container">
             <table id="my-table" className="students-table">
               <thead>
-                <tr>
+                <tr id="view">
                   <th>S/N</th>
                   <th>Enrolled Classes</th>
                   <th>No. of Students</th>
