@@ -134,7 +134,7 @@ function SelfAwarenessCourse() {
                   `week${index + 1}` === activeLink ? 'active' : ''
                 }`}
                 onClick={() => handleLinkClick(index)}
-                // disabled={index + 1 !== currentWeekIndex} // Disable all weeks except the current one comment out the code for development
+                disabled={index + 1 !== currentWeekIndex} // Disable all weeks except the current one comment out the code for development
               >
                 <div>
                   <Icon
