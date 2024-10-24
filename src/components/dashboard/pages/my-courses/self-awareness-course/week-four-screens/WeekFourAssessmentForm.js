@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import userService from '../../../../../../services/api/user.js'
 import MatchingComponent from './MatchingComponent.js'
 
-export default function WeekFourAssessmentForm({ onNext, onBack }) {
+export default function WeekFourAssessmentForm({ onNext, onBack,course }) {
   const [arrows, setArrows] = useState([]) // State for managing arrows
   const [arrows2, setArrows2] = useState([]) // State for managing arrows
 
@@ -261,14 +261,14 @@ export default function WeekFourAssessmentForm({ onNext, onBack }) {
     const percentage = (totalCorrect / totalQuestions) * 100
 
     toast.success(`You scored ${percentage}% in the quiz`)
-    const courseId = '66853bf50118e2e0a02b6a5a'
+
     const dataToSend = {
       rating: percentage,
       assessments: savedAnswers.assessment,
       week: 4,
     }
     userService
-      .postMyAssessment(courseId, dataToSend)
+      .postMyAssessment(course?._id, dataToSend)
       .then((response) => {
         if (response.message === 'You have already taken the assessment') {
           toast.error('You have already taken the assessment') // Show error toast with the message

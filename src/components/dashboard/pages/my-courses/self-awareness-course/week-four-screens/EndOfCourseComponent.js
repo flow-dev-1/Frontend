@@ -1,5 +1,5 @@
 // src/components/EndOfCourseComponent.js
-import React from 'react'
+import React, { useState } from 'react'
 import MyFireWorks from '../Fireworks'
 import celebrate from '../../../../../../assets/celebrate.png'
 
@@ -10,7 +10,7 @@ const EndOfCourseComponent = ({
   setCurrentActivity,
 }) => {
   currentWeekIndex = 4
-  console.log(currentWeekIndex)
+  const [showFireWork, setShowFireWork] = useState(true)
   return (
     <div className="end-of-course-page">
       <div className="congrats">
@@ -20,7 +20,12 @@ const EndOfCourseComponent = ({
           You have made it to the end of <br /> Week 4
         </p>
       </div>
-      <MyFireWorks />
+       {
+        showFireWork && <MyFireWorks
+          setFirework={setShowFireWork}
+        />
+      }
+
       <div className="d-flex align-items-center justify-content-around mx-auto mt-5">
         {/* <button
           className='btn progress-btn btn-light'

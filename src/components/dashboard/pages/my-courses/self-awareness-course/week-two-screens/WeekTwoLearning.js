@@ -28,69 +28,71 @@ export default function WeekTwoLearning({
     )
     return savedState ? JSON.parse(savedState) : 1
   })
+  const [formData, setFormData] = useState()
   const week = 2;
   const { data, isLoading, isError } = useQuery({
     queryKey: ["dashboard/self-awareness-course", course?.course?._id, week],
     queryFn: () => userService.getMyActivites(course?.course?._id, week)
   });
-   const [assessmentData, setAssessmentData] = useState(null);
-   const [assessmentLoading, setAssessmentLoading] = useState(true);
-   const [assessmentError, setAssessmentError] = useState(null);
-    useEffect(() => {
-      const fetchAssessmentData = async () => {
-        setAssessmentLoading(true);
-        try {
-          const data = await userService.getMyAssessment(courseId, week);
-          setAssessmentData(data);
-        } catch (error) {
-          setAssessmentError(error);
-        } finally {
-          setAssessmentLoading(false);
-        }
+
+  const { data: assessmentData, isLoading: assessmentLoading,status:assesmentStatus, isError: assessmentError } = useQuery({
+    queryKey: ["dashboard/self-awareness-assessment", courseId, week],
+    queryFn: () => userService.getMyAssessment(courseId, week),
+    enabled: !!course?.course._id && !!week
+  });
+
+
+  useEffect(() => {
+
+    if(!data || !assessmentData) return
+
+    const assessments = assessmentData?.existingAssessment?.assessments;
+    const percent = assessmentData?.existingAssessment?.rating;
+    const color = assessmentData?.existingAssessment?.personalityColor;
+    // Check if data.activity exists and save it under one key 'activity1' in local storage
+    if (data?.activity && assessments?.length > 0) {
+
+      const activities = data.activity.activities;
+      // Create an object with week and activities
+      const activityData = {
+        week: week,
+        activities: activities
       };
 
-      fetchAssessmentData();
-    }, [courseId, week]);
-
-    const assessments = assessmentData?.existingAssessment.assessments;
-    const percent = assessmentData?.existingAssessment.rating;
-    const color = assessmentData?.existingAssessment?.personalityColor;
-// console.log(assessments)
-  // Check if data.activity exists and save it under one key 'activity1' in local storage
-  if (data?.activity && assessments) {
-    const activities = data.activity.activities;
-
-    // Create an object with week and activities
-    const activityData = {
-      week: week,
-      activities: activities
-    };
       const assessmentData = {
-    week:week,
-    percentage:percent,
-    assessments:assessments,
-    personalityColor:color
-  }
+        week: week,
+        percentage: percent,
+        assessments: assessments,
+        personalityColor: color
+      }
 
-
-    // Store the object in local storage under the key 'activity1'
-    localStorage.setItem("week-2-activityData", JSON.stringify(activityData));
+      setFormData(activityData)
+      // Store the object in local storage under the key 'activity1'
+      localStorage.setItem("week-2-activityData", JSON.stringify(activityData));
       localStorage.setItem(
-    "weekTwoAssessmentData",
-    JSON.stringify({ formData: assessmentData })
-  );
+        "weekTwoAssessmentData",
+        JSON.stringify({ formData: assessmentData })
+      );
 
-    console.log("Week and activities saved to localStorage under 'activity1'");
-  }
 
-  const [formData, setFormData] = useState(() => {
-    const savedState = localStorage.getItem(
-      `week-${currentWeekIndex}-activityData`
-    )
-    return savedState
-      ? JSON.parse(savedState)
-      : { week: currentWeekIndex, activities: [] }
-  })
+    } else {
+      // New user
+      setFormData({
+        week: week,
+        activities: []
+      })
+    }
+
+  }, [data, assessmentData])
+
+  // const [formData, setFormData] = useState(() => {
+  //   const savedState = localStorage.getItem(
+  //     `week-${currentWeekIndex}-activityData`
+  //   )
+  //   return savedState
+  //     ? JSON.parse(savedState)
+  //     : { week: currentWeekIndex, activities: [] }
+  // })
 
   const [videoPlaying, setVideoPlaying] = useState(false)
   const [reviewPopUp, setReviewPopUp] = useState(false)
@@ -112,7 +114,7 @@ export default function WeekTwoLearning({
 //  console.log(course.course._id)
   const handleNext = async (data = {}) => {
     setFormData((prevData) => {
-      const updatedActivities = prevData.activities.map((item) =>
+      const updatedActivities = prevData?.activities.map((item) =>
         item.activity === currentActivity ? { ...item, ...data } : item
       )
       if (
@@ -280,6 +282,7 @@ export default function WeekTwoLearning({
             onBack={handlePrevious}
             handleNextWeekCourse={handleNextWeekCourse}
             onNext={handleNext}
+            course={course}
           />
         )
       default:

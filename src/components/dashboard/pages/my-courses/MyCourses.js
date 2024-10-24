@@ -52,7 +52,6 @@ export default function MyCourses() {
     queryFn: () => userService.getIndividualCoursesEnrolled(), // Make sure to call the function
   })
 
-  console.log(data?.courses)
   const handleSort = (a, b) => {
     if (sortOption === 'az') {
       return a?.course?.title.localeCompare(b.title)

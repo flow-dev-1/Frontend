@@ -5,7 +5,7 @@ import unCheckedImage from '../../../../../../assets/selfawareness-images/not-ch
 import { toast } from 'react-toastify'
 import userService from '../../../../../../services/api/user.js'
 
-export default function NewAssessmentForm({ onNext, onBack }) {
+export default function NewAssessmentForm({ onNext, onBack,course}) {
   const questionsArray = [
     {
       title:
@@ -179,14 +179,14 @@ export default function NewAssessmentForm({ onNext, onBack }) {
 
     const percentage = Math.round((correctCount / totalQuestions) * 100)
     toast.success(`You scored ${percentage}% in the quiz`)
-    const courseId = '66853bf50118e2e0a02b6a5a' 
+
     const dataToSend = {
       rating: percentage,
       assessments: savedAnswers.assessment,
       week: 5,
     }
     userService
-      .postMyAssessment(courseId, dataToSend)
+      .postMyAssessment(course?._id, dataToSend)
       .then((response) => {
         if (response.message === 'You have already taken the assessment') {
           toast.error('You have already taken the assessment')

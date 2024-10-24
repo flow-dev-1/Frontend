@@ -1,5 +1,5 @@
 // src/components/EndOfCourseComponent.js
-import React from 'react'
+import React, { useState } from 'react'
 import MyFireWorks from '../Fireworks'
 import celebrate from '../../../../../../assets/celebrate.png'
 import { useNavigate } from 'react-router-dom'
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 const EndOfCourseComponent = ({ currentWeekIndex, handleNextWeekCourse }) => {
   currentWeekIndex = 1
   const navigate = useNavigate()
+    const [showFireWork, setShowFireWork] = useState(true)
   return (
     <div className='end-of-course-page'>
       <div className='congrats'>
@@ -17,7 +18,12 @@ const EndOfCourseComponent = ({ currentWeekIndex, handleNextWeekCourse }) => {
           you apply these lessons in your life.
         </p>
       </div>
-      <MyFireWorks />
+          {
+        showFireWork && <MyFireWorks
+          setFirework={setShowFireWork}
+        />
+      }
+
       <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
         <button
           className='btn progress-btn btn-dark rounded-3'

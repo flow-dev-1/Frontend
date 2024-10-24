@@ -125,18 +125,15 @@ const SingleStudentEnrolledCoursesCard = ({
   }
   const [coursedarta, setCourseDarta] = useState('')
 
-  console.log(coursedarta)
-  console.log(enrolledData)
   const courseIndex = coursesArray?.courses.findIndex(
     (c) => c._id === course._id
   )
-  console.log(courseIndex)
+
   const handleDetailsClick = () => {
     // Find the index of the current course in the coursesArray
     const courseIndex = coursesArray?.courses.findIndex(
       (c) => c._id === course._id
     )
-    console.log(courseIndex)
 
     // Use this index to get the corresponding enrolledData course
     if (isEnrolled && enrolledData?.courses[courseIndex]) {

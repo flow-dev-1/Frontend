@@ -11,7 +11,7 @@ export default function WeekOneAssessmentForm({
   onSubmit,
   onNext,
   onBack,
-  courseId,
+  course,
 }) {
   const [currentIndex, setCurrentIndex] = useState(1)
   const [reviewPopUp, setReviewPopUp] = useState(false)
@@ -311,7 +311,6 @@ export default function WeekOneAssessmentForm({
       })),
     }
 
-    console.log('Formatted Data', formattedData)
 
     // Basic marking (for demonstration purposes)
     const correctAnswers = questionsArray.map(() => 0) // Assuming correct answers are at index 0
@@ -324,8 +323,7 @@ export default function WeekOneAssessmentForm({
     )
 
     const percentage = (correctCount / totalQuestions) * 100
-    console.log(`Correct Answers: ${correctCount} / ${totalQuestions}`)
-    console.log(`Percentage: ${percentage}%`)
+
     toast.success(`You scored ${percentage}% in the quiz`)
 
     // Save data to local storage
@@ -334,11 +332,9 @@ export default function WeekOneAssessmentForm({
       JSON.stringify({ formattedData, percentage })
     )
 
-    // Post data to the API (if needed)
-    const courseId = '66853bf50118e2e0a02b6a5a'
     userService
       .postMyAssessment(
-        courseId,
+        course?._id,
         JSON.stringify({
           week: formattedData.week,
           assessments: formattedData.assessments,

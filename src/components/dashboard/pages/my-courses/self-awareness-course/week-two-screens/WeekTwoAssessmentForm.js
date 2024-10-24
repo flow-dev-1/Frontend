@@ -7,7 +7,7 @@ import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModa
 import userService from '../../../../../../services/api/user.js'
 import { toast } from 'react-toastify'
 
-export default function WeekTwoAssessmentForm({ onBack, onNext }) {
+export default function WeekTwoAssessmentForm({ onBack, onNext,course }) {
   const [currentIndex, setCurrentIndex] = useState(1)
   const [reviewPopUp, setReviewPopUp] = React.useState(false)
   const [assessment, setAssessment] = useState(() => {
@@ -133,7 +133,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext }) {
       'week-two-assessment',
       JSON.stringify(updatedAssessment)
     )
-    console.log('Assessment updated:', updatedAssessment)
+
   }
   const transformAssessmentData = () => {
     return assessment.assessment.answers.map((answerIndex) => answerIndex)
@@ -154,14 +154,13 @@ export default function WeekTwoAssessmentForm({ onBack, onNext }) {
 
     const percentage = Math.round((correctCount / totalQuestions) * 100)
     toast.success(`You scored ${percentage}% in the quiz`)
-    const courseId = '66853bf50118e2e0a02b6a5a'
     const dataToSend = {
       rating: percentage,
       assessments: assessment,
       week: 2,
     }
     userService
-      .postMyAssessment(courseId, dataToSend)
+      .postMyAssessment(course?._id, dataToSend)
       .then((response) => {
         if (response.message === 'You have already taken the assessment') {
           toast.error('You have already taken the assessment') // Show error toast with the message

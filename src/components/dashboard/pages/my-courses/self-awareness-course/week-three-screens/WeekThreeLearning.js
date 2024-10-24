@@ -44,33 +44,33 @@ export default function WeekThreeLearning({
     queryFn: () => userService.getMyActivites(course?.course?._id, week),
   })
 
-      const [assessmentData, setAssessmentData] = useState(null);
-      const [assessmentLoading, setAssessmentLoading] = useState(true);
-      const [assessmentError, setAssessmentError] = useState(null);
-      const [quizQuestions, setQuizQuestions] = useState([]);
-      console.log(data);
-      useEffect(() => {
-        const fetchAssessmentData = async () => {
-          setAssessmentLoading(true);
-          try {
-            const data = await userService.getMyAssessment(courseId, week);
-            setAssessmentData(data);
-          } catch (error) {
-            setAssessmentError(error);
-          } finally {
-            setAssessmentLoading(false);
-          }
-        };
+  const [assessmentData, setAssessmentData] = useState(null);
+  const [assessmentLoading, setAssessmentLoading] = useState(true);
+  const [assessmentError, setAssessmentError] = useState(null);
+  const [quizQuestions, setQuizQuestions] = useState([]);
 
-        fetchAssessmentData();
-      }, [courseId, week]);
+  useEffect(() => {
+    const fetchAssessmentData = async () => {
+      setAssessmentLoading(true);
+      try {
+        const data = await userService.getMyAssessment(courseId, week);
+        setAssessmentData(data);
+      } catch (error) {
+        setAssessmentError(error);
+      } finally {
+        setAssessmentLoading(false);
+      }
+    };
 
-      const assessments = assessmentData?.existingAssessment.assessments;
-      const percent = assessmentData?.existingAssessment.rating;
-      const color = assessmentData?.existingAssessment?.personalityColor;
-  
-    if (data?.activity) {
-      const activities = data.activity.activities;
+    fetchAssessmentData();
+  }, [courseId, week]);
+
+  const assessments = assessmentData?.existingAssessment?.assessments;
+  const percent = assessmentData?.existingAssessment?.rating;
+  const color = assessmentData?.existingAssessment?.personalityColor;
+
+  if (data?.activity) {
+    const activities = data.activity.activities;
 
     // Create an object with week and activities
     const activityData = {
@@ -80,8 +80,6 @@ export default function WeekThreeLearning({
 
     // Store the object in local storage under the key 'activity1'
     localStorage.setItem('week-3-activityData', JSON.stringify(activityData))
-
-    console.log("Week and activities saved to localStorage under 'activity1'")
   }
 
   const [videoPlaying, setVideoPlaying] = useState(false)
@@ -122,7 +120,6 @@ export default function WeekThreeLearning({
       setCurrentActivity((prev) => prev + 1)
     }
   }
-  console.log(course?.course._id)
 
   const handlePrevious = () => {
     setCurrentActivity((prev) => prev - 1)
@@ -192,7 +189,7 @@ export default function WeekThreeLearning({
             <VideoComponent
               videoPlaying={videoPlaying}
               setVideoPlaying={setVideoPlaying}
-            videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-3/FLOW-3_2.mp4'
+              videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-3/FLOW-3_2.mp4'
             />
             <NavigationButtons
               onBack={handlePrevious}
@@ -267,6 +264,7 @@ export default function WeekThreeLearning({
             onBack={handlePrevious}
             handleNextWeekCourse={handleNextWeekCourse}
             onNext={handleNext}
+            course={course}
           />
         )
       default:

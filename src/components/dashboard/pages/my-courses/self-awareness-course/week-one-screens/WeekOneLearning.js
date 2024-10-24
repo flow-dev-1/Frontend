@@ -30,71 +30,100 @@ export default function WeekOneLearning({
   courseId,
   handleLinkClick,
 }) {
+
   const [showPopup, setShowPopup] = useState(false)
   const [currentActivity, setCurrentActivity] = useState(() => {
     const savedState = localStorage.getItem(
       `week-${currentWeekIndex}-currentActivity`
     )
+
     return savedState ? JSON.parse(savedState) : 1
   })
+  const [formData, setFormData] = useState()
+
   const week = 1;
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, status, isError } = useQuery({
     queryKey: ["dashboard/self-awareness-course", course?.course._id, week],
     queryFn: () => userService.getMyActivites(course?.course._id, week)
   });
 
-  const [assessmentData, setAssessmentData] = useState(null);
-  const [assessmentLoading, setAssessmentLoading] = useState(true);
-  const [assessmentError, setAssessmentError] = useState(null);
+  const { data: assessmentData, isLoading: assessmentLoading,status:assesmentStatus, isError: assessmentError } = useQuery({
+    queryKey: ["dashboard/self-awareness-assessment", courseId, week],
+    queryFn: () => userService.getMyAssessment(courseId, week),
+    enabled: !!course?.course._id && !!week
+  });
+
+
+  // const [assessmentData, setAssessmentData] = useState(null);
+  // const [assessmentLoading, setAssessmentLoading] = useState(true);
+  // const [assessmentError, setAssessmentError] = useState(null);
+
+  // useEffect(() => {
+  //   const fetchAssessmentData = async () => {
+  //     setAssessmentLoading(true);
+  //     try {
+  //       const data = await userService.getMyAssessment(courseId, week);
+  //       setAssessmentData(data);
+  //     } catch (error) {
+  //       setAssessmentError(error);
+  //     } finally {
+  //       setAssessmentLoading(false);
+  //     }
+  //   };
+
+  //   fetchAssessmentData();
+  // }, [courseId, week]);
+
+
+  // console.log(assessments)Don’t have an account? Sign Up
+
 
   useEffect(() => {
-    const fetchAssessmentData = async () => {
-      setAssessmentLoading(true);
-      try {
-        const data = await userService.getMyAssessment(courseId, week);
-        setAssessmentData(data);
-      } catch (error) {
-        setAssessmentError(error);
-      } finally {
-        setAssessmentLoading(false);
+
+    if(!data || !assessmentData) return
+
+    const assessments = assessmentData?.existingAssessment?.assessments;
+    const percent = assessmentData?.existingAssessment?.rating;
+    const color = assessmentData?.existingAssessment?.personalityColor;
+    // Check if data.activity exists and save it under one key 'activity1' in local storage
+    if (data?.activity && assessments?.length > 0) {
+
+      const activities = data.activity.activities;
+      // Create an object with week and activities
+      const activityData = {
+        week: week,
+        activities: activities
+      };
+
+      const assessmentData = {
+        week: week,
+        percentage: percent,
+        assessments: assessments,
+        personalityColor: personality
       }
-    };
 
-    fetchAssessmentData();
-  }, [courseId, week]);
+      setFormData(activityData)
+      // Store the object in local storage under the key 'activity1'
+      localStorage.setItem("week-1-activityData", JSON.stringify(activityData));
+      localStorage.setItem(
+        "weekOneAssessmentData",
+        JSON.stringify({ formData: assessmentData })
+      );
 
-  const assessments = assessmentData?.existingAssessment.assessments;
-  const percent = assessmentData?.existingAssessment.rating;
-  const color = assessmentData?.existingAssessment?.personalityColor;
-  // console.log(assessments)
-  // Check if data.activity exists and save it under one key 'activity1' in local storage
-  if (data?.activity && assessments) {
-    const activities = data.activity.activities;
+    } else {
 
-    // Create an object with week and activities
-    const activityData = {
-      week: week,
-      activities: activities
-    };
-    const assessmentData = {
-      week: week,
-      percentage: percent,
-      assessments: assessments,
-      personalityColor: personality
+      // New user
+      setFormData({
+        week: week,
+        activities: []
+      })
     }
 
-    // Store the object in local storage under the key 'activity1'
-    localStorage.setItem("week-1-activityData", JSON.stringify(activityData));
-    localStorage.setItem(
-      "weekOneAssessmentData",
-      JSON.stringify({ formData: assessmentData })
-    );
+  }, [data, assessmentData])
 
-  }
 
   useEffect(() => {
     const canSee = localStorage.getItem(`${courseId}-can-see`)
-    console.log(canSee)
     if (canSee === null) {
       setShowPopup(true)
     }
@@ -104,12 +133,6 @@ export default function WeekOneLearning({
   const handleClosePopup = () => {
     setShowPopup(false)
   }
-  const [formData, setFormData] = useState(() => {
-    const savedState = localStorage.getItem(
-      `week-${currentWeekIndex}-activityData`
-    )
-    return savedState ? JSON.parse(savedState) : { week: 1, activities: [] }
-  })
 
   const [videoPlaying, setVideoPlaying] = useState(false)
   const [reviewPopUp, setReviewPopUp] = useState(false)
@@ -148,13 +171,14 @@ export default function WeekOneLearning({
 
   const handleNext = async (data = {}) => {
     setFormData((prevData) => {
-      const updatedActivities = prevData.activities.map((item) =>
+      console.log(prevData, "Prev data")
+      const updatedActivities = prevData?.activities?.map((item) =>
         item.activity === currentActivity ? { ...item, ...data } : item
       )
       if (
-        !updatedActivities.find((item) => item.activity === currentActivity)
+        !updatedActivities?.find((item) => item.activity === currentActivity)
       ) {
-        updatedActivities.push({ activity: currentActivity, ...data })
+        updatedActivities?.push({ activity: currentActivity, ...data })
       }
       return { ...prevData, activities: updatedActivities }
     })
@@ -463,6 +487,7 @@ export default function WeekOneLearning({
             onBack={handlePrevious}
             handleNextWeekCourse={handleNextWeekCourse}
             onNext={handleNext}
+            course={course}
           />
         )
 

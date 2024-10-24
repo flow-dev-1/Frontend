@@ -226,6 +226,17 @@ class UserOBJ {
       throw err?.response?.data || err.message;
     }
   };
+
+  getCompletedWeeks = async (id) => {
+    try {
+      // Check if data is not empty
+      const response = await api.get(`api/users/courses/${id}/completed`);
+      return response.data;
+    } catch (err) {
+      throw err?.response?.data || err.message;
+    }
+  };
+
   getIndividualCourses = async () => {
     try {
       // Check if data is not empty
@@ -287,7 +298,7 @@ class UserOBJ {
       );
       return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message;
+      return err?.response?.data || err.message;
     }
   };
 
@@ -311,7 +322,7 @@ class UserOBJ {
       return response.data;
     } catch (err) {
       console.log(err?.response?.data || err.message);
-      throw err?.response?.data || err.message;
+      return err?.response?.data || err.message;
     }
   };
 }

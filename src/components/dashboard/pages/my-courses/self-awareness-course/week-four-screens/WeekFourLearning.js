@@ -278,6 +278,7 @@ export default function WeekFourLearning({
             onBack={handlePrevious}
             handleNextWeekCourse={handleNextWeekCourse}
             onNext={handleNext}
+            course={course}
           />
         )
       default:

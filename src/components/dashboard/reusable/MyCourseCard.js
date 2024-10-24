@@ -5,6 +5,7 @@ import Modal from 'react-modal'
 import ReviewCourseInfoModal from '../../modals-pages/dashboard-modals/ReviewCourseInfoModal'
 import { useNavigate } from 'react-router-dom'
 import { encryptURI } from '../../../utils/encryption'
+import { toast } from 'react-toastify'
 
 const MyCourseCard = ({ course }) => {
   const navigate = useNavigate()
@@ -32,20 +33,17 @@ const MyCourseCard = ({ course }) => {
     return text
   }
 
-  console.log(course)
 
   const handleButtonClick = () => {
+
+
     if (course?.progress === 100) {
       openModal('feedback')
-    } else if (!course) {
-    alert('Wait for the course to be activated by your School')
-    } else {
-      // Code to start the course
-      navigate(`/dashboard/my-courses/${course.id}`, { state: { course } })
+    } else if (course?.schoolCourseEnrollment?.status === "Deactivated") {
+      return toast.info("Course Deavtivated! Please contact admin for support.")
     }
 
-    console.log(course)
-    const id = course?.course._id
+    const id = course?._id
 
     if (course?.course.title === 'Self Awareness') {
       navigate(`/dashboard/self-awareness-course/${encryptURI(id)}`, {
@@ -170,8 +168,8 @@ const MyCourseCard = ({ course }) => {
             {course?.progress === 100
               ? "Completed"
               : course.progress === 0
-              ? "Start"
-              : "Resume"}
+                ? "Start"
+                : "Resume"}
           </button>
           {course?.progress > 0 && course?.progress < 100 && (
             <Icon

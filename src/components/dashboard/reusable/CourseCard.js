@@ -18,6 +18,8 @@ const CourseCard = ({
   enrolledData,
   studentOfSchool,
 }) => {
+
+  console.log(course,"course herere")
   const navigate = useNavigate()
 
   const [modalIsOpen, setIsOpen] = useState(false)
@@ -53,7 +55,6 @@ const CourseCard = ({
     // Determine if the course should be accessed
     if (isEnrolled || studentOfSchool) {
       const enrolledCourse = enrolledData?.courses[courseIndex]
-      console.log(enrolledCourse,"Enrolled course")
       if(enrolledCourse?.schoolCourseEnrollment?.status === "Deactivated"){
         return toast.info("Course Deavtivated! Please contact admin for support.")
       }
@@ -62,7 +63,8 @@ const CourseCard = ({
         navigate(
           `/dashboard/self-awareness-course/${encryptURI(
             enrolledCourse._id || course._id
-          )}`
+          )}`,
+          {state:{course:enrolledCourse}}
         )
       } else {
         console.error('Enrolled data or course information is not available')
