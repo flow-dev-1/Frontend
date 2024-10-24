@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react'
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import schoolService from '../../../../../../services/api/school'
-import { decryptId } from '../../../../../../utils/encryption'
+import { decryptId, encryptURI } from '../../../../../../utils/encryption'
 
 const SingleStudentEnrolledCoursesCard = ({
   openModal,
@@ -26,6 +26,7 @@ const SingleStudentEnrolledCoursesCard = ({
   const [courseStatus, setCourseStatus] = useState('')
 
   const { id } = useParams()
+  const { userId } = useParams()
 
   console.log(decryptId(id))
   const openEnrollementModal = () => {
@@ -374,7 +375,9 @@ const SingleStudentEnrolledCoursesCard = ({
               }}
               onClick={() => {
                 if (course?.progress !== 0 || undefined) {
-                  navigate(`/school-dashboard/courses/feedback${id}`)
+                  navigate(
+                    `/school-dashboard/courses/feedback/${encryptURI(userId)}`
+                  )
                 }
               }}
               disabled={

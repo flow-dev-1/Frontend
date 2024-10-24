@@ -30,7 +30,7 @@ const SelfAwarenessFeedback = () => {
     queryFn: () =>
       Promise.all(
         weeks.map((week) =>
-          schoolService.getMyActivites(courseId, week, decryptId(id))
+          schoolService.getMyActivitesFeedback(courseId, week, decryptId(id))
         )
       ),
   })
@@ -42,7 +42,7 @@ const SelfAwarenessFeedback = () => {
         // Fetch assessment data for each week
         const assessmentResults = await Promise.all(
           weeks.map(async (week) => {
-            const data = await schoolService.getMyAssessment(
+            const data = await schoolService.getMyAssessmentFeedback(
               courseId,
               week,
               decryptId(id)

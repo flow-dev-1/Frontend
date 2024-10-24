@@ -1,4 +1,4 @@
-import api from "../index.js";
+import api from '../index.js'
 
 class UserOBJ {
   //Register
@@ -315,7 +315,21 @@ class UserOBJ {
     }
   }
 
-  getMyActivites = async (params1, week, params2) => {
+  getMyAssessmentFeedback = async (params1, week, params2) => {
+
+    try {
+      const response = await api.get(
+        `api/admins/course-enrollment/${params1}/get-assesment/${week}/${params2}`
+      );
+      
+      return response.data;
+    } catch (err) {
+      console.log(err?.response?.data || err.message,"Error here");
+      throw err?.response?.data || err.message;
+    }
+  };
+
+  getMyActivitesFeedback = async (params1, week, params2) => {
     try {
       const response = await api.get(
         `api/admins/course-enrollment/${params1}/get-activity/${week}/${params2}`
@@ -328,7 +342,5 @@ class UserOBJ {
   }
 }
 
-
-
-const user = new UserOBJ();
-export default user;
+const user = new UserOBJ()
+export default user
