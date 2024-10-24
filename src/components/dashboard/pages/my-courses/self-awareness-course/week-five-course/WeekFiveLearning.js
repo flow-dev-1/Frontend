@@ -103,7 +103,7 @@ export default function WeekFourLearning({
     const isLastActivity = currentActivity >= 9
     if (isLastActivity) {
       handleSubmit()
-      setCurrentActivity(10)
+      setCurrentActivity(11)
     } else {
       setCurrentActivity((prev) => prev + 1)
     }

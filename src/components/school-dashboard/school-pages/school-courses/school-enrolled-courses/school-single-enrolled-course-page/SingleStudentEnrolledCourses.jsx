@@ -6,6 +6,8 @@ import { useQuery } from '@tanstack/react-query'
 import schoolService from '../../../../../../services/api/school'
 import { useSelector } from 'react-redux'
 import Loading from '../../../../../loader/Loader'
+import { useParams } from 'react-router-dom'
+import { decryptId } from '../../../../../../utils/encryption'
 
 Modal.setAppElement('#root') // This is to avoid screen readers issues with React Modal
 
@@ -20,16 +22,18 @@ const SingleStudentEnrolledCourses = () => {
   const [filterOption, setFilterOption] = useState('') // State for Filter Option
   let schoolId
 
+  const { userId } = useParams()
+
   // ToDO: Do a check if its a school or a user
   if (user?.isSchool) {
     schoolId = user?._id
   }
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['courses'],
-    queryFn: () => schoolService.getCourses(schoolId, 'All'),
-    enabled: !!schoolId,
-    refetchOnMount: false,
+    queryKey: ['school-courses'],
+    queryFn: () => schoolService.getIndividualCoursesEnrolled(userId),
+    enabled: !!userId,
+    refetchOnMount: true,
     refetchOnWindowFocus: false,
   })
 
@@ -81,26 +85,7 @@ const SingleStudentEnrolledCourses = () => {
   }
 
   const filteredCourses = courses?.courses
-    ?.filter((course) => {
-      const searchValue = searchQuery.toLowerCase()
-      return (
-        course?.title?.toLowerCase().includes(searchValue) ||
-        course?.description?.toLowerCase().includes(searchValue) ||
-        course?.email?.toLowerCase().includes(searchValue) ||
-        course?.phone?.toLowerCase().includes(searchValue)
-      )
-    })
-    .filter((course) => {
-      if (filterOption === 'Individual') {
-        return course.access === 'Individual'
-      } else if (filterOption === 'School') {
-        return course.access === 'School'
-      } else if (filterOption === 'General') {
-        return course.access === 'General'
-      }
-      return true // Return all courses if no filter is applied
-    })
-    .sort(handleSort)
+  console.log(courses.courses)
 
   return (
     <div className='my-container'>

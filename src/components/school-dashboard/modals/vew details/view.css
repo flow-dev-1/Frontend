@@ -41,7 +41,7 @@
   border: none;
   font-size: 25px;
   cursor: pointer;
-    color: #333333;
+  color: #333333;
 }
 
 .modal-header {
@@ -59,36 +59,32 @@
   padding: 15px 0;
 }
 
-h2{
+h2 {
   text-align: left;
-    color: #5B616A;
+  color: #5b616a;
 }
 
-th{
+th {
   font-weight: 500;
-  font-size: 20px;
-  font-family: var(--headings-font-family);
   color: #333333;
 }
 
-tr {
-    font-family: var(--headings-font-family);
-    font-size: 19px;
+tr#view {
+  font-family: var(--headings-font-family);
+  font-size: 19px;
 }
 
-td{
+td {
   font-size: 13px;
-    /* font-weight: 100; */
-    font-family: 'ABeeZee', sans-serif;
-
+  /* font-weight: 100; */
 }
 
-.students-table{
+.students-table {
   border: 0px;
   border: red;
 }
 
-.hediee{
+.hediee {
   display: flex;
   width: 90%;
   justify-content: space-around;
