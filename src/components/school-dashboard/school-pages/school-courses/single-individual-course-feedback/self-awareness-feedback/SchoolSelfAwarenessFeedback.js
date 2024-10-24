@@ -8,26 +8,30 @@ import { Icon } from '@iconify/react'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 import { useQuery } from '@tanstack/react-query'
-import userService from '../../../../../../services/api/user'
-import { ClimbingBoxLoader } from 'react-spinners' // Assuming you're using `react-spinners`
-import HurrayComponent from './Hurray'
+import { useParams } from 'react-router-dom'
+import { decryptId } from '../../../../../../utils/encryption'
+import Loading from '../../../../../loader/Loader'
+import schoolService from '../../../../../../services/api/user'
 
-const SchoolSelfAwarenessFeedback = () => {
-  const weeks = [1, 2, 3, 4, 5] // List of weeks
+const SelfAwarenessFeedback = () => {
+  const weeks = [1, 2, 3, 4, 5]
   const courseId = '66853bf50118e2e0a02b6a5a'
 
   const [assessmentData, setAssessmentData] = useState({})
   const [assessmentLoading, setAssessmentLoading] = useState(true)
   const [expandedWeek, setExpandedWeek] = useState(null)
-  const [pdfLoading, setPdfLoading] = useState(false) // NEW STATE FOR PDF LOADING
+  const [pdfLoading, setPdfLoading] = useState(false)
   const contentRef = useRef()
-
+  const { id } = useParams()
+  console.log(decryptId(id))
   // Fetch data for all weeks
   const { data, isLoading: queryLoading } = useQuery({
     queryKey: ['dashboard/feedback/self-awareness', courseId],
     queryFn: () =>
       Promise.all(
-        weeks.map((week) => userService.getMyActivites(courseId, week))
+        weeks.map((week) =>
+          schoolService.getMyActivites(courseId, week, decryptId(id))
+        )
       ),
   })
 
@@ -38,7 +42,11 @@ const SchoolSelfAwarenessFeedback = () => {
         // Fetch assessment data for each week
         const assessmentResults = await Promise.all(
           weeks.map(async (week) => {
-            const data = await userService.getMyAssessment(courseId, week)
+            const data = await schoolService.getMyAssessment(
+              courseId,
+              week,
+              decryptId(id)
+            )
             return { week, data }
           })
         )
@@ -108,7 +116,7 @@ const SchoolSelfAwarenessFeedback = () => {
       {/* Loader Overlay */}
       {(queryLoading || assessmentLoading || pdfLoading) && ( // SHOW LOADER WHEN PDF IS LOADING
         <div className='loader-overlay'>
-          <ClimbingBoxLoader color='#275DAD' />
+          <Loading />
         </div>
       )}
 
@@ -218,42 +226,9 @@ const SchoolSelfAwarenessFeedback = () => {
           </div>
           {(expandedWeek === 5 || expandedWeek === 'all') && <Week5 />}
         </div>
-
-        <HurrayComponent />
-        {/* Final Report Section */}
-        <div
-          style={{ backgroundColor: '#5CE1E6' }}
-          className='final-report-container'
-        >
-          <div className='final-report-title'>
-            <h2>
-              Final Report:{' '}
-              <span style={{ fontSize: '14px' }}>
-                {' '}
-                Summary of your journey through Self Awareness
-              </span>
-            </h2>
-
-            <div>
-              {/* Disable download if data is still loading */}
-              <a
-                download='SelfAwarenessSummary.pdf'
-                className={`download-link ${!isDataLoaded ? 'disabled' : ''}`}
-                onClick={(e) => !isDataLoaded && e.preventDefault()}
-              >
-                (Download PDF)
-              </a>
-              <Icon
-                onClick={isDataLoaded ? generatePDF : null}
-                icon='bi:download'
-                style={{ cursor: isDataLoaded ? 'pointer' : 'not-allowed' }}
-              />
-            </div>
-          </div>
-        </div>
       </div>
     </>
   )
 }
 
-export default SchoolSelfAwarenessFeedback
+export default SelfAwarenessFeedback

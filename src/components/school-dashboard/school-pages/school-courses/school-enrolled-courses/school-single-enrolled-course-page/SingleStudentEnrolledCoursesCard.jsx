@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-
+import { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import schoolService from '../../../../../../services/api/school'
+import { decryptId } from '../../../../../../utils/encryption'
 
 const SingleStudentEnrolledCoursesCard = ({
   openModal,
@@ -23,6 +23,11 @@ const SingleStudentEnrolledCoursesCard = ({
     return savedState ? JSON.parse(savedState) : false
   })
 
+  const [courseStatus, setCourseStatus] = useState('')
+
+  const { id } = useParams()
+
+  console.log(decryptId(id))
   const openEnrollementModal = () => {
     if (course.grade === 'Educator') {
       setOpenEnrollModalEducator(true)
@@ -169,7 +174,7 @@ const SingleStudentEnrolledCoursesCard = ({
   }
 
   const truncateText = (text, maxLength) => {
-    if (text.length > maxLength) {
+    if (text?.length > maxLength) {
       return text.slice(0, maxLength) + '...'
     }
     return text
@@ -209,6 +214,24 @@ const SingleStudentEnrolledCoursesCard = ({
     }
   }
 
+  const getStatus = (progress) => {
+    if (progress === 0) {
+      return 'Not Started'
+    } else if (progress > 0 && progress < 100) {
+      return 'Ongoing'
+    } else if (progress === 100) {
+      return 'Completed'
+    } else if (progress === undefined) {
+      return 'Not Started'
+    }
+  }
+  useEffect(() => {
+    // Assuming course has a status field that tells us the course state
+    const status = getStatus(course?.progress) // You can change this based on your data
+    setCourseStatus(status)
+
+    return () => {}
+  }, [course])
   const getButtonText = (progress) => {
     if (progress === 0) {
       return 'Not started yet'
@@ -219,13 +242,51 @@ const SingleStudentEnrolledCoursesCard = ({
     }
   }
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Not Started':
+        return { color: 'red', icon: 'et:caution' }
+      case 'Ongoing':
+        return { color: '#FFB800', icon: 'bi:book' }
+      case 'Completed':
+        return { color: 'green', icon: 'ph:seal-check-light' }
+      default:
+        return { color: 'grey', icon: 'fluent:error-circle-24-regular' }
+    }
+  }
+
+  const renderStatusButton = (status) => {
+    const { color, icon } = getStatusColor(status)
+
+    return (
+      <button
+        style={{
+          border: `1px solid ${color}`,
+          color: color,
+          backgroundColor: '#fff',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.3rem',
+          padding: '5px 10px',
+          borderRadius: '4px',
+          cursor: 'pointer',
+        }}
+      >
+        <Icon icon={icon} width={20} style={{ color: color }} />
+        <span>{status}</span>
+      </button>
+    )
+  }
+
+  console.log(course)
+
   return (
     <div>
       <div className='course-card' style={{ height: '480px' }}>
         <div className='course-card-img' style={{ height: '230px' }}>
-          <img src={course.image} alt='' />
+          <img src={course.course.image} alt='' />
           <div className='course-card-category'>
-            {course.grade !== 'Educators' ? 'Students' : 'Educators'}
+            {course.course.grade !== 'Educators' ? 'Students' : 'Educators'}
           </div>
         </div>
         <div className='course-card-title' style={{ marginBottom: '0' }}>
@@ -233,12 +294,12 @@ const SingleStudentEnrolledCoursesCard = ({
             Knowing Yourself Better
           </h3>
           <h3 style={isEnrolled ? { color: '#555' } : { color: '#329BD6' }}>
-            {course.title}:
+            {course?.course?.title}
           </h3>
           {/* <h3>{course.subtitle}</h3> */}
         </div>
         <p style={{ fontSize: '12px', height: '60px' }}>
-          {truncateText(course?.description, 100)}
+          {truncateText(course?.course?.description, 100)}
         </p>
         <div
           style={{
@@ -251,132 +312,86 @@ const SingleStudentEnrolledCoursesCard = ({
             style={{ margin: '1rem 0', width: '50%' }}
             className='users-review'
           >
-            <div
-              style={
-                course.status === 'published'
-                  ? { color: '#329BD6' }
-                  : { color: '#4B7E31' }
-              }
-              className='users-count'
-            >
+            <div style={{ color: '#329BD6' }} className='users-count'>
               <span>
                 <Icon icon='heroicons:user' width={20} />{' '}
               </span>
-              {course?.courseEnrollment?.length}
+              {course?.course.courseEnrollment?.length}
             </div>
             <div
-              style={
-                course.status === 'published'
-                  ? { color: '#329BD6', display: 'flex', alignItems: 'center' }
-                  : { color: '#4B7E31', display: 'flex', alignItems: 'center' }
-              }
+              style={{
+                color: '#329BD6',
+                display: 'flex',
+                alignItems: 'center',
+              }}
               className='likes-count'
             >
               <span>
                 <Icon width={17} icon='mingcute:thumb-up-line' />{' '}
               </span>
               {likesPercent(
-                course?.likes?.length,
-                course?.courseEnrollment?.length
+                course?.course.likes?.length,
+                course?.course.courseEnrollment?.length
               )}
               %
             </div>
             <div
-              style={
-                course.status === 'published'
-                  ? { color: '#329BD6', display: 'flex', alignItems: 'center' }
-                  : { color: '#4B7E31', display: 'flex', alignItems: 'center' }
-              }
+              style={{
+                color: '#329BD6',
+                display: 'flex',
+                alignItems: 'center',
+              }}
               className='likes-count'
             >
               <span>
                 <Icon width={17} icon='bi:book' />{' '}
               </span>
-              {likesPercent(
-                course?.likes?.length,
-                course?.courseEnrollment?.length
-              )}
-              %
+              {course?.progress}%
             </div>
           </div>
         </div>
         <div className='course-card-buttons'>
           <div className='course-card-buttons-main'>
             <button
-              onClick={() => navigate('/school-dashboard/courses/feedback')}
-              style={
-                isEnrolled
-                  ? {
-                      backgroundColor: '#fff',
-                      color: '#329BD6',
-                      border: '1px solid #329bd6',
-                    }
-                  : course.grade !== 'Educators'
-                  ? {
-                      backgroundColor: '#fff',
-                      color: '#329BD6',
-                      border: '1px solid #329bd6',
-                    }
-                  : { backgroundColor: lightEducator, color: darkEducator }
-              }
-              className={`reviewBtn ${reviewBtnClass}`}
+              style={{
+                backgroundColor: '#fff',
+                display: 'flex',
+                gap: '.4rem',
+                color:
+                  course?.progress === 0 || course?.progress === undefined
+                    ? '#A6A6A6'
+                    : '#329BD6',
+                border: `1px solid ${
+                  course?.progress === 0 || course?.progress === undefined
+                    ? '#D6D6D6'
+                    : '#329bd6'
+                }`,
+                padding: '5px 10px',
+                cursor:
+                  course?.progress === 0 || course?.progress === undefined
+                    ? 'not-allowed'
+                    : 'pointer',
+              }}
+              onClick={() => {
+                if (course?.progress !== 0 || undefined) {
+                  navigate(`/school-dashboard/courses/feedback${id}`)
+                }
+              }}
+              disabled={
+                course?.progress === 0 || course?.progress === undefined
+              } // This disables the button if progress is 0
             >
-              <span>
-                <Icon
-                  icon='hugeicons:comment-01'
-                  style={{ color: '#329BD6' }}
-                  width={20}
-                />
-              </span>{' '}
+              <Icon
+                icon='hugeicons:comment-01'
+                style={{ display: 'inline-block', marginLeft: '1rem' }}
+                width={25}
+              />
               Feedback
             </button>
-            {isEnrolled ? (
-              <>
-                {/* View Details Button */}
-                <button
-                  id='viewDetailsBtn'
-                  onClick={handleDetailsClick}
-                  style={getButtonStyle(progress)}
-                >
-                  <span>{getIcon(progress)}</span> {getButtonText(progress)}
-                </button>
-              </>
-            ) : (
-              <button
-                id='reviewBtn'
-                onClick={handleDetailsClick}
-                style={
-                  course.grade !== 'Educators'
-                    ? { backgroundColor: darkTertiary, color: 'white' }
-                    : { backgroundColor: darkEducator, color: lightEducator }
-                }
-              >
-                <span>
-                  <Icon
-                    icon='vaadin:cart-o'
-                    width={20}
-                    style={{ color: 'white' }}
-                  />
-                </span>{' '}
-                {`${course.currency} ${course.cost}`}
-              </button>
-            )}
 
-            {isEnrolled ? (
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  fontSize: '12px',
-                }}
-              >
-                {/* <span style={{ color: "#50AA50", fontWeight: "400" }}>0 %</span>{" "}
-                <span>Done</span> */}
-              </div>
-            ) : (
-              ''
-            )}
+            <div style={{ margin: '10px 0' }}>
+              {renderStatusButton(courseStatus)}
+            </div>
           </div>
         </div>
       </div>{' '}
