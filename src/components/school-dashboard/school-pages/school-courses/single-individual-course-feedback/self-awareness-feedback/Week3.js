@@ -9,7 +9,9 @@ import { Icon } from '@iconify/react'
 import FinalReport from './FinalReport'
 import { useQuery } from '@tanstack/react-query'
 import userService from '../../../../../../services/api/user'
-
+import { decryptId } from '../../../../../../utils/encryption'
+import schoolService from '../../../../../../services/api/school'
+import { useParams } from 'react-router-dom'
 let questionsQuiz = [
   {
     question:
@@ -318,12 +320,12 @@ let questionsQuiz = [
 
 const Week3 = () => {
   // const percentage = 20;
-
+  const { userId } = useParams()
   const week = 3
   const courseId = '66853bf50118e2e0a02b6a5a'
   const { data, isLoading, isError } = useQuery({
     queryKey: ['dashboard/feedback/self-awareness', courseId, week],
-    queryFn: () => userService.getMyActivites(courseId, week),
+    queryFn: () => schoolService.getStudentMyActivites(courseId, week, decryptId(userId)),
   })
 
   // console.log(data?.activity?.activities[1]?.answers[0]);
@@ -336,7 +338,7 @@ const Week3 = () => {
     const fetchAndProcessAssessmentData = async () => {
       setAssessmentLoading(true)
       try {
-        const data = await userService.getMyAssessment(courseId, week)
+        const data = await schoolService.getStudentAssessments(courseId, week, decryptId(userId));
         setAssessmentData(data)
         const assessmentForChecked =
           data?.existingAssessment.assessments[0].answers

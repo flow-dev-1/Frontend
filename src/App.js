@@ -182,7 +182,7 @@ function App() {
             element={<IndividualSchoolProfile />}
           />
           <Route
-            path='/school-dashboard/courses/feedback/:id'
+            path='/school-dashboard/courses/feedback/:userId'
             element={<SchoolSelfAwarenessFeedback />}
           />
           

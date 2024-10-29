@@ -333,6 +333,30 @@ class SchoolOBJ {
     }
   }
 
+  getStudentMyActivites = async (params1, week, params2) => {
+    try {
+      const response = await api.get(
+        `api/schools/course-enrollment/${params1}/get-activity/${week}/${params2}`
+      )
+      return response.data
+    } catch (err) {
+      return err?.response?.data || err.message;
+    }
+  }
+
+  getStudentAssessments = async (params1, week, params2) => {
+    try {
+      const response = await api.get(
+        `api/schools/course-enrollment/${params1}/get-assesment/${week}/${params2}`
+      )
+      return response.data
+    } catch (err) {
+      console.log(err?.response?.data || err.message)
+      throw err?.response?.data || err.message
+    }
+  }
+
+
   getStudentProfileIndividual = async (id) => {
     try {
       // Check if data is not empty

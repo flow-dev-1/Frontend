@@ -1019,7 +1019,7 @@ const Week1 = () => {
   const [assessmentLoading, setAssessmentLoading] = useState(true);
   const [assessmentError, setAssessmentError] = useState(null);
   const [quizQuestions, setQuizQuestions] = useState([]);
-  console.log(data);
+
   useEffect(() => {
     const fetchAssessmentData = async () => {
       setAssessmentLoading(true);

@@ -8,7 +8,7 @@ import { Icon } from '@iconify/react'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from "react-router-dom";
 import { decryptId } from '../../../../../../utils/encryption'
 import Loading from '../../../../../loader/Loader'
 import schoolService from '../../../../../../services/api/user'
@@ -16,111 +16,141 @@ import schoolService from '../../../../../../services/api/user'
 const SelfAwarenessFeedback = () => {
   const weeks = [1, 2, 3, 4, 5]
   const courseId = '66853bf50118e2e0a02b6a5a'
-
+  const navigate = useNavigate();
   const [assessmentData, setAssessmentData] = useState({})
   const [assessmentLoading, setAssessmentLoading] = useState(true)
   const [expandedWeek, setExpandedWeek] = useState(null)
   const [pdfLoading, setPdfLoading] = useState(false)
   const contentRef = useRef()
-  const { id } = useParams()
-  console.log(decryptId(id))
-  // Fetch data for all weeks
-  const { data, isLoading: queryLoading } = useQuery({
-    queryKey: ['dashboard/feedback/self-awareness', courseId],
-    queryFn: () =>
-      Promise.all(
-        weeks.map((week) =>
-          schoolService.getMyActivitesFeedback(courseId, week, decryptId(id))
-        )
-      ),
-  })
+  const { userId } = useParams()
 
-  useEffect(() => {
-    const fetchAssessmentData = async () => {
-      setAssessmentLoading(true)
-      try {
-        // Fetch assessment data for each week
-        const assessmentResults = await Promise.all(
-          weeks.map(async (week) => {
-            const data = await schoolService.getMyAssessmentFeedback(
-              courseId,
-              week,
-              decryptId(id)
-            )
-            return { week, data }
-          })
-        )
+  // // Fetch data for all weeks
+  // const { data, isLoading: queryLoading } = useQuery({
+  //   queryKey: ['dashboard/feedback/self-awareness', courseId],
+  //   queryFn: () =>
+  //     Promise.all(
+  //       weeks.map((week) =>
+  //         schoolService.getMyActivitesFeedback(courseId, week, decryptId(userId))
+  //       )
+  //     ),
+  // })
 
-        // Organize the assessment data by week
-        const assessmentByWeek = {}
-        assessmentResults.forEach(({ week, data }) => {
-          assessmentByWeek[week] = data
-        })
+  // useEffect(() => {
+  //   const fetchAssessmentData = async () => {
+  //     setAssessmentLoading(true)
+  //     try {
+  //       // Fetch assessment data for each week
+  //       const assessmentResults = await Promise.all(
+  //         weeks.map(async (week) => {
+  //           const data = await schoolService.getMyAssessmentFeedback(
+  //             courseId,
+  //             week,
+  //             decryptId(userId)
+  //           )
+  //           return { week, data }
+  //         })
+  //       )
 
-        setAssessmentData(assessmentByWeek)
-      } catch (error) {
-        console.error(error)
-      } finally {
-        setAssessmentLoading(false)
-      }
-    }
+  //       // Organize the assessment data by week
+  //       const assessmentByWeek = {}
+  //       assessmentResults.forEach(({ week, data }) => {
+  //         assessmentByWeek[week] = data
+  //       })
 
-    fetchAssessmentData()
-  }, [courseId])
+  //       setAssessmentData(assessmentByWeek)
+  //     } catch (error) {
+  //       console.error(error)
+  //     } finally {
+  //       setAssessmentLoading(false)
+  //     }
+  //   }
+
+  //   fetchAssessmentData()
+  // }, [courseId])
 
   const toggleWeek = (weekNumber) => {
     setExpandedWeek(expandedWeek === weekNumber ? null : weekNumber)
   }
 
   // Function to temporarily expand all weeks, generate the PDF, then restore the original state
-  const generatePDF = () => {
-    if (!isDataLoaded) {
-      return
-    }
-    const originalState = expandedWeek
-    setPdfLoading(true) // SET PDF LOADING TO TRUE
-    setExpandedWeek('all')
-    setTimeout(() => {
-      const input = contentRef.current
+  // const generatePDF = () => {
+  //   if (!isDataLoaded) {
+  //     return
+  //   }
+  //   const originalState = expandedWeek
+  //   setPdfLoading(true) // SET PDF LOADING TO TRUE
+  //   setExpandedWeek('all')
+  //   setTimeout(() => {
+  //     const input = contentRef.current
 
-      html2canvas(input).then((canvas) => {
-        const imgData = canvas.toDataURL('image/png')
-        const pdf = new jsPDF('p', 'mm', 'a4')
-        const imgWidth = 210
-        const pageHeight = 295
-        const imgHeight = (canvas.height * imgWidth) / canvas.width
-        let heightLeft = imgHeight
-        let position = 0
+  //     html2canvas(input).then((canvas) => {
+  //       const imgData = canvas.toDataURL('image/png')
+  //       const pdf = new jsPDF('p', 'mm', 'a4')
+  //       const imgWidth = 210
+  //       const pageHeight = 295
+  //       const imgHeight = (canvas.height * imgWidth) / canvas.width
+  //       let heightLeft = imgHeight
+  //       let position = 0
 
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-        heightLeft -= pageHeight
+  //       pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
+  //       heightLeft -= pageHeight
 
-        while (heightLeft >= 0) {
-          position = heightLeft - imgHeight
-          pdf.addPage()
-          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-          heightLeft -= pageHeight
-        }
+  //       while (heightLeft >= 0) {
+  //         position = heightLeft - imgHeight
+  //         pdf.addPage()
+  //         pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
+  //         heightLeft -= pageHeight
+  //       }
 
-        pdf.save('SelfAwarenessFeedback.pdf')
-        setExpandedWeek(originalState)
-        setPdfLoading(false) // HIDE LOADER AFTER PDF IS GENERATED
-      })
-    }, 1000) // Delay to allow rendering
-  }
+  //       pdf.save('SelfAwarenessFeedback.pdf')
+  //       setExpandedWeek(originalState)
+  //       setPdfLoading(false) // HIDE LOADER AFTER PDF IS GENERATED
+  //     })
+  //   }, 1000) // Delay to allow rendering
+  // }
 
-  const isDataLoaded = !queryLoading && !assessmentLoading // Check if both the query data and assessment data have loaded
+  // const isDataLoaded = !queryLoading && !assessmentLoading // Check if both the query data and assessment data have loaded
 
   return (
     <>
       {/* Loader Overlay */}
-      {(queryLoading || assessmentLoading || pdfLoading) && ( // SHOW LOADER WHEN PDF IS LOADING
+      {/* {(queryLoading || assessmentLoading || pdfLoading) && ( // SHOW LOADER WHEN PDF IS LOADING
         <div className='loader-overlay'>
           <Loading />
         </div>
-      )}
+      )} */}
+      <div className="nav-dropdown">
+        <p
+          style={{
+            fontSize: "16px",
+            display: "flex",
+            fontWeight: "600",
+            alignItems: "center",
+            gap: "1rem",
+            color: "#262626",
+            cursor: "pointer"
+          }}
+          onClick={() => navigate(-1)}
+        >
+          <span>
+            <Icon
+              icon="ic:outline-arrow-back"
+              style={{ color: "#262626" }}
+              width={18}
+            />
+          </span>
+          Back
+        </p>
+      </div>
 
       <div ref={contentRef} className='feedback-container'>
+      <div
+          className='browse-all-courses-text'
+          style={{ margin: '1rem 0', width: '100%',borderRadius:"5px"}}
+        >
+          <p style={{ fontSize: '30px',textAlign:"center",fontFamily:"var(--headings1-font-family)" }}>Feedback for Self Awareness</p>
+        </div>
+       
         {/* Week 1 */}
         <div className='week-title-container'>
           <div className='week-title'>

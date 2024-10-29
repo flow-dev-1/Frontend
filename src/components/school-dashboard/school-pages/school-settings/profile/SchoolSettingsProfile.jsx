@@ -31,7 +31,7 @@ const SchoolSettingsProfile = () => {
     refetchOnWindowFocus: false,
   })
 
-  console.log(data)
+
 
   const openModal = () => {
     setModalIsOpen(true)

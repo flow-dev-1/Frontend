@@ -225,6 +225,33 @@ export default function IndividualSchoolProfile({ onClose }) {
                 <span>{toTitleCase(user?.gender) || 'Add Info'} </span>
               </p>
             </div>
+
+            <div className='guardian-info'>
+              <h3
+                style={{ textAlign: 'left', marginTop: '1rem' }}
+                className='guardian-title'
+              >
+                Parent/Guardian Information
+              </h3>
+              <p>
+                <span style={{ color: '#5B616A' }}>Full Name:</span>{' '}
+                <a href='#' className='guardian-link'>
+                  {user?.guardianFullName || 'Add Info'}
+                </a>
+              </p>
+              <p>
+                <span style={{ color: '#5B616A' }}>Email Address:</span>{' '}
+                <a href={`mailto:${user?.email}`} className='guardian-link'>
+                  {user?.email || 'Add Info'}
+                </a>
+              </p>
+              <p>
+                <span style={{ color: '#5B616A' }}>Phone Number:</span>{' '}
+                <a href={`tel:${user?.phone}`} className='guardian-link'>
+                  {user?.phone || 'Add Info'}
+                </a>
+              </p>
+            </div>
           </div>
         ) : (
           <SingleStudentEnrolledCourses />

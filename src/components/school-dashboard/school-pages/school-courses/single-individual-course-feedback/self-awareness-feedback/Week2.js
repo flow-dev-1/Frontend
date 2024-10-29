@@ -7,7 +7,9 @@ import { Icon } from '@iconify/react'
 import FinalReport from './FinalReport'
 import { useQuery } from '@tanstack/react-query'
 import userService from '../../../../../../services/api/user'
-
+import { decryptId } from '../../../../../../utils/encryption'
+import schoolService from '../../../../../../services/api/school'
+import { useParams } from 'react-router-dom'
 const questions = [
   {
     question: 'When I make decisions:',
@@ -195,11 +197,12 @@ let questionsQuiz = [
 ]
 
 const Week2 = () => {
+  const { userId } = useParams()
   const week = 2
   const courseId = '66853bf50118e2e0a02b6a5a'
   const { data, isLoading, isError } = useQuery({
     queryKey: ['dashboard/feedback/self-awareness', courseId, week],
-    queryFn: () => userService.getMyActivites(courseId, week),
+    queryFn: () => schoolService.getStudentMyActivites(courseId, week, decryptId(userId)),
   })
 
   const [assessmentData, setAssessmentData] = useState(null)
@@ -210,7 +213,7 @@ const Week2 = () => {
     const fetchAndProcessAssessmentData = async () => {
       setAssessmentLoading(true)
       try {
-        const data = await userService.getMyAssessment(courseId, week)
+        const data = await schoolService.getStudentAssessments(courseId, week, decryptId(userId));
         setAssessmentData(data)
 
         const assessmentForChecked =

@@ -73,7 +73,6 @@ const SchoolEnrolledStudents = () => {
   }
   const navigate = useNavigate();
   const { id } = useParams();
-  console.log(schoolId, decryptId(id));
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["school-single-courses"],
@@ -100,9 +99,9 @@ const SchoolEnrolledStudents = () => {
   const genderCount = (item) => {
     if (!item) return;
     const male =
-      item.filter((data) => data.user.gender === "male")?.length || 0;
+      item.filter((data) => data?.user?.gender === "male")?.length || 0;
     const female =
-      item.filter((data) => data.user.gender === "female")?.length || 0;
+      item.filter((data) => data?.user?.gender === "female")?.length || 0;
     return {
       male,
       female

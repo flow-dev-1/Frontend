@@ -14,7 +14,7 @@ const SingleStudentEnrolledCoursesCard = ({
   const [openEnrollModal, setOpenEnrollModal] = useState(false)
   const [openViewModal, setOpenViewModal] = useState(false)
   const [openEnrollModalEducator, setOpenEnrollModalEducator] = useState(false)
-  console.log(enrolledData)
+
   const [courseData] = useState(course)
   const navigate = useNavigate()
   const [isOn, setIsOn] = useState(() => {
@@ -28,7 +28,6 @@ const SingleStudentEnrolledCoursesCard = ({
   const { id } = useParams()
   const { userId } = useParams()
 
-  console.log(decryptId(id))
   const openEnrollementModal = () => {
     if (course.grade === 'Educator') {
       setOpenEnrollModalEducator(true)
@@ -108,7 +107,7 @@ const SingleStudentEnrolledCoursesCard = ({
 
   // Check if the course is in the enrolled array
   const isEnrolled = enrolled.includes(course._id)
-  console.log(isEnrolled)
+
 
   if (isEnrolled) {
     reviewBtnColor = darkGreen
@@ -275,7 +274,6 @@ const SingleStudentEnrolledCoursesCard = ({
     )
   }
 
-  console.log(course)
 
   return (
     <div>
@@ -288,7 +286,7 @@ const SingleStudentEnrolledCoursesCard = ({
         </div>
         <div className='course-card-title' style={{ marginBottom: '0' }}>
           <h3 style={{ color: '#329BD6', fontSize: '24px' }}>
-            Knowing Yourself Better
+            {course?.course?.topic}
           </h3>
           <h3 style={isEnrolled ? { color: '#555' } : { color: '#329BD6' }}>
             {course?.course?.title}

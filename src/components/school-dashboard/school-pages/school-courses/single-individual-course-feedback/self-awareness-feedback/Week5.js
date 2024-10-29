@@ -21,6 +21,9 @@ import emojiEnvy from "../../../../../../assets/selfawareness-images/emocom-imag
 import emojiFear from "../../../../../../assets/selfawareness-images/emocom-images/fear.png";
 import emojiJoy from "../../../../../../assets/selfawareness-images/emocom-images/joy.png";
 import emojiNostalgia from "../../../../../../assets/selfawareness-images/emocom-images/nostalgia.png";
+import { decryptId } from "../../../../../../utils/encryption";
+import schoolService from "../../../../../../services/api/school";
+import { useParams } from 'react-router-dom'
 
 let questionsQuiz = [
   {
@@ -371,6 +374,7 @@ const answersForCheck = [
 ];
 
 const Week5 = () => {
+  const { userId } = useParams()
   const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState({});
   const dropdownRefs = useRef([]);
@@ -378,7 +382,7 @@ const Week5 = () => {
   const courseId = "66853bf50118e2e0a02b6a5a";
   const { data, isLoading, isError } = useQuery({
     queryKey: ["dashboard/feedback/self-awareness", courseId, week],
-    queryFn: () => userService.getMyActivites(courseId, week)
+    queryFn: () => schoolService.getStudentMyActivites(courseId, week, decryptId(userId)),
   });
 
   // console.log(data?.activity?.activities[1]?.answers[0]);
@@ -391,7 +395,7 @@ const Week5 = () => {
     const fetchAndProcessAssessmentData = async () => {
       setAssessmentLoading(true);
       try {
-        const data = await userService.getMyAssessment(courseId, week);
+        const data = await schoolService.getStudentAssessments(courseId, week, decryptId(userId));
         setAssessmentData(data);
         const assessmentForChecked =
           data?.existingAssessment.assessments[0].answers;
