@@ -36,6 +36,7 @@ export default function InvitedStudentRegistrationForm() {
   })
 
   useEffect(() => {
+    if(!data) return
     if (data?.status === 'success') {
       setParentFormData({
         fullName: data?.data?.fullName,

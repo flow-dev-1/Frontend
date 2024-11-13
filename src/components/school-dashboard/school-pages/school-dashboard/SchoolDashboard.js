@@ -23,6 +23,7 @@ export default function SchoolDashboard() {
     localStorage.removeItem("personalityExplanation");
     localStorage.removeItem("questionChecked");
     localStorage.removeItem("answersForOne");
+    localStorage.clear()
     dispatch(logoutSuccess());
     dispatch(clearToken());
     navigate("/sign-in", { replace: true });

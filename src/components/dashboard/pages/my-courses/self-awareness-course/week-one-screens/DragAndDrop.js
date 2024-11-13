@@ -72,14 +72,16 @@ const initialBuckets = {
 }
 
 function DragDropComponent({ onBack, onNext, formData }) {
+  console.log(formData, "FormData")
   const [cards, setCards] = useState(formData?.cards || initialCards)
   const [buckets, setBuckets] = useState(formData?.buckets || initialBuckets)
   const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
+
     if (formData) {
-      setCards(formData?.activities[5]?.cards || initialCards)
-      setBuckets(formData?.activities[5]?.buckets || initialBuckets)
+      setCards(formData?.activities?.length > 5 ? formData?.activities[5]?.cards : initialCards)
+      setBuckets(formData?.activities?.length > 5 ? formData?.activities[5]?.buckets : initialBuckets)
     }
   }, [formData])
   // console.log(formData.activities[5].buckets)
@@ -120,7 +122,7 @@ function DragDropComponent({ onBack, onNext, formData }) {
   }
 
   const areAllCardsPlaced = () => {
-    return cards.length === 0
+    return cards?.length === 0
   }
 
   return (
@@ -134,7 +136,7 @@ function DragDropComponent({ onBack, onNext, formData }) {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
-                {cards.length > 0 && (
+                {cards?.length > 0 && (
                   <Draggable
                     key={cards[0].id}
                     draggableId={cards[0].id}
@@ -145,9 +147,8 @@ function DragDropComponent({ onBack, onNext, formData }) {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className={`card-item d-flex align-items-center justify-content-center ${
-                          snapshot.isDragging ? 'draging' : ''
-                        }`}
+                        className={`card-item d-flex align-items-center justify-content-center ${snapshot.isDragging ? 'draging' : ''
+                          }`}
                         style={{
                           cursor: snapshot.isDragging ? 'grabbing' : 'grab',
                           opacity: snapshot.isDragging ? '0.1' : '1',
@@ -179,61 +180,52 @@ function DragDropComponent({ onBack, onNext, formData }) {
               <img src={dragdropArrow} alt='' className='dragdropArrow' />
             </div>
 
-            <div className='bucket-section mt-5 py-2'>
-              {['yes', 'no', 'sometimes'].map((bucketType) => (
+            <div className="bucket-section mt-5 py-2">
+              {["yes", "no", "sometimes"].map((bucketType) => (
                 <Droppable key={bucketType} droppableId={bucketType}>
                   {(provided, snapshot) => (
                     <div
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                      className={`bucket bucket-${bucketType} ${
-                        snapshot.isDraggingOver ? 'dragging-over' : ''
-                      }`}
+                      className={`bucket bucket-${bucketType} ${snapshot.isDraggingOver ? "dragging-over" : ""
+                        }`}
                       style={{
-                        backgroundColor: snapshot.isDraggingOver ? '#0000' : '',
-                        width: '150px',
-                        height: '150px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        position: 'relative',
+                        backgroundColor: snapshot.isDraggingOver ? "rgba(0, 0, 0, 0.1)" : "",
+                        width: "150px",
+                        height: "150px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        position: "relative",
                       }}
                     >
                       <div className={`${bucketType} bucket-item`}>
-                        <h3 className='mb-0'>{buckets[bucketType].length}</h3>
+                      <h3 className="mb-0">{buckets?.[bucketType]?.length ?? 0}</h3>
+
                       </div>
                       <img
                         src={
-                          bucketType === 'yes'
+                          bucketType === "yes"
                             ? bucketYes
-                            : bucketType === 'no'
-                            ? bucketNo
-                            : bucketSometimes
+                            : bucketType === "no"
+                              ? bucketNo
+                              : bucketSometimes
                         }
                         alt={`bucket-${bucketType}`}
-                        // className="bucket-image"
                         style={{
-                          width: '100px',
-                          height: 'auto',
-                          transition: 'transform 0.3s ease',
-                          transform: snapshot.isDraggingOver
-                            ? 'scale(1.4)'
-                            : 'scale(1)', // Scale when dragging over
+                          width: "100px",
+                          height: "auto",
+                          transition: "transform 0.3s ease",
+                          transform: snapshot.isDraggingOver ? "scale(1.4)" : "scale(1)",
                         }}
                       />
-                      {provided.placeholder && (
-                        <div
-                          className='droppable-placeholder'
-                          style={{ display: 'none' }}
-                        >
-                          {provided.placeholder}
-                        </div>
-                      )}
+                      {provided.placeholder}
                     </div>
                   )}
                 </Droppable>
               ))}
             </div>
+
           </div>
         </div>
 

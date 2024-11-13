@@ -257,13 +257,13 @@ const Week2 = () => {
   if (isError || assessmentError) {
     return <div>Take Activity to see feedback.</div>;
   }
-  const strengths = data?.activity?.activities[3].answers.strengths;
-  const weaknesses = data?.activity?.activities[4].answers.weakness;
+  const strengths = data?.activity?.activities[3]?.answers?.strengths;
+  const weaknesses = data?.activity?.activities[4]?.answers?.weakness;
   const actviity1 = [
     {
       activity: 1,
       question: 'What do you think "Self Awareness" is?',
-      answer: data?.activity?.activities[1].answers[0],
+      answer: data?.activity?.activities[1]?.answers[0],
       feedback: ""
     }
   ];
@@ -294,8 +294,8 @@ const Week2 = () => {
       question:
         "A friend is feeling sad and needs someone to talk to because they just failed a test.They come to you for support. How would you help?",
       answer: {
-        strengths: data?.activity?.activities[6].answers.strengthsQ1,
-        weaknesses: data?.activity?.activities[6].answers.weaknessesQ1
+        strengths: data?.activity?.activities[6]?.answers?.strengthsQ1,
+        weaknesses: data?.activity?.activities[6]?.answers?.weaknessesQ1
       },
       feedback:
         ""
@@ -305,8 +305,8 @@ const Week2 = () => {
       question:
         "Imagine you’re working on a group project at school. Your group is struggling to come up with an idea for the project. As a member of the team, how would you help?",
       answer: {
-        strengths: data?.activity?.activities[6].answers.strengthsQ2,
-        weaknesses: data?.activity?.activities[6].answers.weaknessesQ2
+        strengths: data?.activity?.activities[6]?.answers?.strengthsQ2,
+        weaknesses: data?.activity?.activities[6]?.answers?.weaknessesQ2
       },
       feedback:
         ""
@@ -316,8 +316,8 @@ const Week2 = () => {
       question:
         "Is there a sport you dislike? What sport is this? Now imagine you were asked to represent your house in this particular sport, for your School’s inter-house sport competition, to win a laptop and a gaming console. How would you go about this?",
       answer: {
-        strengths: data?.activity?.activities[6].answers.strengthsQ3,
-        weaknesses: data?.activity?.activities[6].answers.weaknessesQ3
+        strengths: data?.activity?.activities[6]?.answers?.strengthsQ3,
+        weaknesses: data?.activity?.activities[6]?.answers?.weaknessesQ3
       },
       feedback:
         ""
@@ -419,7 +419,7 @@ const Week2 = () => {
           </p>
 
           {/* Check for answer type and render accordingly */}
-          {activity.answer.strengths ? (
+          {activity?.answer?.strengths ? (
             <div
               style={{ display: "flex", width: "90%", margin: "1rem auto" }}
               className="strengths-weaknesses"
@@ -441,7 +441,7 @@ const Week2 = () => {
                     gridTemplateColumns: "1fr 1fr 1fr"
                   }}
                 >
-                  {activity.answer.strengths.map((item, idx) => (
+                  {activity?.answer?.strengths.map((item, idx) => (
                     <div className="d-flex align-items-center gap-2">
                       <Icon
                         icon="radix-icons:dot-filled"
@@ -517,7 +517,7 @@ const Week2 = () => {
                   ))}
                 </ul>
               ) : (
-                <p>{activity.answer}</p>
+                <p>{typeof (activity.answer) !== "string" ? "" : activity.answer}</p>
               )}
             </div>
           )}

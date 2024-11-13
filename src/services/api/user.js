@@ -214,7 +214,7 @@ class UserOBJ {
       return response.data
     } catch (err) {
       console.log(err?.response?.data || err.message)
-      throw err?.response?.data || err.message
+      return err?.response?.data || err.message;
     }
   }
   getIndividualCoursesEnrolled = async () => {
@@ -223,7 +223,7 @@ class UserOBJ {
       const response = await api.get(`api/users/courses?type=Enrolled`)
       return response.data
     } catch (err) {
-      throw err?.response?.data || err.message
+      return err?.response?.data || err.message;
     }
   };
 
@@ -233,7 +233,7 @@ class UserOBJ {
       const response = await api.get(`api/users/courses/${id}/completed`);
       return response.data;
     } catch (err) {
-      throw err?.response?.data || err.message;
+      return err?.response?.data || err.message;
     }
   };
 
@@ -243,7 +243,7 @@ class UserOBJ {
       const response = await api.get(`api/users/courses`)
       return response.data
     } catch (err) {
-      throw err?.response?.data || err.message
+      return err?.response?.data || err.message;
     }
   }
   getMyProfileEducator = async () => {
@@ -252,7 +252,7 @@ class UserOBJ {
       const response = await api.get(`api/educator/me`)
       return response.data
     } catch (err) {
-      throw err?.response?.data || err.message
+      return err?.response?.data || err.message;
     }
   }
   getMyPayments = async () => {
@@ -261,7 +261,7 @@ class UserOBJ {
       const response = await api.get(`api/users/payments`)
       return response.data
     } catch (err) {
-      throw err?.response?.data || err.message
+      return err?.response?.data || err.message;
     }
   }
   postMyActivity = async (params1, formData) => {
@@ -274,7 +274,7 @@ class UserOBJ {
       console.log(response.data)
       return response.data
     } catch (err) {
-      throw err?.response?.data || err.message
+      return err?.response?.data || err.message;
     }
   }
   postMyAssessment = async (params1, formData) => {
@@ -287,7 +287,7 @@ class UserOBJ {
       // console.log(response.data);
       return response.data
     } catch (err) {
-      throw err?.response?.data || err.message
+      return err?.response?.data || err.message;
     }
   }
 
@@ -310,7 +310,7 @@ class UserOBJ {
       )
       return response.data
     } catch (err) {
-      throw err?.response?.data || err.message
+      return err?.response?.data || err.message;
     }
   }
 
@@ -319,10 +319,13 @@ class UserOBJ {
       const response = await api.get(
         `api/users/course-enrollment/${params1}/get-assesment/${week}`
       )
+
+      console.log(response,"Yeajjjjjj")
       return response.data
     } catch (err) {
       console.log(err?.response?.data || err.message)
-      throw err?.response?.data || err.message
+      return err?.response?.data || err.message;
+      // throw err?.response?.data || err.message
     }
   }
 

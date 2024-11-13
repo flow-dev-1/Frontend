@@ -12,11 +12,13 @@ export default function WeekOneAssessmentForm({
   onNext,
   onBack,
   course,
+  handleActivitySubmit
 }) {
   const [currentIndex, setCurrentIndex] = useState(1)
   const [reviewPopUp, setReviewPopUp] = useState(false)
   const [personalityColor, setPersonalityColor] = useState('')
   const [questionChecked, setQuestionChecked] = useState([])
+  const [isLoading,setIsLoading] = useState(false)
 
   useEffect(() => {
     // Check if the assessment data is already in localStorage
@@ -271,8 +273,7 @@ export default function WeekOneAssessmentForm({
       setCurrentIndex(currentIndex + 1)
     } else {
       saveAssessmentData()
-      onNext()
-      setReviewPopUp(true) // Show review popup immediately
+      // Show review popup immediately
     }
   }
 
@@ -298,42 +299,51 @@ export default function WeekOneAssessmentForm({
     })
   }
 
-  const saveAssessmentData = () => {
-    const questionsArray = getQuestionsArray()
+  const saveAssessmentData = async () => {
+    setIsLoading(true)
 
-    // Format data to match the required structure
-    const formattedData = {
-      week: 1,
-      personalityColor: personalityColor,
-      assessments: questionsArray.map((_, index) => ({
-        answer:
-          questionChecked[index] !== undefined ? questionChecked[index] : null, // Save the selected answer as an index or null if not selected
-      })),
-    }
+    // First Submit Activity if it doesnt work dont submit Assessment
+    try {
+      const activityResponse = await handleActivitySubmit();
+      if (!activityResponse.success) {
+        setIsLoading(false)
+        return
+      }
+
+      const questionsArray = getQuestionsArray()
+
+      // Format data to match the required structure
+      const formattedData = {
+        week: 1,
+        personalityColor: personalityColor,
+        assessments: questionsArray.map((_, index) => ({
+          answer:
+            questionChecked[index] !== undefined ? questionChecked[index] : null, // Save the selected answer as an index or null if not selected
+        })),
+      }
 
 
-    // Basic marking (for demonstration purposes)
-    const correctAnswers = questionsArray.map(() => 0) // Assuming correct answers are at index 0
-    const totalQuestions = correctAnswers.length
-    const correctCount = formattedData.assessments.reduce(
-      (count, current, index) => {
-        return current.answer === correctAnswers[index] ? count + 1 : count
-      },
-      0
-    )
+      // Basic marking (for demonstration purposes)
+      const correctAnswers = questionsArray.map(() => 0) // Assuming correct answers are at index 0
+      const totalQuestions = correctAnswers.length
+      const correctCount = formattedData.assessments.reduce(
+        (count, current, index) => {
+          return current.answer === correctAnswers[index] ? count + 1 : count
+        },
+        0
+      )
 
-    const percentage = (correctCount / totalQuestions) * 100
+      const percentage = (correctCount / totalQuestions) * 100
 
-    toast.success(`You scored ${percentage}% in the quiz`)
+      toast.success(`You scored ${percentage}% in the quiz`)
 
-    // Save data to local storage
-    localStorage.setItem(
-      'weekOneAssessmentData',
-      JSON.stringify({ formattedData, percentage })
-    )
+      // Save data to local storage
+      localStorage.setItem(
+        'weekOneAssessmentData',
+        JSON.stringify({ formattedData, percentage })
+      )
 
-    userService
-      .postMyAssessment(
+      const response = await userService.postMyAssessment(
         course?._id,
         JSON.stringify({
           week: formattedData.week,
@@ -342,18 +352,29 @@ export default function WeekOneAssessmentForm({
           percentage,
           personalityColor: formattedData.personalityColor,
         })
-      )
-      .then((response) => {
-        if (response.message === 'You have already taken the assessment') {
-          toast.error('You have already taken the assessment')
-        } else {
-          console.log('Submission successful:', response)
-          toast.success('Submission successful!')
-        }
-      })
-      .catch((error) => {
-        console.error('Submission failed:', error)
-      })
+      );
+
+      if (response.status === "success") {
+        toast.success(response.message);
+        onNext()
+        setReviewPopUp(true)
+        setIsLoading(false)
+      } else if (response.status === "failed") {
+        toast.success(response.message);
+        onNext()
+        setReviewPopUp(true)
+        setIsLoading(false)
+      } else {
+        setIsLoading(false)
+        toast.error('Something went wrong. Please contact flow admin for support!');
+      }
+
+    } catch (error) {
+      console.log(error)
+      setIsLoading(false)
+      toast.error('Something went wrong. Please contact flow admin for support!');
+    }
+
   }
 
   const renderQuestion = () => {
@@ -367,7 +388,7 @@ export default function WeekOneAssessmentForm({
         >
           <div className=''>
             <div className='assessment-box'>
-              <h2 style={{ color: '#FAFAFA', textAlign:"center" }}>Assessment</h2>
+              <h2 style={{ color: '#FAFAFA', textAlign: "center" }}>Assessment</h2>
               Scenario around your personality colors.
             </div>
             <h2
@@ -411,7 +432,7 @@ export default function WeekOneAssessmentForm({
               {questionsArray[questionIndex].title}
             </h2>
           </div>
-          <div className='checkbox-questions' style={{marginLeft:"3rem"}}>
+          <div className='checkbox-questions' style={{ marginLeft: "3rem" }}>
             <ul className='p-0'>
               {questionsArray[questionIndex].questionList.map((item, index) => (
                 <li key={index} className='d-flex my-3'>
@@ -459,12 +480,14 @@ export default function WeekOneAssessmentForm({
         <button
           className='btn progress-btn btn-light'
           onClick={handlePreviousStepClick}
+          disabled={isLoading}
         >
           {'<<<'} Back
         </button>
         <button
           className='btn progress-btn btn-dark'
           onClick={handleNextStepClick}
+          disabled={isLoading}
         >
           Next {'>>>'}
         </button>

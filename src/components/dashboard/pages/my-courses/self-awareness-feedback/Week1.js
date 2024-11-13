@@ -1036,8 +1036,8 @@ const Week1 = () => {
     fetchAssessmentData();
   }, [courseId, week]);
 
-  const assessments = assessmentData?.existingAssessment.assessments;
-  const percent = assessmentData?.existingAssessment.rating;
+  const assessments = assessmentData?.existingAssessment?.assessments;
+  const percent = assessmentData?.existingAssessment?.rating;
   const color = assessmentData?.existingAssessment?.personalityColor;
   // console.log(percent)
   function getQuestionsByColor(color) {

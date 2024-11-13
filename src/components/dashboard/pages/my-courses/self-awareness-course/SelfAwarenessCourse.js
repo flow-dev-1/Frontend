@@ -35,8 +35,6 @@ function SelfAwarenessCourse() {
     }
   }, [completedWeeks])
 
-  console.log(completedWeeksState, "completedWeeksState")
-
   useEffect(() => {
     if (!course) return navigate("/dashboard")
     setOpen(true)

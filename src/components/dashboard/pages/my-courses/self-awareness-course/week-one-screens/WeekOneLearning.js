@@ -44,13 +44,19 @@ export default function WeekOneLearning({
   const week = 1;
   const { data, isLoading, status, isError } = useQuery({
     queryKey: ["dashboard/self-awareness-course", course?.course._id, week],
-    queryFn: () => userService.getMyActivites(course?.course._id, week)
+    queryFn: () => userService.getMyActivites(course?.course._id, week),
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false
   });
 
-  const { data: assessmentData, isLoading: assessmentLoading,status:assesmentStatus, isError: assessmentError } = useQuery({
-    queryKey: ["dashboard/self-awareness-assessment", courseId, week],
+  const { data: assessmentData, isLoading: assessmentLoading, status: assesmentStatus, isError: assessmentError } = useQuery({
+    queryKey: ["get-self-awareness-assessment", courseId, week],
     queryFn: () => userService.getMyAssessment(courseId, week),
-    enabled: !!course?.course._id && !!week
+    enabled: !!course?.course._id && !!week,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false
   });
 
 
@@ -80,7 +86,8 @@ export default function WeekOneLearning({
 
   useEffect(() => {
 
-    if(!data || !assessmentData) return
+    if (!data || !assessmentData) return
+    console.log(assessmentData, "assesment data")
 
     const assessments = assessmentData?.existingAssessment?.assessments;
     const percent = assessmentData?.existingAssessment?.rating;
@@ -95,7 +102,7 @@ export default function WeekOneLearning({
         activities: activities
       };
 
-      const assessmentData = {
+      const assessment_data = {
         week: week,
         percentage: percent,
         assessments: assessments,
@@ -107,7 +114,7 @@ export default function WeekOneLearning({
       localStorage.setItem("week-1-activityData", JSON.stringify(activityData));
       localStorage.setItem(
         "weekOneAssessmentData",
-        JSON.stringify({ formData: assessmentData })
+        JSON.stringify({ formData: assessment_data })
       );
 
     } else {
@@ -153,25 +160,29 @@ export default function WeekOneLearning({
   }, [formData, currentWeekIndex])
 
   const handleSubmit = async () => {
+
     try {
       const stringifiedFormData = JSON.stringify(formData)
-      userService
-        .postMyActivity(course.course._id, stringifiedFormData)
-        .then((response) => {
-          console.log("Submission successful:", response);
-        })
-        .catch((error) => {
-          console.error("Submission failed:", error);
-        });
+      const response = await userService.postMyActivity(course.course._id, stringifiedFormData);
+
+      if (response.success) {
+        toast.success(response?.message);
+        console.log("Submission successful:", response);
+        return { success: true, message: "Submission successful" };
+      } else {
+        toast.error("Activity submission failed. Please contact flow admin for support!");
+        console.error("Submission failed with response:", response);
+        return { success: false, message: "Submission failed" };
+      }
     } catch (error) {
       console.error('Submission failed:', error)
-      toast.error('Submission failed. Please try again later.')
+      return { success: false, message: "Submission failed" };
     }
   }
 
   const handleNext = async (data = {}) => {
     setFormData((prevData) => {
-      console.log(prevData, "Prev data")
+
       const updatedActivities = prevData?.activities?.map((item) =>
         item.activity === currentActivity ? { ...item, ...data } : item
       )
@@ -186,7 +197,6 @@ export default function WeekOneLearning({
     // Check if it's the last activity defined and go to the default case
     const isLastActivity = currentActivity >= 15
     if (isLastActivity) {
-      handleSubmit()
       setCurrentActivity(16) // This will trigger the default case in renderActivityContent
     } else {
       const nextActivity = currentActivity + 1
@@ -488,6 +498,7 @@ export default function WeekOneLearning({
             handleNextWeekCourse={handleNextWeekCourse}
             onNext={handleNext}
             course={course}
+            handleActivitySubmit={handleSubmit}
           />
         )
 
