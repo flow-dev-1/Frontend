@@ -50,6 +50,7 @@ import SelfAwarenessFeedback from './components/dashboard/pages/my-courses/self-
 import InvitedAdminEducatorRegistration from './components/onboarding/registration/InvitedEducatorRegistrationForm.js'
 import IndividualSchoolProfile from './components/school-dashboard/school-pages/school-courses/school-enrolled-courses/school-single-enrolled-course-page/IndividualSchoolProfile.jsx'
 import SchoolSelfAwarenessFeedback from './components/school-dashboard/school-pages/school-courses/single-individual-course-feedback/self-awareness-feedback/SchoolSelfAwarenessFeedback.js'
+import CompassionCourse from './components/dashboard/pages/my-courses/compassion-course/index.jsx'
 
 function App() {
   return (
@@ -146,6 +147,11 @@ function App() {
             />
 
             <Route
+              path='/dashboard/compassion/:id'
+              element={<CompassionCourse />}
+            />
+
+            <Route
               path='/dashboard/enrollment/confirm'
               element={<ConfirmPayment />}
             />
@@ -185,7 +191,7 @@ function App() {
             path='/school-dashboard/courses/feedback/:userId'
             element={<SchoolSelfAwarenessFeedback />}
           />
-          
+
           <Route
             path='/school-dashboard/settings/teams'
             element={<SchoolSettingsTeams />}
