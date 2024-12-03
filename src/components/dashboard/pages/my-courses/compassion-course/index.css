@@ -1,0 +1,75 @@
+.compassion-header {
+  padding: 30px 50px;
+  box-shadow: 0 0 .8px rgb(21, 4, 4);
+  z-index: 1;
+}
+
+aside {
+  position: fixed;
+  top: 108.1px;
+  left: 0;
+  padding: 40px 30px;
+  height: 100vh;
+  background-color: rgb(248, 245, 245);
+  box-shadow: 0 0 0.3px rgb(21, 4, 4);
+}
+
+aside .back {
+  margin-left: 30px;
+  font-size: 18px;
+}
+
+.compassion-title {
+  background: url(../../../../../assets/selfawareness-images/course-title-bg.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 20px 30px;
+  width: 350px;
+  margin: 25px 0;
+}
+
+.compassion-title h2 {
+  color: white;
+  font-size: 23px;
+}
+.compassion-title .compassion {
+  color: aquamarine;
+}
+
+.compassion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 0 20px;
+  width: 300px;
+}
+
+.compassion-list li {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  gap: 10px;
+  opacity: 0.5;
+}
+
+.compassion-list li .icon {
+  flex-shrink: 0;
+  font-size: 20px;
+}
+
+.compassion-list li.active-week {
+  opacity: 1;
+  color: rgb(58, 58, 135);
+}
+
+.week-content {
+  position: fixed;
+  background-color: black;
+  top: 100px;
+  left: 400px;
+  border-radius: 10px;
+  padding: 40px 10px;
+  margin: 60px 100px 0 60px;
+  width: 70%;
+  height: 65%;
+}

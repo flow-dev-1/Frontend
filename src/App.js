@@ -56,36 +56,36 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/'>
+        <Route path="/">
           {/*   Onboarding Routes */}
 
-          <Route element={<OnboardingRootLayout />}>
+          <Route element={<CompassionCourse />}>
             <Route index element={<SignIn />} />
             {/* <Route path='sign-in' element={<SigninCategory />} /> */}
 
-            <Route path='/sign-up' element={<SignupCategory />} />
+            <Route path="/sign-up" element={<SignupCategory />} />
             <Route
-              path='/individual/sign-up'
+              path="/individual/sign-up"
               element={<IndividualCategory />}
             />
 
             <Route
-              path='/individual/sign-up/student-registration'
+              path="/individual/sign-up/student-registration"
               element={<StudentRegistrationForm />}
             />
 
             <Route
-              path='/invited-user'
+              path="/invited-user"
               element={<InvitedStudentRegistrationForm />}
             />
 
             <Route
-              path='/invited-educator'
+              path="/invited-educator"
               element={<InvitedAdminRegistration />}
             />
 
             <Route
-              path='/invited-admin'
+              path="/invited-admin"
               element={<InvitedAdminEducatorRegistration />}
             />
             {/* <Route
@@ -94,30 +94,30 @@ function App() {
             /> */}
 
             <Route
-              path='/individual/sign-up/educators'
+              path="/individual/sign-up/educators"
               element={<EducatorRegistrationForm />}
             />
-            <Route path='/sign-in' element={<SignIn />} />
-            <Route path='/forgot-password' element={<ForgotPassword />} />
-            <Route path='/reset-password' element={<ResetPassword />} />
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route
-              path='/school/sign-up/registration'
+              path="/school/sign-up/registration"
               element={<SchoolRegistrationForm />}
             />
             {/* <Route path='/school/sign-in' element={<SchoolSignIn />} /> */}
             <Route
-              path='/school/forgot-password'
+              path="/school/forgot-password"
               element={<SchoolForgotPassword />}
             />
             <Route
-              path='/school/reset-password'
+              path="/school/reset-password"
               element={<SchoolResetPassword />}
             />
           </Route>
 
           {/*   Dashboard Routes */}
           <Route
-            path='/dashboard'
+            path="/dashboard"
             element={
               <ProtectedRoute>
                 <Dashboard />
@@ -125,41 +125,41 @@ function App() {
             }
           >
             <Route index element={<IndividualOverview />} />
-            <Route path='/dashboard/profile' element={<IndividualProfile />} />
-            <Route path='/dashboard/support' element={<Support />} />
+            <Route path="/dashboard/profile" element={<IndividualProfile />} />
+            <Route path="/dashboard/support" element={<Support />} />
             <Route
-              path='/dashboard/feedback/self-awareness'
+              path="/dashboard/feedback/self-awareness"
               element={<SelfAwarenessFeedback />}
             />
             <Route
-              path='/dashboard/payment-history'
+              path="/dashboard/payment-history"
               element={<PayementHistory />}
             />
-            <Route path='/dashboard/my-courses' element={<MyCourses />} />
+            <Route path="/dashboard/my-courses" element={<MyCourses />} />
             <Route
-              path='/dashboard/my-courses/:id'
+              path="/dashboard/my-courses/:id"
               element={<SingleCoursePage />}
             />
 
             <Route
-              path='/dashboard/self-awareness-course/:id'
+              path="/dashboard/self-awareness-course/:id"
               element={<SelfAwarenessCourse />}
             />
 
             <Route
-              path='/dashboard/compassion/:id'
+              path="/dashboard/compassion/:id"
               element={<CompassionCourse />}
             />
 
             <Route
-              path='/dashboard/enrollment/confirm'
+              path="/dashboard/enrollment/confirm"
               element={<ConfirmPayment />}
             />
           </Route>
         </Route>
 
         <Route
-          path='/school-dashboard'
+          path="/school-dashboard"
           element={
             <ProtectedRoute>
               <SchoolDashboard />
@@ -168,61 +168,61 @@ function App() {
         >
           <Route index element={<SchoolOverview />} />
           <Route
-            path='/school-dashboard/settings/profile'
+            path="/school-dashboard/settings/profile"
             element={<SchoolSettingsProfile />}
           />
           <Route
-            path='/school-dashboard/courses/enrolled'
+            path="/school-dashboard/courses/enrolled"
             element={<SchoolEnrolledCourseStudents />}
           />
           <Route
-            path='/school-dashboard/courses/enrolled/:id'
+            path="/school-dashboard/courses/enrolled/:id"
             element={<SchoolEnrolledStudents />}
           />
           <Route
-            path='/school-dashboard/courses/enrolled/educators/:id'
+            path="/school-dashboard/courses/enrolled/educators/:id"
             element={<SchoolEnrolledEducators />}
           />
           <Route
-            path='/school-dashboard/courses/enrolled/:id/users/:userId'
+            path="/school-dashboard/courses/enrolled/:id/users/:userId"
             element={<IndividualSchoolProfile />}
           />
           <Route
-            path='/school-dashboard/courses/feedback/:userId'
+            path="/school-dashboard/courses/feedback/:userId"
             element={<SchoolSelfAwarenessFeedback />}
           />
 
           <Route
-            path='/school-dashboard/settings/teams'
+            path="/school-dashboard/settings/teams"
             element={<SchoolSettingsTeams />}
           />
           <Route
-            path='/school-dashboard/settings/change-password'
+            path="/school-dashboard/settings/change-password"
             element={<SchoolSettingsChangePassword />}
           />
           <Route
-            path='/school-dashboard/settings/email-notifications'
+            path="/school-dashboard/settings/email-notifications"
             element={<SchoolSettingsEmailNotifications />}
           />
           <Route
-            path='/school-dashboard/settings/deactivate-account'
+            path="/school-dashboard/settings/deactivate-account"
             element={<SchoolSettingsDeactivateAccount />}
           />
-          <Route path='/school-dashboard/support' element={<SchoolSupport />} />
+          <Route path="/school-dashboard/support" element={<SchoolSupport />} />
           <Route
-            path='/school-dashboard/courses/all'
+            path="/school-dashboard/courses/all"
             element={<SchoolAllCourses />}
           />
           <Route
-            path='/school-dashboard/payment-history'
+            path="/school-dashboard/payment-history"
             element={<SchoolPaymentHistory />}
           />
           {/*for other users*/}
         </Route>
       </Routes>
-      <ToastContainer position='top-right' />
+      <ToastContainer position="top-right" />
     </BrowserRouter>
-  )
+  );
 }
 
 export default App
