@@ -2,6 +2,12 @@ import logo from "../../../../../assets/logo.png";
 import { Icon } from "@iconify/react";
 
 import "./index.css";
+import Page1 from "./weeks/week1/page1/Page1";
+import Page2 from "./weeks/week1/page2/Page2";
+import Page3 from "./weeks/week1/page3/Page3";
+import Page4 from "./weeks/week1/page4/Page4";
+import Page5 from "./weeks/week1/page5/Page5";
+import Page7 from "./weeks/page7/Page7";
 const CompassionCourse = () => {
   const weeksTopic = [
     "Introduction to Compassion",
@@ -45,7 +51,7 @@ const CompassionCourse = () => {
         </ul>
       </aside>
       <section className="week-content">
-        <h1>WEEK CONTENT</h1>
+        <Page7 />
       </section>
     </>
   );

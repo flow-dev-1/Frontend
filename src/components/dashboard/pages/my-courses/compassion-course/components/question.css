@@ -1,0 +1,64 @@
+.custom-border-20 {
+  border: 20px solid #08bcc4;
+  border-radius: 8px;
+}
+
+::placeholder {
+  font-weight: bold;
+  font-size: 20px;
+}
+.border-outline-0 {
+  border: 0;
+}
+
+.border-outline-0:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.no-scrollbar {
+  overflow: hidden;
+}
+
+.resize-none {
+  resize: none;
+}
+
+.gap-8 {
+  gap: 72px;
+}
+
+.bg-worksheet {
+  background-color: rgb(110, 222, 235);
+  background-image: url(../../../../../../assets/selfawareness-images/course-bg.png);
+  background-size: cover;
+}
+
+.w-1020px {
+  width: 1020px;
+}
+
+.text-blue {
+  color: #275dad;
+}
+.text-gray {
+  color: rgb(115, 114, 114);
+}
+
+.bg-blue {
+  background-color: #275dad;
+}
+
+.answer {
+  font-size: 4rem;
+}
+
+.grab {
+  cursor: grab;
+}
+.grabbing {
+  cursor: grabbing;
+}
+.font-lg {
+  font-size: 48px;
+}

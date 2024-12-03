@@ -1,8 +1,8 @@
 import React from "react";
 import VideoComponent from "../../../components/Video";
 
-const Page1 = () => {
+function Page5() {
   return <VideoComponent videoSrc={""} />;
-};
+}
 
-export default Page1;
+export default Page5;
