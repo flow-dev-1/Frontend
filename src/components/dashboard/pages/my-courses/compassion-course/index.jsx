@@ -9,6 +9,7 @@ import Page4 from "./weeks/week1/page4/Page4";
 import Page5 from "./weeks/week1/page5/Page5";
 import Page6 from "./weeks/week1/page6/Page6";
 import Page7 from "./weeks/week1/page7/Page7";
+import Page8 from "./weeks/week1/page8/Page8";
 const CompassionCourse = () => {
   const weeksTopic = [
     "Introduction to Compassion",

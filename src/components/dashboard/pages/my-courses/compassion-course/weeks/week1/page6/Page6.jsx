@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import QuestionBox from "../../../components/QuestionBox";
 import Frame from "./components/Frame";
+import Button from "../../../components/Button";
 
 function Page6() {
-  const [currentStep, setCurrentStep] = useState(6);
+  const [currentStep, setCurrentStep] = useState(2);
 
   const renderStep = () => {
     switch (currentStep) {
@@ -103,7 +104,17 @@ function Page6() {
         return <div>Invalid Step</div>;
     }
   };
-  return <>{renderStep()}</>;
+  return (
+    <>
+      {renderStep()}
+      //todo indicator
+      <h2 className="text-center">step indicator</h2>
+      <div className="d-flex justify-content-center gap-4 mt-4">
+        {currentStep > 1 && <Button text={"Prev"} />}
+        <Button text={"Next"} />
+      </div>
+    </>
+  );
 }
 
 export default Page6;
