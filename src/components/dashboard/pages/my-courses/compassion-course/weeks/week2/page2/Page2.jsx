@@ -1,18 +1,18 @@
-import React from "react";
-import QuestionBox from "../../../components/QuestionBox";
-import BigTextBox from "../../../components/BigTextBox";
-import theory from "../../../../../../../../assets/theory.png";
-import Button from "../../../components/Button";
+import React from 'react'
+import QuestionBox from '../../../components/QuestionBox';
+import selfCompassion from "../../../../../../../../assets/self-compassion.png";
+import BigTextBox from '../../../components/BigTextBox';
+import Button from '../../../components/Button';
 
-function Page4() {
+function WeekTwoPage2() {
   return (
     <>
       <QuestionBox>
         <div className="d-flex align-items-center gap-2 ms-5">
           <h2 className="text-blue font-lg">Question: </h2>
           <h2 className="text-gray font-lg">
-            What do you understand by the word <img src={theory} alt="theory" />{" "}
-            ?
+            What do you understand by the{" "}
+            <img src={selfCompassion} alt="self-compassion" /> ?
           </h2>
         </div>
         <BigTextBox />
@@ -25,4 +25,4 @@ function Page4() {
   );
 }
 
-export default Page4;
+export default WeekTwoPage2

@@ -10,6 +10,11 @@ import Page5 from "./weeks/week1/page5/Page5";
 import Page6 from "./weeks/week1/page6/Page6";
 import Page7 from "./weeks/week1/page7/Page7";
 import Page8 from "./weeks/week1/page8/Page8";
+import WeekTwoPage1 from "./weeks/week2/page1/Page1";
+import WeekTwoPage2 from "./weeks/week2/page2/Page2";
+import WeekTwoPage3 from "./weeks/week2/page3/Page3";
+import WeekTwoPage4 from "./weeks/week2/page4/page4";
+import WeekTwoPage5 from "./weeks/week2/page5/Page5";
 const CompassionCourse = () => {
   const weeksTopic = [
     "Introduction to Compassion",
@@ -53,7 +58,7 @@ const CompassionCourse = () => {
         </ul>
       </aside>
       <section className="week-content">
-        <Page6 />
+        <WeekTwoPage4 />
       </section>
     </>
   );

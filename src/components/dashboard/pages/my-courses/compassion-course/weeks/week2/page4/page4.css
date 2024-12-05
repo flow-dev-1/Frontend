@@ -1,0 +1,23 @@
+.letter-container {
+  display: flex;
+}
+
+.letter-info {
+  background: url("../../../../../../../../assets/small-rect.png") no-repeat;
+  background-size: cover;
+  padding: 30px 30px;
+  flex-basis: 260px;
+}
+
+.letter-content {
+  background: url("../../../../../../../../assets/big-rect.png") no-repeat;
+  background-size: contain;
+  flex: 1;
+  margin-left: -10px;
+}
+
+.letter-content textarea {
+  background: url("../../../../../../../../assets/text-line.png") no-repeat;
+  background-size: cover;
+  margin-left: -20px;
+}

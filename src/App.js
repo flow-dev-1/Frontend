@@ -1,56 +1,56 @@
-import React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import './App.css'
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
 
 // import LandingPage from './components/common-pages/landing-page/LandingPage';
-import SignupCategory from './components/common-pages/sigup-category/SignupCategory'
-import RegistrationForm from './components/onboarding/registration/StudentRegistrationForm.js'
-import SignIn from './components/onboarding/login/SignIn'
-import ForgotPassword from './components/onboarding/login/ForgotPassword'
-import ResetPassword from './components/onboarding/login/ResetPassword'
-import Dashboard from './components/dashboard/Dashboard'
-import IndividualOverview from './components/dashboard/pages/overview/Overview'
-import IndividualProfile from './components/dashboard/pages/profile/IndividualProfile'
-import MyCourses from './components/dashboard/pages/my-courses/MyCourses'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import OnboardingRootLayout from './components/onboarding/OnboardingRootLayout'
-import SingleCoursePage from './components/dashboard/pages/my-courses/single-course-page/SingleCoursePage'
-import ConfirmPayment from './components/dashboard/pages/ConfirmPayment.js'
-import SchoolDashboard from './components/school-dashboard/school-pages/school-dashboard/SchoolDashboard.js'
-import SchoolOverview from './components/school-dashboard/school-pages/school-overview/SchoolOverview.js'
-import SchoolSettingsChangePassword from './components/school-dashboard/school-pages/school-settings/change-password/SchoolSettingsChangePassword.jsx'
-import SchoolSettingsTeams from './components/school-dashboard/school-pages/school-settings/teams/SchoolSettingsTeams.jsx'
-import SchoolSettingsProfile from './components/school-dashboard/school-pages/school-settings/profile/SchoolSettingsProfile.jsx'
-import SchoolSettingsEmailNotifications from './components/school-dashboard/school-pages/school-settings/email-notification/SchoolSettingsEmailNotifications.jsx'
-import SchoolSettingsDeactivateAccount from './components/school-dashboard/school-pages/school-settings/deactivate-account/SchoolSettingsDeactivateAccount.jsx'
-import SchoolPaymentHistory from './components/school-dashboard/school-pages/school-payment-history/SchoolPaymentHistory.jsx'
-import SchoolSupport from './components/school-dashboard/school-pages/school-support/SchoolSupport.jsx'
-import SchoolAllCourses from './components/school-dashboard/school-pages/school-courses/SchoolAllCourses.jsx'
-import SchoolEnrolledCourseStudents from './components/school-dashboard/school-pages/school-courses/school-enrolled-courses/school-enrolled-course-students/SchoolEnrolledCourseStudents.jsx'
-import SchoolEnrolledStudents from './components/school-dashboard/school-pages/school-courses/school-enrolled-courses/school-single-enrolled-course-page/SchoolEnrolledStudents.jsx'
-import SchoolRegistrationForm from './components/school-dashboard/school-onboarding/registration/SchoolRegistrationForm.js'
-import SchoolSignIn from './components/school-dashboard/school-onboarding/login/SchoolSignIn.js'
-import SchoolForgotPassword from './components/school-dashboard/school-onboarding/login/SchoolForgotPassword.js'
-import SchoolResetPassword from './components/school-dashboard/school-onboarding/login/SchoolResetPassword.js'
-import SigninCategory from './components/common-pages/signin-category/SigninCategory.js'
-import ProtectedRoute from './components/ProtectedRoutes.js'
-import IndividualSignupCategory from './components/common-pages/individual-signup-categorty/IndividualSignupCategory.jsx'
-import StudentRegistrationForm from './components/onboarding/registration/StudentRegistrationForm.js'
-import EducatorRegistrationForm from './components/onboarding/registration/EducatorRegistrationForm.js'
-import IndividualCategory from './components/common-pages/sigup-category/IndividualCategory.js'
-import InvitedUserRegistration from './components/onboarding/registration/InvitedStudentRegistrationForm.js'
-import Support from './components/dashboard/pages/support/Support.jsx'
-import PayementHistory from './components/dashboard/pages/payment-history/PayementHistory.jsx'
-import InvitedAdminRegistration from './components/onboarding/registration/InvitedAdminRegistration.js'
-import InvitedStudentRegistrationForm from './components/onboarding/registration/InvitedStudentRegistrationForm.js'
-import SchoolEnrolledEducators from './components/school-dashboard/school-pages/school-courses/school-enrolled-courses/school-single-enrolled-course-page/SchoolEnrolledEducators.jsx'
-import SelfAwarenessCourse from './components/dashboard/pages/my-courses/self-awareness-course/SelfAwarenessCourse.js'
-import SelfAwarenessFeedback from './components/dashboard/pages/my-courses/self-awareness-feedback/SelfAwarenessFeedback.js'
-import InvitedAdminEducatorRegistration from './components/onboarding/registration/InvitedEducatorRegistrationForm.js'
-import IndividualSchoolProfile from './components/school-dashboard/school-pages/school-courses/school-enrolled-courses/school-single-enrolled-course-page/IndividualSchoolProfile.jsx'
-import SchoolSelfAwarenessFeedback from './components/school-dashboard/school-pages/school-courses/single-individual-course-feedback/self-awareness-feedback/SchoolSelfAwarenessFeedback.js'
-import CompassionCourse from './components/dashboard/pages/my-courses/compassion-course/index.jsx'
+import SignupCategory from "./components/common-pages/sigup-category/SignupCategory";
+import RegistrationForm from "./components/onboarding/registration/StudentRegistrationForm.js";
+import SignIn from "./components/onboarding/login/SignIn";
+import ForgotPassword from "./components/onboarding/login/ForgotPassword";
+import ResetPassword from "./components/onboarding/login/ResetPassword";
+import Dashboard from "./components/dashboard/Dashboard";
+import IndividualOverview from "./components/dashboard/pages/overview/Overview";
+import IndividualProfile from "./components/dashboard/pages/profile/IndividualProfile";
+import MyCourses from "./components/dashboard/pages/my-courses/MyCourses";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import OnboardingRootLayout from "./components/onboarding/OnboardingRootLayout";
+import SingleCoursePage from "./components/dashboard/pages/my-courses/single-course-page/SingleCoursePage";
+import ConfirmPayment from "./components/dashboard/pages/ConfirmPayment.js";
+import SchoolDashboard from "./components/school-dashboard/school-pages/school-dashboard/SchoolDashboard.js";
+import SchoolOverview from "./components/school-dashboard/school-pages/school-overview/SchoolOverview.js";
+import SchoolSettingsChangePassword from "./components/school-dashboard/school-pages/school-settings/change-password/SchoolSettingsChangePassword.jsx";
+import SchoolSettingsTeams from "./components/school-dashboard/school-pages/school-settings/teams/SchoolSettingsTeams.jsx";
+import SchoolSettingsProfile from "./components/school-dashboard/school-pages/school-settings/profile/SchoolSettingsProfile.jsx";
+import SchoolSettingsEmailNotifications from "./components/school-dashboard/school-pages/school-settings/email-notification/SchoolSettingsEmailNotifications.jsx";
+import SchoolSettingsDeactivateAccount from "./components/school-dashboard/school-pages/school-settings/deactivate-account/SchoolSettingsDeactivateAccount.jsx";
+import SchoolPaymentHistory from "./components/school-dashboard/school-pages/school-payment-history/SchoolPaymentHistory.jsx";
+import SchoolSupport from "./components/school-dashboard/school-pages/school-support/SchoolSupport.jsx";
+import SchoolAllCourses from "./components/school-dashboard/school-pages/school-courses/SchoolAllCourses.jsx";
+import SchoolEnrolledCourseStudents from "./components/school-dashboard/school-pages/school-courses/school-enrolled-courses/school-enrolled-course-students/SchoolEnrolledCourseStudents.jsx";
+import SchoolEnrolledStudents from "./components/school-dashboard/school-pages/school-courses/school-enrolled-courses/school-single-enrolled-course-page/SchoolEnrolledStudents.jsx";
+import SchoolRegistrationForm from "./components/school-dashboard/school-onboarding/registration/SchoolRegistrationForm.js";
+import SchoolSignIn from "./components/school-dashboard/school-onboarding/login/SchoolSignIn.js";
+import SchoolForgotPassword from "./components/school-dashboard/school-onboarding/login/SchoolForgotPassword.js";
+import SchoolResetPassword from "./components/school-dashboard/school-onboarding/login/SchoolResetPassword.js";
+import SigninCategory from "./components/common-pages/signin-category/SigninCategory.js";
+import ProtectedRoute from "./components/ProtectedRoutes.js";
+import IndividualSignupCategory from "./components/common-pages/individual-signup-categorty/IndividualSignupCategory.jsx";
+import StudentRegistrationForm from "./components/onboarding/registration/StudentRegistrationForm.js";
+import EducatorRegistrationForm from "./components/onboarding/registration/EducatorRegistrationForm.js";
+import IndividualCategory from "./components/common-pages/sigup-category/IndividualCategory.js";
+import InvitedUserRegistration from "./components/onboarding/registration/InvitedStudentRegistrationForm.js";
+import Support from "./components/dashboard/pages/support/Support.jsx";
+import PayementHistory from "./components/dashboard/pages/payment-history/PayementHistory.jsx";
+import InvitedAdminRegistration from "./components/onboarding/registration/InvitedAdminRegistration.js";
+import InvitedStudentRegistrationForm from "./components/onboarding/registration/InvitedStudentRegistrationForm.js";
+import SchoolEnrolledEducators from "./components/school-dashboard/school-pages/school-courses/school-enrolled-courses/school-single-enrolled-course-page/SchoolEnrolledEducators.jsx";
+import SelfAwarenessCourse from "./components/dashboard/pages/my-courses/self-awareness-course/SelfAwarenessCourse.js";
+import SelfAwarenessFeedback from "./components/dashboard/pages/my-courses/self-awareness-feedback/SelfAwarenessFeedback.js";
+import InvitedAdminEducatorRegistration from "./components/onboarding/registration/InvitedEducatorRegistrationForm.js";
+import IndividualSchoolProfile from "./components/school-dashboard/school-pages/school-courses/school-enrolled-courses/school-single-enrolled-course-page/IndividualSchoolProfile.jsx";
+import SchoolSelfAwarenessFeedback from "./components/school-dashboard/school-pages/school-courses/single-individual-course-feedback/self-awareness-feedback/SchoolSelfAwarenessFeedback.js";
+import CompassionCourse from "./components/dashboard/pages/my-courses/compassion-course/index.jsx";
 
 function App() {
   return (
@@ -225,4 +225,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
