@@ -7,6 +7,7 @@ import Page2 from "./weeks/week1/page2/Page2";
 import Page3 from "./weeks/week1/page3/Page3";
 import Page4 from "./weeks/week1/page4/Page4";
 import Page5 from "./weeks/week1/page5/Page5";
+import Page6 from "./weeks/week1/page6/Page6";
 import Page7 from "./weeks/week1/page7/Page7";
 const CompassionCourse = () => {
   const weeksTopic = [
@@ -51,7 +52,7 @@ const CompassionCourse = () => {
         </ul>
       </aside>
       <section className="week-content">
-        <Page7 />
+        <Page6 />
       </section>
     </>
   );

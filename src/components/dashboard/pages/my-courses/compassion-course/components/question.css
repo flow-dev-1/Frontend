@@ -3,6 +3,17 @@
   border-radius: 8px;
 }
 
+.small-input {
+  border: none;
+  outline: none;
+}
+
+.small-input:focus {
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
 ::placeholder {
   font-weight: bold;
   font-size: 20px;
@@ -32,6 +43,7 @@
   background-color: rgb(110, 222, 235);
   background-image: url(../../../../../../assets/selfawareness-images/course-bg.png);
   background-size: cover;
+  background-position: center;
 }
 
 .w-1020px {
@@ -61,4 +73,10 @@
 }
 .font-lg {
   font-size: 48px;
+}
+
+.question-box-container {
+  max-width: 100%;
+  min-height: 500px;
+  /* width: max-content; */
 }
