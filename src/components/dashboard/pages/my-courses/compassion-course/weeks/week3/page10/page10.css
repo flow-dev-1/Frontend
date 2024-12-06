@@ -1,0 +1,23 @@
+.letter-container {
+  display: flex;
+}
+
+.letter-info {
+  background: url("../../../../../../../../assets/small-rect.png") no-repeat;
+  background-size: contain;
+  padding: 30px 30px;
+  flex-basis: 260px;
+}
+.letter-info h3 {
+  font-size: 20px;
+}
+
+
+.letter-content textarea {
+  background: url("../../../../../../../../assets/text-line.png") no-repeat;
+  background-size: cover;
+  /* margin-left: -20px; */
+}
+input::placeholder {
+  font-weight: normal !important;
+}

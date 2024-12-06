@@ -76,15 +76,15 @@
 }
 
 .question-box-container {
+  min-width: 989px;
   max-width: 100%;
-  min-height: 500px;
+  min-height: 450px;
   /* width: max-content; */
 }
 
 label {
   font-size: 1.2em;
 }
-
 
 .hover-next:hover {
   background-color: transparent !important;

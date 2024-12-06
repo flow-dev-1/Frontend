@@ -16,6 +16,20 @@ import WeekTwoPage3 from "./weeks/week2/page3/Page3";
 import WeekTwoPage4 from "./weeks/week2/page4/page4";
 import WeekTwoPage5 from "./weeks/week2/page5/Page5";
 import WeekTwoPage6 from "./weeks/week2/page6/Page6";
+import WeekTwoPage7 from "./weeks/week2/page7/Page7";
+import WeekTwoPage8 from "./weeks/week2/page8/Page8";
+import WeekThreePage1 from "./weeks/week3/page1/Page1";
+import WeekThreePage2 from "./weeks/week3/page2/Page2";
+import WeekThreePage3 from "./weeks/week3/page3/Page3";
+import WeekThreePage4 from "./weeks/week3/page4/Page4";
+import WeekThreePage5 from "./weeks/week3/page5/Page5";
+import WeekThreePage6 from "./weeks/week3/page6/Page6";
+import WeekThreePage7 from "./weeks/week3/page7/Page7";
+import WeekThreePage8 from "./weeks/week3/page8/Page8";
+import WeekThreePage9 from "./weeks/week3/page9/Page9";
+import WeekThreePage10 from "./weeks/week3/page10/Page10";
+import WeekThreePage11 from "./weeks/week3/page11/Page11";
+import WeekThreePage12 from "./weeks/week3/page12/Page12";
 const CompassionCourse = () => {
   const weeksTopic = [
     "Introduction to Compassion",
@@ -25,7 +39,7 @@ const CompassionCourse = () => {
     `Life Scenarios - Let's wear the shoes of Others`,
   ];
 
-  const weekNumber = 3 // we wil get it from params
+  const weekNumber = 4; // we wil get it from params
   return (
     <>
       <header className="compassion-header">
@@ -44,7 +58,10 @@ const CompassionCourse = () => {
 
         <ul className="compassion-list">
           {weeksTopic.map((item, index) => (
-            <li key={index} className={weekNumber >= index + 1  ? "active-week" : ""}>
+            <li
+              key={index}
+              className={weekNumber >= index + 1 ? "active-week" : ""}
+            >
               <div className="icon">
                 <Icon
                   icon="icon-park-outline:check-one"
@@ -61,7 +78,7 @@ const CompassionCourse = () => {
         </ul>
       </aside>
       <section className="week-content">
-        <WeekTwoPage6 />
+        <WeekThreePage12 />
       </section>
     </>
   );

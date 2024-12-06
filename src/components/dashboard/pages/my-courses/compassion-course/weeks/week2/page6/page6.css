@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  margin: auto;
+}
+
+
+.container-item h3 {
+  width: 160px;
+}
+
+.container-item img{
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.container-item input{
+  padding: 10px 20px;
+  border: 2px solid grey;
+  border-radius: 5px;
+}
+.container-item input:focus {
+  border: 2px solid grey !important;
+
+}
+
+.container-item input::placeholder{
+  font-size: 14px;
+  font-weight: normal;
+}

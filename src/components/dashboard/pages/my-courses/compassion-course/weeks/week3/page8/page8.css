@@ -1,0 +1,36 @@
+.input-container {
+  width: 924px;
+  height: 325px;
+  background: url("../../../../../../../../assets/big-rect.png") no-repeat;
+}
+
+.input-label {
+  background-color: #ffeebb;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  padding: 3px 5px;
+}
+
+input {
+  border: none;
+  border-bottom: 1px solid grey;
+  width: 100%;
+  font-size: 14px;
+  padding: 12px;
+}
+input::placeholder{
+  font-weight:  normal !important;
+
+}
+
+input:focus {
+  border: inherit!important;
+  border-bottom: 1px solid grey !important;
+
+}
+
+.label-input-container {
+  justify-content: center;
+  align-items: center;
+}
