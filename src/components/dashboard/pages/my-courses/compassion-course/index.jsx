@@ -38,6 +38,10 @@ import WeekFourPage5 from "./weeks/week4/page5/Page5";
 import WeekFourPage6 from "./weeks/week4/page6/Page6.jsx";
 import WeekFourPage7 from "./weeks/week4/page7/Page7.jsx";
 import WeekFourPage8 from "./weeks/week4/page8/Page8.jsx";
+import WeekFivePage1 from "./weeks/week5/page1/Page1.jsx";
+import WeekFivePage2 from "./weeks/week5/page2/Page2.jsx";
+import WeekFivePage3 from "./weeks/week5/page3/Page3.jsx";
+import WeekFivePage4 from "./weeks/week5/page4/Page4.jsx";
 const CompassionCourse = () => {
   const weeksTopic = [
     "Introduction to Compassion",
@@ -47,7 +51,7 @@ const CompassionCourse = () => {
     `Life Scenarios - Let's wear the shoes of Others`,
   ];
 
-  const weekNumber = 4; // we wil get it from params
+  const weekNumber = 5; // we wil get it from params
   return (
     <>
       <header className="compassion-header">
@@ -86,7 +90,7 @@ const CompassionCourse = () => {
         </ul>
       </aside>
       <section className="week-content">
-        <WeekFourPage8 />
+        <Page4 />
       </section>
     </>
   );

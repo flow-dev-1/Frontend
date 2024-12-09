@@ -29,7 +29,7 @@ function Page6() {
         return (
           <Frame
             data={{
-              title: `A classmate is sitting alone at lunch, looking usePrefetchInfiniteQuery. You notice they haven't touched thier food.`,
+              title: `A classmate is sitting alone at lunch, looking sad. You notice they haven't touched thier food.`,
               questions: [
                 { Seeing: `What do you notice about the situation?` },
                 {
