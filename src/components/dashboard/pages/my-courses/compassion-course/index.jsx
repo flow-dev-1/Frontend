@@ -30,6 +30,14 @@ import WeekThreePage9 from "./weeks/week3/page9/Page9";
 import WeekThreePage10 from "./weeks/week3/page10/Page10";
 import WeekThreePage11 from "./weeks/week3/page11/Page11";
 import WeekThreePage12 from "./weeks/week3/page12/Page12";
+import WeekFourPage1 from "./weeks/week4/page1/Page1";
+import WeekFourPage2 from "./weeks/week4/page2/Page2";
+import WeekFourPage3 from "./weeks/week4/page3/Page3";
+import WeekFourPage4 from "./weeks/week4/page4/Page4";
+import WeekFourPage5 from "./weeks/week4/page5/Page5";
+import WeekFourPage6 from "./weeks/week4/page6/Page6.jsx";
+import WeekFourPage7 from "./weeks/week4/page7/Page7.jsx";
+import WeekFourPage8 from "./weeks/week4/page8/Page8.jsx";
 const CompassionCourse = () => {
   const weeksTopic = [
     "Introduction to Compassion",
@@ -78,7 +86,7 @@ const CompassionCourse = () => {
         </ul>
       </aside>
       <section className="week-content">
-        <WeekThreePage12 />
+        <WeekFourPage8 />
       </section>
     </>
   );

@@ -1,0 +1,56 @@
+/* which color name is this close to #08bcc4 */
+
+.options {
+  padding: 10px 25px;
+  border-radius: 5px;
+  /* flex: 1 1 calc(33.33% - 20px); */
+}
+
+.flex-basis {
+  flex-basis: 500px;
+}
+
+.inner-count,
+.outer-count {
+  background-color: white;
+  text-align: center;
+  width: 45.65px;
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  margin: auto;
+}
+
+.inner-count {
+  border: 4px solid #438643;
+  color: #50aa50;
+}
+
+.outer-count {
+  border: 4px solid #ed8641;
+  color: #faaa74;
+}
+
+.inner-bowl,
+.outer-bowl {
+  width: 147px;
+  aspect-ratio: 1;
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.inner-bowl {
+  background-color: #50aa50;
+  border: 4px solid #438643;
+}
+.outer-bowl {
+  background-color: #faaa74;
+  border: 4px solid #ed8641;
+}

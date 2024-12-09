@@ -22,7 +22,7 @@ function VideoComponent({ videoSrc }) {
   }, []);
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative", width: '1020px' }}>
       <video
         className="custom-video"
         ref={videoRef}
