@@ -6,32 +6,42 @@ import heartImage from "../../../../../../../../assets/heart-image.png";
 import hugImage2 from "../../../../../../../../assets/hug-image-2.png";
 import QuestionBox from "../../../components/QuestionBox";
 import Button from "../../../components/Button";
+import getPageContent from "../../data";
 
 function WeekTwoPage6() {
-  const data = [
-    { title: "I feel loved when", imgSrc: heartImage },
-    { title: "I feel cared for when", imgSrc: hugImage },
-    { title: "I need support when", imgSrc: hugImage2 },
-    { title: "I wish someone would", imgSrc: wishImage },
-  ];
+  const currentWeek = 2;
+  const currentPage = 6;
+  const pageData = getPageContent(currentWeek, currentPage);
+
+  // Map image imports to their filenames
+  const imageMap = {
+    'heart-image.png': heartImage,
+    'hug-image.png': hugImage,
+    'hug-image-2.png': hugImage2,
+    'wish-image.png': wishImage,
+  };
+
   return (
     <>
       <QuestionBox>
         <div className="container">
-          {data.map((item, index) => (
+          {pageData.prompts.map((item, index) => (
             <div key={index} className="container-item">
               <h3 className="fs-1">{item.title}...</h3>
-              <img src={item.imgSrc} alt="images" />
-              <input type="text" placeholder="Type your answer here..." />
+              <img src={imageMap[item.imgSrc]} alt="images" />
+              <input 
+                type={pageData.inputType} 
+                placeholder={pageData.inputPlaceholder} 
+              />
             </div>
           ))}
         </div>
       </QuestionBox>
 
-      <h1 className="text-center">TODO: step conter</h1>
-      <div className="d-flex justify-content-center gap-4 mt-4">
-        <Button text={"Prev"} />
-        <Button text={"Next"} />
+      <h1 className="text-center">TODO: step counter</h1>
+      <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
+        {pageData.navigation.prev && <Button text={"Prev"} />}
+        {pageData.navigation.next && <Button text={"Next"} />}
       </div>
     </>
   );

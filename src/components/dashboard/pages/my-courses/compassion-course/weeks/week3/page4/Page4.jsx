@@ -3,39 +3,38 @@ import QuestionBox from "../../../components/QuestionBox";
 import Button from "../../../components/Button";
 import checkedImage from "../../../../../../../../assets/checkedbox.png";
 import uncheckedImage from "../../../../../../../../assets/uncheckedBox.png";
+import getPageContent from "../../data";
 
 function WeekThreePage4() {
+  const currentWeek = 3;
+  const currentPage = 4;
+  const pageData = getPageContent(currentWeek, currentPage);
+
   const [selectedOption, setSelectedOption] = useState(null);
+  const [currentStep, setCurrentStep] = useState(1);
 
-  const [currentStep, setCurrentStep] = useState(4);
-
-  const { question, options } = {
-    question: `Imagine you're at break-period, and you see a classmate sitting alone, looking upset. What would you do in this situation?`,
-    options: [
-      { A: `Go over and ask if they are okay.` },
-      { B: `Ignore it; they probably want to be left alone.` },
-      {
-        C: `B. Ignore it; they probably want to be left alone.`,
-      },
-    ],
-  };
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
   };
 
   const renderStep = () => {
-    switch (currentStep) {
-      case 1:
+    const scenario = pageData?.steps[currentStep - 1];
+
+    if (!scenario) return null;
+
+    switch (scenario.type) {
+      case "question":
         return (
           <div className="">
             <form className="d-flex gap-3">
               <h2 className="text-blue fs-1">Question: </h2>
               <div className="">
-                <h3 className="fs-1"> {question}</h3>
-                {options.map((option, index) => {
-                  const optionKey = Object.keys(option)[0]; // Get key (A, B, C, D)
-                  const optionText = option[optionKey]; // Get value (the text of the option)
-                  const isChecked = selectedOption === optionKey;
+                <h3 className="fs-1">{scenario.question}</h3>
+                {scenario.options.map((option, index) => {
+                  const optionKey = Object.keys(option);
+                  const optionID = option[optionKey[0]];
+                  const optionText = option[optionKey[1]];
+                  const isChecked = selectedOption === optionID;
 
                   return (
                     <div
@@ -44,9 +43,9 @@ function WeekThreePage4() {
                     >
                       <input
                         type="radio"
-                        id={optionKey}
-                        name="options"
-                        value={optionKey}
+                        id={optionID}
+                        name="optionID"
+                        value={optionID}
                         checked={isChecked}
                         onChange={handleOptionChange}
                         style={{ display: "none" }}
@@ -55,11 +54,11 @@ function WeekThreePage4() {
                         src={isChecked ? checkedImage : uncheckedImage}
                         alt={optionKey}
                         style={{ width: 20, height: 20, cursor: "pointer" }}
-                        onClick={() => setSelectedOption(optionKey)}
+                        onClick={() => setSelectedOption(optionID)}
                       />
                       <label
-                        htmlFor={optionKey}
-                      >{`${optionKey}. ${optionText}`}</label>
+                        htmlFor={optionID}
+                      >{`${optionID}. ${optionText}`}</label>
                     </div>
                   );
                 })}
@@ -72,55 +71,28 @@ function WeekThreePage4() {
             </p>
           </div>
         );
-      case 2:
+      case "feedback":
         return (
           <div
             className="d-flex justify-content-center align-items-center"
             style={{ height: "400px" }}
           >
-            <h3 className="fs-1 text-center">
-              Great! Let’s talk about why reaching out, even in a small way, can
-              be a powerful act of compassion.
-            </h3>
-          </div>
-        );
-      case 3:
-        return (
-          <div
-            className="d-flex justify-content-center align-items-center"
-            style={{ height: "400px" }}
-          >
-            <h3 className="fs-1 text-center">
-              This can be handled better,  try again to see what can be done
-              differently.
-            </h3>
-          </div>
-        );
-      case 4:
-        return (
-          <div
-            className="d-flex justify-content-center align-items-center"
-            style={{ height: "400px" }}
-          >
-            <h3 className="fs-1 text-center">
-              If you immediately tell a teacher or an adult, ensure to follow up
-              with the situation and encourage the person. However what we need
-              you for this time is different.
-            </h3>
+            <h3 className="fs-1 text-center">{scenario.message}</h3>
           </div>
         );
       default:
         return null;
     }
   };
+
   return (
     <>
       <QuestionBox>{renderStep()}</QuestionBox>
 
-      <h2 className="text-center"> TODO: step indicator</h2>
-      <div className="d-flex justify-content-center gap-4 mt-4">
-        <Button text={"Prev"} />
-        <Button text={"Next"} />
+      <h2 className="text-center">TODO: step indicator</h2>
+      <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
+        {pageData.navigation.prev && <Button text={"Prev"} />}
+        {pageData.navigation.next && <Button text={"Next"} />}
       </div>
     </>
   );

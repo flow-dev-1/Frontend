@@ -3,26 +3,18 @@ import Button from "../../../../components/Button";
 import checkedImage from "../../../../../../../../../assets/checkedbox.png";
 import uncheckedImage from "../../../../../../../../../assets/uncheckedBox.png";
 import { useState } from "react";
+import getPageContent from "../../../data";
 
 function ScenariosThree() {
   const [selectedOption, setSelectedOption] = useState(null);
+  const [currentStep, setCurrentStep] = useState(1);
 
-  const [currentStep, setCurrentStep] = useState(4);
+  // Get the first scenario from Week 5, Page 2
+  const currentWeek = 5;
+  const currentPage = 2;
+  const pageData = getPageContent(currentWeek, currentPage);
+  const scenarioData = pageData.scenarios[2]; // Third scenario
 
-  const { question, options } = {
-    question: `A New Boy Comes to Class and is Nervous About Joining Others to Play.`,
-    options: [
-      {
-        A: `Invite him to join your group and introduce him to other classmates.`,
-      },
-      {
-        B: `Casually remind yourself it's not your responsibility to make new students feel welcome.`,
-      },
-      {
-        C: `Pull him into the game without his permission.`,
-      },
-    ],
-  };
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
   };
@@ -31,15 +23,16 @@ function ScenariosThree() {
     switch (currentStep) {
       case 1:
         return (
-          <div className="">
+          <div>
             <form className="d-flex gap-3">
-              <h2 className="text-blue fs-1">Scenario 3: </h2>
+              <h2 className="text-blue fs-1">Scenario 1: </h2>
               <div className="">
-                <h3 className="fs-1"> {question[currentStep]}</h3>
-                {options[currentStep].map((option, index) => {
-                  const optionKey = Object.keys(option)[0]; // Get key (A, B, C, D)
-                  const optionText = option[optionKey]; // Get value (the text of the option)
-                  const isChecked = selectedOption === optionKey;
+                <h3 className="fs-1">{scenarioData.question}</h3>
+                {scenarioData.options.map((option, index) => {
+                  const optionKey = Object.keys(option)[0];
+                  const optionText = option.text;
+                  const optionID = option.id;
+                  const isChecked = selectedOption === optionID;
 
                   return (
                     <div
@@ -59,11 +52,11 @@ function ScenariosThree() {
                         src={isChecked ? checkedImage : uncheckedImage}
                         alt={optionKey}
                         style={{ width: 20, height: 20, cursor: "pointer" }}
-                        onClick={() => setSelectedOption(optionKey)}
+                        onClick={() => setSelectedOption(optionID)}
                       />
                       <label
                         htmlFor={optionKey}
-                      >{`${optionKey}. ${optionText}`}</label>
+                      >{`${optionID}. ${optionText}`}</label>
                     </div>
                   );
                 })}
@@ -83,10 +76,7 @@ function ScenariosThree() {
             style={{ height: "400px" }}
           >
             <h3 className="fs-1 text-center">
-              Did you choose Option A? Great job! Inviting him and giving him
-              the option to choose to participate or not is a very compassionate
-              act. However, pulling him into the game without his permission and
-              ignoring him are not acts of compassion. 
+              {scenarioData.feedback.A}
             </h3>
           </div>
         );
@@ -97,11 +87,7 @@ function ScenariosThree() {
             style={{ height: "400px" }}
           >
             <h3 className="fs-1 text-center">
-              "If you choose Option B, Understand that, while it might feel like
-              it’s not your job to welcome others, we all play a part in making
-              people feel included. Imagine if you were new and nervous—having
-              someone reach out can make a big difference. Showing kindness and
-              helping others feel comfortable is always a great thing to do."
+              {scenarioData.feedback.B}
             </h3>
           </div>
         );
@@ -112,12 +98,7 @@ function ScenariosThree() {
             style={{ height: "400px" }}
           >
             <h3 className="fs-1 text-center">
-              "Option C might seem like you're helping by pulling him into the
-              game, but forcing someone to do something can make them feel even
-              more nervous. It’s important to ask and give them the choice. When
-              someone is new, they might need time to get comfortable, and being
-              kind and patient can help them feel safe and ready to join when
-              they’re ready."
+              {scenarioData.feedback.C}
             </h3>
           </div>
         );
@@ -125,15 +106,10 @@ function ScenariosThree() {
         return null;
     }
   };
+
   return (
     <>
       <QuestionBox>{renderStep()}</QuestionBox>
-
-      <h2 className="text-center"> TODO: step indicator</h2>
-      <div className="d-flex justify-content-center gap-4 mt-4">
-        <Button text={"Prev"} />
-        <Button text={"Next"} />
-      </div>
     </>
   );
 }

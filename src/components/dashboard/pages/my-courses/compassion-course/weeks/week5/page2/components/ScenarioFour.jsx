@@ -3,26 +3,18 @@ import Button from "../../../../components/Button";
 import checkedImage from "../../../../../../../../../assets/checkedbox.png";
 import uncheckedImage from "../../../../../../../../../assets/uncheckedBox.png";
 import { useState } from "react";
+import getPageContent from "../../../data";
 
 function ScenariosFour() {
   const [selectedOption, setSelectedOption] = useState(null);
+  const [currentStep, setCurrentStep] = useState(2);
 
-  const [currentStep, setCurrentStep] = useState(4);
+  // Get the first scenario from Week 5, Page 2
+  const currentWeek = 5;
+  const currentPage = 2;
+  const pageData = getPageContent(currentWeek, currentPage);
+  const scenarioData = pageData.scenarios[3]; // Forth scenario
 
-  const { question, options } = {
-    question: `Your Friend Failed a Test While You Scored the Highest.`,
-    options: [
-      {
-        A: `Brag about your high score and tell them they should have studied harder.`,
-      },
-      {
-        B: `Ignore their feelings and continue to celebrate your own success.`,
-      },
-      {
-        C: `Encourage them by reminding them that one test doesn’t define their abilities, and that you can help them study for the next one.`,
-      },
-    ],
-  };
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
   };
@@ -31,15 +23,16 @@ function ScenariosFour() {
     switch (currentStep) {
       case 1:
         return (
-          <div className="">
+          <div>
             <form className="d-flex gap-3">
-              <h2 className="text-blue fs-1">Scenario 4: </h2>
+              <h2 className="text-blue fs-1">Scenario 1: </h2>
               <div className="">
-                <h3 className="fs-1"> {question[currentStep]}</h3>
-                {options[currentStep].map((option, index) => {
-                  const optionKey = Object.keys(option)[0]; // Get key (A, B, C, D)
-                  const optionText = option[optionKey]; // Get value (the text of the option)
-                  const isChecked = selectedOption === optionKey;
+                <h3 className="fs-1">{scenarioData.question}</h3>
+                {scenarioData.options.map((option, index) => {
+                  const optionKey = Object.keys(option)[0];
+                  const optionText = option.text;
+                  const optionID = option.id;
+                  const isChecked = selectedOption === optionID;
 
                   return (
                     <div
@@ -59,11 +52,11 @@ function ScenariosFour() {
                         src={isChecked ? checkedImage : uncheckedImage}
                         alt={optionKey}
                         style={{ width: 20, height: 20, cursor: "pointer" }}
-                        onClick={() => setSelectedOption(optionKey)}
+                        onClick={() => setSelectedOption(optionID)}
                       />
                       <label
                         htmlFor={optionKey}
-                      >{`${optionKey}. ${optionText}`}</label>
+                      >{`${optionID}. ${optionText}`}</label>
                     </div>
                   );
                 })}
@@ -83,12 +76,7 @@ function ScenariosFour() {
             style={{ height: "400px" }}
           >
             <h3 className="fs-1 text-center">
-              "If you choose Option A, understand that bragging about your
-              success might make your friend feel worse. It's important to
-              celebrate your achievements, but not in a way that hurts others.
-              Telling them they should have studied harder isn’t very kind.
-              Sometimes, people need support and encouragement instead of
-              criticism when they feel down."
+              {scenarioData.feedback.A}
             </h3>
           </div>
         );
@@ -99,12 +87,7 @@ function ScenariosFour() {
             style={{ height: "400px" }}
           >
             <h3 className="fs-1 text-center">
-              "Did you choose Option B? Not quite right, Ignoring your friend’s
-              feelings might make them feel even more alone. When someone is
-              upset, it's important to be aware of how they’re feeling and offer
-              them comfort. You can still be proud of your success, but showing
-              kindness and understanding to your friend can make them feel
-              better and strengthen your friendship."
+              {scenarioData.feedback.B}
             </h3>
           </div>
         );
@@ -115,11 +98,7 @@ function ScenariosFour() {
             style={{ height: "400px" }}
           >
             <h3 className="fs-1 text-center">
-              Did you choose Option C? Great job! Encouraging your friend and
-              reminding them that the test doesn’t define their abilities is
-              very good, and is a compassionate act. Ignoring their feelings and
-              bragging about your score is not compassionate and not kind in any
-              way.
+              {scenarioData.feedback.C}
             </h3>
           </div>
         );
@@ -127,15 +106,10 @@ function ScenariosFour() {
         return null;
     }
   };
+
   return (
     <>
       <QuestionBox>{renderStep()}</QuestionBox>
-
-      <h2 className="text-center"> TODO: step indicator</h2>
-      <div className="d-flex justify-content-center gap-4 mt-4">
-        <Button text={"Prev"} />
-        <Button text={"Next"} />
-      </div>
     </>
   );
 }

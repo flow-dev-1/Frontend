@@ -3,26 +3,18 @@ import Button from "../../../../components/Button";
 import checkedImage from "../../../../../../../../../assets/checkedbox.png";
 import uncheckedImage from "../../../../../../../../../assets/uncheckedBox.png";
 import { useState } from "react";
+import getPageContent from "../../../data";
 
 function ScenariosOne() {
   const [selectedOption, setSelectedOption] = useState(null);
-
   const [currentStep, setCurrentStep] = useState(1);
 
-  const { question, options } = {
-    question: `Your Friend Forgot Their Homework at Home.`,
-    options: [
-      {
-        A: `You notice your friend is upset and say, "I'm sorry you forgot your homework," but don’t offer further help.`,
-      },
-      {
-        B: `You notice your friend is upset, express concern by saying, "I can see you’re feeling worried about forgetting your homework." You then offer to share your notes and help them prepare for the class discussion.`,
-      },
-      {
-        C: `You tell your friend, "I'll help by talking to the teacher with you," and offer to go with them to explain the situation to the teacher.`,
-      },
-    ],
-  };
+  // Get the first scenario from Week 5, Page 2
+  const currentWeek = 5;
+  const currentPage = 2;
+  const pageData = getPageContent(currentWeek, currentPage);
+  const scenarioData = pageData.scenarios[0]; // First scenario
+
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
   };
@@ -33,13 +25,14 @@ function ScenariosOne() {
         return (
           <div>
             <form className="d-flex gap-3">
-              <h2 className="text-blue fs-1 ">Scenario 1: </h2>
+              <h2 className="text-blue fs-1">Scenario 1: </h2>
               <div className="">
-                <h3 className="fs-1"> {question}</h3>
-                {options.map((option, index) => {
-                  const optionKey = Object.keys(option)[0]; // Get key (A, B, C, D)
-                  const optionText = option[optionKey]; // Get value (the text of the option)
-                  const isChecked = selectedOption === optionKey;
+                <h3 className="fs-1">{scenarioData.question}</h3>
+                {scenarioData.options.map((option, index) => {
+                  const optionKey = Object.keys(option)[0];
+                  const optionText = option.text;
+                  const optionID = option.id;
+                  const isChecked = selectedOption === optionID;
 
                   return (
                     <div
@@ -59,11 +52,11 @@ function ScenariosOne() {
                         src={isChecked ? checkedImage : uncheckedImage}
                         alt={optionKey}
                         style={{ width: 20, height: 20, cursor: "pointer" }}
-                        onClick={() => setSelectedOption(optionKey)}
+                        onClick={() => setSelectedOption(optionID)}
                       />
                       <label
                         htmlFor={optionKey}
-                      >{`${optionKey}. ${optionText}`}</label>
+                      >{`${optionID}. ${optionText}`}</label>
                     </div>
                   );
                 })}
@@ -83,12 +76,7 @@ function ScenariosOne() {
             style={{ height: "400px" }}
           >
             <h3 className="fs-1 text-center">
-              "It's good that you expressed concern by acknowledging their
-              situation, but compassion involves more than just words. You
-              noticed your friend’s worry (Observation), but you didn’t take any
-              steps to actively help (Request). True compassion means going
-              beyond just recognizing a problem and offering support when
-              possible."
+              {scenarioData.feedback.A}
             </h3>
           </div>
         );
@@ -99,13 +87,7 @@ function ScenariosOne() {
             style={{ height: "400px" }}
           >
             <h3 className="fs-1 text-center">
-              "Great job! By choosing Option B, you’ve shown true compassion.
-              You observed your friend’s situation and acknowledged their
-              feelings by saying they are worried (Observation & Feeling). You
-              understood their need for help (Need) and offered assistance by
-              sharing your notes and helping them prepare. Offering practical
-              support for the class discussion directly addresses their
-              emotional and academic needs, showing real compassion."
+              {scenarioData.feedback.B}
             </h3>
           </div>
         );
@@ -116,12 +98,7 @@ function ScenariosOne() {
             style={{ height: "400px" }}
           >
             <h3 className="fs-1 text-center">
-              "It’s great that you’re taking initiative to help your friend by
-              offering to speak to the teacher. This is a thoughtful way to
-              address their need (Need). However, it’s important to confirm with
-              your friend first that they are comfortable with you involving the
-              teacher. Compassion also means respecting their feelings and
-              ensuring they’re okay with the approach you take”
+              {scenarioData.feedback.C}
             </h3>
           </div>
         );
@@ -129,15 +106,10 @@ function ScenariosOne() {
         return null;
     }
   };
+
   return (
     <>
       <QuestionBox>{renderStep()}</QuestionBox>
-
-      <h2 className="text-center"> TODO: step indicator</h2>
-      <div className="d-flex justify-content-center gap-4 mt-4">
-        <Button text={"Prev"} />
-        <Button text={"Next"} />
-      </div>
     </>
   );
 }

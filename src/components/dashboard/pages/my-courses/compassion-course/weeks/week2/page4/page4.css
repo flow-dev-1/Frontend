@@ -4,14 +4,14 @@
 
 .letter-info {
   background: url("../../../../../../../../assets/small-rect.png") no-repeat;
-  background-size: cover;
+  background-size: 100%  100%;
   padding: 30px 30px;
   flex-basis: 260px;
 }
 
 .letter-content {
-  background: url("../../../../../../../../assets/big-rect.png") no-repeat;
-  background-size: contain;
+  background: url("../../../../../../../../assets/big-rect.png");
+  background-size: 100%  100%;
   flex: 1;
   margin-left: -10px;
 }

@@ -4,6 +4,10 @@ import RedBucket from "../../../../../../../../assets/Buckets/Red Bucket.svg";
 import OrangeBucket from "../../../../../../../../assets/Buckets/Orange Bucket.svg";
 import GreenBucket from "../../../../../../../../assets/Buckets/Green Bucket.svg";
 import Button from "../../../components/Button";
+import getPageContent from "../../data";
+import CardBoard from "./components/CardBoard";
+
+// Import all images
 import image1 from "../../../../../../../../assets/drag-images/image1.png";
 import image2 from "../../../../../../../../assets/drag-images/image2.png";
 import image3 from "../../../../../../../../assets/drag-images/image3.png";
@@ -14,48 +18,36 @@ import image7 from "../../../../../../../../assets/drag-images/image7.png";
 import image8 from "../../../../../../../../assets/drag-images/image8.png";
 import image9 from "../../../../../../../../assets/drag-images/image9.png";
 import image10 from "../../../../../../../../assets/drag-images/image10.png";
-import CardBoard from "./components/CardBoard";
 
 function WeekFourPage6() {
-  const [currentStep, setCurrentStep] = useState(3);
-  const images = [
-    image1,
-    image2,
-    image3,
-    image4,
-    image5,
-    image6,
-    image7,
-    image8,
-    image9,
-    image10,
-  ];
+  const currentWeek = 4;
+  const currentPage = 6;
+  const pageData = getPageContent(currentWeek, currentPage);
+
+  const [currentStep, setCurrentStep] = useState(1);
+
+  const imageMap = {
+    "image1.png": image1,
+    "image2.png": image2,
+    "image3.png": image3,
+    "image4.png": image4,
+    "image5.png": image5,
+    "image6.png": image6,
+    "image7.png": image7,
+    "image8.png": image8,
+    "image9.png": image9,
+    "image10.png": image10,
+  };
+
+  const bucketMap = {
+    green: GreenBucket,
+    red: RedBucket,
+    orange: OrangeBucket,
+  };
 
   const renderStep = () => {
-    switch (currentStep) {
-      case 1:
-        return <CardBoard imgSrc={images[currentStep - 1]} />;
-      case 2:
-        return <CardBoard imgSrc={images[currentStep - 1]} />;
-      case 3:
-        return <CardBoard imgSrc={images[currentStep - 1]} />;
-      case 4:
-        return <CardBoard imgSrc={images[currentStep - 1]} />;
-      case 5:
-        return <CardBoard imgSrc={images[currentStep - 1]} />;
-      case 6:
-        return <CardBoard imgSrc={images[currentStep - 1]} />;
-      case 7:
-        return <CardBoard imgSrc={images[currentStep - 1]} />;
-      case 8:
-        return <CardBoard imgSrc={images[currentStep - 1]} />;
-      case 9:
-        return <CardBoard imgSrc={images[currentStep - 1]} />;
-      case 10:
-        return <CardBoard imgSrc={images[currentStep - 1]} />;
-      default:
-        return null;
-    }
+    const currentImage = pageData.images[currentStep - 1];
+    return currentImage ? <CardBoard imgSrc={imageMap[currentImage]} /> : null;
   };
 
   return (
@@ -67,26 +59,27 @@ function WeekFourPage6() {
           </div>
           <div className="col bg-blue">
             <div className="d-flex align-items-start mb-2">
-              <img src={ArrowTrail} />
+              <img src={ArrowTrail} alt="arrow trail" />
               <div className="text-center text-white pt-2">
-                <h1>
-                  Drag-and-drop the statements on the left into any of these
-                  bowls
-                </h1>
+                <h1>{pageData.instruction}</h1>
               </div>
-              <img src={ArrowTrail} />
+              <img src={ArrowTrail} alt="arrow trail" />
             </div>
             <div className="d-flex justify-content-between px-4">
-              <img src={GreenBucket} />
-              <img src={RedBucket} />
-              <img src={OrangeBucket} />
+              {pageData.buckets.map((bucket, index) => (
+                <img
+                  key={index}
+                  src={bucketMap[bucket.id]}
+                  alt={`${bucket.id} bucket`}
+                />
+              ))}
             </div>
           </div>
-        </div>{" "}
+        </div>
         <h2 className="text-center">TODO: step indicator</h2>
-        <div className="d-flex justify-content-center gap-4 mt-4">
-          <Button text={"Prev"} />
-          <Button text={"Next"} />
+        <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
+          {pageData.navigation.prev && <Button text={"Prev"} />}
+          {pageData.navigation.next && <Button text={"Next"} />}
         </div>
       </div>
     </>

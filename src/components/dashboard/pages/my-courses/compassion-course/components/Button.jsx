@@ -6,11 +6,11 @@ function Button({ text }) {
 
   return (
     <button
-      className={`btn px-4 py-3 fs-5 rounded ${
+      className={`btn fs-5 rounded w-183px h-42px ${
         isNextButton
-          ? "bg-blue text-white border-0 hover-prev"
+          ? "bg-button text-white border-0 hover-prev"
           : isPrevButton
-          ? "bg-transparent text-blue border border-blue hover-next"
+          ? "bg-transparent text-button-blue border border-blue hover-next"
           : ""
       }`}
     >

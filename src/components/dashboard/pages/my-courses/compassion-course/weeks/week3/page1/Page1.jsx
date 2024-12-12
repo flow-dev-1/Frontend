@@ -1,13 +1,18 @@
 import React from "react";
 import VideoComponent from "../../../components/Video";
 import Button from "../../../components/Button";
+import getPageContent from "../../data";
 
 function WeekThreePage1() {
+  const currentWeek = 3;
+  const currentPage = 1;
+  const pageData = getPageContent(currentWeek, currentPage);
+
   return (
     <>
-      <VideoComponent videoSrc={""} />
-      <div className="text-center">
-        <Button text={"Next"} />
+      <VideoComponent videoSrc={pageData.videoSrc} />
+      <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
+        {pageData.hasNextButton && <Button text={"Next"} />}
       </div>
     </>
   );

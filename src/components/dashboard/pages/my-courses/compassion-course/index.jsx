@@ -90,10 +90,13 @@ const CompassionCourse = () => {
         </ul>
       </aside>
       <section className="week-content">
-        <Page4 />
+        <WeekFivePage4 />
       </section>
     </>
   );
 };
 
 export default CompassionCourse;
+
+// data
+// activity |  assestment

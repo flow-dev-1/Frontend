@@ -1,14 +1,19 @@
 import React from "react";
 import VideoComponent from "../../../components/Video";
 import Button from "../../../components/Button";
+import getPageContent from "../../data";
 
 function WeekFourPage5() {
+  const currentWeek = 4;
+  const currentPage = 5;
+  const pageData = getPageContent(currentWeek, currentPage);
+
   return (
     <>
-      <VideoComponent videoSrc={""} />
-      <div className="text-center">
-        <Button text={"Prev"} />
-        <Button text={"Next"} />
+      <VideoComponent videoSrc={pageData.videoSrc} />
+      <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
+        {pageData.navigation.prev && <Button text={"Prev"} />}
+        {pageData.navigation.next && <Button text={"Next"} />}
       </div>
     </>
   );
