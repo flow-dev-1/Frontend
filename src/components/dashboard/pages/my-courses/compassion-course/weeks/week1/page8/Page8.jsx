@@ -2,128 +2,85 @@ import React, { useState } from "react";
 import QuestionBox from "../../../components/QuestionBox";
 import AssessmentQuestion from "../../../components/AssessmentQuestion";
 import Button from "../../../components/Button";
+import { getWeekAssessment } from "../../data";
 
-function Page8() {
-  const [currentStep, setCurrentStep] = useState(4);
+function WeekOneAssessment() {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [selections, setSelections] = useState({});
 
-  const renderStep = () => {
-    switch (currentStep) {
-      case 1:
-        return (
-          <AssessmentQuestion
-            data={{
-              question: `What is the main idea behind compassion?`,
-              options: [
-                { A: `Observing without acting.` },
-                { B: `Understanding feelings and providing help.` },
-                { C: `Judging others based on their actions` },
-                { D: `Ignoring others' needs.` },
-              ],
-            }}
-            currentStep={currentStep}
-          />
-        );
-      case 2:
-        return (
-          <AssessmentQuestion
-            data={{
-              question: `Whem working on a group project, how do you typically contribute?`,
-              options: [
-                { A: `Observing without acting.` },
-                { B: `Understanding feelings and providing help` },
-                { C: `Judging others based on their actions` },
-                { D: `Ignoring others' needs` },
-              ],
-            }}
-            currentStep={currentStep}
-          />
-        );
-      case 3:
-        return (
-          <AssessmentQuestion
-            data={{
-              question: `Which of the following best describes Compassionate Communication (NVC)?`,
-              options: [
-                { A: `A way to win arguments` },
-                { B: `A theory that explains evolution` },
-                {
-                  C: `A method to connect with others through compassionate expression`,
-                },
-                { D: `A strategy t oavoid communication` },
-              ],
-            }}
-            currentStep={currentStep}
-          />
-        );
-      case 4:
-        return (
-          <AssessmentQuestion
-            data={{
-              question: `Which component of NVC involves expressing how you feel?`,
-              options: [
-                { A: `Observations.` },
-                { B: `Feelings.` },
-                { C: `Needs.` },
-                { D: `Request.` },
-              ],
-            }}
-            currentStep={currentStep}
-          />
-        );
-      case 5:
-        return (
-          <AssessmentQuestion
-            data={{
-              question: `Why is it important to practice compassion?`,
-              options: [
-                { A: `It helps us with friends.` },
-                {
-                  B: `It creates stronger relationship and makes us feel valued`,
-                },
-                { C: `It helps us avoid conflicts` },
-                { D: `It makes us appear more popular` },
-              ],
-            }}
-            currentStep={currentStep}
-          />
-        );
-      case 6:
-        return (
-          <AssessmentQuestion
-            data={{
-              question: `In the school scenario explained in the video, which step of NVC did the student use when they said, "I need some quiet time to complete my arguments?`,
-              options: [
-                { A: `Observation.` },
-                { B: `Feeling.` },
-                { C: `Need.` },
-                { D: `Request.` },
-              ],
-            }}
-            currentStep={currentStep}
-          />
-        );
-      default:
-        return <div>Invalid Step</div>;
+  const weekNumber = 1;
+  const assessmentData = getWeekAssessment(weekNumber);
+
+  const handleNext = () => {
+    if (currentStep < assessmentData.totalQuestions) {
+      setCurrentStep((prev) => prev + 1);
     }
   };
+
+  const handlePrev = () => {
+    if (currentStep > 1) {
+      setCurrentStep((prev) => prev - 1);
+    }
+  };
+
+  const handleOptionSelect = (optionKey) => {
+    setSelections((prev) => ({
+      ...prev,
+      [currentStep]: optionKey,
+    }));
+  };
+
+  const renderStep = () => {
+    if (!assessmentData) return <div>Loading assessment...</div>;
+
+    const currentQuestion = assessmentData.questions[currentStep - 1];
+    if (!currentQuestion) return <div>Invalid Step</div>;
+
+    const formattedOptions = currentQuestion.options.map((option) => ({
+      [option.id]: option.text,
+    }));
+
+    return (
+      <AssessmentQuestion
+        data={{
+          question: currentQuestion.question,
+          options: formattedOptions,
+        }}
+        currentStep={currentStep}
+        selectedOption={selections[currentStep]}
+        onOptionSelect={handleOptionSelect}
+      />
+    );
+  };
+
+  if (!assessmentData) return null;
+
   return (
     <>
       <QuestionBox>
         <div className="bg-blue text-white p-3 mb-3">
-          <h2 className="fs-1 text-white text-center">Assessment</h2>
-          <p className="text-center">Let's test your knowlege</p>
+          <h2 className="fs-1 text-white text-center">
+            {assessmentData.title}
+          </h2>
+          <p className="text-center">{assessmentData.subtitle}</p>
         </div>
 
         {renderStep()}
       </QuestionBox>
-      //todo indicator
-      <h2 className="text-center">step indicator</h2>
-      <div className="d-flex justify-content-center gap-4 mt-4">
-        {currentStep > 1 && <Button text={"Prev"} />}
-        <Button text={"Next"} />
+
+      <div className="d-flex flex-column align-items-center gap-3">
+        <h2 className="text-center">
+          Question {currentStep} of {assessmentData.totalQuestions}
+        </h2>
+      </div>
+      <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
+        {currentStep > 1 && <Button text={"Prev"} onClick={handlePrev} />}
+        {currentStep < assessmentData.totalQuestions && (
+          <Button text={"Next"} onClick={handleNext} />
+        )}
       </div>
     </>
   );
 }
 
-export default Page8;
+export default WeekOneAssessment;

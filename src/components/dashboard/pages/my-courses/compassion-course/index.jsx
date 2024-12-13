@@ -42,6 +42,9 @@ import WeekFivePage1 from "./weeks/week5/page1/Page1.jsx";
 import WeekFivePage2 from "./weeks/week5/page2/Page2.jsx";
 import WeekFivePage3 from "./weeks/week5/page3/Page3.jsx";
 import WeekFivePage4 from "./weeks/week5/page4/Page4.jsx";
+import PopUp from "./components/ReviewPopUp.jsx";
+import FireWorks from "./components/FireWork.jsx";
+import Hurray from "./components/Hurray.jsx";
 const CompassionCourse = () => {
   const weeksTopic = [
     "Introduction to Compassion",
@@ -89,8 +92,9 @@ const CompassionCourse = () => {
           ))}
         </ul>
       </aside>
-      <section className="week-content">
-        <WeekFivePage4 />
+      <section className="week-content position-relative w-1029px">
+        {/* <Hurray /> */}
+        <Page1 />
       </section>
     </>
   );

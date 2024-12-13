@@ -1,14 +1,19 @@
-import React, { useState } from "react";
-
+import React from "react";
 import checkedImage from "../../../../../../assets/checkedbox.png";
 import uncheckedImage from "../../../../../../assets/uncheckedBox.png";
 
-function AssessmentQuestion({ data, currentStep }) {
+function AssessmentQuestion({
+  data,
+  currentStep,
+  selectedOption,
+  onOptionSelect,
+}) {
   const { question, options } = data;
-  const [selectedOption, setSelectedOption] = useState(null);
 
-  const handleOptionChange = (e) => {
-    setSelectedOption(e.target.value);
+  const handleOptionClick = (optionKey) => {
+    if (onOptionSelect) {
+      onOptionSelect(optionKey);
+    }
   };
 
   return (
@@ -26,23 +31,29 @@ function AssessmentQuestion({ data, currentStep }) {
             <div
               key={index}
               className="ms-5 d-flex gap-2 mb-3 align-items-center"
+              onClick={() => handleOptionClick(optionKey)}
+              style={{ cursor: "pointer" }}
             >
               <input
                 type="radio"
-                id={optionKey}
-                name="options"
+                id={`${currentStep}-${optionKey}`}
+                name={`question-${currentStep}`}
                 value={optionKey}
                 checked={isChecked}
-                onChange={handleOptionChange}
+                onChange={() => handleOptionClick(optionKey)}
                 style={{ display: "none" }}
               />
               <img
                 src={isChecked ? checkedImage : uncheckedImage}
-                alt={optionKey}
-                style={{ width: 20, height: 20, cursor: "pointer" }}
-                onClick={() => setSelectedOption(optionKey)}
+                alt={`Option ${optionKey}`}
+                style={{ width: 20, height: 20 }}
               />
-              <label htmlFor={optionKey}>{`${optionKey}. ${optionText}`}</label>
+              <label
+                htmlFor={`${currentStep}-${optionKey}`}
+                style={{ cursor: "pointer" }}
+              >
+                {`${optionKey}. ${optionText}`}
+              </label>
             </div>
           );
         })}

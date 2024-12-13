@@ -1,6 +1,6 @@
 import React from "react";
 
-function Button({ text }) {
+function Button({ text, onClick }) {
   const isNextButton = text === "Next";
   const isPrevButton = text === "Prev";
 
@@ -12,7 +12,8 @@ function Button({ text }) {
           : isPrevButton
           ? "bg-transparent text-button-blue border border-blue hover-next"
           : ""
-      }`}
+        }`}
+      onClick={onClick}
     >
       {isPrevButton && <span className="me-2">{"<<<"}</span>}
       {text}
