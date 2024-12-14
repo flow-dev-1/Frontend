@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import "./page6.css";
 import wishImage from "../../../../../../../../assets/wish-image.png";
 import hugImage from "../../../../../../../../assets/hug-image.png";
@@ -6,12 +7,11 @@ import heartImage from "../../../../../../../../assets/heart-image.png";
 import hugImage2 from "../../../../../../../../assets/hug-image-2.png";
 import QuestionBox from "../../../components/QuestionBox";
 import Button from "../../../components/Button";
-import getPageContent from "../../data";
+import { selectPageData, selectCurrentStep } from "../../../../../../../../redux/reducers/navigationSlice";
 
 function WeekTwoPage6() {
-  const currentWeek = 2;
-  const currentPage = 6;
-  const pageData = getPageContent(currentWeek, currentPage);
+  const pageData = useSelector(selectPageData);
+  const currentStep = useSelector(selectCurrentStep);
 
   // Map image imports to their filenames
   const imageMap = {
@@ -38,10 +38,10 @@ function WeekTwoPage6() {
         </div>
       </QuestionBox>
 
-      <h1 className="text-center">TODO: step counter</h1>
+      <h2 className="text-center">Step {currentStep}</h2>
       <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
-        {pageData.navigation.prev && <Button text={"Prev"} />}
-        {pageData.navigation.next && <Button text={"Next"} />}
+        <Button text="Prev" />
+        <Button text="Next" />
       </div>
     </>
   );

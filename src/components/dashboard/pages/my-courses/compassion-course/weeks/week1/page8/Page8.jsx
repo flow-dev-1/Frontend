@@ -1,27 +1,24 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import AssessmentQuestion from "../../../components/AssessmentQuestion";
 import Button from "../../../components/Button";
+import {
+  selectCurrentStep,
+  selectCurrentWeek,
+  showReviewPopup,
+} from "../../../../../../../../redux/reducers/navigationSlice";
 import { getWeekAssessment } from "../../data";
+import StepIndicator from "../../../components/StepIndicator";
 
 function WeekOneAssessment() {
-  const [currentStep, setCurrentStep] = useState(1);
+  const dispatch = useDispatch();
+  const currentStep = useSelector(selectCurrentStep);
+  const currentWeek = useSelector(selectCurrentWeek);
   const [selections, setSelections] = useState({});
 
-  const weekNumber = 1;
-  const assessmentData = getWeekAssessment(weekNumber);
-
-  const handleNext = () => {
-    if (currentStep < assessmentData.totalQuestions) {
-      setCurrentStep((prev) => prev + 1);
-    }
-  };
-
-  const handlePrev = () => {
-    if (currentStep > 1) {
-      setCurrentStep((prev) => prev - 1);
-    }
-  };
+  const assessmentData = getWeekAssessment(currentWeek);
+  const totalSteps = assessmentData?.questions?.length || 0;
 
   const handleOptionSelect = (optionKey) => {
     setSelections((prev) => ({
@@ -55,6 +52,12 @@ function WeekOneAssessment() {
 
   if (!assessmentData) return null;
 
+  // If we're on the last question and user has made a selection,
+  // show the review popup instead of the next button
+  const isLastQuestion = currentStep === assessmentData.totalQuestions;
+  const hasCurrentSelection = !!selections[currentStep];
+  const shouldShowReviewButton = isLastQuestion && hasCurrentSelection;
+
   return (
     <>
       <QuestionBox>
@@ -68,15 +71,17 @@ function WeekOneAssessment() {
         {renderStep()}
       </QuestionBox>
 
-      <div className="d-flex flex-column align-items-center gap-3">
-        <h2 className="text-center">
-          Question {currentStep} of {assessmentData.totalQuestions}
-        </h2>
-      </div>
+      <StepIndicator totalSteps={totalSteps} />
+
       <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
-        {currentStep > 1 && <Button text={"Prev"} onClick={handlePrev} />}
-        {currentStep < assessmentData.totalQuestions && (
-          <Button text={"Next"} onClick={handleNext} />
+        <Button text="Prev" />
+        {shouldShowReviewButton ? (
+          <Button
+            text="Review"
+            customOnClick={() => dispatch(showReviewPopup())}
+          />
+        ) : (
+          <Button text="Next" />
         )}
       </div>
     </>

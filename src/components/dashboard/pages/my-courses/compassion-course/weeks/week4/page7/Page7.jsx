@@ -1,19 +1,27 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import VideoComponent from "../../../components/Video";
 import Button from "../../../components/Button";
-import getPageContent from "../../data";
+import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+import { useDispatch } from "react-redux";
+
+import {
+  selectCurrentStep,
+  selectCurrentWeek,
+  setCurrentPage,
+  showReviewPopup,
+} from "../../../../../../../../redux/reducers/navigationSlice";
 
 function WeekFourPage7() {
-  const currentWeek = 4;
-  const currentPage = 7;
-  const pageData = getPageContent(currentWeek, currentPage);
+  const pageData = useSelector(selectPageData);
+  const dispatch = useDispatch();
 
   return (
     <>
       <VideoComponent videoSrc={pageData.videoSrc} />
       <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
-        {pageData.navigation.prev && <Button text={"Prev"} />}
-        {pageData.navigation.next && <Button text={"Next"} />}
+        <Button text="Prev" customOnClick={() => dispatch(setCurrentPage(6))} />
+        <Button text="Next" customOnClick={() => dispatch(setCurrentPage(8))} />
       </div>
     </>
   );

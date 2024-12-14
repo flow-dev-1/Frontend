@@ -22,15 +22,15 @@ function VideoComponent({ videoSrc }) {
   }, []);
 
   return (
-    <div style={{ position: "relative", width: '1020px' }}>
+    <div style={{ position: "relative", width: "1020px" }}>
       <video
         className="custom-video"
         ref={videoRef}
         controls
         controlsList="nodownload noremoteplayback"
         style={{ pointerEvents: "auto" }}
-        onCanPlay={""}
-        onError={""}
+        onCanPlay={() => null}
+        onError={() => null}
       >
         <source src={videoSrc} type="video/mp4" />
         Your browser does not support the video tag.

@@ -1,13 +1,12 @@
 import React from "react";
 import "./page4.css";
+import { useSelector } from "react-redux";
 import ArrowTrail from "../../../../../../../../assets/ArrowTrail.svg";
 import Button from "../../../components/Button";
-import getPageContent from "../../data";
+import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 
 function WeekFourPage4() {
-  const currentWeek = 4;
-  const currentPage = 4;
-  const pageData = getPageContent(currentWeek, currentPage);
+  const pageData = useSelector(selectPageData);
 
   // Check the index and return appropriate styles
   function checkIndex(index) {
@@ -39,10 +38,18 @@ function WeekFourPage4() {
             <div className="d-flex justify-content-around px-4">
               {pageData.bowls.map((bowl, index) => (
                 <div key={index}>
-                  <h2 className={bowl.id === 'inner' ? 'inner-count' : 'outer-count'}>
+                  <h2
+                    className={
+                      bowl.id === "inner" ? "inner-count" : "outer-count"
+                    }
+                  >
                     {bowl.count}
                   </h2>
-                  <div className={bowl.id === 'inner' ? 'inner-bowl' : 'outer-bowl'}>
+                  <div
+                    className={
+                      bowl.id === "inner" ? "inner-bowl" : "outer-bowl"
+                    }
+                  >
                     {bowl.label}
                   </div>
                 </div>
@@ -52,8 +59,8 @@ function WeekFourPage4() {
         </div>
       </div>
       <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
-        {pageData.navigation.prev && <Button text={"Prev"} />}
-        {pageData.navigation.next && <Button text={"Next"} />}
+        <Button text="Prev" />
+        <Button text="Next" />
       </div>
     </>
   );

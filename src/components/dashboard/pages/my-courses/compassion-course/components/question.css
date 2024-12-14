@@ -87,6 +87,15 @@
   background-color: #08bcc4;
 }
 
+.bg-step{
+  background-color: #D6D6D6;
+}
+
+.bg-step-active{
+  background-color: #00BCC3;
+}
+
+
 .answer {
   font-size: 4rem;
 }

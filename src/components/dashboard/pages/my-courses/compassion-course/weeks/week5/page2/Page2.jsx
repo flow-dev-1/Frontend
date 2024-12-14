@@ -1,20 +1,21 @@
-import React, { useState } from "react";
-import QuestionBox from "../../../components/QuestionBox";
+import React from "react";
+import { useSelector } from "react-redux";
 import Button from "../../../components/Button";
-import checkedImage from "../../../../../../../../assets/checkedbox.png";
-import uncheckedImage from "../../../../../../../../assets/uncheckedBox.png";
-import getPageContent from "../../data";
+import {
+  selectPageData,
+  selectCurrentStep,
+} from "../../../../../../../../redux/reducers/navigationSlice";
 import ScenariosOne from "./components/ScenariosOne";
 import ScenariosTwo from "./components/ScenarioTwo";
 import ScenariosThree from "./components/ScenarioThree";
 import ScenariosFour from "./components/ScenarioFour";
+import StepIndicator from "../../../components/StepIndicator";
 
 function WeekFivePage2() {
-  const currentWeek = 5;
-  const currentPage = 2;
-  const pageData = getPageContent(currentWeek, currentPage);
+  const pageData = useSelector(selectPageData);
+  const totalSteps = pageData?.scenarios?.length || 0;
 
-  const [currentStep, setCurrentStep] = useState(4);
+  const currentStep = useSelector(selectCurrentStep);
 
   const scenarioComponents = {
     1: ScenariosOne,
@@ -31,11 +32,11 @@ function WeekFivePage2() {
   return (
     <>
       {renderStep()}
+      <StepIndicator totalSteps={totalSteps} />
 
-      <h2 className="text-center">TODO: step indicator</h2>
       <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
-        {pageData.navigation.prev && <Button text={"Prev"} />}
-        {pageData.navigation.next && <Button text={"Next"} />}
+        <Button text="Prev" />
+        <Button text="Next" />
       </div>
     </>
   );

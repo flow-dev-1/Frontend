@@ -1,7 +1,19 @@
 import logo from "../../../../../assets/logo.png";
 import { Icon } from "@iconify/react";
-
+import { useSelector } from "react-redux";
+import {
+  selectCurrentWeek,
+  selectShowReview,
+  selectShowHurray,
+  selectCurrentPage,
+} from "../../../../../redux/reducers/navigationSlice.js";
 import "./index.css";
+
+// Import components
+import PopUp from "./components/ReviewPopUp";
+import Hurray from "./components/Hurray";
+
+// Import all week components (keep your existing imports)
 import Page1 from "./weeks/week1/page1/Page1";
 import Page2 from "./weeks/week1/page2/Page2";
 import Page3 from "./weeks/week1/page3/Page3";
@@ -42,10 +54,145 @@ import WeekFivePage1 from "./weeks/week5/page1/Page1.jsx";
 import WeekFivePage2 from "./weeks/week5/page2/Page2.jsx";
 import WeekFivePage3 from "./weeks/week5/page3/Page3.jsx";
 import WeekFivePage4 from "./weeks/week5/page4/Page4.jsx";
-import PopUp from "./components/ReviewPopUp.jsx";
-import FireWorks from "./components/FireWork.jsx";
-import Hurray from "./components/Hurray.jsx";
-const CompassionCourse = () => {
+import { useNavigate } from "react-router-dom";
+
+const WeekContent = () => {
+  const currentWeek = useSelector(selectCurrentWeek);
+  const currentPage = useSelector(selectCurrentPage);
+  const showReview = useSelector(selectShowReview);
+  const showHurray = useSelector(selectShowHurray);
+
+
+  // If showing hurray, render that instead
+  if (showHurray) {
+    return <Hurray currentWeek={currentWeek} />;
+  }
+
+  // Determine which component to render based on week and page
+  const getComponent = () => {
+    switch (currentWeek) {
+      case 1:
+        switch (currentPage) {
+          case 1:
+            return <Page1 />;
+          case 2:
+            return <Page2 />;
+          case 3:
+            return <Page3 />;
+          case 4:
+            return <Page4 />;
+          case 5:
+            return <Page5 />;
+          case 6:
+            return <Page6 />;
+          case 7:
+            return <Page7 />;
+          case 8:
+            return <Page8 />;
+          default:
+            return null;
+        }
+      case 2:
+        switch (currentPage) {
+          case 1:
+            return <WeekTwoPage1 />;
+          case 2:
+            return <WeekTwoPage2 />;
+          case 3:
+            return <WeekTwoPage3 />;
+          case 4:
+            return <WeekTwoPage4 />;
+          case 5:
+            return <WeekTwoPage5 />;
+          case 6:
+            return <WeekTwoPage6 />;
+          case 7:
+            return <WeekTwoPage7 />;
+          case 8:
+            return <WeekTwoPage8 />;
+          default:
+            return null;
+        }
+      case 3:
+        switch (currentPage) {
+          case 1:
+            return <WeekThreePage1 />;
+          case 2:
+            return <WeekThreePage2 />;
+          case 3:
+            return <WeekThreePage3 />;
+          case 4:
+            return <WeekThreePage4 />;
+          case 5:
+            return <WeekThreePage5 />;
+          case 6:
+            return <WeekThreePage6 />;
+          case 7:
+            return <WeekThreePage7 />;
+          case 8:
+            return <WeekThreePage8 />;
+          case 9:
+            return <WeekThreePage9 />;
+          case 10:
+            return <WeekThreePage10 />;
+          case 11:
+            return <WeekThreePage11 />;
+          case 12:
+            return <WeekThreePage12 />;
+          default:
+            return null;
+        }
+      case 4:
+        switch (currentPage) {
+          case 1:
+            return <WeekFourPage1 />;
+          case 2:
+            return <WeekFourPage2 />;
+          case 3:
+            return <WeekFourPage3 />;
+          case 4:
+            return <WeekFourPage4 />;
+          case 5:
+            return <WeekFourPage5 />;
+          case 6:
+            return <WeekFourPage6 />;
+          case 7:
+            return <WeekFourPage7 />;
+          case 8:
+            return <WeekFourPage8 />;
+          default:
+            return null;
+        }
+      case 5:
+        switch (currentPage) {
+          case 1:
+            return <WeekFivePage1 />;
+          case 2:
+            return <WeekFivePage2 />;
+          case 3:
+            return <WeekFivePage3 />;
+          case 4:
+            return <WeekFivePage4 />;
+          default:
+            return null;
+        }
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <>
+      {getComponent()}
+      {showReview && <PopUp />}
+    </>
+  );
+};
+
+const CourseContent = () => {
+  const navigate = useNavigate();
+  const currentWeek = useSelector(selectCurrentWeek);
+
   const weeksTopic = [
     "Introduction to Compassion",
     "Self-Compassion",
@@ -54,7 +201,6 @@ const CompassionCourse = () => {
     `Life Scenarios - Let's wear the shoes of Others`,
   ];
 
-  const weekNumber = 5; // we wil get it from params
   return (
     <>
       <header className="compassion-header">
@@ -75,7 +221,7 @@ const CompassionCourse = () => {
           {weeksTopic.map((item, index) => (
             <li
               key={index}
-              className={weekNumber >= index + 1 ? "active-week" : ""}
+              className={index + 1 <= currentWeek ? "active-week" : ""}
             >
               <div className="icon">
                 <Icon
@@ -93,11 +239,14 @@ const CompassionCourse = () => {
         </ul>
       </aside>
       <section className="week-content position-relative w-1029px">
-        {/* <Hurray /> */}
-        <Page1 />
+        <WeekContent />
       </section>
     </>
   );
+};
+
+const CompassionCourse = () => {
+  return <CourseContent />;
 };
 
 export default CompassionCourse;

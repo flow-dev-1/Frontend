@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import Frame from "./components/Frame";
 import Button from "../../../components/Button";
-import getPageContent from "../../data";
+import {
+  selectPageData,
+  selectCurrentStep,
+} from "../../../../../../../../redux/reducers/navigationSlice";
+import StepIndicator from "../../../components/StepIndicator";
 
 function Page6() {
-  const currentWeek = 1;
-  const currentPage = 6;
-  const pageData = getPageContent(currentWeek, currentPage);
-  const [currentStep, setCurrentStep] = useState(5);
-  const totalSteps = pageData.steps.length;
+  const pageData = useSelector(selectPageData);
+  const currentStep = useSelector(selectCurrentStep);
+  const totalSteps = pageData?.steps?.length || 0;
 
   const renderStep = () => {
-    const step = pageData.steps[currentStep - 1];
+    const step = pageData?.steps[currentStep - 1];
 
     if (!step) return <div>Invalid Step</div>;
 
@@ -36,9 +39,9 @@ function Page6() {
           <Frame
             data={{
               title: step.title,
-              questions: step.questions.map(q => ({
-                [q.type]: q.question
-              }))
+              questions: step.questions.map((q) => ({
+                [q.type]: q.question,
+              })),
             }}
           />
         );
@@ -50,20 +53,10 @@ function Page6() {
   return (
     <>
       {renderStep()}
-      <h2 className="text-center">step indicator</h2>
+      <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
-        {currentStep > 1 && (
-          <Button 
-            text={"Prev"} 
-            onClick={() => setCurrentStep(prev => Math.max(1, prev - 1))}
-          />
-        )}
-        {currentStep < totalSteps && (
-          <Button 
-            text={"Next"} 
-            onClick={() => setCurrentStep(prev => Math.min(totalSteps, prev + 1))}
-          />
-        )}
+        <Button text="Prev" />
+        <Button text="Next" />
       </div>
     </>
   );

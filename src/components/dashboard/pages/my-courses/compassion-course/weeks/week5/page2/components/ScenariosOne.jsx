@@ -1,18 +1,19 @@
 import QuestionBox from "../../../../components/QuestionBox";
-import Button from "../../../../components/Button";
 import checkedImage from "../../../../../../../../../assets/checkedbox.png";
 import uncheckedImage from "../../../../../../../../../assets/uncheckedBox.png";
 import { useState } from "react";
-import getPageContent from "../../../data";
+import { useSelector } from "react-redux";
+import {
+  selectPageData,
+  selectCurrentStep,
+} from "../../../../../../../../../redux/reducers/navigationSlice";
 
 function ScenariosOne() {
   const [selectedOption, setSelectedOption] = useState(null);
-  const [currentStep, setCurrentStep] = useState(1);
+  const pageData = useSelector(selectPageData);
+  const currentStep = useSelector(selectCurrentStep);
 
-  // Get the first scenario from Week 5, Page 2
-  const currentWeek = 5;
-  const currentPage = 2;
-  const pageData = getPageContent(currentWeek, currentPage);
+  // Get the first scenario
   const scenarioData = pageData.scenarios[0]; // First scenario
 
   const handleOptionChange = (e) => {
@@ -75,9 +76,7 @@ function ScenariosOne() {
             className="d-flex justify-content-center align-items-center"
             style={{ height: "400px" }}
           >
-            <h3 className="fs-1 text-center">
-              {scenarioData.feedback.A}
-            </h3>
+            <h3 className="fs-1 text-center">{scenarioData.feedback.A}</h3>
           </div>
         );
       case 3:
@@ -86,9 +85,7 @@ function ScenariosOne() {
             className="d-flex justify-content-center align-items-center"
             style={{ height: "400px" }}
           >
-            <h3 className="fs-1 text-center">
-              {scenarioData.feedback.B}
-            </h3>
+            <h3 className="fs-1 text-center">{scenarioData.feedback.B}</h3>
           </div>
         );
       case 4:
@@ -97,9 +94,7 @@ function ScenariosOne() {
             className="d-flex justify-content-center align-items-center"
             style={{ height: "400px" }}
           >
-            <h3 className="fs-1 text-center">
-              {scenarioData.feedback.C}
-            </h3>
+            <h3 className="fs-1 text-center">{scenarioData.feedback.C}</h3>
           </div>
         );
       default:

@@ -1,17 +1,18 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import Button from "../../../components/Button";
 import checkedImage from "../../../../../../../../assets/checkedbox.png";
 import uncheckedImage from "../../../../../../../../assets/uncheckedBox.png";
-import getPageContent from "../../data";
+import { selectCurrentStep, selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+import StepIndicator from "../../../components/StepIndicator";
+
 
 function WeekThreePage4() {
-  const currentWeek = 3;
-  const currentPage = 4;
-  const pageData = getPageContent(currentWeek, currentPage);
-
+  const currentStep = useSelector(selectCurrentStep);
+  const pageData = useSelector(selectPageData);
+   const totalSteps = pageData?.steps?.length || 0;
   const [selectedOption, setSelectedOption] = useState(null);
-  const [currentStep, setCurrentStep] = useState(1);
 
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
@@ -89,10 +90,11 @@ function WeekThreePage4() {
     <>
       <QuestionBox>{renderStep()}</QuestionBox>
 
-      <h2 className="text-center">TODO: step indicator</h2>
+      <StepIndicator totalSteps={totalSteps} />
+
       <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
-        {pageData.navigation.prev && <Button text={"Prev"} />}
-        {pageData.navigation.next && <Button text={"Next"} />}
+        <Button text="Prev" />
+        <Button text="Next" />
       </div>
     </>
   );

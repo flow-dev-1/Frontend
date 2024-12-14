@@ -1,13 +1,12 @@
 import React from "react";
 import "./page8.css";
+import { useSelector } from "react-redux";
 import Button from "../../../components/Button";
 import QuestionBox from "../../../components/QuestionBox";
-import getPageContent from "../../data";
+import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 
 function WeekThreePage8() {
-  const currentWeek = 3;
-  const currentPage = 8;
-  const pageData = getPageContent(currentWeek, currentPage);
+  const pageData = useSelector(selectPageData);
 
   return (
     <>
@@ -22,9 +21,11 @@ function WeekThreePage8() {
             <div key={index}>
               <div className="d-flex gap-3 label-input-container">
                 <p className="input-label">{index + 1}.</p>
-                <input 
-                  type="text" 
-                  placeholder={pageData.inputPlaceholder || "Type your answer here"} 
+                <input
+                  type="text"
+                  placeholder={
+                    pageData.inputPlaceholder || "Type your answer here"
+                  }
                 />
               </div>
             </div>
@@ -33,8 +34,8 @@ function WeekThreePage8() {
       </QuestionBox>
 
       <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
-        {pageData.navigation.prev && <Button text={"Prev"} />}
-        {pageData.navigation.next && <Button text={"Next"} />}
+        <Button text="Prev" />
+        <Button text="Next" />
       </div>
     </>
   );

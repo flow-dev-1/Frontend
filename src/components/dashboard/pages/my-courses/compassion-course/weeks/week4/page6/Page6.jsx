@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import ArrowTrail from "../../../../../../../../assets/ArrowTrail.svg";
 import RedBucket from "../../../../../../../../assets/Buckets/Red Bucket.svg";
 import OrangeBucket from "../../../../../../../../assets/Buckets/Orange Bucket.svg";
 import GreenBucket from "../../../../../../../../assets/Buckets/Green Bucket.svg";
 import Button from "../../../components/Button";
-import getPageContent from "../../data";
+import {
+  selectPageData,
+  selectCurrentStep,
+} from "../../../../../../../../redux/reducers/navigationSlice";
 import CardBoard from "./components/CardBoard";
+import StepIndicator from "../../../components/StepIndicator";
 
 // Import all images
 import image1 from "../../../../../../../../assets/drag-images/image1.png";
@@ -20,11 +25,9 @@ import image9 from "../../../../../../../../assets/drag-images/image9.png";
 import image10 from "../../../../../../../../assets/drag-images/image10.png";
 
 function WeekFourPage6() {
-  const currentWeek = 4;
-  const currentPage = 6;
-  const pageData = getPageContent(currentWeek, currentPage);
-
-  const [currentStep, setCurrentStep] = useState(1);
+  const pageData = useSelector(selectPageData);
+  const currentStep = useSelector(selectCurrentStep);
+  const totalSteps = pageData.images.length;
 
   const imageMap = {
     "image1.png": image1,
@@ -76,11 +79,11 @@ function WeekFourPage6() {
             </div>
           </div>
         </div>
-        <h2 className="text-center">TODO: step indicator</h2>
-        <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
-          {pageData.navigation.prev && <Button text={"Prev"} />}
-          {pageData.navigation.next && <Button text={"Next"} />}
-        </div>
+      </div>
+      <StepIndicator totalSteps={totalSteps} />
+      <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
+        <Button text="Prev" />
+        <Button text="Next" />
       </div>
     </>
   );

@@ -1,13 +1,12 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import MediumTextBox from "../../../components/MediumTextBox";
 import Button from "../../../components/Button";
-import getPageContent from "../../data";
+import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 
 function WeekThreePage6() {
-  const currentWeek = 3;
-  const currentPage = 6;
-  const pageData = getPageContent(currentWeek, currentPage);
+  const pageData = useSelector(selectPageData);
 
   return (
     <>
@@ -19,8 +18,8 @@ function WeekThreePage6() {
         <MediumTextBox />
       </QuestionBox>
       <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
-        {pageData.navigation.prev && <Button text={"Prev"} />}
-        {pageData.navigation.next && <Button text={"Next"} />}
+        <Button text="Prev" />
+        <Button text="Next" />
       </div>
     </>
   );

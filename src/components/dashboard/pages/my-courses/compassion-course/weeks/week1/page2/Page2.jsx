@@ -1,14 +1,13 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import compassion from "../../../../../../../../assets/compassion.png";
 import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
-import getPageContent from "../../data";
+import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 
 function Page2() {
-  const currentWeek = 1;
-  const currentPage = 2;
-  const pageData = getPageContent(currentWeek, currentPage);
+  const pageData = useSelector(selectPageData);
 
   return (
     <>
@@ -23,8 +22,8 @@ function Page2() {
         <BigTextBox />
       </QuestionBox>
       <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
-        {pageData.navigation.prev && <Button text={"Prev"} />}
-        {pageData.navigation.next && <Button text={"Next"} />}
+        <Button text="Prev" />
+        <Button text="Next" />
       </div>
     </>
   );

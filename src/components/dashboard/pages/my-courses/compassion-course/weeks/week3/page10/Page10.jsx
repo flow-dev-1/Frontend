@@ -1,13 +1,12 @@
 import React from "react";
 import "./page10.css";
+import { useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import Button from "../../../components/Button";
-import getPageContent from "../../data";
+import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 
 function WeekThreePage10() {
-  const currentWeek = 3;
-  const currentPage = 10;
-  const pageData = getPageContent(currentWeek, currentPage);
+  const pageData = useSelector(selectPageData);
 
   return (
     <>
@@ -38,8 +37,8 @@ function WeekThreePage10() {
         </div>
       </QuestionBox>
       <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
-        {pageData.navigation.prev && <Button text={"Prev"} />}
-        {pageData.navigation.next && <Button text={"Next"} />}
+        <Button text="Prev" />
+        <Button text="Next" />
       </div>
     </>
   );

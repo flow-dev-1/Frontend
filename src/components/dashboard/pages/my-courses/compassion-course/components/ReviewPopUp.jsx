@@ -1,10 +1,15 @@
-import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import sadEmoji from "../../../../../../assets/selfawareness-images/sadEmoji.png";
 import okayEmoji from "../../../../../../assets/selfawareness-images/okayEmoji.png";
 import happyEmoji from "../../../../../../assets/selfawareness-images/happyEmoji.png";
+import { hideReviewPopup } from "../../../../../../redux/reducers/navigationSlice";
 
 export default function PopUp() {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleEmojiClick = () => {
+    dispatch(hideReviewPopup());
+  };
 
   return (
     <div
@@ -21,17 +26,17 @@ export default function PopUp() {
         </p>
         <div
           style={{ width: "350px", margin: "1rem auto" }}
-          className="d-flex  review-buttons"
+          className="d-flex review-buttons"
         >
-          <button className="btn sad">
+          <button className="btn sad" onClick={handleEmojiClick}>
             <img src={sadEmoji} alt="sadEmoji" />
             <p className="text-center mt-2">Sad</p>
           </button>
-          <button className="btn sad">
+          <button className="btn sad" onClick={handleEmojiClick}>
             <img src={okayEmoji} alt="okayEmoji" />
             <p className="text-center mt-2">Okay</p>
           </button>
-          <button className="btn sad">
+          <button className="btn sad" onClick={handleEmojiClick}>
             <img src={happyEmoji} alt="happyEmoji" />
             <p className="text-center mt-2">Happy</p>
           </button>

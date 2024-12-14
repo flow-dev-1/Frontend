@@ -539,7 +539,7 @@ export const courseContent = {
           },
         ],
         steps: 10,
-        currentStep: 3,
+        currentStep: 1,
         navigation: {
           prev: true,
           next: true,

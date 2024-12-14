@@ -1,21 +1,17 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import VideoComponent from "../../../components/Video";
 import Button from "../../../components/Button";
-import getPageContent from "../../data/index.js";
+import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 
 const Page1 = () => {
-  // Get Week 1's first page data
-
-  const currentWeek = 1;
-  const currentPage = 1;
-  const pageData = getPageContent(currentWeek, currentPage);
-
+  const pageData = useSelector(selectPageData);
 
   return (
     <>
       <VideoComponent videoSrc={pageData.videoSrc} />
       <div className="d-flex justify-content-center w-1029px mt-4">
-        {pageData.hasNextButton && <Button text={"Next"} />}
+        <Button text="Next" />
       </div>
     </>
   );
