@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import ArrowTrail from "../../../../../../../../assets/ArrowTrail.svg";
 import RedBucket from "../../../../../../../../assets/Buckets/Red Bucket.svg";
 import OrangeBucket from "../../../../../../../../assets/Buckets/Orange Bucket.svg";
@@ -29,17 +30,29 @@ function WeekFourPage6() {
   const currentStep = useSelector(selectCurrentStep);
   const totalSteps = pageData.images.length;
 
+  const [showCurrentImage, setShowCurrentImage] = useState(true);
+  const [bucketResults, setBucketResults] = useState({
+    green: [],
+    red: [],
+    orange: [],
+  });
+
+  // Reset showCurrentImage when step changes
+  useEffect(() => {
+    setShowCurrentImage(true);
+  }, [currentStep]);
+
   const imageMap = {
-    "image1.png": image1,
-    "image2.png": image2,
-    "image3.png": image3,
-    "image4.png": image4,
-    "image5.png": image5,
-    "image6.png": image6,
-    "image7.png": image7,
-    "image8.png": image8,
-    "image9.png": image9,
-    "image10.png": image10,
+    "Helping with chores at home.": image1,
+    "Helping an elderly neighbor with groceries.": image2,
+    "Smiling at someone who looks upset.": image3,
+    "Standing up for someone being bullied.": image4,
+    "Holding the door open for a stranger.": image5,
+    "Helping a classmate with a school project.": image6,
+    "Listening when someone needs to talk.": image7,
+    "Being kind and respectful in your daily interactions.": image8,
+    "Preparing a meal for a sick family member.": image9,
+    "Picking up litter in a public park.": image10,
   };
 
   const bucketMap = {
@@ -48,18 +61,72 @@ function WeekFourPage6() {
     orange: OrangeBucket,
   };
 
+  const handleOnDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const { source, destination } = result;
+
+    // If dragging from image area to a bucket
+    if (source.droppableId === "image" && destination.droppableId !== "image") {
+      const currentImage = pageData.images[currentStep - 1];
+      const newBucketResults = {
+        ...bucketResults,
+        [destination.droppableId]: [
+          ...bucketResults[destination.droppableId],
+          currentImage,
+        ],
+      };
+
+      console.log(newBucketResults);
+      
+
+      setBucketResults(newBucketResults);
+      setShowCurrentImage(false);
+    }
+  };
+
   const renderStep = () => {
     const currentImage = pageData.images[currentStep - 1];
-    return currentImage ? <CardBoard imgSrc={imageMap[currentImage]} /> : null;
+    return showCurrentImage && currentImage ? (
+      <Draggable draggableId="current-image" index={0}>
+        {(provided, snapshot) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            style={{
+              ...provided.draggableProps.style,
+              cursor: snapshot.isDragging ? "grabbing" : "grab",
+              transform: `${provided.draggableProps.style?.transform || ''} ${snapshot.isDragging ? 'scale(0.5)' : ''}`,
+              zIndex: snapshot.isDragging ? 9999 : 1,
+            }}
+          >
+            <CardBoard imgSrc={imageMap[currentImage]} />
+          </div>
+        )}
+      </Draggable>
+    ) : null;
   };
 
   return (
-    <>
+    <DragDropContext onDragEnd={handleOnDragEnd}>
       <div className="d-flex flex-column align-items-center pt-2">
         <div className="row custom-border-20 w-1020px">
-          <div className="col d-flex p-5 justify-content-center align-items-center">
-            {renderStep()}
-          </div>
+          <Droppable droppableId="image">
+            {(provided) => (
+              <div 
+                className="col d-flex p-5 justify-content-center align-items-center"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                style={{ minHeight: "200px" }}
+              >
+                {renderStep()}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
           <div className="col bg-blue">
             <div className="d-flex align-items-start mb-2">
               <img src={ArrowTrail} alt="arrow trail" />
@@ -69,12 +136,47 @@ function WeekFourPage6() {
               <img src={ArrowTrail} alt="arrow trail" />
             </div>
             <div className="d-flex justify-content-between px-4">
-              {pageData.buckets.map((bucket, index) => (
-                <img
-                  key={index}
-                  src={bucketMap[bucket.id]}
-                  alt={`${bucket.id} bucket`}
-                />
+              {pageData.buckets.map((bucket) => (
+                <Droppable key={bucket.id} droppableId={bucket.id}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      style={{
+                        position: "relative",
+                        transition: "transform 0.2s",
+                        transform: snapshot.isDraggingOver ? "scale(1.1)" : "scale(1)",
+                      }}
+                    >
+                      <div style={{ textAlign: "center", marginBottom: "10px" }}>
+                        <h2 
+                          style={{
+                            color: "white",
+                            fontSize: "24px",
+                            fontWeight: "bold",
+                            margin: 0,
+                            padding: "5px 15px",
+                            borderRadius: "15px",
+                            display: "inline-block",
+                            backgroundColor: bucket.id === "green" ? "#4CAF50" : 
+                                          bucket.id === "red" ? "#f44336" : "#ff9800",
+                          }}
+                        >
+                          {bucketResults[bucket.id].length}
+                        </h2>
+                      </div>
+                      <img
+                        src={bucketMap[bucket.id]}
+                        alt={`${bucket.id} bucket`}
+                        style={{
+                          maxWidth: "100%",
+                          filter: snapshot.isDraggingOver ? "brightness(1.2)" : "brightness(1)",
+                        }}
+                      />
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
               ))}
             </div>
           </div>
@@ -85,7 +187,7 @@ function WeekFourPage6() {
         <Button text="Prev" />
         <Button text="Next" />
       </div>
-    </>
+    </DragDropContext>
   );
 }
 

@@ -3,7 +3,7 @@ import { courseContent } from "../../components/dashboard/pages/my-courses/compa
 import { assessments } from "../../components/dashboard/pages/my-courses/compassion-course/weeks/data/assessment";
 
 const initialState = {
-  currentWeek: 2,
+  currentWeek: 4,
   currentPage: 6,
   currentStep: 1,
   showReview: false,
@@ -67,6 +67,7 @@ const navigationSlice = createSlice({
       } else if (pageData?.type === "multiScenario") {
         totalSteps = pageData.scenarios?.length || 0;
       }
+
 
       const isLastStep = state.currentStep === totalSteps;
       const hasAssessment =

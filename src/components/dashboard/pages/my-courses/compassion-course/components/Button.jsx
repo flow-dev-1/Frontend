@@ -28,9 +28,9 @@ const Button = ({ text, customOnClick }) => {
 
   // Don't render prev button on first page of first week
   // or first step of a multi-step page
-  if (text === "Prev" && (isFirstPage || isFirstStep)) {
-    return null;
-  }
+  // if (text === "Prev" && isFirstStep) {
+  //   return null; // should have not saved currentStep to be 1 initally
+  // }               or maybe we can use this // (imageDragAndDrop || multiStep || interactiveScenario || multiScenario ), get it from page data, for the assesment, just get pag etype
 
   const isNextButton = text === "Next";
   const isPrevButton = text === "Prev";

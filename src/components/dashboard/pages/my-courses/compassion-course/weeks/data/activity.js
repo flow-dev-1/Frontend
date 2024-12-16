@@ -513,16 +513,16 @@ export const courseContent = {
         instruction:
           "Drag-and-drop the statements on the left into any of these bowls",
         images: [
-          "image1.png",
-          "image2.png",
-          "image3.png",
-          "image4.png",
-          "image5.png",
-          "image6.png",
-          "image7.png",
-          "image8.png",
-          "image9.png",
-          "image10.png",
+          "Helping with chores at home.",
+          "Helping an elderly neighbor with groceries.",
+          "Smiling at someone who looks upset.",
+          "Standing up for someone being bullied.",
+          "Holding the door open for a stranger.",
+          "Helping a classmate with a school project.",
+          "Listening when someone needs to talk.",
+          "Being kind and respectful in your daily interactions.",
+          "Preparing a meal for a sick family member.",
+          "Picking up litter in a public park.",
         ],
         buckets: [
           {
