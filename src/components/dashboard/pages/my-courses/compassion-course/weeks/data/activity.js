@@ -400,8 +400,7 @@ export const courseContent = {
       },
       {
         id: 10,
-        type: "letter",
-        title: "Write a letter to yourself.",
+        type: "Write a letter of Compassion to Others.",
         instructions: [
           "Can you remember a time when a friend needed your compassion, but you didn't offer it?",
           "Write a letter to this friend of yours, telling them that you're sorry for not being compassionate when they needed you, and offer them the kind words you wish you'd said back then.",
@@ -409,7 +408,7 @@ export const courseContent = {
         inputType: "textarea",
         textareaConfig: {
           placeholder: "Type your answer here...",
-          rows: 5,
+          rows: 8,
           cols: 80,
           styles: {
             maxWidth: "100%",
@@ -527,15 +526,18 @@ export const courseContent = {
         buckets: [
           {
             id: "green",
+            label: "Inner Cycle",
             image: "Green Bucket.svg",
           },
           {
-            id: "red",
-            image: "Red Bucket.svg",
+            id: "orange",
+            label: " Outer Cycle",
+            image: "Orange Bucket.svg",
           },
           {
-            id: "orange",
-            image: "Orange Bucket.svg",
+            id: "red",
+            label: "Both",
+            image: "Red Bucket.svg",
           },
         ],
         steps: 10,

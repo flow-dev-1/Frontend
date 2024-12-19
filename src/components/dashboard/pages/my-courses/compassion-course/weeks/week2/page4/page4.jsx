@@ -11,7 +11,7 @@ function WeekTwoPage4() {
   return (
     <>
       <QuestionBox>
-        <h2 className="text-center text-blue fs-1">{pageData.title}</h2>
+        <h2 className="text-center text-blue fs-1 letter">{pageData.title}</h2>
         <div className="letter-container">
           <div className="letter-info">
             {pageData.instructions.map((instruction, index) => (
@@ -36,7 +36,7 @@ function WeekTwoPage4() {
           </div>
         </div>
       </QuestionBox>
-      <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
+      <div className="d-flex justify-content-center gap-96px mt-4">
         <Button text="Prev" />
         <Button text="Next" />
       </div>

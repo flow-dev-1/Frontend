@@ -23,7 +23,7 @@ function WeekTwoPage2() {
         </div>
         <BigTextBox />
       </QuestionBox>
-      <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
+      <div className="d-flex justify-content-center gap-96px mt-4 ">
         <Button text="Prev" />
         <Button text="Next" />
       </div>

@@ -4,14 +4,20 @@
 }
 
 .small-input {
+  width: 100%;
   border: none;
   outline: none;
 }
 
+.small-input-label {
+  background: url("../../../../../../assets/smallTextBox.png") no-repeat ;
+  background-size: 100% 100%;
+}
+
 .small-input:focus {
-  border: none;
-  outline: none;
-  box-shadow: none;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 ::placeholder {
@@ -39,6 +45,10 @@
   gap: 72px;
 }
 
+.ms-7 {
+  margin-left: 90px;
+}
+
 .bg-worksheet {
   background-color: rgb(110, 222, 235);
   background-image: url(../../../../../../assets/selfawareness-images/course-bg.png);
@@ -51,17 +61,17 @@
 }
 
 .w-1029px {
-  width: 1029px;
+  width: 100%;
 }
 
 .w-924px {
   width: 924px;
 }
-.w-183px {
-  width: 183px;
+.w-200px {
+  width: 200px;
 }
-.h-42px {
-  height: 42px;
+.h-50px {
+  height: 50px;
 }
 .gap-96px {
   gap: 96px;
@@ -87,14 +97,13 @@
   background-color: #08bcc4;
 }
 
-.bg-step{
-  background-color: #D6D6D6;
+.bg-step {
+  background-color: #d6d6d6;
 }
 
-.bg-step-active{
-  background-color: #00BCC3;
+.bg-step-active {
+  background-color: #00bcc3;
 }
-
 
 .answer {
   font-size: 4rem;

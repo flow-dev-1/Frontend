@@ -5,7 +5,7 @@ function BigTextBox() {
     <div className="position-relative">
       <svg
         width="100%"
-        height="265"
+        height="305"
         viewBox="0 0 924 225"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

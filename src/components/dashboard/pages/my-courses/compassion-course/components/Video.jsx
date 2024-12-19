@@ -22,7 +22,7 @@ function VideoComponent({ videoSrc }) {
   }, []);
 
   return (
-    <div style={{ position: "relative", width: "1020px" }}>
+    <div style={{ position: "relative",}}>
       <video
         className="custom-video"
         ref={videoRef}
@@ -50,8 +50,8 @@ function VideoComponent({ videoSrc }) {
       <div
         style={{
           width: `${percentageWatched}%`,
-          height: "10px",
-          backgroundColor: "skyblue",
+          height: "15px",
+          backgroundColor: "#00BCC3",
           marginTop: "-6px",
         }}
       ></div>

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import ArrowTrail from "../../../../../../../../assets/ArrowTrail.svg";
-import RedBucket from "../../../../../../../../assets/Buckets/Red Bucket.svg";
-import OrangeBucket from "../../../../../../../../assets/Buckets/Orange Bucket.svg";
-import GreenBucket from "../../../../../../../../assets/Buckets/Green Bucket.svg";
+import RedBucket from "../../../../../../../../assets/Buckets/red.png";
+import OrangeBucket from "../../../../../../../../assets/Buckets/orange.png";
+import GreenBucket from "../../../../../../../../assets/Buckets/green.png";
 import Button from "../../../components/Button";
 import {
   selectPageData,
@@ -37,10 +37,16 @@ function WeekFourPage6() {
     orange: [],
   });
 
+
   // Reset showCurrentImage when step changes
   useEffect(() => {
     setShowCurrentImage(true);
   }, [currentStep]);
+
+  // Check if pageData.images is populated
+  useEffect(() => {
+    console.log("Page Data Images:", pageData.images);
+  }, [pageData]);
 
   const imageMap = {
     "Helping with chores at home.": image1,
@@ -60,6 +66,7 @@ function WeekFourPage6() {
     red: RedBucket,
     orange: OrangeBucket,
   };
+ 
 
   const handleOnDragEnd = (result) => {
     if (!result.destination) {
@@ -80,7 +87,6 @@ function WeekFourPage6() {
       };
 
       console.log(newBucketResults);
-      
 
       setBucketResults(newBucketResults);
       setShowCurrentImage(false);
@@ -90,7 +96,10 @@ function WeekFourPage6() {
   const renderStep = () => {
     const currentImage = pageData.images[currentStep - 1];
     return showCurrentImage && currentImage ? (
-      <Draggable draggableId="current-image" index={0}>
+      <Draggable
+        draggableId="current-image"
+        index={0}
+      >
         {(provided, snapshot) => (
           <div
             ref={provided.innerRef}
@@ -99,11 +108,13 @@ function WeekFourPage6() {
             style={{
               ...provided.draggableProps.style,
               cursor: snapshot.isDragging ? "grabbing" : "grab",
-              transform: `${provided.draggableProps.style?.transform || ''} ${snapshot.isDragging ? 'scale(0.5)' : ''}`,
+              transform: `${provided.draggableProps.style?.transform || ""} ${
+                snapshot.isDragging ? "scale(0.5)" : ""
+              }`,
               zIndex: snapshot.isDragging ? 9999 : 1,
             }}
           >
-            <CardBoard imgSrc={imageMap[currentImage]} />
+            <CardBoard imgSrc={imageMap[currentImage]}/>
           </div>
         )}
       </Draggable>
@@ -113,14 +124,20 @@ function WeekFourPage6() {
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
       <div className="d-flex flex-column align-items-center pt-2">
-        <div className="row custom-border-20 w-1020px">
+        <div className="row custom-border-20">
           <Droppable droppableId="image">
-            {(provided) => (
-              <div 
+            {(provided, snapshot) => (
+              <div
                 className="col d-flex p-5 justify-content-center align-items-center"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                style={{ minHeight: "200px" }}
+                style={{
+                  minHeight: "200px",
+                  transition: "background-color 0.2s ease",
+                  backgroundColor: snapshot.isDraggingOver
+                    ? "rgba(255, 255, 255, 0.1)"
+                    : "transparent",
+                }}
               >
                 {renderStep()}
                 {provided.placeholder}
@@ -143,36 +160,36 @@ function WeekFourPage6() {
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                       style={{
-                        position: "relative",
-                        transition: "transform 0.2s",
-                        transform: snapshot.isDraggingOver ? "scale(1.1)" : "scale(1)",
+                        backgroundColor: snapshot.isDraggingOver
+                          ? "rgba(255, 255, 255, 0.1)"
+                          : "transparent",
+                        padding: "20px",
+                        borderRadius: "8px",
+                        minHeight: "100px",
                       }}
                     >
-                      <div style={{ textAlign: "center", marginBottom: "10px" }}>
-                        <h2 
-                          style={{
-                            color: "white",
-                            fontSize: "24px",
-                            fontWeight: "bold",
-                            margin: 0,
-                            padding: "5px 15px",
-                            borderRadius: "15px",
-                            display: "inline-block",
-                            backgroundColor: bucket.id === "green" ? "#4CAF50" : 
-                                          bucket.id === "red" ? "#f44336" : "#ff9800",
-                          }}
-                        >
-                          {bucketResults[bucket.id].length}
-                        </h2>
+                      <h2
+                        className={
+                          bucket.id === "green"
+                            ? "inner-count"
+                            : bucket.id === "orange"
+                            ? "outer-count"
+                            : "both-count"
+                        }
+                      >
+                        {bucketResults[bucket.id].length}
+                      </h2>
+                      <div
+                        className={
+                          bucket.id === "green"
+                            ? "inner-bucket"
+                            : bucket.id === "orange"
+                            ? "outer-bucket"
+                            : "both-bucket"
+                        }
+                      >
+                        {bucket.label}
                       </div>
-                      <img
-                        src={bucketMap[bucket.id]}
-                        alt={`${bucket.id} bucket`}
-                        style={{
-                          maxWidth: "100%",
-                          filter: snapshot.isDraggingOver ? "brightness(1.2)" : "brightness(1)",
-                        }}
-                      />
                       {provided.placeholder}
                     </div>
                   )}
@@ -183,7 +200,7 @@ function WeekFourPage6() {
         </div>
       </div>
       <StepIndicator totalSteps={totalSteps} />
-      <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
+      <div className="d-flex justify-content-center gap-96px mt-4">
         <Button text="Prev" />
         <Button text="Next" />
       </div>

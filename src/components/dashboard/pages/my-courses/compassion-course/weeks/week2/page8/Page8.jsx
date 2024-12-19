@@ -71,7 +71,7 @@ function WeekTwoPage8() {
 
       <StepIndicator totalSteps={totalSteps} />
 
-      <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
+      <div className="d-flex justify-content-center gap-96px mt-4">
         <Button text="Prev" />
         {shouldShowReviewButton ? (
           <Button

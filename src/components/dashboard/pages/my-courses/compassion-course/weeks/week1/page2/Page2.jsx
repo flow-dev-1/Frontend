@@ -12,7 +12,7 @@ function Page2() {
   return (
     <>
       <QuestionBox>
-        <div className="d-flex gap-2 ms-5">
+        <div className="d-flex gap-3 ms-5 align-items-center">
           <h2 className="text-blue font-lg ">Question: </h2>
           <h2 className="text-gray font-lg">
             {pageData.question}{" "}
@@ -21,7 +21,7 @@ function Page2() {
         </div>
         <BigTextBox />
       </QuestionBox>
-      <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
+      <div className="d-flex justify-content-center gap-96px mt-4">
         <Button text="Prev" />
         <Button text="Next" />
       </div>

@@ -19,9 +19,10 @@ function AssessmentQuestion({
   return (
     <div className="ms-5">
       <form>
-        <h3 className="fs-1">
-          {currentStep}. {question}
-        </h3>
+        <div className="d-flex gap-2">
+          <h3 className="fs-1">{currentStep}.</h3>
+          <h3 className="fs-1">{question}</h3>
+        </div>
         {options.map((option, index) => {
           const optionKey = Object.keys(option)[0]; // Get key (A, B, C, D)
           const optionText = option[optionKey]; // Get value (the text of the option)
@@ -30,7 +31,7 @@ function AssessmentQuestion({
           return (
             <div
               key={index}
-              className="ms-5 d-flex gap-2 mb-3 align-items-center"
+              className="ms-7 d-flex gap-2 mb-3 align-items-center"
               onClick={() => handleOptionClick(optionKey)}
               style={{ cursor: "pointer" }}
             >

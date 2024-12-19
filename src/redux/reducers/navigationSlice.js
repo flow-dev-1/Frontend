@@ -3,8 +3,8 @@ import { courseContent } from "../../components/dashboard/pages/my-courses/compa
 import { assessments } from "../../components/dashboard/pages/my-courses/compassion-course/weeks/data/assessment";
 
 const initialState = {
-  currentWeek: 4,
-  currentPage: 6,
+  currentWeek: 1,
+  currentPage: 1,
   currentStep: 1,
   showReview: false,
   showHurray: false,
@@ -41,12 +41,16 @@ const navigationSlice = createSlice({
         const totalQuestions = assessmentData?.questions?.length || 0;
         const isLastQuestion = state.currentStep === totalQuestions;
 
-        if (!isLastQuestion) {
+        // Check if we are on the last question of the assessment
+        if (isLastQuestion) {
+          if (state.currentWeek === 5) {
+            state.showReview = true; // Set showReview to true if it's week 5
+          } else {
+            state.showHurray = true; // Set showHurray to true if it's not week 5
+          }
+        } else {
           // Move to next question
           state.currentStep += 1;
-        } else if (!state.showReview) {
-          // On last question, show review popup
-          state.showReview = true;
         }
         return;
       }
@@ -67,7 +71,6 @@ const navigationSlice = createSlice({
       } else if (pageData?.type === "multiScenario") {
         totalSteps = pageData.scenarios?.length || 0;
       }
-
 
       const isLastStep = state.currentStep === totalSteps;
       const hasAssessment =

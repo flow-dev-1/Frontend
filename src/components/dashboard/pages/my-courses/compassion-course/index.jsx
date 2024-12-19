@@ -13,7 +13,6 @@ import "./index.css";
 import PopUp from "./components/ReviewPopUp";
 import Hurray from "./components/Hurray";
 
-// Import all week components (keep your existing imports)
 import Page1 from "./weeks/week1/page1/Page1";
 import Page2 from "./weeks/week1/page2/Page2";
 import Page3 from "./weeks/week1/page3/Page3";
@@ -61,7 +60,6 @@ const WeekContent = () => {
   const currentPage = useSelector(selectCurrentPage);
   const showReview = useSelector(selectShowReview);
   const showHurray = useSelector(selectShowHurray);
-
 
   // If showing hurray, render that instead
   if (showHurray) {
@@ -206,41 +204,43 @@ const CourseContent = () => {
       <header className="compassion-header">
         <img src={logo} alt="flow" />
       </header>
-      <aside>
-        <p className="back">
-          <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
-          Back to My Courses
-        </p>
+      <div className="main-content">
+        <aside>
+          <p className="back">
+            <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
+            Back to My Courses
+          </p>
 
-        <div className="compassion-title">
-          <h2> Seeing, Caring and Doing: </h2>
-          <h2 className="compassion">Compassion</h2>
-        </div>
+          <div className="compassion-title">
+            <h2> Seeing, Caring and Doing: </h2>
+            <h2 className="compassion">Compassion</h2>
+          </div>
 
-        <ul className="compassion-list">
-          {weeksTopic.map((item, index) => (
-            <li
-              key={index}
-              className={index + 1 <= currentWeek ? "active-week" : ""}
-            >
-              <div className="icon">
-                <Icon
-                  icon="icon-park-outline:check-one"
-                  className="course-list-icon"
-                />
-              </div>
-              <span>
-                Week
-                {index + 1}
-              </span>
-              <span>{item} </span>
-            </li>
-          ))}
-        </ul>
-      </aside>
-      <section className="week-content position-relative w-1029px">
-        <WeekContent />
-      </section>
+          <ul className="compassion-list">
+            {weeksTopic.map((item, index) => (
+              <li
+                key={index}
+                className={index + 1 <= currentWeek ? "active-week" : ""}
+              >
+                <div className="icon">
+                  <Icon
+                    icon="icon-park-outline:check-one"
+                    className="course-list-icon"
+                  />
+                </div>
+                <span>
+                  Week
+                  {index + 1}
+                </span>
+                <span>{item} </span>
+              </li>
+            ))}
+          </ul>
+        </aside>
+        <section className="week-content position-relative">
+          <WeekContent />
+        </section>
+      </div>
     </>
   );
 };

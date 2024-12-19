@@ -1,7 +1,8 @@
 .input-container {
-  width: 924px;
+  /* width: 924px; */
   height: 325px;
   background: url("../../../../../../../../assets/big-rect.png") no-repeat;
+  background-size: 100% 100%;
 }
 
 .input-label {

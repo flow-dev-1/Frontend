@@ -10,7 +10,7 @@ function WeekTwoPage7() {
   return (
     <>
       <VideoComponent videoSrc={pageData.videoSrc} />
-      <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
+      <div className="d-flex justify-content-center gap-96px mt-4 ">
         <Button text="Prev" />
         <Button text="Next" />
       </div>
