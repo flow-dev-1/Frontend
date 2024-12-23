@@ -59,7 +59,7 @@ function App() {
         <Route path="/">
           {/*   Onboarding Routes */}
 
-          <Route element={<CompassionCourse />}>
+          <Route element={<OnboardingRootLayout />}>
             <Route index element={<SignIn />} />
             {/* <Route path='sign-in' element={<SigninCategory />} /> */}
 
@@ -117,6 +117,14 @@ function App() {
 
           {/*   Dashboard Routes */}
           <Route
+            path="/dashboard/compassion/"
+            element={
+              <ProtectedRoute>
+                <CompassionCourse />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/dashboard"
             element={
               <ProtectedRoute>
@@ -144,11 +152,6 @@ function App() {
             <Route
               path="/dashboard/self-awareness-course/:id"
               element={<SelfAwarenessCourse />}
-            />
-
-            <Route
-              path="/dashboard/compassion/:id"
-              element={<CompassionCourse />}
             />
 
             <Route

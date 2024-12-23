@@ -193,7 +193,7 @@ export const courseContent = {
         id: 2,
         type: "question",
         questionType: "text",
-        question: "What do you understand by the self-compassion?",
+        question: "What do you understand by the word self-compassion?",
         hasImage: true,
         imageSrc: "self-compassion.png",
         inputType: "bigTextBox",

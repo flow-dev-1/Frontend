@@ -15,7 +15,7 @@ function WeekTwoPage2() {
         <div className="d-flex align-items-center gap-2 ms-5">
           <h2 className="text-blue font-lg">Question: </h2>
           <h2 className="text-gray font-lg">
-            {pageData.question}{" "}
+            {pageData.question.substring(0, 34)}{" "}
             {pageData.hasImage && (
               <img src={selfCompassion} alt="self-compassion" />
             )}
