@@ -35,7 +35,7 @@ export default function WeekTwoLearning({
     queryFn: () => userService.getMyActivites(course?.course?._id, week)
   });
 
-  const { data: assessmentData, isLoading: assessmentLoading,status:assesmentStatus, isError: assessmentError } = useQuery({
+  const { data: assessmentData, isLoading: assessmentLoading, status: assesmentStatus, isError: assessmentError } = useQuery({
     queryKey: ["dashboard/self-awareness-assessment", courseId, week],
     queryFn: () => userService.getMyAssessment(courseId, week),
     enabled: !!course?.course._id && !!week
@@ -44,7 +44,7 @@ export default function WeekTwoLearning({
 
   useEffect(() => {
 
-    if(!data || !assessmentData) return
+    if (!data || !assessmentData) return
 
     const assessments = assessmentData?.existingAssessment?.assessments;
     const percent = assessmentData?.existingAssessment?.rating;
@@ -111,7 +111,7 @@ export default function WeekTwoLearning({
       JSON.stringify(formData)
     )
   }, [formData, currentWeekIndex])
-//  console.log(course.course._id)
+  //  console.log(course.course._id)
   const handleNext = async (data = {}) => {
     setFormData((prevData) => {
       const updatedActivities = prevData?.activities.map((item) =>
@@ -128,7 +128,6 @@ export default function WeekTwoLearning({
     const isLastActivity = currentActivity >= 9
     if (isLastActivity) {
       setCurrentActivity(10)
-      handleSubmit()
     } else {
       setCurrentActivity((prev) => prev + 1)
     }
@@ -137,21 +136,30 @@ export default function WeekTwoLearning({
   const handlePrevious = () => {
     setCurrentActivity((prev) => prev - 1)
   }
+
   const handleSubmit = async () => {
+    console.log(formData, "FormData here o")
+
+    if (formData?.activities?.length < 8) {
+      return { success: false, message: "Submission failed" };
+    }
+
     try {
-      // Your submit logic here
       const stringifiedFormData = JSON.stringify(formData)
-      userService
-        .postMyActivity(course.course._id, stringifiedFormData)
-        .then((response) => {
-          console.log("Submission successful:", response);
-        })
-        .catch((error) => {
-          console.error("Submission failed:", error);
-        });
+      const response = await userService.postMyActivity(course.course._id, stringifiedFormData);
+
+      if (response.success) {
+        toast.success(response?.message);
+        console.log("Submission successful:", response);
+        return { success: true, message: "Submission successful" };
+      } else {
+        toast.error("Activity submission failed. Please contact flow admin for support!");
+        console.error("Submission failed with response:", response);
+        return { success: false, message: "Submission failed" };
+      }
     } catch (error) {
       console.error('Submission failed:', error)
-      toast.error('Submission failed. Please try again later.')
+      return { success: false, message: "Submission failed" };
     }
   }
 
@@ -283,6 +291,7 @@ export default function WeekTwoLearning({
             handleNextWeekCourse={handleNextWeekCourse}
             onNext={handleNext}
             course={course}
+            handleActivitySubmit={handleSubmit}
           />
         )
       default:

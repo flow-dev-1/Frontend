@@ -43,6 +43,7 @@ const MatchingComponent = ({
   // Handle starting the arrow drawing
   const handleMouseDown = useCallback(
     (e, index) => {
+    
       isDrawing.current = true
 
       // Remove the existing match and arrow for this left item, if any
@@ -90,6 +91,7 @@ const MatchingComponent = ({
   // Handle finalizing the arrow when the mouse is released
   const handleMouseUp = useCallback(
     (e) => {
+
       if (!isDrawing.current || !tempArrow) return
       isDrawing.current = false
 
@@ -101,14 +103,15 @@ const MatchingComponent = ({
         const itemY = 20 + index * 110
         return pos.x >= 450 && pos.y >= itemY && pos.y <= itemY + 100
       })
-
+ 
       if (rightItemIndex !== -1) {
         const isAlreadyMatched = matches.some(
           (match) => match.right === rightItems[rightItemIndex]
         )
-
+     
         // Check if current matches are less than 3
         if (matches.length < 3 || isAlreadyMatched) {
+         
           if (!isAlreadyMatched && matches.length < 3) {
             const newArrow = {
               points: tempArrow.points,
@@ -134,12 +137,15 @@ const MatchingComponent = ({
               }
               return [...prev, newMatch]
             })
-
+       
             onMatch(startIndex, rightItemIndex)
           }
         }
+      }else{
+        console.log(startIndex)
+        onMatch(startIndex, null)
       }
-
+  
       // Clear the temporary arrow
       setTempArrow(null)
 

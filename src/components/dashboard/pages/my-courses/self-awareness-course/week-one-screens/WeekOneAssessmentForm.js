@@ -300,6 +300,7 @@ export default function WeekOneAssessmentForm({
   }
 
   const saveAssessmentData = async () => {
+    if(isLoading) return
     setIsLoading(true)
 
     // First Submit Activity if it doesnt work dont submit Assessment
@@ -344,7 +345,8 @@ export default function WeekOneAssessmentForm({
       )
 
       const response = await userService.postMyAssessment(
-        course?._id,
+        course.course?._id,
+        course._id,
         JSON.stringify({
           week: formattedData.week,
           assessments: formattedData.assessments,

@@ -5,7 +5,13 @@ import unCheckedImage from '../../../../../../assets/selfawareness-images/not-ch
 import { toast } from 'react-toastify'
 import userService from '../../../../../../services/api/user.js'
 
-export default function NewAssessmentForm({ onNext, onBack,course}) {
+export default function NewAssessmentForm({ onNext,
+   onBack,
+   course,
+   handleActivitySubmit
+}) {
+  const [disableButton,setDisableButton] = useState(false)
+  const [isLoading,setIsLoading] = useState(false)
   const questionsArray = [
     {
       title:
@@ -150,12 +156,11 @@ export default function NewAssessmentForm({ onNext, onBack,course}) {
       toast.error('Please select an answer before proceeding.')
       return
     }
-
-    if (currentIndex < questionsArray.length - 1) {
+    if (currentIndex < questionsArray.length-1) {
       setCurrentIndex(currentIndex + 1)
     } else {
       saveNewAssessment()
-      onNext()
+  
     }
   }
 
@@ -167,38 +172,69 @@ export default function NewAssessmentForm({ onNext, onBack,course}) {
     }
   }
 
-  const saveNewAssessment = () => {
-    const storedData = localStorage.getItem('new-assessment')
-    let savedAnswers = JSON.parse(storedData)
-    const correctAnswers = [1, 0, 0] // Adjust according to correct answers
-    const valuesToCheck = savedAnswers.assessment.answers
-    const totalQuestions = valuesToCheck.length
-    const correctCount = valuesToCheck.reduce((count, current, index) => {
-      return current === correctAnswers[index] ? count + 1 : count
-    }, 0)
+  const saveNewAssessment = async () => {
+    if(disableButton) return
+    setDisableButton(true)
 
-    const percentage = Math.round((correctCount / totalQuestions) * 100)
-    toast.success(`You scored ${percentage}% in the quiz`)
+    try {
+      const activityResponse = await handleActivitySubmit();
+     
+      if (!activityResponse.success) {
+        setIsLoading(false)
+        toast.error(activityResponse?.message)
+        return
+      }
 
-    const dataToSend = {
-      rating: percentage,
-      assessments: savedAnswers.assessment,
-      week: 5,
+      const storedData = localStorage.getItem('new-assessment')
+      let savedAnswers = JSON.parse(storedData)
+      const correctAnswers = [1, 0, 0] // Adjust according to correct answers
+      const valuesToCheck = savedAnswers.assessment.answers
+      const totalQuestions = valuesToCheck.length
+      const correctCount = valuesToCheck.reduce((count, current, index) => {
+        return current === correctAnswers[index] ? count + 1 : count
+      }, 0)
+  
+      const percentage = Math.round((correctCount / totalQuestions) * 100)
+      toast.success(`You scored ${percentage}% in the quiz`)
+  
+      const dataToSend = {
+        rating: percentage,
+        assessments: savedAnswers.assessment,
+        week: 5,
+      }
+
+      const response = await userService.postMyAssessment(
+        course.course?._id,
+        course._id,
+        dataToSend
+      );
+
+      if (response.status === "success") {
+        toast.success(response.message);
+        onNext()
+        // setReviewPopUp(true)
+        setIsLoading(false)
+        setDisableButton(false)
+      } else if (response.status === "failed") {
+        toast.success(response.message);
+        onNext()
+        // setReviewPopUp(true)
+        setIsLoading(false)
+        setDisableButton(false)
+      } else {
+        setIsLoading(false)
+        setDisableButton(false)
+        toast.error('Something went wrong. Please contact flow admin for support!');
+      }
+
+      
+    } catch (error) {
+      console.log(error)
+      setIsLoading(false)
+      toast.error('Something went wrong. Please contact flow admin for support!');
     }
-    userService
-      .postMyAssessment(course?._id, dataToSend)
-      .then((response) => {
-        if (response.message === 'You have already taken the assessment') {
-          toast.error('You have already taken the assessment')
-        } else {
-          console.log('Submission successful:', response)
-          toast.success('Submitted your assessment score')
-          setIsSubmitted(true) // Set the submitted flag to true
-        }
-      })
-      .catch((error) => {
-        console.error('Submission failed:', error)
-      })
+
+
   }
 
   useEffect(() => {
@@ -208,7 +244,6 @@ export default function NewAssessmentForm({ onNext, onBack,course}) {
       submitted: isSubmitted,
     }
     localStorage.setItem('new-assessment', JSON.stringify(assessmentData))
-    console.log(assessmentData)
   }, [answers, isSubmitted])
 
   const renderQuestion = () => {

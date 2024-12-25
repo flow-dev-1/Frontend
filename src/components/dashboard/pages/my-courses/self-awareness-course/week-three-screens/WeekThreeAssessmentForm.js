@@ -5,10 +5,17 @@ import unCheckedImage from '../../../../../../assets/selfawareness-images/not-ch
 import { toast } from 'react-toastify'
 import userService from '../../../../../../services/api/user.js'
 
-export default function WeekThreeAssessmentForm({ onNext, onBack,course }) {
+export default function WeekThreeAssessmentForm({ 
+  onNext, 
+  onBack,
+  course,
+  handleActivitySubmit
+ }) {
   const [currentIndex, setCurrentIndex] = useState(1)
   const [selectedAnswers, setSelectedAnswers] = useState({})
   const [assessment, setAssessment] = useState([])
+  const [disableButton,setDisableButton] = useState(false)
+  const [isLoading,setIsLoading] = useState(false)
   const questionsArray = [
     {
       title:
@@ -147,8 +154,6 @@ export default function WeekThreeAssessmentForm({ onNext, onBack,course }) {
         assessments: { answers: Object.values(selectedAnswers) },
       }
       saveWeekThreeAssessment(result)
-      setAssessment(result)
-      onNext()
     }
   }
 
@@ -171,37 +176,66 @@ export default function WeekThreeAssessmentForm({ onNext, onBack,course }) {
     }))
   }
 
-  const saveWeekThreeAssessment = (result) => {
-    const correctAnswers = [1, 0, 1, 1, 1, 1, 1, 1, 1, 1]
-    const totalQuestions = Object.keys(selectedAnswers).length
-    const correctCount = Object.keys(selectedAnswers).reduce((count, key) => {
-      const selectedAnswerIndex = key - 1 // Adjusting for 0-indexing in correctAnswers array
-      return selectedAnswers[key] === correctAnswers[selectedAnswerIndex]
-        ? count + 1
-        : count
-    }, 0)
-    const percentage = Math.round((correctCount / totalQuestions) * 100)
-    toast.success(`You scored ${percentage}% in the quiz`)
+  const saveWeekThreeAssessment =async (result) => {
+    if(disableButton) return
+    setDisableButton(true)
 
-    const dataToSend = {
-      rating: percentage,
-      assessments: result.assessments,
-      week: 3,
+    try {
+      const activityResponse = await handleActivitySubmit();
+     
+      if (!activityResponse.success) {
+        setIsLoading(false)
+        toast.error(activityResponse?.message)
+        return
+      }
+
+      const correctAnswers = [1, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+      const totalQuestions = Object.keys(selectedAnswers).length
+      const correctCount = Object.keys(selectedAnswers).reduce((count, key) => {
+        const selectedAnswerIndex = key - 1 // Adjusting for 0-indexing in correctAnswers array
+        return selectedAnswers[key] === correctAnswers[selectedAnswerIndex]
+          ? count + 1
+          : count
+      }, 0)
+      
+      const percentage = Math.round((correctCount / totalQuestions) * 100)
+      toast.success(`You scored ${percentage}% in the quiz`)
+  
+      const dataToSend = {
+        rating: percentage,
+        assessments: result.assessments,
+        week: 3,
+      }
+  
+      const response = await userService.postMyAssessment(
+        course.course?._id,
+        course._id,
+        dataToSend
+      );
+
+      if (response.status === "success") {
+        toast.success(response.message);
+        onNext()
+        // setReviewPopUp(true)
+        setIsLoading(false)
+        setDisableButton(false)
+      } else if (response.status === "failed") {
+        toast.success(response.message);
+        onNext()
+        // setReviewPopUp(true)
+        setIsLoading(false)
+        setDisableButton(false)
+      } else {
+        setIsLoading(false)
+        setDisableButton(false)
+        toast.error('Something went wrong. Please contact flow admin for support!');
+      }
+
+    } catch (error) {
+      console.log(error)
+      setIsLoading(false)
+      toast.error('Something went wrong. Please contact flow admin for support!');
     }
-
-    userService
-      .postMyAssessment(course?._id, dataToSend)
-      .then((response) => {
-        if (response.message === 'You have already taken the assessment') {
-          toast.error('You have already taken the assessment')
-        } else {
-          toast.success('Submitted your assessment score')
-        }
-      })
-      .catch((error) => {
-        console.error('Submission failed:', error)
-        toast.error('Submission failed. Please try again later.')
-      })
   }
 
   const renderQuestion = () => {
@@ -272,12 +306,14 @@ export default function WeekThreeAssessmentForm({ onNext, onBack,course }) {
         <button
           className='btn progress-btn btn-light'
           onClick={handlePreviousStepClick}
+          disabled={disableButton}
         >
           Back
         </button>
         <button
-          className='btn progress-btn btn-primary'
+          className='btn progress-btn btn-dark'
           onClick={handleNextStepClick}
+          disabled={disableButton}
         >
           {currentIndex === questionsArray.length ? 'Submit' : 'Next'}
         </button>

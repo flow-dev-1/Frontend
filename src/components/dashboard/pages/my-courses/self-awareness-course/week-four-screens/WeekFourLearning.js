@@ -14,6 +14,7 @@ import userService from '../../../../../../services/api/user.js'
 import { toast, ToastContainer } from 'react-toastify'
 import EndOfCourseComponent from './EndOfCourseComponent'
 import { useQuery } from '@tanstack/react-query'
+
 export default function WeekFourLearning({
   course,
   onClose,
@@ -28,32 +29,32 @@ export default function WeekFourLearning({
     )
     return savedState ? JSON.parse(savedState) : 1
   })
-      const week = 4;
-      const { data, isLoading, isError } = useQuery({
-        queryKey: ["dashboard/self-awareness-course", course?.course._id, week],
-        queryFn: () => userService.getMyActivites(course?.course._id, week)
-      });
+  const week = 4;
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["dashboard/self-awareness-course", course?.course._id, week],
+    queryFn: () => userService.getMyActivites(course?.course._id, week)
+  });
 
-      // Check if data.activity exists and save it under one key 'activity1' in local storage
-      if (data?.activity) {
-        const activities = data.activity.activities;
+  // Check if data.activity exists and save it under one key 'activity1' in local storage
+  if (data?.activity) {
+    const activities = data.activity.activities;
 
-        // Create an object with week and activities
-        const activityData = {
-          week: week,
-          activities: activities
-        };
+    // Create an object with week and activities
+    const activityData = {
+      week: week,
+      activities: activities
+    };
 
-        // Store the object in local storage under the key 'activity1'
-        localStorage.setItem(
-          "week-4-activityData",
-          JSON.stringify(activityData)
-        );
+    // Store the object in local storage under the key 'activity1'
+    localStorage.setItem(
+      "week-4-activityData",
+      JSON.stringify(activityData)
+    );
 
-        console.log(
-          "Week and activities saved to localStorage under 'activity1'"
-        );
-      }
+    console.log(
+      "Week and activities saved to localStorage under 'activity1'"
+    );
+  }
 
   const [formData, setFormData] = useState(() => {
     const savedState = localStorage.getItem(
@@ -97,7 +98,6 @@ export default function WeekFourLearning({
 
     const isLastActivity = currentActivity >= 10
     if (isLastActivity) {
-      handleSubmit()
       setCurrentActivity(11)
     } else {
       setCurrentActivity((prev) => prev + 1)
@@ -116,23 +116,29 @@ export default function WeekFourLearning({
       state: { course, weekIndex: nextWeekIndex },
     })
   }
-  console.log(course?.course._id);
+ 
   const handleSubmit = async () => {
-    try {
-      // Your submit logic here
 
+    if (formData?.activities?.length < 9) {
+      return { success: false, message: "Submission failed" };
+    }
+
+    try {
       const stringifiedFormData = JSON.stringify(formData)
-      userService
-        .postMyActivity(course.course._id, stringifiedFormData)
-        .then((response) => {
-          console.log("Submission successful:", response);
-        })
-        .catch((error) => {
-          console.error("Submission failed:", error);
-        });
+      const response = await userService.postMyActivity(course.course._id, stringifiedFormData);
+
+      if (response.success) {
+        toast.success(response?.message);
+        console.log("Submission successful:", response);
+        return { success: true, message: "Submission successful" };
+      } else {
+        toast.error("Activity submission failed. Please contact flow admin for support!");
+        console.error("Submission failed with response:", response);
+        return { success: false, message: "Submission failed" };
+      }
     } catch (error) {
       console.error('Submission failed:', error)
-      toast.error('Submission failed. Please try again later.')
+      return { success: false, message: "Submission failed" };
     }
   }
 
@@ -279,6 +285,7 @@ export default function WeekFourLearning({
             handleNextWeekCourse={handleNextWeekCourse}
             onNext={handleNext}
             course={course}
+            handleActivitySubmit={handleSubmit}
           />
         )
       default:

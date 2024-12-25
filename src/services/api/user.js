@@ -277,10 +277,10 @@ class UserOBJ {
       return err?.response?.data || err.message;
     }
   }
-  postMyAssessment = async (params1, formData) => {
+  postMyAssessment = async (courseId,courseEnrollmentId, formData) => {
     try {
       const response = await api.post(
-        `api/users/course-enrollment/${params1}/assesment`,
+        `api/users/course-enrollment/${courseId}/assesment?enrollmentId=${courseEnrollmentId}`,
 
         formData
       )

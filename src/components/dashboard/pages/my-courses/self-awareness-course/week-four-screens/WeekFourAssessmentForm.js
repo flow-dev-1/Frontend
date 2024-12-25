@@ -6,10 +6,16 @@ import { toast } from 'react-toastify'
 import userService from '../../../../../../services/api/user.js'
 import MatchingComponent from './MatchingComponent.js'
 
-export default function WeekFourAssessmentForm({ onNext, onBack,course }) {
+export default function WeekFourAssessmentForm({
+  onNext,
+  onBack,
+  course,
+  handleActivitySubmit
+}) {
   const [arrows, setArrows] = useState([]) // State for managing arrows
   const [arrows2, setArrows2] = useState([]) // State for managing arrows
-
+  const [disableButton, setDisableButton] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   // Sample items for matching
 
   const questionsArray = [
@@ -137,7 +143,12 @@ export default function WeekFourAssessmentForm({ onNext, onBack,course }) {
   const [matchesSet2, setMatchesSet2] = useState([])
 
   const handleMatch = (leftIndex, rightIndex) => {
-    console.log(`Matched Left: ${leftIndex}, Right: ${rightIndex}`)
+
+    if (rightIndex === null) {
+
+      setMatchesSet1((prev) => prev.filter((match) => match?.left != leftIndex));
+      return
+    }
 
     // Check if the matches are complete
     if (matchesSet1.length === leftItemsArray.length) {
@@ -150,7 +161,12 @@ export default function WeekFourAssessmentForm({ onNext, onBack,course }) {
   }
 
   const handleMatch2 = (leftIndex, rightIndex) => {
-    console.log(`Matched Left: ${leftIndex}, Right: ${rightIndex}`)
+
+    if (rightIndex === null) {
+
+      setMatchesSet2((prev) => prev.filter((match) => match?.left != leftIndex));
+      return
+    }
 
     // Check if the matches are complete
     if (matchesSet2.length === leftItemsArray2.length) {
@@ -199,7 +215,7 @@ export default function WeekFourAssessmentForm({ onNext, onBack,course }) {
       setCurrentIndex(currentIndex + 1)
     } else {
       saveWeekFourAssessment()
-      onNext()
+      // onNext()
     }
   }
 
@@ -217,71 +233,100 @@ export default function WeekFourAssessmentForm({ onNext, onBack,course }) {
       assessment: { answers, matchesSet1, matchesSet2 },
     }
     localStorage.setItem('week-four-assessment', JSON.stringify(assessmentData))
-    console.log(assessmentData)
-  }, [answers, matchesSet1])
 
-  const saveWeekFourAssessment = () => {
-    const storedData = localStorage.getItem('week-four-assessment')
-    let savedAnswers = JSON.parse(storedData)
-    console.log(savedAnswers)
-    const correctAnswers = [0, 2, 1, 1, 2, 2, 1, 2]
-    const correctMatchesSet1 = [
-      { left: 0, right: 2 },
-      { left: 1, right: 1 },
-      { left: 2, right: 0 },
-    ]
-    const correctMatchesSet2 = [
-      { left: 0, right: 0 },
-      { left: 1, right: 1 },
-      { left: 2, right: 2 },
-    ]
-    const valuesToCheck = savedAnswers.assessment.answers
-    const correctCount = valuesToCheck.reduce((count, current, index) => {
-      return current === correctAnswers[index] ? count + 1 : count
-    }, 0)
+  }, [answers, matchesSet1,matchesSet2])
 
-    // Check Matching Questionsma
-    const valuesToCheckForMatchSet1 = savedAnswers.assessment.matchesSet1
-    const valuesToCheckForMatchSet2 = savedAnswers.assessment.matchesSet2
+  const saveWeekFourAssessment = async () => {
+    if (disableButton) return
+    setDisableButton(true)
 
-    const isMatchSet1Correct =
-      JSON.stringify(valuesToCheckForMatchSet1) ===
-      JSON.stringify(correctMatchesSet1)
-    const isMatchSet2Correct =
-      JSON.stringify(valuesToCheckForMatchSet2) ===
-      JSON.stringify(correctMatchesSet2)
+    try {
+      const activityResponse = await handleActivitySubmit();
 
-    const matchCount =
-      (isMatchSet1Correct ? 3 : 0) + (isMatchSet2Correct ? 3 : 0) // 3 matches per set
+      if (!activityResponse.success) {
+        setIsLoading(false)
+        toast.error(activityResponse?.message)
+        return
+      }
 
-    // Total questions
-    const totalQuestions = 8 + 2
+      const storedData = localStorage.getItem('week-four-assessment')
+      let savedAnswers = JSON.parse(storedData)
 
-    const totalCorrect = correctCount + matchCount
-    const percentage = (totalCorrect / totalQuestions) * 100
+      const correctAnswers = [0, 2, 1, 1, 2, 2, 1, 2]
+      const correctMatchesSet1 = [
+        { left: 0, right: 2 },
+        { left: 1, right: 1 },
+        { left: 2, right: 0 },
+      ]
+      const correctMatchesSet2 = [
+        { left: 0, right: 0 },
+        { left: 1, right: 1 },
+        { left: 2, right: 2 },
+      ]
+      const valuesToCheck = savedAnswers.assessment.answers
+      const correctCount = valuesToCheck.reduce((count, current, index) => {
+        return current === correctAnswers[index] ? count + 1 : count
+      }, 0)
 
-    toast.success(`You scored ${percentage}% in the quiz`)
+      // Check Matching Questionsma
+      const valuesToCheckForMatchSet1 = savedAnswers.assessment.matchesSet1
+      const valuesToCheckForMatchSet2 = savedAnswers.assessment.matchesSet2
 
-    const dataToSend = {
-      rating: percentage,
-      assessments: savedAnswers.assessment,
-      week: 4,
+      const isMatchSet1Correct =
+        JSON.stringify(valuesToCheckForMatchSet1) ===
+        JSON.stringify(correctMatchesSet1)
+      const isMatchSet2Correct =
+        JSON.stringify(valuesToCheckForMatchSet2) ===
+        JSON.stringify(correctMatchesSet2)
+
+      const matchCount =
+        (isMatchSet1Correct ? 3 : 0) + (isMatchSet2Correct ? 3 : 0) // 3 matches per set
+
+      // Total questions
+      const totalQuestions = 8 + 2
+
+      const totalCorrect = correctCount + matchCount
+      const percentage = (totalCorrect / totalQuestions) * 100
+
+      toast.success(`You scored ${percentage}% in the quiz`)
+
+      const dataToSend = {
+        rating: percentage,
+        assessments: savedAnswers.assessment,
+        week: 4,
+      }
+      const response = await userService.postMyAssessment(
+        course.course?._id,
+        course._id,
+        dataToSend
+      );
+
+      if (response.status === "success") {
+        toast.success(response.message);
+        onNext()
+        // setReviewPopUp(true)
+        setIsLoading(false)
+        setDisableButton(false)
+      } else if (response.status === "failed") {
+        toast.success(response.message);
+        onNext()
+        // setReviewPopUp(true)
+        setIsLoading(false)
+        setDisableButton(false)
+      } else {
+        setIsLoading(false)
+        setDisableButton(false)
+        toast.error('Something went wrong. Please contact flow admin for support!');
+      }
+
+    } catch (error) {
+      console.log(error)
+      setIsLoading(false)
+      toast.error('Something went wrong. Please contact flow admin for support!');
     }
-    userService
-      .postMyAssessment(course?._id, dataToSend)
-      .then((response) => {
-        if (response.message === 'You have already taken the assessment') {
-          toast.error('You have already taken the assessment') // Show error toast with the message
-        } else {
-          console.log('Submission successful:', response)
-          toast.success('Submitted your asessment score') // Optional: Show success message
-        }
-      })
-      .catch((error) => {
-        console.error('Submission failed:', error)
-        // toast.error("Submission failed. Please try again later."); // General error message
-      })
+
   }
+
   const renderQuestion = () => {
     const question = questionsArray[currentIndex - 1]
 

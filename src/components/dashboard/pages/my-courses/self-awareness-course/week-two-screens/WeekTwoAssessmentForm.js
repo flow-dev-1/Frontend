@@ -6,10 +6,17 @@ import unCheckedImage from '../../../../../../assets/selfawareness-images/not-ch
 import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModal'
 import userService from '../../../../../../services/api/user.js'
 import { toast } from 'react-toastify'
+import { isDisabled } from '@testing-library/user-event/dist/utils/index.js'
 
-export default function WeekTwoAssessmentForm({ onBack, onNext,course }) {
+export default function WeekTwoAssessmentForm({ onBack,
+  onNext,
+  course,
+  handleActivitySubmit
+}) {
   const [currentIndex, setCurrentIndex] = useState(1)
   const [reviewPopUp, setReviewPopUp] = React.useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [disableButton,setDisableButton] = useState(false)
   const [assessment, setAssessment] = useState(() => {
     // Initialize assessment from localStorage if it exists
     const storedAssessment = localStorage.getItem('week-two-assesment')
@@ -79,6 +86,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext,course }) {
   ]
 
   const handleStepClick = () => {
+
     if (currentIndex < questionsArray.length) {
       if (assessment.assessment.answers[currentIndex - 1] !== undefined) {
         setCurrentIndex(currentIndex + 1)
@@ -87,17 +95,13 @@ export default function WeekTwoAssessmentForm({ onBack, onNext,course }) {
       }
     } else {
       // Optionally handle submission or final step
-      onNext()
+      // setDisableButton(false)
+      // onNext()
     }
 
     if (currentIndex === 8) {
       saveWeekTwoAssessment()
-      setTimeout(() => {
-        setReviewPopUp(true)
-        setTimeout(() => {
-          setReviewPopUp(false)
-        }, 10000)
-      }, 1000)
+     
     }
   }
 
@@ -143,36 +147,70 @@ export default function WeekTwoAssessmentForm({ onBack, onNext,course }) {
   // After handling question check, you might want to calculate the score:
   const transformedData = transformAssessmentData()
 
-  const saveWeekTwoAssessment = () => {
-    const transformedData = transformAssessmentData()
-    const valuesToCheck = transformedData.slice(0, 5)
-    const correctAnswers = [3, 1, 1, 0, 2]
-    const totalQuestions = valuesToCheck.length
-    const correctCount = valuesToCheck.reduce((count, current, index) => {
-      return current === correctAnswers[index] ? count + 1 : count
-    }, 0)
+  const saveWeekTwoAssessment = async () => {
+    if(disableButton) return
+    setDisableButton(true)
+    try {
+      const activityResponse = await handleActivitySubmit();
+     
+      if (!activityResponse.success) {
+        setIsLoading(false)
+        toast.error(activityResponse?.message)
+        return
+      }
+      
+      const transformedData = transformAssessmentData()
+      const valuesToCheck = transformedData.slice(0, 5)
+      const correctAnswers = [3, 1, 1, 0, 2]
+      const totalQuestions = valuesToCheck.length
+      const correctCount = valuesToCheck.reduce((count, current, index) => {
+        return current === correctAnswers[index] ? count + 1 : count
+      }, 0)
 
-    const percentage = Math.round((correctCount / totalQuestions) * 100)
-    toast.success(`You scored ${percentage}% in the quiz`)
-    const dataToSend = {
-      rating: percentage,
-      assessments: assessment,
-      week: 2,
+      const percentage = Math.round((correctCount / totalQuestions) * 100)
+      toast.success(`You scored ${percentage}% in the quiz`)
+      const dataToSend = {
+        rating: percentage,
+        assessments: assessment,
+        week: 2,
+      }
+
+      const response = await userService.postMyAssessment(
+        course.course?._id,
+        course._id,
+        dataToSend
+      );
+
+      if (response.status === "success") {
+        toast.success(response.message);
+        onNext()
+        setReviewPopUp(true)
+        setIsLoading(false)
+        setTimeout(() => {
+          setReviewPopUp(true)
+          setTimeout(() => {
+            setReviewPopUp(false)
+          }, 10000)
+        }, 1000)
+        setDisableButton(false)
+      } else if (response.status === "failed") {
+        toast.success(response.message);
+        onNext()
+        setReviewPopUp(true)
+        setIsLoading(false)
+        setDisableButton(false)
+      } else {
+        setIsLoading(false)
+        setDisableButton(false)
+        toast.error('Something went wrong. Please contact flow admin for support!');
+      }
+
+    } catch (error) {
+      console.log(error)
+      setIsLoading(false)
+      toast.error('Something went wrong. Please contact flow admin for support!');
     }
-    userService
-      .postMyAssessment(course?._id, dataToSend)
-      .then((response) => {
-        if (response.message === 'You have already taken the assessment') {
-          toast.error('You have already taken the assessment') // Show error toast with the message
-        } else {
-          console.log('Submission successful:', response)
-          toast.success('Submitted your asessment score') // Optional: Show success message
-        }
-      })
-      .catch((error) => {
-        console.error('Submission failed:', error)
-        // toast.error("Submission failed. Please try again later."); // General error message
-      })
+
   }
 
   const renderQuestion = () => {
@@ -212,12 +250,11 @@ export default function WeekTwoAssessmentForm({ onBack, onNext,course }) {
                   <li key={index} className='d-flex align-items-center my-2'>
                     <img
                       onClick={() => handleQuestionCheck(questionIndex, index)}
-                      className={`cursor-pointer mt-2 ${
-                        assessment.assessment.answers[questionIndex] !==
+                      className={`cursor-pointer mt-2 ${assessment.assessment.answers[questionIndex] !==
                         undefined
-                          ? 'disabled'
-                          : ''
-                      }`}
+                        ? 'disabled'
+                        : ''
+                        }`}
                       src={
                         assessment.assessment.answers[questionIndex] === index
                           ? checkedImage
@@ -307,7 +344,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext,course }) {
         >
           {'<<<'} Back
         </button>
-        <button className='btn progress-btn btn-dark' onClick={handleStepClick}>
+        <button className='btn progress-btn btn-dark' disabled={disableButton} onClick={handleStepClick}>
           Next {'>>>'}
         </button>
       </div>

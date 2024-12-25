@@ -54,10 +54,6 @@ export default function WeekFourLearning({
             "week-5-activityData",
             JSON.stringify(activityData)
           );
-
-          console.log(
-            "Week and activities saved to localStorage under 'activity1'"
-          );
         }
 
   const [formData, setFormData] = useState(() => {
@@ -100,13 +96,8 @@ export default function WeekFourLearning({
       return { ...prevData, activities: updatedActivities }
     })
 
-    const isLastActivity = currentActivity >= 9
-    if (isLastActivity) {
-      handleSubmit()
-      setCurrentActivity(11)
-    } else {
-      setCurrentActivity((prev) => prev + 1)
-    }
+    setCurrentActivity((prev) => prev + 1)
+
   }
 
   const handlePrevious = () => {
@@ -122,25 +113,31 @@ export default function WeekFourLearning({
     })
   }
 
-   console.log(course?.course._id);
-   const handleSubmit = async () => {
-     try {
-       // Your submit logic here
-     console.log(formData)
-       const stringifiedFormData = JSON.stringify(formData);
-       userService
-         .postMyActivity(course.course._id, stringifiedFormData)
-         .then((response) => {
-           console.log("Submission successful:", response);
-         })
-         .catch((error) => {
-           console.error("Submission failed:", error);
-         });
-     } catch (error) {
-       console.error("Submission failed:", error);
-       toast.error("Submission failed. Please try again later.");
-     }
-   };
+  const handleSubmit = async () => {
+
+    if (formData?.activities?.length < 8) {
+      return { success: false, message: "Submission failed" };
+    }
+
+    try {
+      const stringifiedFormData = JSON.stringify(formData)
+      const response = await userService.postMyActivity(course.course._id, stringifiedFormData);
+
+      if (response.success) {
+        toast.success(response?.message);
+        console.log("Submission successful:", response);
+        return { success: true, message: "Submission successful" };
+      } else {
+        toast.error("Activity submission failed. Please contact flow admin for support!");
+        console.error("Submission failed with response:", response);
+        return { success: false, message: "Submission failed" };
+      }
+    } catch (error) {
+      console.error('Submission failed:', error)
+      return { success: false, message: "Submission failed" };
+    }
+  }
+
   const renderActivityContent = () => {
     switch (currentActivity) {
       case 1:
@@ -278,6 +275,7 @@ export default function WeekFourLearning({
             handleNextWeekCourse={handleNextWeekCourse}
             onNext={handleNext}
             course={course}
+            handleActivitySubmit={handleSubmit}
           />
         )
       default:

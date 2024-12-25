@@ -87,7 +87,6 @@ export default function WeekOneLearning({
   useEffect(() => {
 
     if (!data || !assessmentData) return
-    console.log(assessmentData, "assesment data")
 
     const assessments = assessmentData?.existingAssessment?.assessments;
     const percent = assessmentData?.existingAssessment?.rating;

@@ -114,7 +114,6 @@ export default function WeekThreeLearning({
     })
     const isLastActivity = currentActivity >= 8
     if (isLastActivity) {
-      handleSubmit()
       setCurrentActivity(10)
     } else {
       setCurrentActivity((prev) => prev + 1)
@@ -126,21 +125,28 @@ export default function WeekThreeLearning({
   }
 
   const handleSubmit = async () => {
-    try {
-      // Your submit logic here
+    console.log(formData, "FormData here o")
 
+    if (formData?.activities?.length < 7) {
+      return { success: false, message: "Submission failed" };
+    }
+
+    try {
       const stringifiedFormData = JSON.stringify(formData)
-      userService
-        .postMyActivity(course.course._id, stringifiedFormData)
-        .then((response) => {
-          console.log('Submission successful:', response)
-        })
-        .catch((error) => {
-          console.error('Submission failed:', error)
-        })
+      const response = await userService.postMyActivity(course.course._id, stringifiedFormData);
+
+      if (response.success) {
+        toast.success(response?.message);
+        console.log("Submission successful:", response);
+        return { success: true, message: "Submission successful" };
+      } else {
+        toast.error("Activity submission failed. Please contact flow admin for support!");
+        console.error("Submission failed with response:", response);
+        return { success: false, message: "Submission failed" };
+      }
     } catch (error) {
       console.error('Submission failed:', error)
-      toast.error('Submission failed. Please try again later.')
+      return { success: false, message: "Submission failed" };
     }
   }
 
@@ -265,6 +271,7 @@ export default function WeekThreeLearning({
             handleNextWeekCourse={handleNextWeekCourse}
             onNext={handleNext}
             course={course}
+            handleActivitySubmit={handleSubmit}
           />
         )
       default:
