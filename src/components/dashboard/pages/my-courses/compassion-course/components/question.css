@@ -1,0 +1,157 @@
+.custom-border-20 {
+  border: 20px solid #08bcc4;
+  border-radius: 8px;
+}
+
+.small-input {
+  width: 100%;
+  border: none;
+  outline: none;
+}
+
+.small-input-label {
+  background: url("../../../../../../assets/smallTextBox.png") no-repeat ;
+  background-size: 100% 100%;
+}
+
+.small-input:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+::placeholder {
+  font-weight: bold;
+  font-size: 20px;
+}
+.border-outline-0 {
+  border: 0;
+}
+
+.border-outline-0:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.no-scrollbar {
+  overflow: hidden;
+}
+
+.resize-none {
+  resize: none;
+}
+
+.gap-8 {
+  gap: 72px;
+}
+
+.ms-7 {
+  margin-left: 90px;
+}
+
+.bg-worksheet {
+  background-color: rgb(110, 222, 235);
+  background-image: url(../../../../../../assets/selfawareness-images/course-bg.png);
+  background-size: cover;
+  background-position: center;
+}
+
+.w-1020px {
+  width: 1020px;
+}
+
+.w-1029px {
+  width: 100%;
+}
+
+.w-924px {
+  width: 924px;
+}
+.w-200px {
+  width: 200px;
+}
+.h-50px {
+  height: 50px;
+}
+.gap-96px {
+  gap: 96px;
+}
+.text-blue {
+  color: #275dad;
+}
+.text-gray {
+  color: rgb(115, 114, 114);
+}
+
+.bg-blue {
+  background-color: #275dad;
+}
+.bg-button {
+  background: #329bd6;
+}
+.text-button-blue {
+  color: #329bd6;
+}
+
+.bg-sky-blue {
+  background-color: #08bcc4;
+}
+
+.bg-step {
+  background-color: #d6d6d6;
+}
+
+.bg-step-active {
+  background-color: #00bcc3;
+}
+
+.answer {
+  font-size: 4rem;
+}
+
+.grab {
+  cursor: grab;
+}
+.grabbing {
+  cursor: grabbing;
+}
+.font-lg {
+  font-size: 48px;
+}
+
+.question-box-container {
+  min-width: 989px;
+  max-width: 100%;
+  min-height: 450px;
+  /* width: max-content; */
+}
+
+label {
+  font-size: 1.2em;
+}
+
+.hover-next:hover {
+  background-color: transparent !important;
+  color: #329bd6 !important;
+  border: 2px solid #329bd6 !important;
+}
+
+.hover-prev:hover {
+  background-color: #329bd6 !important;
+  opacity: 0.7;
+  color: white !important;
+  border: none !important;
+}
+
+button {
+  transition: all 0.3s ease-in-out;
+}
+
+.absolute-center {
+  width: 100px !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}

@@ -1,0 +1,34 @@
+import React from "react";
+import { useSelector } from "react-redux";
+import QuestionBox from "../../../components/QuestionBox";
+import selfCompassion from "../../../../../../../../assets/self-compassion.png";
+import BigTextBox from "../../../components/BigTextBox";
+import Button from "../../../components/Button";
+import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+
+function WeekTwoPage2() {
+  const pageData = useSelector(selectPageData);
+
+  return (
+    <>
+      <QuestionBox>
+        <div className="d-flex align-items-center gap-2 ms-5">
+          <h2 className="text-blue font-lg">Question: </h2>
+          <h2 className="text-gray font-lg">
+            {pageData.question.substring(0, 34)}{" "}
+            {pageData.hasImage && (
+              <img src={selfCompassion} alt="self-compassion" />
+            )}
+          </h2>
+        </div>
+        <BigTextBox />
+      </QuestionBox>
+      <div className="d-flex justify-content-center gap-96px mt-4 ">
+        <Button text="Prev" />
+        <Button text="Next" />
+      </div>
+    </>
+  );
+}
+
+export default WeekTwoPage2;

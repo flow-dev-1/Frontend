@@ -1,0 +1,37 @@
+.letter-container {
+  display: flex;
+  background: url("../../../../../../../../assets/big-rect.png");
+  background-size: 100% 100%;
+  
+}
+
+.letter-info {
+  /* background: url("../../../../../../../../assets/small-rect.png") no-repeat;
+  background-size: contain;
+  padding: 30px 30px;
+  flex-basis: 260px; */
+
+  background: url("../../../../../../../../assets/small-rect.png") no-repeat;
+  background-size: 100% 100%;
+  padding: 30px 30px;
+  flex-basis: 345px;
+  margin: 2px;
+}
+
+
+.letter {
+  font-size: 4.5rem !important;
+}
+
+.letter-info h3 {
+  font-size: 2rem !important;
+}
+
+.letter-content textarea {
+  background: url("../../../../../../../../assets/text-line.png") repeat;
+  background-size: cover;
+  margin-left: -30px;
+}
+input::placeholder {
+  font-weight: normal !important;
+}
