@@ -40,9 +40,8 @@ const getWeekAssessment = (weekNumber) => {
       title: assessments[weekKey].title,
       subtitle: assessments[weekKey].subtitle,
       questions: assessments[weekKey].questions,
-      totalQuestions: assessments[weekKey].questions.length
+      totalQuestions: assessments[weekKey].questions.length,
     };
-
   } catch (error) {
     console.error("Error getting assessment data:", error);
     return null;
@@ -55,5 +54,22 @@ export const getTotalPagesForWeek = (weekNumber) => {
   return courseContent[weekKey]?.pages?.length || 0;
 };
 
-export { getPageContent, getWeekAssessment };
+// Gets content for a specific week excluding video pages
+const getWeekContentExcludingVideos = (weekNumber) => {
+  const weekKey = `week${weekNumber}`;
+  const weekData = courseContent[weekKey];
+
+  if (!weekData) {
+    return null; // Week does not exist
+  }
+
+  // Filter out pages of type "video"
+  const filteredPages = weekData.pages.filter((page) => page.type !== "video");
+
+  return {
+    pages: filteredPages,
+  };
+};
+
+export { getPageContent, getWeekAssessment, getWeekContentExcludingVideos };
 export default getPageContent;

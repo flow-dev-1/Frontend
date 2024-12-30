@@ -12,6 +12,7 @@ export const assessments = {
           { id: "C", text: "Judging others based on their actions" },
           { id: "D", text: "Ignoring others' needs." },
         ],
+        correctOption: "B",
       },
       {
         id: 2,
@@ -23,6 +24,7 @@ export const assessments = {
           { id: "C", text: "Judging others based on their actions" },
           { id: "D", text: "Ignoring others' needs" },
         ],
+        correctOption: "C",
       },
       {
         id: 3,
@@ -37,6 +39,7 @@ export const assessments = {
           },
           { id: "D", text: "A strategy t oavoid communication" },
         ],
+        correctOption: "B",
       },
       {
         id: 4,
@@ -47,6 +50,7 @@ export const assessments = {
           { id: "C", text: "Needs." },
           { id: "D", text: "Request." },
         ],
+        correctOption: "A",
       },
       {
         id: 5,
@@ -60,6 +64,7 @@ export const assessments = {
           { id: "C", text: "It helps us avoid conflicts" },
           { id: "D", text: "It makes us appear more popular" },
         ],
+        correctOption: "A",
       },
       {
         id: 6,
@@ -71,6 +76,7 @@ export const assessments = {
           { id: "C", text: "Need." },
           { id: "D", text: "Request." },
         ],
+        correctOption: "A",
       },
     ],
   },
