@@ -86,7 +86,7 @@ function CompassionFeedback() {
             ))}
           </ul>
         </aside>
-        <section className="week-content position-relative">
+        <section className="week-content position-relative mb-5 ">
           <Accordion
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
@@ -99,3 +99,5 @@ function CompassionFeedback() {
 }
 
 export default CompassionFeedback;
+
+// week 4, all drag and drop

@@ -9,13 +9,127 @@ import {
 
 function Week5() {
   const { pages } = getWeekContentExcludingVideos(5);
-  const [acitivity1, activity2, activity3] = pages;
-  const [q1, q2, q3, q4, q5] = activity3.steps.slice(1);
+  const [acitivity1] = pages;
+  const [q1, q2, q3, q4] = acitivity1.scenarios;
+
+  console.log(q1);
 
   const { questions: assessments } = getWeekAssessment(5);
   return (
     <>
-      {" "}
+      {/* Activity 1*/}
+      <p className="bg-yellow py-3 px-5 text-gray d-inline-block rounded-5 fs-4">
+        Activity 1
+      </p>
+      <hr />
+      <div className="d-flex gap-3">
+        <h2 className="text-blue fs-1">Questions:</h2>
+        <p className="text-blue fs-4">{q1.question}</p>
+      </div>
+      <div className="d-flex gap-3">
+        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
+        <p className="fs-5 flex-grow-1">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+          maxime possimus itaque.
+        </p>
+        <p>icon</p>
+      </div>
+      <div className="d-flex gap-3">
+        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+          Feedback
+        </p>
+        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+          maxime possimus itaque.
+        </p>
+        <p>icon</p>
+      </div>
+
+      <div className="d-flex gap-3">
+        <h2 className="text-blue fs-1">Questions:</h2>
+        <p className="text-blue fs-4">{q2.question}</p>
+      </div>
+      <div className="d-flex gap-3">
+        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
+        <p className="fs-5 flex-grow-1">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+          maxime possimus itaque.
+        </p>
+        <p>icon</p>
+      </div>
+      <div className="d-flex gap-3">
+        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+          Feedback
+        </p>
+        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+          maxime possimus itaque.
+        </p>
+        <p>icon</p>
+      </div>
+      <div className="d-flex gap-3">
+        <h2 className="text-blue fs-1">Questions:</h2>
+        <p className="text-blue fs-4">{q3.question}</p>
+      </div>
+      <div className="d-flex gap-3">
+        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
+        <p className="fs-5 flex-grow-1">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+          maxime possimus itaque.
+        </p>
+        <p>icon</p>
+      </div>
+      <div className="d-flex gap-3">
+        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+          Feedback
+        </p>
+        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+          maxime possimus itaque.
+        </p>
+        <p>icon</p>
+      </div>
+      <div className="d-flex gap-3">
+        <h2 className="text-blue fs-1">Questions:</h2>
+        <p className="text-blue fs-4">{q4.question}</p>
+      </div>
+      <div className="d-flex gap-3">
+        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
+        <p className="fs-5 flex-grow-1">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+          maxime possimus itaque.
+        </p>
+        <p>icon</p>
+      </div>
+      <div className="d-flex gap-3">
+        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+          Feedback
+        </p>
+        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+          maxime possimus itaque.
+        </p>
+        <p>icon</p>
+      </div>
+
+      <hr />
+
       <hr />
       {/* Assesment 1 */}
       <p className="bg-yellow py-3 px-5 text-gray d-inline-block rounded-5 fs-4">
@@ -25,8 +139,8 @@ function Week5() {
       {assessments.map(({ question, options, correctOption }, i) => {
         return (
           <>
-            <div className="d-flex align-items-center gap-3" key={i}>
-              <h2 className="text-blue fs-1">Questions {i + 1}:</h2>
+            <div className="d-flex gap-3" key={i}>
+              <h2 className="text-blue fs-1 text-nowrap">Questions {i + 1}:</h2>
               <p className="text-blue fs-4">{question}</p>
             </div>
             {options.map((option, index) => {

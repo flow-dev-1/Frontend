@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { Icon } from "@iconify/react";
 import checkedImage from "../../../../../../../assets/checkedbox.png";
 import unCheckedImage from "../../../../../../../assets/uncheckedBox.png";
@@ -8,14 +8,113 @@ import {
 } from "../../../compassion-course/weeks/data";
 
 function Week4() {
-    const { pages } = getWeekContentExcludingVideos(4);
-    const [acitivity1, activity2, activity3] = pages;
-    const [q1, q2, q3, q4, q5] = activity3.steps.slice(1);
+  const { pages } = getWeekContentExcludingVideos(4);
+  const [acitivity1, activity2, activity3] = pages;
 
-    const { questions: assessments } = getWeekAssessment(4);
+  console.log(pages);
+
+  const { questions: assessments } = getWeekAssessment(4);
   return (
     <>
-      {" "}
+      {/* Activity 1 */}
+      <p className="bg-yellow py-3 px-5 text-gray d-inline-block rounded-5 fs-4">
+        Activity 1
+      </p>
+      <hr />
+      <div className="d-flex gap-3">
+        <h2 className="text-blue fs-1">Questions:</h2>
+        <p className="text-blue fs-4">{acitivity1.question}</p>
+      </div>
+      <div className="d-flex gap-3">
+        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
+        <p className="fs-5 flex-grow-1">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+          maxime possimus itaque.
+        </p>
+        <p>icon</p>
+      </div>
+      <div className="d-flex gap-3">
+        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+          Feedback
+        </p>
+        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+          maxime possimus itaque.
+        </p>
+        <p>icon</p>
+      </div>
+      <hr />
+
+      {/* Activity 2 */}
+      <p className="bg-yellow py-3 px-5 text-gray d-inline-block rounded-5 fs-4">
+        Activity 2
+      </p>
+      <hr />
+      <div className="d-flex gap-3">
+        <h2 className="text-blue fs-1">Questions:</h2>
+        <p className="text-blue fs-4">{acitivity1.question}</p>
+      </div>
+      <div className="d-flex gap-3">
+        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
+        <p className="fs-5 flex-grow-1">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+          maxime possimus itaque.
+        </p>
+        <p>icon</p>
+      </div>
+      <div className="d-flex gap-3">
+        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+          Feedback
+        </p>
+        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+          maxime possimus itaque.
+        </p>
+        <p>icon</p>
+      </div>
+      <hr />
+
+      {/* Activity 3 */}
+      <p className="bg-yellow py-3 px-5 text-gray d-inline-block rounded-5 fs-4">
+        Activity 3
+      </p>
+      <hr />
+      <div className="d-flex gap-3">
+        <h2 className="text-blue fs-1">Questions:</h2>
+        <p className="text-blue fs-4">{acitivity1.question}</p>
+      </div>
+      <div className="d-flex gap-3">
+        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
+        <p className="fs-5 flex-grow-1">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+          maxime possimus itaque.
+        </p>
+        <p>icon</p>
+      </div>
+      <div className="d-flex gap-3">
+        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+          Feedback
+        </p>
+        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+          maxime possimus itaque.
+        </p>
+        <p>icon</p>
+      </div>
+      <hr />
+
       <hr />
       {/* Assesment 1 */}
       <p className="bg-yellow py-3 px-5 text-gray d-inline-block rounded-5 fs-4">
@@ -26,7 +125,7 @@ function Week4() {
         return (
           <>
             <div className="d-flex align-items-center gap-3" key={i}>
-              <h2 className="text-blue fs-1">Questions {i + 1}:</h2>
+              <h2 className="text-blue fs-1 text-nowrap">Questions {i + 1}:</h2>
               <p className="text-blue fs-4">{question}</p>
             </div>
             {options.map((option, index) => {
@@ -77,4 +176,4 @@ function Week4() {
   );
 }
 
-export default Week4
+export default Week4;

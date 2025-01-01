@@ -168,6 +168,9 @@ button {
   background: #5ce1e6;
 }
 
+.text-green {
+  color: #4cb748;
+}
 .border-blue {
   border-color: #275dad !important;
 }
