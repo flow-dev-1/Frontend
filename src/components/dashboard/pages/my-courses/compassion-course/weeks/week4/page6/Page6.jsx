@@ -37,7 +37,6 @@ function WeekFourPage6() {
     orange: [],
   });
 
-
   // Reset showCurrentImage when step changes
   useEffect(() => {
     setShowCurrentImage(true);
@@ -66,7 +65,6 @@ function WeekFourPage6() {
     red: RedBucket,
     orange: OrangeBucket,
   };
- 
 
   const handleOnDragEnd = (result) => {
     if (!result.destination) {
@@ -96,10 +94,7 @@ function WeekFourPage6() {
   const renderStep = () => {
     const currentImage = pageData.images[currentStep - 1];
     return showCurrentImage && currentImage ? (
-      <Draggable
-        draggableId="current-image"
-        index={0}
-      >
+      <Draggable draggableId="current-image" index={0}>
         {(provided, snapshot) => (
           <div
             ref={provided.innerRef}

@@ -630,11 +630,11 @@ const Week2 = () => {
                 }}
               >
                 <div className="feedback-card">{activity.feedback}</div>
-                // <Icon
-                //   style={{ color: "#275DAD" }}
-                //   width={20}
-                //   icon="lucide:edit"
-                // />
+                <Icon
+                  style={{ color: "#275DAD" }}
+                  width={20}
+                  icon="lucide:edit"
+                />
               </div>
             </div>
           )} */}

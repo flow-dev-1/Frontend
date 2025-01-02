@@ -12,6 +12,7 @@ export const assessments = {
           { id: "C", text: "Judging others based on their actions" },
           { id: "D", text: "Ignoring others' needs." },
         ],
+        correctOption: "B",
       },
       {
         id: 2,
@@ -23,6 +24,7 @@ export const assessments = {
           { id: "C", text: "Judging others based on their actions" },
           { id: "D", text: "Ignoring others' needs" },
         ],
+        correctOption: "C",
       },
       {
         id: 3,
@@ -37,6 +39,7 @@ export const assessments = {
           },
           { id: "D", text: "A strategy t oavoid communication" },
         ],
+        correctOption: "B",
       },
       {
         id: 4,
@@ -47,6 +50,7 @@ export const assessments = {
           { id: "C", text: "Needs." },
           { id: "D", text: "Request." },
         ],
+        correctOption: "A",
       },
       {
         id: 5,
@@ -60,6 +64,7 @@ export const assessments = {
           { id: "C", text: "It helps us avoid conflicts" },
           { id: "D", text: "It makes us appear more popular" },
         ],
+        correctOption: "A",
       },
       {
         id: 6,
@@ -71,6 +76,7 @@ export const assessments = {
           { id: "C", text: "Need." },
           { id: "D", text: "Request." },
         ],
+        correctOption: "A",
       },
     ],
   },
@@ -90,6 +96,7 @@ export const assessments = {
           { id: "C", text: "Comparing yourself to others" },
           { id: "D", text: "Being perfect in everything you do." },
         ],
+        correctOption: "A",
       },
       {
         id: 2,
@@ -100,6 +107,7 @@ export const assessments = {
           { id: "C", text: "Speaking to yourself kindly when you fail." },
           { id: "D", text: "Blaming others for your problems." },
         ],
+        correctOption: "A",
       },
       {
         id: 3,
@@ -119,6 +127,7 @@ export const assessments = {
             text: "Practicing mindfulness by paying attention to your emotions.",
           },
         ],
+        correctOption: "A",
       },
       {
         id: 4,
@@ -133,6 +142,7 @@ export const assessments = {
           },
           { id: "D", text: "sk others to tell you what you did wrong." },
         ],
+        correctOption: "A",
       },
       {
         id: 5,
@@ -149,6 +159,7 @@ export const assessments = {
             text: "It allows us to criticize ourselves in order to avoid further mistakes.",
           },
         ],
+        correctOption: "A",
       },
     ],
   },
@@ -166,6 +177,7 @@ export const assessments = {
           { id: "C", text: "Helping, Judging, and Complaining" },
           { id: "D", text: "Listening, Arguing, and Avoiding" },
         ],
+        correctOption: "A",
       },
       {
         id: 2,
@@ -180,6 +192,7 @@ export const assessments = {
           },
           { id: "D", text: "Giving a compliment to cheer someone up." },
         ],
+        correctOption: "A",
       },
       {
         id: 3,
@@ -191,6 +204,7 @@ export const assessments = {
           { id: "C", text: "Ignore the situation and hope it improves." },
           { id: "D", text: "Immediately fix their problem." },
         ],
+        correctOption: "A",
       },
       {
         id: 4,
@@ -207,6 +221,7 @@ export const assessments = {
             text: "It helps you get more information about someone's issues.",
           },
         ],
+        correctOption: "A",
       },
       {
         id: 5,
@@ -227,6 +242,7 @@ export const assessments = {
             text: "\"Let's just forget about it; it doesn't matter.\"",
           },
         ],
+        correctOption: "A",
       },
     ],
   },
@@ -249,6 +265,7 @@ export const assessments = {
             text: "A list of tasks to do for your friends and family.",
           },
         ],
+        correctOption: "A",
       },
       {
         id: 2,
@@ -262,6 +279,7 @@ export const assessments = {
           { id: "C", text: "Your classmate whom you rarely talk to." },
           { id: "D", text: "A neighbor." },
         ],
+        correctOption: "A",
       },
       {
         id: 3,
@@ -273,6 +291,7 @@ export const assessments = {
           { id: "C", text: "Greeting a classmate in the hallway." },
           { id: "D", text: "Offering to help a stranger carry groceries." },
         ],
+        correctOption: "A",
       },
       {
         id: 4,
@@ -284,6 +303,7 @@ export const assessments = {
           { id: "C", text: "Treating them the same as your family." },
           { id: "D", text: "Offering them everything you have." },
         ],
+        correctOption: "A",
       },
       {
         id: 5,
@@ -295,6 +315,7 @@ export const assessments = {
           { id: "C", text: "Loaning money to a stranger." },
           { id: "D", text: "Inviting them into your home." },
         ],
+        correctOption: "A",
       },
     ],
   },
@@ -324,6 +345,7 @@ export const assessments = {
             text: "Self-awareness means focusing on your goals without considering how you feel or what you've experienced in the past.",
           },
         ],
+        correctOption: "A",
       },
       {
         id: 2,
@@ -347,6 +369,7 @@ export const assessments = {
             text: "Strengths are the things your parents say you can do, and weaknesses are things your parents say you cannot do.",
           },
         ],
+        correctOption: "A",
       },
       {
         id: 3,
@@ -369,6 +392,7 @@ export const assessments = {
             text: "So you can compare your values to those of others.",
           },
         ],
+        correctOption: "A",
       },
       {
         id: 4,
@@ -391,6 +415,7 @@ export const assessments = {
             text: "Believing that success comes from natural talent alone.",
           },
         ],
+        correctOption: "A",
       },
       {
         id: 5,
@@ -411,6 +436,7 @@ export const assessments = {
             text: "They would ignore the failure and move on without trying to improve.",
           },
         ],
+        correctOption: "A",
       },
       {
         id: 6,
@@ -424,6 +450,7 @@ export const assessments = {
           { id: "C", text: "The ability to be self reliant." },
           { id: "D", text: "Knowing how to read people's minds." },
         ],
+        correctOption: "A",
       },
       {
         id: 7,
@@ -434,6 +461,7 @@ export const assessments = {
           { id: "C", text: "To be able to react impulsively in situations." },
           { id: "D", text: "To help you fight better." },
         ],
+        correctOption: "A",
       },
       {
         id: 8,
@@ -453,6 +481,7 @@ export const assessments = {
             text: "By suppressing your emotions until the conflict is over.",
           },
         ],
+        correctOption: "A",
       },
       {
         id: 9,
@@ -470,6 +499,7 @@ export const assessments = {
           },
           { id: "D", text: "By ignoring your friends feelings." },
         ],
+        correctOption: "A",
       },
       {
         id: 10,
@@ -493,6 +523,7 @@ export const assessments = {
             text: "Giving up because you think it’s too difficult for you to handle.",
           },
         ],
+        correctOption: "A",
       },
     ],
   },
