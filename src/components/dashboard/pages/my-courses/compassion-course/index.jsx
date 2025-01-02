@@ -1,6 +1,7 @@
 import logo from "../../../../../assets/logo.png";
 import { Icon } from "@iconify/react";
 import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import {
   selectCurrentWeek,
   selectShowReview,
@@ -53,7 +54,6 @@ import WeekFivePage1 from "./weeks/week5/page1/Page1.jsx";
 import WeekFivePage2 from "./weeks/week5/page2/Page2.jsx";
 import WeekFivePage3 from "./weeks/week5/page3/Page3.jsx";
 import WeekFivePage4 from "./weeks/week5/page4/Page4.jsx";
-import { useNavigate } from "react-router-dom";
 
 const WeekContent = () => {
   const currentWeek = useSelector(selectCurrentWeek);
@@ -201,12 +201,28 @@ const CourseContent = () => {
 
   return (
     <>
-      <header className="compassion-header">
-        <img src={logo} alt="flow" />
-      </header>
+      <nav className="navbar">
+        <div className="container">
+          <Link to="/">
+            <img
+              src={logo}
+              alt=""
+              style={{
+                width: "60%",
+                cursor: "pointer",
+              }}
+            />
+          </Link>
+        </div>
+      </nav>
+
       <div className="main-content">
         <aside>
-          <p className="back">
+          <p
+            className="back"
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate("/dashboard/my-courses/")}
+          >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
             Back to My Courses
           </p>

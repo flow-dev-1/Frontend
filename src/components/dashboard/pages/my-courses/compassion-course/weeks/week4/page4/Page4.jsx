@@ -20,7 +20,10 @@ function WeekFourPage4() {
     const { source, destination } = result;
 
     // If dragging from options to a bowl
-    if (source.droppableId === "options" && destination.droppableId !== "options") {
+    if (
+      source.droppableId === "options" &&
+      destination.droppableId !== "options"
+    ) {
       const draggedOption = options[source.index];
       const newOptions = Array.from(options);
       newOptions.splice(source.index, 1);
@@ -32,8 +35,6 @@ function WeekFourPage4() {
           draggedOption,
         ],
       };
-
-      
 
       setOptions(newOptions);
       setBowls(newBowls);
@@ -54,7 +55,7 @@ function WeekFourPage4() {
         <div className="custom-border-20 question-box-container d-flex w-1020px">
           <Droppable droppableId="options">
             {(provided) => (
-              <div 
+              <div
                 className="p-5 d-flex gap-3 align-items-baseline flex-wrap flex-basis"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
@@ -100,19 +101,31 @@ function WeekFourPage4() {
                 <Droppable key={bowl.id} droppableId={bowl.id}>
                   {(provided, snapshot) => (
                     <div
+                      className="my-2"
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                       style={{
-                        backgroundColor: snapshot.isDraggingOver ? "rgba(255, 255, 255, 0.1)" : "transparent",
+                        backgroundColor: snapshot.isDraggingOver
+                          ? "rgba(255, 255, 255, 0.1)"
+                          : "transparent",
                         padding: "20px",
                         borderRadius: "8px",
                         minHeight: "100px",
+                        height: "300px",
                       }}
                     >
-                      <h2 className={bowl.id === "inner" ? "inner-count" : "outer-count"}>
+                      <h2
+                        className={
+                          bowl.id === "inner" ? "inner-count" : "outer-count"
+                        }
+                      >
                         {bowls[bowl.id].length}
                       </h2>
-                      <div className={bowl.id === "inner" ? "inner-bowl" : "outer-bowl"}>
+                      <div
+                        className={
+                          bowl.id === "inner" ? "inner-bowl" : "outer-bowl"
+                        }
+                      >
                         {bowl.label}
                       </div>
                       {provided.placeholder}
