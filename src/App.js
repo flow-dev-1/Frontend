@@ -128,9 +128,9 @@ function App() {
           <Route
             path="/dashboard/feedback/compassion/"
             element={
-              // <ProtectedRoute>
+              <ProtectedRoute>
                 <CompassionFeedback />
-              // </ProtectedRoute>
+              </ProtectedRoute>
             }
           />
           <Route

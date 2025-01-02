@@ -105,6 +105,9 @@
   color: #275dad;
 }
 
+.bg-orange {
+  background: #faaa74;
+}
 .bg-step {
   background-color: #d6d6d6;
 }
@@ -170,6 +173,18 @@ button {
 
 .text-green {
   color: #4cb748;
+}
+
+.text-black {
+  color: #000;
+}
+
+.bg-green {
+  background: #50aa50;
+}
+
+.bg-red {
+  background: #fd483d;
 }
 .border-blue {
   border-color: #275dad !important;

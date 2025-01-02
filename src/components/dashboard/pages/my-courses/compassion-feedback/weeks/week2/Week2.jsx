@@ -2,6 +2,9 @@ import React from "react";
 import { Icon } from "@iconify/react";
 import checkedImage from "../../../../../../../assets/checkedbox.png";
 import unCheckedImage from "../../../../../../../assets/uncheckedBox.png";
+
+import correct from "../../../../../../../assets/correct.png";
+import wrong from "../../../../../../../assets/wrong.png";
 import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
@@ -34,7 +37,7 @@ function Week2() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <p>icon</p>
+         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>
@@ -44,7 +47,7 @@ function Week2() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <p>icon</p>
+         <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
       </div>
       <hr />
 
@@ -67,7 +70,7 @@ function Week2() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <p>icon</p>
+         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>
@@ -77,7 +80,7 @@ function Week2() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <p>icon</p>
+         <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
       </div>
       <hr />
 
@@ -99,7 +102,7 @@ function Week2() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <p>icon</p>
+         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>
@@ -109,7 +112,7 @@ function Week2() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <p>icon</p>
+         <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
       </div>
 
       <div className="d-flex gap-3">
@@ -124,7 +127,7 @@ function Week2() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <p>icon</p>
+         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>
@@ -134,7 +137,7 @@ function Week2() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <p>icon</p>
+         <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
       </div>
 
       <div className="d-flex gap-3">
@@ -149,7 +152,7 @@ function Week2() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <p>icon</p>
+         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>
@@ -159,7 +162,7 @@ function Week2() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <p>icon</p>
+         <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
       </div>
 
       <div className="d-flex gap-3">
@@ -174,7 +177,7 @@ function Week2() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <p>icon</p>
+         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>
@@ -184,7 +187,7 @@ function Week2() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <p>icon</p>
+         <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
       </div>
 
       <hr />
@@ -219,7 +222,18 @@ function Week2() {
                     />
                     <div>{`${optionText}. ${option.text}`}</div>
                   </div>
-                  <div>{isCorrectOption ? "Correct" : "Wrong"}</div>
+                  {isCorrectOption ? (
+                    <p className="d-flex gap-1">
+                      {" "}
+                      <img src={correct} alt="" /> Correct
+                    </p>
+                  ) : (
+                    <p className="d-flex gap-1">
+                      {" "}
+                      <img src={wrong} alt="" />
+                      Wrong
+                    </p>
+                  )}
                 </div>
               );
             })}

@@ -4,6 +4,7 @@ import { Icon } from "@iconify/react";
 
 function Accordion({ activeIndex, setActiveIndex, items }) {
   const handleToggle = (index) => {
+    window.scroll(0, 0);
     setActiveIndex(activeIndex === index ? null : index);
   };
 
@@ -16,6 +17,7 @@ function Accordion({ activeIndex, setActiveIndex, items }) {
       {items.map((item, index) => (
         <div key={index} className="accordion-item">
           <div
+            style={{ cursor: "pointer" }}
             className={
               index > 4
                 ? "bg-blue-feedback  py-4 px-5 d-flex gap-3 align-items-center justify-space-between"
@@ -29,8 +31,12 @@ function Accordion({ activeIndex, setActiveIndex, items }) {
               ) : (
                 <h2 className="text-gray fs-1">FInal Report:</h2>
               )}
-              <p className="fs-4 text-gray">{item.title}</p>
-              {index === 5 && <p className="text-blue fs-2">(Download PDF)</p>}
+              <div className="fs-4 text-gray">{item.title}</div>
+              {index === 5 && (
+                <p className="text-blue fs-4">
+                  (Download PDF) <Icon icon="bi:download" />
+                </p>
+              )}
             </div>
             <Icon
               icon={
