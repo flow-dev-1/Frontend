@@ -5,7 +5,7 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "testing.com",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/week-1/FLOW+1_1.mp4",
         hasNextButton: true,
       },
       {

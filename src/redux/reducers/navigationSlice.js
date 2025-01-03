@@ -51,6 +51,8 @@ const navigationSlice = createSlice({
         } else {
           // Move to next question
           state.currentStep += 1;
+          sessionStorage.setItem("flow-currentStep", state.currentStep)
+
         }
         return;
       }
@@ -79,6 +81,7 @@ const navigationSlice = createSlice({
       // If current page has steps and we're not on the last step
       if (totalSteps > 0 && !isLastStep) {
         state.currentStep += 1;
+        sessionStorage.setItem("flow-currentStep", state.currentStep)
         return;
       }
 
@@ -88,6 +91,8 @@ const navigationSlice = createSlice({
         if (hasAssessment) {
           state.currentPage += 1;
           state.currentStep = 1;
+          sessionStorage.setItem("flow-currentPage", state.currentPage)
+          sessionStorage.setItem("flow-currentStep", 1)
           return;
         }
 
@@ -96,15 +101,22 @@ const navigationSlice = createSlice({
           state.currentWeek += 1;
           state.currentPage = 1;
           state.currentStep = 1;
+          sessionStorage.setItem("flow-currentWeek", state.currentWeek)
+          sessionStorage.setItem("flow-currentPage", 1)
+          sessionStorage.setItem("flow-currentStep", 1)
         }
         return;
       }
+
+
 
       // For pages without steps (like video pages) or when we're on the last step
       // go to next page if we haven't reached the end
       if (state.currentPage < totalPages) {
         state.currentPage += 1;
         state.currentStep = 1;
+        sessionStorage.setItem("flow-currentPage", state.currentPage )
+        sessionStorage.setItem("flow-currentStep", state.currentStep )
       }
     },
     navigatePrev: (state) => {
@@ -120,11 +132,16 @@ const navigationSlice = createSlice({
         if (state.currentStep > 1) {
           // Go to previous question
           state.currentStep -= 1;
+          sessionStorage.setItem("flow-currentStep", state.currentStep)
           return;
         }
         // If on first question, go back to last activity page
         state.currentPage = weekData?.pages.length || 1;
         state.currentStep = 1;
+
+        sessionStorage.setItem("flow-currentPage", state.currentPage)
+        sessionStorage.setItem("flow-currentStep", 1)
+        
         return;
       }
 
@@ -151,6 +168,7 @@ const navigationSlice = createSlice({
       // If current page has steps and we're not on the first step
       if (totalSteps > 0 && !isFirstStep) {
         state.currentStep -= 1;
+        sessionStorage.setItem("flow-currentStep",  state.currentStep - 1)
         return;
       }
 
@@ -163,6 +181,10 @@ const navigationSlice = createSlice({
             courseContent[`week${state.currentWeek}`]?.pages.length || 1;
           state.currentPage = prevWeekPages;
           state.currentStep = 1;
+
+          sessionStorage.setItem("flow-currentWeek", state.currentWeek)
+          sessionStorage.setItem("flow-currentPage", state.currentPage)
+          sessionStorage.setItem("flow-currentStep", 1)
         }
         return;
       }
@@ -170,6 +192,8 @@ const navigationSlice = createSlice({
       // Otherwise, go to previous page
       state.currentPage -= 1;
       state.currentStep = 1;
+      sessionStorage.setItem("flow-currentPage", state.currentPage)
+      sessionStorage.setItem("flow-currentStep", 1)
     },
     showReviewPopup: (state) => {
       state.showReview = true;
@@ -184,6 +208,7 @@ const navigationSlice = createSlice({
         state.currentWeek += 1;
         state.currentPage = 1;
         state.currentStep = 1;
+        sessionStorage.setItem("flow-currentWeek", state.currentWeek)
       }
     },
   },

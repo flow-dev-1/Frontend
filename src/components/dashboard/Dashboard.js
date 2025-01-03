@@ -30,6 +30,7 @@ export default function Dashboard() {
   const logOut = () => {
     // localStorage.removeItem('Flow-Auth-Token');
     localStorage.clear()
+    sessionStorage.clear()
     dispatch(logoutSuccess())
     dispatch(clearToken())
     navigate('/sign-in', { replace: true })

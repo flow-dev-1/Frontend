@@ -6,6 +6,7 @@ import jwtReducer from "./reducers/jwtReducer";
 import adminReducer from "./reducers/adminReducer";
 import navigationSlice from "./reducers/navigationSlice";
 import feedbackSlice from "./reducers/feedbackSlice";
+import userAnswersReducer from "./reducers/userAnswersReducer";
 
 const persistConfig = {
   key: "root",
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   admin: adminReducer,
   navigation: navigationSlice,
   feedback: feedbackSlice,
+  userAnswer: userAnswersReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

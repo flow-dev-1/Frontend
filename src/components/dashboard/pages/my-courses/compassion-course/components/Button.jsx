@@ -15,8 +15,10 @@ const Button = ({ text, customOnClick }) => {
     e.preventDefault();
 
     if (customOnClick) {
-      customOnClick();
-      return;
+      const inputOkay = customOnClick();
+      
+      // If the User is expected to enter input and does not they cant proceed.
+      if (!inputOkay) return;
     }
 
     if (text === "Next") {
@@ -37,13 +39,12 @@ const Button = ({ text, customOnClick }) => {
 
   return (
     <button
-      className={`btn fs-5 rounded w-200px h-50px ${
-        isNextButton || customOnClick
+      className={`btn fs-5 rounded w-200px h-50px ${isNextButton || customOnClick
           ? "bg-button text-white border-0 hover-prev"
           : isPrevButton
-          ? "bg-transparent text-button-blue border border-blue hover-next"
-          : ""
-      }`}
+            ? "bg-transparent text-button-blue border border-blue hover-next"
+            : ""
+        }`}
       onClick={handleClick}
       type="button"
     >

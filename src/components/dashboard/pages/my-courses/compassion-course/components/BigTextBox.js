@@ -1,6 +1,6 @@
 import React from "react";
 
-function BigTextBox() {
+function BigTextBox({ handleChange }) {
   return (
     <div className="position-relative">
       <svg
@@ -41,6 +41,7 @@ function BigTextBox() {
             maxWidth: "100%",
             fontSize: "25px",
           }}
+          onChange={handleChange ? handleChange : () => { }}
         ></textarea>
       </label>
     </div>

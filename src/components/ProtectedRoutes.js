@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux'
 const ProtectedRoute = ({ children }) => {
   const dispatch = useDispatch()
 
+  // Allow Admin Access to course
+
   // Get the JWT token from local storage
   const auth_token =
     localStorage.getItem('Flow-Auth-Token') ||

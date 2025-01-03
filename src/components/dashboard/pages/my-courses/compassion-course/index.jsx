@@ -1,11 +1,15 @@
 import logo from "../../../../../assets/logo.png";
 import { Icon } from "@iconify/react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
 import {
   selectCurrentWeek,
   selectShowReview,
   selectShowHurray,
   selectCurrentPage,
+  setCurrentWeek,
+  setCurrentPage,
+  setCurrentStep
 } from "../../../../../redux/reducers/navigationSlice.js";
 import "./index.css";
 
@@ -54,12 +58,70 @@ import WeekFivePage2 from "./weeks/week5/page2/Page2.jsx";
 import WeekFivePage3 from "./weeks/week5/page3/Page3.jsx";
 import WeekFivePage4 from "./weeks/week5/page4/Page4.jsx";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useQuery } from '@tanstack/react-query'
+import userService from '../../../../../services/api/user.js'
+import { updateData } from "../../../../../redux/reducers/userAnswersReducer.js";
+import { saveActivity } from "../../../../../redux/reducers/userAnswersReducer.js";
+
 
 const WeekContent = () => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const currentWeek = sessionStorage.getItem("flow-currentWeek") ? Number(sessionStorage.getItem("flow-currentWeek")) : 1
+    const currentPage = sessionStorage.getItem("flow-currentPage") ? Number(sessionStorage.getItem("flow-currentPage")) : 1
+    const currentStep = sessionStorage.getItem("flow-currentStep") ? Number(sessionStorage.getItem("flow-currentStep")) : 1
+
+    // Dispatch the current week, page, and step
+    dispatch(setCurrentWeek(currentWeek));
+    dispatch(setCurrentPage(currentPage));
+    dispatch(setCurrentStep(currentStep));
+
+    return () => { }
+  }, [dispatch]) // Added dispatch to dependency array
+
   const currentWeek = useSelector(selectCurrentWeek);
   const currentPage = useSelector(selectCurrentPage);
   const showReview = useSelector(selectShowReview);
   const showHurray = useSelector(selectShowHurray);
+
+  // toDo: Fetch User assessment and Activity Data
+  const { data, isLoading, status, isError } = useQuery({
+    queryKey: ["dashboard/compassion-course", "", currentWeek],
+    queryFn: () => userService.getMyActivites("1234", currentWeek),
+    enabled: !!currentWeek,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false
+  });
+
+  const { data: assessmentData, isLoading: assessmentLoading, status: assesmentStatus, isError: assessmentError } = useQuery({
+    queryKey: ["get-self-awareness-assessment", "", currentWeek],
+    queryFn: () => userService.getMyAssessment("1234", currentWeek),
+    enabled: !!currentWeek,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false
+  });
+
+  useEffect(() => {
+    if (!data || !assessmentData) return
+
+    if (data.error) {
+
+    } else {
+      dispatch(updateData({
+        course: "",
+        week: currentWeek,
+        activities: data.activities,
+        assessments: assessmentData.assessments
+      }))
+    }
+
+    return () => { }
+  }, [data, assessmentData])
+
 
   // If showing hurray, render that instead
   if (showHurray) {
@@ -244,6 +306,23 @@ const CourseContent = () => {
     </>
   );
 };
+
+export const saveUserInput = () => {
+  if (!adminDatas.isAdmin && !myAnswer) {
+    setErrorMessage("Oops! Please enter a valid input!");
+    return false;
+  }
+
+  console.log(myAnswer, "My Answer")
+  setErrorMessage(""); // Clear error if input is valid
+  // Allow flow admin to proceed without input but do not dispatch answer
+  if (adminDatas.isAdmin) return true
+  dispatch(saveActivity({
+    page: pageData.id,
+    answer: myAnswer
+  }))
+  return true
+}
 
 const CompassionCourse = () => {
   return <CourseContent />;
