@@ -9,6 +9,7 @@ import Button from "../../../components/Button";
 import {
   selectPageData,
   selectCurrentStep,
+  navigateNext,
 } from "../../../../../../../../redux/reducers/navigationSlice";
 import CardBoard from "./components/CardBoard";
 import StepIndicator from "../../../components/StepIndicator";
@@ -24,8 +25,10 @@ import image7 from "../../../../../../../../assets/drag-images/image7.png";
 import image8 from "../../../../../../../../assets/drag-images/image8.png";
 import image9 from "../../../../../../../../assets/drag-images/image9.png";
 import image10 from "../../../../../../../../assets/drag-images/image10.png";
+import { useDispatch } from "react-redux";
 
 function WeekFourPage6() {
+  const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
   const totalSteps = pageData.images.length;
@@ -88,13 +91,15 @@ function WeekFourPage6() {
 
       setBucketResults(newBucketResults);
       setShowCurrentImage(false);
+
+      dispatch(navigateNext());
     }
   };
 
   const renderStep = () => {
     const currentImage = pageData.images[currentStep - 1];
     return showCurrentImage && currentImage ? (
-      <Draggable draggableId="current-image" index={0}>
+      <Draggable draggableId="current-image" index={currentStep}>
         {(provided, snapshot) => (
           <div
             ref={provided.innerRef}
@@ -104,12 +109,12 @@ function WeekFourPage6() {
               ...provided.draggableProps.style,
               cursor: snapshot.isDragging ? "grabbing" : "grab",
               transform: `${provided.draggableProps.style?.transform || ""} ${
-                snapshot.isDragging ? "scale(0.5)" : ""
+                snapshot.isDragging ? "scale(0.3)" : ""
               }`,
               zIndex: snapshot.isDragging ? 9999 : 1,
             }}
           >
-            <CardBoard imgSrc={imageMap[currentImage]}/>
+            <CardBoard imgSrc={imageMap[currentImage]} />
           </div>
         )}
       </Draggable>
@@ -147,7 +152,7 @@ function WeekFourPage6() {
               </div>
               <img src={ArrowTrail} alt="arrow trail" />
             </div>
-            <div className="d-flex justify-content-between px-4">
+            <div className="d-flex justify-content-around align-items-center px-4 py-2">
               {pageData.buckets.map((bucket) => (
                 <Droppable key={bucket.id} droppableId={bucket.id}>
                   {(provided, snapshot) => (
@@ -161,6 +166,8 @@ function WeekFourPage6() {
                         padding: "20px",
                         borderRadius: "8px",
                         minHeight: "100px",
+                        height: "300px",
+                        width: "200px",
                       }}
                     >
                       <h2

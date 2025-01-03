@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import "./index.css";
-import logo from "../../../../../assets/logo.png";
+import React, {  useState } from "react";
+import logo from "../../../../../../assets/logo.png";
 import { Icon } from "@iconify/react";
 import Accordion from "./components/Accordion";
 import Week1 from "./weeks/week1/Week1";
@@ -9,8 +8,10 @@ import Week3 from "./weeks/week3/Week3";
 import Week4 from "./weeks/week4/Week4";
 import Week5 from "./weeks/week5/Week5";
 import OverallFeedBack from "./weeks/overall/OverallFeedBack";
+import { useNavigate, Link } from "react-router-dom";
 
 function CompassionFeedback() {
+  const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(null);
 
   const currentWeek = activeIndex + 1;
@@ -50,15 +51,30 @@ function CompassionFeedback() {
 
   return (
     <>
-      <header className="compassion-header">
-        <img src={logo} alt="flow" />
-      </header>
+      <nav className="navbar">
+        <div className="container">
+          <Link to="/">
+            <img
+              src={logo}
+              alt=""
+              style={{
+                width: "60%",
+                cursor: "pointer",
+              }}
+            />
+          </Link>
+        </div>
+      </nav>
       <div className="main-content">
         <aside>
-          <p className="back">
+          <Link
+            className="back"
+            style={{ cursor: "pointer" }}
+            to={"/dashboard/my-courses/"}
+          >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
             Back to My Courses
-          </p>
+          </Link>
 
           <div className="compassion-title">
             <h2> Seeing, Caring and Doing: </h2>

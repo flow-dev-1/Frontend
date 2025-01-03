@@ -1,13 +1,13 @@
 import React from "react";
 import { Icon } from "@iconify/react";
-import checkedImage from "../../../../../../../assets/checkedbox.png";
-import unCheckedImage from "../../../../../../../assets/uncheckedBox.png";
-import correct from "../../../../../../../assets/correct.png";
-import wrong from "../../../../../../../assets/wrong.png";
+import checkedImage from "../../../../../../../../assets/checkedbox.png";
+import unCheckedImage from "../../../../../../../../assets/uncheckedBox.png";
+import correct from "../../../../../../../../assets/correct.png";
+import wrong from "../../../../../../../../assets/wrong.png";
 import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
-} from "../../../compassion-course/weeks/data";
+} from "../../../../compassion-course/weeks/data";
 
 function Week1() {
   const { pages } = getWeekContentExcludingVideos(1);

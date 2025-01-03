@@ -5,7 +5,10 @@ import { useNavigate } from "react-router-dom";
 import celebrate from "../../../../../../assets/celebrate.png";
 import FireWorks from "./FireWork";
 import Button from "./Button";
-import { hideHurray, selectNavigationState } from "../../../../../../redux/reducers/navigationSlice";
+import {
+  hideHurray,
+  selectNavigationState,
+} from "../../../../../../redux/reducers/navigationSlice";
 
 const Hurray = ({ currentWeek = 3 }) => {
   const [showFireWork, setShowFireWork] = useState(true);
@@ -15,7 +18,7 @@ const Hurray = ({ currentWeek = 3 }) => {
 
   const handleNext = () => {
     if (isLastWeek) {
-      navigate("/my-courses");
+      navigate("/dashboard/my-courses/");
     } else {
       dispatch(hideHurray());
     }
