@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import "./index.css";
-import logo from "../../../../../assets/logo.png";
+import React, {  useState } from "react";
+import logo from "../../../../../../assets/logo.png";
 import { Icon } from "@iconify/react";
 import Accordion from "./components/Accordion";
 import Week1 from "./weeks/week1/Week1";
@@ -68,14 +67,14 @@ function CompassionFeedback() {
       </nav>
       <div className="main-content">
         <aside>
-          <p
+          <Link
             className="back"
             style={{ cursor: "pointer" }}
-            onClick={() => navigate("/dashboard/my-courses/")}
+            to={"/dashboard/my-courses/"}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
             Back to My Courses
-          </p>
+          </Link>
 
           <div className="compassion-title">
             <h2> Seeing, Caring and Doing: </h2>

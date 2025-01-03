@@ -109,7 +109,7 @@ function WeekFourPage6() {
               ...provided.draggableProps.style,
               cursor: snapshot.isDragging ? "grabbing" : "grab",
               transform: `${provided.draggableProps.style?.transform || ""} ${
-                snapshot.isDragging ? "scale(0.5)" : ""
+                snapshot.isDragging ? "scale(0.3)" : ""
               }`,
               zIndex: snapshot.isDragging ? 9999 : 1,
             }}
@@ -152,7 +152,7 @@ function WeekFourPage6() {
               </div>
               <img src={ArrowTrail} alt="arrow trail" />
             </div>
-            <div className="d-flex justify-content-around px-4 py-2">
+            <div className="d-flex justify-content-around align-items-center px-4 py-2">
               {pageData.buckets.map((bucket) => (
                 <Droppable key={bucket.id} droppableId={bucket.id}>
                   {(provided, snapshot) => (

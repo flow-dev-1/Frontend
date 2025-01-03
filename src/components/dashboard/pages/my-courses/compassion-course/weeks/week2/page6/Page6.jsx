@@ -38,7 +38,6 @@ function WeekTwoPage6() {
         </div>
       </QuestionBox>
 
-      <h2 className="text-center">Step {currentStep}</h2>
       <div className="d-flex justify-content-center gap-96px mt-4 ">
         <Button text="Prev" />
         <Button text="Next" />
