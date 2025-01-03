@@ -1,5 +1,5 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import Frame from "./components/Frame";
 import Button from "../../../components/Button";
@@ -8,15 +8,66 @@ import {
   selectCurrentStep,
 } from "../../../../../../../../redux/reducers/navigationSlice";
 import StepIndicator from "../../../components/StepIndicator";
+import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
+
 
 function Page6() {
+  const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
   const totalSteps = pageData?.steps?.length || 0;
+  const [answers, setAnswers] = useState([]); // State to hold answers
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const step = pageData?.steps[currentStep - 1];
+  const userAnswers = useSelector(userAnswer);
+  // console.log(userAnswers)
+
+  useEffect(() => {
+
+    if (!userAnswers) return
+    const response = userAnswers.activities?.find(item => (item.page === pageData.id))
+    setAnswers(response?.answer ? response.answer : [])
+    return () => { }
+
+  }, [userAnswers])
+
+  const saveUserInput = () => {
+    if (currentStep === 1) return true;
+
+    const stepData = answers.find(item => item.stepId === currentStep);
+    if (!stepData) {
+      setErrorMessage("Oops! All inputs must be filled out.");
+      return false;
+    }
+
+    const values = Object.values(stepData.value);
+    if (values.length < 3) {
+      setErrorMessage("At least 3 values are required!");
+      return false;
+    }
+
+    const emptyInputs = values.filter((value) => value.trim() === "");
+    if (emptyInputs.length > 0) {
+      setErrorMessage(`Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`);
+      return false;
+    }
+
+    setErrorMessage(""); // Clear error if input is valid
+    
+    const activityData = {
+      page: pageData.id,
+      answer: answers
+    };
+    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+
+    return true;
+  };
+
+  // console.log(answers, "Answers")
 
   const renderStep = () => {
-    const step = pageData?.steps[currentStep - 1];
-
+    // const step = pageData?.steps[currentStep - 1];
+    // console.log(currentStep, step, "step")
     if (!step) return <div>Invalid Step</div>;
 
     switch (step.type) {
@@ -38,11 +89,15 @@ function Page6() {
         return (
           <Frame
             data={{
+              step: step.stepId,
               title: step.title,
               questions: step.questions.map((q) => ({
                 [q.type]: q.question,
               })),
             }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
           />
         );
       default:
@@ -53,10 +108,13 @@ function Page6() {
   return (
     <>
       {renderStep()}
+      {(currentStep !== 1 && errorMessage) && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 ">
         <Button text="Prev" />
-        <Button text="Next" />
+        <Button text="Next"
+          customOnClick={saveUserInput}
+        />
       </div>
     </>
   );

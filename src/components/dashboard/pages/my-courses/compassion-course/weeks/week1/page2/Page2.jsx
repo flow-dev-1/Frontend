@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import compassion from "../../../../../../../../assets/compassion.png";
@@ -6,8 +6,7 @@ import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-import { userAnswer,saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import { toast } from "react-toastify";
+import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
 // ... existing code ...
 
 function Page2() {
@@ -15,16 +14,37 @@ function Page2() {
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
   const userAnswers = useSelector(userAnswer);
-
-  console.log(pageData,"PageData")
-
-  const [myAnswer, setMyAnswer] = useState(null)
+  const [myAnswer, setMyAnswer] = useState(userAnswers)
   const [errorMessage, setErrorMessage] = useState("");
 
+  useEffect(() => {
+
+    if (!userAnswers) return
+    const response = userAnswers?.activities?.find(item => (item.page === pageData.id))
+    setMyAnswer(response?.answer ? response.answer : "")
+    return () => { }
+
+  }, [userAnswers])
 
 
-  const handleInputChange = (e)=>{
-    setErrorMessage(""); 
+  const saveUserInput = () => {
+    if (!adminDatas.isAdmin && !myAnswer) {
+      setErrorMessage("Oops! Please enter a valid input!");
+      return false;
+    }
+
+    setErrorMessage(""); // Clear error if input is valid
+    // Allow flow admin to proceed without input but do not dispatch answer
+    if (adminDatas.isAdmin) return true
+    dispatch(saveActivity({
+      page: pageData.id,
+      answer: myAnswer
+    }))
+    return true
+  }
+
+  const handleInputChange = (e) => {
+    setErrorMessage("");
     setMyAnswer(e.target.value)
   }
 
@@ -39,7 +59,10 @@ function Page2() {
             {pageData.hasImage && <img src={compassion} alt="compassion" />} ?
           </h2>
         </div>
-        <BigTextBox handleChange={handleInputChange} />
+        <BigTextBox
+          handleChange={handleInputChange}
+          value={myAnswer}
+        />
         {errorMessage && <div className="text-danger">{errorMessage}</div>}
       </QuestionBox>
       <div className="d-flex justify-content-center gap-96px mt-4">

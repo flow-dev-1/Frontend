@@ -21,15 +21,17 @@ const userAnswerSlice = createSlice({
       }
     },
     saveActivity: (state, action) => {
+      const updatedActivities = state.activities.filter(activity => activity.page !== action.payload.page);
       return {
         ...state,
-        activities: [...state.activities, action.payload],
+        activities: [...updatedActivities, action.payload],
       }
     },
     saveAssessment: (state, action) => {
+      const updatedAssessments = state.assessments.filter(assessment => assessment.page !== action.payload.page);
       return {
         ...state,
-        assessments: [...state.assessments, action.payload],
+        assessments: [...updatedAssessments, action.payload],
       }
     },
     clearData: (state) => {

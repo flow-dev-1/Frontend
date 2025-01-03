@@ -61,12 +61,15 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useQuery } from '@tanstack/react-query'
 import userService from '../../../../../services/api/user.js'
-import { updateData } from "../../../../../redux/reducers/userAnswersReducer.js";
-import { saveActivity } from "../../../../../redux/reducers/userAnswersReducer.js";
+import { updateData,userAnswer } from "../../../../../redux/reducers/userAnswersReducer.js";
+import { adminData } from "../../../../../redux/reducers/adminReducer";
 
 
 const WeekContent = () => {
   const dispatch = useDispatch()
+  const userAnswers = useSelector(userAnswer);
+
+  // console.log(userAnswers,"User Answers")
 
   useEffect(() => {
     const currentWeek = sessionStorage.getItem("flow-currentWeek") ? Number(sessionStorage.getItem("flow-currentWeek")) : 1
@@ -109,7 +112,12 @@ const WeekContent = () => {
     if (!data || !assessmentData) return
 
     if (data.error) {
-
+      dispatch(updateData({
+        course: "",
+        week: currentWeek,
+        activities: [],
+        assessments: []
+      }))
     } else {
       dispatch(updateData({
         course: "",
@@ -306,23 +314,6 @@ const CourseContent = () => {
     </>
   );
 };
-
-export const saveUserInput = () => {
-  if (!adminDatas.isAdmin && !myAnswer) {
-    setErrorMessage("Oops! Please enter a valid input!");
-    return false;
-  }
-
-  console.log(myAnswer, "My Answer")
-  setErrorMessage(""); // Clear error if input is valid
-  // Allow flow admin to proceed without input but do not dispatch answer
-  if (adminDatas.isAdmin) return true
-  dispatch(saveActivity({
-    page: pageData.id,
-    answer: myAnswer
-  }))
-  return true
-}
 
 const CompassionCourse = () => {
   return <CourseContent />;
