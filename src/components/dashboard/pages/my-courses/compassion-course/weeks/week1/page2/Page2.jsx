@@ -7,7 +7,7 @@ import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
-// ... existing code ...
+
 
 function Page2() {
   const dispatch = useDispatch()
@@ -63,8 +63,8 @@ function Page2() {
           handleChange={handleInputChange}
           value={myAnswer}
         />
-        {errorMessage && <div className="text-danger">{errorMessage}</div>}
       </QuestionBox>
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4">
         <Button text="Prev" />
         <Button text="Next"

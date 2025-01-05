@@ -63,8 +63,9 @@ function Page4() {
           handleChange={handleInputChange}
           value={myAnswer}
         />
-        {errorMessage && <div className="text-danger">{errorMessage}</div>}
+      
       </QuestionBox>
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />

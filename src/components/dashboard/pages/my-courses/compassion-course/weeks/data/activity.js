@@ -247,10 +247,10 @@ export const courseContent = {
         id: 6,
         type: "reflection",
         prompts: [
-          { title: "I feel loved when", imgSrc: "heart-image.png" },
-          { title: "I feel cared for when", imgSrc: "hug-image.png" },
-          { title: "I need support when", imgSrc: "hug-image-2.png" },
-          { title: "I wish someone would", imgSrc: "wish-image.png" },
+          { id: 1, title: "I feel loved when", imgSrc: "heart-image.png" },
+          { id: 2, title: "I feel cared for when", imgSrc: "hug-image.png" },
+          { id: 3, title: "I need support when", imgSrc: "hug-image-2.png" },
+          { id: 4, title: "I wish someone would", imgSrc: "wish-image.png" },
         ],
         inputType: "text",
         inputPlaceholder: "Type your answer here...",
@@ -318,28 +318,19 @@ export const courseContent = {
               },
               {
                 id: "C",
-                text: "B. Ignore it; they probably want to be left alone.",
+                text: "Tell a teacher.",
               },
             ],
           },
           {
             stepId: 2,
             type: "feedback",
-            message:
-              "Great! Let's talk about why reaching out, even in a small way, can be a powerful act of compassion.",
-          },
-          {
-            stepId: 3,
-            type: "feedback",
-            message:
-              "This can be handled better, try again to see what can be done differently.",
-          },
-          {
-            stepId: 4,
-            type: "feedback",
-            message:
-              "If you immediately tell a teacher or an adult, ensure to follow up with the situation and encourage the person. However what we need you for this time is different.",
-          },
+            message: {
+              "A": "Great! Let's talk about why reaching out, even in a small way, can be a powerful act of compassion.",
+              "B": "This can be handled better, try again to see what can be done differently.",
+              "C": "If you immediately tell a teacher or an adult, ensure to follow up with the situation and encourage the person. However what we need you for this time is different."
+            }
+          }
         ],
         navigation: {
           prev: true,
@@ -547,6 +538,15 @@ export const courseContent = {
           next: true,
         },
       },
+      {
+        id: 7,
+        type: "video",
+        videoSrc: "",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
     ],
   },
   week5: {
@@ -565,6 +565,7 @@ export const courseContent = {
           {
             id: 1,
             title: "Scenario 1",
+            type: "question",
             question: "Your Friend Forgot Their Homework at Home.",
             options: [
               {
@@ -580,6 +581,10 @@ export const courseContent = {
                 text: 'You tell your friend, "I\'ll help by talking to the teacher with you," and offer to go with them to explain the situation to the teacher.',
               },
             ],
+          },
+          {
+            id: 2,
+            type: "feedback",
             feedback: {
               A: "It's good that you expressed concern by acknowledging their situation, but compassion involves more than just words. You noticed your friend's worry (Observation), but you didn't take any steps to actively help (Request). True compassion means going beyond just recognizing a problem and offering support when possible.",
               B: "Great job! By choosing Option B, you've shown true compassion. You observed your friend's situation and acknowledged their feelings by saying they are worried (Observation & Feeling). You understood their need for help (Need) and offered assistance by sharing your notes and helping them prepare. Offering practical support for the class discussion directly addresses their emotional and academic needs, showing real compassion.",
@@ -587,8 +592,9 @@ export const courseContent = {
             },
           },
           {
-            id: 2,
+            id: 3,
             title: "Scenario 2",
+            type: "question",
             question:
               "You Go Out with Your Family to Dinner and Your Sibling is Rude to the Waiter.",
             options: [
@@ -604,7 +610,11 @@ export const courseContent = {
                 id: "C",
                 text: "Suggest to your family that you all leave a generous tip to make up for the rudeness.",
               },
-            ],
+            ]
+          },
+          {
+            id: 4,
+            type: "feedback",
             feedback: {
               A: "Great job! Apologizing to the waiter and being extra polite shows compassion and respect, making the waiter feel valued despite the rudeness. Also note that option C is not an act of compassion as giving the waiter money in that instant will be more of an insult than a compassionate act. Apologizing is the best way to show compassion to the waiter; this will also communicate to your sibling that they were wrong and probably make them feel sorry too.",
               B: "Oh, did you choose Option B? Ignoring the situation might seem like the easiest choice, but it doesn't help anyone. The waiter might still feel hurt, and your sibling won't learn how to treat others kindly. When we notice someone is being treated unfairly, it's important to speak up politely or show kindness in some way.",
@@ -612,8 +622,9 @@ export const courseContent = {
             },
           },
           {
-            id: 3,
+            id: 5,
             title: "Scenario 3",
+            type: "question",
             question:
               "A New Boy Comes to Class and is Nervous About Joining Others to Play.",
             options: [
@@ -630,6 +641,10 @@ export const courseContent = {
                 text: "Pull him into the game without his permission.",
               },
             ],
+          },
+          {
+            id: 6,
+            type: "feedback",
             feedback: {
               A: "Did you choose Option A? Great job! Inviting him and giving him the option to choose to participate or not is a very compassionate act. However, pulling him into the game without his permission and ignoring him are not acts of compassion.",
               B: "If you choose Option B, Understand that, while it might feel like it's not your job to welcome others, we all play a part in making people feel included. Imagine if you were new and nervous—having someone reach out can make a big difference. Showing kindness and helping others feel comfortable is always a great thing to do.",
@@ -637,8 +652,9 @@ export const courseContent = {
             },
           },
           {
-            id: 4,
+            id: 7,
             title: "Scenario 4",
+            type: "question",
             question: "Your Friend Failed a Test While You Scored the Highest.",
             options: [
               {
@@ -654,6 +670,9 @@ export const courseContent = {
                 text: "Encourage them by reminding them that one test doesn't define their abilities, and that you can help them study for the next one.",
               },
             ],
+          }, {
+            id: 8,
+            type: "feedback",
             feedback: {
               A: "If you choose Option A, understand that bragging about your success might make your friend feel worse. It's important to celebrate your achievements, but not in a way that hurts others. Telling them they should have studied harder isn't very kind. Sometimes, people need support and encouragement instead of criticism when they feel down.",
               B: "Did you choose Option B? Not quite right, Ignoring your friend's feelings might make them feel even more alone. When someone is upset, it's important to be aware of how they're feeling and offer them comfort. You can still be proud of your success, but showing kindness and understanding to your friend can make them feel better and strengthen your friendship.",

@@ -8,6 +8,7 @@ function AssessmentQuestion({
   selectedOption,
   onOptionSelect,
 }) {
+
   const { question, options } = data;
 
   const handleOptionClick = (optionKey) => {
@@ -59,11 +60,6 @@ function AssessmentQuestion({
           );
         })}
       </form>
-
-      <p>
-        Selected Option for testing purpose:{" "}
-        {selectedOption ? selectedOption : "None"}
-      </p>
     </div>
   );
 }

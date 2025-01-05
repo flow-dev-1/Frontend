@@ -1,6 +1,6 @@
 import React from "react";
 
-function MediumTextBox() {
+function MediumTextBox({ handleChange,value }) {
   return (
     <label className="small-input p-3 border-0 small-input-label">
       <textarea
@@ -9,6 +9,8 @@ function MediumTextBox() {
         rows={5}
         placeholder="Type your answer here..."
         style={{ maxWidth: "100%" }}
+        value={value}
+        onChange={handleChange ? handleChange : () => { }}
       ></textarea>
     </label>
   );

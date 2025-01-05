@@ -1,12 +1,72 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "./page8.css";
-import { useSelector } from "react-redux";
 import Button from "../../../components/Button";
 import QuestionBox from "../../../components/QuestionBox";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
+
 
 function WeekThreePage8() {
   const pageData = useSelector(selectPageData);
+  const dispatch = useDispatch()
+  const [answers, setAnswers] = useState([]); // State to hold answers
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+
+  const userAnswers = useSelector(userAnswer);
+
+  useEffect(() => {
+
+    if (!userAnswers) return
+    const response = userAnswers.activities?.find(item => (item.page === pageData.id))
+    setAnswers(response?.answer ? response.answer : [])
+    return () => { }
+
+  }, [userAnswers])
+
+  const saveUserInput = () => {
+
+    if (answers.length < 5) {
+      setErrorMessage("At least 5 values are required!");
+      return false;
+    }
+
+    const emptyInputs = answers.filter((item) => item?.value?.trim() === "");
+    if (emptyInputs.length > 0) {
+      setErrorMessage(`Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`);
+      return false;
+    }
+
+    setErrorMessage(""); // Clear error if input is valid
+
+    const activityData = {
+      page: pageData.id,
+      answer: answers
+    };
+    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+
+    return true;
+  };
+
+
+  const handleInputChange = (index, value) => {
+    setErrorMessage("");
+    // Update answers state with the new value
+    setAnswers((prevAnswers) => {
+        // Check if the answer already exists
+        const existingAnswerIndex = prevAnswers.findIndex(answer => answer.index === index);
+        if (existingAnswerIndex > -1) {
+            // Update existing answer
+            const updatedAnswers = [...prevAnswers];
+            updatedAnswers[existingAnswerIndex].value = value;
+            return updatedAnswers;
+        } else {
+            // Add new answer
+            return [...prevAnswers, { index, value }];
+        }
+    });
+  };
+
 
   return (
     <>
@@ -26,16 +86,20 @@ function WeekThreePage8() {
                   placeholder={
                     pageData.inputPlaceholder || "Type your answer here"
                   }
+                  value={answers.find(answer => answer.index === index)?.value || ''} 
+                  onChange={(e)=>handleInputChange(index,e.target.value)}
                 />
               </div>
             </div>
           ))}
         </div>
       </QuestionBox>
-
+      {errorMessage && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
       <div className="d-flex justify-content-center gap-96px mt-4">
         <Button text="Prev" />
-        <Button text="Next" />
+        <Button text="Next"
+          customOnClick={saveUserInput}
+        />
       </div>
     </>
   );

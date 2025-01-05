@@ -9,30 +9,23 @@ import Button from "../../../components/Button";
 import {
   selectPageData,
   selectCurrentStep,
+  setCurrentStep,
   navigateNext,
 } from "../../../../../../../../redux/reducers/navigationSlice";
 import CardBoard from "./components/CardBoard";
 import StepIndicator from "../../../components/StepIndicator";
-
-// Import all images
-import image1 from "../../../../../../../../assets/drag-images/image1.png";
-import image2 from "../../../../../../../../assets/drag-images/image2.png";
-import image3 from "../../../../../../../../assets/drag-images/image3.png";
-import image4 from "../../../../../../../../assets/drag-images/image4.png";
-import image5 from "../../../../../../../../assets/drag-images/image5.png";
-import image6 from "../../../../../../../../assets/drag-images/image6.png";
-import image7 from "../../../../../../../../assets/drag-images/image7.png";
-import image8 from "../../../../../../../../assets/drag-images/image8.png";
-import image9 from "../../../../../../../../assets/drag-images/image9.png";
-import image10 from "../../../../../../../../assets/drag-images/image10.png";
 import { useDispatch } from "react-redux";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
 
 function WeekFourPage6() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
   const totalSteps = pageData.images.length;
-
+  const adminDatas = useSelector(adminData);
+  const userAnswers = useSelector(userAnswer);
+  const [errorMessage, setErrorMessage] = useState("");
   const [showCurrentImage, setShowCurrentImage] = useState(true);
   const [bucketResults, setBucketResults] = useState({
     green: [],
@@ -40,61 +33,68 @@ function WeekFourPage6() {
     orange: [],
   });
 
-  // Reset showCurrentImage when step changes
+  // useEffect(() => {
+  //   setShowCurrentImage(true);
+  // }, [currentStep])
+
   useEffect(() => {
-    setShowCurrentImage(true);
-  }, [currentStep]);
 
-  // Check if pageData.images is populated
-  useEffect(() => {
-    console.log("Page Data Images:", pageData.images);
-  }, [pageData]);
+    if (!userAnswers) return
+    const response = userAnswers?.activities?.find(item => (item.page === pageData.id))
+    if (response?.answer) {
+      const answerCopy = { ...response.answer };
+      setBucketResults(answerCopy);
+      if(currentStep ===1){
+        dispatch(setCurrentStep(totalSteps))
+        setShowCurrentImage(false);
+      }
+     
+    }
+    return () => { }
 
-  const imageMap = {
-    "Helping with chores at home.": image1,
-    "Helping an elderly neighbor with groceries.": image2,
-    "Smiling at someone who looks upset.": image3,
-    "Standing up for someone being bullied.": image4,
-    "Holding the door open for a stranger.": image5,
-    "Helping a classmate with a school project.": image6,
-    "Listening when someone needs to talk.": image7,
-    "Being kind and respectful in your daily interactions.": image8,
-    "Preparing a meal for a sick family member.": image9,
-    "Picking up litter in a public park.": image10,
-  };
+  }, [userAnswers])
+  
+  
 
-  const bucketMap = {
-    green: GreenBucket,
-    red: RedBucket,
-    orange: OrangeBucket,
-  };
+  // console.log("Page Data Images:", pageData.images);
+  const imageMap = {};
+
+  for (let i = 0; i < pageData.images.length; i++) {
+    const image = pageData.images[i];
+    imageMap[image] = require(`../../../../../../../../assets/drag-images/image${i + 1}.png`);
+  }
 
   const handleOnDragEnd = (result) => {
     if (!result.destination) {
       return;
     }
+    setErrorMessage("")
 
     const { source, destination } = result;
 
     // If dragging from image area to a bucket
     if (source.droppableId === "image" && destination.droppableId !== "image") {
       const currentImage = pageData.images[currentStep - 1];
+      const draggedIndex = pageData?.images.indexOf(currentImage);
       const newBucketResults = {
         ...bucketResults,
         [destination.droppableId]: [
           ...bucketResults[destination.droppableId],
-          currentImage,
+          draggedIndex,
         ],
       };
-
-      console.log(newBucketResults);
 
       setBucketResults(newBucketResults);
       setShowCurrentImage(false);
 
-      dispatch(navigateNext());
+      if (currentStep < totalSteps) {
+        dispatch(navigateNext())
+        setShowCurrentImage(true);
+      }
     }
   };
+
+
 
   const renderStep = () => {
     const currentImage = pageData.images[currentStep - 1];
@@ -108,9 +108,8 @@ function WeekFourPage6() {
             style={{
               ...provided.draggableProps.style,
               cursor: snapshot.isDragging ? "grabbing" : "grab",
-              transform: `${provided.draggableProps.style?.transform || ""} ${
-                snapshot.isDragging ? "scale(0.3)" : ""
-              }`,
+              transform: `${provided.draggableProps.style?.transform || ""} ${snapshot.isDragging ? "scale(0.3)" : ""
+                }`,
               zIndex: snapshot.isDragging ? 9999 : 1,
             }}
           >
@@ -120,6 +119,63 @@ function WeekFourPage6() {
       </Draggable>
     ) : null;
   };
+
+
+
+  const saveUserInput = () => {
+
+    // if (!adminDatas.isAdmin && !myAnswer) {
+    //   setErrorMessage("Oops! Please enter a valid input!");
+    //   return false;
+    // }
+    if (bucketResults.green.length + bucketResults.red.length + bucketResults.orange.length !== pageData.images.length) {
+      setErrorMessage("Please make sure to fill all the buckets.");
+      return false;
+    }
+
+    setErrorMessage("");
+    // Allow flow admin to proceed without input but do not dispatch answer
+    if (adminDatas.isAdmin) return true
+    dispatch(saveActivity({
+      page: pageData.id,
+      answer: bucketResults
+    }))
+    return true
+  }
+
+
+  const handlePrevious = () => {
+    // console.log(currentStep)
+    // console.log(bucketResults,"bucket results")
+    // Page coming from
+    const afterCurrentImage = pageData.images[currentStep - 1];
+    const currentImage = pageData.images[currentStep - 2];
+
+    // Remove afterCurrentImage and currentImage from bucketResults if they exist
+    const afterCurrentIndex = pageData.images.indexOf(afterCurrentImage);
+    const currentIndex = pageData.images.indexOf(currentImage);
+
+    // Check if afterCurrentImage exists in any bucket and remove it
+    Object.keys(bucketResults).forEach(bucket => {
+      if (bucketResults[bucket].includes(afterCurrentIndex)) {
+        bucketResults[bucket] = bucketResults[bucket].filter(index => index !== afterCurrentIndex);
+      }
+      if (bucketResults[bucket].includes(currentIndex)) {
+        bucketResults[bucket] = bucketResults[bucket].filter(index => index !== currentIndex);
+      }
+    });
+
+    // Update the state with the modified bucket results
+    setBucketResults({
+      ...bucketResults,
+      // Ensure to keep the updated bucket results
+    });
+
+    setShowCurrentImage(true);
+    return true
+
+  }
+
 
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -175,8 +231,8 @@ function WeekFourPage6() {
                           bucket.id === "green"
                             ? "inner-count"
                             : bucket.id === "orange"
-                            ? "outer-count"
-                            : "both-count"
+                              ? "outer-count"
+                              : "both-count"
                         }
                       >
                         {bucketResults[bucket.id].length}
@@ -186,8 +242,8 @@ function WeekFourPage6() {
                           bucket.id === "green"
                             ? "inner-bucket"
                             : bucket.id === "orange"
-                            ? "outer-bucket"
-                            : "both-bucket"
+                              ? "outer-bucket"
+                              : "both-bucket"
                         }
                       >
                         {bucket.label}
@@ -201,10 +257,15 @@ function WeekFourPage6() {
           </div>
         </div>
       </div>
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4">
-        <Button text="Prev" />
-        <Button text="Next" />
+        <Button text="Prev"
+          customOnClick={handlePrevious}
+        />
+        <Button text="Next"
+          customOnClick={saveUserInput}
+        />
       </div>
     </DragDropContext>
   );

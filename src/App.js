@@ -51,7 +51,7 @@ import InvitedAdminEducatorRegistration from "./components/onboarding/registrati
 import IndividualSchoolProfile from "./components/school-dashboard/school-pages/school-courses/school-enrolled-courses/school-single-enrolled-course-page/IndividualSchoolProfile.jsx";
 import SchoolSelfAwarenessFeedback from "./components/school-dashboard/school-pages/school-courses/single-individual-course-feedback/self-awareness-feedback/SchoolSelfAwarenessFeedback.js";
 import CompassionCourse from "./components/dashboard/pages/my-courses/compassion-course/index.jsx";
-import CompassionFeedback from "./components/dashboard/pages/my-courses/compassion-course/compassion-feedback/index.jsx";
+import CompassionFeedback from "./components/dashboard/pages/my-courses/compassion-course/feedback/index.jsx";
 
 function App() {
   return (

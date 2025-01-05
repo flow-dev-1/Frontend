@@ -28,10 +28,9 @@ const userAnswerSlice = createSlice({
       }
     },
     saveAssessment: (state, action) => {
-      const updatedAssessments = state.assessments.filter(assessment => assessment.page !== action.payload.page);
       return {
         ...state,
-        assessments: [...updatedAssessments, action.payload],
+        assessments: action.payload,
       }
     },
     clearData: (state) => {

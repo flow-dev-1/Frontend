@@ -1,20 +1,40 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import "./page4.css";
 import ArrowTrail from "../../../../../../../../assets/ArrowTrail.svg";
 import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
 
 function WeekFourPage4() {
+  const dispatch = useDispatch()
   const pageData = useSelector(selectPageData);
+  const adminDatas = useSelector(adminData);
+  const userAnswers = useSelector(userAnswer);
+  const [errorMessage, setErrorMessage] = useState("");
   const [options, setOptions] = useState(pageData.options);
   const [bowls, setBowls] = useState({
     inner: [],
     outer: [],
   });
 
+  useEffect(() => {
+
+    if (!userAnswers) return
+    const response = userAnswers?.activities?.find(item => (item.page === pageData.id))
+
+    if(response?.answer){
+      setBowls(response.answer)
+      setOptions([])
+    }
+    return () => { }
+
+  }, [userAnswers])
+
   const handleOnDragEnd = (result) => {
+    setErrorMessage("");
     if (!result.destination) return;
 
     const { source, destination } = result;
@@ -25,6 +45,7 @@ function WeekFourPage4() {
       destination.droppableId !== "options"
     ) {
       const draggedOption = options[source.index];
+      const draggedIndex = pageData?.options.indexOf(draggedOption); 
       const newOptions = Array.from(options);
       newOptions.splice(source.index, 1);
 
@@ -32,7 +53,7 @@ function WeekFourPage4() {
         ...bowls,
         [destination.droppableId]: [
           ...bowls[destination.droppableId],
-          draggedOption,
+          draggedIndex,
         ],
       };
 
@@ -40,6 +61,28 @@ function WeekFourPage4() {
       setBowls(newBowls);
     }
   };
+
+  const saveUserInput = () => {
+
+    // if (!adminDatas.isAdmin && !myAnswer) {
+    //   setErrorMessage("Oops! Please enter a valid input!");
+    //   return false;
+    // }
+
+    if (bowls.inner.length + bowls.outer.length !== 12) {
+      setErrorMessage("Please make sure to fill all the bowls.");
+      return false;
+    }
+    setErrorMessage("");
+    // Allow flow admin to proceed without input but do not dispatch answer
+    if (adminDatas.isAdmin) return true
+    dispatch(saveActivity({
+      page: pageData.id,
+      answer: bowls
+    }))
+    return true
+  }
+
 
   // Check the index and return appropriate styles
   function checkIndex(index) {
@@ -137,9 +180,12 @@ function WeekFourPage4() {
           </div>
         </div>
       </div>
+      { errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
         <Button text="Prev" />
-        <Button text="Next" />
+        <Button text="Next"
+          customOnClick={saveUserInput}
+        />
       </div>
     </DragDropContext>
   );
