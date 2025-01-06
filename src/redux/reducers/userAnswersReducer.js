@@ -3,21 +3,21 @@ import { createSlice } from '@reduxjs/toolkit'
 const userAnswerSlice = createSlice({
   name: 'userAnswer',
   initialState: {
-    course: null,
-    week: null,
+    courseEnrollmentId: null,
+    week: 1,
     activities: [],
     assessments: [],
     // isSidebarOpen: false,
   },
   reducers: {
     updateData: (state, action) => {
-      const { course, week, activities, assessments } = action.payload;
+      const { courseEnrollmentId, week, activities, assessments } = action.payload;
       return {
         ...state,
-        course: course,
-        week: week,
-        activities: activities,
-        assessments: assessments,
+        courseEnrollmentId,
+        week,
+        activities,
+        assessments,
       }
     },
     saveActivity: (state, action) => {
@@ -34,7 +34,7 @@ const userAnswerSlice = createSlice({
       }
     },
     clearData: (state) => {
-      state.course = null;
+      state.courseEnrollmentId = null;
       state.week = null;
       state.activities = [];
       state.assessments = [];

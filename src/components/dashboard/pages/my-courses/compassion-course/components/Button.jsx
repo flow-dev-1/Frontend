@@ -5,8 +5,9 @@ import {
   navigatePrev,
   selectNavigationState,
 } from "../../../../../../redux/reducers/navigationSlice";
+import { RotatingLines } from "react-loader-spinner";
 
-const Button = ({ text, customOnClick }) => {
+const Button = ({ loading, text, customOnClick }) => {
   const dispatch = useDispatch();
   const navigationState = useSelector(selectNavigationState);
   const { isFirstPage, isFirstStep, isFirstWeek } = navigationState;
@@ -16,7 +17,7 @@ const Button = ({ text, customOnClick }) => {
 
     if (customOnClick) {
       const inputOkay = customOnClick();
-      
+
       // If the User is expected to enter input and does not they cant proceed.
       if (!inputOkay) return;
     }
@@ -39,17 +40,18 @@ const Button = ({ text, customOnClick }) => {
 
   return (
     <button
-      className={`btn fs-5 rounded w-200px h-50px ${isNextButton || customOnClick
-          ? "bg-button text-white border-0 hover-prev"
-          : isPrevButton
-            ? "bg-transparent text-button-blue border border-blue hover-next"
-            : ""
+      className={`btn fs-5 rounded w-200px h-50px ${isNextButton || customOnClick 
+        ? "bg-button text-white border-0 hover-prev"
+        : isPrevButton 
+          ? "bg-transparent text-button-blue border border-blue hover-next"
+          : ""
         }`}
       onClick={handleClick}
       type="button"
+      disabled={loading}
     >
       {isPrevButton && <span className="me-2">{"<<<"}</span>}
-      {text}
+      {(!isPrevButton && loading) ? <RotatingLines type='Oval' style={{ color: '#FFF' }} height={20} width={20} /> : text}
       {isNextButton && <span className="ms-2">{">>>"}</span>}
     </button>
   );

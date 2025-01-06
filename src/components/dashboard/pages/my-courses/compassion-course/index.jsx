@@ -62,6 +62,7 @@ import { useQuery } from '@tanstack/react-query'
 import userService from '../../../../../services/api/user.js'
 import { updateData,userAnswer } from "../../../../../redux/reducers/userAnswersReducer.js";
 import { adminData } from "../../../../../redux/reducers/adminReducer";
+import { assessments } from "./weeks/data/assessment.js";
 
 
 const WeekContent = () => {
@@ -91,16 +92,7 @@ const WeekContent = () => {
   // toDo: Fetch User assessment and Activity Data
   const { data, isLoading, status, isError } = useQuery({
     queryKey: ["dashboard/compassion-course", "", currentWeek],
-    queryFn: () => userService.getMyActivites("1234", currentWeek),
-    enabled: !!currentWeek,
-    refetchOnMount: "always",
-    refetchOnWindowFocus: true,
-    keepPreviousData: false
-  });
-
-  const { data: assessmentData, isLoading: assessmentLoading, status: assesmentStatus, isError: assessmentError } = useQuery({
-    queryKey: ["get-self-awareness-assessment", "", currentWeek],
-    queryFn: () => userService.getMyAssessment("1234", currentWeek),
+    queryFn: () => userService.getUserCourseData("677ab910f44712a968f16832", currentWeek),
     enabled: !!currentWeek,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -108,26 +100,30 @@ const WeekContent = () => {
   });
 
   useEffect(() => {
-    if (!data || !assessmentData) return
+    if (!data) return
 
-    if (data.error) {
+    console.log(data,"Now this is data")
+
+    if (data.assessment && data.activity) {
+
       dispatch(updateData({
-        course: "",
+        courseEnrollmentId: "677ab910f44712a968f16832",
         week: currentWeek,
-        activities: [],
-        assessments: []
+        activities: data.activity?.activities,
+        assessments: data.assessment?.assessments
       }))
+
     } else {
       dispatch(updateData({
-        course: "",
-        week: currentWeek,
-        activities: data.activities,
-        assessments: assessmentData.assessments
+        courseEnrollmentId:"677ab910f44712a968f16832",
+        week:currentWeek,
+        activities:userAnswers.activities,
+        assessments:userAnswers.assessments
       }))
     }
 
     return () => { }
-  }, [data, assessmentData])
+  }, [data])
 
 
   // If showing hurray, render that instead
@@ -290,7 +286,7 @@ const CourseContent = () => {
           <Link
             className="back"
             style={{ cursor: "pointer" }}
-            to={"/dashboard/my-courses/"}
+            to={"/dashboard/my-courses"}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
             Back to My Courses

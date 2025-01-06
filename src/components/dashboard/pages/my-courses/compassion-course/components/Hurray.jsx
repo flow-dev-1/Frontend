@@ -18,7 +18,7 @@ const Hurray = ({ currentWeek = 3 }) => {
 
   const handleNext = () => {
     if (isLastWeek) {
-      navigate("/dashboard/my-courses/");
+      navigate("/dashboard/my-courses");
     } else {
       dispatch(hideHurray());
     }

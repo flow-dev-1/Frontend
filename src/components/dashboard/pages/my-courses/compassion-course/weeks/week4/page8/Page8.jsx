@@ -4,14 +4,18 @@ import QuestionBox from "../../../components/QuestionBox";
 import AssessmentQuestion from "../../../components/AssessmentQuestion";
 import Button from "../../../components/Button";
 import {
+  navigateNext,
   selectCurrentStep,
   selectCurrentWeek,
   showReviewPopup,
 } from "../../../../../../../../redux/reducers/navigationSlice";
 import { getWeekAssessment } from "../../data";
 import StepIndicator from "../../../components/StepIndicator";
-import { userAnswer, saveActivity, saveAssessment } from "../../../../../../../../redux/reducers/userAnswersReducer";
-
+import { userAnswer, updateData, saveAssessment } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
+import userService from "../../../../../../../../services/api/user";
+import { calculateResult } from "../../../utility";
 
 function WeekFourPage8() {
   const dispatch = useDispatch();
@@ -27,14 +31,36 @@ function WeekFourPage8() {
 
   // console.log(assessmentData,"Assessment data")
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   if (!userAnswers) return
-  //   const response = userAnswers.assessments?.find(item => (item.page === pageData.id))
-  //   setAnswers(response?.answer ? response.answer : [])
-  //   return () => { }
+    if (!userAnswers) return
+    setAnswers(userAnswers?.assessments || [])
+    return () => { }
 
-  // }, [userAnswers])
+  }, [userAnswers])
+
+    // Mutation for saving user data
+    const mutation = useMutation({
+      mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
+      onSuccess: (data) => {
+  
+        toast.dismiss()
+        toast.success(`You scored ${calculateResult(assessmentData.questions, answers, totalSteps)}% in the quiz`)
+        toast.success(data.message || 'Answers saved successfully!'); // Show success toast
+        dispatch(updateData({
+          courseEnrollmentId:null,
+          week:1,
+          activities:[],
+          assessments:[]
+        }))
+        dispatch(navigateNext())
+      },
+      onError: (error) => {
+        console.log(error, "errorrrr")
+        toast.dismiss()
+        toast.error(error?.message || error?.error || 'Error saving answers'); // Show error toast
+      },
+    });
 
   const handleOptionSelect = (optionKey) => {
     setErrorMessage("")
@@ -66,23 +92,21 @@ function WeekFourPage8() {
     }
 
     setErrorMessage(""); // Clear error if input is valid
-
     // If its the last question submit else update answer
     dispatch(saveAssessment(answers)); 
 
     if(isLastQuestion){
       // Check if all answers were provided bothe for assessment and activity
-      if(answers.length !== totalSteps || userAnswers.activities.length !== 5) {
+      if(answers.length !== totalSteps || userAnswers.activities.length !== 3) {
         setErrorMessage("Oops! Something went wrong.");
         return false
       } 
-
       // Submit Data
-      console.log(answers)
+      mutation.mutate({ ...userAnswers, assessments: answers });
 
-    }
-     // Dispatch the saveActivity action
+    } else {
       return true;
+    }
     
   };
 
@@ -134,14 +158,16 @@ function WeekFourPage8() {
       <StepIndicator totalSteps={totalSteps} />
 
       <div className="d-flex justify-content-center gap-96px mt-4 ">
-        <Button text="Prev" />
+        <Button text="Prev"
+          loading={mutation.isPending}
+        />
         {shouldShowReviewButton ? (
           <Button
             text="Review"
             customOnClick={() => dispatch(showReviewPopup())}
           />
         ) : (
-          <Button text="Next" customOnClick={saveUserData} />
+          <Button text="Next" customOnClick={saveUserData} loading={mutation.isPending} />
         )}
       </div>
     </>

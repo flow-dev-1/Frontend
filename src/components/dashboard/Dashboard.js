@@ -11,6 +11,7 @@ import { loginSuccess, logoutSuccess } from '../../redux/reducers/userReducer'
 import SingleCoursePage from './pages/my-courses/single-course-page/SingleCoursePage'
 import { clearToken } from '../../redux/reducers/jwtReducer'
 import SelfAwarenessCourse from './pages/my-courses/self-awareness-course/SelfAwarenessCourse'
+import { updateData } from '../../redux/reducers/userAnswersReducer'
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -33,6 +34,12 @@ export default function Dashboard() {
     sessionStorage.clear()
     dispatch(logoutSuccess())
     dispatch(clearToken())
+    dispatch(updateData({
+      courseEnrollmentId:null,
+      week:1,
+      activities:[],
+      assessments:[]
+    }))
     navigate('/sign-in', { replace: true })
   }
 

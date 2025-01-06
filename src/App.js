@@ -142,7 +142,7 @@ function App() {
             }
           >
             <Route index element={<IndividualOverview />} />
-            <Route path="/dashboard/profile" element={<IndividualProfile />} />
+            <Route path="/dashboard/profile" element={<IndividualProfile />} />/dashboard/my-courses
             <Route path="/dashboard/support" element={<Support />} />
             <Route
               path="/dashboard/feedback/self-awareness"
@@ -153,10 +153,10 @@ function App() {
               element={<PayementHistory />}
             />
             <Route path="/dashboard/my-courses" element={<MyCourses />} />
-            <Route
+            {/* <Route
               path="/dashboard/my-courses/:id"
               element={<SingleCoursePage />}
-            />
+            /> */}
 
             <Route
               path="/dashboard/self-awareness-course/:id"

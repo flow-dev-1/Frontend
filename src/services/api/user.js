@@ -264,6 +264,8 @@ class UserOBJ {
       return err?.response?.data || err.message;
     }
   }
+
+  // This is for self-Awareness course
   postMyActivity = async (params1, formData) => {
     try {
       const response = await api.put(
@@ -277,6 +279,7 @@ class UserOBJ {
       return err?.response?.data || err.message;
     }
   }
+    // This is for self-Awareness course
   postMyAssessment = async (courseId,courseEnrollmentId, formData) => {
     try {
       const response = await api.post(
@@ -285,6 +288,31 @@ class UserOBJ {
         formData
       )
       // console.log(response.data);
+      return response.data
+    } catch (err) {
+      return err?.response?.data || err.message;
+    }
+  }
+
+  submitCourseData = async (formData) => {
+    try {
+      const response = await api.post(
+        `api/users/course/submission`,
+
+        formData
+      )
+      // console.log(response.data);
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message;
+    }
+  }
+
+  getUserCourseData = async (params1, week) => {
+    try {
+      const response = await api.get(
+        `api/users/course-enrollment/${params1}/${week}`
+      )
       return response.data
     } catch (err) {
       return err?.response?.data || err.message;
