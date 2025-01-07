@@ -22,7 +22,8 @@ function WeekTwoPage6() {
 
     if (!userAnswers) return
     const response = userAnswers.activities?.find(item => (item.page === pageData.id))
-    setAnswers(response?.answer ? response.answer : [])
+    const answerCopy = response?.answer ? [...response.answer] : []
+    setAnswers(answerCopy)
     return () => { }
 
   }, [userAnswers])
@@ -60,7 +61,7 @@ function WeekTwoPage6() {
         if (existingAnswerIndex > -1) {
             // Update existing answer
             const updatedAnswers = [...prevAnswers];
-            updatedAnswers[existingAnswerIndex].value = value;
+            updatedAnswers[existingAnswerIndex] = { ...updatedAnswers[existingAnswerIndex], value }; // Create a new object
             return updatedAnswers;
         } else {
             // Add new answer

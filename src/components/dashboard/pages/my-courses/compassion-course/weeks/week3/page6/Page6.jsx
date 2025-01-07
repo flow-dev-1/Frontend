@@ -20,7 +20,8 @@ function WeekThreePage6() {
 
     if (!userAnswers) return
     const response = userAnswers?.activities?.find(item => (item.page === pageData.id))
-    setMyAnswer(response?.answer ? response.answer : "")
+    const answerCopy = response?.answer ? response.answer : ""
+    setMyAnswer(answerCopy)
     return () => { }
 
   }, [userAnswers])

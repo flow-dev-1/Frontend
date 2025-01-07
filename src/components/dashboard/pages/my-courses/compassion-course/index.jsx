@@ -61,8 +61,6 @@ import { useEffect } from "react";
 import { useQuery } from '@tanstack/react-query'
 import userService from '../../../../../services/api/user.js'
 import { updateData,userAnswer } from "../../../../../redux/reducers/userAnswersReducer.js";
-import { adminData } from "../../../../../redux/reducers/adminReducer";
-import { assessments } from "./weeks/data/assessment.js";
 
 
 const WeekContent = () => {

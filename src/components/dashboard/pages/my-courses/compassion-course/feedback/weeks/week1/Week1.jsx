@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import checkedImage from "../../../../../../../../assets/checkedbox.png";
 import unCheckedImage from "../../../../../../../../assets/uncheckedBox.png";
@@ -8,13 +8,53 @@ import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
 } from "../../../../compassion-course/weeks/data";
+import { useQuery } from '@tanstack/react-query'
+import userService from "../../../../../../../../services/api/user.js"
 
 function Week1() {
   const { pages } = getWeekContentExcludingVideos(1);
-  const [acitivity1, activity2, activity3] = pages;
+  const [activity1, activity2, activity3] = pages;
+  const [activityData, setActivityData] = useState([]);
+  const [assessmentData, setAssessmentData] = useState([]);
+
+
+
   const [q1, q2, q3, q4, q5] = activity3.steps.slice(1);
 
+  console.log(q1,"Quality 1")
+
   const { questions: assessments } = getWeekAssessment(1);
+
+  // toDo: Fetch User assessment and Activity Data
+  const { data, isPending, status, isError } = useQuery({
+    queryKey: ["dashboard/compassion-course", ""],
+    queryFn: () => userService.getUserCourseData("677ab910f44712a968f16832", 1),
+    // enabled: !!currentWeek,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false
+  });
+
+  useEffect(() => {
+    if (!data) return
+
+    setActivityData(data.activity?.activities)
+    setAssessmentData(data.assessment?.assessments)
+
+    return () => { }
+  }, [data])
+
+  console.log(activityData, "Activity Data")
+  console.log(assessmentData, "Assessmentdata")
+
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Take Activity to see feedback.</div>;
+  }
+
 
   return (
     <>
@@ -25,30 +65,34 @@ function Week1() {
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{acitivity1.question}</p>
+        <p className="text-blue fs-4">{activity1.question} "Compassion"?</p>
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
         <p className="fs-5 flex-grow-1">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
+          {activityData?.find(activity => activity.page === activity1.id)?.answer}
         </p>
         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
-      <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
-      </div>
+
+      {
+        // Show this only id theres a feedback
+        activityData?.find(activity => activity.page === activity1.id)?.feedback &&
+        <div className="d-flex gap-3">
+          <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+            Feedback
+          </p>
+          <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+            quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+            soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+            maxime possimus itaque.
+          </p>
+          <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        </div>
+
+      }
+
       <hr />
       {/* Activity 2 */}
       <p className="bg-yellow py-3 px-5 text-gray d-inline-block rounded-5 fs-4">
@@ -57,30 +101,33 @@ function Week1() {
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{activity2.question}</p>
+        <p className="text-blue fs-4">{activity2.question} "Theory"?</p>
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
         <p className="fs-5 flex-grow-1">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
+          {activityData?.find(activity => activity.page === activity2.id)?.answer}
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
-      <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
-      </div>
+
+      {
+         // Show this only if theres a feedback
+         activityData?.find(activity => activity.page === activity2.id)?.feedback &&
+         <div className="d-flex gap-3">
+         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+           Feedback
+         </p>
+         <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+           Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+           quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+           maxime possimus itaque.
+         </p>
+         <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+       </div>
+      }
+  
       <hr />
       {/* Activity 3 */}
       <p className="bg-yellow py-3 px-5 text-gray d-inline-block rounded-5 fs-4">
@@ -102,7 +149,7 @@ function Week1() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -127,7 +174,7 @@ function Week1() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -152,7 +199,7 @@ function Week1() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -182,7 +229,7 @@ function Week1() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -207,7 +254,7 @@ function Week1() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -232,7 +279,7 @@ function Week1() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -262,7 +309,7 @@ function Week1() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -287,7 +334,7 @@ function Week1() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -312,7 +359,7 @@ function Week1() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -342,7 +389,7 @@ function Week1() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -367,7 +414,7 @@ function Week1() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -392,7 +439,7 @@ function Week1() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -422,7 +469,7 @@ function Week1() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -447,7 +494,7 @@ function Week1() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -472,7 +519,7 @@ function Week1() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">

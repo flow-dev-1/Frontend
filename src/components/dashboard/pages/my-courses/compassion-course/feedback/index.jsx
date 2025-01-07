@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../../../../../../assets/logo.png";
 import { Icon } from "@iconify/react";
 import Accordion from "./components/Accordion";
@@ -10,44 +10,29 @@ import Week5 from "./weeks/week5/Week5";
 import OverallFeedBack from "./weeks/overall/OverallFeedBack";
 import { useNavigate, Link } from "react-router-dom";
 
+
 function CompassionFeedback() {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(null);
 
   const currentWeek = activeIndex + 1;
-  const weeksTopic = [
-    "Introduction to Compassion",
-    "Self-Compassion",
-    "Compassion to Others",
-    "Circle of concern",
-    `Life Scenarios - Let's wear the shoes of Others`,
+  
+
+  const weekContents = [
+    { topic: "Introduction to Compassion", component: <Week1  /> },
+    { topic: "Self-Compassion", component: <Week2 /> },
+    { topic: "Compassion to Others", component: <Week3 /> },
+    { topic: "Circle of Concern", component: <Week4 /> },
+    { topic: "Life Scenarios - Let’s wear the shoes of others", component: <Week5 /> },
+    { topic: "Summary of your journey through Compassion", component: <OverallFeedBack /> },
   ];
-  const items = [
-    {
-      title: "Introduction to Compassion",
-      content: <Week1 />,
-    },
-    {
-      title: "Self-Compassion",
-      content: <Week2 />,
-    },
-    {
-      title: "Compassion to Others",
-      content: <Week3 />,
-    },
-    {
-      title: "Circle of Concern",
-      content: <Week4 />,
-    },
-    {
-      title: "Life Scenarios - Let’s wear the shoes of others",
-      content: <Week5 />,
-    },
-    {
-      title: "Summary of your journey through Compassion",
-      content: <OverallFeedBack />,
-    },
-  ];
+
+  const weeksTopic = weekContents.map(week => week.topic);
+  const items = weekContents.map(week => ({
+    title: week.topic,
+    content: week.component,
+  }));
+
 
   return (
     <>
