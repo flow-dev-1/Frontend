@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import checkedImage from "../../../../../../../../assets/checkedbox.png";
 import unCheckedImage from "../../../../../../../../assets/uncheckedBox.png";
@@ -8,14 +8,54 @@ import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
 } from "../../../../compassion-course/weeks/data";
+import { useQuery } from '@tanstack/react-query'
+import userService from "../../../../../../../../services/api/user.js"
+import { calculateResult } from "../../../utility.js";
 
 function Week3() {
   const { pages } = getWeekContentExcludingVideos(3);
-  const [acitivity1, activity2, activity3, activity4, activity5] = pages;
+  const [activity1, activity2, activity3, activity4, activity5] = pages;
+  const [activityData, setActivityData] = useState([]);
+  const [assessmentData, setAssessmentData] = useState([]);
 
-  console.log(activity5);
 
   const { questions: assessments } = getWeekAssessment(3);
+
+
+  // toDo: Fetch User assessment and Activity Data
+  const { data, isPending, status, isError } = useQuery({
+    queryKey: ["dashboard/compassion-feedback-3", 3],
+    queryFn: () => userService.getUserCourseData("677ab910f44712a968f16832", 3),
+    // enabled: !!currentWeek,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false
+  });
+
+  useEffect(() => {
+    if (!data) return
+
+    setActivityData(data.activity?.activities)
+    setAssessmentData(data.assessment?.assessments)
+
+    return () => { }
+  }, [data])
+
+  function getActivityAnswer(activityId) {
+      return activityData?.find(activity => activity.page === activityId)?.answer
+
+  }
+
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (data?.status === "failed" || isError) {
+    return <div>{data?.message || "Internal server error!"}</div>;
+  }
+
+  const score = calculateResult(assessments, assessmentData, assessments?.length) || 0
+
   return (
     <>
       {/* Activity 1 */}
@@ -25,30 +65,34 @@ function Week3() {
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{acitivity1.question}</p>
+        <p className="text-blue fs-4">{activity1.question}</p>
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
         <p className="fs-5 flex-grow-1">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
+          {getActivityAnswer(activity1.id)}
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
-      <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-         <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
-      </div>
+
+      {
+        // Show this only id theres a feedback
+        activityData?.find(activity => activity.page === activity1.id)?.feedback &&
+        <div className="d-flex gap-3">
+          <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+            Feedback
+          </p>
+          <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+            quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+            soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+            maxime possimus itaque.
+          </p>
+          <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        </div>
+
+      }
+
       <hr />
 
       {/* Activity 2 */}
@@ -58,30 +102,33 @@ function Week3() {
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{activity2.steps.question}</p>
+        <p className="text-blue fs-4">{activity2?.steps[0]?.question}</p>
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
         <p className="fs-5 flex-grow-1">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
+          {/* This is a static answer for everyone */}
+          {activity2?.steps[0]?.options[0]?.text}
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
-      <div className="d-flex  gap-3 ">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-         <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
-      </div>
+
+      {
+        // Show this only if theres a feedback
+        activityData?.find(activity => activity.page === activity2.id)?.feedback &&
+        <div className="d-flex gap-3">
+          <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+            Feedback
+          </p>
+          <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
+            quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
+            soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
+            maxime possimus itaque.
+          </p>
+          <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        </div>
+      }
       <hr />
 
       {/* Activity 3 */}
@@ -96,14 +143,11 @@ function Week3() {
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
         <p className="fs-5 flex-grow-1">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
+        {getActivityAnswer(activity3.id)}
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
-      <div className="d-flex gap-3">
+      {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
           Feedback
         </p>
@@ -113,8 +157,8 @@ function Week3() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
-      </div>
+        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+      </div> */}
       <hr />
 
       {/* Activity 4 */}
@@ -129,15 +173,15 @@ function Week3() {
       <div className="d-flex gap-4">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
         <div className="flex-grow-1">
-          <p className="fs-5">1. Figma ipsum component variant main layer.</p>
-          <p className="fs-5">2. Figma ipsum component variant main layer.</p>
-          <p className="fs-5">3. Figma ipsum component variant main layer.</p>
-          <p className="fs-5">4. Figma ipsum component variant main layer.</p>
-          <p className="fs-5">5. Figma ipsum component variant main layer.</p>
+          {
+            getActivityAnswer(activity4.id)?.map((item,idx)=>(
+              <p key={idx} className="fs-5">{idx+1}. {item.value}.</p>
+            ))
+          }
         </div>
-         <Icon style={{ color: "#D6D6D6" }} width={30} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={30} icon="tabler:message-2" />
       </div>
-      <div className="d-flex gap-3">
+      {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
           Feedback
         </p>
@@ -147,8 +191,8 @@ function Week3() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
-      </div>
+        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+      </div> */}
       <hr />
 
       {/* Activity 5  */}
@@ -165,14 +209,11 @@ function Week3() {
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
         <p className="fs-5 flex-grow-1">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
+        {getActivityAnswer(activity5.id)}
         </p>
-         <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
-      <div className="d-flex gap-3">
+      {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
           Feedback
         </p>
@@ -182,8 +223,8 @@ function Week3() {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
-      </div>
+        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+      </div> */}
       <hr />
 
       <hr />
@@ -192,7 +233,8 @@ function Week3() {
         Assessment 1
       </p>
       <hr />
-      {assessments.map(({ question, options, correctOption }, i) => {
+      {assessments.map(({ id,question, options, correctOption }, i) => {
+           const selectedAnswer = assessmentData?.find(answer => answer.id === id)?.value 
         return (
           <>
             <div className="d-flex gap-3" key={i}>
@@ -203,6 +245,7 @@ function Week3() {
               const optionKey = Object.keys(option)[0];
               const optionText = option[optionKey];
               const isCorrectOption = correctOption === optionText;
+              const isAnswer = selectedAnswer === optionText
 
               return (
                 <div
@@ -211,7 +254,7 @@ function Week3() {
                 >
                   <div className="d-flex gap-2">
                     <img
-                      src={isCorrectOption ? checkedImage : unCheckedImage}
+                      src={isAnswer ? checkedImage : unCheckedImage}
                       alt={`Option ${optionKey}`}
                       style={{ width: 20, height: 20 }}
                     />
@@ -241,16 +284,16 @@ function Week3() {
         <h2 className="text-white fs-1">Weekly Report</h2>
         <div className="d-flex gap-4">
           <h2 className="text-gray fs-1 ratio-1x1 bg-aqua rounded-4 p-5 d-flex justify-content-center border border-6 border-blue">
-            100%
+          {score}%
           </h2>
           <p className="text-white">
-            Figma ipsum component variant main layer. Draft hand plugin arrow
-            line plugin slice. Comment boolean background union stroke subtract
-            underline vector. Italic move undo create pen strikethrough main
-            arrange image. Component font.Figma ipsum component variant main
-            layer. Draft hand plugin arrow line plugin slice. Comment boolean
-            background union stroke subtract underline vector. Italic move undo
-            create pen strikethrough main arrange image. Component font.
+          {
+              score < 41 ? "It looks like you may need more practice understanding compassion. Take time to reflect on how you can be more empathetic and caring toward others." :
+              score < 61 ? "Good effort! You’re on the right track, but revisiting some aspects of showing compassion could help you improve further." :
+              score < 100 ? "Well done! You have a strong grasp of compassion, though there are some areas where you could practice being more mindful of others' needs.":
+              score === 100 ? "Fantastic! Your answers show a deep understanding of compassion and how to apply it in different situations. Keep up the great work!":""
+            }
+
           </p>
         </div>
       </div>

@@ -1,7 +1,7 @@
 export const calculateResult = (questions, answers,totalSteps) => {
     let score = 0;
     questions.forEach((q) => {
-        const answer = answers.find((a) => a.id === q.id);
+        const answer = answers?.find((a) => a.id === q.id);
         if (answer && q.correctOption === answer.value) {
             score += 1;
         }

@@ -55,7 +55,7 @@ function CompassionFeedback() {
           <Link
             className="back"
             style={{ cursor: "pointer" }}
-            to={"/dashboard/my-courses/"}
+            to={"/dashboard/my-courses"}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
             Back to My Courses
