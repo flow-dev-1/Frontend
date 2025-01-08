@@ -40,8 +40,11 @@ function WeekThreePage4() {
     //   setErrorMessage("Oops! Please enter a valid input!");
     //   return false;
     // }
+
+    console.log(selectedOption,"Selected option")
     if (!selectedOption) {
       setErrorMessage("Please make sure to select an option.");
+      return false
     } else if (selectedOption !== "A") {
       setErrorMessage("Please select the right option to proceed.");
       return false

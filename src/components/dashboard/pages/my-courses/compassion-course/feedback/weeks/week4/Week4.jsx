@@ -12,19 +12,20 @@ import { useQuery } from '@tanstack/react-query'
 import userService from "../../../../../../../../services/api/user.js"
 import { calculateResult } from "../../../utility.js";
 
-function Week4() {
+function Week4({enrollmentId}) {
   const { pages } = getWeekContentExcludingVideos(4);
   const [activity1, activity2, activity3] = pages;
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([])
+  console.log(enrollmentId,"Enrollment Id")
 
 
   const { questions: assessments } = getWeekAssessment(4);
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/compassion-feedback-4", 4],
-    queryFn: () => userService.getUserCourseData("677ab910f44712a968f16832", 4),
-    // enabled: !!currentWeek,
+    queryKey: ["dashboard/compassion-feedback-4",enrollmentId, 4],
+    queryFn: () => userService.getUserCourseData(enrollmentId, 4),
+    enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
     keepPreviousData: false
@@ -39,9 +40,6 @@ function Week4() {
     return () => { }
   }, [data])
 
-  console.log(activityData[2]?.answer, "Activity")
-
-  console.log(activity3.images, "Activity 3")
 
   function getActivityAnswer(activityId) {
     return activityData?.find(activity => activity.page === activityId)?.answer
@@ -49,16 +47,19 @@ function Week4() {
   }
 
   function drag1(type) {
-
-    const indices = (type === "inner") ? activityData[1]?.answer?.inner : activityData[1]?.answer?.outer
-    return indices?.map(index => activity2?.options[index]);
+    if (!activityData || !activityData[1] || !activityData[1].answer) return [];
+    
+    const indices = (type === "inner") ? activityData[1].answer.inner : activityData[1].answer.outer;
+    return indices?.map(index => activity2?.options[index]) || [];
   }
 
   function drag2(type) {
-    const indices = (type === "green") ? activityData[2]?.answer?.green :
-      (type === "orange") ? activityData[2]?.answer?.orange :
-        (type === "red") ? activityData[2]?.answer?.red : []
-    return indices?.map(index => activity3?.images[index]);
+    if (!activityData || !activityData[2] || !activityData[2].answer) return [];
+    
+    const indices = (type === "green") ? activityData[2].answer.green :
+      (type === "orange") ? activityData[2].answer.orange :
+        (type === "red") ? activityData[2].answer.red : [];
+    return indices?.map(index => activity3?.images[index]) || [];
   }
 
 

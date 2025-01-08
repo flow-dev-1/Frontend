@@ -13,7 +13,7 @@ import { useQuery } from '@tanstack/react-query'
 import userService from "../../../../../../../../services/api/user.js"
 import { calculateResult } from "../../../utility.js";
 
-function Week2() {
+function Week2({enrollmentId}) {
   const { pages } = getWeekContentExcludingVideos(2);
   const [activity1, activity2, activity3] = pages;
   const [q1, q2, q3, q4] = activity3.prompts;
@@ -24,9 +24,9 @@ function Week2() {
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/compassion-feedback-2", 2],
-    queryFn: () => userService.getUserCourseData("677ab910f44712a968f16832", 2),
-    // enabled: !!currentWeek,
+    queryKey: ["dashboard/compassion-feedback-2",enrollmentId, 2],
+    queryFn: () => userService.getUserCourseData(enrollmentId, 2),
+    enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
     keepPreviousData: false

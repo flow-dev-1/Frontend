@@ -13,7 +13,7 @@ import userService from "../../../../../../../../services/api/user.js"
 import { calculateResult } from "../../../utility.js";
 
 
-function Week5() {
+function Week5({enrollmentId}) {
   const { pages } = getWeekContentExcludingVideos(5);
   const [acitivity1] = pages;
   const [q1, q2, q3, q4, q5, q6, q7,q8] = acitivity1.scenarios;
@@ -24,9 +24,9 @@ function Week5() {
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/compassion-feedback-5", 5],
-    queryFn: () => userService.getUserCourseData("677ab910f44712a968f16832", 5),
-    // enabled: !!currentWeek,
+    queryKey: ["dashboard/compassion-feedback-5",enrollmentId, 5],
+    queryFn: () => userService.getUserCourseData(enrollmentId, 5),
+    enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
     keepPreviousData: false

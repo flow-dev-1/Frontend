@@ -17,6 +17,8 @@ const Hurray = ({ currentWeek = 3 }) => {
   const { isLastWeek } = useSelector(selectNavigationState);
 
   const handleNext = () => {
+    sessionStorage.setItem("flow-currentPage", 1)
+    sessionStorage.setItem("flow-currentStep", 1)
     if (isLastWeek) {
       navigate("/dashboard/my-courses");
     } else {
@@ -29,6 +31,7 @@ const Hurray = ({ currentWeek = 3 }) => {
       return "Back to Course";
     }
     return `Go to Week ${currentWeek + 1}`;
+    
   };
 
   return (

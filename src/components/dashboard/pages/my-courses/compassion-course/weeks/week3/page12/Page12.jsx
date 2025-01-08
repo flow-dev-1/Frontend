@@ -100,6 +100,8 @@ function WeekThreePage12() {
         return false
       } 
 
+      console.log(userAnswers,"User Answer")
+
       // Submit Data
       mutation.mutate({ ...userAnswers, assessments: answers });
 

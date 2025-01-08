@@ -8,23 +8,52 @@ import Week3 from "./weeks/week3/Week3";
 import Week4 from "./weeks/week4/Week4";
 import Week5 from "./weeks/week5/Week5";
 import OverallFeedBack from "./weeks/overall/OverallFeedBack";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 
 function CompassionFeedback() {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(null);
+  const location = useLocation(); // Get location object
+  const [enrollmentId, setEnrollmentId] = useState(null);
 
   const currentWeek = activeIndex + 1;
-  
+
+
+  // Access data from location.state
+  const enrolmentData = location.state?.enrollmentData; // Assuming enrollData is passed in state
+
+  useEffect(() => {
+    //toDo: Only Enrolled Users or Admin can access this course
+
+    if (!enrolmentData) return
+    console.log(enrolmentData, "Enrollment Data")
+    setEnrollmentId(enrolmentData._id);
+
+  }, [])
+
 
   const weekContents = [
-    { topic: "Introduction to Compassion", component: <Week1  /> },
-    { topic: "Self-Compassion", component: <Week2 /> },
-    { topic: "Compassion to Others", component: <Week3 /> },
-    { topic: "Circle of Concern", component: <Week4 /> },
-    { topic: "Life Scenarios - Let’s wear the shoes of others", component: <Week5 /> },
-    { topic: "Summary of your journey through Compassion", component: <OverallFeedBack /> },
+    {
+      topic: "Introduction to Compassion", component: <Week1
+        enrollmentId={enrollmentId}
+      />
+    },
+    { topic: "Self-Compassion", component: <Week2 
+      enrollmentId={enrollmentId}
+    /> },
+    { topic: "Compassion to Others", component: <Week3 
+      enrollmentId={enrollmentId}
+    /> },
+    { topic: "Circle of Concern", component: <Week4 
+      enrollmentId={enrollmentId}
+    /> },
+    { topic: "Life Scenarios - Let’s wear the shoes of others", component: <Week5 
+      enrollmentId={enrollmentId}
+    /> },
+    { topic: "Summary of your journey through Compassion", component: <OverallFeedBack 
+      enrollmentId={enrollmentId}
+    /> },
   ];
 
   const weeksTopic = weekContents.map(week => week.topic);

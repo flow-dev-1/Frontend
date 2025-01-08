@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import courses from '../../json-files/CoursesData'
 import CourseCard from '../../reusable/CourseCard'
@@ -19,21 +19,47 @@ export default function IndividualOverview() {
   const [sortOption, setSortOption] = useState('') // State for Sort Option
   const [filterOption, setFilterOption] = useState('') // State for Filter Option
   const [selectedCourse, setSelectedCourse] = useState(null)
+  const [displayCourses, setDisplayCourses] = useState([])
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['individual-courses'],
     queryFn: () => userService.getIndividualCourses(), // Make sure to call the function
-    refetchOnWindowFocus: true, // Refetch when the window regains focus
-    refetchOnMount: true, // Refetch when the component mounts again
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false 
   })
 
   const { data: enrolledData } = useQuery({
     queryKey: ['individual-courses-enrolled'],
     queryFn: () => userService.getIndividualCoursesEnrolled(), // Make sure to call the function
-    refetchOnWindowFocus: true, // Refetch when the window regains focus
-    refetchOnMount: true, // Refetch when the component mounts again
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false
   })
 
+
+  useEffect(() => {
+    if (!data || !enrolledData) return
+
+    if (user?.userType === "School") {
+      const genralCourses = data.courses.filter(course => course.access !== "School")
+      // Update to set displayCourses with both generalCourses and enrolledData.courses
+      const enrolledDataArray =
+      enrolledData?.courses?.map((item) => item.course) || []
+      setDisplayCourses([...genralCourses, ...enrolledDataArray])
+
+    } else {
+      // Show only General courses
+      const genralCourses = data.courses.filter(course => course.access !== "School")
+      setDisplayCourses(genralCourses)
+    }
+
+    return () => { }
+  }, [data, enrolledData])
+
+
+  // User Type Determines the courses to show
+  // If user is school student or school educator He'll see His schools enrolled course and only general courses
   const studentOfSchool = user?.newCourseInvite
 
   const handleSort = (a, b) => {
@@ -45,10 +71,9 @@ export default function IndividualOverview() {
     return 0
   }
 
-  const enrolledDataArray =
-    enrolledData?.courses?.map((item) => item.course._id) || []
 
-  const filteredCourses = data?.courses
+
+  const filteredCourses = displayCourses
     ?.filter((course) => {
       const searchValue = searchQuery.toLowerCase()
       return (
@@ -125,8 +150,8 @@ export default function IndividualOverview() {
                   Filter by
                 </option>
                 <option value=''>All</option>
-                <option value='Individual'>Students</option>
-                <option value='School'>Teachers</option>
+                <option value='Individual'>Individual</option>
+                <option value='School'>School</option>
                 <option value='General'>General</option>
               </select>
             </label>
@@ -156,8 +181,8 @@ export default function IndividualOverview() {
           <CourseCard
             key={course.id}
             course={course}
-            coursesArray={data}
-            enrolled={enrolledDataArray}
+            // coursesArray={displayCourses}
+            // enrolled={enrolledDataArray}
             enrolledData={enrolledData}
             studentOfSchool={studentOfSchool}
           />

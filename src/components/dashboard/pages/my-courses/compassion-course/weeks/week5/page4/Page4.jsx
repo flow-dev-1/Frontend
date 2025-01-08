@@ -96,6 +96,7 @@ function WeekFivePage4() {
 
     if(isLastQuestion){
       // Check if all answers were provided bothe for assessment and activity
+      // toDo The posibilty to miss questions exixt so do a check
       if(answers.length !== totalSteps || userAnswers.activities.length !==1) {
         setErrorMessage("Oops! Something went wrong.");
         return false

@@ -55,7 +55,7 @@ export default function InvitedStudentRegistrationForm() {
 
   if (isError) {
     console.error('Error fetching parent details:', error)
-    return <div>Error loading parent details.</div>
+    return <div>Something went wrong, please contact flow admin for support.</div>
   }
 
   const handleParentFormSubmit = (formData) => {

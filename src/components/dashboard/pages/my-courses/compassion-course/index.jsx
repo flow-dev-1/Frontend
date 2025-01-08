@@ -1,7 +1,7 @@
 import logo from "../../../../../assets/logo.png";
 import { Icon } from "@iconify/react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   selectCurrentWeek,
   selectShowReview,
@@ -57,17 +57,28 @@ import WeekFivePage1 from "./weeks/week5/page1/Page1.jsx";
 import WeekFivePage2 from "./weeks/week5/page2/Page2.jsx";
 import WeekFivePage3 from "./weeks/week5/page3/Page3.jsx";
 import WeekFivePage4 from "./weeks/week5/page4/Page4.jsx";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from '@tanstack/react-query'
 import userService from '../../../../../services/api/user.js'
-import { updateData,userAnswer } from "../../../../../redux/reducers/userAnswersReducer.js";
+import { updateData, userAnswer } from "../../../../../redux/reducers/userAnswersReducer.js";
 
 
 const WeekContent = () => {
   const dispatch = useDispatch()
   const userAnswers = useSelector(userAnswer);
+  const location = useLocation(); // Get location object
+  const [enrollmentId, setEnrollmentId] = useState(null);
 
-  // console.log(userAnswers,"User Answers")
+
+  // Access data from location.state
+  const enrolmentData = location.state?.enrollmentData; // Assuming enrollData is passed in state
+
+  useEffect(() => {
+    //toDo: Only Enrolled Users or Admin can access this course
+    if (!enrolmentData) return
+    setEnrollmentId(enrolmentData._id);
+
+  }, [])
 
   useEffect(() => {
     const currentWeek = sessionStorage.getItem("flow-currentWeek") ? Number(sessionStorage.getItem("flow-currentWeek")) : 1
@@ -89,9 +100,9 @@ const WeekContent = () => {
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isLoading, status, isError } = useQuery({
-    queryKey: ["dashboard/compassion-course", "", currentWeek],
-    queryFn: () => userService.getUserCourseData("677ab910f44712a968f16832", currentWeek),
-    enabled: !!currentWeek,
+    queryKey: ["dashboard/compassion-course", enrollmentId, currentWeek],
+    queryFn: () => userService.getUserCourseData(enrollmentId, currentWeek),
+    enabled: !!enrollmentId && !!currentWeek,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
     keepPreviousData: false
@@ -100,12 +111,10 @@ const WeekContent = () => {
   useEffect(() => {
     if (!data) return
 
-    console.log(data,"Now this is data")
-
     if (data.assessment && data.activity) {
 
       dispatch(updateData({
-        courseEnrollmentId: "677ab910f44712a968f16832",
+        courseEnrollmentId: enrollmentId,
         week: currentWeek,
         activities: data.activity?.activities,
         assessments: data.assessment?.assessments
@@ -113,16 +122,15 @@ const WeekContent = () => {
 
     } else {
       dispatch(updateData({
-        courseEnrollmentId:"677ab910f44712a968f16832",
-        week:currentWeek,
-        activities:userAnswers.activities,
-        assessments:userAnswers.assessments
+        courseEnrollmentId: enrollmentId,
+        week: currentWeek,
+        activities: userAnswers.activities,
+        assessments: userAnswers.assessments
       }))
     }
 
     return () => { }
   }, [data])
-
 
   // If showing hurray, render that instead
   if (showHurray) {

@@ -38,6 +38,7 @@ const MyCourseCard = ({ course }) => {
 
 
     if (course?.progress === 100) {
+      console.log("yeahh")
       openModal('feedback')
     } else if (course?.schoolCourseEnrollment?.status === "Deactivated") {
       return toast.info("Course Deavtivated! Please contact admin for support.")
@@ -51,7 +52,7 @@ const MyCourseCard = ({ course }) => {
       })
       localStorage.setItem(`${course._id}-can-see`, true)
     } else {
-      navigate(`/dashboard/my-courses/${encryptURI(id)}`, {
+      navigate(`/dashboard/${course?.course?.title}`, {
         state: { course },
       })
     }
@@ -123,7 +124,7 @@ const MyCourseCard = ({ course }) => {
                 border: "1px solid #329bd6"
               }}
               className="btn card-btn feedback"
-              onClick={() => navigate(`/dashboard/feedback/self-awareness`)}
+              onClick={() => navigate(`/dashboard/${course?.course?.title}/feedback`, { state: { enrollmentData: course } })}
             >
               <Icon icon="hugeicons:comment-01" /> Feedback
             </button>
@@ -173,7 +174,7 @@ const MyCourseCard = ({ course }) => {
           </button>
           {course?.progress > 0 && course?.progress < 100 && (
             <Icon
-              onClick={() => navigate(`/dashboard/feedback/self-awareness`)}
+            onClick={() => navigate(`/dashboard/${course?.course?.title}/feedback`, { state: { enrollmentData: course } })}
               style={{ color: "#329BD6" }}
               width={40}
               icon="hugeicons:comment-01"

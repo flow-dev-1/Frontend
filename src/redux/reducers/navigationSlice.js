@@ -47,6 +47,7 @@ const navigationSlice = createSlice({
             state.showReview = true; // Set showReview to true if it's week 5
           } else {
             state.showHurray = true; // Set showHurray to true if it's not week 5
+            
           }
         } else {
           // Move to next question
@@ -98,6 +99,7 @@ const navigationSlice = createSlice({
 
         // If not the last week, go to next week
         if (!isLastWeek) {
+          console.log("Na here o")
           state.currentWeek += 1;
           state.currentPage = 1;
           state.currentStep = 1;
