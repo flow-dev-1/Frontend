@@ -21,6 +21,8 @@ export default function IndividualProfile({ onClose }) {
   const { userId } = useParams();
   const navigate = useNavigate()
 
+  const user_id = userId? userId: userType?.user?._id
+
   const fetchProfile = (id) => {
     if (userType?.accountType === 'Educator') {
       return userService.getMyProfileEducator(id)
@@ -31,12 +33,10 @@ export default function IndividualProfile({ onClose }) {
   }
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['individual-profile', userId],
-    queryFn: () => fetchProfile(userId),
-    enabled: !!userId
+    queryKey: ['individual-profile', user_id],
+    queryFn: () => fetchProfile(user_id),
+    enabled: !!user_id
   })
-
-  console.log(data, "data ooooooo")
 
   const openModal = () => {
     setIsOpen(true)
@@ -105,7 +105,7 @@ export default function IndividualProfile({ onClose }) {
 
               <div className='user-details'>
                 <div className='green-spring-div school'>
-                  {user?.newCourseInvite?.school?.school_name || 'Individual'}
+                  {user?.school?.school_name || 'Individual'}
                 </div>
                 <div
                   style={{ color: '#5B616A' }}

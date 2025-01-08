@@ -89,10 +89,10 @@ export default function StudentDetailsFormProfile({
       userType,
       __v,
       _id,
+      school,
       ...sanitizedParentFormData
     } = parentFormData;
 
-    console.log(sanitizedParentFormData);
     // Combine sanitizedParentFormData and studentData into a single object
     const completeFormData = {
       ...sanitizedParentFormData,
@@ -100,8 +100,6 @@ export default function StudentDetailsFormProfile({
       // Psanarent form data
       // Student data directly included, no nesting under "student"
     };
-
-    console.log("Submitting form data:", completeFormData);
 
     mutation.mutate(completeFormData); // Submitting the combined data
   });
