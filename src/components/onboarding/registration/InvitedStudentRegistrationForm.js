@@ -20,11 +20,14 @@ export default function InvitedStudentRegistrationForm() {
     return {
       email: params.get('email'),
       t: params.get('t'),
-      s: params.get('schoolName')
+      s: params.get('schoolName'),
+      enrollmentId: params.get('s'),
+      courseName: params.get('coursName')
     }
   }
 
-  const { email, t, s } = getQueryParams(location.search)
+  const { email, t, s,enrollmentId,courseName } = getQueryParams(location.search)
+
 
   dispatch(setToken(t))
   localStorage.setItem('Flow-Auth-Token', t)
@@ -59,7 +62,6 @@ export default function InvitedStudentRegistrationForm() {
   }
 
   const handleParentFormSubmit = (formData) => {
-    console.log(formData)
     setParentFormData(formData) // Save form data when continue is clicked
     setStep(2) // Move to the next step
   }
@@ -93,6 +95,7 @@ export default function InvitedStudentRegistrationForm() {
           students={data?.data?.students} // Pass students array to the component
           email={email} // Pass email as a prop
           t={t} // Pass t as a prop
+          enrollmentId={enrollmentId}
         />
       )}
     </div>

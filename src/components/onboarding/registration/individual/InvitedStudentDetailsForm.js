@@ -55,6 +55,7 @@ export default function InvitedStudentDetailsForm({
   parentFormData,
   students,
   t,
+  enrollmentId
 }) {
   const [formCount, setFormCount] = useState(0) // Start with the first student
   const [modalIsOpen, setIsOpen] = useState(false)
@@ -102,36 +103,38 @@ export default function InvitedStudentDetailsForm({
       // Check if any field contains "N/A"
       const hasNAField = Object.values(studentData).some(
         (value) => value === 'N/A'
-      )
+      );
 
       if (hasNAField) {
         toast.error(
           'Please fill all fields. Fields with "N/A" must be corrected.'
-        )
-        return
+        );
+        return;
       }
 
       // Update the current student's data in the array
       const updatedStudents = students.map((student, index) => {
         if (index === formCount) {
+          const { school, ...rest } = student; // Omit 'school' if it exists
           return {
-            ...student,
+            ...rest,
             fullName: studentData.fullName,
             grade: studentData.grade,
             gender: studentData.gender,
             DOB: studentData.DOB,
             password: studentData.password,
-          }
+          };
         }
-        return student
-      })
+        return student;
+      });
 
       if (formCount < students.length - 1) {
-        setFormCount((prevCount) => prevCount + 1)
-        reset(updatedStudents[formCount + 1])
+        setFormCount((prevCount) => prevCount + 1);
+        reset(updatedStudents[formCount + 1]);
       } else {
         const completeFormData = {
           ...parentFormData,
+          enrollmentId,
           students: updatedStudents.map(
             ({
               _id,
@@ -155,15 +158,14 @@ export default function InvitedStudentDetailsForm({
               // guardianFullName: parentFormData.guardianFullName,
             })
           ),
-        }
-        console.log('Submitting form data:', completeFormData)
-        mutation.mutate(completeFormData)
+        };
+        mutation.mutate(completeFormData);
       }
     } catch (error) {
-      console.error('Error adding student:', error)
-      toast.error('Failed to add student. Please try again.')
+      console.error('Error adding student:', error);
+      toast.error('Failed to add student. Please try again.');
     }
-  }
+  };
 
   function openModal() {
     setIsOpen(true)
@@ -267,7 +269,9 @@ export default function InvitedStudentDetailsForm({
               <div className='d-flex align-items-center input-with-icon'>
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder='Type here...'
+                  placeholder={
+                    students[formCount].isVerified === true ? '************' : 'Type here...'
+                  }
                   {...register('password')}
                   disabled={
                     students[formCount].isVerified === true ? true : false
