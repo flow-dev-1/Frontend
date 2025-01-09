@@ -9,7 +9,7 @@ import {
   selectCurrentPage,
   setCurrentWeek,
   setCurrentPage,
-  setCurrentStep
+  setCurrentStep,
 } from "../../../../../redux/reducers/navigationSlice.js";
 import "./index.css";
 
@@ -58,40 +58,46 @@ import WeekFivePage2 from "./weeks/week5/page2/Page2.jsx";
 import WeekFivePage3 from "./weeks/week5/page3/Page3.jsx";
 import WeekFivePage4 from "./weeks/week5/page4/Page4.jsx";
 import { useEffect, useState } from "react";
-import { useQuery } from '@tanstack/react-query'
-import userService from '../../../../../services/api/user.js'
-import { updateData, userAnswer } from "../../../../../redux/reducers/userAnswersReducer.js";
-
+import { useQuery } from "@tanstack/react-query";
+import userService from "../../../../../services/api/user.js";
+import {
+  updateData,
+  userAnswer,
+} from "../../../../../redux/reducers/userAnswersReducer.js";
 
 const WeekContent = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const userAnswers = useSelector(userAnswer);
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
-
 
   // Access data from location.state
   const enrolmentData = location.state?.enrollmentData; // Assuming enrollData is passed in state
 
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
-    if (!enrolmentData) return
+    if (!enrolmentData) return;
     setEnrollmentId(enrolmentData._id);
-
-  }, [])
+  }, []);
 
   useEffect(() => {
-    const currentWeek = sessionStorage.getItem("flow-currentWeek") ? Number(sessionStorage.getItem("flow-currentWeek")) : 1
-    const currentPage = sessionStorage.getItem("flow-currentPage") ? Number(sessionStorage.getItem("flow-currentPage")) : 1
-    const currentStep = sessionStorage.getItem("flow-currentStep") ? Number(sessionStorage.getItem("flow-currentStep")) : 1
+    const currentWeek = sessionStorage.getItem("flow-currentWeek")
+      ? Number(sessionStorage.getItem("flow-currentWeek"))
+      : 1;
+    const currentPage = sessionStorage.getItem("flow-currentPage")
+      ? Number(sessionStorage.getItem("flow-currentPage"))
+      : 1;
+    const currentStep = sessionStorage.getItem("flow-currentStep")
+      ? Number(sessionStorage.getItem("flow-currentStep"))
+      : 1;
 
     // Dispatch the current week, page, and step
     dispatch(setCurrentWeek(currentWeek));
     dispatch(setCurrentPage(currentPage));
     dispatch(setCurrentStep(currentStep));
 
-    return () => { }
-  }, [dispatch]) // Added dispatch to dependency array
+    return () => {};
+  }, [dispatch]); // Added dispatch to dependency array
 
   const currentWeek = useSelector(selectCurrentWeek);
   const currentPage = useSelector(selectCurrentPage);
@@ -105,32 +111,34 @@ const WeekContent = () => {
     enabled: !!enrollmentId && !!currentWeek,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
-    keepPreviousData: false
+    keepPreviousData: false,
   });
 
   useEffect(() => {
-    if (!data) return
+    if (!data) return;
 
     if (data.assessment && data.activity) {
-
-      dispatch(updateData({
-        courseEnrollmentId: enrollmentId,
-        week: currentWeek,
-        activities: data.activity?.activities,
-        assessments: data.assessment?.assessments
-      }))
-
+      dispatch(
+        updateData({
+          courseEnrollmentId: enrollmentId,
+          week: currentWeek,
+          activities: data.activity?.activities,
+          assessments: data.assessment?.assessments,
+        })
+      );
     } else {
-      dispatch(updateData({
-        courseEnrollmentId: enrollmentId,
-        week: currentWeek,
-        activities: userAnswers.activities,
-        assessments: userAnswers.assessments
-      }))
+      dispatch(
+        updateData({
+          courseEnrollmentId: enrollmentId,
+          week: currentWeek,
+          activities: userAnswers.activities,
+          assessments: userAnswers.assessments,
+        })
+      );
     }
 
-    return () => { }
-  }, [data])
+    return () => {};
+  }, [data]);
 
   // If showing hurray, render that instead
   if (showHurray) {
@@ -274,16 +282,16 @@ const CourseContent = () => {
     <>
       <nav className="navbar">
         <div className="container">
-          <Link to="/">
-            <img
-              src={logo}
-              alt=""
-              style={{
-                width: "60%",
-                cursor: "pointer",
-              }}
-            />
+          <Link to="/dashboard" className="navbar-logo">
+            <img src={logo} alt="" />
           </Link>
+          <div
+            className="navbar-logo"
+            onClick={""}
+            style={{ cursor: "pointer" }}
+          >
+            Logout
+          </div>
         </div>
       </nav>
 

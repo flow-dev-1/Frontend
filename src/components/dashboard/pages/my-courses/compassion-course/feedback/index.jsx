@@ -67,16 +67,16 @@ function CompassionFeedback() {
     <>
       <nav className="navbar">
         <div className="container">
-          <Link to="/">
-            <img
-              src={logo}
-              alt=""
-              style={{
-                width: "60%",
-                cursor: "pointer",
-              }}
-            />
+          <Link to="/dashboard" className="navbar-logo">
+            <img src={logo} alt="" />
           </Link>
+          <div
+            className="navbar-logo"
+            onClick={''}
+            style={{ cursor: "pointer" }}
+          >
+            Logout
+          </div>
         </div>
       </nav>
       <div className="main-content">
