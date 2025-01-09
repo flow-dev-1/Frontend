@@ -2,12 +2,12 @@
   display: flex;
   margin-top: 59.6px;
   margin-bottom: 50px;
+  padding-bottom: 20px;
+  max-height: 82vh;
+
 }
 
 aside {
-  /* position: fixed; */
-  /* top: 120px; */
-  /* left: 0; */
   padding: 40px 30px;
   height: calc(100vh - 120px);
   background-color: rgb(248, 245, 245);
