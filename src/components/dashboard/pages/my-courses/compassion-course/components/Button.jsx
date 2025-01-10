@@ -40,19 +40,32 @@ const Button = ({ loading, text, customOnClick }) => {
 
   return (
     <button
-      className={`btn fs-5 rounded w-200px h-50px ${isNextButton || customOnClick 
-        ? "bg-button text-white border-0 hover-prev"
-        : isPrevButton 
+      className={`btn fs-5 rounded w-200px h-50px d-flex align-items-center justify-content-center ${
+        isNextButton || customOnClick
+          ? "bg-button text-white border-0 hover-prev"
+          : isPrevButton
           ? "bg-transparent text-button-blue border border-blue hover-next"
           : ""
-        }`}
+      }`}
       onClick={handleClick}
       type="button"
-      disabled={loading}
+      // disabled={loading}
     >
-      {isPrevButton && <span className="me-2">{"<<<"}</span>}
-      {(!isPrevButton && loading) ? <RotatingLines type='Oval' style={{ color: '#FFF' }} height={20} width={20} /> : text}
-      {isNextButton && <span className="ms-2">{">>>"}</span>}
+      {loading && isNextButton ? (
+        <RotatingLines
+          className="me-2 text-white"
+          type="Oval"
+          strokeColor="white"
+          height={20}
+          width={20}
+        />
+      ) : (
+        <>
+          {isPrevButton && <span className="me-2">{"<<<"}</span>}
+          {text}
+          {isNextButton && <span className="ms-2">{">>>"}</span>}
+        </>
+      )}
     </button>
   );
 };
