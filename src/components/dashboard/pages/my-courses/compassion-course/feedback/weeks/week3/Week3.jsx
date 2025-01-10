@@ -69,7 +69,7 @@ function Week3({ enrollmentId, setShowModal }) {
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
         <p className="fs-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
-        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
 
       {
@@ -86,7 +86,7 @@ function Week3({ enrollmentId, setShowModal }) {
               sapiente id ipsa soluta dolorum accusamus, voluptates illum amet
               magnam ullam assumenda maxime possimus itaque.
             </p>
-            <Icon onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+            <Icon onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
           </div>
         )
       }
@@ -108,7 +108,7 @@ function Week3({ enrollmentId, setShowModal }) {
           {/* This is a static answer for everyone */}
           {activity2?.steps[0]?.options[0]?.text}
         </p>
-        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
 
       {
@@ -125,7 +125,7 @@ function Week3({ enrollmentId, setShowModal }) {
               sapiente id ipsa soluta dolorum accusamus, voluptates illum amet
               magnam ullam assumenda maxime possimus itaque.
             </p>
-            <Icon onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+            <Icon onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
           </div>
         )
       }
@@ -143,7 +143,7 @@ function Week3({ enrollmentId, setShowModal }) {
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
         <p className="fs-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
-        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -155,7 +155,7 @@ function Week3({ enrollmentId, setShowModal }) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <hr />
 
@@ -177,7 +177,7 @@ function Week3({ enrollmentId, setShowModal }) {
             </p>
           ))}
         </div>
-        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={30} icon="tabler:message-2" />
+        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -189,7 +189,7 @@ function Week3({ enrollmentId, setShowModal }) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <hr />
 
@@ -207,7 +207,7 @@ function Week3({ enrollmentId, setShowModal }) {
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
         <p className="fs-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
-        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -219,7 +219,7 @@ function Week3({ enrollmentId, setShowModal }) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <hr />
 
