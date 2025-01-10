@@ -9,9 +9,10 @@ import Week4 from "./weeks/week4/Week4";
 import Week5 from "./weeks/week5/Week5";
 import OverallFeedBack from "./weeks/overall/OverallFeedBack";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-
+import Modal from "./components/Modal";
 
 function CompassionFeedback() {
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(null);
   const location = useLocation(); // Get location object
@@ -19,49 +20,59 @@ function CompassionFeedback() {
 
   const currentWeek = activeIndex + 1;
 
-
   // Access data from location.state
   const enrolmentData = location.state?.enrollmentData; // Assuming enrollData is passed in state
 
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    if (!enrolmentData) return
-    console.log(enrolmentData, "Enrollment Data")
+    if (!enrolmentData) return;
+    console.log(enrolmentData, "Enrollment Data");
     setEnrollmentId(enrolmentData._id);
-
-  }, [])
-
+  }, []);
 
   const weekContents = [
     {
-      topic: "Introduction to Compassion", component: <Week1
-        enrollmentId={enrollmentId}
-      />
+      topic: "Introduction to Compassion",
+      component: (
+        <Week1 enrollmentId={enrollmentId} setShowModal={setShowModal} />
+      ),
     },
-    { topic: "Self-Compassion", component: <Week2 
-      enrollmentId={enrollmentId}
-    /> },
-    { topic: "Compassion to Others", component: <Week3 
-      enrollmentId={enrollmentId}
-    /> },
-    { topic: "Circle of Concern", component: <Week4 
-      enrollmentId={enrollmentId}
-    /> },
-    { topic: "Life Scenarios - Let’s wear the shoes of others", component: <Week5 
-      enrollmentId={enrollmentId}
-    /> },
-    { topic: "Summary of your journey through Compassion", component: <OverallFeedBack 
-      enrollmentId={enrollmentId}
-    /> },
+    {
+      topic: "Self-Compassion",
+      component: (
+        <Week2 enrollmentId={enrollmentId} setShowModal={setShowModal} />
+      ),
+    },
+    {
+      topic: "Compassion to Others",
+      component: (
+        <Week3 enrollmentId={enrollmentId} setShowModal={setShowModal} />
+      ),
+    },
+    {
+      topic: "Circle of Concern",
+      component: (
+        <Week4 enrollmentId={enrollmentId} setShowModal={setShowModal} />
+      ),
+    },
+    {
+      topic: "Life Scenarios - Let’s wear the shoes of others",
+      component: (
+        <Week5 enrollmentId={enrollmentId} setShowModal={setShowModal} />
+      ),
+    },
+    {
+      topic: "Summary of your journey through Compassion",
+      component: <OverallFeedBack enrollmentId={enrollmentId} />,
+    },
   ];
 
-  const weeksTopic = weekContents.map(week => week.topic);
-  const items = weekContents.map(week => ({
+  const weeksTopic = weekContents.map((week) => week.topic);
+  const items = weekContents.map((week) => ({
     title: week.topic,
     content: week.component,
   }));
-
 
   return (
     <>
@@ -72,7 +83,7 @@ function CompassionFeedback() {
           </Link>
           <div
             className="navbar-logo"
-            onClick={''}
+            onClick={""}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -124,6 +135,7 @@ function CompassionFeedback() {
           />
         </section>
       </div>
+      <Modal isOpen={showModal} setIsOpen={setShowModal} />
     </>
   );
 }

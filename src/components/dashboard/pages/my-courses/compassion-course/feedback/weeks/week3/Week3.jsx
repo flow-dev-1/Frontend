@@ -12,38 +12,36 @@ import { useQuery } from '@tanstack/react-query'
 import userService from "../../../../../../../../services/api/user.js"
 import { calculateResult } from "../../../utility.js";
 
-function Week3({enrollmentId}) {
+function Week3({ enrollmentId, setShowModal }) {
   const { pages } = getWeekContentExcludingVideos(3);
   const [activity1, activity2, activity3, activity4, activity5] = pages;
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([]);
 
-
   const { questions: assessments } = getWeekAssessment(3);
-
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/compassion-feedback-3",enrollmentId, 3],
+    queryKey: ["dashboard/compassion-feedback-3", enrollmentId, 3],
     queryFn: () => userService.getUserCourseData(enrollmentId, 3),
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
-    keepPreviousData: false
+    keepPreviousData: false,
   });
 
   useEffect(() => {
-    if (!data) return
+    if (!data) return;
 
-    setActivityData(data.activity?.activities)
-    setAssessmentData(data.assessment?.assessments)
+    setActivityData(data.activity?.activities);
+    setAssessmentData(data.assessment?.assessments);
 
-    return () => { }
-  }, [data])
+    return () => {};
+  }, [data]);
 
   function getActivityAnswer(activityId) {
-      return activityData?.find(activity => activity.page === activityId)?.answer
-
+    return activityData?.find((activity) => activity.page === activityId)
+      ?.answer;
   }
 
   if (isPending) {
@@ -54,7 +52,8 @@ function Week3({enrollmentId}) {
     return <div>{data?.message || "Internal server error!"}</div>;
   }
 
-  const score = calculateResult(assessments, assessmentData, assessments?.length) || 0
+  const score =
+    calculateResult(assessments, assessmentData, assessments?.length) || 0;
 
   return (
     <>
@@ -69,28 +68,27 @@ function Week3({enrollmentId}) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity1.id)}
-        </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <p className="fs-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
+        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
 
       {
         // Show this only id theres a feedback
-        activityData?.find(activity => activity.page === activity1.id)?.feedback &&
-        <div className="d-flex gap-3">
-          <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-            Feedback
-          </p>
-          <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-            quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-            soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-            maxime possimus itaque.
-          </p>
-          <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
-        </div>
-
+        activityData?.find((activity) => activity.page === activity1.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Consectetur quaerat consequuntur veritatis quasi provident autem,
+              sapiente id ipsa soluta dolorum accusamus, voluptates illum amet
+              magnam ullam assumenda maxime possimus itaque.
+            </p>
+            <Icon onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+          </div>
+        )
       }
 
       <hr />
@@ -110,24 +108,26 @@ function Week3({enrollmentId}) {
           {/* This is a static answer for everyone */}
           {activity2?.steps[0]?.options[0]?.text}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
 
       {
         // Show this only if theres a feedback
-        activityData?.find(activity => activity.page === activity2.id)?.feedback &&
-        <div className="d-flex gap-3">
-          <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-            Feedback
-          </p>
-          <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-            quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-            soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-            maxime possimus itaque.
-          </p>
-          <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
-        </div>
+        activityData?.find((activity) => activity.page === activity2.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Consectetur quaerat consequuntur veritatis quasi provident autem,
+              sapiente id ipsa soluta dolorum accusamus, voluptates illum amet
+              magnam ullam assumenda maxime possimus itaque.
+            </p>
+            <Icon onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+          </div>
+        )
       }
       <hr />
 
@@ -142,10 +142,8 @@ function Week3({enrollmentId}) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-        {getActivityAnswer(activity3.id)}
-        </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <p className="fs-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -157,7 +155,7 @@ function Week3({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
       </div> */}
       <hr />
 
@@ -173,13 +171,13 @@ function Week3({enrollmentId}) {
       <div className="d-flex gap-4">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
         <div className="flex-grow-1">
-          {
-            getActivityAnswer(activity4.id)?.map((item,idx)=>(
-              <p key={idx} className="fs-5">{idx+1}. {item.value}.</p>
-            ))
-          }
+          {getActivityAnswer(activity4.id)?.map((item, idx) => (
+            <p key={idx} className="fs-5">
+              {idx + 1}. {item.value}.
+            </p>
+          ))}
         </div>
-        <Icon style={{ color: "#D6D6D6" }} width={30} icon="tabler:message-2" />
+        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={30} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -191,7 +189,7 @@ function Week3({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
       </div> */}
       <hr />
 
@@ -208,10 +206,8 @@ function Week3({enrollmentId}) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-        {getActivityAnswer(activity5.id)}
-        </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <p className="fs-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -223,7 +219,7 @@ function Week3({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
       </div> */}
       <hr />
 
@@ -233,8 +229,10 @@ function Week3({enrollmentId}) {
         Assessment 1
       </p>
       <hr />
-      {assessments.map(({ id,question, options, correctOption }, i) => {
-           const selectedAnswer = assessmentData?.find(answer => answer.id === id)?.value 
+      {assessments.map(({ id, question, options, correctOption }, i) => {
+        const selectedAnswer = assessmentData?.find(
+          (answer) => answer.id === id
+        )?.value;
         return (
           <>
             <div className="d-flex gap-3" key={i}>
@@ -245,7 +243,7 @@ function Week3({enrollmentId}) {
               const optionKey = Object.keys(option)[0];
               const optionText = option[optionKey];
               const isCorrectOption = correctOption === optionText;
-              const isAnswer = selectedAnswer === optionText
+              const isAnswer = selectedAnswer === optionText;
 
               return (
                 <div
@@ -284,16 +282,18 @@ function Week3({enrollmentId}) {
         <h2 className="text-white fs-1">Weekly Report</h2>
         <div className="d-flex gap-4">
           <h2 className="text-gray fs-1 ratio-1x1 bg-aqua rounded-4 p-5 d-flex justify-content-center border border-6 border-blue">
-          {score}%
+            {score}%
           </h2>
           <p className="text-white">
-          {
-              score < 41 ? "It looks like you may need more practice understanding compassion. Take time to reflect on how you can be more empathetic and caring toward others." :
-              score < 61 ? "Good effort! You’re on the right track, but revisiting some aspects of showing compassion could help you improve further." :
-              score < 100 ? "Well done! You have a strong grasp of compassion, though there are some areas where you could practice being more mindful of others' needs.":
-              score === 100 ? "Fantastic! Your answers show a deep understanding of compassion and how to apply it in different situations. Keep up the great work!":""
-            }
-
+            {score < 41
+              ? "It looks like you may need more practice understanding compassion. Take time to reflect on how you can be more empathetic and caring toward others."
+              : score < 61
+              ? "Good effort! You’re on the right track, but revisiting some aspects of showing compassion could help you improve further."
+              : score < 100
+              ? "Well done! You have a strong grasp of compassion, though there are some areas where you could practice being more mindful of others' needs."
+              : score === 100
+              ? "Fantastic! Your answers show a deep understanding of compassion and how to apply it in different situations. Keep up the great work!"
+              : ""}
           </p>
         </div>
       </div>

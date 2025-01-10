@@ -12,56 +12,61 @@ import { useQuery } from '@tanstack/react-query'
 import userService from "../../../../../../../../services/api/user.js"
 import { calculateResult } from "../../../utility.js";
 
-function Week4({enrollmentId}) {
+function Week4({ enrollmentId, setShowModal }) {
   const { pages } = getWeekContentExcludingVideos(4);
   const [activity1, activity2, activity3] = pages;
   const [activityData, setActivityData] = useState([]);
-  const [assessmentData, setAssessmentData] = useState([])
-  console.log(enrollmentId,"Enrollment Id")
-
+  const [assessmentData, setAssessmentData] = useState([]);
+  console.log(enrollmentId, "Enrollment Id");
 
   const { questions: assessments } = getWeekAssessment(4);
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/compassion-feedback-4",enrollmentId, 4],
+    queryKey: ["dashboard/compassion-feedback-4", enrollmentId, 4],
     queryFn: () => userService.getUserCourseData(enrollmentId, 4),
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
-    keepPreviousData: false
+    keepPreviousData: false,
   });
 
   useEffect(() => {
-    if (!data) return
+    if (!data) return;
 
-    setActivityData(data.activity?.activities)
-    setAssessmentData(data.assessment?.assessments)
+    setActivityData(data.activity?.activities);
+    setAssessmentData(data.assessment?.assessments);
 
-    return () => { }
-  }, [data])
-
+    return () => {};
+  }, [data]);
 
   function getActivityAnswer(activityId) {
-    return activityData?.find(activity => activity.page === activityId)?.answer
-
+    return activityData?.find((activity) => activity.page === activityId)
+      ?.answer;
   }
 
   function drag1(type) {
     if (!activityData || !activityData[1] || !activityData[1].answer) return [];
-    
-    const indices = (type === "inner") ? activityData[1].answer.inner : activityData[1].answer.outer;
-    return indices?.map(index => activity2?.options[index]) || [];
+
+    const indices =
+      type === "inner"
+        ? activityData[1].answer.inner
+        : activityData[1].answer.outer;
+    return indices?.map((index) => activity2?.options[index]) || [];
   }
 
   function drag2(type) {
     if (!activityData || !activityData[2] || !activityData[2].answer) return [];
-    
-    const indices = (type === "green") ? activityData[2].answer.green :
-      (type === "orange") ? activityData[2].answer.orange :
-        (type === "red") ? activityData[2].answer.red : [];
-    return indices?.map(index => activity3?.images[index]) || [];
-  }
 
+    const indices =
+      type === "green"
+        ? activityData[2].answer.green
+        : type === "orange"
+        ? activityData[2].answer.orange
+        : type === "red"
+        ? activityData[2].answer.red
+        : [];
+    return indices?.map((index) => activity3?.images[index]) || [];
+  }
 
   if (isPending) {
     return <div>Loading...</div>;
@@ -71,7 +76,8 @@ function Week4({enrollmentId}) {
     return <div>{data?.message || "Internal server error!"}</div>;
   }
 
-  const score = calculateResult(assessments, assessmentData, assessments?.length) || 0
+  const score =
+    calculateResult(assessments, assessmentData, assessments?.length) || 0;
 
   return (
     <>
@@ -86,10 +92,8 @@ function Week4({enrollmentId}) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity1.id)}
-        </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <p className="fs-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -101,7 +105,7 @@ function Week4({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+         <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
       </div> */}
       <hr />
 
@@ -122,12 +126,11 @@ function Week4({enrollmentId}) {
               Innner Cycle
             </h2>
             <div className="px-5 py-3">
-              {
-                drag1("inner")?.map((item, idx) => (
-                  <p className="fs-4">{idx + 1}. {item}</p>
-                ))
-              }
-
+              {drag1("inner")?.map((item, idx) => (
+                <p className="fs-4">
+                  {idx + 1}. {item}
+                </p>
+              ))}
             </div>
           </div>
           <div className="flex-grow-1">
@@ -135,15 +138,15 @@ function Week4({enrollmentId}) {
               Outer Cycle
             </h2>
             <div className="px-5 py-3">
-              {
-                drag1("outer")?.map((item, idx) => (
-                  <p className="fs-4">{idx + 1}. {item}</p>
-                ))
-              }
+              {drag1("outer")?.map((item, idx) => (
+                <p className="fs-4">
+                  {idx + 1}. {item}
+                </p>
+              ))}
             </div>
           </div>
         </div>
-        <Icon style={{ color: "#D6D6D6" }} width={30} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={30} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -155,7 +158,7 @@ function Week4({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+         <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
       </div> */}
       <hr />
 
@@ -176,21 +179,21 @@ function Week4({enrollmentId}) {
               Innner Cycle
             </h2>
             <div className="py-3">
-              {
-                drag2("green")?.map((item, idx) => (
-                  <p className="fs-4">{idx + 1}. {item}</p>
-                ))
-              }
+              {drag2("green")?.map((item, idx) => (
+                <p className="fs-4">
+                  {idx + 1}. {item}
+                </p>
+              ))}
             </div>
           </div>
           <div className="flex-grow-1">
             <h2 className="text-center bg-red text-white py-3 fs-1">Both</h2>
             <div className="py-3">
-              {
-                drag2("orange")?.map((item, idx) => (
-                  <p className="fs-4">{idx + 1}. {item}</p>
-                ))
-              }
+              {drag2("orange")?.map((item, idx) => (
+                <p className="fs-4">
+                  {idx + 1}. {item}
+                </p>
+              ))}
             </div>
           </div>
           <div className="flex-grow-1">
@@ -198,15 +201,15 @@ function Week4({enrollmentId}) {
               Outer Cycle
             </h2>
             <div className="py-3">
-              {
-                drag2("red")?.map((item, idx) => (
-                  <p className="fs-4">{idx + 1}. {item}</p>
-                ))
-              }
+              {drag2("red")?.map((item, idx) => (
+                <p className="fs-4">
+                  {idx + 1}. {item}
+                </p>
+              ))}
             </div>
           </div>
         </div>
-        <Icon style={{ color: "#D6D6D6" }} width={30} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={30} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -218,10 +221,9 @@ function Week4({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-         <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+         <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
       </div> */}
       <hr />
-
 
       <hr />
       {/* Assesment 1 */}
@@ -230,7 +232,9 @@ function Week4({enrollmentId}) {
       </p>
       <hr />
       {assessments.map(({ id, question, options, correctOption }, i) => {
-        const selectedAnswer = assessmentData?.find(answer => answer.id === id)?.value
+        const selectedAnswer = assessmentData?.find(
+          (answer) => answer.id === id
+        )?.value;
         return (
           <>
             <div className="d-flex align-items-center gap-3" key={i}>
@@ -241,7 +245,7 @@ function Week4({enrollmentId}) {
               const optionKey = Object.keys(option)[0];
               const optionText = option[optionKey];
               const isCorrectOption = correctOption === optionText;
-              const isAnswer = selectedAnswer === optionText
+              const isAnswer = selectedAnswer === optionText;
               return (
                 <div
                   key={index}
@@ -282,13 +286,15 @@ function Week4({enrollmentId}) {
             {score}%
           </h2>
           <p className="text-white">
-            {
-              score < 41 ? "It seems like you need more time to fully understand the Circle of Concern and the difference between showing compassion to your inner and outer circles. Review the concept and think about how to apply it in your daily life." :
-                score < 61 ? "Good effort! You have a general idea of the Circle of Concern, but there’s room for improvement in recognizing how to show compassion appropriately to different groups." :
-                  score < 100 ? "Great job! You mostly understand the Circle of Concern, though you could benefit from thinking more about the boundaries between your inner and outer circles." :
-                    score === 100 ? "Excellent understanding! You clearly grasp the idea of the Circle of Concern and how to interact with people in your inner and outer circles with compassion and respect." : ""
-            }
-
+            {score < 41
+              ? "It seems like you need more time to fully understand the Circle of Concern and the difference between showing compassion to your inner and outer circles. Review the concept and think about how to apply it in your daily life."
+              : score < 61
+              ? "Good effort! You have a general idea of the Circle of Concern, but there’s room for improvement in recognizing how to show compassion appropriately to different groups."
+              : score < 100
+              ? "Great job! You mostly understand the Circle of Concern, though you could benefit from thinking more about the boundaries between your inner and outer circles."
+              : score === 100
+              ? "Excellent understanding! You clearly grasp the idea of the Circle of Concern and how to interact with people in your inner and outer circles with compassion and respect."
+              : ""}
           </p>
         </div>
       </div>
