@@ -6,10 +6,14 @@ import ArrowTrail from "../../../../../../../../assets/ArrowTrail.svg";
 import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  userAnswer,
+  saveActivity,
+} from "../../../../../../../../redux/reducers/userAnswersReducer";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 function WeekFourPage4() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
   const userAnswers = useSelector(userAnswer);
@@ -21,17 +25,17 @@ function WeekFourPage4() {
   });
 
   useEffect(() => {
+    if (!userAnswers) return;
+    const response = userAnswers?.activities?.find(
+      (item) => item.page === pageData.id
+    );
 
-    if (!userAnswers) return
-    const response = userAnswers?.activities?.find(item => (item.page === pageData.id))
-
-    if(response?.answer){
-      setBowls(response.answer)
-      setOptions([])
+    if (response?.answer) {
+      setBowls(response.answer);
+      setOptions([]);
     }
-    return () => { }
-
-  }, [userAnswers])
+    return () => {};
+  }, [userAnswers]);
 
   const handleOnDragEnd = (result) => {
     setErrorMessage("");
@@ -45,7 +49,7 @@ function WeekFourPage4() {
       destination.droppableId !== "options"
     ) {
       const draggedOption = options[source.index];
-      const draggedIndex = pageData?.options.indexOf(draggedOption); 
+      const draggedIndex = pageData?.options.indexOf(draggedOption);
       const newOptions = Array.from(options);
       newOptions.splice(source.index, 1);
 
@@ -63,7 +67,6 @@ function WeekFourPage4() {
   };
 
   const saveUserInput = () => {
-
     // if (!adminDatas.isAdmin && !myAnswer) {
     //   setErrorMessage("Oops! Please enter a valid input!");
     //   return false;
@@ -75,14 +78,21 @@ function WeekFourPage4() {
     }
     setErrorMessage("");
     // Allow flow admin to proceed without input but do not dispatch answer
-    if (adminDatas.isAdmin) return true
-    dispatch(saveActivity({
-      page: pageData.id,
-      answer: bowls
-    }))
-    return true
-  }
+    if (adminDatas.isAdmin) return true;
+    dispatch(
+      saveActivity({
+        page: pageData.id,
+        answer: bowls,
+      })
+    );
+    return true;
+  };
 
+  const resetDragAndDrop = () => {
+    setBowls({ inner: [], outer: [] }); // Reset bowls
+    setOptions(pageData.options); // Reset options to initial state
+    setErrorMessage(""); // Clear any error messages
+  };
 
   // Check the index and return appropriate styles
   function checkIndex(index) {
@@ -180,12 +190,17 @@ function WeekFourPage4() {
           </div>
         </div>
       </div>
-      { errorMessage && <div className="text-danger">{errorMessage}</div>}
+      <p
+        className="fs-5 d-flex justify-content-center gap-1"
+        onClick={resetDragAndDrop}
+      >
+        <Icon className="ml-3" icon="teenyicons:refresh-solid" />
+        Refresh
+      </p>
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
         <Button text="Prev" />
-        <Button text="Next"
-          customOnClick={saveUserInput}
-        />
+        <Button text="Next" customOnClick={saveUserInput} />
       </div>
     </DragDropContext>
   );

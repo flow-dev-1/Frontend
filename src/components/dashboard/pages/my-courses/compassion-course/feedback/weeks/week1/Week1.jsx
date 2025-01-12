@@ -8,12 +8,11 @@ import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
 } from "../../../../compassion-course/weeks/data";
-import { useQuery } from '@tanstack/react-query'
-import userService from "../../../../../../../../services/api/user.js"
+import { useQuery } from "@tanstack/react-query";
+import userService from "../../../../../../../../services/api/user.js";
 import { calculateResult } from "../../../utility.js";
 
-
-function Week1({enrollmentId}) {
+function Week1({ enrollmentId, setShowModal }) {
   const { pages } = getWeekContentExcludingVideos(1);
   const [activity1, activity2, activity3] = pages;
   const [activityData, setActivityData] = useState([]);
@@ -21,35 +20,39 @@ function Week1({enrollmentId}) {
 
   const [q1, q2, q3, q4, q5] = activity3.steps.slice(1);
 
-
   const { questions: assessments } = getWeekAssessment(1);
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/compassion-feedback-1",enrollmentId, 1],
+    queryKey: ["dashboard/compassion-feedback-1", enrollmentId, 1],
     queryFn: () => userService.getUserCourseData(enrollmentId, 1),
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
-    keepPreviousData: false
+    keepPreviousData: false,
   });
 
   useEffect(() => {
-    if (!data) return
+    if (!data) return;
 
-    setActivityData(data.activity?.activities)
-    setAssessmentData(data.assessment?.assessments)
+    setActivityData(data.activity?.activities);
+    setAssessmentData(data.assessment?.assessments);
 
-    return () => { }
-  }, [data])
+    return () => {};
+  }, [data]);
 
   function getActivityAnswer(activityId, itemId, index) {
     if (!itemId) {
-      return activityData?.find(activity => activity.page === activityId)?.answer
+      return activityData?.find((activity) => activity.page === activityId)
+        ?.answer;
     } else {
-      const answersList = activityData?.find(activity => activity.page === activityId)?.answer
-      const answerObject = answersList?.find(activity => activity.stepId === itemId)?.value
-      return answerObject ? answerObject[index] : ""
+      const answersList = activityData?.find(
+        (activity) => activity.page === activityId
+      )?.answer;
+      const answerObject = answersList?.find(
+        (activity) => activity.stepId === itemId
+      )?.value;
+      return answerObject ? answerObject[index] : "";
     }
   }
 
@@ -61,7 +64,8 @@ function Week1({enrollmentId}) {
     return <div>{data?.message || "Internal server error!"}</div>;
   }
 
-  const score = calculateResult(assessments, assessmentData, assessments?.length) || 0
+  const score =
+    calculateResult(assessments, assessmentData, assessments?.length) || 0;
   return (
     <>
       {/* Activity 1 */}
@@ -75,28 +79,27 @@ function Week1({enrollmentId}) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity1.id)}
-        </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <p className="fs-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
 
       {
         // Show this only id theres a feedback
-        activityData?.find(activity => activity.page === activity1.id)?.feedback &&
-        <div className="d-flex gap-3">
-          <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-            Feedback
-          </p>
-          <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-            quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-            soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-            maxime possimus itaque.
-          </p>
-          <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
-        </div>
-
+        activityData?.find((activity) => activity.page === activity1.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Consectetur quaerat consequuntur veritatis quasi provident autem,
+              sapiente id ipsa soluta dolorum accusamus, voluptates illum amet
+              magnam ullam assumenda maxime possimus itaque.
+            </p>
+            <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
+          </div>
+        )
       }
 
       <hr />
@@ -111,27 +114,27 @@ function Week1({enrollmentId}) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity2.id)}
-        </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <p className="fs-5 flex-grow-1">{getActivityAnswer(activity2.id)}</p>
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
 
       {
         // Show this only if theres a feedback
-        activityData?.find(activity => activity.page === activity2.id)?.feedback &&
-        <div className="d-flex gap-3">
-          <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-            Feedback
-          </p>
-          <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-            quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-            soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-            maxime possimus itaque.
-          </p>
-          <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
-        </div>
+        activityData?.find((activity) => activity.page === activity2.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Consectetur quaerat consequuntur veritatis quasi provident autem,
+              sapiente id ipsa soluta dolorum accusamus, voluptates illum amet
+              magnam ullam assumenda maxime possimus itaque.
+            </p>
+            <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
+          </div>
+        )
       }
 
       <hr />
@@ -152,7 +155,7 @@ function Week1({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q1.stepId, 0)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -164,7 +167,7 @@ function Week1({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
         {`${q1.questions[1].type}: ${q1.questions[1].question}`}
@@ -174,7 +177,7 @@ function Week1({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q1.stepId, 1)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -186,7 +189,7 @@ function Week1({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
         {`${q1.questions[2].type}: ${q1.questions[2].question}`}
@@ -196,7 +199,7 @@ function Week1({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q1.stepId, 2)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -208,7 +211,7 @@ function Week1({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <hr />
       <div className="d-flex gap-3">
@@ -223,7 +226,7 @@ function Week1({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q2.stepId, 0)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -235,7 +238,7 @@ function Week1({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
         {`${q2.questions[1].type}: ${q2.questions[1].question}`}
@@ -245,7 +248,7 @@ function Week1({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q2.stepId, 1)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -257,7 +260,7 @@ function Week1({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
         {`${q2.questions[2].type}: ${q2.questions[2].question}`}
@@ -267,7 +270,7 @@ function Week1({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q2.stepId, 2)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -279,7 +282,7 @@ function Week1({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <hr />
       <div className="d-flex gap-3">
@@ -294,7 +297,7 @@ function Week1({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q3.stepId, 0)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -306,7 +309,7 @@ function Week1({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
         {`${q3.questions[1].type}: ${q3.questions[1].question}`}
@@ -316,7 +319,7 @@ function Week1({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q3.stepId, 1)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -328,7 +331,7 @@ function Week1({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
         {`${q3.questions[2].type}: ${q3.questions[2].question}`}
@@ -338,7 +341,7 @@ function Week1({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q3.stepId, 2)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -350,7 +353,7 @@ function Week1({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <hr />
       <div className="d-flex gap-3">
@@ -365,7 +368,7 @@ function Week1({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q4.stepId, 0)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -377,7 +380,7 @@ function Week1({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
         {`${q4.questions[1].type}: ${q4.questions[1].question}`}
@@ -387,7 +390,7 @@ function Week1({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q4.stepId, 1)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -399,7 +402,7 @@ function Week1({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
         {`${q4.questions[2].type}: ${q4.questions[2].question}`}
@@ -409,7 +412,7 @@ function Week1({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q4.stepId, 2)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -421,7 +424,7 @@ function Week1({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <hr />
       <div className="d-flex gap-3">
@@ -436,7 +439,7 @@ function Week1({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q5.stepId, 0)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -448,7 +451,7 @@ function Week1({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
         {`${q5.questions[1].type}: ${q5.questions[1].question}`}
@@ -458,7 +461,7 @@ function Week1({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q5.stepId, 1)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -470,7 +473,7 @@ function Week1({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
         {`${q5.questions[2].type}: ${q5.questions[2].question}`}
@@ -480,7 +483,7 @@ function Week1({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q5.stepId, 2)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -492,7 +495,7 @@ function Week1({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
       <hr />
 
@@ -503,7 +506,9 @@ function Week1({enrollmentId}) {
       </p>
       <hr />
       {assessments.map(({ id, question, options, correctOption }, i) => {
-        const selectedAnswer = assessmentData?.find(answer => answer.id === id)?.value 
+        const selectedAnswer = assessmentData?.find(
+          (answer) => answer.id === id
+        )?.value;
         return (
           <>
             <div className="d-flex gap-3" key={i}>
@@ -514,9 +519,8 @@ function Week1({enrollmentId}) {
               const optionKey = Object.keys(option)[0];
               const optionText = option[optionKey];
               const isCorrectOption = correctOption === optionText;
-              const isAnswer = selectedAnswer === optionText
+              const isAnswer = selectedAnswer === optionText;
               // console.log(assessmentData,"AssessmentData")
-
 
               return (
                 <div
@@ -557,16 +561,18 @@ function Week1({enrollmentId}) {
         <h2 className="text-white fs-1">Weekly Report</h2>
         <div className="d-flex gap-4">
           <h2 className="text-gray fs-1 ratio-1x1 bg-aqua rounded-4 p-5 d-flex justify-content-center border border-6 border-blue">
-          {score}%
+            {score}%
           </h2>
           <p className="text-white">
-
-            {
-              score < 41 ? "It looks like there’s room for improvement in your understanding of compassion and NVC. Reviewing these ideas will help you gain more clarity. Also, feel free to ask questions where you need help." :
-              score < 61 ? "You’re on the right track but might need to revisit some key concepts around compassion and NVC. Keep learning and exploring!" :
-              score < 100 ? "Great job! You generally understand compassion and NVC, though there are a few areas you can explore further to deepen your knowledge.":
-              score === 100 ? "Your understanding of compassion and NVC is spot on! You’ve clearly understood the key concepts.":""
-            }
+            {score < 41
+              ? "It looks like there’s room for improvement in your understanding of compassion and NVC. Reviewing these ideas will help you gain more clarity. Also, feel free to ask questions where you need help."
+              : score < 61
+              ? "You’re on the right track but might need to revisit some key concepts around compassion and NVC. Keep learning and exploring!"
+              : score < 100
+              ? "Great job! You generally understand compassion and NVC, though there are a few areas you can explore further to deepen your knowledge."
+              : score === 100
+              ? "Your understanding of compassion and NVC is spot on! You’ve clearly understood the key concepts."
+              : ""}
           </p>
         </div>
       </div>
@@ -579,14 +585,14 @@ export default Week1;
 {
   /* <Icon
                 style={{ color: "#275DAD" }}
-                width={20}
+                width={35}
                 icon="lucide:edit"
               /> */
 }
 {
   /* <Icon
                 style={{ color: "#275DAD" }}
-                width={20}
+                width={35}
                 icon="lucide:edit"
               /> */
 }

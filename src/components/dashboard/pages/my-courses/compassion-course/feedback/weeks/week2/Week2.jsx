@@ -13,7 +13,7 @@ import { useQuery } from '@tanstack/react-query'
 import userService from "../../../../../../../../services/api/user.js"
 import { calculateResult } from "../../../utility.js";
 
-function Week2({enrollmentId}) {
+function Week2({ enrollmentId, setShowModal }) {
   const { pages } = getWeekContentExcludingVideos(2);
   const [activity1, activity2, activity3] = pages;
   const [q1, q2, q3, q4] = activity3.prompts;
@@ -24,32 +24,36 @@ function Week2({enrollmentId}) {
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/compassion-feedback-2",enrollmentId, 2],
+    queryKey: ["dashboard/compassion-feedback-2", enrollmentId, 2],
     queryFn: () => userService.getUserCourseData(enrollmentId, 2),
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
-    keepPreviousData: false
+    keepPreviousData: false,
   });
 
   useEffect(() => {
-    if (!data) return
+    if (!data) return;
 
-    setActivityData(data.activity?.activities)
-    setAssessmentData(data.assessment?.assessments)
+    setActivityData(data.activity?.activities);
+    setAssessmentData(data.assessment?.assessments);
 
-    return () => { }
-  }, [data])
-
+    return () => {};
+  }, [data]);
 
   function getActivityAnswer(activityId, itemId) {
     if (!itemId) {
-      return activityData?.find(activity => activity.page === activityId)?.answer
+      return activityData?.find((activity) => activity.page === activityId)
+        ?.answer;
     } else {
-      const answersList = activityData?.find(activity => activity.page === activityId)?.answer
+      const answersList = activityData?.find(
+        (activity) => activity.page === activityId
+      )?.answer;
 
-      const answerObject = answersList?.find(activity => activity.id === itemId)?.value 
-      return answerObject ? answerObject : ""
+      const answerObject = answersList?.find(
+        (activity) => activity.id === itemId
+      )?.value;
+      return answerObject ? answerObject : "";
     }
   }
 
@@ -61,7 +65,8 @@ function Week2({enrollmentId}) {
     return <div>{data?.message}</div>;
   }
 
-  const score = calculateResult(assessments, assessmentData, assessments?.length) || 0
+  const score =
+    calculateResult(assessments, assessmentData, assessments?.length) || 0;
 
   return (
     <>
@@ -76,27 +81,26 @@ function Week2({enrollmentId}) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity1.id)}
-        </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <p className="fs-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find(activity => activity.page === activity1.id)?.feedback &&
-        <div className="d-flex gap-3">
-          <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-            Feedback
-          </p>
-          <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-            quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-            soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-            maxime possimus itaque.
-          </p>
-          <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
-        </div>
-
+        activityData?.find((activity) => activity.page === activity1.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Consectetur quaerat consequuntur veritatis quasi provident autem,
+              sapiente id ipsa soluta dolorum accusamus, voluptates illum amet
+              magnam ullam assumenda maxime possimus itaque.
+            </p>
+            <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
+          </div>
+        )
       }
       <hr />
 
@@ -113,26 +117,26 @@ function Week2({enrollmentId}) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity2.id)}
-        </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <p className="fs-5 flex-grow-1">{getActivityAnswer(activity2.id)}</p>
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {
         // Show this only if theres a feedback
-        activityData?.find(activity => activity.page === activity2.id)?.feedback &&
-        <div className="d-flex gap-3">
-          <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-            Feedback
-          </p>
-          <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-            quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-            soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-            maxime possimus itaque.
-          </p>
-          <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
-        </div>
+        activityData?.find((activity) => activity.page === activity2.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Consectetur quaerat consequuntur veritatis quasi provident autem,
+              sapiente id ipsa soluta dolorum accusamus, voluptates illum amet
+              magnam ullam assumenda maxime possimus itaque.
+            </p>
+            <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
+          </div>
+        )
       }
       <hr />
 
@@ -151,7 +155,7 @@ function Week2({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q1.id)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>
@@ -161,7 +165,7 @@ function Week2({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
 
       <div className="d-flex gap-3">
@@ -173,7 +177,7 @@ function Week2({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q2.id)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>
@@ -183,7 +187,7 @@ function Week2({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
 
       <div className="d-flex gap-3">
@@ -195,7 +199,7 @@ function Week2({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q3.id)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>
@@ -205,7 +209,7 @@ function Week2({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
 
       <div className="d-flex gap-3">
@@ -217,7 +221,7 @@ function Week2({enrollmentId}) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q4.id)}
         </p>
-        <Icon style={{ color: "#D6D6D6" }} width={50} icon="tabler:message-2" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>
@@ -227,7 +231,7 @@ function Week2({enrollmentId}) {
           soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
           maxime possimus itaque.
         </p>
-        <Icon style={{ color: "#275DAD" }} width={40} icon="lucide:edit" />
+        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
       </div> */}
 
       <hr />
@@ -238,7 +242,9 @@ function Week2({enrollmentId}) {
       </p>
       <hr />
       {assessments.map(({ id, question, options, correctOption }, i) => {
-        const selectedAnswer = assessmentData?.find(answer => answer.id === id)?.value
+        const selectedAnswer = assessmentData?.find(
+          (answer) => answer.id === id
+        )?.value;
         return (
           <>
             <div className="d-flex gap-3" key={i}>
@@ -249,7 +255,7 @@ function Week2({enrollmentId}) {
               const optionKey = Object.keys(option)[0];
               const optionText = option[optionKey];
               const isCorrectOption = correctOption === optionText;
-              const isAnswer = selectedAnswer === optionText
+              const isAnswer = selectedAnswer === optionText;
 
               return (
                 <div
@@ -291,13 +297,15 @@ function Week2({enrollmentId}) {
             {score}%
           </h2>
           <p className="text-white">
-            {
-              score < 41 ? "It seems like you could benefit from exploring self-compassion more. Learning to treat yourself with kindness is a valuable skill that can help you in many areas of life." :
-                score < 61 ? "You're on your way! Revisiting the concepts of self-compassion will help you further develop your ability to practice kindness toward yourself." :
-                  score < 100 ? "Great work! You have a strong grasp of self-compassion, though there are a few areas where you can deepen your understanding." :
-                    score === 100 ? "Excellent! Your responses indicate a clear understanding of self-compassion and its importance. Keep being kind to yourself!" : ""
-            }
-
+            {score < 41
+              ? "It seems like you could benefit from exploring self-compassion more. Learning to treat yourself with kindness is a valuable skill that can help you in many areas of life."
+              : score < 61
+              ? "You're on your way! Revisiting the concepts of self-compassion will help you further develop your ability to practice kindness toward yourself."
+              : score < 100
+              ? "Great work! You have a strong grasp of self-compassion, though there are a few areas where you can deepen your understanding."
+              : score === 100
+              ? "Excellent! Your responses indicate a clear understanding of self-compassion and its importance. Keep being kind to yourself!"
+              : ""}
           </p>
         </div>
       </div>
