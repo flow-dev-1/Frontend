@@ -69,7 +69,6 @@ const WeekContent = () => {
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
 
-
   // Access data from location.state
   const enrolmentData = location.state?.enrollmentData; // Assuming enrollData is passed in state
 
