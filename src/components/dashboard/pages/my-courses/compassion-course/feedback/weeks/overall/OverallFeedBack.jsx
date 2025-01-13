@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import celebrate from "../../../../../../../../assets/celebrate.png";
-import FireWorks from "../../../components/FireWork";
 
 function OverallFeedBack() {
-  const [showFireWork, setShowFireWork] = useState(true);
 
   return (
     <>
-      <div className="bg-sky-blue custom-border-20 question-box-container d-flex justify-content-center align-items-center flex-column gap-3">
+      <div className="bg-compassion--feedback custom-border-20 question-box-container d-flex justify-content-center align-items-center flex-column gap-3">
         <img src={celebrate} alt="celebrate" className="text-center" />
         <h1 className="text-green" style={{ fontSize: "100px" }}>
           Hurray!
@@ -44,7 +42,6 @@ function OverallFeedBack() {
           create pen strikethrough main arrange image. Component font.
         </p>
       </div>
-      <FireWorks setFirework={setShowFireWork} />
     </>
   );
 }

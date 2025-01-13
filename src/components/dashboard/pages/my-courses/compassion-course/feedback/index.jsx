@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import logo from "../../../../../../assets/logo.png";
 import { Icon } from "@iconify/react";
 import Accordion from "./components/Accordion";
@@ -74,6 +74,7 @@ function CompassionFeedback() {
     content: week.component,
   }));
 
+
   return (
     <>
       <nav className="navbar">
@@ -132,10 +133,12 @@ function CompassionFeedback() {
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
             items={items}
+            enrollmentId={enrollmentId}
           />
         </section>
       </div>
       <Modal isOpen={showModal} setIsOpen={setShowModal} />
+
     </>
   );
 }

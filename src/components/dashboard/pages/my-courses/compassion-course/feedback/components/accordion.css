@@ -19,3 +19,9 @@
 .percent-100 {
   border: 4px solid #275dad;
 }
+
+.bg-compassion--feedback {
+  background: url("../../../../../../../assets/compassion-feedback.png")
+    no-repeat;
+  background-size: 100% 100%;
+}
