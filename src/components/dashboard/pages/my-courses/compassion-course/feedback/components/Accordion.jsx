@@ -5,7 +5,12 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { ClimbingBoxLoader } from "react-spinners";
 
-function Accordion({ activeIndex, setActiveIndex, items, enrollmentId }) {
+function Accordion({
+  activeIndex,
+  setActiveIndex,
+  items,
+  allDataLoaded,
+}) {
   const contentRef = useRef();
   const [pdfLoading, setPdfLoading] = useState(false);
 
@@ -19,7 +24,7 @@ function Accordion({ activeIndex, setActiveIndex, items, enrollmentId }) {
     setPdfLoading(true);
     setActiveIndex(null);
 
-    if (!enrollmentId) {
+    if (!allDataLoaded) {
       setActiveIndex(originalState);
       setPdfLoading(false);
       return;

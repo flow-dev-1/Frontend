@@ -8,11 +8,11 @@ import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
 } from "../../../../compassion-course/weeks/data";
-import { useQuery } from '@tanstack/react-query'
-import userService from "../../../../../../../../services/api/user.js"
+import { useQuery } from "@tanstack/react-query";
+import userService from "../../../../../../../../services/api/user.js";
 import { calculateResult } from "../../../utility.js";
 
-function Week4({ enrollmentId, setShowModal }) {
+function Week4({ enrollmentId, setShowModal, setWeekFourData }) {
   const { pages } = getWeekContentExcludingVideos(4);
   const [activity1, activity2, activity3] = pages;
   const [activityData, setActivityData] = useState([]);
@@ -35,6 +35,7 @@ function Week4({ enrollmentId, setShowModal }) {
 
     setActivityData(data.activity?.activities);
     setAssessmentData(data.assessment?.assessments);
+    setWeekFourData(true);
 
     return () => {};
   }, [data]);
@@ -93,7 +94,12 @@ function Week4({ enrollmentId, setShowModal }) {
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
         <p className="fs-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
+        <Icon
+          onClick={() => setShowModal(true)}
+          style={{ color: "#D6D6D6" }}
+          width={35}
+          icon="tabler:message-2"
+        />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -146,7 +152,12 @@ function Week4({ enrollmentId, setShowModal }) {
             </div>
           </div>
         </div>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
+        <Icon
+          onClick={() => setShowModal(true)}
+          style={{ color: "#D6D6D6" }}
+          width={35}
+          icon="tabler:message-2"
+        />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
@@ -209,7 +220,12 @@ function Week4({ enrollmentId, setShowModal }) {
             </div>
           </div>
         </div>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
+        <Icon
+          onClick={() => setShowModal(true)}
+          style={{ color: "#D6D6D6" }}
+          width={35}
+          icon="tabler:message-2"
+        />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
