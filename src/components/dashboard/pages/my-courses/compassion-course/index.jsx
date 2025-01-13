@@ -114,6 +114,7 @@ const WeekContent = () => {
     keepPreviousData: false,
   });
 
+
   useEffect(() => {
     if (!data) return;
 
@@ -129,7 +130,7 @@ const WeekContent = () => {
     } else {
       dispatch(
         updateData({
-          courseEnrollmentId: enrollmentId,
+          courseEnrollmentId:userAnswers.courseEnrollmentId,
           week: currentWeek,
           activities: userAnswers.activities,
           assessments: userAnswers.assessments,
@@ -287,7 +288,7 @@ const CourseContent = () => {
           </Link>
           <div
             className="navbar-logo"
-            onClick={""}
+            onClick={()=>{}}
             style={{ cursor: "pointer" }}
           >
             Logout

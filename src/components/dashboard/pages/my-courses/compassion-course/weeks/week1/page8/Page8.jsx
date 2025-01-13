@@ -45,10 +45,10 @@ function WeekOneAssessment() {
       toast.success(`You scored ${calculateResult(assessmentData.questions, answers, totalSteps)}% in the quiz`)
       toast.success(data.message || 'Answers saved successfully!'); // Show success toast
       dispatch(updateData({
-        courseEnrollmentId:null,
-        week:1,
-        activities:[],
-        assessments:[]
+        courseEnrollmentId: null,
+        week: 1,
+        activities: [],
+        assessments: []
       }))
       dispatch(navigateNext())
     },
@@ -94,13 +94,36 @@ function WeekOneAssessment() {
     dispatch(saveAssessment(answers));
 
     if (isLastQuestion) {
-      // Check if all answers were provided bothe for assessment and activity
-      if (answers.length !== totalSteps || userAnswers.activities.length !== 3) {
-        setErrorMessage("Oops! Something went wrong.");
-        return false
+
+      const hasUnansweredQuestions = answers.length !== totalSteps || userAnswers.activities.length !== 3;
+      if (hasUnansweredQuestions) {
+        setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+        return false;
       }
 
-      mutation.mutate({ ...userAnswers, assessments: answers });
+      const selectedActivity = userAnswers.activities.find(activity => activity.page === 6);
+      const isValidActivity = selectedActivity && Array.isArray(selectedActivity.answer) && selectedActivity.answer.length === 5;
+
+      if (isValidActivity) {
+        const isValid = selectedActivity.answer.every(item =>
+          item.stepId !== undefined &&
+          item.value &&
+          Object.keys(item.value).length === 3
+        );
+
+        if (isValid) {
+          mutation.mutate({ ...userAnswers, assessments: answers });
+        } else {
+          console.log("Selected activity does not meet the required structure.");
+          setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+          return false;
+        }
+      } else {
+        setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+        return false;
+      }
+
+
     } else {
       return true;
     }

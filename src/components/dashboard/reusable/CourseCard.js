@@ -22,8 +22,6 @@ const CourseCard = ({
 
   const isEnrolled = enrolledData?.courses?.find(enrolledCourse => enrolledCourse?.course._id === course._id) || null
 
-  console.log(isEnrolled, course._id, "Is Enrolled")
-
   const openModal = (modalType, course) => {
     setIsOpen(true)
     setModalType(modalType)

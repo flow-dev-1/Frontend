@@ -48,12 +48,12 @@ const MyCourseCard = ({ course }) => {
 
     if (course?.course.title === 'Self Awareness') {
       navigate(`/dashboard/self-awareness-course/${encryptURI(id)}`, {
-        state: { course },
+        state: { enrollmentData: course },
       })
       localStorage.setItem(`${course._id}-can-see`, true)
     } else {
       navigate(`/dashboard/${course?.course?.title}`, {
-        state: { course },
+        state: { enrollmentData: course }
       })
     }
   }

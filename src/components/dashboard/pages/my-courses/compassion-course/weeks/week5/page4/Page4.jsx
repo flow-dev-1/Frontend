@@ -98,9 +98,17 @@ function WeekFivePage4() {
       // Check if all answers were provided bothe for assessment and activity
       // toDo The posibilty to miss questions exixt so do a check
       if(answers.length !== totalSteps || userAnswers.activities.length !==1) {
-        setErrorMessage("Oops! Something went wrong.");
+        setErrorMessage("Oops! Some answers are missing. Please ensure all questions are answered.");
         return false
       } 
+
+      const hasEmptyAnswers = answers.some(answer => !answer.value);
+      const hasEmptyActivities = userAnswers.activities.some(activity => Object.keys(activity.answer).length !== 4);
+
+      if (hasEmptyAnswers || hasEmptyActivities) {
+        setErrorMessage("Oops! Some answers are missing. Please ensure all questions are answered.");
+        return false;
+      }
 
       // Submit Data
       mutation.mutate({ ...userAnswers, assessments: answers });

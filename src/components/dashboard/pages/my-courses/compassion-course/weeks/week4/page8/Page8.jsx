@@ -39,28 +39,28 @@ function WeekFourPage8() {
 
   }, [userAnswers])
 
-    // Mutation for saving user data
-    const mutation = useMutation({
-      mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
-      onSuccess: (data) => {
-  
-        toast.dismiss()
-        toast.success(`You scored ${calculateResult(assessmentData.questions, answers, totalSteps)}% in the quiz`)
-        toast.success(data.message || 'Answers saved successfully!'); // Show success toast
-        dispatch(updateData({
-          courseEnrollmentId:null,
-          week:1,
-          activities:[],
-          assessments:[]
-        }))
-        dispatch(navigateNext())
-      },
-      onError: (error) => {
-        console.log(error, "errorrrr")
-        toast.dismiss()
-        toast.error(error?.message || error?.error || 'Error saving answers'); // Show error toast
-      },
-    });
+  // Mutation for saving user data
+  const mutation = useMutation({
+    mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
+    onSuccess: (data) => {
+
+      toast.dismiss()
+      toast.success(`You scored ${calculateResult(assessmentData.questions, answers, totalSteps)}% in the quiz`)
+      toast.success(data.message || 'Answers saved successfully!'); // Show success toast
+      dispatch(updateData({
+        courseEnrollmentId: null,
+        week: 1,
+        activities: [],
+        assessments: []
+      }))
+      dispatch(navigateNext())
+    },
+    onError: (error) => {
+      console.log(error, "errorrrr")
+      toast.dismiss()
+      toast.error(error?.message || error?.error || 'Error saving answers'); // Show error toast
+    },
+  });
 
   const handleOptionSelect = (optionKey) => {
     setErrorMessage("")
@@ -93,21 +93,29 @@ function WeekFourPage8() {
 
     setErrorMessage(""); // Clear error if input is valid
     // If its the last question submit else update answer
-    dispatch(saveAssessment(answers)); 
+    dispatch(saveAssessment(answers));
 
-    if(isLastQuestion){
+    if (isLastQuestion) {
       // Check if all answers were provided bothe for assessment and activity
-      if(answers.length !== totalSteps || userAnswers.activities.length !== 3) {
-        setErrorMessage("Oops! Something went wrong.");
-        return false
-      } 
+      if (answers.length !== totalSteps || userAnswers.activities.length !== 3) {
+        setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+        return false;
+        
+      }
+      const selectedActivity = userAnswers.activities.find(activity => activity.page === 6);
+      const answer = selectedActivity?.answer;
+      const totalLength = (answer?.green?.length || 0) + (answer?.orange?.length || 0) + (answer?.red?.length || 0);
+      if (totalLength !== 10) {
+        setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+        return false;
+      }
       // Submit Data
       mutation.mutate({ ...userAnswers, assessments: answers });
 
     } else {
       return true;
     }
-    
+
   };
 
 
@@ -128,7 +136,7 @@ function WeekFourPage8() {
           options: formattedOptions,
         }}
         currentStep={currentStep}
-        selectedOption={answers[currentStep-1]?.value || ""}
+        selectedOption={answers[currentStep - 1]?.value || ""}
         onOptionSelect={handleOptionSelect}
       />
     );

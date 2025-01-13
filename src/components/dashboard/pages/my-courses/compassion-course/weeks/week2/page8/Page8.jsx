@@ -89,14 +89,35 @@ function WeekTwoPage8() {
     dispatch(saveAssessment(answers));
 
     if (isLastQuestion) {
-      // Check if all answers were provided bothe for assessment and activity
-      if (answers.length !== totalSteps || userAnswers.activities.length < 3) {
-        setErrorMessage("Oops! Something went wrong.");
-        return false
+
+
+      const hasUnansweredQuestions = answers.length !== totalSteps || userAnswers.activities.length !== 3;
+      if (hasUnansweredQuestions) {
+        setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+        return false;
       }
 
-      // Submit Data
-      mutation.mutate({ ...userAnswers, assessments: answers });
+      const selectedActivity = userAnswers.activities.find(activity => activity.page === 6);
+      const isValidActivity = selectedActivity && Array.isArray(selectedActivity.answer) && selectedActivity.answer.length === 4;
+
+      if (isValidActivity) {
+
+        const isValid = selectedActivity.answer.every(item =>
+          item.id !== undefined && // Ensure item.id is defined
+          typeof item.value === 'string' && item.value !== '' && item.value !== undefined // Ensure item.value is a string and not empty or undefined
+        );
+
+        if (isValid) {
+          // Submit Data
+          mutation.mutate({ ...userAnswers, assessments: answers });
+        } else {
+          setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+          return false;
+        }
+      } else {
+        setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+        return false;
+      }
 
     } else {
       return true;

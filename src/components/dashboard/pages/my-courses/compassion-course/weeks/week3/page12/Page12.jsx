@@ -96,11 +96,9 @@ function WeekThreePage12() {
     if(isLastQuestion){
       // Check if all answers were provided bothe for assessment and activity
       if(answers.length !== totalSteps || userAnswers.activities.length < 3) {
-        setErrorMessage("Oops! Something went wrong.");
+        setErrorMessage("Oops! Some answers are missing. Please ensure all questions are answered.");
         return false
       } 
-
-      console.log(userAnswers,"User Answer")
 
       // Submit Data
       mutation.mutate({ ...userAnswers, assessments: answers });
