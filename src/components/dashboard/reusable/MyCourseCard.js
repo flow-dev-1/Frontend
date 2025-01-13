@@ -38,7 +38,6 @@ const MyCourseCard = ({ course }) => {
 
 
     if (course?.progress === 100) {
-      console.log("yeahh")
       openModal('feedback')
     } else if (course?.schoolCourseEnrollment?.status === "Deactivated") {
       return toast.info("Course Deavtivated! Please contact admin for support.")

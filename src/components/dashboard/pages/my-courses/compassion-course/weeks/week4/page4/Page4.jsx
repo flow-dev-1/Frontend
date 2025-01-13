@@ -193,6 +193,7 @@ function WeekFourPage4() {
       <p
         className="fs-5 d-flex justify-content-center gap-1"
         onClick={resetDragAndDrop}
+        style={{ cursor: 'pointer' }} // Added cursor pointer
       >
         <Icon className="ml-3" icon="teenyicons:refresh-solid" />
         Refresh
