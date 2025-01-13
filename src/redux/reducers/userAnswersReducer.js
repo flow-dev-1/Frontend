@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const userAnswerSlice = createSlice({
   name: 'userAnswer',
   initialState: {
+    course:null,
     courseEnrollmentId: null,
     week: 1,
     activities: [],
@@ -11,9 +12,10 @@ const userAnswerSlice = createSlice({
   },
   reducers: {
     updateData: (state, action) => {
-      const { courseEnrollmentId, week, activities, assessments } = action.payload;
+      const {course, courseEnrollmentId, week, activities, assessments } = action.payload;
       return {
         ...state,
+        course,
         courseEnrollmentId,
         week,
         activities,
@@ -34,6 +36,7 @@ const userAnswerSlice = createSlice({
       }
     },
     clearData: (state) => {
+      state.course = null;
       state.courseEnrollmentId = null;
       state.week = null;
       state.activities = [];

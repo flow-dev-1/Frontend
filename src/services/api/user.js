@@ -307,6 +307,16 @@ class UserOBJ {
     }
   }
 
+  submitUserCourseReaction = async (courseId,reaction) => {
+
+    try {
+      const response = await api.put(`api/users/courses/${courseId}/reaction?reaction=${reaction}`)
+      // console.log(response.data);
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message;
+    }
+  }
   getUserCourseData = async (params1, week) => {
     try {
       const response = await api.get(

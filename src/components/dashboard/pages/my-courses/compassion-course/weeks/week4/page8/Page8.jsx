@@ -48,6 +48,7 @@ function WeekFourPage8() {
       toast.success(`You scored ${calculateResult(assessmentData.questions, answers, totalSteps)}% in the quiz`)
       toast.success(data.message || 'Answers saved successfully!'); // Show success toast
       dispatch(updateData({
+        course:null,
         courseEnrollmentId: null,
         week: 1,
         activities: [],

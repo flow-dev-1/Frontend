@@ -70,14 +70,15 @@ const WeekContent = () => {
   const userAnswers = useSelector(userAnswer);
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
+  const [course, setCourse] = useState(null);
 
   // Access data from location.state
   const enrolmentData = location.state?.enrollmentData; // Assuming enrollData is passed in state
-
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
     if (!enrolmentData) return;
     setEnrollmentId(enrolmentData._id);
+    setCourse(enrolmentData?.course?._id)
   }, []);
 
   useEffect(() => {
@@ -121,6 +122,7 @@ const WeekContent = () => {
     if (data.assessment && data.activity) {
       dispatch(
         updateData({
+          course:course,
           courseEnrollmentId: enrollmentId,
           week: currentWeek,
           activities: data.activity?.activities,
@@ -130,6 +132,7 @@ const WeekContent = () => {
     } else {
       dispatch(
         updateData({
+          course:course,
           courseEnrollmentId:userAnswers.courseEnrollmentId,
           week: currentWeek,
           activities: userAnswers.activities,

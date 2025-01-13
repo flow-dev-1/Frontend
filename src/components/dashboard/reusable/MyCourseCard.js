@@ -22,8 +22,8 @@ const MyCourseCard = ({ course }) => {
   }
 
   const likesPercent = (likes, courseEnrollment) => {
-    if (likes === 0) return 0
-    return (likes / courseEnrollment) * 100
+    if (likes === 0) return 0.0
+    return ((likes / courseEnrollment) * 100).toFixed(1)
   }
 
   const truncateText = (text, maxLength) => {

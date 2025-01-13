@@ -35,6 +35,7 @@ export default function Dashboard() {
     dispatch(logoutSuccess())
     dispatch(clearToken())
     dispatch(updateData({
+      course:null,
       courseEnrollmentId:null,
       week:1,
       activities:[],

@@ -45,12 +45,13 @@ function WeekFivePage4() {
         toast.dismiss()
         toast.success(`You scored ${calculateResult(assessmentData.questions, answers, totalSteps)}% in the quiz`)
         toast.success(data.message || 'Answers saved successfully!'); // Show success toast
-        dispatch(updateData({
-          courseEnrollmentId:null,
-          week:1,
-          activities:[],
-          assessments:[]
-        }))
+        // dispatch(updateData({
+        //   course:null,
+        //   courseEnrollmentId:null,
+        //   week:1,
+        //   activities:[],
+        //   assessments:[]
+        // }))
         dispatch(navigateNext())
       },
       onError: (error) => {
