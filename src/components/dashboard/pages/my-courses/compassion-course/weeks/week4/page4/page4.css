@@ -1,13 +1,16 @@
-/* which color name is this close to #08bcc4 */
 
 .options {
   padding: 10px 25px;
   border-radius: 5px;
+  flex-basis: 30%;
+  text-wrap: nowrap;
   /* flex: 1 1 calc(33.33% - 20px); */
 }
 
-.flex-basis {
-  flex-basis: 500px;
+.drag-flex-basis {
+  /* flex-grow: 1; */
+  flex-basis: 50%;
+
 }
 
 .inner-count,
@@ -92,4 +95,8 @@
   min-height: 20px; /* Ensure a minimum height */
   width: 100%; /* Ensure full width */
   position: relative; /* Maintain position */
+}
+
+.bg-drag-blue{
+  background: #329BD6;
 }

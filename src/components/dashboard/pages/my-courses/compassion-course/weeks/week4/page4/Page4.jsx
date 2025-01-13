@@ -53,10 +53,11 @@ function WeekFourPage4() {
       const newOptions = Array.from(options);
       newOptions.splice(source.index, 1);
 
+      // Ensure the destination bowl exists and is an array
       const newBowls = {
         ...bowls,
         [destination.droppableId]: [
-          ...bowls[destination.droppableId],
+          ...(bowls[destination.droppableId] || []), // Default to empty array if undefined
           draggedIndex,
         ],
       };
@@ -97,7 +98,7 @@ function WeekFourPage4() {
   // Check the index and return appropriate styles
   function checkIndex(index) {
     if (index === 2 || index === 5 || index === 8 || index === 11) {
-      return "text-white bg-blue options";
+      return "text-white bg-drag-blue options";
     }
     return "text-blue bg-sky-blue options";
   }
@@ -105,11 +106,11 @@ function WeekFourPage4() {
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
       <div>
-        <div className="custom-border-20 question-box-container d-flex w-1020px">
+        <div className="custom-border-20 question-box-container d-flex">
           <Droppable droppableId="options">
             {(provided) => (
               <div
-                className="p-5 d-flex gap-3 align-items-baseline flex-wrap flex-basis"
+                className="p-5 d-flex gap-3 align-items-baseline flex-wrap drag-flex-basis"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
@@ -124,7 +125,7 @@ function WeekFourPage4() {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className={`${checkIndex(index + 1)} ${
+                        className={`fs-1 ${checkIndex(index + 1)} ${
                           snapshot.isDragging ? "dragging" : ""
                         }`}
                         style={{
@@ -142,7 +143,7 @@ function WeekFourPage4() {
             )}
           </Droppable>
           <div className="col bg-blue">
-            <div className="d-flex align-items-start mb-2">
+            <div className="d-flex align-items-start mb-5">
               <img src={ArrowTrail} alt="arrow trail" />
               <div className="text-center text-white pt-2">
                 <h1>{pageData.instruction}</h1>
@@ -172,7 +173,8 @@ function WeekFourPage4() {
                           bowl.id === "inner" ? "inner-count" : "outer-count"
                         }
                       >
-                        {bowls[bowl.id].length}
+                        {bowls[bowl.id] ? bowls[bowl.id].length : 0}{" "}
+                        {/* Added check */}
                       </h2>
                       <div
                         className={
@@ -191,7 +193,8 @@ function WeekFourPage4() {
         </div>
       </div>
       <p
-        className="fs-5 d-flex justify-content-center gap-1"
+        style={{cursor: "pointer"}}
+        className="fs-5 d-flex justify-content-center gap-3 align-items-center mt-3 fs-2"
         onClick={resetDragAndDrop}
       >
         <Icon className="ml-3" icon="teenyicons:refresh-solid" />
