@@ -41,7 +41,6 @@ function WeekThreePage4() {
     //   return false;
     // }
 
-    console.log(selectedOption,"Selected option")
     if (!selectedOption) {
       setErrorMessage("Please make sure to select an option.");
       return false

@@ -118,7 +118,7 @@ function App() {
 
           {/*   Dashboard Routes */}
           <Route
-            path="/dashboard/compassion/"
+            path="/dashboard/compassion"
             element={
               <ProtectedRoute>
                 <CompassionCourse />
@@ -133,41 +133,39 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+        </Route>
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<IndividualOverview />} />
+          <Route path="/dashboard/profile" element={<IndividualProfile />} />
+          <Route path="/dashboard/support" element={<Support />} />
           <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<IndividualOverview />} />
-            <Route path="/dashboard/profile" element={<IndividualProfile />} />/dashboard/my-courses
-            <Route path="/dashboard/support" element={<Support />} />
-            <Route
-              path="/dashboard/feedback/self-awareness"
-              element={<SelfAwarenessFeedback />}
-            />
-            <Route
-              path="/dashboard/payment-history"
-              element={<PayementHistory />}
-            />
-            <Route path="/dashboard/my-courses" element={<MyCourses />} />
-            {/* <Route
-              path="/dashboard/my-courses/:id"
-              element={<SingleCoursePage />}
-            /> */}
+            path="/dashboard/feedback/self-awareness"
+            element={<SelfAwarenessFeedback />}
+          />
+          <Route
+            path="/dashboard/payment-history"
+            element={<PayementHistory />}
+          />
+          <Route path="/dashboard/my-courses" element={<MyCourses />} />
 
-            <Route
-              path="/dashboard/self-awareness-course/:id"
-              element={<SelfAwarenessCourse />}
-            />
+          <Route
+            path="/dashboard/self-awareness-course/:id"
+            element={<SelfAwarenessCourse />}
+          />
 
-            <Route
-              path="/dashboard/enrollment/confirm"
-              element={<ConfirmPayment />}
-            />
-          </Route>
+          <Route
+            path="/dashboard/enrollment/confirm"
+            element={<ConfirmPayment />}
+          />
         </Route>
 
         <Route

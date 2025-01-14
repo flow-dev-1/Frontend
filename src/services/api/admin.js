@@ -22,10 +22,15 @@ class AdminOBJ {
     }
   }
   //Get My profile
-  getMyProfile = async () => {
+  getMyProfile = async (token) => {
     try {
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      };
       // Check if data is not empty
-      const response = await api.get(`api/admins/me`)
+      const response = await api.get(`api/admins/me`, config)
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message

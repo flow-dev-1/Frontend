@@ -35,6 +35,7 @@ function WeekTwoPage2() {
     setErrorMessage(""); // Clear error if input is valid
     // Allow flow admin to proceed without input but do not dispatch answer
     if (adminDatas.isAdmin) return true
+    
     dispatch(saveActivity({
       page: pageData.id,
       answer: myAnswer

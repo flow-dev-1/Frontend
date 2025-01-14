@@ -11,6 +11,7 @@ import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import userService from "../../../../../../../../services/api/user";
 import { calculateResult } from "../../../utility";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
 function WeekTwoPage8() {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ function WeekTwoPage8() {
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const userAnswers = useSelector(userAnswer);
   const isLastQuestion = currentStep === assessmentData.totalQuestions;
+  const adminDatas = useSelector(adminData);
 
   useEffect(() => {
 
@@ -78,6 +80,7 @@ function WeekTwoPage8() {
   };
 
   const saveUserData = () => {
+    if (adminDatas.isAdmin) return true
     const stepData = answers.find(item => item.id === currentStep);
     if (!stepData) {
       setErrorMessage("Oops! Please choose an option to proceed.");
@@ -90,8 +93,6 @@ function WeekTwoPage8() {
     dispatch(saveAssessment(answers));
 
     if (isLastQuestion) {
-
-
       const hasUnansweredQuestions = answers.length !== totalSteps || userAnswers.activities.length !== 3;
       if (hasUnansweredQuestions) {
         setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");

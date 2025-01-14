@@ -5,6 +5,7 @@ import Button from "../../../components/Button";
 import QuestionBox from "../../../components/QuestionBox";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
 
 function WeekThreePage8() {
@@ -12,6 +13,7 @@ function WeekThreePage8() {
   const dispatch = useDispatch()
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const adminDatas = useSelector(adminData);
 
   const userAnswers = useSelector(userAnswer);
 
@@ -26,7 +28,7 @@ function WeekThreePage8() {
   }, [userAnswers])
 
   const saveUserInput = () => {
-
+    if (adminDatas.isAdmin) return true
     if (answers.length < 5) {
       setErrorMessage("At least 5 values are required!");
       return false;

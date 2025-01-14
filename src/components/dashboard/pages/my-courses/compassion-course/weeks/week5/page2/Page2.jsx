@@ -60,6 +60,7 @@ function WeekFivePage2() {
     //   setErrorMessage("Oops! Please enter a valid input!");
     //   return false;
     // }
+    if (adminDatas.isAdmin) return true
     if ([2, 4, 6, 8].includes(currentStep)) {
       const currentSelectedOption = selectedOption.find(option => option.id === currentStep - 1);
       if (!currentSelectedOption || !currentSelectedOption.value) {

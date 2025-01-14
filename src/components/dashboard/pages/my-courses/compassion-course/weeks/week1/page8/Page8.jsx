@@ -16,6 +16,7 @@ import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import userService from "../../../../../../../../services/api/user";
 import { calculateResult } from "../../../utility";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
 function WeekOneAssessment() {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ function WeekOneAssessment() {
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const userAnswers = useSelector(userAnswer);
   const isLastQuestion = currentStep === assessmentData.totalQuestions;
+  const adminDatas = useSelector(adminData);
 
   useEffect(() => {
 
@@ -45,7 +47,7 @@ function WeekOneAssessment() {
       toast.success(`You scored ${calculateResult(assessmentData.questions, answers, totalSteps)}% in the quiz`)
       toast.success(data.message || 'Answers saved successfully!'); // Show success toast
       dispatch(updateData({
-        course:null,
+        course: null,
         courseEnrollmentId: null,
         week: 1,
         activities: [],
@@ -83,6 +85,7 @@ function WeekOneAssessment() {
   };
 
   const saveUserData = () => {
+    if (adminDatas.isAdmin) return true
     const stepData = answers.find(item => item.id === currentStep);
     if (!stepData) {
       setErrorMessage("Oops! Please choose an option to proceed.");
@@ -115,7 +118,7 @@ function WeekOneAssessment() {
         if (isValid) {
           mutation.mutate({ ...userAnswers, assessments: answers });
         } else {
-          console.log("Selected activity does not meet the required structure.");
+
           setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
           return false;
         }

@@ -16,6 +16,7 @@ import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import userService from "../../../../../../../../services/api/user";
 import { calculateResult } from "../../../utility";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
 function WeekThreePage12() {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ function WeekThreePage12() {
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const userAnswers = useSelector(userAnswer);
   const isLastQuestion = currentStep === assessmentData.totalQuestions;
+  const adminDatas = useSelector(adminData);
 
   useEffect(() => {
 
@@ -61,6 +63,7 @@ function WeekThreePage12() {
     });
 
   const handleOptionSelect = (optionKey) => {
+
     setErrorMessage("")
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
@@ -83,6 +86,7 @@ function WeekThreePage12() {
   };
 
   const saveUserData = () => {
+    if (adminDatas.isAdmin) return true
     const stepData = answers.find(item => item.id === currentStep);
     if (!stepData) {
       setErrorMessage("Oops! Please choose an option to proceed.");

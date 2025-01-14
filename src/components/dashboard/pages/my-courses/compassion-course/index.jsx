@@ -64,20 +64,24 @@ import {
   updateData,
   userAnswer,
 } from "../../../../../redux/reducers/userAnswersReducer.js";
+import { adminData } from "../../../../../redux/reducers/adminReducer.js";
 
 const WeekContent = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const userAnswers = useSelector(userAnswer);
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
   const [course, setCourse] = useState(null);
+  const isAdmin = useSelector(adminData);
 
   // Access data from location.state
   const enrolmentData = location.state?.enrollmentData; // Assuming enrollData is passed in state
+
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
-    if (!enrolmentData) return;
-    setEnrollmentId(enrolmentData._id);
+    if (!enrolmentData && !isAdmin) return navigate("/sign-in");
+    setEnrollmentId(enrolmentData?._id);
     setCourse(enrolmentData?.course?._id)
   }, []);
 
@@ -97,7 +101,7 @@ const WeekContent = () => {
     dispatch(setCurrentPage(currentPage));
     dispatch(setCurrentStep(currentStep));
 
-    return () => {};
+    return () => { };
   }, [dispatch]); // Added dispatch to dependency array
 
   const currentWeek = useSelector(selectCurrentWeek);
@@ -122,7 +126,7 @@ const WeekContent = () => {
     if (data.assessment && data.activity) {
       dispatch(
         updateData({
-          course:course,
+          course: course,
           courseEnrollmentId: enrollmentId,
           week: currentWeek,
           activities: data.activity?.activities,
@@ -132,8 +136,8 @@ const WeekContent = () => {
     } else {
       dispatch(
         updateData({
-          course:course,
-          courseEnrollmentId:userAnswers.courseEnrollmentId,
+          course: course,
+          courseEnrollmentId: userAnswers.courseEnrollmentId,
           week: currentWeek,
           activities: userAnswers.activities,
           assessments: userAnswers.assessments,
@@ -141,7 +145,7 @@ const WeekContent = () => {
       );
     }
 
-    return () => {};
+    return () => { };
   }, [data]);
 
   // If showing hurray, render that instead
@@ -271,7 +275,6 @@ const WeekContent = () => {
 };
 
 const CourseContent = () => {
-  const navigate = useNavigate();
   const currentWeek = useSelector(selectCurrentWeek);
 
   const weeksTopic = [
@@ -291,7 +294,7 @@ const CourseContent = () => {
           </Link>
           <div
             className="navbar-logo"
-            onClick={()=>{}}
+            onClick={() => { }}
             style={{ cursor: "pointer" }}
           >
             Logout

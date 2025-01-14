@@ -15,6 +15,7 @@ const ConfirmPayment = () => {
   const queryClient = useQueryClient() // Initialize the queryClient
   const urlParams = new URLSearchParams(window.location.search)
   const reference = urlParams.get('reference')
+  
   const mutation = useMutation({
     mutationFn: () => userService.validatePayment(token, reference),
     onSuccess: (data) => {

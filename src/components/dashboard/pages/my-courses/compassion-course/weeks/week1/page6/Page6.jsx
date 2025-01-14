@@ -9,6 +9,7 @@ import {
 } from "../../../../../../../../redux/reducers/navigationSlice";
 import StepIndicator from "../../../components/StepIndicator";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
 
 function Page6() {
@@ -20,6 +21,7 @@ function Page6() {
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
+  const adminDatas = useSelector(adminData);
   // console.log(userAnswers)
 
   useEffect(() => {
@@ -33,6 +35,7 @@ function Page6() {
 
   const saveUserInput = () => {
     if (currentStep === 1) return true;
+    if (adminDatas.isAdmin) return true
 
     const stepData = answers.find(item => item.stepId === currentStep);
     if (!stepData) {

@@ -9,13 +9,14 @@ import QuestionBox from "../../../components/QuestionBox";
 import Button from "../../../components/Button";
 import { selectPageData, selectCurrentStep } from "../../../../../../../../redux/reducers/navigationSlice";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
 function WeekTwoPage6() {
   const dispatch = useDispatch()
   const pageData = useSelector(selectPageData);
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
-
+  const adminDatas = useSelector(adminData);
   const userAnswers = useSelector(userAnswer);
 
   useEffect(() => {
@@ -29,7 +30,7 @@ function WeekTwoPage6() {
   }, [userAnswers])
 
   const saveUserInput = () => {
-
+    if (adminDatas.isAdmin) return true
     if (answers.length < 4) {
       setErrorMessage("At least 4 values are required!");
       return false;
