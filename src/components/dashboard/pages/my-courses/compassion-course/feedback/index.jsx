@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import logo from "../../../../../../assets/logo.png";
 import { Icon } from "@iconify/react";
 import Accordion from "./components/Accordion";
@@ -14,9 +14,27 @@ import Modal from "./components/Modal";
 function CompassionFeedback() {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
-  const [activeIndex, setActiveIndex] = useState(null);
+  const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
+
+  // this might be bad practice but i dont have a choice
+  // states to check a certain week data has been loaded
+  const [isWeekOneLoaded, setWeekOneData] = useState(false);
+  const [isWeekTwoLoaded, setWeekTwoData] = useState(false);
+  const [isWeekThreeLoaded, setWeekThreeData] = useState(false);
+  const [isWeekFourLoaded, setWeekFourData] = useState(false);
+  const [isWeekFiveLoaded, setWeekFiveData] = useState(false);
+
+  //check if evrything has been loaded
+  const [allDataLoaded, _] = useState(
+    () =>
+      isWeekOneLoaded &&
+      isWeekTwoLoaded &&
+      isWeekThreeLoaded &&
+      isWeekFourLoaded &&
+      isWeekFiveLoaded
+  );
 
   const currentWeek = activeIndex + 1;
 
@@ -35,31 +53,51 @@ function CompassionFeedback() {
     {
       topic: "Introduction to Compassion",
       component: (
-        <Week1 enrollmentId={enrollmentId} setShowModal={setShowModal} />
+        <Week1
+          enrollmentId={enrollmentId}
+          setShowModal={setShowModal}
+          setWeekOneData={setWeekOneData}
+        />
       ),
     },
     {
       topic: "Self-Compassion",
       component: (
-        <Week2 enrollmentId={enrollmentId} setShowModal={setShowModal} />
+        <Week2
+          enrollmentId={enrollmentId}
+          setShowModal={setShowModal}
+          setWeekTwoData={setWeekTwoData}
+        />
       ),
     },
     {
       topic: "Compassion to Others",
       component: (
-        <Week3 enrollmentId={enrollmentId} setShowModal={setShowModal} />
+        <Week3
+          enrollmentId={enrollmentId}
+          setShowModal={setShowModal}
+          setWeekThreeData={setWeekThreeData}
+        />
       ),
     },
     {
       topic: "Circle of Concern",
       component: (
-        <Week4 enrollmentId={enrollmentId} setShowModal={setShowModal} />
+        <Week4
+          enrollmentId={enrollmentId}
+          setShowModal={setShowModal}
+          setWeekFourData={setWeekFourData}
+        />
       ),
     },
     {
       topic: "Life Scenarios - Let’s wear the shoes of others",
       component: (
-        <Week5 enrollmentId={enrollmentId} setShowModal={setShowModal} />
+        <Week5
+          enrollmentId={enrollmentId}
+          setShowModal={setShowModal}
+          setWeekFiveData={setWeekFiveData}
+        />
       ),
     },
     {
@@ -132,6 +170,7 @@ function CompassionFeedback() {
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
             items={items}
+            allDataLoaded={allDataLoaded}
           />
         </section>
       </div>

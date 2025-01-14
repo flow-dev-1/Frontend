@@ -9,11 +9,11 @@ import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
 } from "../../../../compassion-course/weeks/data";
-import { useQuery } from '@tanstack/react-query'
-import userService from "../../../../../../../../services/api/user.js"
+import { useQuery } from "@tanstack/react-query";
+import userService from "../../../../../../../../services/api/user.js";
 import { calculateResult } from "../../../utility.js";
 
-function Week2({ enrollmentId, setShowModal }) {
+function Week2({ enrollmentId, setShowModal, setWeekTwoData }) {
   const { pages } = getWeekContentExcludingVideos(2);
   const [activity1, activity2, activity3] = pages;
   const [q1, q2, q3, q4] = activity3.prompts;
@@ -37,6 +37,7 @@ function Week2({ enrollmentId, setShowModal }) {
 
     setActivityData(data.activity?.activities);
     setAssessmentData(data.assessment?.assessments);
+    setWeekTwoData(true);
 
     return () => {};
   }, [data]);
@@ -82,7 +83,12 @@ function Week2({ enrollmentId, setShowModal }) {
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
         <p className="fs-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
+        <Icon
+          onClick={() => setShowModal(true)}
+          style={{ color: "#D6D6D6" }}
+          width={35}
+          icon="tabler:message-2"
+        />
       </div>
       {
         // Show this only id theres a feedback
@@ -98,7 +104,12 @@ function Week2({ enrollmentId, setShowModal }) {
               sapiente id ipsa soluta dolorum accusamus, voluptates illum amet
               magnam ullam assumenda maxime possimus itaque.
             </p>
-            <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
+            <Icon
+              onClick={() => setShowModal(true)}
+              style={{ color: "#275DAD" }}
+              width={35}
+              icon="lucide:edit"
+            />
           </div>
         )
       }
@@ -118,7 +129,12 @@ function Week2({ enrollmentId, setShowModal }) {
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
         <p className="fs-5 flex-grow-1">{getActivityAnswer(activity2.id)}</p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
+        <Icon
+          onClick={() => setShowModal(true)}
+          style={{ color: "#D6D6D6" }}
+          width={35}
+          icon="tabler:message-2"
+        />
       </div>
       {
         // Show this only if theres a feedback
@@ -134,7 +150,12 @@ function Week2({ enrollmentId, setShowModal }) {
               sapiente id ipsa soluta dolorum accusamus, voluptates illum amet
               magnam ullam assumenda maxime possimus itaque.
             </p>
-            <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
+            <Icon
+              onClick={() => setShowModal(true)}
+              style={{ color: "#275DAD" }}
+              width={35}
+              icon="lucide:edit"
+            />
           </div>
         )
       }
@@ -155,7 +176,12 @@ function Week2({ enrollmentId, setShowModal }) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q1.id)}
         </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
+        <Icon
+          onClick={() => setShowModal(true)}
+          style={{ color: "#D6D6D6" }}
+          width={35}
+          icon="tabler:message-2"
+        />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>
@@ -177,7 +203,12 @@ function Week2({ enrollmentId, setShowModal }) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q2.id)}
         </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
+        <Icon
+          onClick={() => setShowModal(true)}
+          style={{ color: "#D6D6D6" }}
+          width={35}
+          icon="tabler:message-2"
+        />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>
@@ -199,7 +230,12 @@ function Week2({ enrollmentId, setShowModal }) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q3.id)}
         </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
+        <Icon
+          onClick={() => setShowModal(true)}
+          style={{ color: "#D6D6D6" }}
+          width={35}
+          icon="tabler:message-2"
+        />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>
@@ -221,7 +257,12 @@ function Week2({ enrollmentId, setShowModal }) {
         <p className="fs-5 flex-grow-1">
           {getActivityAnswer(activity3.id, q4.id)}
         </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" />
+        <Icon
+          onClick={() => setShowModal(true)}
+          style={{ color: "#D6D6D6" }}
+          width={35}
+          icon="tabler:message-2"
+        />
       </div>
       {/* <div className="d-flex gap-3">
         <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>

@@ -1,60 +1,140 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import "./accordion.css";
 import { Icon } from "@iconify/react";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import { ClimbingBoxLoader } from "react-spinners";
 
-function Accordion({ activeIndex, setActiveIndex, items }) {
+function Accordion({
+  activeIndex,
+  setActiveIndex,
+  items,
+  allDataLoaded,
+}) {
+  const contentRef = useRef();
+  const [pdfLoading, setPdfLoading] = useState(false);
+
   const handleToggle = (index) => {
     window.scroll(0, 0);
-    setActiveIndex(activeIndex === index ? null : index);
+    setActiveIndex(activeIndex === index ? "" : index);
+  };
+
+  const generatePDF = async () => {
+    const originalState = activeIndex;
+    setPdfLoading(true);
+    setActiveIndex(null);
+
+    if (!allDataLoaded) {
+      setActiveIndex(originalState);
+      setPdfLoading(false);
+      return;
+    }
+
+    setTimeout(() => {
+      const input = contentRef.current;
+
+      html2canvas(input).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "mm", "a4");
+        const imgWidth = 210;
+        const pageHeight = 295;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 0;
+
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+
+        pdf.save("CompassionFeedback.pdf");
+        setActiveIndex(originalState);
+        setPdfLoading(false);
+      });
+    }, 1000);
   };
 
   return (
-    <div className="accordion">
-      <h2 className="accordion-header p-4 fs-1 bg-blue text-center text-white">
-        Feedback for Compassion
-      </h2>
-
-      {items.map((item, index) => (
-        <div key={index} className="accordion-item">
-          <div
-            style={{ cursor: "pointer" }}
-            className={
-              index > 4
-                ? "bg-blue-feedback  py-4 px-5 d-flex gap-3 align-items-center justify-space-between"
-                : "py-4 px-5 d-flex gap-3 align-items-center justify-space-between"
-            }
-            onClick={() => handleToggle(index)}
-          >
-            <div className="d-flex align-items-center gap-3 flex-grow-1">
-              {index < 5 ? (
-                <h2 className="text-gray fs-1">Week {index + 1}:</h2>
-              ) : (
-                <h2 className="text-gray fs-1">FInal Report:</h2>
-              )}
-              <div className="fs-4 text-gray">{item.title}</div>
-              {index === 5 && (
-                <p className="text-blue fs-4">
-                  (Download PDF) <Icon icon="bi:download" />
-                </p>
-              )}
-            </div>
-            <Icon
-              icon={
-                activeIndex === index
-                  ? "simple-line-icons:arrow-up"
-                  : "simple-line-icons:arrow-down"
-              }
-              style={{ cursor: "pointer" }}
-            />
-          </div>
-          {activeIndex === index && (
-            <div className="accordion-content">
-              <p>{item.content}</p>
-            </div>
-          )}
+    <>
+      {pdfLoading && ( // SHOW LOADER WHEN PDF IS LOADING
+        <div className="loader-overlay">
+          <ClimbingBoxLoader color="#275DAD" />
         </div>
-      ))}
-    </div>
+      )}
+      <div className="accordion" ref={contentRef}>
+        <h2 className="accordion-header p-4 fs-1 bg-blue text-center text-white">
+          Feedback for Compassion
+        </h2>
+
+        {items.map((item, index) => (
+          <div key={index} className="accordion-item">
+            <div
+              className={
+                index > 4
+                  ? "bg-blue-feedback  py-4 px-5 d-flex gap-3 align-items-center justify-space-between"
+                  : "py-4 px-5 d-flex gap-3 align-items-center justify-space-between"
+              }
+            >
+              <div className="d-flex align-items-center gap-3 flex-grow-1">
+                {index < 5 ? (
+                  <h2
+                    className="text-gray fs-1"
+                    onClick={() => handleToggle(index)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Week {index + 1}:
+                  </h2>
+                ) : (
+                  <h2
+                    className="text-gray fs-1"
+                    onClick={() => handleToggle(index)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Final Report:
+                  </h2>
+                )}
+                <div
+                  className="fs-4 text-gray "
+                  onClick={() => handleToggle(index)}
+                  style={{ cursor: "pointer" }}
+                >
+                  {item.title}
+                </div>
+                {index === 5 && (
+                  <p
+                    className="text-blue fs-4"
+                    style={{ zIndex: 100, cursor: "pointer" }}
+                    onClick={generatePDF}
+                  >
+                    {pdfLoading ? "Generating PDF..." : "(Download PDF)"}{" "}
+                    <Icon icon="bi:download" />
+                  </p>
+                )}
+              </div>
+              <Icon
+                onClick={() => handleToggle(index)}
+                icon={
+                  activeIndex === index
+                    ? "simple-line-icons:arrow-up"
+                    : "simple-line-icons:arrow-down"
+                }
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            {(activeIndex === index || activeIndex === null) && (
+              <div className="accordion-content">
+                <p>{item.content}</p>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
 

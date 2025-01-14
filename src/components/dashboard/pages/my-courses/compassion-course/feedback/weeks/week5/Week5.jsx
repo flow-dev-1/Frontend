@@ -12,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
 import { calculateResult } from "../../../utility.js";
 
-function Week5({ enrollmentId, setShowModal }) {
+function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
   const { pages } = getWeekContentExcludingVideos(5);
   const [acitivity1] = pages;
   const [q1, q2, q3, q4, q5, q6, q7, q8] = acitivity1.scenarios;
@@ -36,6 +36,7 @@ function Week5({ enrollmentId, setShowModal }) {
 
     setActivityData(data.activity?.activities);
     setAssessmentData(data.assessment?.assessments);
+    setWeekFiveData(true);
 
     return () => {};
   }, [data]);
