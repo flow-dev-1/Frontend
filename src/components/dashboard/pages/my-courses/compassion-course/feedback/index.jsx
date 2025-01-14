@@ -102,7 +102,10 @@ function CompassionFeedback() {
     },
     {
       topic: "Summary of your journey through Compassion",
-      component: <OverallFeedBack enrollmentId={enrollmentId} />,
+      component: <OverallFeedBack
+        enrollmentId={enrollmentId}
+      //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
+      />,
     },
   ];
 
