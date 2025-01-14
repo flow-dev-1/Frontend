@@ -275,7 +275,9 @@ const WeekContent = () => {
 };
 
 const CourseContent = () => {
+  const isAdmin = useSelector(adminData);
   const currentWeek = useSelector(selectCurrentWeek);
+  const navigate = useNavigate()
 
   const weeksTopic = [
     "Introduction to Compassion",
@@ -289,9 +291,14 @@ const CourseContent = () => {
     <>
       <nav className="navbar">
         <div className="container">
-          <Link to="/dashboard" className="navbar-logo">
+          <button
+            disabled={isAdmin}
+            onClick={()=>navigate("/dashboard")}
+            className="navbar-logo"
+            style={{ border: 'none' }} // Remove button outline
+          >
             <img src={logo} alt="" />
-          </Link>
+          </button>
           <div
             className="navbar-logo"
             onClick={() => { }}
@@ -304,14 +311,16 @@ const CourseContent = () => {
 
       <div className="main-content">
         <aside>
-          <Link
+          <button
+            disabled={isAdmin}
+            onClick={()=>navigate("/dashboard/my-courses")}
             className="back"
-            style={{ cursor: "pointer" }}
-            to={"/dashboard/my-courses"}
+            style={{ cursor: "pointer",border:'none' }}
+         
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
             Back to My Courses
-          </Link>
+          </button>
 
           <div className="compassion-title">
             <h2> Seeing, Caring and Doing: </h2>
