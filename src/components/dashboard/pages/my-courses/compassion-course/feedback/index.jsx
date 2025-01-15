@@ -9,14 +9,15 @@ import Week4 from "./weeks/week4/Week4";
 import Week5 from "./weeks/week5/Week5";
 import OverallFeedBack from "./weeks/overall/OverallFeedBack";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import Modal from "./components/Modal";
+import { adminData } from "../../../../../../redux/reducers/adminReducer";
+import { useSelector } from "react-redux";
 
 function CompassionFeedback() {
-  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
+  const isAdmin = useSelector(adminData);
 
   // this might be bad practice but i dont have a choice
   // states to check a certain week data has been loaded
@@ -44,9 +45,18 @@ function CompassionFeedback() {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    if (!enrolmentData) return;
-    console.log(enrolmentData, "Enrollment Data");
-    setEnrollmentId(enrolmentData._id);
+    if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
+
+    if (isAdmin) {
+
+      const courseEnrollmentId = sessionStorage.getItem("flow-courseEnrollmentId")
+      if (!courseEnrollmentId) return
+      setEnrollmentId(courseEnrollmentId)
+    } else {
+      setEnrollmentId(enrolmentData._id);
+    }
+
+
   }, []);
 
   const weekContents = [
@@ -55,7 +65,6 @@ function CompassionFeedback() {
       component: (
         <Week1
           enrollmentId={enrollmentId}
-          setShowModal={setShowModal}
           setWeekOneData={setWeekOneData}
         />
       ),
@@ -65,7 +74,6 @@ function CompassionFeedback() {
       component: (
         <Week2
           enrollmentId={enrollmentId}
-          setShowModal={setShowModal}
           setWeekTwoData={setWeekTwoData}
         />
       ),
@@ -75,7 +83,6 @@ function CompassionFeedback() {
       component: (
         <Week3
           enrollmentId={enrollmentId}
-          setShowModal={setShowModal}
           setWeekThreeData={setWeekThreeData}
         />
       ),
@@ -85,7 +92,6 @@ function CompassionFeedback() {
       component: (
         <Week4
           enrollmentId={enrollmentId}
-          setShowModal={setShowModal}
           setWeekFourData={setWeekFourData}
         />
       ),
@@ -95,7 +101,6 @@ function CompassionFeedback() {
       component: (
         <Week5
           enrollmentId={enrollmentId}
-          setShowModal={setShowModal}
           setWeekFiveData={setWeekFiveData}
         />
       ),
@@ -174,7 +179,6 @@ function CompassionFeedback() {
           />
         </section>
       </div>
-      <Modal isOpen={showModal} setIsOpen={setShowModal} />
     </>
   );
 }

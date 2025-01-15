@@ -9,11 +9,12 @@ const ProtectedRoute = ({ children }) => {
   const isAdmin = useSelector(adminData);
   const params = new URLSearchParams(location.search);
   const token = params.get('token');
-  let auth_token;
+  const courseEnrollmentId = params.get('courseEnrollmentId');
 
   const removeTokenFromURL = () => {
     // Remove the token parameter from the URL
     params.delete('token');
+    params.delete('courseEnrollmentId')
     const newSearch = params.toString();
     const newURL = `${location.pathname}${newSearch ? `?${newSearch}` : ''}`;
     window.history.replaceState({}, '', newURL); // Update URL without reloading
@@ -21,34 +22,51 @@ const ProtectedRoute = ({ children }) => {
 
   if (token) {
     // Check if the admin is already stored to prevent multiple API calls
+
     if (isAdmin.isAdmin) {
+      // dispatch(setCode(token));
+      if (courseEnrollmentId) {
+        sessionStorage.setItem("flow-courseEnrollmentId", courseEnrollmentId)
+      }
       removeTokenFromURL();
-      auth_token = true;
+      return children
+
     } else {
+
       const fetchAdminData = async () => {
         try {
           const adminData = await adminService.getMyProfile(token);
           if (adminData.admin) {
             dispatch(setCode(token));
+            if (courseEnrollmentId) {
+              sessionStorage.setItem("flow-courseEnrollmentId", courseEnrollmentId)
+            }
             removeTokenFromURL();
-            auth_token = true;
+            return children
           }
+
         } catch (error) {
           console.error('Error fetching admin data:', error);
+          return <Navigate to="/sign-in" />;
         }
       };
 
       fetchAdminData();
     }
+
   } else {
     // Get the JWT token from local storage
-    auth_token =
+    const auth_token =
       localStorage.getItem('Flow-Auth-Token') ||
       (localStorage.getItem('persist:root') &&
         JSON.parse(JSON.parse(localStorage.getItem('persist:root')).auth)?.token);
+
+    return auth_token ? children : <Navigate to="/sign-in" />;
   }
 
-  return auth_token ? children : <Navigate to="/sign-in" />;
+
+
+
 };
 
 export default ProtectedRoute;
