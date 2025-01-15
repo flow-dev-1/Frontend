@@ -18,7 +18,7 @@ class AdminOBJ {
     }
   }
 
-  getUserCourseData = async (params1, week,token) => {
+  getUserCourseData = async (params1, week, token) => {
     const config = {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -34,6 +34,21 @@ class AdminOBJ {
     }
   }
 
+  submitAdminFeedback = async (data, params1, week, userId, token) => {
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    };
+    try {
+      const response = await api.patch(
+        `api/admins/course-enrollment/${params1}/post-activity/${week}/${userId}`, { activities: data }, config
+      )
+      return response.data
+    } catch (err) {
+      return err?.response?.data || err.message;
+    }
+  }
 }
 
 const admin = new AdminOBJ()

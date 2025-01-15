@@ -10,14 +10,22 @@ import {
 } from "../../../../compassion-course/weeks/data";
 import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
+import adminService from "../../../../../../../../services/api/admin.js";
 import { calculateResult } from "../../../utility.js";
+import { useSelector } from "react-redux";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer.js";
+import Modal from "../../components/Modal.jsx";
+import { useMutation } from '@tanstack/react-query'
 
-function Week4({ enrollmentId, setShowModal, setWeekFourData }) {
+function Week4({ enrollmentId, setWeekFourData }) {
   const { pages } = getWeekContentExcludingVideos(4);
   const [activity1, activity2, activity3] = pages;
   const [activityData, setActivityData] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState("")
+  const [activityFeedbackId, setActivityFeedbackId] = useState(null);
   const [assessmentData, setAssessmentData] = useState([]);
-  console.log(enrollmentId, "Enrollment Id");
+  const { isAdmin, code } = useSelector(adminData);
 
   const { questions: assessments } = getWeekAssessment(4);
   // toDo: Fetch User assessment and Activity Data
@@ -30,6 +38,22 @@ function Week4({ enrollmentId, setShowModal, setWeekFourData }) {
     keepPreviousData: false,
   });
 
+  const mutation = useMutation({
+    mutationFn: () => adminService.submitAdminFeedback(activityData, enrollmentId, 4, data?.activity?.user, code),
+    onSuccess: (data) => {
+      setModalData("")
+      // setIsOpen(true)
+      // toast.success(data.message)
+    },
+    onError: (error) => {
+      console.error('Registration error:', error)
+      setModalData("")
+      // toast.dismiss()
+      // toast.error(error?.message)
+      // navigate('/sign-in', { replace: true })
+    },
+  });
+
   useEffect(() => {
     if (!data) return;
 
@@ -40,9 +64,25 @@ function Week4({ enrollmentId, setShowModal, setWeekFourData }) {
     return () => {};
   }, [data]);
 
+  const handleModalOpen = () => {
+    setShowModal(true);
+  }
+
+  const handleModalClose = () => {
+    setActivityFeedbackId(null)
+    setShowModal(false);
+  }
+
+
   function getActivityAnswer(activityId) {
     return activityData?.find((activity) => activity.page === activityId)
       ?.answer;
+  }
+
+  function getActivityFeedback(activityId) {
+      return activityData?.find((activity) => activity.page === activityId)
+        ?.feedback;
+
   }
 
   function drag1(type) {
@@ -80,6 +120,31 @@ function Week4({ enrollmentId, setShowModal, setWeekFourData }) {
   const score =
     calculateResult(assessments, assessmentData, assessments?.length) || 0;
 
+    const submitFeedback = (value) => {
+      // console.log(value, "value")
+      // console.log(activityData, "Activity Data")
+      // console.log(activityFeedbackId, "Activity feedback Id")
+      if (!activityFeedbackId?.itemId) {
+        const answerData = activityData.find(item => item.page === activityFeedbackId.activityId)
+        answerData.feedback = value
+        handleModalClose()
+        mutation.mutate()
+      } else {
+  
+        const answerData = activityData.find(item => item.page === activityFeedbackId.activityId);
+  
+        const feedbackData = answerData?.answer?.find(item => item.stepId === activityFeedbackId.itemId);
+        if (!feedbackData.feedback) {
+          feedbackData.feedback = {};
+        }
+        feedbackData.feedback[activityFeedbackId.index] = value; // Set feedback entry with key as index
+  
+        handleModalClose()
+        mutation.mutate()
+        // mutation.mutate({ /* pass necessary data */ });
+      }
+    }
+
   return (
     <>
       {/* Activity 1 */}
@@ -94,25 +159,45 @@ function Week4({ enrollmentId, setShowModal, setWeekFourData }) {
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
         <p className="fs-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
+        {
+          (isAdmin && !activityData?.find((activity) => activity.page === activity1.id)?.feedback) && <Icon
+            onClick={() => {
+              setActivityFeedbackId({ activityId: activity1.id })
+              handleModalOpen()
+            }}
+            style={{ color: "#D6D6D6" }}
+            width={35}
+            icon="tabler:message-2"
+          />
+        }
       </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-         <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
+      {
+        // Show this only id theres a feedback
+        (activityData?.find((activity) => activity.page === activity1.id)
+          ?.feedback) && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+              {getActivityFeedback(activity1.id)}
+            </p>
+            {
+              isAdmin && <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity1.id))
+                  setActivityFeedbackId({ activityId: activity1.id })
+                  handleModalOpen()
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            }
+
+          </div>
+        )
+      }
       <hr />
 
       {/* Activity 2 */}
@@ -152,25 +237,45 @@ function Week4({ enrollmentId, setShowModal, setWeekFourData }) {
             </div>
           </div>
         </div>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
+        {
+          (isAdmin && !activityData?.find((activity) => activity.page === activity2.id)?.feedback) && <Icon
+            onClick={() => {
+              setActivityFeedbackId({ activityId: activity2.id })
+              handleModalOpen()
+            }}
+            style={{ color: "#D6D6D6" }}
+            width={35}
+            icon="tabler:message-2"
+          />
+        }
       </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-         <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
+      {
+        // Show this only id theres a feedback
+        (activityData?.find((activity) => activity.page === activity2.id)
+          ?.feedback) && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+              {getActivityFeedback(activity2.id)}
+            </p>
+            {
+              isAdmin && <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity2.id))
+                  setActivityFeedbackId({ activityId: activity2.id })
+                  handleModalOpen()
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            }
+
+          </div>
+        )
+      }
       <hr />
 
       {/* Activity 3 */}
@@ -220,25 +325,45 @@ function Week4({ enrollmentId, setShowModal, setWeekFourData }) {
             </div>
           </div>
         </div>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
+        {
+          (isAdmin && !activityData?.find((activity) => activity.page === activity3.id)?.feedback) && <Icon
+            onClick={() => {
+              setActivityFeedbackId({ activityId: activity3.id })
+              handleModalOpen()
+            }}
+            style={{ color: "#D6D6D6" }}
+            width={35}
+            icon="tabler:message-2"
+          />
+        }
       </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-         <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
+      {
+        // Show this only id theres a feedback
+        (activityData?.find((activity) => activity.page === activity3.id)
+          ?.feedback) && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+              {getActivityFeedback(activity3.id)}
+            </p>
+            {
+              isAdmin && <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity3.id))
+                  setActivityFeedbackId({ activityId: activity3.id })
+                  handleModalOpen()
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            }
+
+          </div>
+        )
+      }
       <hr />
 
       <hr />
@@ -313,6 +438,11 @@ function Week4({ enrollmentId, setShowModal, setWeekFourData }) {
               : ""}
           </p>
         </div>
+        <Modal
+          isOpen={showModal}
+          closeModal={handleModalClose}
+          data={modalData}
+          handleSubmit={submitFeedback} />
       </div>
     </>
   );

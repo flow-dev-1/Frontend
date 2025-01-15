@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function Modal({ isOpen, closeModal, data, handleSubmit }) {
-  const [feedback, setFeedback] = useState(data || "")
+  const [feedback, setFeedback] = useState("")
+
+  useEffect(() => {
+    setFeedback(data)
+  }, [data])
+  
   if (!isOpen) return null;
 
   return (

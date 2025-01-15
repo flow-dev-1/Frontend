@@ -47,7 +47,7 @@ function CompassionFeedback() {
 
     if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
 
-    if (isAdmin) {
+    if (isAdmin?.isAdmin) {
 
       const courseEnrollmentId = sessionStorage.getItem("flow-courseEnrollmentId")
       if (!courseEnrollmentId) return
@@ -124,12 +124,17 @@ function CompassionFeedback() {
     <>
       <nav className="navbar">
         <div className="container">
-          <Link to="/dashboard" className="navbar-logo">
+        <button
+            disabled={isAdmin}
+            onClick={()=>navigate("/dashboard")}
+            className="navbar-logo"
+            style={{ border: 'none' }} // Remove button outline
+          >
             <img src={logo} alt="" />
-          </Link>
+          </button>
           <div
             className="navbar-logo"
-            onClick={""}
+            onClick={() => { }}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -138,15 +143,16 @@ function CompassionFeedback() {
       </nav>
       <div className="main-content">
         <aside>
-          <Link
+        <button
+            disabled={isAdmin}
+            onClick={()=>navigate("/dashboard/my-courses")}
             className="back"
-            style={{ cursor: "pointer" }}
-            to={"/dashboard/my-courses"}
+            style={{ cursor: "pointer",border:'none' }}
+         
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
             Back to My Courses
-          </Link>
-
+          </button>
           <div className="compassion-title">
             <h2> Seeing, Caring and Doing: </h2>
             <h2 className="compassion">Compassion</h2>

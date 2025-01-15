@@ -15,9 +15,11 @@ import { calculateResult } from "../../../utility.js";
 import { useSelector } from "react-redux";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer.js";
 import Modal from "../../components/Modal.jsx";
+import { useMutation } from '@tanstack/react-query'
 
 function Week1({ enrollmentId, setWeekOneData }) {
   const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState("");
   const [activityFeedbackId, setActivityFeedbackId] = useState(null);
   const { pages } = getWeekContentExcludingVideos(1);
   const [activity1, activity2, activity3] = pages;
@@ -36,6 +38,22 @@ function Week1({ enrollmentId, setWeekOneData }) {
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
     keepPreviousData: false,
+  });
+
+  const mutation = useMutation({
+    mutationFn: () => adminService.submitAdminFeedback(activityData, enrollmentId, 1, data?.activity?.user, code),
+    onSuccess: (data) => {
+      setModalData("")
+      // setIsOpen(true)
+      // toast.success(data.message)
+    },
+    onError: (error) => {
+      console.error('Registration error:', error)
+      setModalData("")
+      // toast.dismiss()
+      // toast.error(error?.message)
+      // navigate('/sign-in', { replace: true })
+    },
   });
 
   const handleModalOpen = () => {
@@ -83,11 +101,62 @@ function Week1({ enrollmentId, setWeekOneData }) {
       )?.answer;
       const answerObject = answersList?.find(
         (activity) => activity.stepId === itemId
-      )?.value;
-      return answerObject ? answerObject[index] : "";
+      )?.feedback;
+      return answerObject ? answerObject[index] : null;
     }
   }
 
+  function renderQuestions(activityId, questions, stepId) {
+    return questions.map((question, index) => (
+      <div key={index}>
+        <p className="d-inline-block bg-blue text-white rounded-4 px-3">
+          {`${question.type}: ${question.question}`}
+        </p>
+        <div className="d-flex gap-3">
+          <h2 className="text-gray fs-1 text-gray">Answers:</h2>
+          <p className="fs-5 flex-grow-1">
+            {getActivityAnswer(activityId, stepId, index)}
+          </p>
+          {
+            (isAdmin && !getActivityFeedback(activityId, stepId, index)) &&
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId, itemId: stepId, index });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          }
+        </div>
+        {
+          getActivityFeedback(activityId, stepId, index) && (
+            <div className="d-flex gap-3">
+              <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+                Feedback
+              </p>
+              <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+                {getActivityFeedback(activityId, stepId, index)}
+              </p>
+              {
+                isAdmin && <Icon
+                  onClick={() => {
+                    setModalData(getActivityFeedback(activityId, stepId, index));
+                    setActivityFeedbackId({ activityId, itemId: stepId, index });
+                    handleModalOpen();
+                  }}
+                  style={{ color: "#275DAD" }}
+                  width={35}
+                  icon="lucide:edit"
+                />
+              }
+            </div>
+          )
+        }
+      </div>
+    ));
+  }
 
   if (isPending) {
     return <div>Loading...</div>;
@@ -105,14 +174,26 @@ function Week1({ enrollmentId, setWeekOneData }) {
     // console.log(value, "value")
     // console.log(activityData, "Activity Data")
     // console.log(activityFeedbackId, "Activity feedback Id")
-    const answerData = activityData.find(item => item.page === activityFeedbackId.activityId)
-    answerData.feedback = value
-    console.log(answerData, "Answer Data")
-    handleModalClose()
+    if (!activityFeedbackId?.itemId) {
+      const answerData = activityData.find(item => item.page === activityFeedbackId.activityId)
+      answerData.feedback = value
+      handleModalClose()
+      mutation.mutate()
+    } else {
+
+      const answerData = activityData.find(item => item.page === activityFeedbackId.activityId);
+
+      const feedbackData = answerData?.answer?.find(item => item.stepId === activityFeedbackId.itemId);
+      if (!feedbackData.feedback) {
+        feedbackData.feedback = {};
+      }
+      feedbackData.feedback[activityFeedbackId.index] = value; // Set feedback entry with key as index
+
+      handleModalClose()
+      mutation.mutate()
+      // mutation.mutate({ /* pass necessary data */ });
+    }
   }
-
-  console.log(activityData, "Activity data")
-
 
   return (
     <>
@@ -130,7 +211,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
         <p className="fs-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
 
         {
-          (isAdmin && !activityData?.find((activity) => activity.page === activity1.id)?.feedback) &&<Icon
+          (isAdmin && !activityData?.find((activity) => activity.page === activity1.id)?.feedback) && <Icon
             onClick={() => {
               setActivityFeedbackId({ activityId: activity1.id })
               handleModalOpen()
@@ -145,21 +226,28 @@ function Week1({ enrollmentId, setWeekOneData }) {
 
       {
         // Show this only id theres a feedback
-        (isAdmin && activityData?.find((activity) => activity.page === activity1.id)
+        (activityData?.find((activity) => activity.page === activity1.id)
           ?.feedback) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-            {getActivityFeedback(activity1.id)}
+              {getActivityFeedback(activity1.id)}
             </p>
-            <Icon
-              onClick={() => setShowModal(true)}
-              style={{ color: "#275DAD" }}
-              width={35}
-              icon="lucide:edit"
-            />
+            {
+              isAdmin && <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity1.id))
+                  setActivityFeedbackId({ activityId: activity1.id })
+                  handleModalOpen()
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            }
+
           </div>
         )
       }
@@ -177,34 +265,44 @@ function Week1({ enrollmentId, setWeekOneData }) {
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
         <p className="fs-5 flex-grow-1">{getActivityAnswer(activity2.id)}</p>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
+
+        {
+          (isAdmin && !activityData?.find((activity) => activity.page === activity2.id)?.feedback) && <Icon
+            onClick={() => {
+              setActivityFeedbackId({ activityId: activity2.id })
+              handleModalOpen()
+            }}
+            style={{ color: "#D6D6D6" }}
+            width={35}
+            icon="tabler:message-2"
+          />
+        }
       </div>
 
       {
-        // Show this only if theres a feedback
-        activityData?.find((activity) => activity.page === activity2.id)
-          ?.feedback && (
+        // Show this only id theres a feedback
+        (activityData?.find((activity) => activity.page === activity2.id)
+          ?.feedback) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Consectetur quaerat consequuntur veritatis quasi provident autem,
-              sapiente id ipsa soluta dolorum accusamus, voluptates illum amet
-              magnam ullam assumenda maxime possimus itaque.
+              {getActivityFeedback(activity2.id)}
             </p>
-            <Icon
-              onClick={() => setShowModal(true)}
-              style={{ color: "#275DAD" }}
-              width={35}
-              icon="lucide:edit"
-            />
+            {
+              isAdmin && <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity2.id))
+                  setActivityFeedbackId({ activityId: activity2.id })
+                  handleModalOpen()
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            }
+
           </div>
         )
       }
@@ -219,432 +317,31 @@ function Week1({ enrollmentId, setWeekOneData }) {
         <h2 className="text-blue fs-1">Questions:</h2>
         <p className="text-blue fs-4">{q1.title}</p>
       </div>
-      <p className="d-inline-block bg-blue text-white rounded-4 px-3">
-        {`${q1.questions[0].type}: ${q1.questions[0].question}`}
-      </p>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity3.id, q1.stepId, 0)}
-        </p>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
-      </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
-      <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
-        {`${q1.questions[1].type}: ${q1.questions[1].question}`}
-      </p>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity3.id, q1.stepId, 1)}
-        </p>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
-      </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
-      <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
-        {`${q1.questions[2].type}: ${q1.questions[2].question}`}
-      </p>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity3.id, q1.stepId, 2)}
-        </p>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
-      </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
+      {renderQuestions(activity3.id, q1.questions, q1.stepId)}
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-1">Questions:</h2>
         <p className="text-blue fs-4">{q2.title}</p>
       </div>
-      <p className="d-inline-block bg-blue text-white rounded-4 px-3">
-        {`${q2.questions[0].type}: ${q2.questions[0].question}`}
-      </p>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity3.id, q2.stepId, 0)}
-        </p>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
-      </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
-      <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
-        {`${q2.questions[1].type}: ${q2.questions[1].question}`}
-      </p>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity3.id, q2.stepId, 1)}
-        </p>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
-      </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
-      <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
-        {`${q2.questions[2].type}: ${q2.questions[2].question}`}
-      </p>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity3.id, q2.stepId, 2)}
-        </p>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
-      </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
+      {renderQuestions(activity3.id, q2.questions, q2.stepId)}
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-1">Questions:</h2>
         <p className="text-blue fs-4">{q3.title}</p>
       </div>
-      <p className="d-inline-block bg-blue text-white rounded-4 px-3">
-        {`${q3.questions[0].type}: ${q3.questions[0].question}`}
-      </p>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity3.id, q3.stepId, 0)}
-        </p>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
-      </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
-      <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
-        {`${q3.questions[1].type}: ${q3.questions[1].question}`}
-      </p>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity3.id, q3.stepId, 1)}
-        </p>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
-      </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
-      <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
-        {`${q3.questions[2].type}: ${q3.questions[2].question}`}
-      </p>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity3.id, q3.stepId, 2)}
-        </p>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
-      </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
+      {renderQuestions(activity3.id, q3.questions, q3.stepId)}
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-1">Questions:</h2>
         <p className="text-blue fs-4">{q4.title}</p>
       </div>
-      <p className="d-inline-block bg-blue text-white rounded-4 px-3">
-        {`${q4.questions[0].type}: ${q4.questions[0].question}`}
-      </p>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity3.id, q4.stepId, 0)}
-        </p>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
-      </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
-      <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
-        {`${q4.questions[1].type}: ${q4.questions[1].question}`}
-      </p>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity3.id, q4.stepId, 1)}
-        </p>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
-      </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
-      <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
-        {`${q4.questions[2].type}: ${q4.questions[2].question}`}
-      </p>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity3.id, q4.stepId, 2)}
-        </p>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
-      </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
+      {renderQuestions(activity3.id, q4.questions, q4.stepId)}
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-1">Questions:</h2>
         <p className="text-blue fs-4">{q5.title}</p>
       </div>
-      <p className="d-inline-block bg-blue text-white rounded-4 px-3">
-        {`${q5.questions[0].type}: ${q5.questions[0].question}`}
-      </p>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity3.id, q5.stepId, 0)}
-        </p>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
-      </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
-      <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
-        {`${q5.questions[1].type}: ${q5.questions[1].question}`}
-      </p>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity3.id, q5.stepId, 1)}
-        </p>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
-      </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
-      <p className="d-inline-block bg-blue text-white rounded-4 px-3 my-2">
-        {`${q5.questions[2].type}: ${q5.questions[2].question}`}
-      </p>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">
-          {getActivityAnswer(activity3.id, q5.stepId, 2)}
-        </p>
-        <Icon
-          onClick={() => setShowModal(true)}
-          style={{ color: "#D6D6D6" }}
-          width={35}
-          icon="tabler:message-2"
-        />
-      </div>
-      {/* <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-          quaerat consequuntur veritatis quasi provident autem, sapiente id ipsa
-          soluta dolorum accusamus, voluptates illum amet magnam ullam assumenda
-          maxime possimus itaque.
-        </p>
-        <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" />
-      </div> */}
-      <hr />
+      {renderQuestions(activity3.id, q5.questions, q5.stepId)}
 
       <hr />
       {/* Assesment 1 */}
@@ -722,7 +419,11 @@ function Week1({ enrollmentId, setWeekOneData }) {
                     : ""}
           </p>
         </div>
-        <Modal isOpen={showModal} closeModal={handleModalClose} handleSubmit={submitFeedback} />
+        <Modal
+          isOpen={showModal}
+          closeModal={handleModalClose}
+          data={modalData}
+          handleSubmit={submitFeedback} />
       </div>
     </>
   );
