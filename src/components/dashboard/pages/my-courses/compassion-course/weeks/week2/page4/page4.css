@@ -1,4 +1,4 @@
-.letter-container {
+ /* .letter-container {
   display: flex;
   background: url("../../../../../../../../assets/big-rect.png");
   background-size: 100% 100%;
@@ -14,18 +14,18 @@
 
 .letter-content {
   flex: 1;
-}
+} */
 
 .letter-content textarea {
   /* background: url("../../../../../../../../assets/text-line.png") no-repeat; */
   /* background-size: cover; */
-  margin-left: -20px;
+  /* margin-left: -20px; */
 }
 
 .letter {
-  font-size: 4.5rem !important;
+  /* font-size: 4.5rem !important; */
 }
 
 .letter-info h3 {
-  font-size: 2rem !important;
+  /* font-size: 2rem !important; */
 }
