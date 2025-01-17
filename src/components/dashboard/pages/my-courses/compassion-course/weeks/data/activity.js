@@ -474,12 +474,12 @@ export const courseContent = {
         bowls: [
           {
             id: "inner",
-            label: "Inner Cycle",
+            label: "Inner Circle",
             count: 2,
           },
           {
             id: "outer",
-            label: "Outer Cycle",
+            label: "Outer Circle",
             count: 2,
           },
         ],
@@ -517,12 +517,12 @@ export const courseContent = {
         buckets: [
           {
             id: "green",
-            label: "Inner Cycle",
+            label: "Inner Circle",
             image: "Green Bucket.svg",
           },
           {
             id: "orange",
-            label: " Outer Cycle",
+            label: " Outer Circle",
             image: "Orange Bucket.svg",
           },
           {

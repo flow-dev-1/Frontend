@@ -73,7 +73,7 @@ const WeekContent = () => {
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
   const [course, setCourse] = useState(null);
-  const isAdmin = useSelector(adminData);
+  const {isAdmin} = useSelector(adminData);
 
   // Access data from location.state
   const enrolmentData = location.state?.enrollmentData; // Assuming enrollData is passed in state
@@ -275,7 +275,7 @@ const WeekContent = () => {
 };
 
 const CourseContent = () => {
-  const isAdmin = useSelector(adminData);
+  const {isAdmin} = useSelector(adminData);
   const currentWeek = useSelector(selectCurrentWeek);
   const navigate = useNavigate()
 

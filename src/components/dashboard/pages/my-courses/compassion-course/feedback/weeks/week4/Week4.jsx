@@ -214,7 +214,7 @@ function Week4({ enrollmentId, setWeekFourData }) {
         <div className="flex-grow-1 d-flex">
           <div className="flex-grow-1">
             <h2 className="text-center bg-green text-white py-3 fs-1">
-              Innner Cycle
+              Innner Circle
             </h2>
             <div className="px-5 py-3">
               {drag1("inner")?.map((item, idx) => (
@@ -226,7 +226,7 @@ function Week4({ enrollmentId, setWeekFourData }) {
           </div>
           <div className="flex-grow-1">
             <h2 className="bg-orange text-center text-white py-3 fs-1">
-              Outer Cycle
+              Outer Circle
             </h2>
             <div className="px-5 py-3">
               {drag1("outer")?.map((item, idx) => (
@@ -292,7 +292,7 @@ function Week4({ enrollmentId, setWeekFourData }) {
         <div className="flex-grow-1 d-flex">
           <div className="flex-grow-1">
             <h2 className="text-center bg-green text-white py-3 fs-1">
-              Innner Cycle
+              Innner Circle
             </h2>
             <div className="py-3">
               {drag2("green")?.map((item, idx) => (
@@ -314,7 +314,7 @@ function Week4({ enrollmentId, setWeekFourData }) {
           </div>
           <div className="flex-grow-1">
             <h2 className="bg-orange text-center text-white py-3 fs-1">
-              Outer Cycle
+              Outer Circle
             </h2>
             <div className="py-3">
               {drag2("red")?.map((item, idx) => (

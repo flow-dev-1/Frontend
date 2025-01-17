@@ -125,7 +125,7 @@ function CompassionFeedback() {
       <nav className="navbar">
         <div className="container">
         <button
-            disabled={isAdmin}
+            disabled={isAdmin?.isAdmin}
             onClick={()=>navigate("/dashboard")}
             className="navbar-logo"
             style={{ border: 'none' }} // Remove button outline
@@ -144,7 +144,7 @@ function CompassionFeedback() {
       <div className="main-content">
         <aside>
         <button
-            disabled={isAdmin}
+            disabled={isAdmin?.isAdmin}
             onClick={()=>navigate("/dashboard/my-courses")}
             className="back"
             style={{ cursor: "pointer",border:'none' }}
