@@ -34,6 +34,22 @@ class AdminOBJ {
     }
   }
 
+  getUserCoursePercentile = async (params1, week, token) => {
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    };
+    try {
+      const response = await api.get(
+        `api/admins/course-enrollment/${params1}/percentile`, config
+      )
+      return response.data
+    } catch (err) {
+      return err?.response?.data || err.message;
+    }
+  }
+
   submitAdminFeedback = async (data, params1, week, userId, token) => {
     const config = {
       headers: {

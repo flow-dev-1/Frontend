@@ -328,6 +328,16 @@ class UserOBJ {
     }
   }
 
+  getUserCoursePercentile = async (params1) => {
+    try {
+      const response = await api.get(
+        `api/users/course-enrollment/${params1}/percentile`
+      )
+      return response.data
+    } catch (err) {
+      return err?.response?.data || err.message;
+    }
+  }
   getMyActivites = async (params1, week) => {
     try {
       const response = await api.get(

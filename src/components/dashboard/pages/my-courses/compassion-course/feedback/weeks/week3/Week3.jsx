@@ -54,7 +54,6 @@ function Week3({ enrollmentId, setWeekThreeData }) {
   }
 
   function getActivityFeedback(activityId) {
-  console.log(activityData?.find((activity) => activity.page === activityId),activityId,"Hmm")
     return activityData?.find((activity) => activity.page === activityId)?.feedback;
  
   }

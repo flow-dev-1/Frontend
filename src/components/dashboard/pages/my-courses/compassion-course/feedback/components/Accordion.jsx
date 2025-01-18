@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./accordion.css";
 import { Icon } from "@iconify/react";
 import jsPDF from "jspdf";
@@ -10,53 +10,69 @@ function Accordion({
   setActiveIndex,
   items,
   allDataLoaded,
+  hasPercentile,
+  setHasPercentile
 }) {
   const contentRef = useRef();
   const [pdfLoading, setPdfLoading] = useState(false);
+  const [startDownload, setStartDownload] = useState(false);
 
   const handleToggle = (index) => {
     window.scroll(0, 0);
     setActiveIndex(activeIndex === index ? "" : index);
   };
 
+  useEffect(() => {
+    if (!startDownload) return
+    generatePDF()
+
+  }, [hasPercentile, allDataLoaded])
+
+
   const generatePDF = async () => {
+    console.log(hasPercentile, "Has Percentile")
     const originalState = activeIndex;
     setPdfLoading(true);
     setActiveIndex(null);
 
-    if (!allDataLoaded) {
+    if (!hasPercentile) {
       setActiveIndex(originalState);
       setPdfLoading(false);
       return;
     }
 
-    setTimeout(() => {
-      const input = contentRef.current;
+    if(allDataLoaded){
+      setTimeout(() => {
+        console.log(allDataLoaded, "All data loaded")
+        const input = contentRef.current;
 
-      html2canvas(input).then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF("p", "mm", "a4");
-        const imgWidth = 210;
-        const pageHeight = 295;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        let heightLeft = imgHeight;
-        let position = 0;
+        html2canvas(input).then((canvas) => {
+          const imgData = canvas.toDataURL("image/png");
+          const pdf = new jsPDF("p", "mm", "a4");
+          const imgWidth = 210;
+          const pageHeight = 295;
+          const imgHeight = (canvas.height * imgWidth) / canvas.width;
+          let heightLeft = imgHeight;
+          let position = 0;
 
-        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-
-        while (heightLeft >= 0) {
-          position = heightLeft - imgHeight;
-          pdf.addPage();
           pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
           heightLeft -= pageHeight;
-        }
 
-        pdf.save("CompassionFeedback.pdf");
-        setActiveIndex(originalState);
-        setPdfLoading(false);
-      });
-    }, 1000);
+          while (heightLeft >= 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+          }
+
+          pdf.save("CompassionFeedback.pdf");
+          setActiveIndex("");
+          setPdfLoading(false);
+          setHasPercentile(false)
+        });
+      }, 1000);
+    }
+
   };
 
   return (
@@ -82,21 +98,9 @@ function Accordion({
             >
               <div className="d-flex align-items-center gap-3 flex-grow-1">
                 {index < 5 ? (
-                  <h2
-                    className="text-gray fs-1"
-                    onClick={() => handleToggle(index)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    Week {index + 1}:
-                  </h2>
+                  <h2 className="text-gray fs-1" onClick={() => handleToggle(index)} style={{ cursor: "pointer" }}>Week {index + 1}:</h2>
                 ) : (
-                  <h2
-                    className="text-gray fs-1"
-                    onClick={() => handleToggle(index)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    Final Report:
-                  </h2>
+                  <h2 className="text-gray fs-1" onClick={() => handleToggle(index)} style={{ cursor: "pointer" }}>Final Report:</h2>
                 )}
                 <div
                   className="fs-4 text-gray "
@@ -109,7 +113,11 @@ function Accordion({
                   <p
                     className="text-blue fs-4"
                     style={{ zIndex: 100, cursor: "pointer" }}
-                    onClick={generatePDF}
+                    onClick={() => {
+                      handleToggle(index)
+                      setStartDownload(true)
+                    }
+                    }
                   >
                     {pdfLoading ? "Generating PDF..." : "(Download PDF)"}{" "}
                     <Icon icon="bi:download" />

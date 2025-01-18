@@ -1,7 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import celebrate from "../../../../../../../../assets/celebrate.png";
+import { useQuery } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer.js";
+import userService from "../../../../../../../../services/api/user.js";
+import adminService from "../../../../../../../../services/api/admin.js";
 
-function OverallFeedBack({percentile}) {
+function OverallFeedBack({ enrollmentId,setHasPercentile}) {
+  const [assessmentPercentile, setAssessmentPercentile] = useState(null);
+  const { isAdmin, code } = useSelector(adminData);
+
+  const { data, isPending, status, isError } = useQuery({
+    queryKey: ["dashboard/compassion-feedback-overall", enrollmentId, 1],
+    queryFn: () => isAdmin ? adminService.getUserCourseData(enrollmentId, 1, code) : userService.getUserCoursePercentile(enrollmentId),
+    enabled: !!enrollmentId,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false,
+  });
+
+  useEffect(() => {
+    if (!data || data?.status === "failed") return;
+    setAssessmentPercentile(data?.averagePercent)
+    setHasPercentile(true)
+    return () => { };
+  }, [data]);
+
   function getFeedBackMessage(percentile) {
     switch (true) {
       case percentile >= 10 && percentile <= 39:
@@ -19,7 +43,16 @@ function OverallFeedBack({percentile}) {
     }
   }
 
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (data?.status === "failed" || isError) {
+    return <div style={{ color: 'red' }}>{data?.message || "Internal server error!"}</div>;
+  }
+
   return (
+    
     <>
       <div className="bg-compassion--feedback custom-border-20 question-box-container d-flex justify-content-center align-items-center flex-column gap-3">
         <img src={celebrate} alt="celebrate" className="text-center" />
@@ -49,7 +82,7 @@ function OverallFeedBack({percentile}) {
       <div className="bg-blue p-3 mt-2 rounded rounded-4">
         <h2 className="text-white fs-1">Overall Feedback</h2>
         <p className="text-white fs-3">
-          {getFeedBackMessage(percentile)}
+          {getFeedBackMessage(assessmentPercentile)}
         </p>
       </div>
     </>

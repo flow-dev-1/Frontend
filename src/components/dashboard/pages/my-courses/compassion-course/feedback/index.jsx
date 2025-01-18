@@ -17,25 +17,24 @@ function CompassionFeedback() {
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
+
+  // This is used to trigger the report download.
+  const [hasPercentile,setHasPercentile] = useState(false)
   const isAdmin = useSelector(adminData);
 
-  // this might be bad practice but i dont have a choice
   // states to check a certain week data has been loaded
+  // This is for the final report generation
   const [isWeekOneLoaded, setWeekOneData] = useState(false);
   const [isWeekTwoLoaded, setWeekTwoData] = useState(false);
   const [isWeekThreeLoaded, setWeekThreeData] = useState(false);
   const [isWeekFourLoaded, setWeekFourData] = useState(false);
   const [isWeekFiveLoaded, setWeekFiveData] = useState(false);
 
-  //check if evrything has been loaded
-  const [allDataLoaded, _] = useState(
-    () =>
-      isWeekOneLoaded &&
-      isWeekTwoLoaded &&
-      isWeekThreeLoaded &&
-      isWeekFourLoaded &&
-      isWeekFiveLoaded
-  );
+  const [allDataLoaded, setAllDataLoaded] = useState(false);
+
+  useEffect(() => {
+    setAllDataLoaded(isWeekOneLoaded && isWeekTwoLoaded && isWeekThreeLoaded && isWeekFourLoaded && isWeekFiveLoaded);
+  }, [isWeekOneLoaded, isWeekTwoLoaded, isWeekThreeLoaded, isWeekFourLoaded, isWeekFiveLoaded]);
 
   const currentWeek = activeIndex + 1;
 
@@ -109,6 +108,7 @@ function CompassionFeedback() {
       topic: "Summary of your journey through Compassion",
       component: <OverallFeedBack
         enrollmentId={enrollmentId}
+        setHasPercentile={setHasPercentile}
       //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
       />,
     },
@@ -189,7 +189,9 @@ function CompassionFeedback() {
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
             items={items}
+            hasPercentile={hasPercentile}
             allDataLoaded={allDataLoaded}
+            setHasPercentile={setHasPercentile}
           />
         </section>
       </div>
