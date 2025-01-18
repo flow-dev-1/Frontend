@@ -13,11 +13,11 @@
 }
 
 .letter {
-  font-size: 4.5rem !important;
+  font-size: 3rem !important;
 }
 
 .letter-info h3 {
-  font-size: 2rem !important;
+  font-size: 1.7rem !important;
 }
 
 .letter-content {
@@ -27,6 +27,10 @@
 .letter-content textarea {
   background: transparent !important;
   height: 100% !important;
+}
+
+.letter-content textarea::-webkit-scrollbar {
+  display: none;
 }
 input::placeholder {
   font-weight: normal !important;

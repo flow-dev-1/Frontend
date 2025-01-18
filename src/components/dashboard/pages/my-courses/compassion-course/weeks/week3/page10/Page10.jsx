@@ -65,9 +65,9 @@ function WeekThreePage10() {
             ))}
           </div>
           <div className="letter-content">
-            <label className="w-100 p-5 border-0" style={{ height: "100%" }}>
+            <label className="w-100 py-5 px-3 border-0" style={{ height: "100%" }}>
               <textarea
-                className="border-0 w-100 bg-transparent border-outline-0 no-scrollbar resize-none"
+                className="border-0 w-100 bg-transparent border-outline-0 resize-none"
                 cols={pageData.textareaConfig.cols}
                 rows={pageData.textareaConfig.rows}
                 placeholder={pageData.textareaConfig.placeholder}
