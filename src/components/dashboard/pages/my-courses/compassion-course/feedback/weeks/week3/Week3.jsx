@@ -325,12 +325,12 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-1">Questions:</h2>
         <p className="text-blue fs-4">
-          {activity5.title + " " + activity5.instructions.join(" ")}
+          {activity5.instructions.join(" ")}
         </p>
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        <p className="fs-5 flex-grow-1" style={{ whiteSpace: 'pre-wrap' }}>{getActivityAnswer(activity5.id)}</p>
         {
           (isAdmin && !activityData?.find((activity) => activity.page === activity5.id)?.feedback) && <Icon
             onClick={() => {

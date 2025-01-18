@@ -214,7 +214,11 @@ function Week2({ enrollmentId, setWeekTwoData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">{getActivityAnswer(activity2.id)}</p>
+        <p className="fs-5 flex-grow-1" style={{ whiteSpace: 'pre-wrap' }}>
+          {getActivityAnswer(activity2.id)}
+        </p>
+
+
         {
           (isAdmin && !activityData?.find((activity) => activity.page === activity2.id)?.feedback) && <Icon
             onClick={() => {
