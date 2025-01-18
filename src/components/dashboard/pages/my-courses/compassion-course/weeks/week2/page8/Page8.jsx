@@ -111,7 +111,8 @@ function WeekTwoPage8() {
 
         if (isValid) {
           // Submit Data
-          mutation.mutate({ ...userAnswers, assessments: answers });
+          const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
+          mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
         } else {
           setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
           return false;

@@ -137,7 +137,7 @@ const WeekContent = () => {
       dispatch(
         updateData({
           course: course,
-          courseEnrollmentId: userAnswers.courseEnrollmentId,
+          courseEnrollmentId:enrollmentId ? enrollmentId : userAnswers.courseEnrollmentId,
           week: currentWeek,
           activities: userAnswers.activities,
           assessments: userAnswers.assessments,

@@ -446,7 +446,7 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+4/FLOW+4_1.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+4/FLOW+4_2.mp4",
         navigation: {
           prev: true,
           next: true,

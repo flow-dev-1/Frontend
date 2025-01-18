@@ -105,8 +105,9 @@ function WeekThreePage12() {
         return false
       } 
 
-      // Submit Data
-      mutation.mutate({ ...userAnswers, assessments: answers });
+      const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
+
+      mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
 
     } else {
       return true;
