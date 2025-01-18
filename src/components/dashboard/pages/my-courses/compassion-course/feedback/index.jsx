@@ -124,17 +124,17 @@ function CompassionFeedback() {
     <>
       <nav className="navbar">
         <div className="container">
-        <button
+          <button
             disabled={isAdmin?.isAdmin}
-            onClick={()=>navigate("/dashboard")}
+            onClick={() => navigate("/dashboard")}
             className="navbar-logo"
-            style={{ border: 'none' }} // Remove button outline
+            style={{ border: "none" }} // Remove button outline
           >
             <img src={logo} alt="" />
           </button>
           <div
             className="navbar-logo"
-            onClick={() => { }}
+            onClick={() => {}}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -143,12 +143,11 @@ function CompassionFeedback() {
       </nav>
       <div className="main-content">
         <aside>
-        <button
+          <button
             disabled={isAdmin?.isAdmin}
-            onClick={()=>navigate("/dashboard/my-courses")}
+            onClick={() => navigate("/dashboard/my-courses")}
             className="back"
-            style={{ cursor: "pointer",border:'none' }}
-         
+            style={{ cursor: "pointer", border: "none" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
             Back to My Courses
@@ -162,7 +161,13 @@ function CompassionFeedback() {
             {weeksTopic.map((item, index) => (
               <li
                 key={index}
-                className={index + 1 <= currentWeek ? "active-week" : ""}
+                className={
+                  index + 1 <= currentWeek
+                    ? "active-week"
+                    : index === 5
+                    ? "d-none"
+                    : ""
+                }
               >
                 <div className="icon">
                   <Icon
@@ -170,7 +175,7 @@ function CompassionFeedback() {
                     className="course-list-icon"
                   />
                 </div>
-                <span>
+                <span className={index === 5 ? "d-none" : ""}>
                   Week
                   {index + 1}
                 </span>
