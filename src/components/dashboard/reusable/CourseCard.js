@@ -20,7 +20,7 @@ const CourseCard = ({
   const [modalIsOpen, setIsOpen] = useState(false)
   const [modalType, setModalType] = useState('')
 
-  const isEnrolled = enrolledData?.courses?.find(enrolledCourse => enrolledCourse?.course._id === course._id) || null
+  const isEnrolled = enrolledData?.courses?.find(enrolledCourse => enrolledCourse?.course?._id === course?._id) || null
 
   const openModal = (modalType, course) => {
     setIsOpen(true)
@@ -41,6 +41,24 @@ const CourseCard = ({
       return text.slice(0, maxLength) + '...'
     }
     return text
+  }
+
+  const handleFeedbackNavigation = (course) => {
+    if(course?.title === "Self Awareness"){
+      navigate(`/dashboard/feedback/self-awareness`, { state: { enrollmentData: isEnrolled } })
+    }else{
+      navigate(`/dashboard/${course?.title}/feedback`, { state: { enrollmentData: isEnrolled } })
+    }
+
+  }
+
+  const handleCourseNavigation = (course) => {
+    if(course?.title === "Self Awareness"){
+      navigate(`/dashboard/self-awareness-course`, { state: { enrollmentData: isEnrolled } })
+    }else{
+      navigate(`/dashboard/${course?.title}`, { state: { enrollmentData: isEnrolled } })
+    }
+
   }
 
   return (
@@ -106,7 +124,7 @@ const CourseCard = ({
                   border: '1px solid #329bd6',
                 }}
                 className='btn card-btn feedback'
-                onClick={() => navigate(`/dashboard/${course?.title}/feedback`, { state: { enrollmentData: isEnrolled } })}
+                onClick={() => handleFeedbackNavigation(course)}
               >
                 <Icon icon='hugeicons:comment-01' /> Feedback
               </button>
@@ -141,9 +159,8 @@ const CourseCard = ({
                 padding: '.5rem 8px',
               }}
               className='btn card-btn start-resume'
-              onClick={() => {
-                navigate(`/dashboard/${course?.title}`, { state: { enrollmentData: isEnrolled } })
-              }}
+              onClick={() =>  handleCourseNavigation(course)
+              }
             >
               {isEnrolled?.progress === 100 ? (
                 <Icon width={25} icon='ph:seal-check-thin' />
@@ -158,7 +175,7 @@ const CourseCard = ({
             </button>
             {isEnrolled?.progress > 0 && isEnrolled?.progress < 100 && (
               <Icon
-                onClick={() => navigate(`/dashboard/${course?.title}/feedback`, { state: { enrollmentData: isEnrolled } })}
+                onClick={() => handleFeedbackNavigation(course)}
                 style={{ color: '#329BD6' }}
                 width={40}
                 icon='hugeicons:comment-01'

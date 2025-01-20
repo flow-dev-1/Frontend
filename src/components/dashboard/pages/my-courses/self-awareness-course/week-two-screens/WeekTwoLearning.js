@@ -31,13 +31,13 @@ export default function WeekTwoLearning({
   const [formData, setFormData] = useState()
   const week = 2;
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["dashboard/self-awareness-course", course?.course?._id, week],
+    queryKey: ["self-awareness-course-2", course?.course?._id, week],
     queryFn: () => userService.getMyActivites(course?.course?._id, week)
   });
 
   const { data: assessmentData, isLoading: assessmentLoading, status: assesmentStatus, isError: assessmentError } = useQuery({
-    queryKey: ["dashboard/self-awareness-assessment", courseId, week],
-    queryFn: () => userService.getMyAssessment(courseId, week),
+    queryKey: ["self-awareness-assessment-2", course?.course?._id, week],
+    queryFn: () => userService.getMyAssessment(course?.course?._id, week),
     enabled: !!course?.course._id && !!week
   });
 

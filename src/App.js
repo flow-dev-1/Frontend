@@ -158,7 +158,7 @@ function App() {
           <Route path="/dashboard/my-courses" element={<MyCourses />} />
 
           <Route
-            path="/dashboard/self-awareness-course/:id"
+            path="/dashboard/self-awareness-course"
             element={<SelfAwarenessCourse />}
           />
 

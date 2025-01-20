@@ -33,7 +33,14 @@ const MyCourseCard = ({ course }) => {
     return text
   }
 
+  const handleFeedbackNavigation = (course) => {
+    if(course?.course.title === "Self Awareness"){
+      navigate(`/dashboard/feedback/self-awareness`, { state: { enrollmentData: course } })
+    }else{
+      navigate(`/dashboard/${course?.title}/feedback`, { state: { enrollmentData: course } })
+    }
 
+  }
   const handleButtonClick = () => {
 
 
@@ -43,10 +50,8 @@ const MyCourseCard = ({ course }) => {
       return toast.info("Course Deavtivated! Please contact admin for support.")
     }
 
-    const id = course?._id
-
     if (course?.course.title === 'Self Awareness') {
-      navigate(`/dashboard/self-awareness-course/${encryptURI(id)}`, {
+      navigate(`/dashboard/self-awareness-course`, {
         state: { enrollmentData: course },
       })
       localStorage.setItem(`${course._id}-can-see`, true)
@@ -123,7 +128,7 @@ const MyCourseCard = ({ course }) => {
                 border: "1px solid #329bd6"
               }}
               className="btn card-btn feedback"
-              onClick={() => navigate(`/dashboard/${course?.course?.title}/feedback`, { state: { enrollmentData: course } })}
+              onClick={() => handleFeedbackNavigation(course)}
             >
               <Icon icon="hugeicons:comment-01" /> Feedback
             </button>
@@ -173,7 +178,7 @@ const MyCourseCard = ({ course }) => {
           </button>
           {course?.progress > 0 && course?.progress < 100 && (
             <Icon
-            onClick={() => navigate(`/dashboard/${course?.course?.title}/feedback`, { state: { enrollmentData: course } })}
+            onClick={() => handleFeedbackNavigation(course)}
               style={{ color: "#329BD6" }}
               width={40}
               icon="hugeicons:comment-01"

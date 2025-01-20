@@ -18,7 +18,7 @@ const QuestionComponent = ({
     const currentActivityData = formData?.activities?.find(
       (item) => item?.activity === activityIndex
     )
-    console.log(formData)
+    console.log(formData,"formData")
 
     if (currentActivityData && currentActivityData?.answers) {
       // Set the answer from formData if it exists

@@ -13,16 +13,30 @@ import userService from '../../../../../services/api/user'
 import { useQuery } from '@tanstack/react-query'
 
 function SelfAwarenessCourse() {
-  let { id } = useParams()
+
   const [open, setOpen] = useState(false)
   const location = useLocation()
-  const course = location?.state?.course
   const navigate = useNavigate()
-  id = decryptId(id)
+  const [id, setId] = useState("")
+  const [course, setCourse] = useState(null)
+
+  // Access data from location.state
+  const enrolmentData = location.state?.enrollmentData; // Assuming enrollData is passed in state
+
+
+  useEffect(() => {
+    //toDo: Only Enrolled Users or Admin can access this course
+    if (!enrolmentData) return navigate("/dashboard");
+    setId(enrolmentData?._id);
+    setCourse(enrolmentData)
+    setOpen(true)
+
+  }, []);
+
 
   const { data: completedWeeks, isLoading, isError } = useQuery({
-    queryKey: ['completed-weeks', course._id],
-    queryFn: () => userService.getCompletedWeeks(course._id), 
+    queryKey: ['completed-weeks', course?._id],
+    queryFn: () => userService.getCompletedWeeks(course?._id),
   })
 
   // New state to track completed weeks
@@ -35,10 +49,10 @@ function SelfAwarenessCourse() {
     }
   }, [completedWeeks])
 
-  useEffect(() => {
-    if (!course) return navigate("/dashboard")
-    setOpen(true)
-  }, [location, course, navigate])
+  // useEffect(() => {
+  //   if (!course) return navigate("/dashboard")
+  //   setOpen(true)
+  // }, [location, course, navigate])
 
   const storedWeekIndex = localStorage.getItem(`currentWeek-${id}`) || '1'
   const initialWeekIndex = parseInt(storedWeekIndex, 10)

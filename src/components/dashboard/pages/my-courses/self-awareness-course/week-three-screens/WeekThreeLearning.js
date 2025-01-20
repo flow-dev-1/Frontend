@@ -40,34 +40,21 @@ export default function WeekThreeLearning({
 
   const week = 3
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['dashboard/self-awareness-course', course?.course?._id, week],
+    queryKey: ['self-awareness-course-3', course?.course?._id, week],
     queryFn: () => userService.getMyActivites(course?.course?._id, week),
   })
 
-  const [assessmentData, setAssessmentData] = useState(null);
-  const [assessmentLoading, setAssessmentLoading] = useState(true);
-  const [assessmentError, setAssessmentError] = useState(null);
-  const [quizQuestions, setQuizQuestions] = useState([]);
+  const { data: assessmentData, isLoading: assessmentLoading, status: assesmentStatus, isError: assessmentError } = useQuery({
+    queryKey: ["self-awareness-assessment-3", course?.course?._id, week],
+    queryFn: () => userService.getMyAssessment(course?.course?._id, week),
+    enabled: !!course?.course._id && !!week
+  });
+
+  console.log(data,assessmentData,"Data here")
+
 
   useEffect(() => {
-    const fetchAssessmentData = async () => {
-      setAssessmentLoading(true);
-      try {
-        const data = await userService.getMyAssessment(courseId, week);
-        setAssessmentData(data);
-      } catch (error) {
-        setAssessmentError(error);
-      } finally {
-        setAssessmentLoading(false);
-      }
-    };
-
-    fetchAssessmentData();
-  }, [courseId, week]);
-
-  const assessments = assessmentData?.existingAssessment?.assessments;
-  const percent = assessmentData?.existingAssessment?.rating;
-  const color = assessmentData?.existingAssessment?.personalityColor;
+    if (!data || !assessmentData) return
 
   if (data?.activity) {
     const activities = data.activity.activities;
@@ -81,6 +68,10 @@ export default function WeekThreeLearning({
     // Store the object in local storage under the key 'activity1'
     localStorage.setItem('week-3-activityData', JSON.stringify(activityData))
   }
+
+
+  }, [data])
+  
 
   const [videoPlaying, setVideoPlaying] = useState(false)
   const [reviewPopUp, setReviewPopUp] = useState(false)
@@ -125,7 +116,6 @@ export default function WeekThreeLearning({
   }
 
   const handleSubmit = async () => {
-    console.log(formData, "FormData here o")
 
     if (formData?.activities?.length < 7) {
       return { success: false, message: "Submission failed" };

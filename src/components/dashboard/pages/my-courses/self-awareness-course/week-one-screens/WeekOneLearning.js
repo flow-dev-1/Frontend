@@ -43,7 +43,7 @@ export default function WeekOneLearning({
 
   const week = 1;
   const { data, isLoading, status, isError } = useQuery({
-    queryKey: ["dashboard/self-awareness-course", course?.course._id, week],
+    queryKey: ["self-awareness-course-1", course?.course._id, week],
     queryFn: () => userService.getMyActivites(course?.course._id, week),
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -51,7 +51,7 @@ export default function WeekOneLearning({
   });
 
   const { data: assessmentData, isLoading: assessmentLoading, status: assesmentStatus, isError: assessmentError } = useQuery({
-    queryKey: ["get-self-awareness-assessment", course?.course._id, week],
+    queryKey: ["get-self-awareness-assessment-1", course?.course._id, week],
     queryFn: () => userService.getMyAssessment(course?.course._id, week),
     enabled: !!course?.course._id && !!week,
     refetchOnMount: "always",
