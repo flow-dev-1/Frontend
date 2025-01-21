@@ -26,7 +26,10 @@ const SelfAwarenessFeedback = () => {
   // Fetch data for all weeks
   const { data, isLoading: queryLoading } = useQuery({
     queryKey: ["dashboard/feedback/self-awareness", courseId],
-    queryFn: () => Promise.all(weeks.map((week) => userService.getMyActivites(courseId, week))),
+    queryFn: () =>
+      Promise.all(
+        weeks.map((week) => userService.getMyActivites(courseId, week))
+      ),
   });
 
   useEffect(() => {
@@ -65,7 +68,7 @@ const SelfAwarenessFeedback = () => {
   // Function to temporarily expand all weeks, generate the PDF, then restore the original state
   const generatePDF = () => {
     if (!isDataLoaded) {
-      return; 
+      return;
     }
     const originalState = expandedWeek;
     setPdfLoading(true); // SET PDF LOADING TO TRUE
@@ -104,13 +107,16 @@ const SelfAwarenessFeedback = () => {
   return (
     <>
       {/* Loader Overlay */}
-      {(queryLoading || assessmentLoading || pdfLoading) && (  // SHOW LOADER WHEN PDF IS LOADING
+      {(queryLoading || assessmentLoading || pdfLoading) && ( // SHOW LOADER WHEN PDF IS LOADING
         <div className="loader-overlay">
           <ClimbingBoxLoader color="#275DAD" />
         </div>
       )}
 
-      <div ref={contentRef} className="feedback-container">
+      <div ref={contentRef} className="feedback-container ">
+        <h2 className="accordion-header p-4 fs-1 bg-blue text-center text-white">
+          Feedback for Self-Awareness
+        </h2>
         {/* Week 1 */}
         <div className="week-title-container">
           <div className="week-title">
@@ -179,7 +185,8 @@ const SelfAwarenessFeedback = () => {
         <div className="week-title-container">
           <div className="week-title">
             <h2 onClick={() => toggleWeek(4)} style={{ fontSize: "24px" }}>
-              Week 4: <span style={{ fontSize: "14px" }}>Identifying Values</span>
+              Week 4:{" "}
+              <span style={{ fontSize: "14px" }}>Identifying Values</span>
             </h2>
             <Icon
               icon={
@@ -216,38 +223,51 @@ const SelfAwarenessFeedback = () => {
           {(expandedWeek === 5 || expandedWeek === "all") && <Week5 />}
         </div>
 
-        <HurrayComponent/>
         {/* Final Report Section */}
+
         <div
+          className="week-title-container"
           style={{ backgroundColor: "#5CE1E6" }}
-          className="final-report-container"
         >
-          <div className="final-report-title">
-            <h2>
+          <div className="week-title">
+            <h2 onClick={() => toggleWeek(6)} style={{ fontSize: "24px" }}>
               Final Report:{" "}
               <span style={{ fontSize: "14px" }}>
-                {" "}
                 Summary of your journey through Self Awareness
               </span>
-            </h2>
-
-            <div>
               {/* Disable download if data is still loading */}
               <a
+                style={{
+                  zIndex: 100,
+                  cursor: "pointer",
+                  fontSize: 16,
+                }}
                 download="SelfAwarenessSummary.pdf"
-                className={`download-link ${!isDataLoaded ? "disabled" : ""}`}
+                className={`download-link text-blue${
+                  !isDataLoaded ? "disabled" : ""
+                }`}
                 onClick={(e) => !isDataLoaded && e.preventDefault()}
               >
                 (Download PDF)
+                <Icon
+                  onClick={isDataLoaded ? generatePDF : null}
+                  icon="bi:download"
+                  style={{ cursor: isDataLoaded ? "pointer" : "not-allowed" }}
+                />
               </a>
-              <Icon
-                onClick={isDataLoaded ? generatePDF : null}
-                icon="bi:download"
-                style={{ cursor: isDataLoaded ? "pointer" : "not-allowed" }}
-              />
-            </div>
+            </h2>
+            <Icon
+              icon={
+                expandedWeek === 6 || expandedWeek === "all"
+                  ? "simple-line-icons:arrow-up"
+                  : "simple-line-icons:arrow-down"
+              }
+              onClick={() => toggleWeek(6)}
+              style={{ cursor: "pointer" }}
+            />
           </div>
         </div>
+        {(expandedWeek === 6 || expandedWeek === "all") && <HurrayComponent />}
       </div>
     </>
   );

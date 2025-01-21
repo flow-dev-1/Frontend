@@ -1,5 +1,5 @@
 .feedback-container {
-  font-family: 'ABeeZee', sans-serif;
+  font-family: "ABeeZee", sans-serif;
 }
 
 .final-report-title {
@@ -15,6 +15,7 @@
 
 .week-title-container,
 .final-report-container {
+  border: 1px solid #ecedf0;
   padding: 15px 20px;
   display: flex;
   flex-direction: column;
@@ -106,7 +107,6 @@
   background-color: #333;
 }
 
-h2{
+h2 {
   color: #333;
-
 }
