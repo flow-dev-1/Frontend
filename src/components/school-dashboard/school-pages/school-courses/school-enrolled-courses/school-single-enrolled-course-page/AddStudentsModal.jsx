@@ -96,8 +96,7 @@ const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
     mutationFn: (data) =>
       schoolService.enrollStudentsIntoCourse(schoolId, decryptId(id), data),
     onSuccess: (data) => {
-      console.log('Mutation success:', data)
-      toast.success('Enrollment successful')
+      toast.success(data.message)
       queryClient.invalidateQueries(['school-single-courses'])
       reset()
       onRequestClose()
