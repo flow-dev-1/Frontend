@@ -90,7 +90,6 @@ const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
     schoolId = user?._id
   }
   const { id } = useParams()
-  console.log(decryptId(id), schoolId)
 
   const mutation = useMutation({
     mutationFn: (data) =>
@@ -118,7 +117,7 @@ const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
     if (isFileUploaded) {
       data.students = parsedStudents
     }
-    console.log(data)
+ 
     mutation.mutate(data)
   }
 
@@ -381,6 +380,7 @@ const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
           className="modal-button"
           type="submit"
           style={{ backgroundColor: "#329BD6" }}
+          disabled={mutation.isPending}
         >
           {mutation.isPending ? (
             <RotatingLines

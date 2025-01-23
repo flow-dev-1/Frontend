@@ -105,7 +105,6 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   const onSubmit = (data) => {
     if (!window.confirm('Are you sure you want to enroll this class for this course?')) return
 
-    console.log(data)
     mutation.mutate(data)
     // Ensure the data is submitted
   }

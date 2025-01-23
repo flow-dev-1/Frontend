@@ -108,7 +108,6 @@ const SchoolCourseCard = ({
 
   // Check if the course is in the enrolled array
   const isEnrolled = enrolled.includes(course._id)
-  console.log(isEnrolled)
 
   if (isEnrolled) {
     reviewBtnColor = darkGreen
@@ -131,8 +130,6 @@ const SchoolCourseCard = ({
   }
   const [coursedarta, setCourseDarta] = useState("")
 
-  console.log(coursedarta);
-  console.log(enrolledData)
   const courseIndex = coursesArray?.courses.findIndex(
     (c) => c._id === course._id
   )
@@ -142,7 +139,6 @@ const SchoolCourseCard = ({
     const courseIndex = coursesArray?.courses.findIndex(
       (c) => c._id === course._id
     )
-    console.log(courseIndex)
 
     // Use this index to get the corresponding enrolledData course
     if (isEnrolled && enrolledData?.courses[courseIndex]) {

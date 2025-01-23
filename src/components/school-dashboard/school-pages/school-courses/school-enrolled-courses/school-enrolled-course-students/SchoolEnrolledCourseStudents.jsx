@@ -60,8 +60,6 @@ const SchoolEnrolledCourseStudents = () => {
     return 0
   }
 
-  console.log(courses)
-
   const filteredCourses = courses
     ?.filter((course) => {
       const searchValue = searchQuery.toLowerCase()

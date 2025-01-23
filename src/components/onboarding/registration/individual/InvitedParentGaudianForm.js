@@ -78,7 +78,7 @@ export default function InivitedParentGuardianForm({
   useEffect(() => {
     if (initialData) {
       // Update form values when initialData changes
-      setValue('guardianFullName', initialData.fullName || '')
+      setValue('guardianFullName', initialData.guardianFullName || '')
       setValue('email', initialData.email || email)
       setValue('phone', s === "Children's International School" ? "+2349062684338" : initialData.phone ? initialData.phone : "")
       setValue('country', initialData.country !== "N/A" ? initialData.country : 'Nigeria')
