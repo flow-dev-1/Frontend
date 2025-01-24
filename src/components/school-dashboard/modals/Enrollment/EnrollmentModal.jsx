@@ -12,6 +12,7 @@ import excelDoc from '../../../../assets/Flowtemp.xlsx'
 import userService from '../../../../services/api/school'
 import { RotatingLines } from 'react-loader-spinner'
 import { isPending } from '@reduxjs/toolkit'
+
 const generateTimeOptions = () => {
   const times = []
   for (let hour = 6; hour <= 18; hour++) {
@@ -28,7 +29,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   const [fileError, setFileError] = useState('')
   const [isFileUploaded, setIsFileUploaded] = useState(false)
   const [parsedStudents, setParsedStudents] = useState([])
-  const schemaWithFile = yup.object().shape({
+  const schema = yup.object().shape({
     stdClass: yup.string().required('Class is required'),
     dayOfWeek: yup.string().required('Day of the Week is required'),
     startTime: yup.string().required('Start Time is required'),
@@ -37,21 +38,21 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
 
   const [showMessage, setShowMessage] = useState(false)
 
-  const schemaWithoutFile = schemaWithFile.shape({
-    students: yup
-      .array()
-      .of(
-        yup.object().shape({
-          email: yup
-            .string()
-            .email('Invalid email')
-            .required('Email is required'),
-          fullName: yup.string().required('Student Name is required'),
-          guardianFullName: yup.string().required('Guardian Name is required'),
-        })
-      )
-      .required('At least one student is required'),
-  })
+  // const schemaWithoutFile = schemaWithFile.shape({
+  //   students: yup
+  //     .array()
+  //     .of(
+  //       yup.object().shape({
+  //         email: yup
+  //           .string()
+  //           .email('Invalid email')
+  //           .required('Email is required'),
+  //         fullName: yup.string().required('Student Name is required'),
+  //         guardianFullName: yup.string().required('Guardian Name is required'),
+  //       })
+  //     )
+  //     .required('At least one student is required'),
+  // })
 
   // Dynamically determine which schema to use based on the file upload status
   const {
@@ -59,9 +60,9 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(isFileUploaded ? schemaWithFile : schemaWithoutFile),
+    resolver: yupResolver(schema),
     defaultValues: {
-      students: [{ email: '', fullName: '', guardianFullName: '' }],
+
     },
   })
 
@@ -90,8 +91,8 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   const mutation = useMutation({
     mutationFn: (value) =>
       userService.enrolledStudents(params1, params2, value),
-    onSuccess: () => {
-      toast.success('Enrollment successful')
+    onSuccess: (data) => {
+      toast.success(data.message)
       queryClient.invalidateQueries(['school-enrolled-courses'])
       onRequestClose()
     },
@@ -102,18 +103,8 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   })
 
   const onSubmit = (data) => {
-    if (
-      !window.confirm(
-        'Are you sure you want to enroll the students for this course?'
-      )
-    )
-      return
+    if (!window.confirm('Are you sure you want to enroll this class for this course?')) return
 
-    // If a file was uploaded, override the students array with parsed data
-    if (isFileUploaded) {
-      data.students = parsedStudents
-    }
-    console.log(data)
     mutation.mutate(data)
     // Ensure the data is submitted
   }
@@ -320,7 +311,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
           </div>
 
           {/* Render student input fields without the ability to add or remove */}
-          {!isFileUploaded && (
+          {/* {!isFileUploaded && (
             <div>
               <p style={{ fontSize: "14px", color: "#329BD6" }}>
                 For single invite, kindly use the fields below.
@@ -384,7 +375,9 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
+
+          {/*           
           <p style={{ fontSize: "14px", color: "#329BD6" }}>
             For multiple students, kindly upload file using the sheet (Excel)
             attached below.
@@ -457,7 +450,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                 </span>
               </span>
             </div>
-          </div>
+          </div> */}
 
           <hr />
           <button
@@ -478,12 +471,12 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
               "Send invite"
             )}
           </button>
-          {isFileUploaded && mutation.isPending && (
+          {/* {isFileUploaded && mutation.isPending && (
             <p style={{ fontSize: '10px', color: 'red', textAlign: 'right' }}>
               Depending on the number of students, this process may take <br />{' '}
               a while. Please wait and do not close this page. Thank you.
             </p>
-          )}
+          )} */}
         </form>
       </div>
     </Modal>

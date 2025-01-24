@@ -63,8 +63,6 @@ class UserOBJ {
 
   //Register
   registerInvitedUser = async (auth_token, data) => {
-    console.log(auth_token)
-    console.log(data)
     try {
       const response = await api.post(`api/users/invited-user`, data, {
         headers: {
@@ -92,10 +90,10 @@ class UserOBJ {
       throw err?.response?.data || err.message
     }
   }
-  getParentDetails = async (auth_token) => {
-    console.log(auth_token)
+  getParentDetails = async (auth_token, enrollmentId) => {
+
     try {
-      const response = await api.get(`api/users/parent`, {
+      const response = await api.get(`api/users/parent?enrollmentId=${enrollmentId}`, {
         headers: {
           Authorization: `Bearer ${auth_token}`,
         },

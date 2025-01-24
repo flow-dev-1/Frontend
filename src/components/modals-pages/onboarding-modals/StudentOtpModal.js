@@ -13,6 +13,7 @@ export default function StudentOtpModal({
   resendOTP,
   closeModal,
   setOpenSuccessModal,
+  enrollmentId,
 }) {
   const dispatch = useDispatch()
   const [modalIsOpen, setIsOpen] = useState(false)
@@ -38,7 +39,7 @@ export default function StudentOtpModal({
 
   function handleSubmit() {
     console.log(otp.join(''), 'OTP')
-    mutation.mutate({ code: otp.join('') })
+    mutation.mutate({ code: otp.join(''), enrollmentId })
   }
 
   const [countdown, setCountdown] = useState(0)
@@ -64,7 +65,6 @@ export default function StudentOtpModal({
   const mutation = useMutation({
     mutationFn: userService.verifyAccount, // Assuming userService.register is your API call function
     onSuccess: (data) => {
-      console.log('OTP Verification:', data)
       toast.dismiss()
       toast.success(data.message)
       dispatch(clearToken())
