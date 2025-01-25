@@ -115,15 +115,15 @@ const handleToggle = (courseId) => {
         </div>
         <div className="course-card-title" style={{ margin: "0" }}>
           <h3 style={{ color: "#329BD6", fontSize: "24px" }}>
-            Knowing Yourself Better
+          {course?.course?.topic}
           </h3>
           <h3 style={isEnrolled ? { color: "#555" } : { color: "#329BD6" }}>
-            {course.title}:
+            {course?.title}:
           </h3>
           {/* <h3>{course.subtitle}</h3> */}
         </div>
         <p style={{ fontSize: "12px", height: "60px", marginBottom: "1rem" }}>
-          {truncateText(course.description, 100)}
+          {truncateText(course?.description, 100)}
         </p>
 
         <div className="users-review">

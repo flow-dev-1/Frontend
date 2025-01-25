@@ -202,6 +202,8 @@ const Week2 = () => {
     queryFn: () => userService.getMyActivites(courseId, week)
   });
 
+  console.log(data,"Data")
+
   const [assessmentData, setAssessmentData] = useState(null);
   const [assessmentLoading, setAssessmentLoading] = useState(true);
   const [assessmentError, setAssessmentError] = useState(null);
@@ -254,17 +256,18 @@ const Week2 = () => {
     return <div>Loading...</div>;
   }
 
-  if (isError || assessmentError) {
+  if (isError || data.status === "failed" || assessmentError) {
     return <div>Take Activity to see feedback.</div>;
   }
   const strengths = data?.activity?.activities[3]?.answers?.strengths;
   const weaknesses = data?.activity?.activities[4]?.answers?.weakness;
+
   const actviity1 = [
     {
       activity: 1,
       question: 'What do you think "Self Awareness" is?',
-      answer: data?.activity?.activities[1]?.answers[0],
-      feedback: ""
+      answer: data?.activity?.activities?.[1]?.answers?.[0],
+      feedback: data?.activity?.activities[1]?.feedback?.[0],
     }
   ];
   const activities = [
@@ -272,15 +275,13 @@ const Week2 = () => {
       activity: 2, // New activity based on image
       question: "Identify your Strengths.",
       answer: strengths,
-      feedback:
-        ""
+   feedback: data?.activity?.activities?.[3]?.feedback?.[0]
     },
     {
       activity: 3, // New activity based on image
       question: "Identify your Weaknesses.",
       answer: weaknesses,
-      feedback:
-        ""
+       feedback: data?.activity?.activities?.[4]?.feedback?.[0]
     },
     // {
     //   activity: 4, // Another new activity based on image
@@ -297,8 +298,7 @@ const Week2 = () => {
         strengths: data?.activity?.activities[6]?.answers?.strengthsQ1,
         weaknesses: data?.activity?.activities[6]?.answers?.weaknessesQ1
       },
-      feedback:
-        ""
+          feedback: data?.activity?.activities[6]?.feedback ? data?.activity?.activities[6]?.feedback[0] : ""
     },
     {
       activity: 4, // New activity based on the latest image
@@ -308,8 +308,7 @@ const Week2 = () => {
         strengths: data?.activity?.activities[6]?.answers?.strengthsQ2,
         weaknesses: data?.activity?.activities[6]?.answers?.weaknessesQ2
       },
-      feedback:
-        ""
+        feedback: data?.activity?.activities[6]?.feedback ? data?.activity?.activities[6]?.feedback[1] : ""
     },
     {
       activity: 4, // New activity based on the latest image
@@ -319,10 +318,10 @@ const Week2 = () => {
         strengths: data?.activity?.activities[6]?.answers?.strengthsQ3,
         weaknesses: data?.activity?.activities[6]?.answers?.weaknessesQ3
       },
-      feedback:
-        ""
+      feedback: data?.activity?.activities[6]?.feedback ? data?.activity?.activities[6]?.feedback[2] : ""
     }
   ];
+
   const quizEssay = [
     {
       activity: 1,
@@ -382,12 +381,12 @@ const Week2 = () => {
           ) : (
             <div className="answer d-flex align-items-center gap-2">
               <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
-              <p> {activity.answer}</p>
+              <p style={{ fontSize: "14px" }}> {activity.answer}</p>
             </div>
           )}
 
           {/* Conditionally render feedback */}
-          {activity.feedback && (
+          {activity?.feedback?.length > 0 && (
             <div className="feedback">
               <div id="badge">Feedback:</div>
               <div
@@ -523,7 +522,7 @@ const Week2 = () => {
           )}
 
           {/* Conditionally render feedback */}
-          {activity.feedback && (
+          {activity?.feedback?.length > 0 && (
             <p className="feedback">
               <div id="badge">Feedback:</div>
               <div
@@ -613,7 +612,7 @@ const Week2 = () => {
           ) : (
             <div className="answer d-flex align-items-center gap-2">
               <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
-              <p> Answer: {activity.answer}</p>
+              <p style={{ fontSize: "14px" }}> {activity.answer}</p>
             </div>
           )}
 

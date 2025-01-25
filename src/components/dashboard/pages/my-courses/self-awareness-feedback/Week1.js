@@ -1015,6 +1015,7 @@ const Week1 = () => {
     queryFn: () => userService.getMyActivites(courseId, week)
   });
 
+
   const [assessmentData, setAssessmentData] = useState(null);
   const [assessmentLoading, setAssessmentLoading] = useState(true);
   const [assessmentError, setAssessmentError] = useState(null);
@@ -1087,7 +1088,7 @@ const Week1 = () => {
     return <div>Loading...</div>;
   }
 
-  if (isError || assessmentError) {
+  if (isError || data.status === "failed" || assessmentError) {
     return <div>Take Activity to see feedback.</div>;
   }
 
@@ -1113,21 +1114,20 @@ const Week1 = () => {
       activity: 1,
       question: 'What do you think "Self Awareness" is?',
       answer: data?.activity?.activities?.[1].answers[0],
-      feedback: ""
+      feedback: data?.activity?.activities?.[1]?.feedback?.[0] || "",
     },
     {
       activity: 2,
       question: "What do you understand by the word “Personality”?",
       answer: data?.activity?.activities?.[3].answers[0],
-      feedback: ""
+      feedback: data?.activity?.activities?.[3]?.feedback?.[0] || "",
     },
     {
       activity: 3,
       question:
         "Drag-and-drop the statements on the left into any of these bowls.",
       answer: mappedContent,
-      feedback:
-        ""
+      feedback: data?.activity?.activities?.[5]?.feedback?.[0] || "",
     }
   ];
   const activityFour = [
@@ -1138,7 +1138,7 @@ const Week1 = () => {
       selectedPersonality:
         data?.activity?.activities?.[7].answer?.selectedPersonality,
       explanation: data?.activity?.activities?.[7].answer?.explanation,
-      feedback: ""
+      feedback: data?.activity?.activities?.[7]?.feedback?.[0] || "",
     }
   ];
   const activityAnswers = data?.activity?.activities?.[12]?.answers || [];
@@ -1146,25 +1146,25 @@ const Week1 = () => {
   // Map through answers to create restActivities
   const restActivities = [
     {
-      activity: 4,
+      activity: 8,
       question: "Do you agree with this new result?",
       answer: data?.activity?.activities?.[13].answers[2].answer,
-      feedback: ""
+      feedback: data?.activity?.activities?.[13]?.feedback?.[0] || [],
     },
     {
-      activity: 4,
+      activity: 9,
       question:
         "Did you get the same color as the color you identified for yourself earlier?",
       answer: data?.activity?.activities?.[13].answers[0].answer,
 
-      feedback: ""
+      feedback: data?.activity?.activities?.[13]?.feedback?.[1] || [],
     },
     {
-      activity: 4,
+      activity: 10,
       question: "What was different? Why do you think this was different?",
       answer: data?.activity?.activities?.[13].answers[1].answer,
 
-      feedback: ""
+      feedback: data?.activity?.activities?.[13]?.feedback?.[2] || [],
     }
   ];
 
@@ -1294,24 +1294,27 @@ const Week1 = () => {
             </p>
           )}
 
-          <p className="feedback">
-            <div id="badge">Feedback:</div>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem"
-              }}
-            >
-              <div className="feedback-card">{activity?.feedback}</div>
-              {/* <Icon
+          {activity?.feedback?.length > 0 && (
+            <p className="feedback">
+              <div id="badge">Feedback:</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem"
+                }}
+              >
+                <div className="feedback-card">{activity?.feedback}</div>
+                {/* <Icon
                 style={{ color: "#275DAD" }}
                 width={20}
                 icon="lucide:edit"
               /> */}
-            </div>
-          </p>
+              </div>
+            </p>
+          )}
+
         </div>
       ))}
       {activityFour?.map((activity, index) => (
@@ -1337,6 +1340,8 @@ const Week1 = () => {
             /> */}
           </p>
 
+
+          {activity?.feedback?.length > 0 && (
           <p className="feedback">
             <div id="badge">Feedback:</div>
             <div
@@ -1355,6 +1360,8 @@ const Week1 = () => {
               /> */}
             </div>
           </p>
+
+          )}
         </div>
       ))}
       <p className="activity-badge">Activity 5</p>
@@ -1407,6 +1414,8 @@ const Week1 = () => {
               icon="hugeicons:comment-01"
             /> */}
           </p>
+          
+          {activity?.feedback?.length > 0 && (
           <p className="feedback">
             <div id="badge">Feedback:</div>
             <div
@@ -1425,6 +1434,8 @@ const Week1 = () => {
               /> */}
             </div>
           </p>
+          )}
+
         </div>
       ))}
       <p className="activity-badge">Assessment 1</p>

@@ -34,10 +34,10 @@ const MyCourseCard = ({ course }) => {
   }
 
   const handleFeedbackNavigation = (course) => {
-    if(course?.course.title === "Self Awareness"){
+    if (course?.course.title === "Self Awareness") {
       navigate(`/dashboard/feedback/self-awareness`, { state: { enrollmentData: course } })
-    }else{
-      navigate(`/dashboard/${course?.title}/feedback`, { state: { enrollmentData: course } })
+    } else {
+      navigate(`/dashboard/${course?.course.title}/feedback`, { state: { enrollmentData: course } })
     }
 
   }
@@ -86,7 +86,7 @@ const MyCourseCard = ({ course }) => {
 
           <div className="px-3 py-2">
             <h3 style={{ color: "#329BD6", fontSize: "24px" }}>
-              Knowing Yourself Better
+              {course?.course?.topic}
             </h3>
             <h3 style={{ color: "#555", fontSize: "24px" }}>
               {course?.course.title}
@@ -178,7 +178,7 @@ const MyCourseCard = ({ course }) => {
           </button>
           {course?.progress > 0 && course?.progress < 100 && (
             <Icon
-            onClick={() => handleFeedbackNavigation(course)}
+              onClick={() => handleFeedbackNavigation(course)}
               style={{ color: "#329BD6" }}
               width={40}
               icon="hugeicons:comment-01"

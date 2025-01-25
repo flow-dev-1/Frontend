@@ -322,7 +322,7 @@ const Week3 = () => {
   const week = 3;
   const courseId = "66853bf50118e2e0a02b6a5a";
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["dashboard/feedback/self-awareness", courseId, week],
+    queryKey: ["feedback-self-awareness-3", courseId, week],
     queryFn: () => userService.getMyActivites(courseId, week)
   });
 
@@ -385,21 +385,25 @@ const Week3 = () => {
   const activities = [
     {
       question: "What do you understand by the word “Mindset”?",
-      answer: data?.activity?.activities[1]?.answers[0]
+      answer: data?.activity?.activities[1]?.answers[0],
+      feedback: data?.activity?.activities[1]?.feedback?.[0]
     },
     {
       question:
         "Do you feel like you have a growth mindset, or do you sometimes find yourself with a fixed mindset? Share your thoughts. It’s okay to be honest, this is all about learning and growing together!",
-      answer: data?.activity?.activities[3]?.answers[0]
+      answer: data?.activity?.activities[3]?.answers[0],
+      feedback: data?.activity?.activities[3]?.feedback?.[0]
     },
     {
       question: "List five (5) lessons you got from the videos you watched.",
-      answer: data?.activity?.activities[5]?.answers.slice(0, 5)
+      answer: data?.activity?.activities[5]?.answers.slice(0, 5),
+      feedback: data?.activity?.activities[5]?.feedback?.[0]
     },
     {
       question:
         "List one (1) thing you will start working on, even on your growth journey.",
-      answer: data?.activity?.activities[5]?.answers[5]
+      answer: data?.activity?.activities[5]?.answers[5],
+      feedback: data?.activity?.activities[5]?.feedback?.[1]
     }
   ];
 
@@ -433,12 +437,12 @@ const Week3 = () => {
           ) : (
             <div className="answer d-flex align-items-center gap-2">
               <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
-              <p>{activity.answer}</p>
+              <p style={{ fontSize: "14px" }}>{activity.answer}</p>
             </div>
           )}
 
           {/* Conditionally render feedback */}
-          {activity.feedback && (
+          {activity?.feedback?.length > 0 && (
             <div className="feedback">
               <div id="badge">Feedback:</div>
               <div

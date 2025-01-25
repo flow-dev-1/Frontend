@@ -45,6 +45,8 @@ export default function InvitedStudentRegistrationForm() {
     enabled: !!t, // Only run the query if token is present
   })
 
+  console.log(data,"Parent data")
+
   const mutation = useMutation({
     mutationFn: (data) => userService.registerInvitedUser(t, data),
     onSuccess: (data) => {

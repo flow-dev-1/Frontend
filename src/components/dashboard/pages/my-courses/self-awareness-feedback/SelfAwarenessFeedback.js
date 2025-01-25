@@ -12,17 +12,19 @@ import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../services/api/user";
 import { ClimbingBoxLoader } from "react-spinners"; // Assuming you're using `react-spinners`
 import HurrayComponent from "./Hurray";
+import { useLocation } from "react-router-dom";
 
 const SelfAwarenessFeedback = () => {
   const weeks = [1, 2, 3, 4, 5]; // List of weeks
   const courseId = "66853bf50118e2e0a02b6a5a";
-
+  const location = useLocation(); // Get location object
   const [assessmentData, setAssessmentData] = useState({});
   const [assessmentLoading, setAssessmentLoading] = useState(true);
   const [expandedWeek, setExpandedWeek] = useState(null);
   const [pdfLoading, setPdfLoading] = useState(false); // NEW STATE FOR PDF LOADING
   const contentRef = useRef();
-
+  // Access data from location.state
+  const enrolmentData = location.state?.enrollmentData; // Assuming enrollData is passed in state
   // Fetch data for all weeks
   const { data, isLoading: queryLoading } = useQuery({
     queryKey: ["dashboard/feedback/self-awareness", courseId],
@@ -267,7 +269,9 @@ const SelfAwarenessFeedback = () => {
             />
           </div>
         </div>
-        {(expandedWeek === 6 || expandedWeek === "all") && <HurrayComponent />}
+        {(expandedWeek === 6 || expandedWeek === "all") && <HurrayComponent 
+        enrollmentData={enrolmentData}
+        />}
       </div>
     </>
   );

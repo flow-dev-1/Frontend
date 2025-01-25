@@ -189,7 +189,7 @@ const SchoolCourseCard = ({
         </div>
         <div className="course-card-title" style={{ marginBottom: "0" }}>
           <h3 style={{ color: "#329BD6", fontSize: "24px" }}>
-            Knowing Yourself Better
+          {course?.course?.topic}
           </h3>
           <h3 style={isEnrolled ? { color: "#555" } : { color: "#329BD6" }}>
             {course.title}:
