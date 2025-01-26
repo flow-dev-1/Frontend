@@ -111,7 +111,7 @@ const WeekContent = () => {
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isLoading, status, isError } = useQuery({
-    queryKey: ["dashboard/compassion-course", enrollmentId, currentWeek],
+    queryKey: [`dashboard-compassion-course-${currentWeek}`, enrollmentId, currentWeek],
     queryFn: () => userService.getUserCourseData(enrollmentId, currentWeek),
     enabled: !!enrollmentId && !!currentWeek,
     refetchOnMount: "always",

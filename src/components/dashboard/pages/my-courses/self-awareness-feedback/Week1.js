@@ -1015,6 +1015,7 @@ const Week1 = () => {
     queryFn: () => userService.getMyActivites(courseId, week)
   });
 
+  console.log(data, "week 1 report")
 
   const [assessmentData, setAssessmentData] = useState(null);
   const [assessmentLoading, setAssessmentLoading] = useState(true);

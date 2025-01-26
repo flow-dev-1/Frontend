@@ -1,7 +1,7 @@
 export const assessments = {
   week1: {
     title: "Assessment",
-    subtitle: "Let's test your knowlege",
+    subtitle: "Let's test your knowledge",
     questions: [
       {
         id: 1,
@@ -82,7 +82,7 @@ export const assessments = {
   },
   week2: {
     title: "Assessment",
-    subtitle: "Let's test your knowlege",
+    subtitle: "Let's test your knowledge",
     questions: [
       {
         id: 1,
@@ -165,7 +165,7 @@ export const assessments = {
   },
   week3: {
     title: "Assessment",
-    subtitle: "Let's test your knowlege",
+    subtitle: "Let's test your knowledge",
     questions: [
       {
         id: 1,
@@ -248,7 +248,7 @@ export const assessments = {
   },
   week4: {
     title: "Assessment",
-    subtitle: "Let's test your knowlege",
+    subtitle: "Let's test your knowledge",
     questions: [
       {
         id: 1,
@@ -321,7 +321,7 @@ export const assessments = {
   },
   week5: {
     title: "Assessment",
-    subtitle: "Let's test your knowlege",
+    subtitle: "Let's test your knowledge",
     questions: [
       {
         id: 1,

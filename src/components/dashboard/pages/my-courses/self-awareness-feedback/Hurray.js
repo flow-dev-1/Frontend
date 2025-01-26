@@ -17,8 +17,6 @@ const HurrayComponent = ({ enrollmentData }) => {
         keepPreviousData: false,
     });
 
-    console.log(data, "overall data")
-
     useEffect(() => {
         if (!data || data?.status === "failed") return;
         setAssessmentPercentile(data?.averagePercent)
