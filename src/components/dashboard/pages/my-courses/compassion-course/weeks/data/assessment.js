@@ -17,18 +17,6 @@ export const assessments = {
       {
         id: 2,
         question:
-          "Whem working on a group project, how do you typically contribute?",
-        options: [
-          { id: "A", text: "Observing without acting." },
-          { id: "B", text: "Understanding feelings and providing help" },
-          { id: "C", text: "Judging others based on their actions" },
-          { id: "D", text: "Ignoring others' needs" },
-        ],
-        correctOption: "C",
-      },
-      {
-        id: 3,
-        question:
           "Which of the following best describes Compassionate Communication (NVC)?",
         options: [
           { id: "A", text: "A way to win arguments" },
@@ -42,7 +30,7 @@ export const assessments = {
         correctOption: "B",
       },
       {
-        id: 4,
+        id: 3,
         question: "Which component of NVC involves expressing how you feel?",
         options: [
           { id: "A", text: "Observations." },
@@ -53,7 +41,7 @@ export const assessments = {
         correctOption: "B",
       },
       {
-        id: 5,
+        id: 4,
         question: "Why is it important to practice compassion?",
         options: [
           { id: "A", text: "It helps us with friends." },
@@ -67,7 +55,7 @@ export const assessments = {
         correctOption: "D",
       },
       {
-        id: 6,
+        id: 5,
         question:
           'In the school scenario explained in the video, which step of NVC did the student use when they said, "I need some quiet time to complete my arguments?',
         options: [

@@ -19,10 +19,11 @@ input {
   width: 100%;
   font-size: 14px;
   padding: 12px;
+  font-weight: 600;
 }
 input::placeholder{
-  font-weight:  normal !important;
-
+  /* font-weight:  bolder !important; */
+  font-size: 14px;
 }
 
 input:focus {
