@@ -110,7 +110,7 @@ function WeekFourPage4() {
           <Droppable droppableId="options">
             {(provided) => (
               <div
-                className="p-5 d-flex gap-3 align-items-baseline flex-wrap drag-flex-basis"
+                className="p-5 gap-5 drag-flex-basis"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
@@ -193,10 +193,10 @@ function WeekFourPage4() {
         </div>
       </div>
       <p
-        style={{cursor: "pointer"}}
+        // style={{cursor: "pointer"}}
         className="fs-5 d-flex justify-content-center gap-3 align-items-center mt-3 fs-2"
         onClick={resetDragAndDrop}
-        style={{ cursor: 'pointer' }} // Added cursor pointer
+        style={{ cursor: "pointer" }} // Added cursor pointer
       >
         <Icon className="ml-3" icon="teenyicons:refresh-solid" />
         Refresh

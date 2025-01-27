@@ -51,7 +51,7 @@ function WeekTwoPage2() {
   return (
     <>
       <QuestionBox>
-        <div className="d-flex align-items-center gap-2 ms-5">
+        <div className="d-flex align-center-lg-custom gap-2 ms-5">
           <h2 className="text-blue font-lg">Question: </h2>
           <h2 className="text-gray font-lg">
             {pageData.question.substring(0, 34)}{" "}
@@ -60,17 +60,12 @@ function WeekTwoPage2() {
             )}
           </h2>
         </div>
-        <BigTextBox
-          handleChange={handleInputChange}
-          value={myAnswer}
-        />
+        <BigTextBox handleChange={handleInputChange} value={myAnswer} />
       </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4 ">
         <Button text="Prev" />
-        <Button text="Next"
-          customOnClick={saveUserInput}
-        />
+        <Button text="Next" customOnClick={saveUserInput} />
       </div>
     </>
   );

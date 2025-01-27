@@ -52,18 +52,14 @@ function Page4() {
   return (
     <>
       <QuestionBox>
-        <div className="d-flex gap-2 ms-5 align-items-center">
+        <div className="d-flex gap-2 ms-5 align-center-lg-custom">
           <h2 className="text-blue font-lg">Question: </h2>
           <h2 className="text-gray font-lg">
             {pageData.question}{" "}
             {pageData.hasImage && <img src={theory} alt="theory" />} ?
           </h2>
         </div>
-        <BigTextBox
-          handleChange={handleInputChange}
-          value={myAnswer}
-        />
-      
+        <BigTextBox handleChange={handleInputChange} value={myAnswer} />
       </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4">
