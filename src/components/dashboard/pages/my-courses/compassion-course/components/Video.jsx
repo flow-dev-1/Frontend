@@ -35,7 +35,8 @@ function VideoComponent({ videoSrc }) {
         <source src={videoSrc} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <Icon
+      {/* <Icon
+        // onClick={()=> videoRef.current.play()}
         icon="mdi:play-circle-outline"
         color="skyblue"
         width={40}
@@ -45,7 +46,7 @@ function VideoComponent({ videoSrc }) {
           left: "50%",
           transform: "translate(-50%, -50%)",
         }}
-      />
+      /> */}
 
       <div
         style={{
