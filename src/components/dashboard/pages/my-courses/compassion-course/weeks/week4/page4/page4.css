@@ -86,6 +86,7 @@ grid-auto-rows: max-content;
   color: #fff;
   font-weight: bold;
   display: flex;
+  margin: auto;
   justify-content: center;
   align-items: center;
   width: 120px;

@@ -180,11 +180,11 @@ function WeekFourPage6() {
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
       <div className="d-flex flex-column align-items-center pt-2">
-        <div className="row custom-border-20">
+        <div className="d-flex custom-border-20">
           <Droppable droppableId="image">
             {(provided, snapshot) => (
               <div
-                className="col d-flex p-5 justify-content-center align-items-center"
+                className="d-flex p-5 justify-content-center align-items-center"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 style={{
@@ -200,7 +200,7 @@ function WeekFourPage6() {
               </div>
             )}
           </Droppable>
-          <div className="col bg-blue">
+          <div className="bg-blue">
             <div className="d-flex align-items-start mb-2">
               <img src={ArrowTrail} alt="arrow trail" />
               <div className="text-center text-white pt-2">
@@ -235,7 +235,7 @@ function WeekFourPage6() {
                               : "both-count"
                         }
                       >
-                        {bucketResults[bucket.id].length}
+                        {bucketResults[bucket.id]?.length}
                       </h2>
                       <div
                         className={
