@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react'
 import './course-detail-modal.css'
 import EnrollmentModal from '../Enrollment/EnrollmentModal'
 import AddEducator from '../../school-pages/school-courses/school-course-card/AddEducator'
+import self_awareness_image from'../../../../assets/selfawareness-images/self-awareness modal.png'
 
 const CourseDetailModal = ({ course, enrolled, closeModal }) => {
   const [openEnrollModal, setOpenEnrollModal] = useState(false)
@@ -66,12 +67,12 @@ const CourseDetailModal = ({ course, enrolled, closeModal }) => {
           <hr className='w-100 h-auto mb-2' />
           <div>
             <img
-              src={course.image}
+              src={course.image || self_awareness_image}
               style={{
                 width: '100%',
-                height: '160px',
+                height: '100%',
                 objectFit: 'cover',
-                display: 'block',
+                // display: 'block',
               }}
               alt=''
             />
