@@ -181,15 +181,32 @@ const SchoolCourseCard = ({
   return (
     <div>
       <div className="course-card" style={{ height: "480px" }}>
-        <div className="course-card-img" style={{ height: "230px" }}>
-          <img src={course.image} alt="" />
+        <div className="course-card-img" style={{
+          height: "230px",
+          position: "relative",
+          backgroundColor: "#f5f5f5",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden"
+        }}>
+          <img
+            src={course?.image}
+            alt=""
+            style={{
+              height: "100%",  // Keep full height
+              width: "auto",   // Maintain aspect ratio
+              minWidth: "100%", // Prevent width from being too small
+              objectFit: "cover"
+            }}
+          />
           <div className="course-card-category">
             {course.grade !== "Educators" ? "Students" : "Educators"}
           </div>
         </div>
         <div className="course-card-title" style={{ marginBottom: "0" }}>
           <h3 style={{ color: "#329BD6", fontSize: "24px" }}>
-          {course?.course?.topic}
+            {course?.course?.topic}
           </h3>
           <h3 style={isEnrolled ? { color: "#555" } : { color: "#329BD6" }}>
             {course.title}:

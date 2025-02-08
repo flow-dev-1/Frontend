@@ -82,8 +82,6 @@ const SchoolEnrolledStudents = () => {
     // refetchOnWindowFocus: false,
   });
 
-  console.log("Enrolled data ", data);
-
   useEffect(() => {
     if (!data) return;
     setData(data?.course);
@@ -214,7 +212,6 @@ const SchoolEnrolledStudents = () => {
         deleteUserCredentials.enrollId
       ),
     onSuccess: (data) => {
-      console.log("Mutation success:", data);
       toast.success("User UnEnrolled successfully!");
       queryClient.invalidateQueries(["school-single-courses"]);
       reset();
@@ -252,7 +249,7 @@ const SchoolEnrolledStudents = () => {
 
       <div className="image-container">
         <img
-          src={backgroundImage}
+          src={data?.course?.course?.banner || backgroundImage}
           alt="Background"
           className="background-image"
         />
