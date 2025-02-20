@@ -1,192 +1,75 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import AssessmentQuestion from "../../../components/AssessmentQuestion";
+import BigTextBox from "../../../components/BigTextBox";
+import theory from "../../../../../../../../assets/theory.png";
+import transition from "../../../../../../../../assets/transition.png";
 import Button from "../../../components/Button";
-import {
-  navigateNext,
-  selectCurrentStep,
-  selectCurrentWeek,
-  showReviewPopup,
-} from "../../../../../../../../redux/reducers/navigationSlice";
-import { getWeekAssessment } from "../../data";
-import StepIndicator from "../../../components/StepIndicator";
-import { userAnswer, updateData, saveAssessment } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import { useMutation } from '@tanstack/react-query';
-import { toast } from 'react-toastify';
-import userService from "../../../../../../../../services/api/user";
-import { calculateResult } from "../../../utility";
+import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
 
+function Page4() {
 
-function WeekFivePage4() {
-  const dispatch = useDispatch();
-  const currentStep = useSelector(selectCurrentStep);
-  const currentWeek = useSelector(selectCurrentWeek);
-  const assessmentData = getWeekAssessment(currentWeek);
-  const totalSteps = assessmentData?.questions?.length || 0;
-  const [answers, setAnswers] = useState([]); // State to hold answers
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
-  const userAnswers = useSelector(userAnswer);
-  const isLastQuestion = currentStep === assessmentData.totalQuestions;
+  const dispatch = useDispatch()
+  const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
+  const userAnswers = useSelector(userAnswer);
+  const [myAnswer, setMyAnswer] = useState("")
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
 
     if (!userAnswers) return
-    setAnswers(userAnswers?.assessments || [])
+    const response = userAnswers.activities?.find(item => (item.page === pageData.id))
+    setMyAnswer(response?.answer ? response.answer : "")
     return () => { }
 
   }, [userAnswers])
 
-    // Mutation for saving user data
-    const mutation = useMutation({
-      mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
-      onSuccess: (data) => {
-  
-        toast.dismiss()
-        toast.success(`You scored ${calculateResult(assessmentData.questions, answers, totalSteps)}% in the quiz`)
-        toast.success(data.message || 'Answers saved successfully!'); // Show success toast
-        // dispatch(updateData({
-        //   course:null,
-        //   courseEnrollmentId:null,
-        //   week:1,
-        //   activities:[],
-        //   assessments:[]
-        // }))
-        dispatch(navigateNext())
-      },
-      onError: (error) => {
-        console.log(error, "errorrrr")
-        toast.dismiss()
-        toast.error(error?.message || error?.error || 'Error saving answers'); // Show error toast
-      },
-    });
 
-  const handleOptionSelect = (optionKey) => {
-    setErrorMessage("")
-    setAnswers((prevAnswers) => {
-      const updatedAnswers = [...prevAnswers];
-      const stepIndex = updatedAnswers.findIndex((answer) => answer.id === currentStep);
-
-      if (stepIndex !== -1) {
-        updatedAnswers[stepIndex] = {
-          ...updatedAnswers[stepIndex],
-          value: optionKey
-        };
-      } else {
-        updatedAnswers.push({
-          id: currentStep,
-          value: optionKey
-        });
-      }
-
-      return updatedAnswers;
-    });
-  };
-
-  const saveUserData = () => {
-    if (adminDatas.isAdmin) return true
-    const stepData = answers.find(item => item.id === currentStep);
-    if (!stepData) {
-      setErrorMessage("Oops! Please choose an option to proceed.");
+  const saveUserInput = () => {
+    if (!adminDatas.isAdmin && !myAnswer) {
+      setErrorMessage("Oops! Please enter a valid input!");
       return false;
     }
 
     setErrorMessage(""); // Clear error if input is valid
+    // Allow flow admin to proceed without input but do not dispatch answer
+    if (adminDatas.isAdmin) return true
+    dispatch(saveActivity({
+      page: pageData.id,
+      answer: myAnswer
+    }))
+    return true
+  }
 
-    // If its the last question submit else update answer
-    dispatch(saveAssessment(answers)); 
+  const handleInputChange = (e) => {
+    setErrorMessage("");
+    setMyAnswer(e.target.value)
+  }
 
-    if(isLastQuestion){
-      // Check if all answers were provided bothe for assessment and activity
-      // toDo The posibilty to miss questions exixt so do a check
-      if(answers.length !== totalSteps || userAnswers.activities.length !==1) {
-        setErrorMessage("Oops! Some answers are missing. Please ensure all questions are answered.");
-        return false
-      } 
-
-      const hasEmptyAnswers = answers.some(answer => !answer.value);
-      const hasEmptyActivities = userAnswers.activities.some(activity => Object.keys(activity.answer).length !== 4);
-
-      if (hasEmptyAnswers || hasEmptyActivities) {
-        setErrorMessage("Oops! Some answers are missing. Please ensure all questions are answered.");
-        return false;
-      }
-
-      const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
-
-      mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
-
-    }else{
-      return true;
-    }
- 
-    
-  };
-
-
-  const renderStep = () => {
-    if (!assessmentData) return <div>Loading assessment...</div>;
-
-    const currentQuestion = assessmentData.questions[currentStep - 1];
-    if (!currentQuestion) return <div>Invalid Step</div>;
-
-    const formattedOptions = currentQuestion.options.map((option) => ({
-      [option.id]: option.text,
-    }));
-
-    return (
-      <AssessmentQuestion
-        data={{
-          question: currentQuestion.question,
-          options: formattedOptions,
-        }}
-        currentStep={currentStep}
-        selectedOption={answers[currentStep-1]?.value || ""}
-        onOptionSelect={handleOptionSelect}
-      />
-    );
-  };
-
-  if (!assessmentData) return null;
-
-  // If we're on the last question and user has made a selection,
-  // show the review popup instead of the next button
-
-  const hasCurrentSelection = !!answers[currentStep];
-  const shouldShowReviewButton = isLastQuestion && hasCurrentSelection;
 
   return (
     <>
       <QuestionBox>
-        <div className="bg-blue text-white p-3 mb-3">
-          <h2 className="fs-1 text-white text-center">
-            {assessmentData.title}
+        <div className="d-flex gap-2 ms-5 align-center-lg-custom">
+          <h2 className="text-blue font-lg">Question: </h2>
+          <h2 className="text-gray font-lg">
+          {pageData.question}{" "}
+            {pageData.hasImage && <img src={transition} alt="transition" />}
+            {pageData.isbrokenQuestion ? pageData.brokenCompletion : ''}
           </h2>
-          <p className="text-center">{assessmentData.subtitle}</p>
         </div>
-
-        {renderStep()}
+        <BigTextBox handleChange={handleInputChange} value={myAnswer} />
       </QuestionBox>
-      {errorMessage && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
-      <StepIndicator totalSteps={totalSteps} />
-
-      <div className="d-flex justify-content-center gap-96px mt-4 ">
-        <Button text="Prev"
-          loading={mutation.isPending}
-        />
-        {shouldShowReviewButton ? (
-          <Button
-            text="Review"
-            customOnClick={() => dispatch(showReviewPopup())}
-          />
-        ) : (
-          <Button text="Next" customOnClick={saveUserData} loading={mutation.isPending} />
-        )}
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}
+      <div className="d-flex justify-content-center gap-96px mt-4">
+        <Button text="Prev" />
+        <Button text="Next" customOnClick={saveUserInput} />
       </div>
     </>
   );
 }
 
-export default WeekFivePage4;
+export default Page4;

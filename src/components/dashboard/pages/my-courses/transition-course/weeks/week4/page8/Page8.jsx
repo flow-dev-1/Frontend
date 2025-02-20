@@ -18,7 +18,7 @@ import userService from "../../../../../../../../services/api/user";
 import { calculateResult } from "../../../utility";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
-function WeekFourPage8() {
+function WeekFourAssessment() {
   const dispatch = useDispatch();
   const currentStep = useSelector(selectCurrentStep);
   const currentWeek = useSelector(selectCurrentWeek);
@@ -29,9 +29,6 @@ function WeekFourPage8() {
   const userAnswers = useSelector(userAnswer);
   const isLastQuestion = currentStep === assessmentData.totalQuestions;
   const adminDatas = useSelector(adminData);
-  // console.log(userAnswers,"userAn")
-
-  // console.log(assessmentData,"Assessment data")
 
   useEffect(() => {
 
@@ -50,7 +47,7 @@ function WeekFourPage8() {
       toast.success(`You scored ${calculateResult(assessmentData.questions, answers, totalSteps)}% in the quiz`)
       toast.success(data.message || 'Answers saved successfully!'); // Show success toast
       dispatch(updateData({
-        course:null,
+        course: null,
         courseEnrollmentId: null,
         week: 1,
         activities: [],
@@ -96,33 +93,48 @@ function WeekFourPage8() {
     }
 
     setErrorMessage(""); // Clear error if input is valid
+
     // If its the last question submit else update answer
     dispatch(saveAssessment(answers));
 
     if (isLastQuestion) {
-      // Check if all answers were provided bothe for assessment and activity
-      if (answers.length !== totalSteps || userAnswers.activities.length !== 3) {
-        setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-        return false;
-        
-      }
-      const selectedActivity = userAnswers.activities.find(activity => activity.page === 6);
-      const answer = selectedActivity?.answer;
-      const totalLength = (answer?.green?.length || 0) + (answer?.orange?.length || 0) + (answer?.red?.length || 0);
-      if (totalLength !== 10) {
-        setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-        return false;
-      }
-      const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
 
-      mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
+      const hasUnansweredQuestions = answers.length !== totalSteps || userAnswers.activities.length !== 3;
+      if (hasUnansweredQuestions) {
+        setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+        return false;
+      }
+
+      const selectedActivity = userAnswers.activities.find(activity => activity.page === 6);
+      const isValidActivity = selectedActivity && Array.isArray(selectedActivity.answer) && selectedActivity.answer.length === 5;
+
+      if (isValidActivity) {
+        const isValid = selectedActivity.answer.every(item =>
+          item.stepId !== undefined &&
+          item.value &&
+          Object.keys(item.value).length === 3
+        );
+
+        if (isValid) {
+          const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
+
+          mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
+        } else {
+
+          setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+          return false;
+        }
+      } else {
+        setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+        return false;
+      }
+
 
     } else {
       return true;
     }
-
+    // Dispatch the saveActivity action
   };
-
 
   const renderStep = () => {
     if (!assessmentData) return <div>Loading assessment...</div>;
@@ -187,4 +199,4 @@ function WeekFourPage8() {
   );
 }
 
-export default WeekFourPage8;
+export default WeekFourAssessment;

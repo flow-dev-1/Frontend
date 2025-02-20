@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import selfCompassion from "../../../../../../../../assets/self-compassion.png";
 import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
@@ -9,7 +8,7 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
 
 
-function WeekThreePage2() {
+function Page2() {
   const dispatch = useDispatch()
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
@@ -52,19 +51,16 @@ function WeekThreePage2() {
   return (
     <>
       <QuestionBox>
-        <div className="d-flex gap-2 ms-5 align-center-lg-custom">
+        <div className="d-flex gap-3 ms-5 align-center-lg-custom">
           <h2 className="text-blue font-lg">Question: </h2>
           <h2 className="text-gray font-lg">
-            {pageData.question.substring(0, 20)}{" "}
-            {pageData.hasImage && (
-              <img src={selfCompassion} alt="self-compassion" />
-            )}{" "}
-            is ?
+            {pageData.question}{" "}
           </h2>
         </div>
         <BigTextBox handleChange={handleInputChange} value={myAnswer} />
       </QuestionBox>
-      <div className="d-flex justify-content-center gap-96px mt-4 ">
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}
+      <div className="d-flex justify-content-center gap-96px mt-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
@@ -72,4 +68,4 @@ function WeekThreePage2() {
   );
 }
 
-export default WeekThreePage2;
+export default Page2;
