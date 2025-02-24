@@ -19,7 +19,7 @@ export const courseContent = {
           next: true,
         },
       },
-     
+
       {
         id: 3,
         type: "video",
@@ -36,7 +36,7 @@ export const courseContent = {
         question: "What does the word ",
         hasImage: true,
         isbrokenQuestion: true,
-        brokenCompletion:" mean to you?",
+        brokenCompletion: " mean to you?",
         imageSrc: "transition.png",
         inputType: "bigTextBox",
         navigation: {
@@ -44,7 +44,7 @@ export const courseContent = {
           next: true,
         },
       },
-     
+
       {
         id: 5,
         type: "video",
@@ -173,7 +173,7 @@ export const courseContent = {
           next: true,
         },
       },
-        ],
+    ],
   },
   week3: {
     title: "Secondary School",
@@ -212,18 +212,33 @@ export const courseContent = {
         instruction:
           "Drag-and-drop the statements on the left into any of these bowls",
         options: [
-          "Mum",
-          "Dad",
+          "Past Mistakes",
+          "How I Respond to Challenges",
+          "Asking for Help",
+          "Being Accountable",
+          "Height",
+          "Being Kind",
+          "Doing My Chores",
+          "Forgiveness from others",
+          "Who Loves Me",
+          "The Friends I Choose to Have",
+          "Death",
+          "Others expressing their emotions",
+          "Skin Color",
+          "Others being kind",
+          "Someone else's decisions",
+          "How I Spend my Free Time",
+          "Responding Properly",
         ],
         bowls: [
           {
             id: "inner",
-            label: "Growth Mindset",
+            label: "Inner Cycle",
             count: 2,
           },
           {
             id: "outer",
-            label: "Fixed Mindset",
+            label: "Outer Cycle",
             count: 2,
           },
         ],
@@ -232,7 +247,7 @@ export const courseContent = {
           next: true,
         },
       },
-           {
+      {
         id: 5,
         type: "video",
         videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+3/FLOW+3_3.mp4",
@@ -266,7 +281,7 @@ export const courseContent = {
                 type: "Caring",
                 question: "Outside your control:",
               }
-             
+
             ],
           },
           {
@@ -277,76 +292,60 @@ export const courseContent = {
             questions: [
               {
                 type: "Seeing",
-                question: "What do you notice about the situation?",
+                question: "Within your control:",
               },
               {
                 type: "Caring",
-                question: "What do you think the new student might be feeling?",
-              },
-              {
-                type: "Doing",
-                question: "What could you do to show compassion?",
-              },
+                question: "Outside your control:",
+              }
             ],
           },
           {
             stepId: 4,
             type: "scenario",
             title:
-              "Your friend did'nt do well on a test they studied hard for and seems very disappointed.",
+              "You didn’t get selected for the school team.",
             questions: [
               {
                 type: "Seeing",
-                question: "What do you notice about the situation?",
+                question: "Within your control:",
               },
               {
                 type: "Caring",
-                question: "What do you think your friend might be feeling?",
-              },
-              {
-                type: "Doing",
-                question: "What could you do to show compassion?",
-              },
+                question: "Outside your control:",
+              }
             ],
           },
           {
             stepId: 5,
             type: "scenario",
             title:
-              "During recess, you notice a group of students excluding someone from a game. That student is standing alone, looking sad.",
+              "Your sibling borrowed your things without asking.",
             questions: [
               {
                 type: "Seeing",
-                question: "What do you notice about the situation?",
+                question: "Within your control:",
               },
               {
                 type: "Caring",
-                question: "What do you think the student might be feeling?",
-              },
-              {
-                type: "Doing",
-                question: "What could you do to show compassion?",
-              },
+                question: "Outside your control:",
+              }
             ],
           },
           {
             stepId: 6,
             type: "scenario",
             title:
-              "You overhear a classmate being teased for a mistake they made during a presentation. They seem embarassed and are avoiding eye contact with others.",
+              "You feel nervous about giving a presentation.",
             questions: [
               {
                 type: "Seeing",
-                question: "What do you notice about the situation?",
+                question: "Within your control:",
               },
               {
                 type: "Caring",
-                question: "What do you think your classmate might be feeling?",
-              },
-              {
-                type: "Doing",
-                question: "What could you do to show compassion?",
-              },
+                question: "Outside your control:",
+              }
             ],
           },
         ],
@@ -359,59 +358,6 @@ export const courseContent = {
         id: 7,
         type: "video",
         videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+3/FLOW+3_4.mp4",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 8,
-        type: "listQuestion",
-        question:
-          "List five (5) other ways you think compassion can be shown to others.",
-        inputCount: 5,
-        inputType: "text",
-        inputPlaceholder: "Type your answer here",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 9,
-        type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+3/FLOW+3_5.mp4",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 10,
-        type: "Write a letter of Compassion to Others.",
-        instructions: [
-          "Can you remember a time when a friend needed your compassion, but you didn't offer it?",
-          "Write a letter to this friend of yours, telling them that you're sorry for not being compassionate when they needed you, and offer them the kind words you wish you'd said back then.",
-        ],
-        inputType: "textarea",
-        textareaConfig: {
-          placeholder: "Type your answer here...",
-          rows: 8,
-          cols: 80,
-          styles: {
-            maxWidth: "100%",
-            fontSize: "25px",
-          },
-        },
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 11,
-        type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+3/FLOW+3_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -433,8 +379,10 @@ export const courseContent = {
         type: "question",
         questionType: "text",
         question:
-          "If a stranger you never knew walked up to you and asked you to share your lunch with them because they were hungry. What would you do? Would you share your food with them to show compassion?",
+          "What do you understand by the word",
         inputType: "mediumTextBox",
+        hasImage: true,
+        imageSrc: "values.png",
         navigation: {
           prev: true,
           next: true,
@@ -451,33 +399,201 @@ export const courseContent = {
       },
       {
         id: 4,
-        type: "dragAndDrop",
+        type: "multiStepValueCheck",
         instruction:
           "Drag-and-drop the statements on the left into any of these bowls",
-        options: [
-          "Mum",
-          "Dad",
-          "Family friend",
-          "Cousin",
-          "Brother",
-          "Sister",
-          "Stranger",
-          "Classmate",
-          "Uncle",
-          "Driver",
-          "Best friend",
-          "Teacher",
-        ],
-        bowls: [
+        steps: [
           {
-            id: "inner",
-            label: "Inner Circle",
-            count: 2,
+            stepId: 1,
+            checklists: [
+              {
+                option: "Generosity",
+                description: "Being willing to share and give to others.",
+                eg: "Example: Donating to charity.",
+              },
+              {
+                option: "Respect",
+                description: "Valuing and honoring others and their options.",
+                eg: "Example: Listening carefully to an elder.",
+              },
+              {
+                option: "Leadership",
+                description: "Guiding  and inspiring others.",
+                eg: "Example: Leading a group project at school",
+              },
+              {
+                option: "Responsibility",
+                description: "Being accountable for your actions and duties.",
+                eg: "Example: Completing your homework on time.",
+              }, {
+                option: "Integrity",
+                description: "Being honest and having strong moral principles.",
+                eg: "Example:Returning a lost wallet you found.",
+              },
+              {
+                option: "Empathy",
+                description: "Understanding and sharing the feelings of others.",
+                eg: "Example: Comforting a friend who is sad.",
+              },
+              {
+                option: "Compassion",
+                description: "Caring for others and helping them when they need it.",
+                eg: "Example: Volunteering at a soup kitchen.",
+              },
+              {
+                option: "Gratitude",
+                description: "Being thankful and appreciating what you have.",
+                eg: "Example: Writing a thank-you note to someone who helped you.",
+              }, {
+                option: "Courage",
+                description: "Facing your fears or challenges bravely.",
+                eg: "Example: Speaking up for someone being bullied.",
+              },
+              {
+                option: "Forgiveness",
+                description: "Letting go of anger or resentment towards someone who wronged you.",
+                eg: "Example: Forgiving a friend who hurt your feelings.",
+              }
+              ,
+              {
+                option: "Perseverance",
+                description: "Continuing to try, even when things are tough.",
+                eg: "Example: Practicig a sport even after losing a game.",
+              },
+              {
+                option: "Cooperation",
+                description: "Working well with others to achieve a common goal.",
+                eg: "Example: Collaborating on a group project.",
+              }
+            ],
           },
           {
-            id: "outer",
-            label: "Outer Circle",
-            count: 2,
+            stepId: 2,
+            checklists: [
+              {
+                option: "Kindness",
+                description: "Being friendly, generous, and considerate to others.",
+                eg: "Example: Helping a neighbor carry their groceries.",
+              },
+              {
+                option: "Tolerance",
+                description: "Accepting and respecting different opinions or behaviors.",
+                eg: "Example: Respecting classmates' diverse backgrounds.",
+              },
+              {
+                option: "Patience",
+                description: "Waiting calmly without getting frustrated.",
+                eg: "Example: Waiting for your turn without complaining.",
+              },
+              {
+                option: "Friendship",
+                description: "Having a close and trusting relationship with someone.",
+                eg: "Example: Spending time with a friend who needs support.",
+              }, {
+                option: "Teamwork",
+                description: "Working together with others to achieve a goal.",
+                eg: "Example: Playing a team sport and supporting each other.",
+              },
+              {
+                option: "Organization",
+                description: "Planning and arranging tasks and activities efficiently.",
+                eg: "Example: Keeping a tidy desk and schedule.",
+              },
+              {
+                option: "Grit",
+                description: "Having courage and determination to stick with something.",
+                eg: "Example: Studying hard for a tough exam.",
+              },
+              {
+                option: "Resilience",
+                description: "Recovering quickly from difficulties.",
+                eg: "Example: Bouncing back after a disappointing performance.",
+              }, {
+                option: "Adaptability",
+                description: "Adjusting to new conditions or changes.",
+                eg: "Example: Getting used to a new school.",
+              },
+              {
+                option: "Contentment",
+                description: "Being happy and satisfied with what you have.",
+                eg: "Example: Enjoying time with family without wanting more.",
+              }
+              ,
+              {
+                option: "Honour",
+                description: "Doing what is right and keeping promises.",
+                eg: "Example: Keeping a promise even when it’s hard.",
+              },
+              {
+                option: "Moderation",
+                description: "Avoiding extremes and practicing self-control.",
+                eg: "Example: Eating sweets occasionally rather than every day.",
+              }
+            ],
+          },
+          {
+            stepId: 3,
+            checklists: [
+              {
+                option: "Spirituality",
+                description: "Feeling connected to something bigger than yourself.",
+                eg: "Example: Practicing meditation or prayer.",
+              },
+              {
+                option: "Healthy Life",
+                description: "Taking care of your physical, mental, and emotional well-being.",
+                eg: "Example: Exercising and eating a balanced diet.",
+              },
+              {
+                option: "Family",
+                description: "Valuing and maintaining strong bonds with family members.",
+                eg: "Example: Spending quality time with your family.",
+              },
+              {
+                option: "Resourcefulness",
+                description: "Finding clever solutions to problems.",
+                eg: "Example: Using household items creatively to solve a problem.",
+              }, {
+                option: "Mindfulness",
+                description: "Being fully present and aware of the moment.",
+                eg: "Example: Practicing deep breathing to stay calm.",
+              },
+              {
+                option: "Creativity",
+                description: "Using your imagination to create or solve problems.",
+                eg: "Example: Painting a picture or writing a story.",
+              },
+              {
+                option: "Curiosity",
+                description: "Wanting to know or learn something new.",
+                eg: "Example: Asking questions about a topic you’re interested in.",
+              },
+              {
+                option: "Punctuality",
+                description: "Being on time.",
+                eg: "Example: Arriving at school before the bell rings.",
+              },
+              {
+                option: "Courtsey",
+                description: "Being polite and considerate.",
+                eg: "Example: Saying please and thank you.",
+              }, {
+                option: "Self-control",
+                description: "Managing your emotions and behavior.",
+                eg: "Example:Staying calm when you’re angry.",
+              },
+              {
+                option: "Self-discipline",
+                description: "Sticking to what’s right, even when it’s tough.",
+                eg: "Example: Following a study schedule despite wanting to play.",
+              }
+              ,
+              {
+                option: "Optimism",
+                description: "Being hopeful and confident about the future.",
+                eg: "Example: Believing you will do well on a test even if it seems hard.",
+              },
+            ],
           },
         ],
         navigation: {
@@ -496,40 +612,32 @@ export const courseContent = {
       },
       {
         id: 6,
-        type: "imageDragAndDrop",
-        instruction:
-          "Drag-and-drop the statements on the left into any of these bowls",
-        images: [
-          "Helping with chores at home.",
-          "Helping an elderly neighbor with groceries.",
-          "Smiling at someone who looks upset.",
-          "Standing up for someone being bullied.",
-          "Holding the door open for a stranger.",
-          "Helping a classmate with a school project.",
-          "Listening when someone needs to talk.",
-          "Being kind and respectful in your daily interactions.",
-          "Preparing a meal for a sick family member.",
-          "Picking up litter in a public park.",
+        type: "multiStepMultiAnswers",
+        steps: [
+         
+          {
+            stepId: 1,
+            type: "question",
+            title:
+              "Identify three (3) important people in your life and list their names below.",
+            answers:3
+          },
+          {
+            stepId: 1,
+            type: "question",
+            title:
+              "Write out what these people think about you.",
+            answers:3
+          },
+          {
+            stepId: 1,
+            type: "question",
+            title:
+              "Are you happy with what these people think about you? If no, what would you like to change? If yes, type “YES” in the box.",
+            answers:3
+          },
+        
         ],
-        buckets: [
-          {
-            id: "green",
-            label: "Inner Circle",
-            image: "Green Bucket.svg",
-          },
-          {
-            id: "orange",
-            label: " Outer Circle",
-            image: "Orange Bucket.svg",
-          },
-          {
-            id: "red",
-            label: "Both",
-            image: "Red Bucket.svg",
-          },
-        ],
-        steps: 10,
-        currentStep: 1,
         navigation: {
           prev: true,
           next: true,
@@ -557,126 +665,173 @@ export const courseContent = {
       },
       {
         id: 2,
-        type: "multiScenario",
-        scenarios: [
+        type: "multiLineAnswers",
+        title: "Write a letter to yourself.",
+        instructions: [
+          "Give examples of emotions that you know of.",
+        ],
+        inputType: "textarea",
+        textareaConfig: {
+          placeholder: "Type your answer here...",
+          rows: 5,
+          cols: 80,
+          styles: {
+            maxWidth: "100%",
+            fontSize: "25px",
+          },
+        },
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 6,
+        type: "multiStep",
+        steps: [
           {
-            id: 1,
-            title: "Scenario 1",
-            type: "question",
-            question: "Your Friend Forgot Their Homework at Home.",
-            options: [
+            stepId: 1,
+            type: "instruction",
+            title: "Scenario",
+            instructions:
+              "Jordan's friend was supposed to meet him at the library but canceled at the last minute. Jordan feels frustrated.",
+          },
+          {
+            stepId: 2,
+            type: "scenario",
+            title:
+              "Your friends made plans without you.",
+            questions: [
               {
-                id: "A",
-                text: "You notice your friend is upset and say, \"I'm sorry you forgot your homework,\" but don't offer further help.",
+                type: "",
+                question: "Identify the Emotion:",
               },
               {
-                id: "B",
-                text: 'You notice your friend is upset, express concern by saying, "I can see you\'re feeling worried about forgetting your homework." You then offer to share your notes and help them prepare for the class discussion.',
+                type: "",
+                question: "Reason for the Emotion:",
               },
               {
-                id: "C",
-                text: 'You tell your friend, "I\'ll help by talking to the teacher with you," and offer to go with them to explain the situation to the teacher.',
-              },
+                type: "",
+                question: "Respond with Emotional Intelligence:",
+              }
+
             ],
           },
           {
-            id: 2,
-            type: "feedback",
-            feedback: {
-              A: "It's good that you expressed concern by acknowledging their situation, but compassion involves more than just words. You noticed your friend's worry (Observation), but you didn't take any steps to actively help (Request). True compassion means going beyond just recognizing a problem and offering support when possible.",
-              B: "Great job! By choosing Option B, you've shown true compassion. You observed your friend's situation and acknowledged their feelings by saying they are worried (Observation & Feeling). You understood their need for help (Need) and offered assistance by sharing your notes and helping them prepare. Offering practical support for the class discussion directly addresses their emotional and academic needs, showing real compassion.",
-              C: "It's great that you're taking initiative to help your friend by offering to speak to the teacher. This is a thoughtful way to address their need (Need). However, it's important to confirm with your friend first that they are comfortable with you involving the teacher. Compassion also means respecting their feelings and ensuring they're okay with the approach you take",
-            },
-          },
-          {
-            id: 3,
-            title: "Scenario 2",
-            type: "question",
-            question:
-              "You Go Out with Your Family to Dinner and Your Sibling is Rude to the Waiter.",
-            options: [
+            stepId: 3,
+            type: "scenario",
+            title:
+              "Maria got her test results back and is disappointed because she didn’t score as high as she expected, even though she studied hard.",
+            questions: [
               {
-                id: "A",
-                text: "Politely apologize to the waiter for your sibling's behavior and thank them for their service.",
+                type: "",
+                question: "Identify the Emotion:",
               },
               {
-                id: "B",
-                text: "Ignore the situation and eat your food quietly.",
+                type: "",
+                question: "Reason for the Emotion:",
               },
               {
-                id: "C",
-                text: "Suggest to your family that you all leave a generous tip to make up for the rudeness.",
-              },
-            ]
-          },
-          {
-            id: 4,
-            type: "feedback",
-            feedback: {
-              A: "Great job! Apologizing to the waiter and being extra polite shows compassion and respect, making the waiter feel valued despite the rudeness. Also note that option C is not an act of compassion as giving the waiter money in that instant will be more of an insult than a compassionate act. Apologizing is the best way to show compassion to the waiter; this will also communicate to your sibling that they were wrong and probably make them feel sorry too.",
-              B: "Oh, did you choose Option B? Ignoring the situation might seem like the easiest choice, but it doesn't help anyone. The waiter might still feel hurt, and your sibling won't learn how to treat others kindly. When we notice someone is being treated unfairly, it's important to speak up politely or show kindness in some way.",
-              C: "If you choose Option C Understand that leaving a tip is a nice gesture, but in this case, it's not enough to fix the problem. Giving the waiter money won't make them feel respected. What they really need is for someone to say sorry and acknowledge their feelings. Showing kindness through words is more powerful than giving money in this situation.",
-            },
-          },
-          {
-            id: 5,
-            title: "Scenario 3",
-            type: "question",
-            question:
-              "A New Boy Comes to Class and is Nervous About Joining Others to Play.",
-            options: [
-              {
-                id: "A",
-                text: "Invite him to join your group and introduce him to other classmates.",
-              },
-              {
-                id: "B",
-                text: "Casually remind yourself it's not your responsibility to make new students feel welcome.",
-              },
-              {
-                id: "C",
-                text: "Pull him into the game without his permission.",
-              },
+                type: "",
+                question: "Respond with Emotional Intelligence:",
+              }
+
             ],
-          },
-          {
-            id: 6,
-            type: "feedback",
-            feedback: {
-              A: "Did you choose Option A? Great job! Inviting him and giving him the option to choose to participate or not is a very compassionate act. However, pulling him into the game without his permission and ignoring him are not acts of compassion.",
-              B: "If you choose Option B, Understand that, while it might feel like it's not your job to welcome others, we all play a part in making people feel included. Imagine if you were new and nervous—having someone reach out can make a big difference. Showing kindness and helping others feel comfortable is always a great thing to do.",
-              C: "Option C might seem like you're helping by pulling him into the game, but forcing someone to do something can make them feel even more nervous. It's important to ask and give them the choice. When someone is new, they might need time to get comfortable, and being kind and patient can help them feel safe and ready to join when they're ready.",
-            },
-          },
-          {
-            id: 7,
-            title: "Scenario 4",
-            type: "question",
-            question: "Your Friend Failed a Test While You Scored the Highest.",
-            options: [
+          },  {
+            stepId: 4,
+            type: "scenario",
+            title:
+              "Alex’s friend just got chosen as the team captain, a position Alex also wanted. Alex feels left out and a little jealous.",
+            questions: [
               {
-                id: "A",
-                text: "Brag about your high score and tell them they should have studied harder.",
+                type: "",
+                question: "Identify the Emotion:",
               },
               {
-                id: "B",
-                text: "Ignore their feelings and continue to celebrate your own success.",
+                type: "",
+                question: "Reason for the Emotion:",
               },
               {
-                id: "C",
-                text: "Encourage them by reminding them that one test doesn't define their abilities, and that you can help them study for the next one.",
-              },
+                type: "",
+                question: "Respond with Emotional Intelligence:",
+              }
+
             ],
-          }, {
-            id: 8,
-            type: "feedback",
-            feedback: {
-              A: "If you choose Option A, understand that bragging about your success might make your friend feel worse. It's important to celebrate your achievements, but not in a way that hurts others. Telling them they should have studied harder isn't very kind. Sometimes, people need support and encouragement instead of criticism when they feel down.",
-              B: "Did you choose Option B? Not quite right, Ignoring your friend's feelings might make them feel even more alone. When someone is upset, it's important to be aware of how they're feeling and offer them comfort. You can still be proud of your success, but showing kindness and understanding to your friend can make them feel better and strengthen your friendship.",
-              C: "Did you choose Option C? Great job! Encouraging your friend and reminding them that the test doesn't define their abilities is very good, and is a compassionate act. Ignoring their feelings and bragging about your score is not compassionate and not kind in any way.",
-            },
+          },  {
+            stepId: 5,
+            type: "scenario",
+            title:
+              "During group work, Mia notices that one team member, Sam, seems quiet and withdrawn. Mia suspects he might be feeling stressed..",
+            questions: [
+              {
+                type: "",
+                question: "Identify the Emotion:",
+              },
+              {
+                type: "",
+                question: "Reason for the Emotion:",
+              },
+              {
+                type: "",
+                question: "Respond with Emotional Intelligence:",
+              }
+
+            ],
+          },  {
+            stepId: 6,
+            type: "scenario",
+            title:
+              "Jamie helped organize a big event, but nobody thanked him for his hard work. Jamie feels unappreciated.",
+            questions: [
+              {
+                type: "",
+                question: "Identify the Emotion:",
+              },
+              {
+                type: "",
+                question: "Reason for the Emotion:",
+              },
+              {
+                type: "",
+                question: "Respond with Emotional Intelligence:",
+              }
+
+            ],
           },
         ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 4,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+    ],
+  },
+  week6: {
+    title: "Compassion in Practice",
+    pages: [
+      {
+        id: 1,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 2,
+        type: "question",
+        questionType: "text",
+        question: "What comes to your mind about the word  ",
+        hasImage: true,
+        imageSrc: "social_skills.png",
+        inputType: "bigTextBox",
         navigation: {
           prev: true,
           next: true,
@@ -686,6 +841,599 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 4,
+        type: "progressBar",
+        question: "Do you think you have great social skills or poor social skills?",
+               progressBarConfig: {
+          low: 0,
+          mid: 50,
+          max:100,
+        },
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 5,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 6,
+        type: "question",
+        questionType: "text",
+        question: "What comes to your mind about the word  ",
+        hasImage: true,
+        imageSrc: "communication.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 7,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 8,
+        type: "question",
+        questionType: "text",
+        question: "What do you understand by the word ",
+        hasImage: true,
+        imageSrc: "boundaries.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 9,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 10,
+        type: "dragAndDrop",
+        instruction:
+          "Drag-and-drop the statements on the left into any of these bowls",
+        options: [
+          "Listening actively and not interrupting.",
+          "Clearly expressing your own comfort levels in a conversation.",
+          "Being direct and respectful when you don’t agree.",
+          "Politely explaining if something is outside your comfort zone.",
+          "Respecting others’ personal space and values.",
+        ],
+        bowls: [
+          {
+            id: "inner",
+            label: "Effective communication",
+            count: 2,
+          },
+          {
+            id: "outer",
+            label: "Clear Boundaries",
+            count: 2,
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 11,
+        type: "multiStepDropDown",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions:[
+              "Below are sentences with missing words related to communication and boundaries. Choose the best word from the list below to complete each sentence.",
+              "Missing words are: Respect, Clarity, Comfort, Listen, Express"
+                    ]            },
+          {
+            stepId: 2,
+            type: "scenario",
+             question: "When setting boundaries, it’s important to clearly ______ your needs.",
+            options: [
+            "Respect",
+            "Clarity",
+            "Comfort",
+            "Listen",
+            "Express",
+            ],
+          },
+          {
+            stepId: 3,
+            type: "scenario",
+             question: "In effective communication, you ______ to understand, not to respond immediately.",
+            options: [
+            "Respect",
+            "Clarity",
+            "Comfort",
+            "Listen",
+            "Express",
+            ],
+          },
+          {
+            stepId: 4,
+            type: "scenario",
+             question: "Boundaries help maintain ______ within relationships.",
+            options: [
+            "Respect",
+            "Clarity",
+            "Comfort",
+            "Listen",
+            "Express",
+            ],
+          },
+          {
+            stepId: 5,
+            type: "scenario",
+             question: "Good communication includes being able to speak with ______ and honesty.",
+            options: [
+            "Respect",
+            "Clarity",
+            "Comfort",
+            "Listen",
+            "Express",
+            ],
+          },
+          {
+            stepId: 6,
+            type: "scenario",
+             question: "Healthy relationships are built on ______ for each other’s space and ideas.",
+            options: [
+            "Respect",
+            "Clarity",
+            "Comfort",
+            "Listen",
+            "Express",
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 12,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+    ],
+  },
+  week7: {
+    title: "Compassion in Practice",
+    pages: [
+      {
+        id: 1,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 2,
+        type: "radio",
+        question:"Have you sat down to think about how you will balance all of these effectively? ",
+        options: [
+           "Yes",
+           "No"
+               ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 3,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },},
+   
+     
+      {
+        id: 4,
+        type: "versatileMultiStepAndMultiAnswers",
+        steps: [
+                   {
+            stepId: 1,
+            type: "star",
+            question:
+              "Your friends made plans without you.",
+          fieldCount:5
+          },
+        
+          {
+            stepId: 2,
+            type: "hearts",
+            question:
+              "Write down the goals you want to achieve.",
+          fieldCount:5
+          },
+          {
+            stepId: 3,
+            type: "single-star",
+            question:
+              "Write down your Wishing State here.",
+          fieldCount:1
+          },
+          {
+            stepId: 3,
+            type: "smart",
+            question:
+              "Write down your Wishing State here.",
+          fieldCount:5
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 5,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      
+     
+    ],
+  },
+  week8: {
+    title: "Compassion in Practice",
+    pages: [
+      {
+        id: 1,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 2,
+        type: "radio",
+        question:"Do you watch or play football? ",
+        hasImage:true,
+        imageSrc:"foootballers.png",
+        options: [
+           "Yes",
+           "No"
+               ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 3,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 4,
+        type: "question",
+        questionType: "text",
+        question: "What do you understand by the word  ",
+        hasImage: true,
+        imageSrc: "resilience.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 5,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 6,
+        type: "versatileMultiStepAndMultiAnswers",
+        steps: [
+                   {
+            stepId: 1,
+            type: "star",
+            question:
+              "Your friends made plans without you.",
+          fieldCount:5
+          },
+        
+          {
+            stepId: 2,
+            type: "hearts",
+            question:
+              "Write down the goals you want to achieve.",
+          fieldCount:5
+          },
+          {
+            stepId: 3,
+            type: "single-star",
+            question:
+              "Write down your Wishing State here.",
+          fieldCount:1
+          },
+          {
+            stepId: 3,
+            type: "smart",
+            question:
+              "Write down your Wishing State here.",
+          fieldCount:5
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 7,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+    ],
+  },
+  week9: {
+    title: "Compassion in Practice",
+    pages: [
+      {
+        id: 1,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 2,
+        type: "question",
+        questionType: "text",
+        question: "What do you understand by the word  ",
+        hasImage: true,
+        imageSrc: "resilience.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 3,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 4,
+        type: "question",
+        questionType: "text",
+        question: "What do you understand by the word  ",
+        hasImage: true,
+        imageSrc: "coping_skills.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 5,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 6,
+        type: "multiStepChallenge",
+        title: "Write a letter to yourself.",
+        challenges: [
+         {
+          type:"example",
+          chalenge:"Preparing for a big math test, and you don’t understand all the topics.",
+          statement:"I don’t understand all the topics. yet., but I can keep studying and practicing until I do"
+        },
+        {
+          type:"question",
+          chalenge:"Trying to make new friends but feeling like I don’t fit in..",
+        },
+        {
+          type:"question",
+          chalenge:"Learning how to play a musical instrument, but I keep making mistakes.",
+        },
+        {
+          type:"question",
+          chalenge:"During class discussions, I don't feel confident speaking in front of others..",
+        },
+        {
+          type:"question",
+          chalenge:"I don't seem to know how to balance school work and home chores",
+        },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 7,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        hasNextButton: true,
+      }
+    ],
+  },
+  week10: {
+    title: "Compassion in Practice",
+    pages: [
+      {
+        id: 1,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 2,
+        type: "multiLineAnswers",
+        title: "Write a letter to yourself.",
+        instructions: [
+          "Give examples of emotions that you know of.",
+        ],
+        inputType: "textarea",
+        textareaConfig: {
+          placeholder: "Type your answer here...",
+          rows: 5,
+          cols: 80,
+          styles: {
+            maxWidth: "100%",
+            fontSize: "25px",
+          },
+        },
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 3,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 4,
+        type: "muiltiStepWithTitle",
+        steps: [
+          {
+            stepId: 1,
+            type: "question",
+            title: "Dear Future Me",
+            question:
+              "When I’m feeling overwhelmed with homework, I’ll remember to",
+          },
+          {
+            stepId: 2,
+            type: "question",
+            title: "Dear Future Me",
+            question:
+              "If I’m nervous about giving a presentation, I’ll try to calm myself by...",
+          },
+          {
+            stepId: 3,
+            type: "question",
+            title: "Dear Future Me",
+            question:
+              "If I find a subject difficult and start to struggle, I’ll remind myself to ...",
+          },
+          {
+            stepId: 4,
+            type: "question",
+            title: "Dear Future Me",
+            question:
+              "When I get a lower grade than I expected, I’ll use resilience by...",
+          },
+          {
+            stepId: 5,
+            type: "question",
+            title: "Dear Future Me",
+            question:
+              "If I feel left out at lunch or during group activities, I’ll remember to...",
+          },
+          {
+            stepId: 6,
+            type: "question",
+            title: "Dear Future Me",
+            question:
+              "When I have a disagreement with a friend, I’ll handle it by...",
+          },
+          {
+            stepId: 7,
+            type: "question",
+            title: "Dear Future Me",
+            question:
+              "If I feel too tired or stressed, I’ll take care of myself by ...",
+          },
+          {
+            stepId: 8,
+            type: "question",
+            title: "Dear Future Me",
+            question:
+              "When I feel unsure about asking for help, I’ll remind myself that I can always talk to...",
+          },
+          {
+            stepId: 9,
+            type: "question",
+            title: "Dear Future Me",
+            question:
+              "If I need to set a new goal, I’ll plan by first...",
+          },
+          {
+            stepId: 10,
+            type: "question",
+            title: "Dear Future Me",
+            question:
+              "When I need a break from studying, I’ll choose a healthy way to recharge like...",
+          },
+          {
+            stepId: 11,
+            type: "question",
+            title: "Dear Future Me",
+            question:
+              "If I have a day where everything feels hard, I’ll show resilience by...",
+          },
+          {
+            stepId: 12,
+            type: "question",
+            title: "Dear Future Me",
+            question:
+              "When I need to manage my time for a big test, I’ll organize myself by...",
+          },
+        
+        ],
         navigation: {
           prev: true,
           next: true,
