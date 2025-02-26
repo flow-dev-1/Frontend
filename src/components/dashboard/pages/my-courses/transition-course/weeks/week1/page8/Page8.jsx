@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import BigTextBox from "../../../components/BigTextBox";
+import transition from "../../../../../../../../assets/transition.png";
 import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
@@ -51,10 +52,12 @@ function Page8() {
   return (
     <>
       <QuestionBox>
-        <div className="d-flex gap-3 ms-5 align-center-lg-custom">
+        <div className="d-flex gap-2 ms-5 align-center-lg-custom">
           <h2 className="text-blue font-lg">Question: </h2>
           <h2 className="text-gray font-lg">
-            {pageData.question}{" "}
+          {pageData.question}{" "}
+            {pageData.hasImage && <img src={transition} alt="transition" />}
+            {pageData.isbrokenQuestion ? pageData.brokenCompletion : ''}
           </h2>
         </div>
         <BigTextBox handleChange={handleInputChange} value={myAnswer} />

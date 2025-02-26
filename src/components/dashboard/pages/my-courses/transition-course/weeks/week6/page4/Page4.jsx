@@ -9,7 +9,7 @@ import { selectPageData } from "../../../../../../../../redux/reducers/navigatio
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
 
-function Page4() {
+function WeekSixPage4() {
 
   const dispatch = useDispatch()
   const pageData = useSelector(selectPageData);
@@ -72,4 +72,4 @@ function Page4() {
   );
 }
 
-export default Page4;
+export default WeekSixPage4;

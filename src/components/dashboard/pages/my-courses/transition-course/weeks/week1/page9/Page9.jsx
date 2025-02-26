@@ -11,6 +11,7 @@ const Page9 = () => {
     <>
       <VideoComponent videoSrc={pageData.videoSrc} />
       <div className="d-flex justify-content-center mt-4">
+      <Button text="Prev" />
         <Button text="Next" />
       </div>
     </>

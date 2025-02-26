@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import BigTextBox from "../../../components/BigTextBox";
+import HeartTextBox from "../../../components/HeartTextBox";
 import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
@@ -57,7 +57,7 @@ function Page10() {
             {pageData.question}{" "}
           </h2>
         </div>
-        <BigTextBox handleChange={handleInputChange} value={myAnswer} />
+        <HeartTextBox handleChange={handleInputChange} value={myAnswer} />
       </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4">

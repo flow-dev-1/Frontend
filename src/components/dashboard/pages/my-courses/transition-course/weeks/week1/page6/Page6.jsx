@@ -1,62 +1,47 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import QuestionBox from "../../../components/QuestionBox";
-import Frame from "./components/Frame";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import "./page6.css";
 import Button from "../../../components/Button";
-import {
-  selectPageData,
-  selectCurrentStep,
-} from "../../../../../../../../redux/reducers/navigationSlice";
-import StepIndicator from "../../../components/StepIndicator";
+import QuestionBox from "../../../components/QuestionBox";
+import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
 
 function Page6() {
-  const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
-  const currentStep = useSelector(selectCurrentStep);
-  const totalSteps = pageData?.steps?.length || 0;
+  const dispatch = useDispatch()
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
-  const step = pageData?.steps[currentStep - 1];
-  const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
-  // console.log(userAnswers)
+
+  const userAnswers = useSelector(userAnswer);
 
   useEffect(() => {
 
     if (!userAnswers) return
     const response = userAnswers.activities?.find(item => (item.page === pageData.id))
-    setAnswers(response?.answer ? response.answer : [])
+    const answerCopy = response?.answer ? [...response.answer] : []
+    setAnswers(answerCopy)
     return () => { }
 
   }, [userAnswers])
 
   const saveUserInput = () => {
-    if (currentStep === 1) return true;
     if (adminDatas.isAdmin) return true
-
-    const stepData = answers.find(item => item.stepId === currentStep);
-    if (!stepData) {
-      setErrorMessage("Oops! All inputs must be filled out.");
+    if (answers.length < 5) {
+      setErrorMessage("At least 5 values are required!");
       return false;
     }
 
-    const values = Object.values(stepData.value);
-    if (values.length < 3) {
-      setErrorMessage("At least 3 values are required!");
-      return false;
-    }
-
-    const emptyInputs = values.filter((value) => value.trim() === "");
+    const emptyInputs = answers.filter((item) => item?.value?.trim() === "");
     if (emptyInputs.length > 0) {
       setErrorMessage(`Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`);
       return false;
     }
 
     setErrorMessage(""); // Clear error if input is valid
-    
+
     const activityData = {
       page: pageData.id,
       answer: answers
@@ -66,54 +51,54 @@ function Page6() {
     return true;
   };
 
-  // console.log(answers, "Answers")
 
-  const renderStep = () => {
-    // const step = pageData?.steps[currentStep - 1];
-    // console.log(currentStep, step, "step")
-    if (!step) return <div>Invalid Step</div>;
-
-    switch (step.type) {
-      case "instruction":
-        return (
-          <QuestionBox>
-            <div className="text-center mb-5">
-              <h2 className="text-white bg-blue p-4 fs-1 rounded d-inline">
-                {step.title}
-              </h2>
-            </div>
-            <div className="d-flex gap-2">
-              <h2 className="text-blue fs-1">Instructions: </h2>
-              <h2 className="text-gray fs-1">{step.instructions}</h2>
-            </div>
-          </QuestionBox>
-        );
-      case "scenario":
-        return (
-          <Frame
-            data={{
-              step: step.stepId,
-              title: step.title,
-              questions: step.questions.map((q) => ({
-                [q.type]: q.question,
-              })),
-            }}
-            setErrorMessage={setErrorMessage}
-            answers={answers}
-            setAnswers={setAnswers}
-          />
-        );
-      default:
-        return <div>Unknown step type</div>;
-    }
+  const handleInputChange = (index, value) => {
+    setErrorMessage("");
+    // Update answers state with the new value
+    setAnswers((prevAnswers) => {
+        // Check if the answer already exists
+        const existingAnswerIndex = prevAnswers.findIndex(answer => answer.index === index);
+        if (existingAnswerIndex > -1) {
+            // Update existing answer
+            const updatedAnswers = [...prevAnswers];
+            updatedAnswers[existingAnswerIndex] = { ...updatedAnswers[existingAnswerIndex], value };
+            return updatedAnswers;
+        } else {
+            // Add new answer
+            return [...prevAnswers, { index, value }];
+        }
+    });
   };
+
 
   return (
     <>
-      {renderStep()}
-      {(currentStep !== 1 && errorMessage) && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
-      <StepIndicator totalSteps={totalSteps} />
-      <div className="d-flex justify-content-center gap-96px mt-4 ">
+      <QuestionBox>
+        <div className="d-flex gap-3 mb-3">
+          <h2 className="text-blue fs-1">Question:</h2>
+          <h2 className="text-gray fs-1">{pageData.question}</h2>
+        </div>
+
+        <div className="input-container py-5 px-5">
+          {[...Array(pageData.numberOfInputs || 5)].map((_, index) => (
+            <div key={index}>
+              <div className="d-flex gap-3 label-input-container">
+                <p className="input-label">{index + 1}.</p>
+                <input
+                  type="text"
+                  placeholder={
+                    pageData.inputPlaceholder || "Type your answer here"
+                  }
+                  value={answers.find(answer => answer.index === index)?.value || ''} 
+                  onChange={(e)=>handleInputChange(index,e.target.value)}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </QuestionBox>
+      {errorMessage && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
+      <div className="d-flex justify-content-center gap-96px mt-4">
         <Button text="Prev" />
         <Button text="Next"
           customOnClick={saveUserInput}

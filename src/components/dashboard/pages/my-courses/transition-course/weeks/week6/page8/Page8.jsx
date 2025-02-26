@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
+import boundaries from "../../../../../../../../assets/boundaries.png";
 import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
@@ -8,7 +9,7 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
 
 
-function Page8() {
+function WeekSixPage8() {
   const dispatch = useDispatch()
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
@@ -55,6 +56,7 @@ function Page8() {
           <h2 className="text-blue font-lg">Question: </h2>
           <h2 className="text-gray font-lg">
             {pageData.question}{" "}
+            {pageData.hasImage && <img src={boundaries} alt="Boundaries" />} ?
           </h2>
         </div>
         <BigTextBox handleChange={handleInputChange} value={myAnswer} />
@@ -68,4 +70,4 @@ function Page8() {
   );
 }
 
-export default Page8;
+export default  WeekSixPage8;

@@ -20,6 +20,43 @@
   box-shadow: none !important;
 }
 
+
+.heart-input {
+  width: 90%; /* Adjust based on the heart size */
+  height: 100%;
+  text-align: center;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.heart-input-label {
+  background: url("../../../../../../assets/heartTextBox.png") no-repeat;
+   background-size: 100% 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  padding-top:170px;
+  padding-bottom:140px;
+  padding-left:70px;
+  padding-right:25px;
+  position: relative;
+ 
+}
+
+.heart-input:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
 ::placeholder {
   font-weight: bold;
   font-size: 20px;

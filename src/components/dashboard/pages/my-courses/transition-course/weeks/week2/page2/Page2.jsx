@@ -8,7 +8,7 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
 
 
-function Page2() {
+function WeekTwoPage2() {
   const dispatch = useDispatch()
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
@@ -68,4 +68,4 @@ function Page2() {
   );
 }
 
-export default Page2;
+export default WeekTwoPage2;

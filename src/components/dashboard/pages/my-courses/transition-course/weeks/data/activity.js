@@ -12,7 +12,7 @@ export const courseContent = {
         id: 2,
         type: "question",
         questionType: "text",
-        question: "What do you look forward to experiencing in secondary school?",
+        question: "How has been your learning process in Primary school?",
         inputType: "bigTextBox",
         navigation: {
           prev: true,
@@ -33,17 +33,15 @@ export const courseContent = {
         id: 4,
         type: "question",
         questionType: "text",
-        question: "What does the word ",
-        hasImage: true,
-        isbrokenQuestion: true,
-        brokenCompletion: " mean to you?",
-        imageSrc: "transition.png",
+        question: "Why do you think a higher education is important for you?",
         inputType: "bigTextBox",
         navigation: {
           prev: true,
           next: true,
         },
       },
+      
+  
 
       {
         id: 5,
@@ -56,15 +54,18 @@ export const courseContent = {
       },
       {
         id: 6,
-        type: "question",
+        type: "listQuestion",
         questionType: "text",
-        question: "What’s one thing you’re looking forward to?",
-        inputType: "bigTextBox",
+        question: "What do you look forward to experiencing in secondary school?",
+        inputCount: 5,
+        inputType: "text",
+        inputPlaceholder: "Type your answer here",
         navigation: {
           prev: true,
           next: true,
         },
       },
+      
       {
         id: 7,
         type: "video",
@@ -78,7 +79,11 @@ export const courseContent = {
         id: 8,
         type: "question",
         questionType: "text",
-        question: "List three (3) things you’re excited about for secondary school.",
+        question: "What does the word ",
+        hasImage: true,
+        isbrokenQuestion: true,
+        brokenCompletion: " mean to you?",
+        imageSrc: "transition.png",
         inputType: "bigTextBox",
         navigation: {
           prev: true,
@@ -94,12 +99,46 @@ export const courseContent = {
           next: true,
         },
       },
+
+      // Love TextBox
       {
         id: 10,
         type: "question",
         questionType: "text",
-        question: "List three (3) things you’re excited about for secondary school.",
+        question: "What’s one thing you’re looking forward to?",
         inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 11,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+1/FLOW+1_3.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+  
+      {
+        id: 12,
+        type: "liatQuestion",
+        questionType: "text",
+        question: "List three (3) things you’re excited about for secondary school.",
+        inputCount: 5,
+        inputType: "text",
+        inputPlaceholder: "Type your answer here",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 13,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+1/FLOW+1_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -144,8 +183,10 @@ export const courseContent = {
         instruction:
           "Drag-and-drop the statements on the left into any of these bowls",
         options: [
-          "Mum",
-          "Dad",
+          "I can get better at this if I keep practicing.",
+          "I haven’t figured it out yet, but I will.",
+          "Mistakes help me learn and improve.",
+          "With effort, I can improve my skills.",
         ],
         bowls: [
           {
@@ -665,21 +706,12 @@ export const courseContent = {
       },
       {
         id: 2,
-        type: "multiLineAnswers",
-        title: "Write a letter to yourself.",
-        instructions: [
-          "Give examples of emotions that you know of.",
-        ],
-        inputType: "textarea",
-        textareaConfig: {
-          placeholder: "Type your answer here...",
-          rows: 5,
-          cols: 80,
-          styles: {
-            maxWidth: "100%",
-            fontSize: "25px",
-          },
-        },
+        type: "listQuestion",
+        questionType: "text",
+        question: "Give examples of emotions that you know of.",
+        inputCount: 5,
+        inputType: "text",
+        inputPlaceholder: "Type your answer here",
         navigation: {
           prev: true,
           next: true,
