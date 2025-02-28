@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import QuestionBox from "../../../../components/QuestionBox";
-import BigTextBox from "../../../../components/BigTextBox";
+import SmallTextBox from "../../../../components/SmallTextBox";
 
 function Frame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, title, questions } = data;
@@ -45,7 +45,7 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
               <h2 className="text-blue">{key}: </h2>
               <h2 className="text-gray">{value}</h2>
             </div>
-            <BigTextBox 
+            <SmallTextBox 
               value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""} // Pass the current answer
               onChange={(e) => handleInputChange(index, e.target.value)} // Handle input change
             />

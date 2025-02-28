@@ -10,10 +10,40 @@ export const courseContent = {
       },
       {
         id: 2,
-        type: "question",
-        questionType: "text",
-        question: "How has been your learning process in Primary school?",
-        inputType: "bigTextBox",
+        type: "muiltiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "scenario",
+            questions: [
+              {
+                type: "",
+                question: "How has been your learning process in Primary school",
+              }
+            ]
+          },
+          {
+            stepId: 2,
+            type: "scenario",
+            questions: [
+
+              {
+                type: "",
+                question: "What will be your favorite memory as you leave",
+              }]
+          },
+          {
+            stepId: 3,
+            type: "scenario",
+            questions: [
+              {
+                type: "",
+                question: "What was the most challenging thing you overcame",
+              }
+            ],
+          },
+
+        ],
         navigation: {
           prev: true,
           next: true,
@@ -128,13 +158,6 @@ export const courseContent = {
         steps: [
           {
             stepId: 1,
-            type: "instruction",
-            title: "questions",
-            instructions:
-              "Read the following scenarios, and apply the Seeing, Caring and Doing Principle of Compassion.",
-          },
-          {
-            stepId: 2,
             type: "multipleQuestionBoxes",
             title:
               "List three (3) things you’re excited about for secondary school.",
@@ -155,7 +178,7 @@ export const courseContent = {
             ],
           },
           {
-            stepId: 3,
+            stepId: 1,
             type: "multipleQuestionBoxes",
             title:
               "List three (3) things that you feel nervous or afraid about.",
@@ -273,12 +296,12 @@ export const courseContent = {
       },
       {
         id: 2,
-        type: "question",
+        type: "progressBar",
         questionType: "text",
         question: "On a scale of 1 to 100, how ready do you feel for Secondary School?",
         hasImage: true,
         imageSrc: "self-compassion.png",
-        inputType: "bigTextBox",
+        inputType: "progressBar",
         navigation: {
           prev: true,
           next: true,
@@ -347,15 +370,9 @@ export const courseContent = {
         id: 6,
         type: "multiStep",
         steps: [
+
           {
             stepId: 1,
-            type: "instruction",
-            title: "Scenario",
-            instructions:
-              "Read the following scenarios, and apply the Seeing, Caring and Doing Principle of Compassion.",
-          },
-          {
-            stepId: 2,
             type: "scenario",
             title:
               "Your friends made plans without you.",
@@ -372,7 +389,7 @@ export const courseContent = {
             ],
           },
           {
-            stepId: 3,
+            stepId: 2,
             type: "scenario",
             title:
               "It started raining on the day you planned to play outside.",
@@ -388,7 +405,7 @@ export const courseContent = {
             ],
           },
           {
-            stepId: 4,
+            stepId: 3,
             type: "scenario",
             title:
               "You didn’t get selected for the school team.",
@@ -404,7 +421,7 @@ export const courseContent = {
             ],
           },
           {
-            stepId: 5,
+            stepId: 4,
             type: "scenario",
             title:
               "Your sibling borrowed your things without asking.",
@@ -420,7 +437,7 @@ export const courseContent = {
             ],
           },
           {
-            stepId: 6,
+            stepId: 5,
             type: "scenario",
             title:
               "You feel nervous about giving a presentation.",
@@ -699,7 +716,7 @@ export const courseContent = {
       },
       {
         id: 6,
-        type: "multiStepMultiAnswers",
+        type: "multiStep",
         steps: [
 
           {
@@ -764,7 +781,13 @@ export const courseContent = {
         },
       },
       {
-        id: 6,
+        id: 3,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 4,
         type: "multiStep",
         steps: [
           {
@@ -1022,7 +1045,7 @@ export const courseContent = {
       },
       {
         id: 11,
-        type: "multiStepDropDown",
+        type: "multiStep",
         steps: [
           {
             stepId: 1,
@@ -1145,7 +1168,7 @@ export const courseContent = {
 
       {
         id: 4,
-        type: "versatileMultiStepAndMultiAnswers",
+        type: "multiStep",
         steps: [
           {
             stepId: 1,
@@ -1165,17 +1188,17 @@ export const courseContent = {
               {
                 title: "1",
                 color: "green",
-                colorCode:"#89B92E",
+                colorCode: "#89B92E",
               },
               {
                 title: "2",
                 color: "yellow",
-                colorCode:"#FCF85D",
+                colorCode: "#FCF85D",
               },
               {
                 title: "3",
                 color: "red",
-                colorCode:"#F46851",
+                colorCode: "#F46851",
               },
             ]
           },
@@ -1196,32 +1219,32 @@ export const courseContent = {
               {
                 title: "Monday",
                 color: "orange",
-                colorCode:"#FCAF17",
+                colorCode: "#FCAF17",
               },
               {
                 title: "Tuesday",
                 color: "yellow",
-                colorCode:"#FCF85D",
+                colorCode: "#FCF85D",
               },
               {
                 title: "Wednesday",
                 color: "lightOrange",
-                colorCode:"#FAAA74",
+                colorCode: "#FAAA74",
               },
               {
                 title: "Thursday",
                 color: "green",
-                colorCode:"#2CCF4F",
+                colorCode: "#2CCF4F",
               },
               {
                 title: "Friday",
                 color: "pink",
-                colorCode:"#FDD8B6",
+                colorCode: "#FDD8B6",
               },
               {
                 title: "Saturday",
                 color: "blue",
-                colorCode:"#01A7FF",
+                colorCode: "#01A7FF",
               },
             ]
           },
@@ -1347,7 +1370,7 @@ export const courseContent = {
       },
       {
         id: 6,
-        type: "versatileMultiStepAndMultiAnswers",
+        type: "multiStep",
         steps: [
           {
             stepId: 1,
@@ -1359,32 +1382,32 @@ export const courseContent = {
               {
                 title: "",
                 color: "yellow",
-                colorCode:"#FCF85D",
-                bgColor:"#FCF85D"
+                colorCode: "#FCF85D",
+                bgColor: "#FCF85D"
               },
               {
                 title: "",
                 color: "blue",
-                colorCode:"#01A7FF",
-                bgColor:"#85D4FF"
+                colorCode: "#01A7FF",
+                bgColor: "#85D4FF"
               },
               {
                 title: "",
                 color: "pink",
-                colorCode:"#FF2C92",
-                bgColor:"#FF90C6"
+                colorCode: "#FF2C92",
+                bgColor: "#FF90C6"
               },
               {
                 title: "",
                 color: "green",
-                colorCode:"#2CCF4F",
-                bgColor:"#FFCDAC"
+                colorCode: "#2CCF4F",
+                bgColor: "#FFCDAC"
               },
               {
                 title: "",
                 color: "pink",
-                colorCode:"#FDD8B6",
-                bgColor:"#C9FF61"
+                colorCode: "#FDD8B6",
+                bgColor: "#C9FF61"
               },
             ]
           },
@@ -1399,32 +1422,32 @@ export const courseContent = {
               {
                 title: "",
                 color: "yellow",
-                colorCode:"#FCF85D",
-                bgColor:"#FCF85D"
+                colorCode: "#FCF85D",
+                bgColor: "#FCF85D"
               },
               {
                 title: "",
                 color: "blue",
-                colorCode:"#01A7FF",
-                bgColor:"#85D4FF"
+                colorCode: "#01A7FF",
+                bgColor: "#85D4FF"
               },
               {
                 title: "",
                 color: "pink",
-                colorCode:"#FF2C92",
-                bgColor:"#FF90C6"
+                colorCode: "#FF2C92",
+                bgColor: "#FF90C6"
               },
               {
                 title: "",
                 color: "green",
-                colorCode:"#2CCF4F",
-                bgColor:"#FFCDAC"
+                colorCode: "#2CCF4F",
+                bgColor: "#FFCDAC"
               },
               {
                 title: "",
                 color: "pink",
-                colorCode:"#FDD8B6",
-                bgColor:"#C9FF61"
+                colorCode: "#FDD8B6",
+                bgColor: "#C9FF61"
               },
             ]
           },
@@ -1453,7 +1476,7 @@ export const courseContent = {
               },
               {
                 title: "R",
-              
+
               },
               {
                 title: "T",
@@ -1507,15 +1530,15 @@ export const courseContent = {
       },
       {
         id: 4,
-        type: "versatileMultiStepAndMultiAnswers",
+        type: "multiStep",
         steps: [
           {
             stepId: 1,
             type: "bigTextBox",
             question:
               "What do you understand by the word",
-              hasImage:true,
-              image:"copingSkils.png",
+            hasImage: true,
+            image: "copingSkils.png",
             fieldCount: 1,
           },
           {
@@ -1531,57 +1554,57 @@ export const courseContent = {
             question:
               "Drag-and-drop the statements on the left into any of these bowls.",
             dragCount: 9,
-            dragConfig:[
+            dragConfig: [
               {
-                title:"1",
-                desc:"Healthy Skills",
+                title: "1",
+                desc: "Healthy Skills",
               },
               {
-                title:"2",
-                desc:"Unhealthy Skills",
+                title: "2",
+                desc: "Unhealthy Skills",
               }
             ],
-            dragData:[
+            dragData: [
               {
-                title:"Write",
-                image:"writeDragable.png",
+                title: "Write",
+                image: "writeDragable.png",
               },
               {
-                title:"Walk away",
-                image:"walAwayDragable.png",
+                title: "Walk away",
+                image: "walAwayDragable.png",
               },
               {
-                title:"Belly Breathing",
-                image:"bellyBreathingDragable.png",
+                title: "Belly Breathing",
+                image: "bellyBreathingDragable.png",
               },
               {
-                title:"Exercise",
-                image:"exerciseDragable.png",
+                title: "Exercise",
+                image: "exerciseDragable.png",
               },
               {
-                title:"Yell",
-                image:"yellDragable.png",
+                title: "Yell",
+                image: "yellDragable.png",
               },
               {
-                title:"Talk to Someone",
-                image:"talkToSomeoneDragable.png",
+                title: "Talk to Someone",
+                image: "talkToSomeoneDragable.png",
               },
               {
-                title:"Positive Self Talk",
-                image:"positiveSelfTalkDragable.png",
+                title: "Positive Self Talk",
+                image: "positiveSelfTalkDragable.png",
               },
               {
-                title:"Break things",
-                image:"breakThingsDragable.png",
+                title: "Break things",
+                image: "breakThingsDragable.png",
               },
               {
-                title:"Bite nails",
-                image:"biteNailsDragable.png",
+                title: "Bite nails",
+                image: "biteNailsDragable.png",
               },
             ]
 
           },
-        
+
         ],
         navigation: {
           prev: true,
@@ -1645,88 +1668,88 @@ export const courseContent = {
       },
       {
         id: 2,
-        type: "muiltiStepBigTextWithTitle",
+        type: "muiltiStep",
         steps: [
           {
             stepId: 1,
-            type: "question",
+            type: "questionWithTitle",
             title: "Dear Future Me",
             question:
               "When I’m feeling overwhelmed with homework, I’ll remember to",
           },
           {
             stepId: 2,
-            type: "question",
+            type: "questionWithTitle",
             title: "Dear Future Me",
             question:
               "If I’m nervous about giving a presentation, I’ll try to calm myself by...",
           },
           {
             stepId: 3,
-            type: "question",
+            type: "questionWithTitle",
             title: "Dear Future Me",
             question:
               "If I find a subject difficult and start to struggle, I’ll remind myself to ...",
           },
           {
             stepId: 4,
-            type: "question",
+            type: "questionWithTitle",
             title: "Dear Future Me",
             question:
               "When I get a lower grade than I expected, I’ll use resilience by...",
           },
           {
             stepId: 5,
-            type: "question",
+            type: "questionWithTitle",
             title: "Dear Future Me",
             question:
               "If I feel left out at lunch or during group activities, I’ll remember to...",
           },
           {
             stepId: 6,
-            type: "question",
+            type: "questionWithTitle",
             title: "Dear Future Me",
             question:
               "When I have a disagreement with a friend, I’ll handle it by...",
           },
           {
             stepId: 7,
-            type: "question",
+            type: "questionWithTitle",
             title: "Dear Future Me",
             question:
               "If I feel too tired or stressed, I’ll take care of myself by ...",
           },
           {
             stepId: 8,
-            type: "question",
+            type: "questionWithTitle",
             title: "Dear Future Me",
             question:
               "When I feel unsure about asking for help, I’ll remind myself that I can always talk to...",
           },
           {
             stepId: 9,
-            type: "question",
+            type: "questionWithTitle",
             title: "Dear Future Me",
             question:
               "If I need to set a new goal, I’ll plan by first...",
           },
           {
             stepId: 10,
-            type: "question",
+            type: "questionWithTitle",
             title: "Dear Future Me",
             question:
               "When I need a break from studying, I’ll choose a healthy way to recharge like...",
           },
           {
             stepId: 11,
-            type: "question",
+            type: "questionWithTitle",
             title: "Dear Future Me",
             question:
               "If I have a day where everything feels hard, I’ll show resilience by...",
           },
           {
             stepId: 12,
-            type: "question",
+            type: "questionWithTitle",
             title: "Dear Future Me",
             question:
               "When I need to manage my time for a big test, I’ll organize myself by...",
