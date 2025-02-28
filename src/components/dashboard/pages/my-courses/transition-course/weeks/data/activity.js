@@ -40,8 +40,8 @@ export const courseContent = {
           next: true,
         },
       },
-      
-  
+
+
 
       {
         id: 5,
@@ -65,7 +65,7 @@ export const courseContent = {
           next: true,
         },
       },
-      
+
       {
         id: 7,
         type: "video",
@@ -121,15 +121,61 @@ export const courseContent = {
           next: true,
         },
       },
-  
+
       {
         id: 12,
-        type: "liatQuestion",
-        questionType: "text",
-        question: "List three (3) things you’re excited about for secondary school.",
-        inputCount: 5,
-        inputType: "text",
-        inputPlaceholder: "Type your answer here",
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "questions",
+            instructions:
+              "Read the following scenarios, and apply the Seeing, Caring and Doing Principle of Compassion.",
+          },
+          {
+            stepId: 2,
+            type: "multipleQuestionBoxes",
+            title:
+              "List three (3) things you’re excited about for secondary school.",
+            questions: [
+              {
+                title: "1",
+                color: "yellow",
+              },
+              {
+                type: "2",
+                color: "orange",
+              },
+              {
+                type: "3",
+                color: "pink",
+              }
+
+            ],
+          },
+          {
+            stepId: 3,
+            type: "multipleQuestionBoxes",
+            title:
+              "List three (3) things that you feel nervous or afraid about.",
+            questions: [
+              {
+                title: "1",
+                color: "yellow",
+              },
+              {
+                type: "2",
+                color: "orange",
+              },
+              {
+                type: "3",
+                color: "pink",
+              }
+
+            ],
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
@@ -655,29 +701,29 @@ export const courseContent = {
         id: 6,
         type: "multiStepMultiAnswers",
         steps: [
-         
+
           {
             stepId: 1,
             type: "question",
             title:
               "Identify three (3) important people in your life and list their names below.",
-            answers:3
+            answers: 3
           },
           {
             stepId: 1,
             type: "question",
             title:
               "Write out what these people think about you.",
-            answers:3
+            answers: 3
           },
           {
             stepId: 1,
             type: "question",
             title:
               "Are you happy with what these people think about you? If no, what would you like to change? If yes, type “YES” in the box.",
-            answers:3
+            answers: 3
           },
-        
+
         ],
         navigation: {
           prev: true,
@@ -769,7 +815,7 @@ export const courseContent = {
               }
 
             ],
-          },  {
+          }, {
             stepId: 4,
             type: "scenario",
             title:
@@ -789,7 +835,7 @@ export const courseContent = {
               }
 
             ],
-          },  {
+          }, {
             stepId: 5,
             type: "scenario",
             title:
@@ -809,7 +855,7 @@ export const courseContent = {
               }
 
             ],
-          },  {
+          }, {
             stepId: 6,
             type: "scenario",
             title:
@@ -882,10 +928,10 @@ export const courseContent = {
         id: 4,
         type: "progressBar",
         question: "Do you think you have great social skills or poor social skills?",
-               progressBarConfig: {
+        progressBarConfig: {
           low: 0,
           mid: 50,
-          max:100,
+          max: 100,
         },
         navigation: {
           prev: true,
@@ -982,68 +1028,69 @@ export const courseContent = {
             stepId: 1,
             type: "instruction",
             title: "Instruction",
-            instructions:[
+            instructions: [
               "Below are sentences with missing words related to communication and boundaries. Choose the best word from the list below to complete each sentence.",
               "Missing words are: Respect, Clarity, Comfort, Listen, Express"
-                    ]            },
+            ]
+          },
           {
             stepId: 2,
             type: "scenario",
-             question: "When setting boundaries, it’s important to clearly ______ your needs.",
+            question: "When setting boundaries, it’s important to clearly ______ your needs.",
             options: [
-            "Respect",
-            "Clarity",
-            "Comfort",
-            "Listen",
-            "Express",
+              "Respect",
+              "Clarity",
+              "Comfort",
+              "Listen",
+              "Express",
             ],
           },
           {
             stepId: 3,
             type: "scenario",
-             question: "In effective communication, you ______ to understand, not to respond immediately.",
+            question: "In effective communication, you ______ to understand, not to respond immediately.",
             options: [
-            "Respect",
-            "Clarity",
-            "Comfort",
-            "Listen",
-            "Express",
+              "Respect",
+              "Clarity",
+              "Comfort",
+              "Listen",
+              "Express",
             ],
           },
           {
             stepId: 4,
             type: "scenario",
-             question: "Boundaries help maintain ______ within relationships.",
+            question: "Boundaries help maintain ______ within relationships.",
             options: [
-            "Respect",
-            "Clarity",
-            "Comfort",
-            "Listen",
-            "Express",
+              "Respect",
+              "Clarity",
+              "Comfort",
+              "Listen",
+              "Express",
             ],
           },
           {
             stepId: 5,
             type: "scenario",
-             question: "Good communication includes being able to speak with ______ and honesty.",
+            question: "Good communication includes being able to speak with ______ and honesty.",
             options: [
-            "Respect",
-            "Clarity",
-            "Comfort",
-            "Listen",
-            "Express",
+              "Respect",
+              "Clarity",
+              "Comfort",
+              "Listen",
+              "Express",
             ],
           },
           {
             stepId: 6,
             type: "scenario",
-             question: "Healthy relationships are built on ______ for each other’s space and ideas.",
+            question: "Healthy relationships are built on ______ for each other’s space and ideas.",
             options: [
-            "Respect",
-            "Clarity",
-            "Comfort",
-            "Listen",
-            "Express",
+              "Respect",
+              "Clarity",
+              "Comfort",
+              "Listen",
+              "Express",
             ],
           },
         ],
@@ -1075,11 +1122,11 @@ export const courseContent = {
       {
         id: 2,
         type: "radio",
-        question:"Have you sat down to think about how you will balance all of these effectively? ",
+        question: "Have you sat down to think about how you will balance all of these effectively? ",
         options: [
-           "Yes",
-           "No"
-               ],
+          "Yes",
+          "No"
+        ],
         navigation: {
           prev: true,
           next: true,
@@ -1092,41 +1139,137 @@ export const courseContent = {
         navigation: {
           prev: true,
           next: true,
-        },},
-   
-     
+        },
+      },
+
+
       {
         id: 4,
         type: "versatileMultiStepAndMultiAnswers",
         steps: [
-                   {
+          {
             stepId: 1,
-            type: "star",
+            type: "multipleAnswers",
             question:
-              "Your friends made plans without you.",
-          fieldCount:5
+              "List of all the assignments and activities you have this week.",
+            fieldCount: 5
           },
-        
+
           {
             stepId: 2,
-            type: "hearts",
+            type: "decoratedSmallBoxesWithTitles",
             question:
-              "Write down the goals you want to achieve.",
-          fieldCount:5
+              "Choose three tasks from your planner and rank them by importance. Write down which task you’ll complete first, second, and third.",
+            fieldCount: 3,
+            config: [
+              {
+                title: "1",
+                color: "green",
+                colorCode:"#89B92E",
+              },
+              {
+                title: "2",
+                color: "yellow",
+                colorCode:"#FCF85D",
+              },
+              {
+                title: "3",
+                color: "red",
+                colorCode:"#F46851",
+              },
+            ]
           },
           {
             stepId: 3,
-            type: "single-star",
+            type: "bigTextBox",
             question:
-              "Write down your Wishing State here.",
-          fieldCount:1
+              "Why did you select these tasks?",
+            fieldCount: 1
           },
           {
-            stepId: 3,
-            type: "smart",
+            stepId: 4,
+            type: "decoratedSmallBoxesWithTitles",
             question:
-              "Write down your Wishing State here.",
-          fieldCount:5
+              "Decide when you’ll work on each task, starting with the top 3 you selected.",
+            fieldCount: 6,
+            config: [
+              {
+                title: "Monday",
+                color: "orange",
+                colorCode:"#FCAF17",
+              },
+              {
+                title: "Tuesday",
+                color: "yellow",
+                colorCode:"#FCF85D",
+              },
+              {
+                title: "Wednesday",
+                color: "lightOrange",
+                colorCode:"#FAAA74",
+              },
+              {
+                title: "Thursday",
+                color: "green",
+                colorCode:"#2CCF4F",
+              },
+              {
+                title: "Friday",
+                color: "pink",
+                colorCode:"#FDD8B6",
+              },
+              {
+                title: "Saturday",
+                color: "blue",
+                colorCode:"#01A7FF",
+              },
+            ]
+          },
+          {
+            stepId: 5,
+            type: "checkBoxesWithImageAndTitle",
+            question:
+              "Identify the things you will need to limit to make more room for your tasks.",
+            fieldCount: 6,
+            config: [
+              {
+                title: "Watching TV",
+                image: "watchingTv.png",
+                color: "#FCF85D",
+              },
+              {
+                title: "Spending time on phone",
+                image: "timeWithPhone.png",
+                color: "#FFEEBB",
+              },
+              {
+                title: "Gisting/Gossiping",
+                image: "gistingAndGossiping",
+                color: "#C9FF61",
+              },
+              {
+                title: "Playing Games",
+                image: "playingGames.png",
+                color: "#FCCAA1",
+              },
+              {
+                title: "Playing around",
+                image: "playingAround.png",
+                color: "#ECEDF0",
+              },
+              {
+                title: "Social Media",
+                image: "socialMedia.png",
+                color: "#F7ABAA",
+              },
+            ]
+          },
+          {
+            stepId: 6,
+            type: "multipleAnswers",
+            question:
+              "Write other time consumers you must limit, if you have.",
+            fieldCount: 5
           },
         ],
         navigation: {
@@ -1143,8 +1286,8 @@ export const courseContent = {
           next: true,
         },
       },
-      
-     
+
+
     ],
   },
   week8: {
@@ -1159,13 +1302,13 @@ export const courseContent = {
       {
         id: 2,
         type: "radio",
-        question:"Do you watch or play football? ",
-        hasImage:true,
-        imageSrc:"foootballers.png",
+        question: "Do you watch or play football? ",
+        hasImage: true,
+        imageSrc: "footballers.png",
         options: [
-           "Yes",
-           "No"
-               ],
+          "Yes",
+          "No"
+        ],
         navigation: {
           prev: true,
           next: true,
@@ -1206,34 +1349,116 @@ export const courseContent = {
         id: 6,
         type: "versatileMultiStepAndMultiAnswers",
         steps: [
-                   {
+          {
             stepId: 1,
             type: "star",
             question:
               "Your friends made plans without you.",
-          fieldCount:5
+            fieldCount: 5,
+            config: [
+              {
+                title: "",
+                color: "yellow",
+                colorCode:"#FCF85D",
+                bgColor:"#FCF85D"
+              },
+              {
+                title: "",
+                color: "blue",
+                colorCode:"#01A7FF",
+                bgColor:"#85D4FF"
+              },
+              {
+                title: "",
+                color: "pink",
+                colorCode:"#FF2C92",
+                bgColor:"#FF90C6"
+              },
+              {
+                title: "",
+                color: "green",
+                colorCode:"#2CCF4F",
+                bgColor:"#FFCDAC"
+              },
+              {
+                title: "",
+                color: "pink",
+                colorCode:"#FDD8B6",
+                bgColor:"#C9FF61"
+              },
+            ]
           },
-        
+
           {
             stepId: 2,
             type: "hearts",
             question:
               "Write down the goals you want to achieve.",
-          fieldCount:5
+            fieldCount: 5,
+            config: [
+              {
+                title: "",
+                color: "yellow",
+                colorCode:"#FCF85D",
+                bgColor:"#FCF85D"
+              },
+              {
+                title: "",
+                color: "blue",
+                colorCode:"#01A7FF",
+                bgColor:"#85D4FF"
+              },
+              {
+                title: "",
+                color: "pink",
+                colorCode:"#FF2C92",
+                bgColor:"#FF90C6"
+              },
+              {
+                title: "",
+                color: "green",
+                colorCode:"#2CCF4F",
+                bgColor:"#FFCDAC"
+              },
+              {
+                title: "",
+                color: "pink",
+                colorCode:"#FDD8B6",
+                bgColor:"#C9FF61"
+              },
+            ]
           },
           {
             stepId: 3,
-            type: "single-star",
+            type: "singleStar",
             question:
               "Write down your Wishing State here.",
-          fieldCount:1
+            fieldCount: 1
           },
           {
             stepId: 3,
             type: "smart",
             question:
               "Write down your Wishing State here.",
-          fieldCount:5
+            fieldCount: 5,
+            config: [
+              {
+                title: "S",
+              },
+              {
+                title: "M",
+              },
+              {
+                title: "A",
+              },
+              {
+                title: "R",
+              
+              },
+              {
+                title: "T",
+              },
+            ]
           },
         ],
         navigation: {
@@ -1282,12 +1507,82 @@ export const courseContent = {
       },
       {
         id: 4,
-        type: "question",
-        questionType: "text",
-        question: "What do you understand by the word  ",
-        hasImage: true,
-        imageSrc: "coping_skills.png",
-        inputType: "bigTextBox",
+        type: "versatileMultiStepAndMultiAnswers",
+        steps: [
+          {
+            stepId: 1,
+            type: "bigTextBox",
+            question:
+              "What do you understand by the word",
+              hasImage:true,
+              image:"copingSkils.png",
+            fieldCount: 1,
+          },
+          {
+            stepId: 2,
+            type: "multipleAnswers",
+            question:
+              "Other words for coping could be: deal with, handle. Let me know if you have other words in mind.",
+            fieldCount: 5
+          },
+          {
+            stepId: 3,
+            type: "imageDragAndDrop",
+            question:
+              "Drag-and-drop the statements on the left into any of these bowls.",
+            dragCount: 9,
+            dragConfig:[
+              {
+                title:"1",
+                desc:"Healthy Skills",
+              },
+              {
+                title:"2",
+                desc:"Unhealthy Skills",
+              }
+            ],
+            dragData:[
+              {
+                title:"Write",
+                image:"writeDragable.png",
+              },
+              {
+                title:"Walk away",
+                image:"walAwayDragable.png",
+              },
+              {
+                title:"Belly Breathing",
+                image:"bellyBreathingDragable.png",
+              },
+              {
+                title:"Exercise",
+                image:"exerciseDragable.png",
+              },
+              {
+                title:"Yell",
+                image:"yellDragable.png",
+              },
+              {
+                title:"Talk to Someone",
+                image:"talkToSomeoneDragable.png",
+              },
+              {
+                title:"Positive Self Talk",
+                image:"positiveSelfTalkDragable.png",
+              },
+              {
+                title:"Break things",
+                image:"breakThingsDragable.png",
+              },
+              {
+                title:"Bite nails",
+                image:"biteNailsDragable.png",
+              },
+            ]
+
+          },
+        
+        ],
         navigation: {
           prev: true,
           next: true,
@@ -1301,30 +1596,30 @@ export const courseContent = {
       },
       {
         id: 6,
-        type: "multiStepChallenge",
+        type: "multiStepChallengeWithStatement",
         title: "Write a letter to yourself.",
         challenges: [
-         {
-          type:"example",
-          chalenge:"Preparing for a big math test, and you don’t understand all the topics.",
-          statement:"I don’t understand all the topics. yet., but I can keep studying and practicing until I do"
-        },
-        {
-          type:"question",
-          chalenge:"Trying to make new friends but feeling like I don’t fit in..",
-        },
-        {
-          type:"question",
-          chalenge:"Learning how to play a musical instrument, but I keep making mistakes.",
-        },
-        {
-          type:"question",
-          chalenge:"During class discussions, I don't feel confident speaking in front of others..",
-        },
-        {
-          type:"question",
-          chalenge:"I don't seem to know how to balance school work and home chores",
-        },
+          {
+            type: "example",
+            chalenge: "Preparing for a big math test, and you don’t understand all the topics.",
+            statement: "I don’t understand all the topics. yet., but I can keep studying and practicing until I do"
+          },
+          {
+            type: "question",
+            chalenge: "Trying to make new friends but feeling like I don’t fit in..",
+          },
+          {
+            type: "question",
+            chalenge: "Learning how to play a musical instrument, but I keep making mistakes.",
+          },
+          {
+            type: "question",
+            chalenge: "During class discussions, I don't feel confident speaking in front of others..",
+          },
+          {
+            type: "question",
+            chalenge: "I don't seem to know how to balance school work and home chores",
+          },
         ],
         navigation: {
           prev: true,
@@ -1350,35 +1645,7 @@ export const courseContent = {
       },
       {
         id: 2,
-        type: "multiLineAnswers",
-        title: "Write a letter to yourself.",
-        instructions: [
-          "Give examples of emotions that you know of.",
-        ],
-        inputType: "textarea",
-        textareaConfig: {
-          placeholder: "Type your answer here...",
-          rows: 5,
-          cols: 80,
-          styles: {
-            maxWidth: "100%",
-            fontSize: "25px",
-          },
-        },
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 3,
-        type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
-        hasNextButton: true,
-      },
-      {
-        id: 4,
-        type: "muiltiStepWithTitle",
+        type: "muiltiStepBigTextWithTitle",
         steps: [
           {
             stepId: 1,
@@ -1464,12 +1731,18 @@ export const courseContent = {
             question:
               "When I need to manage my time for a big test, I’ll organize myself by...",
           },
-        
+
         ],
         navigation: {
           prev: true,
           next: true,
         },
+      },
+      {
+        id: 3,
+        type: "video",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        hasNextButton: true,
       },
     ],
   },
