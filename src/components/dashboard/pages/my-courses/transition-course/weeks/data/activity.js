@@ -17,8 +17,8 @@ export const courseContent = {
             type: "scenario",
             questions: [
               {
-                type: "",
-                question: "How has been your learning process in Primary school",
+                type: "Question",
+                question: "How has been your learning process in Primary school?",
               }
             ]
           },
@@ -28,8 +28,8 @@ export const courseContent = {
             questions: [
 
               {
-                type: "",
-                question: "What will be your favorite memory as you leave",
+                type: "Question",
+                question: "What will be your favorite memory as you leave?",
               }]
           },
           {
@@ -37,8 +37,8 @@ export const courseContent = {
             type: "scenario",
             questions: [
               {
-                type: "",
-                question: "What was the most challenging thing you overcame",
+                type: "Question",
+                question: "What was the most challenging thing you overcame?",
               }
             ],
           },
@@ -158,45 +158,51 @@ export const courseContent = {
         steps: [
           {
             stepId: 1,
-            type: "multipleQuestionBoxes",
-            title:
+            type: "multiColoredQuestionBoxes",
+            question:
               "List three (3) things you’re excited about for secondary school.",
-            questions: [
+              fields: [
               {
-                title: "1",
-                color: "yellow",
+                number: "1",
+                textFieldColor: "yellow",
+                colorCode:"#FCF85D",
               },
               {
-                type: "2",
-                color: "orange",
+                number: "2",
+                textFieldColor: "orange",
+                colorCode:"#FAAA74",
               },
               {
-                type: "3",
-                color: "pink",
+                number: "3",
+                textFieldColor: "pink",
+                colorCode:"#ED3F93",
               }
 
-            ],
+            ]
           },
           {
-            stepId: 1,
-            type: "multipleQuestionBoxes",
-            title:
+            stepId: 2,
+            type: "multiColoredQuestionBoxes",
+            question:
               "List three (3) things that you feel nervous or afraid about.",
-            questions: [
+              fields: [
               {
                 title: "1",
-                color: "yellow",
+                textFieldColor: "yellow",
+                colorCode:"#FCF85D",
               },
               {
                 type: "2",
-                color: "orange",
+                textFieldColor: "orange",
+                colorCode:"#FAAA74",
               },
               {
                 type: "3",
-                color: "pink",
-              }
+                textFieldColor: "pink",
+                colorCode:"#ED3F93",
+              },
 
-            ],
+            ]
           },
         ],
         navigation: {

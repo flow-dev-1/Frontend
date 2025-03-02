@@ -6,7 +6,7 @@ import Button from "../../../components/Button";
 import { selectPageData, selectCurrentStep, } from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import Frame from "./components/Frame";
+import ColoredSmallSquaredBoxFrame from "./components/ColoredSmallSquaredBoxFrame";
 import StepIndicator from "../../../components/StepIndicator";
 
 function Page12() {
@@ -73,7 +73,7 @@ function Page12() {
       case "instruction":
         return (
           <QuestionBox>
-            <div className="text-center mb-5">
+            {/* <div className="text-center mb-5">
               <h2 className="text-white bg-blue p-4 fs-1 rounded d-inline">
                 {step.title}
               </h2>
@@ -81,18 +81,16 @@ function Page12() {
             <div className="d-flex gap-2">
               <h2 className="text-blue fs-1">Instructions: </h2>
               <h2 className="text-gray fs-1">{step.instructions}</h2>
-            </div>
+            </div> */}
           </QuestionBox>
         );
-      case "scenario":
+      case "multiColoredQuestionBoxes":
         return (
-          <Frame
+          <ColoredSmallSquaredBoxFrame
             data={{
               step: step.stepId,
-              title: step.title,
-              questions: step.questions.map((q) => ({
-                [q.type]: q.question,
-              })),
+              title: step.question,
+              info:step.fields,
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
