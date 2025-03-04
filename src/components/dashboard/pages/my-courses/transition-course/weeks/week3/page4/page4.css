@@ -68,20 +68,21 @@ grid-auto-rows: max-content;
   border: 4px solid #ed8641;
 }
 
-.inner-bucket {
-  background: url("../../../../../../../../assets/Buckets/green.png") no-repeat;
+.inner-circle {
+  background: url("../../../../../../../../assets/Buckets/innerCircle.png") no-repeat;
 }
 
-.outer-bucket {
-  background: url("../../../../../../../../assets/Buckets/orange.png") no-repeat;
+.outer-circle {
+  background: url("../../../../../../../../assets/Buckets/outerCircle.png") no-repeat;
 }
+
 
 .both-bucket {
   background: url("../../../../../../../../assets/Buckets/red.png") no-repeat;
 }
 
-.inner-bucket,
-.outer-bucket,
+.inner-circle,
+.outer-circle,
 .both-bucket {
   color: #fff;
   font-weight: bold;

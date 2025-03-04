@@ -255,27 +255,47 @@ export const courseContent = {
       },
       {
         id: 4,
-        type: "dragAndDrop",
+        type: "imageDragAndDrop",
         instruction:
           "Drag-and-drop the statements on the left into any of these bowls",
-        options: [
+        images: [
           "I can get better at this if I keep practicing.",
           "I haven’t figured it out yet, but I will.",
           "Mistakes help me learn and improve.",
           "With effort, I can improve my skills.",
+          "If I don’t understand it immediately, it means I’m not smart enough.",
+
+          "I’m either good at something or I’m not.",
+          "I give up when things get too hard.",
+          "I can’t change my abilities; I was born this way.",
+          "I stick to what I’m good at and avoid new things.",
+          "Hard work and effort lead to improvement.",
+
+          "If I fail, it just shows I’m not cut out for it. ",
+          "Why try? Others are just naturally better than me.",
+          "If I need help, it means I’m not capable enough.",
+          "I’ll keep trying, even when it’s tough.",
+          "Learning is a journey; I don’t have to be perfect right away.",
+
+          "If I don’t succeed on the first try, I’m not meant to do it.",
+          "Mistakes help me learn and improve.",
+          "My brain can grow with new information and practice",
+          "I’m just not good at this, and I never will be.",
+          "I ask for help because it helps me learn.",
         ],
-        bowls: [
+        buckets: [
           {
-            id: "inner",
+            id: "green",
             label: "Growth Mindset",
-            count: 2,
+            image: "Green Bucket.svg",
           },
           {
-            id: "outer",
+            id: "red",
             label: "Fixed Mindset",
-            count: 2,
+            image: "Red Bucket.svg",
           },
         ],
+        steps: 20,
         navigation: {
           prev: true,
           next: true,
@@ -325,10 +345,10 @@ export const courseContent = {
       },
       {
         id: 4,
-        type: "dragAndDrop",
+        type: "imageDragAndDrop",
         instruction:
           "Drag-and-drop the statements on the left into any of these bowls",
-        options: [
+          images: [
           "Past Mistakes",
           "How I Respond to Challenges",
           "Asking for Help",
@@ -347,7 +367,7 @@ export const courseContent = {
           "How I Spend my Free Time",
           "Responding Properly",
         ],
-        bowls: [
+        buckets: [
           {
             id: "inner",
             label: "Inner Cycle",
@@ -359,6 +379,7 @@ export const courseContent = {
             count: 2,
           },
         ],
+        steps: 18,
         navigation: {
           prev: true,
           next: true,
@@ -1035,17 +1056,17 @@ export const courseContent = {
       },
       {
         id: 10,
-        type: "dragAndDrop",
+        type: "imageDragAndDrop",
         instruction:
           "Drag-and-drop the statements on the left into any of these bowls",
-        options: [
+        images: [
           "Listening actively and not interrupting.",
           "Clearly expressing your own comfort levels in a conversation.",
           "Being direct and respectful when you don’t agree.",
           "Politely explaining if something is outside your comfort zone.",
           "Respecting others’ personal space and values.",
         ],
-        bowls: [
+        buckets: [
           {
             id: "inner",
             label: "Effective communication",
@@ -1057,6 +1078,7 @@ export const courseContent = {
             count: 2,
           },
         ],
+        steps: 5,
         navigation: {
           prev: true,
           next: true,
