@@ -327,7 +327,6 @@ export const courseContent = {
         questionType: "text",
         question: "On a scale of 1 to 100, how ready do you feel for Secondary School?",
         hasImage: true,
-        imageSrc: "self-compassion.png",
         inputType: "progressBar",
         navigation: {
           prev: true,

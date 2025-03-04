@@ -60,7 +60,7 @@ function WeekTwoPage4() {
 
   for (let i = 0; i < pageData.images.length; i++) {
     const image = pageData.images[i];
-    imageMap[image] = require(`../../../../../../../../assets/drag-images/transition-drag-images/week2/image${i + 1}.png`);
+    imageMap[image] = require(`../../../../../../../../assets/drag-images/transition-drag-images/week3/image${i + 1}.png`);
   }
   const handleOnDragEnd = (result) => {
     if (!result.destination) {

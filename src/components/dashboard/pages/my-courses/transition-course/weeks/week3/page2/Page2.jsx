@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import BigTextBox from "../../../components/BigTextBox";
+import ProgressBar from "../../../components/PogressBar";
 import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
@@ -20,21 +20,21 @@ function Page2() {
 
     if (!userAnswers) return
     const response = userAnswers?.activities?.find(item => (item.page === pageData.id))
-    setMyAnswer(response?.answer ? response.answer : "")
+    setMyAnswer(response?.answer ? response.answer : 0)
     return () => { }
 
   }, [userAnswers])
 
 
   const saveUserInput = () => {
-    if (!adminDatas.isAdmin && !myAnswer) {
-      setErrorMessage("Oops! Please enter a valid input!");
-      return false;
-    }
+    // if (!adminDatas.isAdmin && !myAnswer) {
+    //   setErrorMessage("Oops! Please enter a valid input!");
+    //   return false;
+    // }
 
     setErrorMessage(""); // Clear error if input is valid
     // Allow flow admin to proceed without input but do not dispatch answer
-    if (adminDatas.isAdmin) return true
+    // if (adminDatas.isAdmin) return true
     dispatch(saveActivity({
       page: pageData.id,
       answer: myAnswer
@@ -57,7 +57,7 @@ function Page2() {
             {pageData.question}{" "}
           </h2>
         </div>
-        <BigTextBox handleChange={handleInputChange} value={myAnswer} />
+        <ProgressBar handleChange={handleInputChange} value={myAnswer} />
       </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4">
