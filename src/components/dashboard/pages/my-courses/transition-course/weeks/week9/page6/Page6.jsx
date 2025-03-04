@@ -44,7 +44,7 @@ function WeekNinePage6() {
     }
 
     const values = Object.values(stepData.value);
-    if (values.length < 3) {
+    if (values.length <1) {
       setErrorMessage("At least 3 values are required!");
       return false;
     }
@@ -81,20 +81,23 @@ function WeekNinePage6() {
               </h2>
             </div>
             <div className="d-flex flex-column gap-3">
-              <h2 className="text-white bg-red py-4 px-5 fs-1 rounded d-inline-block w-auto">
-                Challenge
-              </h2>
-              <h2 className="text-gray fs-1">
+              <div className="mb-3">
+                <h2 className="text-white bg-red py-4 px-5 fs-1 rounded d-inline">
+                  Challenge
+                </h2>
+              </div>
+              <h2 className="text-gray mb-5 fs-1 d-inline-block w-auto">
                 {step.challenge}
               </h2>
-              <h2 className="text-white bg-green py-4 px-5 fs-1 rounded d-inline-block w-auto">
-                Your YET Statement:
-              </h2>
-              <h2 className="text-gray fs-1">
+              <div className="mb-3">
+                <h2 className="text-white bg-green py-4 px-5 fs-1 rounded d-inline">
+                  Your YET Statement:
+                </h2>
+              </div>
+              <h2 className="text-gray fs-1 d-inline-block w-auto">
                 {step.statement}
               </h2>
             </div>
-
           </QuestionBox>
         );
       case "scenario":

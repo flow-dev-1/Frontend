@@ -4,7 +4,7 @@ import SmallTextBox from "../../../../components/SmallTextBox";
 import ColoredBox from "../../../../components/ColoredBox";
 
 function ChallengeFrame({ data, answers, setAnswers, setErrorMessage }) {
-  const { step, info } = data;
+  const { step, challenge, info } = data;
   const fieldCount =  1; // Default to 1 if not provided
 
   const handleInputChange = (index, value) => {
@@ -35,25 +35,35 @@ function ChallengeFrame({ data, answers, setAnswers, setErrorMessage }) {
 
   return (
     <QuestionBox>
-      <div className="gap-2">
-        {/* <h2 className="text-blue">Question: </h2>
-        <h2 className="text-gray">{info.question}</h2> */}
-          <div className="text-center mb-5">
-             
-             <ColoredBox text="Challenge" color="#FD483D"/>
-              <h2 className="text-white bg-blue p-4 fs-1 rounded d-inline">
-               {info.challenge}
-             </h2>
-             <ColoredBox text="Your YET Statement:" color="#0AA54B"/>
-           </div>
+      <div className="gap-2 mb-5">
+    
+          <div className="d-flex flex-column gap-3">
+              <div className="mb-3">
+                <h2 className="text-white bg-red py-4 px-5 fs-1 rounded d-inline">
+                  Challenge
+                </h2>
+              </div>
+              <h2 className="text-gray mb-5 fs-1 d-inline-block w-auto">
+                {challenge}
+              </h2>
+              <div className="mb-3">
+                <h2 className="text-white bg-green py-4 px-5 fs-1 rounded d-inline">
+                  Your YET Statement:
+                </h2>
+              </div>
+            </div>
       </div>
       <div className="d-flex flex-column gap-3 justify-content-center">
         {[...Array(fieldCount)].map((_, index) => (
-          <SmallTextBox
+        <>
+        
+        <SmallTextBox
             key={index}
             value={answers.find((answer) => answer.stepId === step)?.value?.[index] || ""}
             onChange={(e) => handleInputChange(index, e.target.value)}
           />
+
+          </>
         ))}
       </div>
     </QuestionBox>

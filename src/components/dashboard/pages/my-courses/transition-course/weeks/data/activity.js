@@ -1596,22 +1596,22 @@ export const courseContent = {
           {
             stepId: 2,
             type: "scenario",
-            chalenge: "Trying to make new friends but feeling like I don’t fit in..",
+            challenge: "Trying to make new friends but feeling like I don’t fit in..",
           },
           {
             stepId: 3,
             type: "scenario",
-            chalenge: "Learning how to play a musical instrument, but I keep making mistakes.",
+            challenge: "Learning how to play a musical instrument, but I keep making mistakes.",
           },
           {
             stepId: 4,
             type: "scenario",
-            chalenge: "During class discussions, I don't feel confident speaking in front of others..",
+            challenge: "During class discussions, I don't feel confident speaking in front of others..",
           },
           {
             stepId: 5,
             type: "scenario",
-            chalenge: "I don't seem to know how to balance school work and home chores",
+            challenge: "I don't seem to know how to balance school work and home chores",
           },
           {
             stepId: 6,
