@@ -94,7 +94,9 @@ function WeekFivePage4() {
               step: step.stepId,
               title: step.title,
               questions: step.questions.map((q) => ({
-                [q.type]: q.question,
+                type: q.type,
+                question:q.question,
+                colorCode:q.colorCode
               })),
             }}
             setErrorMessage={setErrorMessage}

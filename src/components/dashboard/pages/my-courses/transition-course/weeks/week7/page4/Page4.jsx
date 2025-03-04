@@ -8,6 +8,10 @@ import {
   selectCurrentStep,
 } from "../../../../../../../../redux/reducers/navigationSlice";
 import StepIndicator from "../../../components/StepIndicator";
+import MultiLineColoredSmallTextBox from "./components/MultiLineColoredSmallTextBox";
+import ColoredSmallSquaredBoxFrame from "./components/ColoredSmallSquaredBoxFrame";
+import ImageCheckBoxesFrame from "./components/ImageCheckBoxesFrame";
+import ListQuestionFrame from "./components/ListQuestionFrame";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
@@ -48,7 +52,8 @@ function WeekSevenPage4() {
       return false;
     }
 
-    const emptyInputs = values.filter((value) => value.trim() === "");
+    const emptyInputs = values.filter((value) => typeof value === "string" && value.trim() === "");
+
     if (emptyInputs.length > 0) {
       setErrorMessage(`Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`);
       return false;
@@ -73,35 +78,72 @@ function WeekSevenPage4() {
     if (!step) return <div>Invalid Step</div>;
 
     switch (step.type) {
-      case "instruction":
+      case "listQuestion":
         return (
-          <QuestionBox>
-            <div className="text-center mb-5">
-              <h2 className="text-white bg-blue p-4 fs-1 rounded d-inline">
-                {step.title}
-              </h2>
-            </div>
-            <div className="d-flex gap-2">
-              <h2 className="text-blue fs-1">Instructions: </h2>
-              <h2 className="text-gray fs-1">{step.instructions}</h2>
-            </div>
-          </QuestionBox>
-        );
-      case "scenario":
-        return (
-          <Frame
+          <ListQuestionFrame
             data={{
-              step: step.stepId,
-              title: step.title,
-              questions: step.questions.map((q) => ({
-                [q.type]: q.question,
-              })),
+              id: step.stepId,
+              question:step.question,
+              numberOfInputs:step.numberOfInputs
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
             setAnswers={setAnswers}
           />
         );
+        case "multiColoredQuestionBoxes":
+          return (
+            <ColoredSmallSquaredBoxFrame
+              data={{
+                step: step.stepId,
+                title: step.question,
+                info:step.fields,
+              }}
+              setErrorMessage={setErrorMessage}
+              answers={answers}
+              setAnswers={setAnswers}
+            />
+          );
+          case "multiMultiColoredQuestionBoxes":
+            return (
+              <MultiLineColoredSmallTextBox
+                data={{
+                  step: step.stepId,
+                  title: step.question,
+                  info:step.fields,
+                }}
+                setErrorMessage={setErrorMessage}
+                answers={answers}
+                setAnswers={setAnswers}
+              />
+            );
+          case "checkBoxesWithImageAndTitle":
+          return (
+            <ImageCheckBoxesFrame
+              data={{
+                step: step.stepId,
+                title: step.question,
+                info:step.options,
+              }}
+              setErrorMessage={setErrorMessage}
+              answers={answers}
+              setAnswers={setAnswers}
+            />
+          );
+          case "bigTextBox":
+          return (
+            <Frame
+              data={{
+                step: step.stepId,
+                title: step.question,
+                info:step,
+              }}
+              setErrorMessage={setErrorMessage}
+              answers={answers}
+              setAnswers={setAnswers}
+            />
+          );
+
       default:
         return <div>Unknown step type</div>;
     }

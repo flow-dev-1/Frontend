@@ -1,8 +1,9 @@
 import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
-import SmallTextBox from "../../../../components/SmallTextBox";
-function Frame({ data, answers, setAnswers, setErrorMessage }) {
-  const { step, question, expectedAnswers } = data;
+import SmartTextBox from "../../../../components/SmartTextBox";
+
+function SmartFrame({ data, answers, setAnswers, setErrorMessage }) {
+  const { step, question, config } = data;
 
   const handleInputChange = (textBoxIndex, value) => {
     setErrorMessage(""); 
@@ -33,15 +34,16 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
 
   return (
     <QuestionBox>
-         <div className="d-flex gap-2">
-              <h2 className="text-blue">Question: </h2>
-              <h2 className="text-gray">{question}</h2>
-            </div>
+      <div className="d-flex gap-2 justify-content-center">
+        <h2 className="text-blue">Question:  </h2>
+        <h2 className="text-gray">{question}</h2>
+      </div>
       <div className="mb-2">
-        <div className=" gap-2">
-          {Array.from({ length: expectedAnswers }).map((_, textBoxIndex) => (
-            <SmallTextBox
+        <div className="gap-2">
+          {config.map((item, textBoxIndex) => (
+            <SmartTextBox
               key={textBoxIndex}
+              label={item.title}  // ✅ Fix: Use `item.title`
               value={answers.find(answer => answer.stepId === step)?.value?.[textBoxIndex] || ""}
               onChange={(e) => handleInputChange(textBoxIndex, e.target.value)}
             />
@@ -52,4 +54,4 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
   );
 }
 
-export default Frame;
+export default SmartFrame;

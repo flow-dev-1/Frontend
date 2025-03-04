@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import QuestionBox from "../../../../components/QuestionBox";
 import SmallTextBox from "../../../../components/SmallTextBox";
+import ColoredSmallSquaredTextBox from "../../../../components/ColoredSmallSquaredTextBox";
+import ColoredSmallCircledTextBox from "../../../../components/ColoredSmallCircledTextBox";
 
 function Frame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, title, questions } = data;
 
   const handleInputChange = (index, value) => {
-    setErrorMessage(""); 
-    // Update answers state with the new value
+    setErrorMessage("");
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
       const stepIndex = updatedAnswers.findIndex((answer) => answer.stepId === step);
@@ -17,7 +18,7 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
           ...updatedAnswers[stepIndex],
           value: {
             ...updatedAnswers[stepIndex].value,
-            [index]: value, // Update the specific index with the new value
+            [index]: value,
           },
         };
       } else {
@@ -35,23 +36,39 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
 
   return (
     <QuestionBox>
-      <h2 className="text-blue text-center fs-1">{title}</h2>
+      <h2 className="text-blue text-center fs-1">Situation: {title}</h2>
 
-      {questions.map((question, index) => {
-        const [key, value] = Object.entries(question)[0]; // extract the key value pair
-        return (
-          <div key={index} className="mb-2">
-            <div className="d-flex gap-2">
-              <h2 className="text-blue">{key}: </h2>
-              <h2 className="text-gray">{value}</h2>
+      {questions.map((q, index) => (
+        <div key={index} className="mb-2">
+          {q.type === "smallText" ? (
+            <>
+              <h2 className="text-gray">{q.question}</h2>
+              <SmallTextBox
+                value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
+                onChange={(e) => handleInputChange(index, e.target.value)}
+              />
+            </>
+          ) : q.type === "circle" ? (
+            <div className="d-flex flex-column align-items-center">
+              <ColoredSmallCircledTextBox
+                color={q.colorCode}
+                value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
+                onChange={(e) => handleInputChange(index, e.target.value)}
+              />
+              <h2 className="text-gray">{q.question}</h2>
             </div>
-            <SmallTextBox 
-              value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""} // Pass the current answer
-              onChange={(e) => handleInputChange(index, e.target.value)} // Handle input change
-            />
-          </div>
-        );
-      })}
+          ) : q.type === "square" ? (
+            <div className="d-flex flex-column align-items-center">
+              <ColoredSmallSquaredTextBox
+                color={q.colorCode}
+                value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
+                onChange={(e) => handleInputChange(index, e.target.value)}
+              />
+              <h2 className="text-gray">{q.question}</h2>
+            </div>
+          ) : null}
+        </div>
+      ))}
     </QuestionBox>
   );
 }

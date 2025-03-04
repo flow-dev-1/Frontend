@@ -44,7 +44,7 @@ function Page6() {
     }
 
     const values = Object.values(stepData.value);
-    if (values.length < 3) {
+    if (values.length < 2) {
       setErrorMessage("At least 3 values are required!");
       return false;
     }
@@ -95,7 +95,9 @@ function Page6() {
               step: step.stepId,
               title: step.title,
               questions: step.questions.map((q) => ({
-                [q.type]: q.question,
+                type: q.type,
+                question:q.question,
+                colorCode:q.colorCode
               })),
             }}
             setErrorMessage={setErrorMessage}

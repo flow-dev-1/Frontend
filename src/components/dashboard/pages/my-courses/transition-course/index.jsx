@@ -153,13 +153,12 @@ const WeekContent = () => {
   useEffect(() => {
     const currentWeek = sessionStorage.getItem("flow-currentWeek")
       ? Number(sessionStorage.getItem("flow-currentWeek"))
-      : 1;
-    const currentPage = sessionStorage.getItem("flow-currentPage")
-      ? Number(sessionStorage.getItem("flow-currentPage"))
-      : 1;
-    const currentStep = sessionStorage.getItem("flow-currentStep")
-      ? Number(sessionStorage.getItem("flow-currentStep"))
-      : 1;
+      : 9;
+    // const currentPage = sessionStorage.getItem("flow-currentPage")
+    //   ? Number(sessionStorage.getItem("flow-currentPage"))
+    //   : 1;
+    const currentPage = 6;
+    const currentStep =  1;
 
     // Dispatch the current week, page, and step
     dispatch(setCurrentWeek(currentWeek));
@@ -456,11 +455,16 @@ const CourseContent = () => {
   const navigate = useNavigate()
 
   const weeksTopic = [
-    "Introduction to Transition",
-    "Self-Compassion",
-    "Compassion to Others",
-    "Circle of concern",
-    `Life Scenarios - Let's wear the shoes of Others`,
+    "Introduction To Transition. Also Talk About ‘Your Why’",
+    "Growth And Fixed Mindset",
+    "Understanding What Is In Your Control",
+    "Understanding Values",
+    `Emotional Intelligence`,
+    "Social Skills (Navigating Relationships)",
+    "Time Management",
+    "Goal Setting",
+    "Resilience And Introduction To Coping Skills",
+    "Looking Ahead",
   ];
 
   return (

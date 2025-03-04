@@ -42,10 +42,10 @@ function WeekFourPage6() {
     }
 
     const values = Object.values(stepData.value);
-    if (values.length < 3) {
-      setErrorMessage("At least 3 values are required!");
-      return false;
-    }
+    // if (values.length < 3) {
+    //   setErrorMessage("At least 3 values are required!");
+    //   return false;
+    // }
 
     const emptyInputs = values.filter((value) => value.trim() === "");
     if (emptyInputs.length > 0) {
@@ -86,15 +86,13 @@ function WeekFourPage6() {
             </div>
           </QuestionBox>
         );
-      case "scenario":
+      case "threeFieldsAnswers":
         return (
           <Frame
             data={{
               step: step.stepId,
-              title: step.title,
-              questions: step.questions.map((q) => ({
-                [q.type]: q.question,
-              })),
+              question: step.question,
+              expectedAnswers:step.answers,
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}

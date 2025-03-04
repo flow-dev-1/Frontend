@@ -90,7 +90,7 @@ function Page2() {
           <Frame
             data={{
               step: step.stepId,
-              title: step.title,
+              question: step.question,
               questions: step.questions.map((q) => ({
                 [q.type]: q.question,
               })),

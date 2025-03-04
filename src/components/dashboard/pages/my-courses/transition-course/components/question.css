@@ -20,6 +20,53 @@
   outline: none !important;
   box-shadow: none !important;
 }
+.s-smart-small-input-label {
+  background: url("../../../../../../assets/sSmartSmallTextBox.png") no-repeat;
+  background-size: 100% 100%;
+}
+.m-smart-small-input-label {
+  background: url("../../../../../../assets/mSmartSmallTextBox.png") no-repeat;
+  background-size: 100% 100%;
+}
+.a-smart-small-input-label {
+  background: url("../../../../../../assets/aSmartSmallTextBox.png") no-repeat;
+  background-size: 100% 100%;
+}
+.r-smart-small-input-label {
+  background: url("../../../../../../assets/rSmartSmallTextBox.png") no-repeat;
+  background-size: 100% 100%;
+}
+.t-smart-small-input-label {
+  background: url("../../../../../../assets/tSmartSmallTextBox.png") no-repeat;
+  background-size: 100% 100%;
+}
+
+.dropdown-small-input {
+  width: 50%;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  padding: 10px;
+  cursor: pointer;
+  background-color: transparent;
+  /* Ensure the default dropdown arrow appears */
+  -webkit-appearance: menulist; /* Safari */
+  -moz-appearance: menulist; /* Firefox */
+  appearance: menulist; 
+}
+
+.dropdown-input-label {
+  background: url("../../../../../../assets/dropdownBg.png") no-repeat;
+  background-size: 60% 100%;
+  display: inline-block;
+  position: relative;
+}
+
+.dropdown-input:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
 
 
 .colored-small-input {
@@ -27,6 +74,7 @@
   border: none;
   outline: none;
 }
+
 
 .yellow-colored-small-input-label {
   background: url("../../../../../../assets/yellowSmallTextBox.png") no-repeat;
@@ -75,12 +123,60 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50%;
-  padding-top:170px;
-  padding-bottom:140px;
-  padding-left:70px;
-  padding-right:25px;
+  width: 100%;
+  padding-top:8em;
+  padding-bottom:8em;
+  padding-left:5em;
+  padding-right:5em;
+  margin-right: 15em;
+  margin-left: 15em;
+  margin-bottom: 1em;
+  margin-top: 1em;
   position: relative;
+ 
+}
+
+.colored-small-heart-input-label{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-top:5%;
+  margin-top: 5%;
+  /* padding-bottom:140px; */
+  padding-left:2%;
+  padding-right:2%;
+  position: relative;
+ 
+}
+.yellow-colored-small-input-label {
+  background: url("../../../../../../assets/yellowHeartSmallText.png") no-repeat;
+  background-size: 100% 100%;
+ 
+}
+
+.pink-colored-small-input-label {
+  background: url("../../../../../../assets/pinkHeartSmallText.png") no-repeat;
+  background-size: 100% 100%;
+ 
+}
+
+.blue-colored-small-input-label {
+  background: url("../../../../../../assets/blueHeartSmallText.png") no-repeat;
+  background-size: 100% 100%;
+
+ 
+}
+
+.orange-colored-small-input-label {
+  background: url("../../../../../../assets/orangeHeartSmallText.png") no-repeat;
+  background-size: 100% 100%;
+ 
+}
+
+.green-colored-small-input-label {
+  background: url("../../../../../../assets/greenHeartSmallText.png") no-repeat;
+  background-size: 100% 100%;
  
 }
 
@@ -89,6 +185,114 @@
   outline: none !important;
   box-shadow: none !important;
 }
+
+/* Star Input Boxes */
+
+.colored-small-star-input-label{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-top:8.1%;
+  padding-bottom:4%;
+ 
+  margin-top: 8%;
+  font-size: 28px;
+  /* padding-bottom:140px; */
+  padding-left:3.4%;
+  padding-right:2.2%;
+  position: relative;
+ 
+}
+.yellow-star-colored-small-input-label {
+  background: url("../../../../../../assets/yellowStarSmallText.png") no-repeat;
+  background-size: 100% 100%;
+ 
+}
+
+.pink-star-colored-small-input-label {
+  background: url("../../../../../../assets/pinkStarSmallText.png") no-repeat;
+  background-size: 100% 100%;
+ 
+}
+
+.blue-star-colored-small-input-label {
+  background: url("../../../../../../assets/blueStarSmallText.png") no-repeat;
+  background-size: 100% 100%;
+
+ 
+}
+
+.orange-star-colored-small-input-label {
+  background: url("../../../../../../assets/orangeStarSmallText.png") no-repeat;
+  background-size: 100% 100%;
+ 
+}
+
+.green-star-colored-small-input-label {
+  background: url("../../../../../../assets/greenStarSmallText.png") no-repeat;
+  background-size: 100% 100%;
+ 
+}
+
+.colored-star-input:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.colored-star-input {
+ font-weight: bold;
+  font-size: 15px;
+}
+.colored-star-input::placeholder {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.white-colored-small-star-input-label{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  padding-top:141px;
+  padding-bottom:4%;
+  padding-left:55px;
+  padding-right:0%;
+  margin-top: 8%;
+  margin-left: 5%;
+  margin-right: 5%;
+  font-size: 25px;
+  position: relative;
+ 
+}
+
+.white-star-colored-small-input-label {
+  background: url("../../../../../../assets/singleWhiteStarFrame.png") no-repeat;
+  background-size: 100% 100%;
+ 
+}
+
+.white-star-input:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.white-star-input {
+ font-weight: bold;
+  font-size: 20px;
+}
+.white-star-input::placeholder {
+  font-weight: bold;
+  font-size: 20px;
+}
+.star-input:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+
+
 ::placeholder {
   font-weight: bold;
   font-size: 20px;
@@ -261,3 +465,5 @@ button {
 .border-6 {
   border-width: 6px !important;
 }
+
+

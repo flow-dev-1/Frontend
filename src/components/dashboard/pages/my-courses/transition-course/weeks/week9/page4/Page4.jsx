@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import QuestionBox from "../../../components/QuestionBox";
+import ListQuestionFrame from "./components/ListQuestionFrame";
 import Frame from "./components/Frame";
 import Button from "../../../components/Button";
 import {
@@ -72,36 +72,32 @@ function WeekNinePage4() {
     if (!step) return <div>Invalid Step</div>;
 
     switch (step.type) {
-      case "instruction":
+      case "listQuestion":
         return (
-          <QuestionBox>
-            <div className="text-center mb-5">
-              <h2 className="text-white bg-blue p-4 fs-1 rounded d-inline">
-                {step.title}
-              </h2>
-            </div>
-            <div className="d-flex gap-2">
-              <h2 className="text-blue fs-1">Instructions: </h2>
-              <h2 className="text-gray fs-1">{step.instructions}</h2>
-            </div>
-          </QuestionBox>
-        );
-      case "scenario":
-        return (
-          <Frame
+          <ListQuestionFrame
             data={{
-              step: step.stepId,
-              title: step.title,
-              questions: step.questions.map((q) => ({
-                [q.type]: q.question,
-              })),
+              id: step.stepId,
+              question:step.question,
+              numberOfInputs:step.numberOfInputs
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
             setAnswers={setAnswers}
           />
         );
-      default:
+        case "bigTextBox":
+          return (
+            <Frame
+              data={{
+                step: step.stepId,
+                title: step.question,
+                info:step,
+              }}
+              setErrorMessage={setErrorMessage}
+              answers={answers}
+              setAnswers={setAnswers}
+            />
+          );
         return <div>Unknown step type</div>;
     }
   };

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import Frame from "./components/Frame";
+import SmartFrame from "./components/SmartFrame";
+import MultiStarFrame from "./components/MultiStarFrame";
+import SingleWhiteStarFrame from "./components/SingleWhiteStarFrame";
 import Button from "../../../components/Button";
 import {
   selectPageData,
@@ -26,9 +29,10 @@ function WeekEightPage6() {
 
   useEffect(() => {
 
-    if (!userAnswers) return;
-    const response = userAnswers.activities?.find(item => item.page === pageData.id);
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    if (!userAnswers) return
+    const response = userAnswers.activities?.find(item => (item.page === pageData.id))
+    setAnswers(response?.answer ? response.answer : [])
+    return () => { }
 
   }, [userAnswers])
 
@@ -43,7 +47,7 @@ function WeekEightPage6() {
     }
 
     const values = Object.values(stepData.value);
-    if (values.length < 3) {
+    if (values.length < 2) {
       setErrorMessage("At least 3 values are required!");
       return false;
     }
@@ -87,21 +91,61 @@ function WeekEightPage6() {
             </div>
           </QuestionBox>
         );
-      case "scenario":
-        return (
-          <Frame
-            data={{
-              step: step.stepId,
-              title: step.title,
-              questions: step.questions.map((q) => ({
-                [q.type]: q.question,
-              })),
-            }}
-            setErrorMessage={setErrorMessage}
-            answers={answers}
-            setAnswers={setAnswers}
-          />
-        );
+        case "hearts":
+          return (
+            <Frame
+              data={{
+                step: step.stepId,
+                question: step.question,
+                expectedAnswers:step.answers,
+                config:step.config
+              }}
+              setErrorMessage={setErrorMessage}
+              answers={answers}
+              setAnswers={setAnswers}
+            />
+          );
+          case "star":
+            return (
+              <MultiStarFrame
+                data={{
+                  step: step.stepId,
+                  question: step.question,
+                  expectedAnswers:step.answers,
+                  config:step.config
+                }}
+                setErrorMessage={setErrorMessage}
+                answers={answers}
+                setAnswers={setAnswers}
+              />
+            );
+            case "singleStar":
+              return (
+                <SingleWhiteStarFrame
+                  data={{
+                    step: step.stepId,
+                    questions: step.questions.map((q) => ({
+                      [q.type]: q.question,
+                    })),
+                  }}
+                  setErrorMessage={setErrorMessage}
+                  answers={answers}
+                  setAnswers={setAnswers}
+                />
+              );
+              case "smart":
+                return (
+                  <SmartFrame
+                    data={{
+                      step: step.stepId,
+                      question: step.question,
+                      config:step.config
+                    }}
+                    setErrorMessage={setErrorMessage}
+                    answers={answers}
+                    setAnswers={setAnswers}
+                  />
+                );
       default:
         return <div>Unknown step type</div>;
     }

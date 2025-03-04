@@ -1,10 +1,9 @@
 import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
-import ColoredHeartTextBox from "../../../../components/ColoredHeartTextBox";
 
 import ColoredStarTextBox from "../../../../components/ColoredStarTextBox";
 
-function Frame({ data, answers, setAnswers, setErrorMessage }) {
+function MultiStarFrame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, question, config } = data;
 
   const handleInputChange = (index, value) => {
@@ -45,7 +44,7 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
       <div className="mb-2">
         <div className="d-flex gap-2">
            {config.map((textBoxConfig, index) => (
-            <ColoredHeartTextBox
+            <ColoredStarTextBox
               key={index}
               color={textBoxConfig.color}
               value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
@@ -62,4 +61,4 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
   );
 }
 
-export default Frame;
+export default MultiStarFrame;

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
 import checkedImage from "../../../../../../../../assets/checkedbox.png";
 import uncheckedImage from "../../../../../../../../assets/uncheckedBox.png";
@@ -34,24 +33,19 @@ function Page2() {
   };
 
   const saveUserInput = () => {
-    if (!adminDatas.isAdmin && !myAnswer) {
-      setErrorMessage("Oops! Please enter a valid input!");
-      return false;
-    }
+    // if (!adminDatas.isAdmin && !myAnswer) {
+    //   setErrorMessage("Oops! Please enter a valid input!");
+    //   return false;
+    // }
 
     setErrorMessage(""); // Clear error if input is valid
     // Allow flow admin to proceed without input but do not dispatch answer
-    if (adminDatas.isAdmin) return true
+    // if (adminDatas.isAdmin) return true
     dispatch(saveActivity({
       page: pageData.id,
       answer: myAnswer
     }))
     return true
-  }
-
-  const handleInputChange = (e) => {
-    setErrorMessage("");
-    setMyAnswer(e.target.value)
   }
 
 
@@ -62,20 +56,16 @@ function Page2() {
         <div className="d-flex gap-2 ms-5 align-center-lg-custom">
           <div className="">
             <form className="d-flex gap-3">
-              <h2 className="text-blue fs-1">Question: </h2>
-              <div className="">
+              <h2 className="text-blue fs-1">Question:</h2>
+              <div className="d-flex flex-wrap gap-8 align-items-center">
                 <h3 className="fs-1">{pageData.question}</h3>
                 {pageData.options.map((option, index) => {
                   const optionKey = Object.keys(option);
                   const optionID = option[optionKey[0]];
                   const optionText = option[optionKey[1]];
                   const isChecked = selectedOption === optionID;
-
                   return (
-                    <div
-                      key={index}
-                      className="ms-5 d-flex gap-2 mb-3 align-items-center"
-                    >
+                    <div key={index} className="d-flex gap-3 align-items-center py-5">
                       <input
                         type="radio"
                         id={optionID}
@@ -88,19 +78,18 @@ function Page2() {
                       <img
                         src={isChecked ? checkedImage : uncheckedImage}
                         alt={optionKey}
-                        style={{ width: 20, height: 20, cursor: "pointer" }}
+                        style={{ width: 60, height: 60, cursor: "pointer" }} // Increased size
                         onClick={() => {
-                          setErrorMessage("")
-                          setSelectedOption(optionID)
+                          setErrorMessage("");
+                          setSelectedOption(optionID);
                         }}
                       />
-                      <label
-                        htmlFor={optionID}
-                      >{`${optionID}. ${optionText}`}</label>
+                      <label htmlFor={optionID} className="fs-2">{optionText}</label>
                     </div>
                   );
                 })}
               </div>
+
             </form>
           </div>
         </div>

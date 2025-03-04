@@ -6,6 +6,7 @@ import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import mindset from "../../../../../../../../assets/mindset.png";
 
 
 function WeekTwoPage2() {
@@ -54,7 +55,9 @@ function WeekTwoPage2() {
         <div className="d-flex gap-3 ms-5 align-center-lg-custom">
           <h2 className="text-blue font-lg">Question: </h2>
           <h2 className="text-gray font-lg">
-            {pageData.question}{" "}
+            {pageData.question}{" "}{pageData.hasImage && (
+              <img src={mindset} alt="self-compassion" />
+            )}{" ?"}
           </h2>
         </div>
         <BigTextBox handleChange={handleInputChange} value={myAnswer} />

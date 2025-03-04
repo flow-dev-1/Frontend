@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import Frame from "./components/Frame";
+import ChallengeFrame from "./components/ChallengeFrame";
 import Button from "../../../components/Button";
+import ColoredBox from "../../../components/ColoredBox";
 import {
   selectPageData,
   selectCurrentStep,
@@ -12,7 +13,7 @@ import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
 
-function WeekTenPage2() {
+function WeekNinePage6() {
   const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
@@ -55,7 +56,7 @@ function WeekTenPage2() {
     }
 
     setErrorMessage(""); // Clear error if input is valid
-    
+
     const activityData = {
       page: pageData.id,
       answer: answers
@@ -68,8 +69,6 @@ function WeekTenPage2() {
   // console.log(answers, "Answers")
 
   const renderStep = () => {
-    // const step = pageData?.steps[currentStep - 1];
-    // console.log(currentStep, step, "step")
     if (!step) return <div>Invalid Step</div>;
 
     switch (step.type) {
@@ -77,25 +76,34 @@ function WeekTenPage2() {
         return (
           <QuestionBox>
             <div className="text-center mb-5">
-              <h2 className="text-white bg-blue p-4 fs-1 rounded d-inline">
-                {step.title}
+              <h2 className="text-white bg-blue py-4 px-5 fs-1 rounded d-inline">
+                Example
               </h2>
             </div>
-            <div className="d-flex gap-2">
-              <h2 className="text-blue fs-1">Instructions: </h2>
-              <h2 className="text-gray fs-1">{step.instructions}</h2>
+            <div className="d-flex flex-column gap-3">
+              <h2 className="text-white bg-red py-4 px-5 fs-1 rounded d-inline-block w-auto">
+                Challenge
+              </h2>
+              <h2 className="text-gray fs-1">
+                {step.challenge}
+              </h2>
+              <h2 className="text-white bg-green py-4 px-5 fs-1 rounded d-inline-block w-auto">
+                Your YET Statement:
+              </h2>
+              <h2 className="text-gray fs-1">
+                {step.statement}
+              </h2>
             </div>
+
           </QuestionBox>
         );
       case "scenario":
         return (
-          <Frame
+          <ChallengeFrame
             data={{
               step: step.stepId,
-              title: step.title,
-              questions: step.questions.map((q) => ({
-                [q.type]: q.question,
-              })),
+              challenge: step.challenge,
+              info: step,
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
@@ -122,4 +130,4 @@ function WeekTenPage2() {
   );
 }
 
-export default WeekTenPage2;
+export default WeekNinePage6;

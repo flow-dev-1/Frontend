@@ -44,13 +44,7 @@ function ColoredSmallSquaredBoxFrame({ data, answers, setAnswers, setErrorMessag
       <div className="d-flex gap-3 justify-content-center">
         {info.map((field, index) => (
           <div key={index} className="d-flex flex-column align-items-center">
-
-            <ColoredSmallSquaredTextBox
-              color={field.colorCode}
-              value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
-              onChange={(e) => handleInputChange(index, e.target.value)}
-            />
-            <div
+              <div
               className="mt-2 d-flex justify-content-center align-items-center"
               style={{
                 width: "50px",
@@ -65,6 +59,13 @@ function ColoredSmallSquaredBoxFrame({ data, answers, setAnswers, setErrorMessag
             >
               {field.number}
             </div>
+
+            <ColoredSmallSquaredTextBox
+              color={field.colorCode}
+              value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
+              onChange={(e) => handleInputChange(index, e.target.value)}
+            />
+          
           </div>
         ))}
       </div>

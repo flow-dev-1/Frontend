@@ -1,10 +1,11 @@
 import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
-import MediumTextBox from "../../../../components/MediumTextBox";
+import SmallTextBox from "../../../../components/SmallTextBox";
+import ColoredBox from "../../../../components/ColoredBox";
 
-function Frame({ data, answers, setAnswers, setErrorMessage }) {
+function ChallengeFrame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, info } = data;
-  const fieldCount = info.fieldCount || 1; // Default to 1 if not provided
+  const fieldCount =  1; // Default to 1 if not provided
 
   const handleInputChange = (index, value) => {
     setErrorMessage("");
@@ -34,13 +35,21 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
 
   return (
     <QuestionBox>
-      <div className="d-flex gap-2">
-        <h2 className="text-blue">Question: </h2>
-        <h2 className="text-gray">{info.question}</h2>
+      <div className="gap-2">
+        {/* <h2 className="text-blue">Question: </h2>
+        <h2 className="text-gray">{info.question}</h2> */}
+          <div className="text-center mb-5">
+             
+             <ColoredBox text="Challenge" color="#FD483D"/>
+              <h2 className="text-white bg-blue p-4 fs-1 rounded d-inline">
+               {info.challenge}
+             </h2>
+             <ColoredBox text="Your YET Statement:" color="#0AA54B"/>
+           </div>
       </div>
       <div className="d-flex flex-column gap-3 justify-content-center">
         {[...Array(fieldCount)].map((_, index) => (
-          <MediumTextBox
+          <SmallTextBox
             key={index}
             value={answers.find((answer) => answer.stepId === step)?.value?.[index] || ""}
             onChange={(e) => handleInputChange(index, e.target.value)}
@@ -51,4 +60,4 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
   );
 }
 
-export default Frame;
+export default ChallengeFrame;

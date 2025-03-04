@@ -8,6 +8,7 @@ import {
   selectCurrentStep,
   selectCurrentWeek,
   showReviewPopup,
+  hideReviewPopup,
 } from "../../../../../../../../redux/reducers/navigationSlice";
 import { getWeekAssessment } from "../../data";
 import StepIndicator from "../../../components/StepIndicator";
@@ -99,38 +100,38 @@ function WeekFiveAssessment() {
 
     if (isLastQuestion) {
 
-      const hasUnansweredQuestions = answers.length !== totalSteps || userAnswers.activities.length !== 3;
-      if (hasUnansweredQuestions) {
-        setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-        return false;
-      }
+    //   const hasUnansweredQuestions = answers.length !== totalSteps || userAnswers.activities.length !== 3;
+    //   if (hasUnansweredQuestions) {
+    //     setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+    //     return false;
+    //   }
 
-      const selectedActivity = userAnswers.activities.find(activity => activity.page === 6);
-      const isValidActivity = selectedActivity && Array.isArray(selectedActivity.answer) && selectedActivity.answer.length === 5;
+    //   const selectedActivity = userAnswers.activities.find(activity => activity.page === 6);
+    //   const isValidActivity = selectedActivity && Array.isArray(selectedActivity.answer) && selectedActivity.answer.length === 5;
 
-      if (isValidActivity) {
-        const isValid = selectedActivity.answer.every(item =>
-          item.stepId !== undefined &&
-          item.value &&
-          Object.keys(item.value).length === 3
-        );
+    //   if (isValidActivity) {
+    //     const isValid = selectedActivity.answer.every(item =>
+    //       item.stepId !== undefined &&
+    //       item.value &&
+    //       Object.keys(item.value).length === 3
+    //     );
 
-        if (isValid) {
-          const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
+    //     if (isValid) {
+    //       const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
 
-          mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
-        } else {
+    //       mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
+    //     } else {
 
-          setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-          return false;
-        }
-      } else {
-        setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-        return false;
-      }
+    //       setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+    //       return false;
+    //     }
+    //   } else {
+    //     setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+    //     return false;
+    //   }
 
 
-    } else {
+    // } else {
       return true;
     }
     // Dispatch the saveActivity action
@@ -192,7 +193,7 @@ function WeekFiveAssessment() {
             customOnClick={() => dispatch(showReviewPopup())}
           />
         ) : (
-          <Button text="Next" customOnClick={saveUserData} loading={mutation.isPending} />
+          <Button text="Next" customOnClick={() => dispatch(hideReviewPopup())} loading={mutation.isPending} />
         )}
       </div>
     </>

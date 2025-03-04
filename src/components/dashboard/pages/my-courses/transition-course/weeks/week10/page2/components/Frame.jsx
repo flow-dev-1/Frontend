@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import QuestionBox from "../../../../components/QuestionBox";
-import SmallTextBox from "../../../../components/SmallTextBox";
+import MediumTextBox from "../../../../components/MediumTextBox";
+import futureMe from "../../../../../../../../../assets/dearFutureMe.png";
 
 function Frame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, title, questions } = data;
@@ -37,15 +38,16 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
     <QuestionBox>
       <h2 className="text-blue text-center fs-1">{title}</h2>
 
-      {questions.map((question, index) => {
-        const [key, value] = Object.entries(question)[0]; // extract the key value pair
+      {questions.map((q, index) => {
+    
         return (
           <div key={index} className="mb-2">
+            <img src={futureMe} alt="Future Me" />
+
             <div className="d-flex gap-2">
-              <h2 className="text-blue">{key}: </h2>
-              <h2 className="text-gray">{value}</h2>
+              <h2 className="text-gray">{q.question}</h2>
             </div>
-            <SmallTextBox 
+            <MediumTextBox 
               value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""} // Pass the current answer
               onChange={(e) => handleInputChange(index, e.target.value)} // Handle input change
             />

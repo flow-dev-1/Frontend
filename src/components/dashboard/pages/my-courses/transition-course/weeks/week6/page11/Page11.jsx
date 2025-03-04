@@ -86,16 +86,14 @@ function WeekSixPage11() {
             </div>
           </QuestionBox>
         );
-      case "scenario":
+      case "dropdownScenario":
         return (
           <Frame
             data={{
               step: step.stepId,
-              title: step.title,
-              questions: step.questions.map((q) => ({
-                [q.type]: q.question,
-              })),
-            }}
+              question: step.question,
+              options:step.options,
+                       }}
             setErrorMessage={setErrorMessage}
             answers={answers}
             setAnswers={setAnswers}
