@@ -161,21 +161,21 @@ export const courseContent = {
             type: "multiColoredQuestionBoxes",
             question:
               "List three (3) things you’re excited about for secondary school.",
-              fields: [
+            fields: [
               {
                 number: "1",
                 textFieldColor: "yellow",
-                colorCode:"#FCF85D",
+                colorCode: "#FCF85D",
               },
               {
                 number: "2",
                 textFieldColor: "orange",
-                colorCode:"#FAAA74",
+                colorCode: "#FAAA74",
               },
               {
                 number: "3",
                 textFieldColor: "pink",
-                colorCode:"#ED3F93",
+                colorCode: "#ED3F93",
               }
 
             ]
@@ -185,23 +185,23 @@ export const courseContent = {
             type: "multiColoredQuestionBoxes",
             question:
               "List three (3) things that you feel nervous or afraid about.",
-              fields: [
-                {
-                  number: "1",
-                  textFieldColor: "yellow",
-                  colorCode:"#FCF85D",
-                },
-                {
-                  number: "2",
-                  textFieldColor: "orange",
-                  colorCode:"#FAAA74",
-                },
-                {
-                  number: "3",
-                  textFieldColor: "pink",
-                  colorCode:"#ED3F93",
-                }
-  
+            fields: [
+              {
+                number: "1",
+                textFieldColor: "yellow",
+                colorCode: "#FCF85D",
+              },
+              {
+                number: "2",
+                textFieldColor: "orange",
+                colorCode: "#FAAA74",
+              },
+              {
+                number: "3",
+                textFieldColor: "pink",
+                colorCode: "#ED3F93",
+              }
+
 
             ]
           },
@@ -347,7 +347,7 @@ export const courseContent = {
         type: "imageDragAndDrop",
         instruction:
           "Drag-and-drop the statements on the left into any of these bowls",
-          images: [
+        images: [
           "Past Mistakes",
           "How I Respond to Challenges",
           "Asking for Help",
@@ -405,13 +405,13 @@ export const courseContent = {
               "Your friends made plans without you.",
             questions: [
               {
-                type:"circle",
-                colorCode:"#50AA50",
+                type: "circle",
+                colorCode: "#50AA50",
                 question: "Within your control:",
               },
               {
                 type: "square",
-                colorCode:"#FD483D",
+                colorCode: "#FD483D",
                 question: "Outside your control:",
               }
 
@@ -425,12 +425,12 @@ export const courseContent = {
             questions: [
               {
                 type: "smallText",
-                colorCode:null,
+                colorCode: null,
                 question: "Within your control:",
               },
               {
                 type: "smallText",
-                colorCode:null,
+                colorCode: null,
                 question: "Outside your control:",
               }
             ],
@@ -443,12 +443,12 @@ export const courseContent = {
             questions: [
               {
                 type: "smallText",
-                colorCode:null,
+                colorCode: null,
                 question: "Within your control:",
               },
               {
                 type: "smallText",
-                colorCode:null,
+                colorCode: null,
                 question: "Outside your control:",
               }
             ],
@@ -461,12 +461,12 @@ export const courseContent = {
             questions: [
               {
                 type: "smallText",
-                colorCode:null,
+                colorCode: null,
                 question: "Within your control:",
               },
               {
                 type: "smallText",
-                colorCode:null,
+                colorCode: null,
                 question: "Outside your control:",
               }
             ],
@@ -479,12 +479,12 @@ export const courseContent = {
             questions: [
               {
                 type: "smallText",
-                colorCode:null,
+                colorCode: null,
                 question: "Within your control:",
               },
               {
                 type: "smallText",
-                colorCode:null,
+                colorCode: null,
                 question: "Outside your control:",
               }
             ],
@@ -543,239 +543,239 @@ export const courseContent = {
         type: "multiStep",
         instruction:
           "Click each card to know more about the values. Tick the box on each card to pick the values you feel are a big part of who you are.",
-          steps: [
-            {
-              stepId: 1,
-              options: [
-                {
-                  value: "Generosity",
-                  description: "Being willing to share and give to others.",
-                  eg: "Example: Donating to charity.",
-                  color: "maroon"
-                },
-                {
-                  value: "Respect",
-                  description: "Valuing and honoring others and their options.",
-                  eg: "Example: Listening carefully to an elder.",
-                  color: "green"
-                },
-                {
-                  value: "Leadership",
-                  description: "Guiding  and inspiring others.",
-                  eg: "Example: Leading a group project at school",
-                  color: "orange"
-                },
-                {
-                  value: "Responsibility",
-                  description: "Being accountable for your actions and duties.",
-                  eg: "Example: Completing your homework on time.",
-                  color: "purple"
-                }, 
-                {
-                  value: "Integrity",
-                  description: "Being honest and having strong moral principles.",
-                  eg: "Example:Returning a lost wallet you found.",
-                  color: "maroon"
-                },
-                {
-                  value: "Empathy",
-                  description: "Understanding and sharing the feelings of others.",
-                  eg: "Example: Comforting a friend who is sad.",
-                  color: "green"
-                },
-                {
-                  value: "Compassion",
-                  description: "Caring for others and helping them when they need it.",
-                  eg: "Example: Volunteering at a soup kitchen.",
-                  color: "orange"
-                },
-                {
-                  value: "Gratitude",
-                  description: "Being thankful and appreciating what you have.",
-                  eg: "Example: Writing a thank-you note to someone who helped you.",
-                  color: "purple"
-                }, 
-                {
-                  value: "Courage",
-                  description: "Facing your fears or challenges bravely.",
-                  eg: "Example: Speaking up for someone being bullied.",
-                  color: "maroon"
-                },
-                {
-                  value: "Forgiveness",
-                  description: "Letting go of anger or resentment towards someone who wronged you.",
-                  eg: "Example: Forgiving a friend who hurt your feelings.",
-                  color: "green"
-                },
-                {
-                  value: "Perseverance",
-                  description: "Continuing to try, even when things are tough.",
-                  eg: "Example: Practicig a sport even after losing a game.",
-                  color: "orange"
-                },
-                {
-                  value: "Cooperation",
-                  description: "Working well with others to achieve a common goal.",
-                  eg: "Example: Collaborating on a group project.",
-                  color: "purple"
-                }
-              ],
-            },
-            {
-              stepId: 2,
-              checklists: [
-                {
-                  value: "Kindness",
-                  description: "Being friendly, generous, and considerate to others.",
-                  eg: "Example: Helping a neighbor carry their groceries.",
-                  color: "maroon"
-                },
-                {
-                  value: "Tolerance",
-                  description: "Accepting and respecting different opinions or behaviors.",
-                  eg: "Example: Respecting classmates' diverse backgrounds.",
-                  color: "green"
-                },
-                {
-                  value: "Patience",
-                  description: "Waiting calmly without getting frustrated.",
-                  eg: "Example: Waiting for your turn without complaining.",
-                  color: "orange"
-                },
-                {
-                  value: "Friendship",
-                  description: "Having a close and trusting relationship with someone.",
-                  eg: "Example: Spending time with a friend who needs support.",
-                  color: "purple"
-                }, 
-                {
-                  value: "Teamwork",
-                  description: "Working together with others to achieve a goal.",
-                  eg: "Example: Playing a team sport and supporting each other.",
-                  color: "maroon"
-                },
-                {
-                  value: "Organization",
-                  description: "Planning and arranging tasks and activities efficiently.",
-                  eg: "Example: Keeping a tidy desk and schedule.",
-                  color: "green"
-                },
-                {
-                  value: "Grit",
-                  description: "Having courage and determination to stick with something.",
-                  eg: "Example: Studying hard for a tough exam.",
-                  color: "orange"
-                },
-                {
-                  value: "Resilience",
-                  description: "Recovering quickly from difficulties.",
-                  eg: "Example: Bouncing back after a disappointing performance.",
-                  color: "purple"
-                }, 
-                {
-                  value: "Adaptability",
-                  description: "Adjusting to new conditions or changes.",
-                  eg: "Example: Getting used to a new school.",
-                  color: "maroon"
-                },
-                {
-                  value: "Contentment",
-                  description: "Being happy and satisfied with what you have.",
-                  eg: "Example: Enjoying time with family without wanting more.",
-                  color: "green"
-                },
-                {
-                  value: "Honour",
-                  description: "Doing what is right and keeping promises.",
-                  eg: "Example: Keeping a promise even when it's hard.",
-                  color: "orange"
-                },
-                {
-                  value: "Moderation",
-                  description: "Avoiding extremes and practicing self-control.",
-                  eg: "Example: Eating sweets occasionally rather than every day.",
-                  color: "purple"
-                }
-              ],
-            },
-            {
-              stepId: 3,
-              checklists: [
-                {
-                  value: "Spirituality",
-                  description: "Feeling connected to something bigger than yourself.",
-                  eg: "Example: Practicing meditation or prayer.",
-                  color: "maroon"
-                },
-                {
-                  value: "Healthy Life",
-                  description: "Taking care of your physical, mental, and emotional well-being.",
-                  eg: "Example: Exercising and eating a balanced diet.",
-                  color: "green"
-                },
-                {
-                  value: "Family",
-                  description: "Valuing and maintaining strong bonds with family members.",
-                  eg: "Example: Spending quality time with your family.",
-                  color: "orange"
-                },
-                {
-                  value: "Resourcefulness",
-                  description: "Finding clever solutions to problems.",
-                  eg: "Example: Using household items creatively to solve a problem.",
-                  color: "purple"
-                }, 
-                {
-                  value: "Mindfulness",
-                  description: "Being fully present and aware of the moment.",
-                  eg: "Example: Practicing deep breathing to stay calm.",
-                  color: "maroon"
-                },
-                {
-                  value: "Creativity",
-                  description: "Using your imagination to create or solve problems.",
-                  eg: "Example: Painting a picture or writing a story.",
-                  color: "green"
-                },
-                {
-                  value: "Curiosity",
-                  description: "Wanting to know or learn something new.",
-                  eg: "Example: Asking questions about a topic you're interested in.",
-                  color: "orange"
-                },
-                {
-                  value: "Punctuality",
-                  description: "Being on time.",
-                  eg: "Example: Arriving at school before the bell rings.",
-                  color: "purple"
-                },
-                {
-                  value: "Courtsey",
-                  description: "Being polite and considerate.",
-                  eg: "Example: Saying please and thank you.",
-                  color: "maroon"
-                }, 
-                {
-                  value: "Self-control",
-                  description: "Managing your emotions and behavior.",
-                  eg: "Example:Staying calm when you're angry.",
-                  color: "green"
-                },
-                {
-                  value: "Self-discipline",
-                  description: "Sticking to what's right, even when it's tough.",
-                  eg: "Example: Following a study schedule despite wanting to play.",
-                  color: "orange"
-                },
-                {
-                  value: "Optimism",
-                  description: "Being hopeful and confident about the future.",
-                  eg: "Example: Believing you will do well on a test even if it seems hard.",
-                  color: "purple"
-                },
-              ],
-            },
-          ],
+        steps: [
+          {
+            stepId: 1,
+            options: [
+              {
+                value: "Generosity",
+                description: "Being willing to share and give to others.",
+                eg: "Example: Donating to charity.",
+                color: "maroon"
+              },
+              {
+                value: "Respect",
+                description: "Valuing and honoring others and their options.",
+                eg: "Example: Listening carefully to an elder.",
+                color: "green"
+              },
+              {
+                value: "Leadership",
+                description: "Guiding  and inspiring others.",
+                eg: "Example: Leading a group project at school",
+                color: "orange"
+              },
+              {
+                value: "Responsibility",
+                description: "Being accountable for your actions and duties.",
+                eg: "Example: Completing your homework on time.",
+                color: "purple"
+              },
+              {
+                value: "Integrity",
+                description: "Being honest and having strong moral principles.",
+                eg: "Example:Returning a lost wallet you found.",
+                color: "maroon"
+              },
+              {
+                value: "Empathy",
+                description: "Understanding and sharing the feelings of others.",
+                eg: "Example: Comforting a friend who is sad.",
+                color: "green"
+              },
+              {
+                value: "Compassion",
+                description: "Caring for others and helping them when they need it.",
+                eg: "Example: Volunteering at a soup kitchen.",
+                color: "orange"
+              },
+              {
+                value: "Gratitude",
+                description: "Being thankful and appreciating what you have.",
+                eg: "Example: Writing a thank-you note to someone who helped you.",
+                color: "purple"
+              },
+              {
+                value: "Courage",
+                description: "Facing your fears or challenges bravely.",
+                eg: "Example: Speaking up for someone being bullied.",
+                color: "maroon"
+              },
+              {
+                value: "Forgiveness",
+                description: "Letting go of anger or resentment towards someone who wronged you.",
+                eg: "Example: Forgiving a friend who hurt your feelings.",
+                color: "green"
+              },
+              {
+                value: "Perseverance",
+                description: "Continuing to try, even when things are tough.",
+                eg: "Example: Practicig a sport even after losing a game.",
+                color: "orange"
+              },
+              {
+                value: "Cooperation",
+                description: "Working well with others to achieve a common goal.",
+                eg: "Example: Collaborating on a group project.",
+                color: "purple"
+              }
+            ],
+          },
+          {
+            stepId: 2,
+            checklists: [
+              {
+                value: "Kindness",
+                description: "Being friendly, generous, and considerate to others.",
+                eg: "Example: Helping a neighbor carry their groceries.",
+                color: "maroon"
+              },
+              {
+                value: "Tolerance",
+                description: "Accepting and respecting different opinions or behaviors.",
+                eg: "Example: Respecting classmates' diverse backgrounds.",
+                color: "green"
+              },
+              {
+                value: "Patience",
+                description: "Waiting calmly without getting frustrated.",
+                eg: "Example: Waiting for your turn without complaining.",
+                color: "orange"
+              },
+              {
+                value: "Friendship",
+                description: "Having a close and trusting relationship with someone.",
+                eg: "Example: Spending time with a friend who needs support.",
+                color: "purple"
+              },
+              {
+                value: "Teamwork",
+                description: "Working together with others to achieve a goal.",
+                eg: "Example: Playing a team sport and supporting each other.",
+                color: "maroon"
+              },
+              {
+                value: "Organization",
+                description: "Planning and arranging tasks and activities efficiently.",
+                eg: "Example: Keeping a tidy desk and schedule.",
+                color: "green"
+              },
+              {
+                value: "Grit",
+                description: "Having courage and determination to stick with something.",
+                eg: "Example: Studying hard for a tough exam.",
+                color: "orange"
+              },
+              {
+                value: "Resilience",
+                description: "Recovering quickly from difficulties.",
+                eg: "Example: Bouncing back after a disappointing performance.",
+                color: "purple"
+              },
+              {
+                value: "Adaptability",
+                description: "Adjusting to new conditions or changes.",
+                eg: "Example: Getting used to a new school.",
+                color: "maroon"
+              },
+              {
+                value: "Contentment",
+                description: "Being happy and satisfied with what you have.",
+                eg: "Example: Enjoying time with family without wanting more.",
+                color: "green"
+              },
+              {
+                value: "Honour",
+                description: "Doing what is right and keeping promises.",
+                eg: "Example: Keeping a promise even when it's hard.",
+                color: "orange"
+              },
+              {
+                value: "Moderation",
+                description: "Avoiding extremes and practicing self-control.",
+                eg: "Example: Eating sweets occasionally rather than every day.",
+                color: "purple"
+              }
+            ],
+          },
+          {
+            stepId: 3,
+            checklists: [
+              {
+                value: "Spirituality",
+                description: "Feeling connected to something bigger than yourself.",
+                eg: "Example: Practicing meditation or prayer.",
+                color: "maroon"
+              },
+              {
+                value: "Healthy Life",
+                description: "Taking care of your physical, mental, and emotional well-being.",
+                eg: "Example: Exercising and eating a balanced diet.",
+                color: "green"
+              },
+              {
+                value: "Family",
+                description: "Valuing and maintaining strong bonds with family members.",
+                eg: "Example: Spending quality time with your family.",
+                color: "orange"
+              },
+              {
+                value: "Resourcefulness",
+                description: "Finding clever solutions to problems.",
+                eg: "Example: Using household items creatively to solve a problem.",
+                color: "purple"
+              },
+              {
+                value: "Mindfulness",
+                description: "Being fully present and aware of the moment.",
+                eg: "Example: Practicing deep breathing to stay calm.",
+                color: "maroon"
+              },
+              {
+                value: "Creativity",
+                description: "Using your imagination to create or solve problems.",
+                eg: "Example: Painting a picture or writing a story.",
+                color: "green"
+              },
+              {
+                value: "Curiosity",
+                description: "Wanting to know or learn something new.",
+                eg: "Example: Asking questions about a topic you're interested in.",
+                color: "orange"
+              },
+              {
+                value: "Punctuality",
+                description: "Being on time.",
+                eg: "Example: Arriving at school before the bell rings.",
+                color: "purple"
+              },
+              {
+                value: "Courtsey",
+                description: "Being polite and considerate.",
+                eg: "Example: Saying please and thank you.",
+                color: "maroon"
+              },
+              {
+                value: "Self-control",
+                description: "Managing your emotions and behavior.",
+                eg: "Example:Staying calm when you're angry.",
+                color: "green"
+              },
+              {
+                value: "Self-discipline",
+                description: "Sticking to what's right, even when it's tough.",
+                eg: "Example: Following a study schedule despite wanting to play.",
+                color: "orange"
+              },
+              {
+                value: "Optimism",
+                description: "Being hopeful and confident about the future.",
+                eg: "Example: Believing you will do well on a test even if it seems hard.",
+                color: "purple"
+              },
+            ],
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
@@ -882,7 +882,7 @@ export const courseContent = {
               {
                 type: "smallText",
                 question: "Identify the Emotion:",
-                
+
               },
               {
                 type: "smallText",
@@ -923,7 +923,7 @@ export const courseContent = {
             questions: [
               {
                 type: "smallText",
-                colorCode:null,
+                colorCode: null,
                 question: "Identify the Emotion:",
               },
               {
@@ -1135,7 +1135,7 @@ export const courseContent = {
               "Missing words are: Respect, Clarity, Comfort, Listen, Express"
             ]
           },
-        
+
           {
             stepId: 2,
             type: "dropdownScenario",
@@ -1254,11 +1254,11 @@ export const courseContent = {
             stepId: 1,
             type: "listQuestion",
             questionType: "text",
-            question:"List of all the assignments and activities you have this week.",
+            question: "List of all the assignments and activities you have this week.",
             inputCount: 5,
             inputType: "text",
             inputPlaceholder: "Type your answer here",
-          
+
           },
           {
             stepId: 2,
@@ -1269,7 +1269,7 @@ export const courseContent = {
               {
                 number: "1",
                 textFieldColor: "green",
-                colorCode:"#89B92E",
+                colorCode: "#89B92E",
               },
               {
                 number: "2",
@@ -1370,11 +1370,11 @@ export const courseContent = {
             stepId: 6,
             type: "listQuestion",
             questionType: "text",
-            question:"Write other time consumers you must limit, if you have.",
+            question: "Write other time consumers you must limit, if you have.",
             inputCount: 5,
             inputType: "text",
             inputPlaceholder: "Type your answer here",
-          
+
           },
         ],
         navigation: {
@@ -1458,7 +1458,7 @@ export const courseContent = {
             type: "star",
             question:
               "Your friends made plans without you.",
-              answers: 5,
+            answers: 5,
             config: [
               {
                 title: "",
@@ -1535,13 +1535,13 @@ export const courseContent = {
           {
             stepId: 3,
             type: "singleStar",
-            questions:[
-             {type:"Question",question: "Write down your Wishing Star here."}],
+            questions: [
+              { type: "Question", question: "Write down your Wishing Star here." }],
           },
           {
             stepId: 3,
             type: "smart",
-              question: "Write down your Wishing Star here.",
+            question: "Write down your Wishing Star here.",
             answers: 5,
             config: [
               {
@@ -1627,7 +1627,7 @@ export const courseContent = {
               "Other words for coping could be: deal with, handle. Let me know if you have other words in mind.",
             fieldCount: 5
           },
-      
+
 
         ],
         navigation: {
@@ -1675,56 +1675,30 @@ export const courseContent = {
           {
             stepId: 6,
             type: "imageDragAndDrop",
-            question:
+            instruction:
               "Drag-and-drop the statements on the left into any of these bowls.",
-            dragCount: 9,
-            dragConfig: [
+            steps: 9,
+            buckets: [
               {
-                title: "1",
-                desc: "Healthy Skills",
+                id: "inner",
+                title: "Healthy Skills",
               },
               {
-                title: "2",
-                desc: "Unhealthy Skills",
+                id: "outer",
+                title: "Unhealthy Skills",
               }
+        
             ],
-            dragData: [
-              {
-                title: "Write",
-                image: "writeDragable.png",
-              },
-              {
-                title: "Walk away",
-                image: "walAwayDragable.png",
-              },
-              {
-                title: "Belly Breathing",
-                image: "bellyBreathingDragable.png",
-              },
-              {
-                title: "Exercise",
-                image: "exerciseDragable.png",
-              },
-              {
-                title: "Yell",
-                image: "yellDragable.png",
-              },
-              {
-                title: "Talk to Someone",
-                image: "talkToSomeoneDragable.png",
-              },
-              {
-                title: "Positive Self Talk",
-                image: "positiveSelfTalkDragable.png",
-              },
-              {
-                title: "Break things",
-                image: "breakThingsDragable.png",
-              },
-              {
-                title: "Bite nails",
-                image: "biteNailsDragable.png",
-              },
+            images: [
+              "Write",
+              "Walk away",
+              "Belly Breathing",
+              "Exercise",
+              "Yell",
+              "Talk to Someone",
+              "Positive Self Talk",
+              "Break things",
+              "Bite nails"
             ]
 
           },
@@ -1876,7 +1850,7 @@ export const courseContent = {
             ]
           }
         ]
-        
+
         ,
         navigation: {
           prev: true,

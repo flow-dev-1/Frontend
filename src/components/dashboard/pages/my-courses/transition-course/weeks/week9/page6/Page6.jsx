@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import ChallengeFrame from "./components/ChallengeFrame";
+import DragAndDropFrame from "./components/DragAndDropFrame";
 import Button from "../../../components/Button";
 import ColoredBox from "../../../components/ColoredBox";
 import {
@@ -44,7 +45,7 @@ function WeekNinePage6() {
     }
 
     const values = Object.values(stepData.value);
-    if (values.length <1) {
+    if (values.length < 1) {
       setErrorMessage("At least 3 values are required!");
       return false;
     }
@@ -107,6 +108,19 @@ function WeekNinePage6() {
               step: step.stepId,
               challenge: step.challenge,
               info: step,
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        );
+      case "imageDragAndDrop":
+        return (
+          <DragAndDropFrame
+            info={{
+              images: step.images,
+              buckets: step.buckets,
+              instruction: step.instruction,
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}

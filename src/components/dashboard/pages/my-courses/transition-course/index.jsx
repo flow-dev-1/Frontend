@@ -153,12 +153,12 @@ const WeekContent = () => {
   useEffect(() => {
     const currentWeek = sessionStorage.getItem("flow-currentWeek")
       ? Number(sessionStorage.getItem("flow-currentWeek"))
-      : 4;
+      : 9;
     // const currentPage = sessionStorage.getItem("flow-currentPage")
     //   ? Number(sessionStorage.getItem("flow-currentPage"))
     //   : 1;
-    const currentPage = 4;
-    const currentStep =  1;
+    const currentPage = 6;
+    const currentStep =  6;
 
     // Dispatch the current week, page, and step
     dispatch(setCurrentWeek(currentWeek));

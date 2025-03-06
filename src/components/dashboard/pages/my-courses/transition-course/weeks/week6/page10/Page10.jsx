@@ -3,8 +3,6 @@ import { useSelector } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import ArrowTrail from "../../../../../../../../assets/ArrowTrail.svg";
 import "./page10.css";
-import RedBucket from "../../../../../../../../assets/Buckets/red.png";
-import GreenBucket from "../../../../../../../../assets/Buckets/green.png";
 import Button from "../../../components/Button";
 import {
   selectPageData,
