@@ -36,25 +36,22 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
 
   return (
     <QuestionBox>
-      <h2 className="text-blue text-center fs-1">{title}</h2>
+    <div className="d-flex flex-column align-items-center text-center w-100">
+      <img src={futureMe} alt="Future Me" className="mb-3" />
+  
+      {questions.map((q, index) => (
+        <div key={index} className="mb-2 w-100 d-flex flex-column align-items-center">
+          <h2 className="text-gray text-center">{q.question}</h2>
+          <MediumTextBox
+            value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
+            onChange={(e) => handleInputChange(index, e.target.value)}
+          />
+        </div>
+      ))}
+    </div>
+  </QuestionBox>
+  
 
-      {questions.map((q, index) => {
-    
-        return (
-          <div key={index} className="mb-2">
-            <img src={futureMe} alt="Future Me" />
-
-            <div className="d-flex gap-2">
-              <h2 className="text-gray">{q.question}</h2>
-            </div>
-            <MediumTextBox 
-              value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""} // Pass the current answer
-              onChange={(e) => handleInputChange(index, e.target.value)} // Handle input change
-            />
-          </div>
-        );
-      })}
-    </QuestionBox>
   );
 }
 

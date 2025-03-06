@@ -540,203 +540,242 @@ export const courseContent = {
       },
       {
         id: 4,
-        type: "multiStepValueCheck",
+        type: "multiStep",
         instruction:
-          "Drag-and-drop the statements on the left into any of these bowls",
-        steps: [
-          {
-            stepId: 1,
-            checklists: [
-              {
-                option: "Generosity",
-                description: "Being willing to share and give to others.",
-                eg: "Example: Donating to charity.",
-              },
-              {
-                option: "Respect",
-                description: "Valuing and honoring others and their options.",
-                eg: "Example: Listening carefully to an elder.",
-              },
-              {
-                option: "Leadership",
-                description: "Guiding  and inspiring others.",
-                eg: "Example: Leading a group project at school",
-              },
-              {
-                option: "Responsibility",
-                description: "Being accountable for your actions and duties.",
-                eg: "Example: Completing your homework on time.",
-              }, {
-                option: "Integrity",
-                description: "Being honest and having strong moral principles.",
-                eg: "Example:Returning a lost wallet you found.",
-              },
-              {
-                option: "Empathy",
-                description: "Understanding and sharing the feelings of others.",
-                eg: "Example: Comforting a friend who is sad.",
-              },
-              {
-                option: "Compassion",
-                description: "Caring for others and helping them when they need it.",
-                eg: "Example: Volunteering at a soup kitchen.",
-              },
-              {
-                option: "Gratitude",
-                description: "Being thankful and appreciating what you have.",
-                eg: "Example: Writing a thank-you note to someone who helped you.",
-              }, {
-                option: "Courage",
-                description: "Facing your fears or challenges bravely.",
-                eg: "Example: Speaking up for someone being bullied.",
-              },
-              {
-                option: "Forgiveness",
-                description: "Letting go of anger or resentment towards someone who wronged you.",
-                eg: "Example: Forgiving a friend who hurt your feelings.",
-              }
-              ,
-              {
-                option: "Perseverance",
-                description: "Continuing to try, even when things are tough.",
-                eg: "Example: Practicig a sport even after losing a game.",
-              },
-              {
-                option: "Cooperation",
-                description: "Working well with others to achieve a common goal.",
-                eg: "Example: Collaborating on a group project.",
-              }
-            ],
-          },
-          {
-            stepId: 2,
-            checklists: [
-              {
-                option: "Kindness",
-                description: "Being friendly, generous, and considerate to others.",
-                eg: "Example: Helping a neighbor carry their groceries.",
-              },
-              {
-                option: "Tolerance",
-                description: "Accepting and respecting different opinions or behaviors.",
-                eg: "Example: Respecting classmates' diverse backgrounds.",
-              },
-              {
-                option: "Patience",
-                description: "Waiting calmly without getting frustrated.",
-                eg: "Example: Waiting for your turn without complaining.",
-              },
-              {
-                option: "Friendship",
-                description: "Having a close and trusting relationship with someone.",
-                eg: "Example: Spending time with a friend who needs support.",
-              }, {
-                option: "Teamwork",
-                description: "Working together with others to achieve a goal.",
-                eg: "Example: Playing a team sport and supporting each other.",
-              },
-              {
-                option: "Organization",
-                description: "Planning and arranging tasks and activities efficiently.",
-                eg: "Example: Keeping a tidy desk and schedule.",
-              },
-              {
-                option: "Grit",
-                description: "Having courage and determination to stick with something.",
-                eg: "Example: Studying hard for a tough exam.",
-              },
-              {
-                option: "Resilience",
-                description: "Recovering quickly from difficulties.",
-                eg: "Example: Bouncing back after a disappointing performance.",
-              }, {
-                option: "Adaptability",
-                description: "Adjusting to new conditions or changes.",
-                eg: "Example: Getting used to a new school.",
-              },
-              {
-                option: "Contentment",
-                description: "Being happy and satisfied with what you have.",
-                eg: "Example: Enjoying time with family without wanting more.",
-              }
-              ,
-              {
-                option: "Honour",
-                description: "Doing what is right and keeping promises.",
-                eg: "Example: Keeping a promise even when it’s hard.",
-              },
-              {
-                option: "Moderation",
-                description: "Avoiding extremes and practicing self-control.",
-                eg: "Example: Eating sweets occasionally rather than every day.",
-              }
-            ],
-          },
-          {
-            stepId: 3,
-            checklists: [
-              {
-                option: "Spirituality",
-                description: "Feeling connected to something bigger than yourself.",
-                eg: "Example: Practicing meditation or prayer.",
-              },
-              {
-                option: "Healthy Life",
-                description: "Taking care of your physical, mental, and emotional well-being.",
-                eg: "Example: Exercising and eating a balanced diet.",
-              },
-              {
-                option: "Family",
-                description: "Valuing and maintaining strong bonds with family members.",
-                eg: "Example: Spending quality time with your family.",
-              },
-              {
-                option: "Resourcefulness",
-                description: "Finding clever solutions to problems.",
-                eg: "Example: Using household items creatively to solve a problem.",
-              }, {
-                option: "Mindfulness",
-                description: "Being fully present and aware of the moment.",
-                eg: "Example: Practicing deep breathing to stay calm.",
-              },
-              {
-                option: "Creativity",
-                description: "Using your imagination to create or solve problems.",
-                eg: "Example: Painting a picture or writing a story.",
-              },
-              {
-                option: "Curiosity",
-                description: "Wanting to know or learn something new.",
-                eg: "Example: Asking questions about a topic you’re interested in.",
-              },
-              {
-                option: "Punctuality",
-                description: "Being on time.",
-                eg: "Example: Arriving at school before the bell rings.",
-              },
-              {
-                option: "Courtsey",
-                description: "Being polite and considerate.",
-                eg: "Example: Saying please and thank you.",
-              }, {
-                option: "Self-control",
-                description: "Managing your emotions and behavior.",
-                eg: "Example:Staying calm when you’re angry.",
-              },
-              {
-                option: "Self-discipline",
-                description: "Sticking to what’s right, even when it’s tough.",
-                eg: "Example: Following a study schedule despite wanting to play.",
-              }
-              ,
-              {
-                option: "Optimism",
-                description: "Being hopeful and confident about the future.",
-                eg: "Example: Believing you will do well on a test even if it seems hard.",
-              },
-            ],
-          },
-        ],
+          "Click each card to know more about the values. Tick the box on each card to pick the values you feel are a big part of who you are.",
+          steps: [
+            {
+              stepId: 1,
+              options: [
+                {
+                  value: "Generosity",
+                  description: "Being willing to share and give to others.",
+                  eg: "Example: Donating to charity.",
+                  color: "maroon"
+                },
+                {
+                  value: "Respect",
+                  description: "Valuing and honoring others and their options.",
+                  eg: "Example: Listening carefully to an elder.",
+                  color: "green"
+                },
+                {
+                  value: "Leadership",
+                  description: "Guiding  and inspiring others.",
+                  eg: "Example: Leading a group project at school",
+                  color: "orange"
+                },
+                {
+                  value: "Responsibility",
+                  description: "Being accountable for your actions and duties.",
+                  eg: "Example: Completing your homework on time.",
+                  color: "purple"
+                }, 
+                {
+                  value: "Integrity",
+                  description: "Being honest and having strong moral principles.",
+                  eg: "Example:Returning a lost wallet you found.",
+                  color: "maroon"
+                },
+                {
+                  value: "Empathy",
+                  description: "Understanding and sharing the feelings of others.",
+                  eg: "Example: Comforting a friend who is sad.",
+                  color: "green"
+                },
+                {
+                  value: "Compassion",
+                  description: "Caring for others and helping them when they need it.",
+                  eg: "Example: Volunteering at a soup kitchen.",
+                  color: "orange"
+                },
+                {
+                  value: "Gratitude",
+                  description: "Being thankful and appreciating what you have.",
+                  eg: "Example: Writing a thank-you note to someone who helped you.",
+                  color: "purple"
+                }, 
+                {
+                  value: "Courage",
+                  description: "Facing your fears or challenges bravely.",
+                  eg: "Example: Speaking up for someone being bullied.",
+                  color: "maroon"
+                },
+                {
+                  value: "Forgiveness",
+                  description: "Letting go of anger or resentment towards someone who wronged you.",
+                  eg: "Example: Forgiving a friend who hurt your feelings.",
+                  color: "green"
+                },
+                {
+                  value: "Perseverance",
+                  description: "Continuing to try, even when things are tough.",
+                  eg: "Example: Practicig a sport even after losing a game.",
+                  color: "orange"
+                },
+                {
+                  value: "Cooperation",
+                  description: "Working well with others to achieve a common goal.",
+                  eg: "Example: Collaborating on a group project.",
+                  color: "purple"
+                }
+              ],
+            },
+            {
+              stepId: 2,
+              checklists: [
+                {
+                  value: "Kindness",
+                  description: "Being friendly, generous, and considerate to others.",
+                  eg: "Example: Helping a neighbor carry their groceries.",
+                  color: "maroon"
+                },
+                {
+                  value: "Tolerance",
+                  description: "Accepting and respecting different opinions or behaviors.",
+                  eg: "Example: Respecting classmates' diverse backgrounds.",
+                  color: "green"
+                },
+                {
+                  value: "Patience",
+                  description: "Waiting calmly without getting frustrated.",
+                  eg: "Example: Waiting for your turn without complaining.",
+                  color: "orange"
+                },
+                {
+                  value: "Friendship",
+                  description: "Having a close and trusting relationship with someone.",
+                  eg: "Example: Spending time with a friend who needs support.",
+                  color: "purple"
+                }, 
+                {
+                  value: "Teamwork",
+                  description: "Working together with others to achieve a goal.",
+                  eg: "Example: Playing a team sport and supporting each other.",
+                  color: "maroon"
+                },
+                {
+                  value: "Organization",
+                  description: "Planning and arranging tasks and activities efficiently.",
+                  eg: "Example: Keeping a tidy desk and schedule.",
+                  color: "green"
+                },
+                {
+                  value: "Grit",
+                  description: "Having courage and determination to stick with something.",
+                  eg: "Example: Studying hard for a tough exam.",
+                  color: "orange"
+                },
+                {
+                  value: "Resilience",
+                  description: "Recovering quickly from difficulties.",
+                  eg: "Example: Bouncing back after a disappointing performance.",
+                  color: "purple"
+                }, 
+                {
+                  value: "Adaptability",
+                  description: "Adjusting to new conditions or changes.",
+                  eg: "Example: Getting used to a new school.",
+                  color: "maroon"
+                },
+                {
+                  value: "Contentment",
+                  description: "Being happy and satisfied with what you have.",
+                  eg: "Example: Enjoying time with family without wanting more.",
+                  color: "green"
+                },
+                {
+                  value: "Honour",
+                  description: "Doing what is right and keeping promises.",
+                  eg: "Example: Keeping a promise even when it's hard.",
+                  color: "orange"
+                },
+                {
+                  value: "Moderation",
+                  description: "Avoiding extremes and practicing self-control.",
+                  eg: "Example: Eating sweets occasionally rather than every day.",
+                  color: "purple"
+                }
+              ],
+            },
+            {
+              stepId: 3,
+              checklists: [
+                {
+                  value: "Spirituality",
+                  description: "Feeling connected to something bigger than yourself.",
+                  eg: "Example: Practicing meditation or prayer.",
+                  color: "maroon"
+                },
+                {
+                  value: "Healthy Life",
+                  description: "Taking care of your physical, mental, and emotional well-being.",
+                  eg: "Example: Exercising and eating a balanced diet.",
+                  color: "green"
+                },
+                {
+                  value: "Family",
+                  description: "Valuing and maintaining strong bonds with family members.",
+                  eg: "Example: Spending quality time with your family.",
+                  color: "orange"
+                },
+                {
+                  value: "Resourcefulness",
+                  description: "Finding clever solutions to problems.",
+                  eg: "Example: Using household items creatively to solve a problem.",
+                  color: "purple"
+                }, 
+                {
+                  value: "Mindfulness",
+                  description: "Being fully present and aware of the moment.",
+                  eg: "Example: Practicing deep breathing to stay calm.",
+                  color: "maroon"
+                },
+                {
+                  value: "Creativity",
+                  description: "Using your imagination to create or solve problems.",
+                  eg: "Example: Painting a picture or writing a story.",
+                  color: "green"
+                },
+                {
+                  value: "Curiosity",
+                  description: "Wanting to know or learn something new.",
+                  eg: "Example: Asking questions about a topic you're interested in.",
+                  color: "orange"
+                },
+                {
+                  value: "Punctuality",
+                  description: "Being on time.",
+                  eg: "Example: Arriving at school before the bell rings.",
+                  color: "purple"
+                },
+                {
+                  value: "Courtsey",
+                  description: "Being polite and considerate.",
+                  eg: "Example: Saying please and thank you.",
+                  color: "maroon"
+                }, 
+                {
+                  value: "Self-control",
+                  description: "Managing your emotions and behavior.",
+                  eg: "Example:Staying calm when you're angry.",
+                  color: "green"
+                },
+                {
+                  value: "Self-discipline",
+                  description: "Sticking to what's right, even when it's tough.",
+                  eg: "Example: Following a study schedule despite wanting to play.",
+                  color: "orange"
+                },
+                {
+                  value: "Optimism",
+                  description: "Being hopeful and confident about the future.",
+                  eg: "Example: Believing you will do well on a test even if it seems hard.",
+                  color: "purple"
+                },
+              ],
+            },
+          ],
         navigation: {
           prev: true,
           next: true,
@@ -1368,12 +1407,11 @@ export const courseContent = {
       {
         id: 2,
         type: "radio",
-        question: "Do you watch or play football? ",
-        hasImage: true,
+        question: " Do you watch or play football? ",
         imageSrc: "footballers.png",
         options: [
-          "Yes",
-          "No"
+          { id: "A", text: "YES" },
+          { id: "B", text: "NO" },
         ],
         navigation: {
           prev: true,
@@ -1719,90 +1757,127 @@ export const courseContent = {
         steps: [
           {
             stepId: 1,
-            type: "questionWithTitle",
-            title: "Dear Future Me",
-            question:
-              "When I’m feeling overwhelmed with homework, I’ll remember to",
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "When I’m feeling overwhelmed with homework, I’ll remember to"
+              }
+            ]
           },
           {
             stepId: 2,
-            type: "questionWithTitle",
-            title: "Dear Future Me",
-            question:
-              "If I’m nervous about giving a presentation, I’ll try to calm myself by...",
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "If I’m nervous about giving a presentation, I’ll try to calm myself by..."
+              }
+            ]
           },
           {
             stepId: 3,
-            type: "questionWithTitle",
-            title: "Dear Future Me",
-            question:
-              "If I find a subject difficult and start to struggle, I’ll remind myself to ...",
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "If I find a subject difficult and start to struggle, I’ll remind myself to ..."
+              }
+            ]
           },
           {
             stepId: 4,
-            type: "questionWithTitle",
-            title: "Dear Future Me",
-            question:
-              "When I get a lower grade than I expected, I’ll use resilience by...",
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "When I get a lower grade than I expected, I’ll use resilience by..."
+              }
+            ]
           },
           {
             stepId: 5,
-            type: "questionWithTitle",
-            title: "Dear Future Me",
-            question:
-              "If I feel left out at lunch or during group activities, I’ll remember to...",
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "If I feel left out at lunch or during group activities, I’ll remember to..."
+              }
+            ]
           },
           {
             stepId: 6,
-            type: "questionWithTitle",
-            title: "Dear Future Me",
-            question:
-              "When I have a disagreement with a friend, I’ll handle it by...",
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "When I have a disagreement with a friend, I’ll handle it by..."
+              }
+            ]
           },
           {
             stepId: 7,
-            type: "questionWithTitle",
-            title: "Dear Future Me",
-            question:
-              "If I feel too tired or stressed, I’ll take care of myself by ...",
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "If I feel too tired or stressed, I’ll take care of myself by ..."
+              }
+            ]
           },
           {
             stepId: 8,
-            type: "questionWithTitle",
-            title: "Dear Future Me",
-            question:
-              "When I feel unsure about asking for help, I’ll remind myself that I can always talk to...",
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "When I feel unsure about asking for help, I’ll remind myself that I can always talk to..."
+              }
+            ]
           },
           {
             stepId: 9,
-            type: "questionWithTitle",
-            title: "Dear Future Me",
-            question:
-              "If I need to set a new goal, I’ll plan by first...",
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "If I need to set a new goal, I’ll plan by first..."
+              }
+            ]
           },
           {
             stepId: 10,
-            type: "questionWithTitle",
-            title: "Dear Future Me",
-            question:
-              "When I need a break from studying, I’ll choose a healthy way to recharge like...",
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "When I need a break from studying, I’ll choose a healthy way to recharge like..."
+              }
+            ]
           },
           {
             stepId: 11,
-            type: "questionWithTitle",
-            title: "Dear Future Me",
-            question:
-              "If I have a day where everything feels hard, I’ll show resilience by...",
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "If I have a day where everything feels hard, I’ll show resilience by..."
+              }
+            ]
           },
           {
             stepId: 12,
-            type: "questionWithTitle",
-            title: "Dear Future Me",
-            question:
-              "When I need to manage my time for a big test, I’ll organize myself by...",
-          },
-
-        ],
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "When I need to manage my time for a big test, I’ll organize myself by..."
+              }
+            ]
+          }
+        ]
+        
+        ,
         navigation: {
           prev: true,
           next: true,

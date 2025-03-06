@@ -12,7 +12,7 @@ import {
   showReviewPopup,
 } from "../../../../../../../../redux/reducers/navigationSlice";
 
-function WeekFourPage7() {
+function WeekEightPage7() {
   const pageData = useSelector(selectPageData);
   const dispatch = useDispatch();
 
@@ -27,4 +27,4 @@ function WeekFourPage7() {
   );
 }
 
-export default WeekFourPage7;
+export default WeekEightPage7;

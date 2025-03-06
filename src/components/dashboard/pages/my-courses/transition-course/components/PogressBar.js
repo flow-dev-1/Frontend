@@ -23,11 +23,11 @@ function ProgressBar({ value, handleChange }) {
                 }}
             />
 
-            <div className="flex justify-between w-full mt-2">
-                <h2 className="text-gray-500 text-3xl">0</h2>
-                <h2 className="text-gray-500 text-3xl">50</h2>
-                <h2 className="text-gray-500 text-3xl">100</h2>
-            </div>
+<div className="flex justify-between w-full mt-2">
+          <div className="flex-1 text-left d-inline"><h2 className="text-gray-500 text-3xl d-inline">0</h2></div>
+          <div className="flex-1 text-center d-inline"><h2 className="text-gray-500 text-3xl d-inline">50</h2></div>
+          <div className="flex-1 text-right d-inline"><h2 className="text-gray-500 text-3xl d-inline">100</h2></div>
+        </div>
 
 
         </div>

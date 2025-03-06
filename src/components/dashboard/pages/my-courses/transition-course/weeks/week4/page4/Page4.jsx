@@ -1,73 +1,104 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import QuestionBox from "../../../components/QuestionBox";
-import values from "../../../../../../../../assets/values.png";
-import BigTextBox from "../../../components/BigTextBox";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import Button from "../../../components/Button";
-import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
-import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  selectPageData,
+  selectCurrentStep,
+} from "../../../../../../../../redux/reducers/navigationSlice";
+import StepIndicator from "../../../components/StepIndicator";
+import MuitiFlipCheckBoxesFrame from "./components/MuitiFlipCheckBoxesFrame";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
 
 function WeekFourPage4() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
-  const adminDatas = useSelector(adminData);
+  const currentStep = useSelector(selectCurrentStep);
+  const totalSteps = pageData?.steps?.length || 0;
+  const [answers, setAnswers] = useState([]); // State to hold answers
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
-  const [myAnswer, setMyAnswer] = useState(userAnswers)
-  const [errorMessage, setErrorMessage] = useState("");
+  const adminDatas = useSelector(adminData);
+  // console.log(userAnswers)
 
   useEffect(() => {
 
-    if (!userAnswers) return
-    const response = userAnswers?.activities?.find(item => (item.page === pageData.id))
-    setMyAnswer(response?.answer ? response.answer : "")
-    return () => { }
+    if (!userAnswers) return;
+    const response = userAnswers.activities?.find(item => item.page === pageData.id);
+    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
 
   }, [userAnswers])
 
-
   const saveUserInput = () => {
-    if (!adminDatas.isAdmin && !myAnswer) {
-      setErrorMessage("Oops! Please enter a valid input!");
+    if (currentStep === 1) return true;
+    if (adminDatas.isAdmin) return true
+
+    const stepData = answers.find(item => item.stepId === currentStep);
+    if (!stepData) {
+      setErrorMessage("Oops! All inputs must be filled out.");
+      return false;
+    }
+
+    const values = Object.values(stepData.value);
+    if (values.length < 3) {
+      setErrorMessage("At least 3 values are required!");
+      return false;
+    }
+
+    const emptyInputs = values.filter((value) => typeof value === "string" && value.trim() === "");
+
+    if (emptyInputs.length > 0) {
+      setErrorMessage(`Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`);
       return false;
     }
 
     setErrorMessage(""); // Clear error if input is valid
-    // Allow flow admin to proceed without input but do not dispatch answer
-    if (adminDatas.isAdmin) return true
-    dispatch(saveActivity({
+    
+    const activityData = {
       page: pageData.id,
-      answer: myAnswer
-    }))
-    return true
-  }
+      answer: answers
+    };
+    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
-  const handleInputChange = (e) => {
-    setErrorMessage("");
-    setMyAnswer(e.target.value)
-  }
+    return true;
+  };
 
+  // console.log(answers, "Answers")
+
+  const renderStep = () => {
+    // const step = pageData?.steps[currentStep - 1];
+    // console.log(currentStep, step, "step")
+    if (!step) return <div>Invalid Step</div>;
+
+   return (
+            <MuitiFlipCheckBoxesFrame
+              data={{
+                step: step.stepId,
+                instruction: pageData.instruction,
+                info:step.options,
+              }}
+              setErrorMessage={setErrorMessage}
+              answers={answers}
+              setAnswers={setAnswers}
+            />
+          );
+  };
 
   return (
     <>
-      <QuestionBox>
-        <div className="d-flex gap-3 ms-5 align-center-lg-custom">
-          <h2 className="text-blue font-lg">Question: </h2>
-          <h2 className="text-gray font-lg">
-            {pageData.question}{" "}
-            {pageData.hasImage && <img src={values} alt="values" />} ?
-          </h2>
-        </div>
-        <BigTextBox handleChange={handleInputChange} value={myAnswer} />
-      </QuestionBox>
-      {errorMessage && <div className="text-danger">{errorMessage}</div>}
-      <div className="d-flex justify-content-center gap-96px mt-4">
+      {renderStep()}
+      {(currentStep !== 1 && errorMessage) && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
+      <StepIndicator totalSteps={totalSteps} />
+      <div className="d-flex justify-content-center gap-96px mt-4 ">
         <Button text="Prev" />
-        <Button text="Next" customOnClick={saveUserInput} />
+        <Button text="Next"
+          customOnClick={saveUserInput}
+        />
       </div>
     </>
   );
 }
 
-export default  WeekFourPage4;
+export default WeekFourPage4;

@@ -12,7 +12,7 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-function WeekFourPage4() {
+function WeekEightPage4() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
@@ -210,4 +210,4 @@ function WeekFourPage4() {
   );
 }
 
-export default WeekFourPage4;
+export default WeekEightPage4;
