@@ -115,20 +115,33 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
                 <Droppable key={bucket.title} droppableId={bucket.title}>
                   {(provided, snapshot) => (
                     <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      style={{
-                        backgroundColor: snapshot.isDraggingOver
-                          ? "rgba(255, 255, 255, 0.1)"
-                          : "transparent",
-                        padding: "20px",
-                        borderRadius: "8px",
-                        minHeight: "100px",
-                        height: "300px",
-                        width: "200px",
-                      }}
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    style={{
+                      backgroundColor: snapshot.isDraggingOver
+                        ? "rgba(255, 255, 255, 0.1)"
+                        : "transparent",
+                      padding: "20px",
+                      borderRadius: "8px",
+                      minHeight: "100px",
+                      height: "300px",
+                      width: "200px",
+                    }}
                     >
-                      <h2>{bucket.desc}</h2>
+                      <h2  className={
+                          bucket.id === "inner"
+                            ? "inner-count"
+                            : "both-count"
+                        }>{bucketResults[bucket.id]?.length}</h2>
+                          <div
+                        className={
+                          bucket.id === "inner"
+                            ? "inner-bucket"
+                            : "both-bucket" 
+                        }
+                      >
+                        {bucket.title}
+                      </div>
                       {provided.placeholder}
                     </div>
                   )}

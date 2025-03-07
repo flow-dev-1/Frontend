@@ -242,7 +242,7 @@ function WeekThreePage4() {
                             : "both-bucket" 
                         }
                       >
-                        {bucket.label}
+                          
                       </div>
                       {provided.placeholder}
                     </div>
