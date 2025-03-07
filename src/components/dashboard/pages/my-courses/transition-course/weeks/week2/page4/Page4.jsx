@@ -242,14 +242,14 @@ function WeekThreePage4() {
                             : "both-bucket" 
                         }
                       >
-                          
+                        {bucket.label}
                       </div>
                       {provided.placeholder}
                     </div>
                   )}
                 </Droppable>
               ))}
-            </div>
+            </div>equa
           </div>
         </div>
       </div>
