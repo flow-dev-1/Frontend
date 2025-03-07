@@ -4,7 +4,32 @@ import CardBoard from "./CardBoard";
 import ArrowTrail from "../../../../../../../../../assets/ArrowTrail.svg";
 import '../page6.css';
 
+
+const InternalStepIndicator = ({ totalSteps, currentStep }) => {
+  return (
+    <div className="d-flex justify-content-center mt-4" style={{ gap: "10px" }}>
+      {[...Array(totalSteps)].map((_, index) => (
+        <div
+          key={index}
+          className={`${index + 1 <= currentStep ? "bg-green" : "bg-gray"}`}
+          style={{
+            flexBasis: "35px",
+            height: "17px",
+            borderRadius: "8px",
+            cursor: index <= currentStep ? "pointer" : "default",
+          }}
+
+        />
+      ))}
+    </div>
+  );
+};
+
 const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
+
+
+  
+  
   const { images, buckets, instruction } = info;
   const [bucketResults, setBucketResults] = useState({ green: [], red: [] });
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -32,8 +57,14 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
           answer.stepId === 1 ? { ...answer, value: bucketResults } : answer
         )
       );
-      
+
       setCurrentImageIndex((prevIndex) => (prevIndex + 1 < images.length ? prevIndex + 1 : prevIndex));
+    }
+  };
+
+  const goToStep = (index) => {
+    if (index < currentImageIndex) {
+      setCurrentImageIndex(index);
     }
   };
 
@@ -65,8 +96,13 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
   };
 
   return (
-    <DragDropContext onDragEnd={handleOnDragEnd}>
+    <> <InternalStepIndicator totalSteps={images.length} currentStep={currentImageIndex + 1} />
+    <DragDropContext
+      onDragEnd={handleOnDragEnd}>
       <div className="d-flex flex-column align-items-center pt-2">
+        {/* Step Indicator */}
+      
+
         <div className="d-flex custom-border-20">
           <Droppable droppableId="image">
             {(provided, snapshot) => (
@@ -128,6 +164,8 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
         )}
       </div>
     </DragDropContext>
+
+    </>
   );
 };
 
