@@ -162,10 +162,10 @@ function WeekFourPage4() {
                         backgroundColor: snapshot.isDraggingOver
                           ? "rgba(255, 255, 255, 0.1)"
                           : "transparent",
-                        padding: "20px",
-                        borderRadius: "8px",
-                        minHeight: "100px",
-                        height: "300px",
+                        padding: "1.25rem",
+                        borderRadius: "0.5rem",
+                        minHeight: "6.25rem",
+                        height: "18.75rem",
                       }}
                     >
                       <h2
@@ -173,8 +173,7 @@ function WeekFourPage4() {
                           bowl.id === "inner" ? "inner-count" : "outer-count"
                         }
                       >
-                        {bowls[bowl.id] ? bowls[bowl.id].length : 0}{" "}
-                        {/* Added check */}
+                        {bowls[bowl.id] ? bowls[bowl.id].length : 0}
                       </h2>
                       <div
                         className={
@@ -193,16 +192,15 @@ function WeekFourPage4() {
         </div>
       </div>
       <p
-        // style={{cursor: "pointer"}}
         className="fs-5 d-flex justify-content-center gap-3 align-items-center mt-3 fs-2"
         onClick={resetDragAndDrop}
-        style={{ cursor: "pointer" }} // Added cursor pointer
+        style={{ cursor: "pointer" }}
       >
         <Icon className="ml-3" icon="teenyicons:refresh-solid" />
         Refresh
       </p>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
-      <div className="d-flex justify-content-center gap-96px mt-4 w-1029px">
+      <div className="d-flex justify-content-center gap-6 mt-4 w-full max-w-[64.31rem]">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>

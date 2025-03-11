@@ -57,7 +57,6 @@ export default function IndividualOverview() {
     return () => { }
   }, [data, enrolledData])
 
-
   // User Type Determines the courses to show
   // If user is school student or school educator He'll see His schools enrolled course and only general courses
   const studentOfSchool = user?.newCourseInvite
@@ -94,7 +93,6 @@ export default function IndividualOverview() {
       return true // Return all courses if no filter is applied
     })
     .sort(handleSort)
-
 
   if (isLoading) return <Loading /> // Render loading spinner or message
   if (isError) return <p>Error loading courses. Please try again later.</p>

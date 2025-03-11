@@ -63,6 +63,7 @@ class UserOBJ {
 
   //Register
   registerInvitedUser = async (auth_token, data) => {
+
     try {
       const response = await api.post(`api/users/invited-user`, data, {
         headers: {

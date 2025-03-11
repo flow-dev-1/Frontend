@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import '../onboarding.css'
 import { useDispatch } from 'react-redux'
 import { setToken } from '../../../redux/reducers/jwtReducer'
@@ -14,13 +14,14 @@ import Modal from 'react-modal'
 import { logoutSuccess } from '../../../redux/reducers/userReducer'
 
 export default function InvitedStudentRegistrationForm() {
-  const [step, setStep] = useState(1) // Step 1 for Parent/Guardian Info, Step 2 for Student Details
+  const [step, setStep] = useState(0) // Step 1 for Parent/Guardian Info, Step 2 for Student Details
   const [parentFormData, setParentFormData] = useState({}) // State to store form data
   const [studentFormData, setStudentFormData] = useState({})
   const [modalIsOpen, setIsOpen] = useState(false)
   const [openSuccessModal, setOpenSuccessModal] = useState(false)
   const location = useLocation()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const getQueryParams = (search) => {
     const params = new URLSearchParams(search)
@@ -45,18 +46,21 @@ export default function InvitedStudentRegistrationForm() {
     enabled: !!t, // Only run the query if token is present
   })
 
-  console.log(data,"Parent data")
 
   const mutation = useMutation({
     mutationFn: (data) => userService.registerInvitedUser(t, data),
     onSuccess: (data) => {
-      console.log('Form submitted successfully', data)
       toast.success(data.message)
       dispatch(setToken(data?.token))
       localStorage.setItem('Flow-Auth-Token', data?.token)
+      dispatch(logoutSuccess())
+
+      if(data?.status === 'redirect'){
+        return navigate('/sign-in')
+      }
       openModal()
       setStep(2)
-      dispatch(logoutSuccess())
+     
     },
     onError: (error) => {
       toast.error(error.message || error.error || error)
@@ -78,8 +82,31 @@ export default function InvitedStudentRegistrationForm() {
       })
 
       if (data?.data?.students?.length > 0) {
-        const { fullName, email, userId, grade, gender, DOB, isVerified } = data.data.students[0]; // Assuming there's only one student
+        const { fullName, email, userId, grade, gender, DOB, isVerified } = data.data.students[0]; // There's only one student
         setStudentFormData({ fullName, userId, grade, gender, DOB, isVerified });
+        if (isVerified) {
+          // If verified, submit data automatically
+          const dataToSubmit = {
+            guardianFullName: data?.data?.fullName,
+            email: data?.data?.email, // Pre-fill email but it will be non-editable
+            phone: data?.data?.phone,
+            country: data?.data?.country || 'Nigeria',
+            state: data?.data?.state,
+            lga: data?.data?.lga,
+            enrollmentId,
+            students: {
+              fullName,
+              userId,
+              grade,
+              gender,
+              DOB,
+              isVerified
+            }
+          }
+          mutation.mutate(dataToSubmit)
+        } else {
+          setStep(1)
+        }
       }
     }
   }, [data])
@@ -91,15 +118,6 @@ export default function InvitedStudentRegistrationForm() {
 
   function closeModal() {
     setIsOpen(false)
-  }
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
-
-  if (isError) {
-    console.error('Error fetching parent details:', error)
-    return <div>{error.message ? error.message : 'Something went wrong, please contact flow admin for support.'}</div>
   }
 
   const handleParentFormSubmit = (formData) => {
@@ -115,6 +133,59 @@ export default function InvitedStudentRegistrationForm() {
     }
 
     mutation.mutate(dataToSubmit)
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (isError) {
+    console.error('Error fetching parent details:', error)
+    return <div>{error.message ? error.message : 'Something went wrong, please contact flow admin for support.'}</div>
+  }
+
+  if (mutation.isPending) {
+    return (
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        gap: '20px'
+      }}>
+        <div style={{
+          width: '200px',
+          height: '6px',
+          background: '#f0f0f0',
+          borderRadius: '4px',
+          overflow: 'hidden',
+          position: 'relative'
+        }}>
+          <div style={{
+            width: '40%',
+            height: '100%',
+            background: '#329BD6',
+            position: 'absolute',
+            animation: 'loading 1s infinite linear',
+            borderRadius: '4px'
+          }} />
+        </div>
+        <p style={{
+          color: '#666',
+          fontSize: '16px',
+          textAlign: 'center'
+        }}>
+          Please wait while we set things up for you...
+        </p>
+        <style>{`
+          @keyframes loading {
+            0% { left: -40% }
+            100% { left: 100% }
+          }
+        `}</style>
+      </div>
+    )
   }
 
   return (

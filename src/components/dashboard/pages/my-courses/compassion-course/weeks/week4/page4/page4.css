@@ -1,5 +1,5 @@
 .options {
-  padding: 20px 20px;
+  padding: clamp(10px, 2vw, 20px);
   border-radius: 5px;
   text-align: center;
 /* grid-auto-rows: min-content; */
@@ -48,7 +48,7 @@ grid-auto-rows: max-content;
 
 .inner-bowl,
 .outer-bowl {
-  width: 147px;
+  width: clamp(100px, 15vw, 147px);
   aspect-ratio: 1;
   color: white;
   border-radius: 50%;
@@ -89,8 +89,8 @@ grid-auto-rows: max-content;
   margin: auto;
   justify-content: center;
   align-items: center;
-  width: 120px;
-  height: 120px;
+  width: clamp(80px, 15vw, 120px);
+  height: clamp(80px, 15vw, 120px);
   background-size: contain;
 }
 

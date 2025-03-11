@@ -275,7 +275,7 @@ export const assessments = {
           "Which of the following actions would be more appropriate for your inner circle rather than your outer circle?",
         options: [
           { id: "A", text: "Smiling at someone you pass on the street." },
-          { id: "B", text: "Listening to your someone's personal problems." },
+          { id: "B", text: "Listening to someone's personal problems." },
           { id: "C", text: "Greeting a classmate in the hallway." },
           { id: "D", text: "Offering to help a stranger carry groceries." },
         ],
@@ -314,23 +314,23 @@ export const assessments = {
       {
         id: 1,
         question:
-          "From what you have learnt so far in the course, what do you understand by the term, ‘Self-Awareness? Please select from the following options.",
+          "Which of the following best represents the Compassionate Communication theory?",
         options: [
           {
             id: "A",
-            text: "Self-awareness is knowing only your strengths and trying to hide your weaknesses from others",
+            text: "Observations, Criticism, Punishment, Demands.",
           },
           {
             id: "B",
-            text: "Self-awareness means understanding your own thoughts, feelings, strengths, and weaknesses, and knowing how they affect your actions and relationships.",
+            text: "Observations, Feelings, Needs, Requests.",
           },
           {
             id: "C",
-            text: "Self-awareness is about comparing yourself to others to see how you measure up in life.",
+            text: "Feelings, Demands, Arguments, Solutions.",
           },
           {
             id: "D",
-            text: "Self-awareness means focusing on your goals without considering how you feel or what you've experienced in the past.",
+            text: "Feelings, Judgments, Needs, Expectations.",
           },
         ],
         correctOption: "B",
@@ -338,69 +338,69 @@ export const assessments = {
       {
         id: 2,
         question:
-          "To the best of your understanding, which of the following best describes the terms, ‘Strengths’ and ‘Weaknesses’?",
+          "Why is it important to respect boundaries when showing compassion to people in your outer circle?",
         options: [
           {
             id: "A",
-            text: "Strengths are the things you’re naturally good at and enjoy doing, while weaknesses are the things you dislike and should avoid altogether.",
+            text: "To avoid helping people at all.",
           },
           {
             id: "B",
-            text: "Strengths are skills or qualities that help you succeed and make you feel confident, while weaknesses are areas where you might struggle or need improvement. Understanding both helps you grow.",
+            text: "To keep yourself safe while still being kind.",
           },
           {
             id: "C",
-            text: "Strengths are the tasks you find easy to do, and weaknesses are the things you fail at, which means you should focus only on your strengths.",
+            text: "To prevent others from knowing how compassionate you are.",
           },
           {
             id: "D",
-            text: "Strengths are the things your parents say you can do, and weaknesses are things your parents say you cannot do.",
+            text: "To avoid any communication with strangers.",
           },
         ],
         correctOption: "B",
       },
       {
         id: 3,
-        question: "Why is it important to identify your personal values?",
+        question: "Scenario: Your friend failed a test while you scored the highest. How can you show compassion?",
         options: [
           {
             id: "A",
-            text: "So you can have the same values as everyone else.",
+            text: "Brag about your high score and tell them they should have studied harder.",
           },
           {
             id: "B",
-            text: "So you can prioritize what truly matters to you in life and make decisions that align with your beliefs.",
+            text: "Encourage them by reminding them that one test doesn’t define their abilities and offer to help them study.",
           },
           {
             id: "C",
-            text: "So you can easily change your values to fit different situations.",
+            text: "Ignore their feelings and celebrate your own success.",
           },
           {
             id: "D",
-            text: "So you can compare your values to those of others.",
+            text: "Tell them they should give up on the subject.",
           },
         ],
         correctOption: "B",
       },
       {
         id: 4,
-        question: "What is a growth mindset?",
+        question: "Which statement best describes the ‘Circle of Concern’?",
         options: [
           {
             id: "A",
-            text: "Believing that your abilities and intelligence are fixed and cannot be changed.",
+            text: "It’s a strategy for deciding who to be rude to.",
           },
           {
             id: "B",
-            text: "Believing that you can develop your abilities and intelligence through hard work, learning, and perseverance.",
+            text: "It’s a method to identify who is in your inner and outer circles and how to act compassionately.",
           },
           {
             id: "C",
-            text: "Believing that you should avoid challenges to prevent failure.",
+            text: "It’s a way to organize your friends based on how much you like them.",
           },
           {
             id: "D",
-            text: "Believing that success comes from natural talent alone.",
+            text: "It’s a tool to exclude people from your life.",
           },
         ],
         correctOption: "B",
@@ -408,65 +408,65 @@ export const assessments = {
       {
         id: 5,
         question:
-          "After failing a test, how would someone with a growth mindset respond?",
+          "What is the most compassionate way to react when you notice someone being excluded or feeling left out?",
         options: [
           {
             id: "A",
-            text: "They would give up because they believe they aren’t smart enough.",
+            text: "Pretend you didn’t see anything.",
           },
           {
             id: "B",
-            text: "They would reflect on what they can learn from the experience and try harder next time.",
+            text: "Offer a kind gesture, like inviting them to join you.",
           },
-          { id: "C", text: "They would blame others for their failure." },
+          { id: "C", text: "Make a joke about the situation." },
           {
             id: "D",
-            text: "They would ignore the failure and move on without trying to improve.",
+            text: "Continue with what you’re doing without paying attention.",
           },
         ],
         correctOption: "B",
       },
       {
         id: 6,
-        question: "What is Emotional Intelligence?",
+        question: "What is the first step when practicing compassionate communication?",
         options: [
           {
             id: "A",
-            text: "The ability to understand and manage your own emotions.",
+            text: "Make a demand.",
           },
-          { id: "B", text: "The ability to influence the emotions of others." },
-          { id: "C", text: "The ability to be self reliant." },
-          { id: "D", text: "Knowing how to read people's minds." },
+          { id: "B", text: "Identify the feelings involved." },
+          { id: "C", text: "Observe the situation without judgment." },
+          { id: "D", text: "Offer a solution immediately." },
         ],
         correctOption: "B",
       },
       {
         id: 7,
-        question: "Why is it important to be emotionally intelligent?",
+        question: "Why is it important to set boundaries when showing compassion?",
         options: [
-          { id: "A", text: "To communicate better with others." },
-          { id: "B", text: "To understand why you feel the way you do." },
-          { id: "C", text: "To be able to react impulsively in situations." },
-          { id: "D", text: "To help you fight better." },
+          { id: "A", text: "To avoid showing compassion altogether." },
+          { id: "B", text: "To protect yourself while still being kind." },
+          { id: "C", text: "To keep people at a distance so they don’t bother you." },
+          { id: "D", text: "To make others earn your compassion." },
         ],
         correctOption: "B",
       },
       {
         id: 8,
-        question: "In a conflict, how can emotional intelligence help you?",
+        question: "When someone in your outer circle asks for help, what should you consider first?",
         options: [
-          { id: "A", text: "By helping you avoid the conflict entirely." },
+          { id: "A", text: "Whether they can do something for you in return." },
           {
             id: "B",
-            text: "By helping you understand your emotions and respond calmly and effectively.",
+            text: "Your own boundaries and comfort level.",
           },
           {
             id: "C",
-            text: "By allowing you to dominate the conversation without considering others’ feelings.",
+            text: "How you can ignore them without them noticing.",
           },
           {
             id: "D",
-            text: "By suppressing your emotions until the conflict is over.",
+            text: "Whether others will think you are kind.",
           },
         ],
         correctOption: "B",
@@ -474,41 +474,41 @@ export const assessments = {
       {
         id: 9,
         question:
-          "Your friends want candies, but you only want some cake because you think it is healthier. How will you communicate this to your friends?",
+          "What should you do if a friend shares something personal and emotional with you?",
         options: [
-          { id: "A", text: "By expressing your emotions clearly." },
+          { id: "A", text: "Spread the information because it’s interesting." },
           {
             id: "B",
-            text: "By aggressively telling your friends what is right.",
+            text: "Listen attentively and offer support without judgment.",
           },
           {
             id: "C",
-            text: "By understanding your friends emotions and responding appropriately.",
+            text: "Change the subject to something more positive.",
           },
-          { id: "D", text: "By ignoring your friends feelings." },
+          { id: "D", text: "Criticize them for feeling that way." },
         ],
         correctOption: "B",
       },
       {
         id: 10,
         question:
-          "You’re facing a difficult task that feels overwhelming. Which approach best reflects a growth mindset?",
+          "Which behavior best reflects maintaining compassion while respecting your boundaries?",
         options: [
           {
             id: "A",
-            text: "Avoiding the task because you’re afraid of failing.",
+            text: "Offering help even if it makes you uncomfortable.",
           },
           {
             id: "B",
-            text: "Breaking the task into smaller, manageable steps and seeking help if needed.",
+            text: "Being kind and supportive without overextending yourself.",
           },
           {
             id: "C",
-            text: "Complaining about how hard the task is without trying to solve it.",
+            text: "Saying yes to everyone’s requests, no matter how you feel.",
           },
           {
             id: "D",
-            text: "Giving up because you think it’s too difficult for you to handle.",
+            text: "Avoiding all interactions to protect yourself.",
           },
         ],
         correctOption: "B",

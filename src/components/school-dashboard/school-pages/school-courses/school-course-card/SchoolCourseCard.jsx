@@ -18,7 +18,7 @@ const SchoolCourseCard = ({
   const [openEnrollModal, setOpenEnrollModal] = useState(false)
   const [openViewModal, setOpenViewModal] = useState(false);
   const [openEnrollModalEducator, setOpenEnrollModalEducator] = useState(false)
-  console.log(enrolledData);
+
   const [courseData] = useState(course)
   const navigate = useNavigate()
   const [isOn, setIsOn] = useState(() => {
@@ -162,7 +162,7 @@ const SchoolCourseCard = ({
 
   const likesPercent = (likes, courseEnrollment) => {
     if (likes === 0) return 0
-    return (likes / courseEnrollment) * 100
+    return ((likes / courseEnrollment) * 100).toFixed(1)
   }
 
   const viewSingleCourse = (url) => {
