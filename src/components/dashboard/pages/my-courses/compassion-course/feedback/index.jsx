@@ -17,10 +17,19 @@ function CompassionFeedback() {
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
+  const [isSchool, setIsSchool] = useState(false)
 
   // This is used to trigger the report download.
-  const [hasPercentile,setHasPercentile] = useState(false)
+  const [hasPercentile, setHasPercentile] = useState(false)
   const isAdmin = useSelector(adminData);
+
+  const { user } = useSelector((state) => state?.user);
+
+  useEffect(() => {
+    if (user?.isSchool) {
+      setIsSchool(true)
+    }
+  }, [user]);
 
   // states to check a certain week data has been loaded
   // This is for the final report generation
@@ -126,7 +135,7 @@ function CompassionFeedback() {
         <div className="container">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => navigate("/dashboard")}
+            onClick={() =>isSchool ? navigate("/school-dashboard") : navigate("/dashboard")}
             className="navbar-logo"
             style={{ border: "none" }} // Remove button outline
           >
@@ -134,7 +143,7 @@ function CompassionFeedback() {
           </button>
           <div
             className="navbar-logo"
-            onClick={() => {}}
+            onClick={() => { }}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -145,12 +154,12 @@ function CompassionFeedback() {
         <aside>
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => navigate("/dashboard/my-courses")}
+            onClick={() => isSchool ? navigate(-1, { replace: true }) : navigate("/dashboard/my-courses")}
             className="back"
             style={{ cursor: "pointer", border: "none" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
-            Back to My Courses
+            {isSchool ? "Go back" : "Back to My Courses"}
           </button>
           <div className="compassion-title">
             <h2> Seeing, Caring and Doing: </h2>
@@ -165,8 +174,8 @@ function CompassionFeedback() {
                   index + 1 <= currentWeek
                     ? "active-week"
                     : index === 5
-                    ? "d-none"
-                    : ""
+                      ? "d-none"
+                      : ""
                 }
               >
                 <div className="icon">
@@ -201,4 +210,3 @@ function CompassionFeedback() {
 
 export default CompassionFeedback;
 
-// week 4, all drag and drop

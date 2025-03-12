@@ -85,7 +85,6 @@ const SingleStudentEnrolledCourses = () => {
   }
 
   const filteredCourses = courses?.courses
-  console.log(courses.courses)
 
   return (
     <div className='my-container'>

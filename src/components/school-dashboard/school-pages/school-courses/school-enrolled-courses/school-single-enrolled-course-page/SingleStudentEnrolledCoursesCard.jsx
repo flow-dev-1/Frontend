@@ -11,93 +11,18 @@ const SingleStudentEnrolledCoursesCard = ({
   coursesArray,
   enrolledData,
 }) => {
-  const [openEnrollModal, setOpenEnrollModal] = useState(false)
-  const [openViewModal, setOpenViewModal] = useState(false)
-  const [openEnrollModalEducator, setOpenEnrollModalEducator] = useState(false)
-
-  const [courseData] = useState(course)
   const navigate = useNavigate()
-  const [isOn, setIsOn] = useState(() => {
-    // Initialize state from localStorage if it exists, otherwise default to false
-    const savedState = localStorage.getItem('toggleState')
-    return savedState ? JSON.parse(savedState) : false
-  })
 
   const [courseStatus, setCourseStatus] = useState('')
 
   const { id } = useParams()
   const { userId } = useParams()
 
-  const openEnrollementModal = () => {
-    if (course.grade === 'Educator') {
-      setOpenEnrollModalEducator(true)
-    } else {
-      setOpenEnrollModal(true)
-    }
-  }
-
-  const closeEnrollementModal = () => {
-    setOpenEnrollModal(false)
-    setOpenEnrollModalEducator(false)
-  }
-
-
-  const handleToggle = (courseId) => {
-    setIsOn((prevIsOn) => {
-      const newIsOn = !prevIsOn
-      const data = { status: newIsOn ? 'Active' : 'Deactivated' }
-
-      // Save the new toggle state in localStorage
-      localStorage.setItem('toggleState', JSON.stringify(newIsOn))
-
-      // Call the service with the updated status
-      schoolService.changeToggle(courseId, data)
-
-      return newIsOn
-    })
-  }
-
-  // const handleToggle = (courseId) => {
-  //   setIsOn((prevIsOn) => {
-  //     const newIsOn = !prevIsOn;
-  //     const data = { status: newIsOn ? "Confirmed" : "Deactivated" };
-
-  //     // Save the new toggle state in localStorage
-  //     localStorage.setItem("toggleState", JSON.stringify(newIsOn));
-
-  //     // Call the service with the updated status
-  //     schoolService.changeToggle(courseId, data);
-
-  //     return newIsOn;
-  //   });
-  // };
-
-  const daysOfWeek = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',
-  ]
-  const timeOptions = Array.from(
-    { length: 10 },
-    (_, i) => `${String(i + 8).padStart(2, '0')}:00`
-  )
 
   // enrolled color
   const lightGreen = '#D4FFBE'
   const darkGreen = '#4B7E31'
 
-  // not-enrolled
-  // studentimp
-  const lightTertiary = '#FAFAFA'
-  const darkTertiary = '#329BD6'
-
-  // educator
-  const lightEducator = '#5CE1E6'
-  const darkEducator = '#275DAD'
 
   let reviewBtnColor
   let detailsBtnColor
@@ -128,86 +53,19 @@ const SingleStudentEnrolledCoursesCard = ({
     // detailsBtnClass =
     //   course.category.toLowerCase() == 'students' ? 'not-enrolled' : 'educator'
   }
-  const [coursedarta, setCourseDarta] = useState('')
 
-  const courseIndex = coursesArray?.courses.findIndex(
-    (c) => c._id === course._id
-  )
-
-  const handleDetailsClick = () => {
-    // Find the index of the current course in the coursesArray
-    const courseIndex = coursesArray?.courses.findIndex(
-      (c) => c._id === course._id
-    )
-
-    // Use this index to get the corresponding enrolledData course
-    if (isEnrolled && enrolledData?.courses[courseIndex]) {
-      setOpenViewModal(true)
-      setCourseDarta(enrolledData?.courses[courseIndex]._id)
-      //  console.log(enrolledData?.courses[courseIndex]._id);
-      // navigate(
-      //   `/school-dashboard/courses/enrolled/${encryptURI(
-      //     enrolledData.courses[courseIndex]._id
-      //   )}`
-      // )
-      //  openEnrollementModal();
-    } else {
-      openEnrollementModal()
-    }
-  }
-
-  const closeViewModal = () => {
-    setOpenViewModal(false)
-  }
 
   const likesPercent = (likes, courseEnrollment) => {
     if (likes === 0) return 0
     return ((likes / courseEnrollment) * 100).toFixed(1)
   }
 
-  const viewSingleCourse = (url) => {
-    window.open(url, '_blank')
-  }
 
   const truncateText = (text, maxLength) => {
     if (text?.length > maxLength) {
       return text.slice(0, maxLength) + '...'
     }
     return text
-  }
-
-  const progress = 0
-
-  const getButtonStyle = (progress) => {
-    if (progress === 0) {
-      return {
-        backgroundColor: '#fff',
-        color: 'red',
-        border: '1px solid red',
-      }
-    } else if (progress > 0 && progress < 100) {
-      return {
-        backgroundColor: '#fff',
-        color: 'yellow',
-        border: '1px solid yellow',
-      }
-    } else if (progress === 100) {
-      return {
-        backgroundColor: '#fff',
-        color: 'green',
-        border: '1px solid green',
-      }
-    }
-  }
-
-  const getIcon = (progress) => {
-    if (progress === 0) {
-      return <Icon icon='et:caution' width={20} />
-    } else if (progress > 0 && progress < 100) {
-      return <Icon icon='bi:book' width={20} />
-    } else if (progress === 100) {
-      return <Icon icon='ph:seal-check-light' width={20} />
-    }
   }
 
   const getStatus = (progress) => {
@@ -221,6 +79,7 @@ const SingleStudentEnrolledCoursesCard = ({
       return 'Not Started'
     }
   }
+
   useEffect(() => {
     // Assuming course has a status field that tells us the course state
     const status = getStatus(course?.progress) // You can change this based on your data
@@ -228,15 +87,6 @@ const SingleStudentEnrolledCoursesCard = ({
 
     return () => {}
   }, [course])
-  const getButtonText = (progress) => {
-    if (progress === 0) {
-      return 'Not started yet'
-    } else if (progress > 0 && progress < 100) {
-      return 'Ongoing'
-    } else if (progress === 100) {
-      return 'Completed'
-    }
-  }
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -249,6 +99,17 @@ const SingleStudentEnrolledCoursesCard = ({
       default:
         return { color: 'grey', icon: 'fluent:error-circle-24-regular' }
     }
+  }
+
+  const handleFeedbackNavigation = (course) => {
+    if (course?.course.title === "Self Awareness") {
+      navigate(
+        `/school-dashboard/courses/feedback/${encryptURI(userId)}`
+      )
+    } else {
+      navigate(`/dashboard/${course?.course.title}/feedback`, { state: { enrollmentData: course } })
+    }
+
   }
 
   const renderStatusButton = (status) => {
@@ -369,9 +230,7 @@ const SingleStudentEnrolledCoursesCard = ({
               }}
               onClick={() => {
                 if (course?.progress !== 0 || undefined) {
-                  navigate(
-                    `/school-dashboard/courses/feedback/${encryptURI(userId)}`
-                  )
+                  handleFeedbackNavigation(course)
                 }
               }}
               disabled={
