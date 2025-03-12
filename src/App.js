@@ -53,6 +53,8 @@ import SchoolSelfAwarenessFeedback from "./components/school-dashboard/school-pa
 import CompassionCourse from "./components/dashboard/pages/my-courses/compassion-course/index.jsx";
 import CompassionFeedback from "./components/dashboard/pages/my-courses/compassion-course/feedback/index.jsx";
 
+import TransitionCourse from "./components/dashboard/pages/my-courses/transition-course/index.jsx";
+import TransitionFeedback from "./components/dashboard/pages/my-courses/transition-course/feedback/index.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -134,7 +136,25 @@ function App() {
             }
           />
 
+          <Route
+            path="/dashboard/transition"
+            element={
+              <TransitionCourse />
+            }
+          />
+          <Route
+            path="/dashboard/transition/feedback"
+            element={
+
+              <TransitionCourse />
+
+            }
+          />
+
+
+
         </Route>
+
 
         <Route
           path="/dashboard"
