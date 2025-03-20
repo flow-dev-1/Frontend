@@ -177,7 +177,7 @@ export default function IndividualOverview() {
       <div className='courses-list row row-cols-1 row-cols-md-3 g-4'>
         {filteredCourses?.map((course) => (
           <CourseCard
-            key={course.id}
+            key={course._id}
             course={course}
             // coursesArray={displayCourses}
             // enrolled={enrolledDataArray}

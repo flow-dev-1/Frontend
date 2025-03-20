@@ -153,12 +153,12 @@ const WeekContent = () => {
   useEffect(() => {
     const currentWeek = sessionStorage.getItem("flow-currentWeek")
       ? Number(sessionStorage.getItem("flow-currentWeek"))
-      : 9;
+      : 1;
     // const currentPage = sessionStorage.getItem("flow-currentPage")
     //   ? Number(sessionStorage.getItem("flow-currentPage"))
     //   : 1;
-    const currentPage = 6;
-    const currentStep =  6;
+    const currentPage = 1;
+    const currentStep =  1;
 
     // Dispatch the current week, page, and step
     dispatch(setCurrentWeek(currentWeek));
@@ -175,7 +175,7 @@ const WeekContent = () => {
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isLoading, status, isError } = useQuery({
-    queryKey: [`dashboard-compassion-course-${currentWeek}`, enrollmentId, currentWeek],
+    queryKey: [`dashboard-transition-course-${currentWeek}`, enrollmentId, currentWeek],
     queryFn: () => userService.getUserCourseData(enrollmentId, currentWeek),
     enabled: !!enrollmentId && !!currentWeek,
     refetchOnMount: "always",
@@ -451,7 +451,7 @@ case 10:
 
 const CourseContent = () => {
   const { isAdmin } = useSelector(adminData);
-  const currentWeek = useSelector(selectCurrentWeek);
+  // const currentWeek = useSelector(selectCurrentWeek);
   const navigate = useNavigate()
 
   const weeksTopic = [
@@ -511,7 +511,8 @@ const CourseContent = () => {
             {weeksTopic.map((item, index) => (
               <li
                 key={index}
-                className={index + 1 <= currentWeek ? "active-week" : ""}
+                // className={index + 1 <= currentWeek ? "active-week" : ""}
+                className={"active-week"}
               >
                 <div className="icon">
                   <Icon

@@ -1,8 +1,8 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
 import { courseContent as compassionCourseContent } from "../../components/dashboard/pages/my-courses/compassion-course/weeks/data/activity";
 import { assessments as compassionAssessments } from "../../components/dashboard/pages/my-courses/compassion-course/weeks/data/assessment";
-import { courseContent as transitionCourseContent } from "../../components/dashboard/pages/my-courses/transition-course/weeks/data/activity";
-import { assessments as transitionAssessments } from "../../components/dashboard/pages/my-courses/transition-course/weeks/data/assessment";
+import { courseContent as transitionCourseContent } from "../../components/dashboard/pages/my-courses/transition-course/data/activity";
+import { assessments as transitionAssessments } from "../../components/dashboard/pages/my-courses/transition-course/data/assessment";
 
 const courseData = {
   'compassion': {

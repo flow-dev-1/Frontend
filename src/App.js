@@ -139,7 +139,9 @@ function App() {
           <Route
             path="/dashboard/transition"
             element={
-              <TransitionCourse />
+              <ProtectedRoute>
+                <TransitionCourse />
+              </ProtectedRoute>
             }
           />
           <Route
