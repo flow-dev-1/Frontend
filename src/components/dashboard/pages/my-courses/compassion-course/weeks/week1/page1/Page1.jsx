@@ -5,6 +5,7 @@ import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 
 const Page1 = () => {
+
   const pageData = useSelector(selectPageData);
 
   return (

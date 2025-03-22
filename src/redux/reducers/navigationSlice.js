@@ -14,13 +14,14 @@ const courseData = {
     assessments: transitionAssessments
   }
 };
+
 const getCourseFromURL = () => {
   const path = window.location.pathname;
   const lastSegment = path.split('/').pop();
-  return lastSegment || 'compassion'; // default to compassion if no segment
+  return lastSegment.toLowerCase() || 'compassion'; // default to compassion if no segment
 };
 const initialState = {
-  currentCourse:  getCourseFromURL(),
+  currentCourse:  getCourseFromURL() || 'compassion',
   currentWeek: 1,
   currentPage: 1,
   currentStep: 1,

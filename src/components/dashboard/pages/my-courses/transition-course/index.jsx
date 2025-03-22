@@ -145,27 +145,28 @@ const WeekContent = () => {
 
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
-    // if (!enrolmentData && !isAdmin) return navigate("/sign-in");
-    // setEnrollmentId(enrolmentData?._id);
-    // setCourse(enrolmentData?.course?._id)
+    if (!enrolmentData && !isAdmin) return navigate("/sign-in");
+    setEnrollmentId(enrolmentData?._id);
+    setCourse(enrolmentData?.course?._id)
   }, []);
 
   useEffect(() => {
     const currentWeek = sessionStorage.getItem("flow-currentWeek")
-      ? Number(sessionStorage.getItem("flow-currentWeek"))
-      : 1;
-    // const currentPage = sessionStorage.getItem("flow-currentPage")
-    //   ? Number(sessionStorage.getItem("flow-currentPage"))
-    //   : 1;
-    const currentPage = 1;
-    const currentStep =  1;
+    ? Number(sessionStorage.getItem("flow-currentWeek"))
+    : 1;
+  const currentPage = sessionStorage.getItem("flow-currentPage")
+    ? Number(sessionStorage.getItem("flow-currentPage"))
+    : 1;
+  const currentStep = sessionStorage.getItem("flow-currentStep")
+    ? Number(sessionStorage.getItem("flow-currentStep"))
+    : 1;
 
-    // Dispatch the current week, page, and step
-    dispatch(setCurrentWeek(currentWeek));
-    dispatch(setCurrentPage(currentPage));
-    dispatch(setCurrentStep(currentStep));
+  // Dispatch the current week, page, and step
+  dispatch(setCurrentWeek(currentWeek));
+  dispatch(setCurrentPage(currentPage));
+  dispatch(setCurrentStep(currentStep));
 
-    return () => { };
+  return () => { };
   }, [dispatch]); // Added dispatch to dependency array
 
   const currentWeek = useSelector(selectCurrentWeek);
@@ -451,7 +452,7 @@ case 10:
 
 const CourseContent = () => {
   const { isAdmin } = useSelector(adminData);
-  // const currentWeek = useSelector(selectCurrentWeek);
+  const currentWeek = useSelector(selectCurrentWeek);
   const navigate = useNavigate()
 
   const weeksTopic = [
@@ -503,7 +504,7 @@ const CourseContent = () => {
           </button>
 
           <div className="compassion-title">
-            <h2> Seeing, Caring and Doing: </h2>
+            <h2> Embrace Change, Grow Stronger:  </h2>
             <h2 className="compassion">Transition</h2>
           </div>
 
@@ -511,8 +512,7 @@ const CourseContent = () => {
             {weeksTopic.map((item, index) => (
               <li
                 key={index}
-                // className={index + 1 <= currentWeek ? "active-week" : ""}
-                className={"active-week"}
+                className={index + 1 <= currentWeek ? "active-week" : ""}
               >
                 <div className="icon">
                   <Icon

@@ -30,10 +30,13 @@ function Page2() {
   }, [userAnswers])
 
   const saveUserInput = () => {
-    if (currentStep === 1) return true;
+    // if (currentStep === 1) return true;
+    return true;
     if (adminDatas.isAdmin) return true
 
     const stepData = answers.find(item => item.stepId === currentStep);
+
+    console.log(stepData, "Step Data")
     if (!stepData) {
       setErrorMessage("Oops! All inputs must be filled out.");
       return false;
@@ -71,20 +74,6 @@ function Page2() {
     if (!step) return <div>Invalid Step</div>;
 
     switch (step.type) {
-      case "instruction":
-        return (
-          <QuestionBox>
-            <div className="text-center mb-5">
-              <h2 className="text-white bg-blue p-4 fs-1 rounded d-inline">
-                {step.title}
-              </h2>
-            </div>
-            <div className="d-flex gap-2">
-              <h2 className="text-blue fs-1">Instructions: </h2>
-              <h2 className="text-gray fs-1">{step.instructions}</h2>
-            </div>
-          </QuestionBox>
-        );
       case "scenario":
         return (
           <Frame
