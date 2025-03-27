@@ -34,9 +34,10 @@ function Page6() {
       return false;
     }
 
-    const emptyInputs = answers.filter((item) => item?.value?.trim() === "");
+    const emptyInputs = answers.filter((item) => item.value.trim() === "");
+
     if (emptyInputs.length > 0) {
-      setErrorMessage(`Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`);
+      setErrorMessage(`Please fill out all inputs. ${emptyInputs?.length} input(s) are missing.`);
       return false;
     }
 

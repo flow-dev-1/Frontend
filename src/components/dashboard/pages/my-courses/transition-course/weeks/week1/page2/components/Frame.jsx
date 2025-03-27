@@ -15,17 +15,13 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
       if (stepIndex !== -1) {
         updatedAnswers[stepIndex] = {
           ...updatedAnswers[stepIndex],
-          value: {
-            ...updatedAnswers[stepIndex].value,
-            [index]: value, // Update the specific index with the new value
-          },
+          stepId: step,
+          value,
         };
       } else {
         updatedAnswers.push({
           stepId: step,
-          value: {
-            [index]: value,
-          },
+          value
         });
       }
 
@@ -46,8 +42,8 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
               <h2 className="text-gray">{value}</h2>
             </div>
             <BigTextBox 
-              value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""} // Pass the current answer
-              onChange={(e) => handleInputChange(index, e.target.value)} // Handle input change
+              value={answers.find(answer => answer.stepId === step)?.value|| ""} // Pass the current answer
+              handleChange={(e) => handleInputChange(index, e.target.value)} // Handle input change
             />
           </div>
         );

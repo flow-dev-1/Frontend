@@ -10,7 +10,7 @@ export const courseContent = {
       },
       {
         id: 2,
-        type: "muiltiStep",
+        type: "multiStep",
         steps: [
           {
             stepId: 1,

@@ -8,6 +8,7 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import Frame from "./components/Frame";
 import StepIndicator from "../../../components/StepIndicator";
+import { use } from "react";
 
 function Page2() {
   const dispatch = useDispatch(); // Initialize dispatch
@@ -24,37 +25,22 @@ function Page2() {
   useEffect(() => {
 
     if (!userAnswers) return;
+    console.log(userAnswers, "userAnswers")
     const response = userAnswers.activities?.find(item => item.page === pageData.id);
+
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
 
   }, [userAnswers])
 
   const saveUserInput = () => {
-    // if (currentStep === 1) return true;
-    return true;
     if (adminDatas.isAdmin) return true
 
     const stepData = answers.find(item => item.stepId === currentStep);
 
-    console.log(stepData, "Step Data")
-    if (!stepData) {
-      setErrorMessage("Oops! All inputs must be filled out.");
+    if (!stepData || !stepData.value || stepData.value.trim() === '') {
+      setErrorMessage("Oops! Please enter a valid input!");
       return false;
     }
-    
-
-    const values = Object.values(stepData.value);
-    if (values.length < 3) {
-      setErrorMessage("At least 3 values are required!");
-      return false;
-    }
-
-    const emptyInputs = values.filter((value) => value.trim() === "");
-    if (emptyInputs.length > 0) {
-      setErrorMessage(`Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`);
-      return false;
-    }
-
     setErrorMessage(""); // Clear error if input is valid
     
     const activityData = {
@@ -97,7 +83,7 @@ function Page2() {
   return (
     <>
       {renderStep()}
-      {(currentStep !== 1 && errorMessage) && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
+      {errorMessage && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 ">
         <Button text="Prev" />

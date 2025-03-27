@@ -63,6 +63,7 @@ function WeekOneAssessment() {
   });
 
   const handleOptionSelect = (optionKey) => {
+
     setErrorMessage("")
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
@@ -87,6 +88,7 @@ function WeekOneAssessment() {
   const saveUserData = () => {
     if (adminDatas.isAdmin) return true
     const stepData = answers.find(item => item.id === currentStep);
+    
     if (!stepData) {
       setErrorMessage("Oops! Please choose an option to proceed.");
       return false;
