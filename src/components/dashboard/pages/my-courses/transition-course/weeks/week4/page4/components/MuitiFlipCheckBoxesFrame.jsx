@@ -87,7 +87,7 @@ function MuitiFlipCheckBoxesFrame({ data, answers, setAnswers, setErrorMessage }
           justifyContent: "center",
         }}
       >
-        {info.map((option, index) => (
+        {info?.map((option, index) => (
           <div
             key={index}
             className="d-flex flex-column align-items-center"

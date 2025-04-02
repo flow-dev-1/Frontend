@@ -37,19 +37,31 @@ function WeekEightPage6() {
   }, [userAnswers])
 
   const saveUserInput = () => {
-    if (currentStep === 1) return true;
+    setErrorMessage(""); // Clear error if input is valid
     if (adminDatas.isAdmin) return true
 
     const stepData = answers.find(item => item.stepId === currentStep);
+
     if (!stepData) {
       setErrorMessage("Oops! All inputs must be filled out.");
       return false;
     }
 
+
     const values = Object.values(stepData.value);
-    if (values.length < 2) {
-      setErrorMessage("At least 3 values are required!");
-      return false;
+    if (currentStep === 3) {
+
+      if (values.length < 1) {
+        setErrorMessage("Oops please enter a valid input!");
+        return false;
+      }
+
+    } else {
+      if (values.length < 5) {
+        setErrorMessage("At least 5 values are required!");
+        return false;
+      }
+
     }
 
     const emptyInputs = values.filter((value) => value.trim() === "");
@@ -59,7 +71,7 @@ function WeekEightPage6() {
     }
 
     setErrorMessage(""); // Clear error if input is valid
-    
+
     const activityData = {
       page: pageData.id,
       answer: answers
@@ -91,61 +103,61 @@ function WeekEightPage6() {
             </div>
           </QuestionBox>
         );
-        case "hearts":
-          return (
-            <Frame
-              data={{
-                step: step.stepId,
-                question: step.question,
-                expectedAnswers:step.answers,
-                config:step.config
-              }}
-              setErrorMessage={setErrorMessage}
-              answers={answers}
-              setAnswers={setAnswers}
-            />
-          );
-          case "star":
-            return (
-              <MultiStarFrame
-                data={{
-                  step: step.stepId,
-                  question: step.question,
-                  expectedAnswers:step.answers,
-                  config:step.config
-                }}
-                setErrorMessage={setErrorMessage}
-                answers={answers}
-                setAnswers={setAnswers}
-              />
-            );
-            case "singleStar":
-              return (
-                <SingleWhiteStarFrame
-                  data={{
-                    step: step.stepId,
-                    questions: step.questions.map((q) => ({
-                      [q.type]: q.question,
-                    })),
-                  }}
-                  setErrorMessage={setErrorMessage}
-                  answers={answers}
-                  setAnswers={setAnswers}
-                />
-              );
-              case "smart":
-                return (
-                  <SmartFrame
-                    data={{
-                      step: step.stepId,
-                      question: step.question,
-                      config:step.config
-                    }}
-                    setErrorMessage={setErrorMessage}
-                    answers={answers}
-                    setAnswers={setAnswers}
-                  />
-                );
+      case "hearts":
+        return (
+          <Frame
+            data={{
+              step: step.stepId,
+              question: step.question,
+              expectedAnswers: step.answers,
+              config: step.config
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        );
+      case "star":
+        return (
+          <MultiStarFrame
+            data={{
+              step: step.stepId,
+              question: step.question,
+              expectedAnswers: step.answers,
+              config: step.config
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        );
+      case "singleStar":
+        return (
+          <SingleWhiteStarFrame
+            data={{
+              step: step.stepId,
+              questions: step.questions.map((q) => ({
+                [q.type]: q.question,
+              })),
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        );
+      case "smart":
+        return (
+          <SmartFrame
+            data={{
+              step: step.stepId,
+              question: step.question,
+              config: step.config
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        );
       default:
         return <div>Unknown step type</div>;
     }
@@ -154,7 +166,7 @@ function WeekEightPage6() {
   return (
     <>
       {renderStep()}
-      {(currentStep !== 1 && errorMessage) && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
+      {errorMessage && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 ">
         <Button text="Prev" />

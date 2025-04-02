@@ -18,6 +18,8 @@ import { toast } from 'react-toastify';
 import userService from "../../../../../../../../services/api/user";
 import { calculateResult } from "../../../utility";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import { use } from "react";
+import user from "../../../../../../../../services/api/user";
 
 function WeekFiveAssessment() {
   const dispatch = useDispatch();
@@ -100,38 +102,42 @@ function WeekFiveAssessment() {
 
     if (isLastQuestion) {
 
-    //   const hasUnansweredQuestions = answers.length !== totalSteps || userAnswers.activities.length !== 3;
-    //   if (hasUnansweredQuestions) {
-    //     setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-    //     return false;
-    //   }
+      const hasUnansweredQuestions = answers.length !== totalSteps || userAnswers.activities.length !== 2;
+      if (hasUnansweredQuestions) {
+        setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+        return false;
+      }
 
-    //   const selectedActivity = userAnswers.activities.find(activity => activity.page === 6);
-    //   const isValidActivity = selectedActivity && Array.isArray(selectedActivity.answer) && selectedActivity.answer.length === 5;
+      const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
+    
+      mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
 
-    //   if (isValidActivity) {
-    //     const isValid = selectedActivity.answer.every(item =>
-    //       item.stepId !== undefined &&
-    //       item.value &&
-    //       Object.keys(item.value).length === 3
-    //     );
+      //   const selectedActivity = userAnswers.activities.find(activity => activity.page === 6);
+      //   const isValidActivity = selectedActivity && Array.isArray(selectedActivity.answer) && selectedActivity.answer.length === 5;
 
-    //     if (isValid) {
-    //       const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
+      //   if (isValidActivity) {
+      //     const isValid = selectedActivity.answer.every(item =>
+      //       item.stepId !== undefined &&
+      //       item.value &&
+      //       Object.keys(item.value).length === 3
+      //     );
 
-    //       mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
-    //     } else {
+      //     if (isValid) {
+      //       const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
 
-    //       setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-    //       return false;
-    //     }
-    //   } else {
-    //     setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-    //     return false;
-    //   }
+      //       mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
+      //     } else {
+
+      //       setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+      //       return false;
+      //     }
+      //   } else {
+      //     setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+      //     return false;
+      //   }
 
 
-    // } else {
+    } else {
       return true;
     }
     // Dispatch the saveActivity action
@@ -193,7 +199,7 @@ function WeekFiveAssessment() {
             customOnClick={() => dispatch(showReviewPopup())}
           />
         ) : (
-          <Button text="Next" customOnClick={() => dispatch(hideReviewPopup())} loading={mutation.isPending} />
+          <Button text="Next" customOnClick={saveUserData} loading={mutation.isPending} />
         )}
       </div>
     </>

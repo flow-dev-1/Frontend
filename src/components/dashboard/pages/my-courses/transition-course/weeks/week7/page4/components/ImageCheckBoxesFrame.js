@@ -37,7 +37,6 @@ function ImageCheckBoxesFrame({ data, answers, setAnswers, setErrorMessage }) {
         } else {
           updatedAnswers.push({ stepId: step, value: updatedOptions });
         }
-
         return updatedAnswers;
       });
       return updatedOptions;

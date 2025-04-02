@@ -30,15 +30,18 @@ function WeekNinePage6() {
 
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(item => item.page === pageData.id);
+
+    console.log(response,"This is reponse here o!")
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
 
   }, [userAnswers])
 
   const saveUserInput = () => {
-    if (currentStep === 1) return true;
     if (adminDatas.isAdmin) return true
+    if(currentStep === 1) return true
 
     const stepData = answers.find(item => item.stepId === currentStep);
+
     if (!stepData) {
       setErrorMessage("Oops! All inputs must be filled out.");
       return false;
@@ -46,15 +49,18 @@ function WeekNinePage6() {
 
     const values = Object.values(stepData.value);
     if (values.length < 1) {
-      setErrorMessage("At least 3 values are required!");
+      setErrorMessage("At least 1 value are required!");
       return false;
     }
 
-    const emptyInputs = values.filter((value) => value.trim() === "");
-    if (emptyInputs.length > 0) {
-      setErrorMessage(`Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`);
-      return false;
+    if (currentStep !== 1 && currentStep !== 6) {
+      const emptyInputs = values.filter((value) => value?.trim() === "");
+      if (emptyInputs.length > 0) {
+        setErrorMessage(`Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`);
+        return false;
+      }
     }
+
 
     setErrorMessage(""); // Clear error if input is valid
 

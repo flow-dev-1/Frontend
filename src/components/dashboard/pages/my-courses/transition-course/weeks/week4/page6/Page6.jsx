@@ -32,7 +32,6 @@ function WeekFourPage6() {
   }, [userAnswers])
 
   const saveUserInput = () => {
-    if (currentStep === 1) return true;
     if (adminDatas.isAdmin) return true
 
     const stepData = answers.find(item => item.stepId === currentStep);
@@ -72,20 +71,6 @@ function WeekFourPage6() {
     if (!step) return <div>Invalid Step</div>;
 
     switch (step.type) {
-      case "instruction":
-        return (
-          <QuestionBox>
-            <div className="text-center mb-5">
-              <h2 className="text-white bg-blue p-4 fs-1 rounded d-inline">
-                {step.title}
-              </h2>
-            </div>
-            <div className="d-flex gap-2">
-              <h2 className="text-blue fs-1">Instructions: </h2>
-              <h2 className="text-gray fs-1">{step.instructions}</h2>
-            </div>
-          </QuestionBox>
-        );
       case "threeFieldsAnswers":
         return (
           <Frame
@@ -107,7 +92,7 @@ function WeekFourPage6() {
   return (
     <>
       {renderStep()}
-      {(currentStep !== 1 && errorMessage) && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
+      {errorMessage && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 ">
         <Button text="Prev" />

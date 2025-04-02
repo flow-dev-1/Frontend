@@ -4,30 +4,26 @@ import MediumTextBox from "../../../../components/MediumTextBox";
 
 function Frame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, info } = data;
-  const fieldCount = info.fieldCount || 1; // Default to 1 if not provided
 
-  const handleInputChange = (index, value) => {
+  const handleInputChange = (value) => {
+
     setErrorMessage("");
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
       const pageIndex = updatedAnswers.findIndex((answer) => answer.stepId === step);
-      console.log(`Before update: ${JSON.stringify(updatedAnswers)}`);
-      
+
       if (pageIndex !== -1) {
         updatedAnswers[pageIndex] = {
           ...updatedAnswers[pageIndex],
-          value: {
-            ...updatedAnswers[pageIndex].value,
-            [index]: value,
-          },
+          value,
         };
       } else {
         updatedAnswers.push({
           stepId: step,
-          value: { [index]: value },
+          value,
         });
       }
-      console.log(`After update: ${JSON.stringify(updatedAnswers)}`);
+
       return updatedAnswers;
     });
   };
@@ -39,13 +35,10 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
         <h2 className="text-gray">{info.question}</h2>
       </div>
       <div className="d-flex flex-column gap-3 justify-content-center">
-        {[...Array(fieldCount)].map((_, index) => (
           <MediumTextBox
-            key={index}
-            value={answers.find((answer) => answer.stepId === step)?.value?.[index] || ""}
-            onChange={(e) => handleInputChange(index, e.target.value)}
+            value={answers.find((answer) => answer.stepId === step)?.value || ""}
+            handleChange={(e) => handleInputChange(e.target.value)}
           />
-        ))}
       </div>
     </QuestionBox>
   );

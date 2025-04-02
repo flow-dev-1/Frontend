@@ -3,8 +3,6 @@ import { useSelector } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import ArrowTrail from "../../../../../../../../assets/ArrowTrail.svg";
 import "./page4.css";
-import RedBucket from "../../../../../../../../assets/Buckets/red.png";
-import GreenBucket from "../../../../../../../../assets/Buckets/green.png";
 import Button from "../../../components/Button";
 import {
   selectPageData,
@@ -18,11 +16,11 @@ import { useDispatch } from "react-redux";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
 
-function WeekThreePage4() {
+function WeekTwoPage4() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
-  const totalSteps = pageData.images.length;
+  const totalSteps = pageData?.images?.length;
   const adminDatas = useSelector(adminData);
   const userAnswers = useSelector(userAnswer);
   const [errorMessage, setErrorMessage] = useState("");
@@ -33,21 +31,18 @@ function WeekThreePage4() {
   });
 
   useEffect(() => {
-    setShowCurrentImage(true);
-  }, [currentStep])
-
-  useEffect(() => {
 
     if (!userAnswers) return
     const response = userAnswers?.activities?.find(item => (item.page === pageData.id))
     if (response?.answer) {
       const answerCopy = { ...response.answer };
+
       setBucketResults(answerCopy);
-      if (currentStep === 1) {
+
+      if (currentStep == 1 ) {
         dispatch(setCurrentStep(totalSteps))
         setShowCurrentImage(false);
       }
-
     }
     return () => { }
 
@@ -98,6 +93,7 @@ function WeekThreePage4() {
 
   const renderStep = () => {
     const currentImage = pageData.images[currentStep - 1];
+
     return showCurrentImage && currentImage ? (
       <Draggable draggableId="current-image" index={currentStep}>
         {(provided, snapshot) => (
@@ -128,6 +124,8 @@ function WeekThreePage4() {
     //   setErrorMessage("Oops! Please enter a valid input!");
     //   return false;
     // }
+
+
     if (bucketResults.green.length + bucketResults.red.length !== pageData.images.length) {
       setErrorMessage("Please make sure to fill all the buckets.");
       return false;
@@ -249,7 +247,7 @@ function WeekThreePage4() {
                   )}
                 </Droppable>
               ))}
-            </div>equa
+            </div>
           </div>
         </div>
       </div>
@@ -267,4 +265,4 @@ function WeekThreePage4() {
   );
 }
 
-export default WeekThreePage4;
+export default WeekTwoPage4;

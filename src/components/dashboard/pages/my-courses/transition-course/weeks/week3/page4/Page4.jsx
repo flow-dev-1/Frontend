@@ -3,8 +3,6 @@ import { useSelector } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import ArrowTrail from "../../../../../../../../assets/ArrowTrail.svg";
 import "./page4.css";
-import RedBucket from "../../../../../../../../assets/Buckets/red.png";
-import GreenBucket from "../../../../../../../../assets/Buckets/green.png";
 import Button from "../../../components/Button";
 import {
   selectPageData,
@@ -18,7 +16,7 @@ import { useDispatch } from "react-redux";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
 
-function WeekTwoPage4() {
+function WeekThreePage4() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
@@ -32,9 +30,9 @@ function WeekTwoPage4() {
     red: [],
   });
 
-  useEffect(() => {
-    setShowCurrentImage(true);
-  }, [currentStep])
+  // useEffect(() => {
+  //   setShowCurrentImage(true);
+  // }, [currentStep])
 
   useEffect(() => {
 
@@ -128,6 +126,8 @@ function WeekTwoPage4() {
     //   setErrorMessage("Oops! Please enter a valid input!");
     //   return false;
     // }
+
+    console.log(bucketResults, pageData.images.length, "bucket results")
     if (bucketResults.green.length + bucketResults.red.length !== pageData.images.length) {
       setErrorMessage("Please make sure to fill all the buckets.");
       return false;
@@ -242,7 +242,7 @@ function WeekTwoPage4() {
                           : "outer-bowl" 
                         }
                       >
-                        {/* {bucket.label} */}
+                        {bucket.label}
                       </div>
                       {provided.placeholder}
                     </div>
@@ -267,4 +267,4 @@ function WeekTwoPage4() {
   );
 }
 
-export default WeekTwoPage4;
+export default WeekThreePage4;

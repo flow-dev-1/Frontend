@@ -1,6 +1,7 @@
 import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
 import MediumTextBox from "../../../../components/MediumTextBox";
+import Coping from "../../../../../../../../../assets/copingSkills.png";
 
 function Frame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, info } = data;
@@ -11,8 +12,7 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
       const pageIndex = updatedAnswers.findIndex((answer) => answer.stepId === step);
-      console.log(`Before update: ${JSON.stringify(updatedAnswers)}`);
-      
+
       if (pageIndex !== -1) {
         updatedAnswers[pageIndex] = {
           ...updatedAnswers[pageIndex],
@@ -36,14 +36,18 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
     <QuestionBox>
       <div className="d-flex gap-2">
         <h2 className="text-blue">Question: </h2>
-        <h2 className="text-gray">{info.question}</h2>
+        <h2 className="text-gray">
+          {info.question}
+          {info.hasImage && <img src={Coping} alt="Coping Skill" />}?
+
+        </h2>
       </div>
       <div className="d-flex flex-column gap-3 justify-content-center">
         {[...Array(fieldCount)].map((_, index) => (
           <MediumTextBox
             key={index}
             value={answers.find((answer) => answer.stepId === step)?.value?.[index] || ""}
-            onChange={(e) => handleInputChange(index, e.target.value)}
+            handleChange={(e) => handleInputChange(index, e.target.value)}
           />
         ))}
       </div>

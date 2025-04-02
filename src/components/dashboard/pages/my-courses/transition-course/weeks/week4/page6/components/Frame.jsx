@@ -1,6 +1,7 @@
 import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
 import SmallTextBox from "../../../../components/SmallTextBox";
+
 function Frame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, question, expectedAnswers } = data;
 

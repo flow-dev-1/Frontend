@@ -32,19 +32,23 @@ function WeekNinePage4() {
   }, [userAnswers])
 
   const saveUserInput = () => {
-    if (currentStep === 1) return true;
+
     if (adminDatas.isAdmin) return true
 
     const stepData = answers.find(item => item.stepId === currentStep);
+
     if (!stepData) {
       setErrorMessage("Oops! All inputs must be filled out.");
       return false;
     }
 
     const values = Object.values(stepData.value);
-    if (values.length < 3) {
-      setErrorMessage("At least 3 values are required!");
-      return false;
+    if (currentStep !== 1) {
+
+      if (values.length < 5) {
+        setErrorMessage("At least 5 values are required!");
+        return false;
+      }
     }
 
     const emptyInputs = values.filter((value) => value.trim() === "");
@@ -53,8 +57,9 @@ function WeekNinePage4() {
       return false;
     }
 
+
     setErrorMessage(""); // Clear error if input is valid
-    
+
     const activityData = {
       page: pageData.id,
       answer: answers
@@ -76,28 +81,28 @@ function WeekNinePage4() {
         return (
           <ListQuestionFrame
             data={{
-              id: step.stepId,
-              question:step.question,
-              numberOfInputs:step.numberOfInputs
+              stepId: step.stepId,
+              question: step.question,
+              numberOfInputs: step.numberOfInputs
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
             setAnswers={setAnswers}
           />
         );
-        case "bigTextBox":
-          return (
-            <Frame
-              data={{
-                step: step.stepId,
-                title: step.question,
-                info:step,
-              }}
-              setErrorMessage={setErrorMessage}
-              answers={answers}
-              setAnswers={setAnswers}
-            />
-          );
+      case "bigTextBox":
+        return (
+          <Frame
+            data={{
+              step: step.stepId,
+              title: step.question,
+              info: step,
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        );
         return <div>Unknown step type</div>;
     }
   };
@@ -105,7 +110,7 @@ function WeekNinePage4() {
   return (
     <>
       {renderStep()}
-      {(currentStep !== 1 && errorMessage) && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
+      {errorMessage && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 ">
         <Button text="Prev" />

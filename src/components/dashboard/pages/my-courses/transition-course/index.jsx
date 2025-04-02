@@ -152,21 +152,21 @@ const WeekContent = () => {
 
   useEffect(() => {
     const currentWeek = sessionStorage.getItem("flow-currentWeek")
-    ? Number(sessionStorage.getItem("flow-currentWeek"))
-    : 1;
-  const currentPage = sessionStorage.getItem("flow-currentPage")
-    ? Number(sessionStorage.getItem("flow-currentPage"))
-    : 1;
-  const currentStep = sessionStorage.getItem("flow-currentStep")
-    ? Number(sessionStorage.getItem("flow-currentStep"))
-    : 1;
+      ? Number(sessionStorage.getItem("flow-currentWeek"))
+      : 1;
+    const currentPage = sessionStorage.getItem("flow-currentPage")
+      ? Number(sessionStorage.getItem("flow-currentPage"))
+      : 1;
+    const currentStep = sessionStorage.getItem("flow-currentStep")
+      ? Number(sessionStorage.getItem("flow-currentStep"))
+      : 1;
 
-  // Dispatch the current week, page, and step
-  dispatch(setCurrentWeek(currentWeek));
-  dispatch(setCurrentPage(currentPage));
-  dispatch(setCurrentStep(currentStep));
+    // Dispatch the current week, page, and step
+    dispatch(setCurrentWeek(currentWeek));
+    dispatch(setCurrentPage(currentPage));
+    dispatch(setCurrentStep(currentStep));
 
-  return () => { };
+    return () => { };
   }, [dispatch]); // Added dispatch to dependency array
 
   const currentWeek = useSelector(selectCurrentWeek);
@@ -184,6 +184,8 @@ const WeekContent = () => {
     keepPreviousData: false,
   });
 
+  // console.log(data,"Course data here")
+
 
   useEffect(() => {
     if (!data) return;
@@ -199,6 +201,7 @@ const WeekContent = () => {
         })
       );
     } else {
+
       dispatch(
         updateData({
           course: course,
@@ -361,7 +364,7 @@ const WeekContent = () => {
           default:
             return null;
         }
-        case 7:
+      case 7:
         switch (currentPage) {
           case 1:
             return <WeekSevenPage1 />;
@@ -379,7 +382,7 @@ const WeekContent = () => {
             return null;
         }
 
-case 8:
+      case 8:
         switch (currentPage) {
           case 1:
             return <WeekEightPage1 />;
@@ -401,7 +404,7 @@ case 8:
             return null;
         }
 
-case 9:
+      case 9:
         switch (currentPage) {
           case 1:
             return <WeekNinePage1 />;
@@ -423,7 +426,7 @@ case 9:
             return null;
         }
 
-case 10:
+      case 10:
         switch (currentPage) {
           case 1:
             return <WeekTenPage1 />;

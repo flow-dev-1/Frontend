@@ -7,12 +7,16 @@ function ChallengeFrame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, challenge, info } = data;
   const fieldCount =  1; // Default to 1 if not provided
 
+  console.log(answers, "Answers")
+
+  const checkData = answers.find((answer) => answer.stepId === step)?.value
+  console.log(checkData, "Check Data")
+
   const handleInputChange = (index, value) => {
     setErrorMessage("");
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
       const pageIndex = updatedAnswers.findIndex((answer) => answer.stepId === step);
-      console.log(`Before update: ${JSON.stringify(updatedAnswers)}`);
       
       if (pageIndex !== -1) {
         updatedAnswers[pageIndex] = {
@@ -28,7 +32,6 @@ function ChallengeFrame({ data, answers, setAnswers, setErrorMessage }) {
           value: { [index]: value },
         });
       }
-      console.log(`After update: ${JSON.stringify(updatedAnswers)}`);
       return updatedAnswers;
     });
   };

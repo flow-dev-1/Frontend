@@ -25,7 +25,6 @@ function Page2() {
   useEffect(() => {
 
     if (!userAnswers) return;
-    console.log(userAnswers, "userAnswers")
     const response = userAnswers.activities?.find(item => item.page === pageData.id);
 
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);

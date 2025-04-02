@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import CardBoard from "./CardBoard";
 import ArrowTrail from "../../../../../../../../../assets/ArrowTrail.svg";
@@ -26,13 +26,28 @@ const InternalStepIndicator = ({ totalSteps, currentStep }) => {
 };
 
 const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
-
-
-  
   
   const { images, buckets, instruction } = info;
   const [bucketResults, setBucketResults] = useState({ green: [], red: [] });
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    if (!answers?.length) return;
+    
+    const existingAnswer = answers.find(answer => answer.stepId === 6);
+    if (existingAnswer?.value) {
+      setBucketResults({
+        green: existingAnswer.value.green || [],
+        red: existingAnswer.value.red || []
+      });
+      
+      // Update currentImageIndex based on total dropped items
+      const totalDropped = 
+        (existingAnswer.value.green?.length || 0) + 
+        (existingAnswer.value.red?.length || 0);
+      setCurrentImageIndex(totalDropped);
+    }
+  }, [answers]);
 
   const totalDropped = Object.values(bucketResults).reduce((sum, arr) => sum + arr.length, 0);
   const allImagesDropped = totalDropped >= images.length;
@@ -41,24 +56,43 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
     if (!result.destination) return;
     
     setErrorMessage("");
-
     const { source, destination } = result;
     
     if (source.droppableId === "image" && destination.droppableId !== "image") {
       const draggedIndex = currentImageIndex;
       
-      setBucketResults((prev) => ({
-        ...prev,
-        [destination.droppableId]: [...(prev[destination.droppableId] || []), draggedIndex],
-      }));
+      // Update bucket results
+      const newBucketResults = {
+        ...bucketResults,
+        [destination.droppableId]: [...(bucketResults[destination.droppableId] || []), draggedIndex],
+      };
+      setBucketResults(newBucketResults);
       
-      setAnswers((prevAnswers) =>
-        prevAnswers.map((answer) =>
-          answer.stepId === 1 ? { ...answer, value: bucketResults } : answer
-        )
-      );
+      // Update answers state
+      setAnswers((prevAnswers) => {
+        const existingAnswerIndex = prevAnswers.findIndex(answer => answer.stepId === 6);
+        
+        if (existingAnswerIndex !== -1) {
+          // Update existing answer
+          const updatedAnswers = [...prevAnswers];
+          updatedAnswers[existingAnswerIndex] = {
+            ...updatedAnswers[existingAnswerIndex],
+            value: newBucketResults
+          };
+          return updatedAnswers;
+        } else {
+          // Create new answer
+          return [...prevAnswers, {
+            stepId: 6,
+            value: newBucketResults
+          }];
+        }
+      });
 
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1 < images.length ? prevIndex + 1 : prevIndex));
+      // Update current image index
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex + 1 < images.length ? prevIndex + 1 : prevIndex
+      );
     }
   };
 
@@ -145,10 +179,10 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
                         width: "200px",
                       }}
                     >
-                      <h2 className={bucket.id === "inner" ? "inner-count" : "both-count"}>
+                      <h2 className={bucket.id === "green" ? "inner-count" : "both-count"}>
                         {bucketResults[bucket.id]?.length || 0}
                       </h2>
-                      <div className={bucket.id === "inner" ? "inner-bucket" : "both-bucket"}>
+                      <div className={bucket.id === "green" ? "inner-bucket" : "both-bucket"}>
                         {bucket.title}
                       </div>
                       {provided.placeholder}

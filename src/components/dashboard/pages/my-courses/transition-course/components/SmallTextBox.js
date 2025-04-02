@@ -1,6 +1,8 @@
 import React from "react";
 
 function SmallTextBox({ value, onChange }) {
+
+  console.log(value,"Value den")
   return (
     <label className="small-input p-3 border-0 small-input-label">
       <input

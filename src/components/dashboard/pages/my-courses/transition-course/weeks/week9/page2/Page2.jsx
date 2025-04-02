@@ -6,7 +6,7 @@ import MediumTextBox from "../../../components/MediumTextBox";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
-
+import Resilience from "../../../../../../../../assets/Resilience.png";
 
 function WeekFourPage2() {
   const dispatch = useDispatch()
@@ -52,11 +52,14 @@ function WeekFourPage2() {
       <QuestionBox>
         <div className="d-flex gap-3 mb-3">
           <h2 className="text-blue fs-1">Question:</h2>
-          <h2 className="text-gray fs-1">{pageData.question}</h2>
+          <h2 className="text-gray fs-1">
+            {pageData.question}
+            {pageData.hasImage && <img src={Resilience} alt="Resilience" />}?
+          </h2>
         </div>
         <MediumTextBox
-             handleChange={handleInputChange}
-             value={myAnswer}
+          handleChange={handleInputChange}
+          value={myAnswer}
         />
       </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}

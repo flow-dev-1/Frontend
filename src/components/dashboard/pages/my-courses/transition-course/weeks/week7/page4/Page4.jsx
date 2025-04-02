@@ -37,36 +37,54 @@ function WeekSevenPage4() {
   }, [userAnswers])
 
   const saveUserInput = () => {
-    if (currentStep === 1) return true;
-    if (adminDatas.isAdmin) return true
+    if (adminDatas.isAdmin) return true;
 
     const stepData = answers.find(item => item.stepId === currentStep);
-    if (!stepData) {
+
+    // Skip validation for step 5
+    if (currentStep === 5) {
+      dispatch(saveActivity({
+        page: pageData.id,
+        answer: answers
+      }));
+      return true;
+    }
+
+    if (!stepData || !stepData.value) {
       setErrorMessage("Oops! All inputs must be filled out.");
       return false;
     }
 
-    const values = Object.values(stepData.value);
-    if (values.length < 3) {
-      setErrorMessage("At least 3 values are required!");
-      return false;
-    }
+    const valuesArray = Object.values(stepData.value);
+    const emptyInputs = valuesArray.filter(value => !value || value?.trim() === "");
 
-    const emptyInputs = values.filter((value) => typeof value === "string" && value.trim() === "");
+    if (currentStep === 1 || currentStep=== 6) {
+      if (valuesArray.length < 5) {
+        setErrorMessage("At least 5 values are required!");
+        return false;
+      }
+    } else if (currentStep === 2) {
+      if (valuesArray.length < 3) {
+        setErrorMessage("At least 3 values are required!");
+        return false;
+      }
+    } else if (currentStep === 4) {
+      if (valuesArray.length < 6) {
+        setErrorMessage("At least 6 values are required!");
+        return false;
+      }
+    }
 
     if (emptyInputs.length > 0) {
       setErrorMessage(`Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`);
       return false;
     }
 
-    setErrorMessage(""); // Clear error if input is valid
-    
-    const activityData = {
+    setErrorMessage("");
+    dispatch(saveActivity({
       page: pageData.id,
       answer: answers
-    };
-    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
-
+    }));
     return true;
   };
 
@@ -82,67 +100,67 @@ function WeekSevenPage4() {
         return (
           <ListQuestionFrame
             data={{
-              id: step.stepId,
-              question:step.question,
-              numberOfInputs:step.numberOfInputs
+              stepId: step?.stepId,
+              question: step?.question,
+              numberOfInputs: step?.numberOfInputs
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
             setAnswers={setAnswers}
           />
         );
-        case "multiColoredQuestionBoxes":
-          return (
-            <ColoredSmallSquaredBoxFrame
-              data={{
-                step: step.stepId,
-                title: step.question,
-                info:step.fields,
-              }}
-              setErrorMessage={setErrorMessage}
-              answers={answers}
-              setAnswers={setAnswers}
-            />
-          );
-          case "multiMultiColoredQuestionBoxes":
-            return (
-              <MultiLineColoredSmallTextBox
-                data={{
-                  step: step.stepId,
-                  title: step.question,
-                  info:step.fields,
-                }}
-                setErrorMessage={setErrorMessage}
-                answers={answers}
-                setAnswers={setAnswers}
-              />
-            );
-          case "checkBoxesWithImageAndTitle":
-          return (
-            <ImageCheckBoxesFrame
-              data={{
-                step: step.stepId,
-                title: step.question,
-                info:step.options,
-              }}
-              setErrorMessage={setErrorMessage}
-              answers={answers}
-              setAnswers={setAnswers}
-            />
-          );
-          case "bigTextBox":
-          return (
-            <Frame
-              data={{
-                step: step.stepId,
-                title: step.question,
-                info:step,
-              }}
-              setErrorMessage={setErrorMessage}
-              answers={answers}
-              setAnswers={setAnswers}
-            />
-          );
+      case "multiColoredQuestionBoxes":
+        return (
+          <ColoredSmallSquaredBoxFrame
+            data={{
+              step: step.stepId,
+              title: step.question,
+              info: step.fields,
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        );
+      case "multiMultiColoredQuestionBoxes":
+        return (
+          <MultiLineColoredSmallTextBox
+            data={{
+              step: step.stepId,
+              title: step.question,
+              info: step.fields,
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        );
+      case "checkBoxesWithImageAndTitle":
+        return (
+          <ImageCheckBoxesFrame
+            data={{
+              step: step.stepId,
+              title: step.question,
+              info: step.options,
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        );
+      case "bigTextBox":
+        return (
+          <Frame
+            data={{
+              step: step.stepId,
+              title: step.question,
+              info: step,
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        );
 
       default:
         return <div>Unknown step type</div>;
@@ -152,7 +170,7 @@ function WeekSevenPage4() {
   return (
     <>
       {renderStep()}
-      {(currentStep !== 1 && errorMessage) && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
+      {errorMessage && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 ">
         <Button text="Prev" />

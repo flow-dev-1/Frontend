@@ -19,33 +19,32 @@ function Page2() {
   const [selectedOption, setSelectedOption] = useState(null);
 
   useEffect(() => {
-
-    if (!userAnswers) return
-    const response = userAnswers?.activities?.find(item => (item.page === pageData.id))
-    setMyAnswer(response?.answer ? response.answer : "")
-    return () => { }
-
-  }, [userAnswers])
+    if (!userAnswers) return;
+    const response = userAnswers?.activities?.find(item => (item.page === pageData.id));
+    const savedAnswer = response?.answer ? response.answer : "";
+    setMyAnswer(savedAnswer);
+    setSelectedOption(savedAnswer); // Also set the selected option
+  }, [userAnswers]);
 
   const handleOptionChange = (e) => {
-    setErrorMessage("")
-    setSelectedOption(e.target.value);
+    setErrorMessage("");
+    const value = e.target.value;
+    setSelectedOption(value);
+    setMyAnswer(value); // Set myAnswer when option changes
   };
 
   const saveUserInput = () => {
-    // if (!adminDatas.isAdmin && !myAnswer) {
-    //   setErrorMessage("Oops! Please enter a valid input!");
-    //   return false;
-    // }
+    if (!adminDatas.isAdmin && !selectedOption) {
+      setErrorMessage("Please select an option to continue!");
+      return false;
+    }
 
-    setErrorMessage(""); // Clear error if input is valid
-    // Allow flow admin to proceed without input but do not dispatch answer
-    // if (adminDatas.isAdmin) return true
+    setErrorMessage("");
     dispatch(saveActivity({
       page: pageData.id,
-      answer: myAnswer
-    }))
-    return true
+      answer: selectedOption
+    }));
+    return true;
   }
 
 

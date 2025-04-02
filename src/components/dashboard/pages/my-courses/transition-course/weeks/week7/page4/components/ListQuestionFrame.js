@@ -5,9 +5,14 @@ import QuestionBox from "../../../../components/QuestionBox";
 function ListQuestionFrame({ data, answers, setAnswers, setErrorMessage }) {
 
 
+  console.log(data,"Hereeeeeeeeeee")
+
   const { stepId, question, numberOfInputs } = data;
 
+  // console.log(stepId, question, numberOfInputs, "data")
+  
   const handleInputChange = (index, value) => {
+
     setErrorMessage("");
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];

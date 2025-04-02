@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { userAnswer, updateData } from "../../../../../../redux/reducers/userAnswersReducer";
 import { toast } from "react-toastify";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
+import user from "../../../../../../services/api/user";
 
 export default function PopUp() {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ export default function PopUp() {
   const adminDatas = useSelector(adminData);
 
   const handleEmojiClick = (value) => {
+
     if (adminDatas.isAdmin) return window.close();
     if (!userAnswers.course || !value) {
       toast.error("Something went wrong!")

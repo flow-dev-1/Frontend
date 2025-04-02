@@ -44,7 +44,7 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
           <h2 className="text-gray text-center">{q.question}</h2>
           <MediumTextBox
             value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
-            onChange={(e) => handleInputChange(index, e.target.value)}
+            handleChange={(e) => handleInputChange(index, e.target.value)}
           />
         </div>
       ))}

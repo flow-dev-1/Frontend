@@ -368,12 +368,12 @@ export const courseContent = {
         ],
         buckets: [
           {
-            id: "inner",
+            id: "green",
             label: "Inner Cycle",
             count: 2,
           },
           {
-            id: "outer",
+            id: "red",
             label: "Outer Cycle",
             count: 2,
           },
@@ -623,7 +623,7 @@ export const courseContent = {
           },
           {
             stepId: 2,
-            checklists: [
+            options: [
               {
                 value: "Kindness",
                 description: "Being friendly, generous, and considerate to others.",
@@ -700,7 +700,7 @@ export const courseContent = {
           },
           {
             stepId: 3,
-            checklists: [
+            options: [
               {
                 value: "Spirituality",
                 description: "Feeling connected to something bigger than yourself.",
@@ -803,14 +803,14 @@ export const courseContent = {
             answers: 3
           },
           {
-            stepId: 1,
+            stepId: 2,
             type: "threeFieldsAnswers",
             question:
               "Write out what these people think about you.",
             answers: 3
           },
           {
-            stepId: 1,
+            stepId: 3,
             type: "threeFieldsAnswers",
             question:
               "Are you happy with what these people think about you? If no, what would you like to change? If yes, type “YES” in the box.",
@@ -868,19 +868,12 @@ export const courseContent = {
         steps: [
           {
             stepId: 1,
-            type: "instruction",
-            title: "Scenario",
-            instructions:
-              "Jordan's friend was supposed to meet him at the library but canceled at the last minute. Jordan feels frustrated.",
-          },
-          {
-            stepId: 2,
             type: "scenario",
             title:
-              "Your friends made plans without you.",
+              "Jordan's friend was supposed to meet him at the library but canceled at the last minute. Jordan feels frustrated.",
             questions: [
               {
-                type: "smallText",
+                type: "smallSelect",
                 question: "Identify the Emotion:",
 
               },
@@ -896,13 +889,34 @@ export const courseContent = {
             ],
           },
           {
-            stepId: 3,
+            stepId: 2,
             type: "scenario",
             title:
               "Maria got her test results back and is disappointed because she didn’t score as high as she expected, even though she studied hard.",
             questions: [
               {
+                type: "smallSelect",
+                question: "Identify the Emotion:",
+              },
+              {
                 type: "smallText",
+                question: "Reason for the Emotion:",
+              },
+              {
+                type: "smallText",
+                question: "Respond with Emotional Intelligence:",
+              }
+
+            ],
+          }, {
+            stepId: 3,
+            type: "scenario",
+            title:
+              "Alex’s friend just got chosen as the team captain, a position Alex also wanted. Alex feels left out and a little jealous.",
+            questions: [
+              {
+                type: "smallSelect",
+                colorCode: null,
                 question: "Identify the Emotion:",
               },
               {
@@ -919,11 +933,10 @@ export const courseContent = {
             stepId: 4,
             type: "scenario",
             title:
-              "Alex’s friend just got chosen as the team captain, a position Alex also wanted. Alex feels left out and a little jealous.",
+              "During group work, Mia notices that one team member, Sam, seems quiet and withdrawn. Mia suspects he might be feeling stressed..",
             questions: [
               {
-                type: "smallText",
-                colorCode: null,
+                type: "smallSelect",
                 question: "Identify the Emotion:",
               },
               {
@@ -940,38 +953,18 @@ export const courseContent = {
             stepId: 5,
             type: "scenario",
             title:
-              "During group work, Mia notices that one team member, Sam, seems quiet and withdrawn. Mia suspects he might be feeling stressed..",
-            questions: [
-              {
-                type: "",
-                question: "Identify the Emotion:",
-              },
-              {
-                type: "",
-                question: "Reason for the Emotion:",
-              },
-              {
-                type: "",
-                question: "Respond with Emotional Intelligence:",
-              }
-
-            ],
-          }, {
-            stepId: 6,
-            type: "scenario",
-            title:
               "Jamie helped organize a big event, but nobody thanked him for his hard work. Jamie feels unappreciated.",
             questions: [
               {
-                type: "",
+                type: "smallSelect",
                 question: "Identify the Emotion:",
               },
               {
-                type: "",
+                type: "smallText",
                 question: "Reason for the Emotion:",
               },
               {
-                type: "",
+                type: "smallText",
                 question: "Respond with Emotional Intelligence:",
               }
 
@@ -1106,12 +1099,12 @@ export const courseContent = {
         ],
         buckets: [
           {
-            id: "inner",
+            id: "green",
             label: "Effective communication",
             count: 2,
           },
           {
-            id: "outer",
+            id: "red",
             label: "Clear Boundaries",
             count: 2,
           },
@@ -1132,8 +1125,9 @@ export const courseContent = {
             title: "Instruction",
             instructions: [
               "Below are sentences with missing words related to communication and boundaries. Choose the best word from the list below to complete each sentence.",
-              "Missing words are: Respect, Clarity, Comfort, Listen, Express"
-            ]
+              "Missing words are: "
+            ],
+            options: "Respect, Clarity, Comfort, Listen, Express"
           },
 
           {
@@ -1539,7 +1533,7 @@ export const courseContent = {
               { type: "Question", question: "Write down your Wishing Star here." }],
           },
           {
-            stepId: 3,
+            stepId: 4,
             type: "smart",
             question: "Write down your Wishing Star here.",
             answers: 5,
@@ -1680,14 +1674,14 @@ export const courseContent = {
             steps: 9,
             buckets: [
               {
-                id: "inner",
+                id: "green",
                 title: "Healthy Skills",
               },
               {
-                id: "outer",
+                id: "red",
                 title: "Unhealthy Skills",
               }
-        
+
             ],
             images: [
               "Write",
@@ -1727,7 +1721,7 @@ export const courseContent = {
       },
       {
         id: 2,
-        type: "muiltiStep",
+        type: "multiStep",
         steps: [
           {
             stepId: 1,

@@ -13,13 +13,14 @@ function Page2() {
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
   const userAnswers = useSelector(userAnswer);
-  const [myAnswer, setMyAnswer] = useState(userAnswers)
+  const [myAnswer, setMyAnswer] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
 
     if (!userAnswers) return
     const response = userAnswers?.activities?.find(item => (item.page === pageData.id))
+
     setMyAnswer(response?.answer ? response.answer : 0)
     return () => { }
 
@@ -27,10 +28,11 @@ function Page2() {
 
 
   const saveUserInput = () => {
-    // if (!adminDatas.isAdmin && !myAnswer) {
-    //   setErrorMessage("Oops! Please enter a valid input!");
-    //   return false;
-    // }
+    
+    if (!adminDatas.isAdmin && (!myAnswer || myAnswer === '0' || myAnswer === 0)) {
+      setErrorMessage("Oops! Please select a valid input!");
+      return false;
+    }
 
     setErrorMessage(""); // Clear error if input is valid
     // Allow flow admin to proceed without input but do not dispatch answer
@@ -57,7 +59,7 @@ function Page2() {
             {pageData.question}{" "}
           </h2>
         </div>
-        <ProgressBar handleChange={handleInputChange} value={myAnswer} />
+        <ProgressBar handleChange={handleInputChange} value={myAnswer}/>
       </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4">

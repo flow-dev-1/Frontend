@@ -48,7 +48,7 @@ function SingleWhiteStarFrame({ data, answers, setAnswers, setErrorMessage }) {
             <div className="d-flex justify-content-center">
               <WhiteStarSmallTextBox
                 value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
-                onChange={(e) => handleInputChange(index, e.target.value)}
+                handleChange={(e) => handleInputChange(index, e.target.value)}
               />
             </div>
           </div>

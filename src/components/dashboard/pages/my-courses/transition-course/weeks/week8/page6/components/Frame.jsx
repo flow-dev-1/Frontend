@@ -49,7 +49,7 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
               key={index}
               color={textBoxConfig.color}
               value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
-              onChange={(e) => handleInputChange(index, e.target.value)}
+              handleChange={(e) => handleInputChange(index, e.target.value)}
             />
           ))}
         </div>

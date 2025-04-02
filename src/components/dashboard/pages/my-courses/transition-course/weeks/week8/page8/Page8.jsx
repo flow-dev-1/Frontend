@@ -105,29 +105,33 @@ function WeekEightAssessment() {
         return false;
       }
 
-      const selectedActivity = userAnswers.activities.find(activity => activity.page === 6);
-      const isValidActivity = selectedActivity && Array.isArray(selectedActivity.answer) && selectedActivity.answer.length === 5;
+      const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
 
-      if (isValidActivity) {
-        const isValid = selectedActivity.answer.every(item =>
-          item.stepId !== undefined &&
-          item.value &&
-          Object.keys(item.value).length === 3
-        );
+      mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
 
-        if (isValid) {
-          const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
+      // const selectedActivity = userAnswers.activities.find(activity => activity.page === 6);
+      // const isValidActivity = selectedActivity && Array.isArray(selectedActivity.answer) && selectedActivity.answer.length === 5;
 
-          mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
-        } else {
+      // if (isValidActivity) {
+      //   const isValid = selectedActivity.answer.every(item =>
+      //     item.stepId !== undefined &&
+      //     item.value &&
+      //     Object.keys(item.value).length === 3
+      //   );
 
-          setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-          return false;
-        }
-      } else {
-        setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-        return false;
-      }
+      //   if (isValid) {
+      //     const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
+
+      //     mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
+      //   } else {
+
+      //     setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+      //     return false;
+      //   }
+      // } else {
+      //   setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+      //   return false;
+      // }
 
 
     } else {

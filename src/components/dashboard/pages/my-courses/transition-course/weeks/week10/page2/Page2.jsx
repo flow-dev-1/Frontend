@@ -32,21 +32,15 @@ function WeekTenPage2() {
   }, [userAnswers])
 
   const saveUserInput = () => {
-    if (currentStep === 1) return true;
     if (adminDatas.isAdmin) return true
 
     const stepData = answers.find(item => item.stepId === currentStep);
     if (!stepData) {
-      setErrorMessage("Oops! All inputs must be filled out.");
+      setErrorMessage("Oops! Please enter a valid input.")
       return false;
     }
 
     const values = Object.values(stepData.value);
-    if (values.length < 3) {
-      setErrorMessage("At least 3 values are required!");
-      return false;
-    }
-
     const emptyInputs = values.filter((value) => value.trim() === "");
     if (emptyInputs.length > 0) {
       setErrorMessage(`Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`);
@@ -109,7 +103,7 @@ function WeekTenPage2() {
   return (
     <>
       {renderStep()}
-      {(currentStep !== 1 && errorMessage) && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
+      {errorMessage && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 ">
         <Button text="Prev" />

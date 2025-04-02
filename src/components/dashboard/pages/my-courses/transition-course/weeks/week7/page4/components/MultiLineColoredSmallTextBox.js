@@ -6,6 +6,10 @@ function MultiLineColoredSmallTextBox({ data, answers, setAnswers, setErrorMessa
   const { step, title, info } = data;
 
   const handleInputChange = (index, value) => {
+
+    console.log(
+      "Yeahhhhhhhhh"
+    )
     setErrorMessage("");
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];

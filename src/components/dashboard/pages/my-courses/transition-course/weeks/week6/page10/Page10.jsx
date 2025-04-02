@@ -30,9 +30,9 @@ function WeekTwoPage4() {
     red: [],
   });
 
-  useEffect(() => {
-    setShowCurrentImage(true);
-  }, [currentStep])
+  // useEffect(() => {
+  //   setShowCurrentImage(true);
+  // }, [currentStep])
 
   useEffect(() => {
 
@@ -226,7 +226,7 @@ function WeekTwoPage4() {
                     >
                       <h2
                         className={
-                          bucket.id === "inner"
+                          bucket.id === "green"
                             ? "inner-count"
                             : "both-count"
                         }
@@ -235,9 +235,9 @@ function WeekTwoPage4() {
                       </h2>
                       <div
                         className={
-                          bucket.id === "inner"
-                            ? "inner-bucket"
-                            : "both-bucket"
+                          bucket.id === "green"
+                          ? "inner-bucket"
+                          : "both-bucket" 
                         }
                       >
                         {bucket.label}

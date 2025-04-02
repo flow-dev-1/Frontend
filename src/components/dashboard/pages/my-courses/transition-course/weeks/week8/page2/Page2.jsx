@@ -24,6 +24,7 @@ function WeekEightPage2() {
     if (!userAnswers) return
     const response = userAnswers?.activities?.find(item => (item.page === pageData.id))
     setMyAnswer(response?.answer ? response.answer : "")
+    setSelectedOption(response?.answer ? response.answer : "")  
     return () => { }
 
   }, [userAnswers])
@@ -34,20 +35,20 @@ function WeekEightPage2() {
   };
 
   const saveUserInput = () => {
-    // if (!adminDatas.isAdmin && !myAnswer) {
-    //   setErrorMessage("Oops! Please enter a valid input!");
-    //   return false;
-    // }
+    if (adminDatas.isAdmin) return true;
+    
+    if (!selectedOption) {
+      setErrorMessage("Please select an option to continue!");
+      return false;
+    }
 
-    setErrorMessage(""); // Clear error if input is valid
-    // Allow flow admin to proceed without input but do not dispatch answer
-    // if (adminDatas.isAdmin) return true
+    setErrorMessage("");
     dispatch(saveActivity({
       page: pageData.id,
-      answer: myAnswer
-    }))
-    return true
-  }
+      answer: selectedOption
+    }));
+    return true;
+  };
 
 
   return (

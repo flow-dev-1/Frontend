@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import QuestionBox from "../../../../components/QuestionBox";
 import SmallTextBox from "../../../../components/SmallTextBox";
+import SmallSelectBox from "../../../../components/SmallSelectBox";
 
 function Frame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, title, questions } = data;
+
+  console.log(questions, "questions");
 
   const handleInputChange = (index, value) => {
     setErrorMessage("");
@@ -34,17 +37,23 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
 
   return (
     <QuestionBox>
-      <h2 className="text-blue text-center fs-1">Situation: {title}</h2>
+      <h2 className="text-gray text-center fs-1"><joe className="text-blue ">Situation {step}:</joe> {title}</h2>
 
       {questions.map((q, index) => (
         <div key={index} className="mb-2">
-           <>
-              <h2 className="text-gray">{q.question}</h2>
-              <SmallTextBox
+          <>
+            <h2 className="text-gray">{q.question}</h2>
+            {
+              q?.type === "smallSelect" ? (<SmallSelectBox
                 value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
                 onChange={(e) => handleInputChange(index, e.target.value)}
-              />
-            </>
+              />) : (<SmallTextBox
+                value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
+                onChange={(e) => handleInputChange(index, e.target.value)}
+              />)
+            }
+
+          </>
         </div>
       ))}
     </QuestionBox>

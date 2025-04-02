@@ -4,7 +4,6 @@ import QuestionBox from "../../../../components/QuestionBox";
 
 function ListQuestionFrame({ data, answers, setAnswers, setErrorMessage }) {
 
-
   const { stepId, question, numberOfInputs } = data;
 
   const handleInputChange = (index, value) => {

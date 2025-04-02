@@ -82,7 +82,7 @@ function WeekSixPage11() {
             </div>
             <div className="d-flex gap-2">
               <h2 className="text-blue fs-1">Instructions: </h2>
-              <h2 className="text-gray fs-1">{step.instructions}</h2>
+              <h2 className="text-gray fs-1">{step.instructions}<joe className="text-blue">{step.options}</joe></h2>
             </div>
           </QuestionBox>
         );

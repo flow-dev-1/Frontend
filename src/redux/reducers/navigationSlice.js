@@ -77,7 +77,10 @@ const navigationSlice = createSlice({
         const isLastQuestion = state.currentStep === totalQuestions;
 
         if (isLastQuestion) {
-          if (state.currentWeek === 5) {
+
+          if(state.currentCourse === 'transition' && state.currentWeek === 10) {
+            state.showReview = true;
+          }else if (state.currentCourse !== 'transition' && state.currentWeek === 5) {
             state.showReview = true;
           } else {
             state.showHurray = true;
