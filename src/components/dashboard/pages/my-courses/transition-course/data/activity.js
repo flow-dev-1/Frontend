@@ -1125,7 +1125,7 @@ export const courseContent = {
             title: "Instruction",
             instructions: [
               "Below are sentences with missing words related to communication and boundaries. Choose the best word from the list below to complete each sentence.",
-              "Missing words are: "
+              "\n Missing words are: "
             ],
             options: "Respect, Clarity, Comfort, Listen, Express"
           },
