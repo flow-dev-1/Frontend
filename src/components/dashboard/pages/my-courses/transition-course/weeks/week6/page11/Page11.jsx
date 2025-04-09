@@ -80,10 +80,9 @@ function WeekSixPage11() {
                 {step.title}
               </h2>
             </div>
-            <div className="d-flex gap-2">
-              <h2 className="text-blue fs-1">Instructions: </h2>
-              <h2 className="text-gray fs-1">{step.instructions}<joe className="text-blue">{step.options}</joe></h2>
-            </div>
+              <h2 className="text-gray fs-1">{step.instructions[0]}</h2>
+              <h2 className="text-gray mt-5 fs-1">{step.instructions[1]} <joe className="text-blue">{step.options}</joe></h2>
+            
           </QuestionBox>
         );
       case "dropdownScenario":

@@ -36,40 +36,54 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
 
   return (
     <QuestionBox>
-      <h2 className="text-blue text-center fs-1">Situation: {title}</h2>
-
+  <h2 className="text-blue text-center fs-1">Situation: {title}</h2>
+  
+  {/* For circle and square components, use a horizontal row */}
+  {questions.some(q => q.type === "circle" || q.type === "square") && (
+    <div className="d-flex flex-row justify-content-around mb-3">
       {questions.map((q, index) => (
-        <div key={index} className="mb-2">
-          {q.type === "smallText" ? (
-            <>
-              <h2 className="text-gray">{q.question}</h2>
-              <SmallTextBox
-                value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
-                onChange={(e) => handleInputChange(index, e.target.value)}
-              />
-            </>
-          ) : q.type === "circle" ? (
-            <div className="d-flex flex-column align-items-center">
+        (q.type === "circle" || q.type === "square") && (
+          <div key={index} className="d-flex flex-column align-items-center">
+            {q.type === "circle" ? (
               <ColoredSmallCircledTextBox
                 color={q.colorCode}
                 value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
                 onChange={(e) => handleInputChange(index, e.target.value)}
               />
-              <h2 className="text-gray">{q.question}</h2>
-            </div>
-          ) : q.type === "square" ? (
-            <div className="d-flex flex-column align-items-center">
-              <ColoredSmallSquaredTextBox
+            ) : (
+            <div className="pt-5">
+                <ColoredSmallSquaredTextBox
                 color={q.colorCode}
+                className="p-2"
                 value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
                 onChange={(e) => handleInputChange(index, e.target.value)}
               />
-              <h2 className="text-gray">{q.question}</h2>
             </div>
-          ) : null}
-        </div>
+            )}
+            <h2 className="text-gray">{q.question}</h2>
+          </div>
+        )
       ))}
-    </QuestionBox>
+    </div>
+  )}
+  
+  {/* For other components like smallText, use a column layout */}
+  {questions.map((q, index) => (
+    q.type !== "circle" && q.type !== "square" && (
+      <div key={index} className="mb-2">
+        {q.type === "smallText" && (
+          <>
+            <h2 className="text-gray">{q.question}</h2>
+            <SmallTextBox
+              value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
+              onChange={(e) => handleInputChange(index, e.target.value)}
+            />
+          </>
+        )}
+      </div>
+    )
+  ))}
+</QuestionBox>
   );
 }
 

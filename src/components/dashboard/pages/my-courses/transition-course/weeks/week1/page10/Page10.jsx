@@ -50,7 +50,7 @@ function Page10() {
 
   return (
     <>
-      <QuestionBox>
+      <QuestionBox className="">
         <div className="d-flex gap-3 ms-5 align-center-lg-custom">
           <h2 className="text-blue font-lg">Question: </h2>
           <h2 className="text-gray font-lg">
