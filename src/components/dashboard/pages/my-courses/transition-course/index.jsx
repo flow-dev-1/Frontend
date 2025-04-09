@@ -131,6 +131,9 @@ import {
 } from "../../../../../redux/reducers/userAnswersReducer.js";
 import { adminData } from "../../../../../redux/reducers/adminReducer.js";
 
+import { setCourse } from '../../../../../redux/reducers/navigationSlice.js';
+
+
 const WeekContent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
@@ -457,6 +460,8 @@ const CourseContent = () => {
   const { isAdmin } = useSelector(adminData);
   const currentWeek = useSelector(selectCurrentWeek);
   const navigate = useNavigate()
+  const location = useLocation();
+  const dispatch = useDispatch();
 
   const weeksTopic = [
     "Introduction To Transition. Also Talk About ‘Your Why’",
@@ -470,6 +475,16 @@ const CourseContent = () => {
     "Resilience And Introduction To Coping Skills",
     "Looking Ahead",
   ];
+
+
+  useEffect(() => {
+    const segments = location.pathname.split('/').filter(Boolean);
+    const lastSegment = segments[segments.length - 1];
+    
+    if (['compassion', 'transition'].includes(lastSegment?.toLowerCase())) {
+      dispatch(setCourse(lastSegment.toLowerCase()));
+    }
+  }, [location.pathname, dispatch]);
 
   return (
     <>
