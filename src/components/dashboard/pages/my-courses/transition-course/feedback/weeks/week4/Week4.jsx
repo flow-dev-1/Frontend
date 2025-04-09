@@ -7,7 +7,7 @@ import wrong from "../../../../../../../../assets/wrong.png";
 import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
-} from "../../../../compassion-course/weeks/data";
+} from "../../../../transition-course/data/index.js";
 import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
 import adminService from "../../../../../../../../services/api/admin.js";
@@ -26,6 +26,12 @@ function Week4({ enrollmentId, setWeekFourData }) {
   const [activityFeedbackId, setActivityFeedbackId] = useState(null);
   const [assessmentData, setAssessmentData] = useState([]);
   const { isAdmin, code } = useSelector(adminData);
+
+  const [Q1, Q2, Q3] = activity2.steps;
+  const [A1, A2, A3] = activityData?.[1]?.answer?.map(a => a.value) || [];
+
+  const [q1, q2, q3] = activity3.steps;
+  const [a1, a2, a3] = activityData?.[2]?.answer?.map(a => a.value) || [];
 
   const { questions: assessments } = getWeekAssessment(4);
   // toDo: Fetch User assessment and Activity Data
@@ -61,7 +67,7 @@ function Week4({ enrollmentId, setWeekFourData }) {
     setAssessmentData(data.assessment?.assessments);
     setWeekFourData(true);
 
-    return () => {};
+    return () => { };
   }, [data]);
 
   const handleModalOpen = () => {
@@ -80,34 +86,11 @@ function Week4({ enrollmentId, setWeekFourData }) {
   }
 
   function getActivityFeedback(activityId) {
-      return activityData?.find((activity) => activity.page === activityId)
-        ?.feedback;
+    return activityData?.find((activity) => activity.page === activityId)
+      ?.feedback;
 
   }
 
-  function drag1(type) {
-    if (!activityData || !activityData[1] || !activityData[1].answer) return [];
-
-    const indices =
-      type === "inner"
-        ? activityData[1].answer.inner
-        : activityData[1].answer.outer;
-    return indices?.map((index) => activity2?.options[index]) || [];
-  }
-
-  function drag2(type) {
-    if (!activityData || !activityData[2] || !activityData[2].answer) return [];
-
-    const indices =
-      type === "green"
-        ? activityData[2].answer.green
-        : type === "orange"
-        ? activityData[2].answer.orange
-        : type === "red"
-        ? activityData[2].answer.red
-        : [];
-    return indices?.map((index) => activity3?.images[index]) || [];
-  }
 
   if (isPending) {
     return <div>Loading...</div>;
@@ -120,30 +103,133 @@ function Week4({ enrollmentId, setWeekFourData }) {
   const score =
     calculateResult(assessments, assessmentData, assessments?.length) || 0;
 
-    const submitFeedback = (value) => {
-      // console.log(value, "value")
-      // console.log(activityData, "Activity Data")
-      // console.log(activityFeedbackId, "Activity feedback Id")
-      if (!activityFeedbackId?.itemId) {
-        const answerData = activityData.find(item => item.page === activityFeedbackId.activityId)
-        answerData.feedback = value
-        handleModalClose()
-        mutation.mutate()
-      } else {
-  
-        const answerData = activityData.find(item => item.page === activityFeedbackId.activityId);
-  
-        const feedbackData = answerData?.answer?.find(item => item.stepId === activityFeedbackId.itemId);
-        if (!feedbackData.feedback) {
-          feedbackData.feedback = {};
-        }
-        feedbackData.feedback[activityFeedbackId.index] = value; // Set feedback entry with key as index
-  
-        handleModalClose()
-        mutation.mutate()
-        // mutation.mutate({ /* pass necessary data */ });
+  const submitFeedback = (value) => {
+    // console.log(value, "value")
+    // console.log(activityData, "Activity Data")
+    // console.log(activityFeedbackId, "Activity feedback Id")
+    if (!activityFeedbackId?.itemId) {
+      const answerData = activityData.find(item => item.page === activityFeedbackId.activityId)
+      answerData.feedback = value
+      handleModalClose()
+      mutation.mutate()
+    } else {
+
+      const answerData = activityData.find(item => item.page === activityFeedbackId.activityId);
+
+      const feedbackData = answerData?.answer?.find(item => item.stepId === activityFeedbackId.itemId);
+      if (!feedbackData.feedback) {
+        feedbackData.feedback = {};
       }
+      feedbackData.feedback[activityFeedbackId.index] = value; // Set feedback entry with key as index
+
+      handleModalClose()
+      mutation.mutate()
+      // mutation.mutate({ /* pass necessary data */ });
     }
+  }
+
+  function renderActivity2() {
+    const renderAnswers = (question, answer) => {
+      if (!answer) return null;
+
+      const selectedIndices = Object.entries(answer)
+        .filter(([_, value]) => value === true)
+        .map(([index]) => parseInt(index));
+
+      const selectedValues = question
+        .filter((_, index) => selectedIndices.includes(index))
+        .map(item => item.value);
+
+      return selectedValues.join(", ");
+    };
+
+    return (
+      <>
+        <div className="d-flex gap-3">
+          <h2 className="text-blue fs-1">Questions:</h2>
+          <p className="text-blue fs-4">{activity2?.instruction}</p>
+        </div>
+
+        <div className="d-flex gap-3">
+          <h2 className="text-gray fs-1 text-gray">Answer:</h2>
+          <ul className="list-unstyled">
+            {[[Q1, A1], [Q2, A2], [Q3, A3]].map(([question, answer], index) => (
+              <li key={index} className="mb-4">
+                <div className="d-flex align-items-start gap-3">
+                  <span className="fs-4">•</span>
+                  <div className="d-flex gap-3 flex-grow-1">
+                    <p className="text-blue fs-4 mb-0">{question.question}</p>
+                    <p className="text-gray fs-4 mb-0">
+                      {renderAnswers(question.options, answer)}
+                    </p>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </>
+
+    );
+  }
+
+  function renderActivity3() {
+    const questions = [q1, q2, q3];
+    const answers = [a1, a2, a3];
+
+    return questions.map((question, index) => (
+      <>
+        <div className="d-flex gap-3">
+          <h2 className="text-blue fs-1">Questions:</h2>
+          <p className="text-blue fs-4">{question.question}</p>
+        </div>
+
+        <div className="d-flex gap-3">
+          <h2 className="text-gray fs-1 text-gray">Answer:</h2>
+          <ul className="list-unstyled">
+            {Object.values(answers[index] || {}).map((value, idx) => (
+              <li key={idx} className="fs-5">
+                {idx + 1}. {value}
+              </li>
+            ))}
+          </ul>
+
+          {(isAdmin && !activityData?.find((activity) => activity.page === activity3.id)?.feedback) &&
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity3.id, itemId: index + 1 })
+                handleModalOpen()
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          }
+        </div>
+
+        {activityData?.find((activity) => activity.page === activity3.id)?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>
+            <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+              {getActivityFeedback(activity3.id, index + 1)}
+            </p>
+            {isAdmin &&
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity3.id))
+                  setActivityFeedbackId({ activityId: activity3.id, itemId: index + 1 })
+                  handleModalOpen()
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            }
+          </div>
+        )}
+      </>
+    ));
+  }
 
   return (
     <>
@@ -154,7 +240,7 @@ function Week4({ enrollmentId, setWeekFourData }) {
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{activity1.question}</p>
+        <p className="text-blue fs-4">{activity1.question} "Values"?</p>
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
@@ -205,77 +291,7 @@ function Week4({ enrollmentId, setWeekFourData }) {
         Activity 2
       </p>
       <hr />
-      <div className="d-flex gap-3">
-        <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{activity2.instruction}</p>
-      </div>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <div className="flex-grow-1 d-flex">
-          <div className="flex-grow-1">
-            <h2 className="text-center bg-green text-white py-3 fs-1">
-              Innner Circle
-            </h2>
-            <div className="px-5 py-3">
-              {drag1("inner")?.map((item, idx) => (
-                <p className="fs-4">
-                  {idx + 1}. {item}
-                </p>
-              ))}
-            </div>
-          </div>
-          <div className="flex-grow-1">
-            <h2 className="bg-orange text-center text-white py-3 fs-1">
-              Outer Circle
-            </h2>
-            <div className="px-5 py-3">
-              {drag1("outer")?.map((item, idx) => (
-                <p className="fs-4">
-                  {idx + 1}. {item}
-                </p>
-              ))}
-            </div>
-          </div>
-        </div>
-        {
-          (isAdmin && !activityData?.find((activity) => activity.page === activity2.id)?.feedback) && <Icon
-            onClick={() => {
-              setActivityFeedbackId({ activityId: activity2.id })
-              handleModalOpen()
-            }}
-            style={{ color: "#D6D6D6" }}
-            width={35}
-            icon="tabler:message-2"
-          />
-        }
-      </div>
-      {
-        // Show this only id theres a feedback
-        (activityData?.find((activity) => activity.page === activity2.id)
-          ?.feedback) && (
-          <div className="d-flex gap-3">
-            <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-              Feedback
-            </p>
-            <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-              {getActivityFeedback(activity2.id)}
-            </p>
-            {
-              isAdmin && <Icon
-                onClick={() => {
-                  setModalData(getActivityFeedback(activity2.id))
-                  setActivityFeedbackId({ activityId: activity2.id })
-                  handleModalOpen()
-                }}
-                style={{ color: "#275DAD" }}
-                width={35}
-                icon="lucide:edit"
-              />
-            }
-
-          </div>
-        )
-      }
+      {renderActivity2()}
       <hr />
 
       {/* Activity 3 */}
@@ -283,90 +299,10 @@ function Week4({ enrollmentId, setWeekFourData }) {
         Activity 3
       </p>
       <hr />
-      <div className="d-flex gap-3">
-        <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{activity3.instruction}</p>
-      </div>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <div className="flex-grow-1 d-flex">
-          <div className="flex-grow-1">
-            <h2 className="text-center bg-green text-white py-3 fs-1">
-              Innner Circle
-            </h2>
-            <div className="py-3">
-              {drag2("green")?.map((item, idx) => (
-                <p className="fs-4">
-                  {idx + 1}. {item}
-                </p>
-              ))}
-            </div>
-          </div>
-          <div className="flex-grow-1">
-            <h2 className="text-center bg-red text-white py-3 fs-1">Both</h2>
-            <div className="py-3">
-              {drag2("orange")?.map((item, idx) => (
-                <p className="fs-4">
-                  {idx + 1}. {item}
-                </p>
-              ))}
-            </div>
-          </div>
-          <div className="flex-grow-1">
-            <h2 className="bg-orange text-center text-white py-3 fs-1">
-              Outer Circle
-            </h2>
-            <div className="py-3">
-              {drag2("red")?.map((item, idx) => (
-                <p className="fs-4">
-                  {idx + 1}. {item}
-                </p>
-              ))}
-            </div>
-          </div>
-        </div>
-        {
-          (isAdmin && !activityData?.find((activity) => activity.page === activity3.id)?.feedback) && <Icon
-            onClick={() => {
-              setActivityFeedbackId({ activityId: activity3.id })
-              handleModalOpen()
-            }}
-            style={{ color: "#D6D6D6" }}
-            width={35}
-            icon="tabler:message-2"
-          />
-        }
-      </div>
-      {
-        // Show this only id theres a feedback
-        (activityData?.find((activity) => activity.page === activity3.id)
-          ?.feedback) && (
-          <div className="d-flex gap-3">
-            <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-              Feedback
-            </p>
-            <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-              {getActivityFeedback(activity3.id)}
-            </p>
-            {
-              isAdmin && <Icon
-                onClick={() => {
-                  setModalData(getActivityFeedback(activity3.id))
-                  setActivityFeedbackId({ activityId: activity3.id })
-                  handleModalOpen()
-                }}
-                style={{ color: "#275DAD" }}
-                width={35}
-                icon="lucide:edit"
-              />
-            }
-
-          </div>
-        )
-      }
-      <hr />
+      {renderActivity3()}
 
       <hr />
+
       {/* Assesment 1 */}
       <p className="bg-yellow py-3 px-5 text-gray d-inline-block rounded-5 fs-4">
         Assessment 1
@@ -423,19 +359,21 @@ function Week4({ enrollmentId, setWeekFourData }) {
       <div className="bg-button p-5 rounded-4">
         <h2 className="text-white fs-1">Weekly Report</h2>
         <div className="d-flex gap-4">
-          <h2 className="text-gray fs-1 ratio-1x1 bg-aqua rounded-4 p-5 d-flex justify-content-center align-items-center border border-6 border-blue">
+          <h2 className="text-gray fs-1 ratio-1x1 bg-aqua rounded-4 p-5 d-flex justify-content-center border border-6 border-blue">
             {score}%
           </h2>
           <p className="text-white">
-            {score < 41
-              ? "It seems like you need more time to fully understand the Circle of Concern and the difference between showing compassion to your inner and outer circles. Review the concept and think about how to apply it in your daily life."
-              : score < 61
-              ? "Good effort! You have a general idea of the Circle of Concern, but there’s room for improvement in recognizing how to show compassion appropriately to different groups."
-              : score < 100
-              ? "Great job! You mostly understand the Circle of Concern, though you could benefit from thinking more about the boundaries between your inner and outer circles."
-              : score === 100
-              ? "Excellent understanding! You clearly grasp the idea of the Circle of Concern and how to interact with people in your inner and outer circles with compassion and respect."
-              : ""}
+            {score < 40
+              ? "Well done on starting your journey toward a smooth transition into secondary school! You’ve made an effort to understand important ideas like understanding your “why,” identifying what’s in your control, and the importance of values. There’s still room to deepen your understanding and practice what you’ve learned. Focus on building small habits, like managing your time more effectively or thinking about how a growth mindset can help you face challenges. Remember, every step you take brings you closer to feeling confident and ready for this new chapter. Keep trying—you’re capable of great things! Also, I recommend you take the course again from the beginning, as this will help you get more familiar with the concepts."
+              : score < 60
+                ? "Good job! You’ve made solid progress and shown a great understanding of how to transition into secondary school successfully. To build on this, try putting what you’ve learned into action more consistently. Practice navigating relationships with friends and family, and reflect on how your core values can guide your decisions. With steady effort, you’ll become even more prepared for this exciting new stage. Keep going—you’re on the right track!"
+                : score < 80
+                  ? "Great work! You’ve proven to have gained a good understanding of the key concepts that will help you navigate the exciting transition from primary to secondary school. You can start applying ideas like cultivating a growth mindset, focusing on what’s within your control, and understanding your core values. To build on this progress, try practicing these lessons in your daily life—whether it’s managing your time, setting goals, or building meaningful relationships. With consistent effort, you’ll feel more confident and ready to take on this new chapter. Keep it up—you’re doing well!"
+                  : score < 95
+                    ? "Excellent job! You’ve shown a strong grasp of the skills and mindset needed to transition smoothly into secondary school. Remember it’s highly important to keep applying what you’ve learned about time management, goal setting, and resilience in every way you can. To continue growing, focus on using these tools to face new challenges and opportunities everyday. Your hard work is paying off, and you’re well on your way to thriving in secondary school. Keep up the fantastic progress!"
+                    : score < 100
+                      ? "Outstanding achievement! You’ve shown mastery and a deep understanding of the skills and mindset to navigate your transition into secondary school with confidence and purpose. Your understanding of growth and fixed mindsets, time management, and resilience is exceptional, and you’ve shown you can apply these concepts to real-life situations. You’re not only ready for this new stage but also equipped to make the most of it. Keep inspiring others with your example, and continue using these tools to grow and succeed in every area of your life. Well done—you’re ready to shine in secondary school!"
+                      : ""}
           </p>
         </div>
         <Modal

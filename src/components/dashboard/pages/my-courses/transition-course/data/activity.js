@@ -235,7 +235,7 @@ export const courseContent = {
         id: 2,
         type: "question",
         questionType: "text",
-        question: "What do you understand by the",
+        question: "What do you understand by the word",
         hasImage: true,
         imageSrc: "mindset.png",
         inputType: "bigTextBox",
