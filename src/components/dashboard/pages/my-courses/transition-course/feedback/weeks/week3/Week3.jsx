@@ -260,7 +260,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         <div className="flex-grow-1 d-flex">
           <div className="flex-grow-1">
             <h2 className="text-center bg-green text-white py-3 fs-1">
-              Inner Cycle
+              Inner Circle
             </h2>
             <div className="px-5 py-3">
               {drag1("growth")?.map((item, idx) => (
@@ -272,7 +272,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           </div>
           <div className="flex-grow-1">
             <h2 className="bg-orange text-center text-white py-3 fs-1">
-              Outer Cycle
+              Outer Circle
             </h2>
             <div className="px-5 py-3">
               {drag1("fixed")?.map((item, idx) => (
