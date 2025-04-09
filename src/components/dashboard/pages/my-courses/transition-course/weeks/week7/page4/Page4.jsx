@@ -40,19 +40,21 @@ function WeekSevenPage4() {
     if (adminDatas.isAdmin) return true;
 
     const stepData = answers.find(item => item.stepId === currentStep);
+    console.log(stepData, "stepData")
 
-    // Skip validation for step 5
-    if (currentStep === 5) {
+    if (!stepData || !stepData.value) {
+      setErrorMessage("Oops! All inputs must be filled out.");
+      return false;
+    }
+
+
+
+    if (currentStep === 3 || currentStep === 5) {
       dispatch(saveActivity({
         page: pageData.id,
         answer: answers
       }));
       return true;
-    }
-
-    if (!stepData || !stepData.value) {
-      setErrorMessage("Oops! All inputs must be filled out.");
-      return false;
     }
 
     const valuesArray = Object.values(stepData.value);
@@ -64,11 +66,13 @@ function WeekSevenPage4() {
         return false;
       }
     } else if (currentStep === 2) {
+
       if (valuesArray.length < 3) {
         setErrorMessage("At least 3 values are required!");
         return false;
       }
     } else if (currentStep === 4) {
+
       if (valuesArray.length < 6) {
         setErrorMessage("At least 6 values are required!");
         return false;

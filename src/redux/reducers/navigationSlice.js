@@ -17,10 +17,18 @@ const courseData = {
 };
 
 const getCourseFromURL = () => {
-  const location = useLocation();
-  const segments = location.pathname.split('/').filter(Boolean);
+  // Add timeout to wait for route initialization
+  const path = window?.location?.pathname || '/';
+  
+  // Handle initial / case
+  if (path === '/') {
+    return 'compassion'; // default course
+  }
+
+  const segments = path.split('/').filter(Boolean);
   const lastSegment = segments[segments.length - 1];
   
+  // Validate course name
   return ['compassion', 'transition'].includes(lastSegment?.toLowerCase()) 
     ? lastSegment.toLowerCase() 
     : 'compassion';

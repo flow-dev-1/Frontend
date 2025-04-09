@@ -522,7 +522,7 @@ const CourseContent = () => {
           </button>
 
           <div className="compassion-title">
-            <h2> Embrace Change, Grow Stronger:  </h2>
+            <h2> From Curious to Confident: Transition with Ease  </h2>
             <h2 className="compassion">Transition</h2>
           </div>
 
