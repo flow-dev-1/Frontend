@@ -152,7 +152,7 @@ export default function MyCourses() {
 
       <div className='courses-list row row-cols-1 row-cols-md-3 g-4'>
         {filteredCourses?.map((course) => (
-          <MyCourseCard key={course.id} course={course} />
+          <MyCourseCard key={course._id} course={course} />
         ))}
       </div>
     </div>
