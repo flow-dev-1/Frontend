@@ -6,7 +6,7 @@ function HeartTextBox({ handleChange, value }) {
       <textarea
         className="heart-input border-0 bg-transparent border-outline-0 no-scrollbar w-100 resize-none"
         cols={55}
-        rows={10}
+        rows={6}
         placeholder="Type your answer here..."
                value={value}
         onChange={handleChange ? handleChange : () => {}}

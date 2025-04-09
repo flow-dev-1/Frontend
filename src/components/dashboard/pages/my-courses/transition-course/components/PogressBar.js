@@ -2,13 +2,45 @@ import React from "react";
 
 function ProgressBar({ value, handleChange }) {
     return (
-        <div className="w-full flex flex-col items-center space-y-3">
+        <div className="w-full">
             {/* Display percentage above the bar */}
             <div className="text-center mb-5 mt-5">
-                <h1 className="text-blue bg-white py-4 px-5 text-2xl rounded d-inline">
+                <h1 className="text-blue bg-white py-10 px-5 text-2xl rounded d-inline py-4">
                     {value}
                 </h1>
             </div>
+            <style>
+                {`
+                    input[type=range] {
+                        -webkit-appearance: none;
+                        width: 100%;
+                        height: 16px;
+                        border-radius: 8px;
+                        background: linear-gradient(to right, #2563eb 0%, #2563eb ${value}%, #d1d5db ${value}%, #d1d5db 100%);
+                    }
+                    
+                    input[type=range]::-webkit-slider-thumb {
+                        -webkit-appearance: none;
+                        appearance: none;
+                        width: 28px;
+                        height: 28px;
+                        background-color: #2563eb;
+                        border-radius: 50%;
+                        cursor: pointer;
+                        border: 2px solid white;
+                    }
+                    
+                    input[type=range]::-moz-range-thumb {
+                        width: 28px;
+                        height: 28px;
+                        background-color: #2563eb;
+                        border-radius: 50%;
+                        cursor: pointer;
+                        border: 2px solid white;
+                    }
+                `}
+                </style>
+          
 
             {/* Progress Bar */}
             <input
@@ -24,11 +56,13 @@ function ProgressBar({ value, handleChange }) {
                 }}
             />
 
-            <div className="flex justify-between w-full mt-2">
-                <div className="flex-1 text-left d-inline"><h2 className="text-gray-500 text-3xl d-inline">0</h2></div>
-                <div className="flex-1 text-center d-inline"><h2 className="text-gray-500 text-3xl d-inline">50</h2></div>
-                <div className="flex-1 text-right d-inline"><h2 className="text-gray-500 text-3xl d-inline">100</h2></div>
-            </div>
+
+<div className="relative w-full mt-2">
+  <span className="absolute left-0 text-gray-500 text-xl font-bold">0</span>
+  <span className="absolute left-1/2 transform -translate-x-1/2 text-gray-500 text-xl font-bold">50</span>
+  <span className="absolute right-0 text-gray-500 text-xl font-bold">100</span>
+</div>
+
 
 
         </div>

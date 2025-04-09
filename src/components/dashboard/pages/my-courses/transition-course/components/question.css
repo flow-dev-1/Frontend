@@ -117,20 +117,18 @@
 
 .heart-input-label {
   background: url("../../../../../../assets/heartTextBox.png") no-repeat;
-   background-size: 100% 90%;
+   background-size: 100% 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 80%;
-  height: 80%;
-  padding-top:8em;
+  width: 60%;
+  height: 40%;
+  padding-top:9em;
   padding-bottom:8em;
   padding-left:5em;
   padding-right:5em;
-  margin-bottom: 1em;
   margin-left: 5em;
   margin-right: 5em;
-  margin-top: 1em;
   position: relative;
  
 }
