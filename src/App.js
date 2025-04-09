@@ -148,7 +148,7 @@ function App() {
             path="/dashboard/transition/feedback"
             element={
 
-              <TransitionCourse />
+              <TransitionFeedback />
 
             }
           />

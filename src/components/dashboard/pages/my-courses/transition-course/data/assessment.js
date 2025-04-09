@@ -27,7 +27,7 @@ export const assessments = {
           },
           { id: "D", text: "It makes school easier." },
         ],
-        correctOption: "B",
+        correctOption: "A",
       },
       {
         id: 3,
@@ -52,7 +52,7 @@ export const assessments = {
           { id: "C", text: "Avoid thinking about it until they actually start." },
           { id: "D", text: "Make a list of every possible activity they might join." },
         ],
-        correctOption: "D",
+        correctOption: "A",
       },
       {
         id: 5,
@@ -64,7 +64,7 @@ export const assessments = {
           { id: "C", text: "If I don’t talk to anyone, I'll be fine." },
           { id: "D", text: "I shouldn't feel nervous; that means something's wrong." },
         ],
-        correctOption: "A",
+        correctOption: "B",
       },
     ],
   },
@@ -84,7 +84,7 @@ export const assessments = {
           { id: "C", text: "Believing that challenges are fun." },
           { id: "D", text: "Knowing that everyone can learn math. " },
         ],
-        correctOption: "A",
+        correctOption: "B",
       },
       {
         id: 2,
@@ -115,7 +115,7 @@ export const assessments = {
             text: "The power of “Try”. ",
           },
         ],
-        correctOption: "A",
+        correctOption: "B",
       },
       {
         id: 4,
@@ -147,7 +147,7 @@ export const assessments = {
             text: "I’ll ask my teacher for more guidance so I can understand better.",
           },
         ],
-        correctOption: "A",
+        correctOption: "B",
       },
     ],
   },
@@ -209,7 +209,7 @@ export const assessments = {
             text: "It helps you get more information about someone's issues.",
           },
         ],
-        correctOption: "B",
+        correctOption: "A",
       },
       {
         id: 5,
@@ -230,7 +230,7 @@ export const assessments = {
             text: "\"Let's just forget about it; it doesn't matter.\"",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
     ],
   },
@@ -267,7 +267,7 @@ export const assessments = {
           { id: "C", text: "Ignoring the situation to avoid conflict." },
           { id: "D", text: "Saying whatever will make you popular." },
         ],
-        correctOption: "B",
+        correctOption: "A",
       },
       {
         id: 3,
@@ -279,7 +279,7 @@ export const assessments = {
           { id: "C", text: "To make decisions that align with what matters most to you." },
           { id: "D", text: "To avoid making any mistakes." },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 4,
@@ -308,7 +308,7 @@ export const assessments = {
             text: "True",
           }
         ],
-        correctOption: "B",
+        correctOption: "A",
       },
     ],
   },

@@ -5,7 +5,7 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+1/FLOW+1_1.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+1/Week+1_1.mp4",
         hasNextButton: true,
       },
       {
@@ -53,7 +53,7 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+1/FLOW+1_2.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+1/Week+1_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -76,7 +76,7 @@ export const courseContent = {
       {
         id: 5,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+1/FLOW+1_3.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+1/Week+1_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -99,7 +99,7 @@ export const courseContent = {
       {
         id: 7,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+1/FLOW+1_3.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+1/Week+1_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -123,7 +123,7 @@ export const courseContent = {
       {
         id: 9,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+1/FLOW+1_3.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+1/Week+1_5.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -145,7 +145,7 @@ export const courseContent = {
       {
         id: 11,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+1/FLOW+1_3.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+1/Week+1_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -214,7 +214,7 @@ export const courseContent = {
       {
         id: 13,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+1/FLOW+1_3.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+1/Week+1_7.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -228,14 +228,14 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+2/FLOW+2_1.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+2/Week+2_1.mp4",
         hasNextButton: true,
       },
       {
         id: 2,
         type: "question",
         questionType: "text",
-        question: "What do you understand by the",
+        question: "What do you understand by the word",
         hasImage: true,
         imageSrc: "mindset.png",
         inputType: "bigTextBox",
@@ -247,7 +247,7 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+2/FLOW+2_2.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+2/Week+2_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -304,7 +304,7 @@ export const courseContent = {
       {
         id: 5,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+2/FLOW+2_3.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+2/Week+2_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -318,7 +318,7 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+3/FLOW+3_1.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+3/Week+3_1.mp4",
         hasNextButton: true,
       },
       {
@@ -336,7 +336,7 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+3/FLOW+3_2.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+3/Week+3_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -369,12 +369,12 @@ export const courseContent = {
         buckets: [
           {
             id: "green",
-            label: "Inner Cycle",
+            label: "Inner Circle",
             count: 2,
           },
           {
             id: "red",
-            label: "Outer Cycle",
+            label: "Outer Circle",
             count: 2,
           },
         ],
@@ -387,7 +387,7 @@ export const courseContent = {
       {
         id: 5,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+3/FLOW+3_3.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+3/Week+3_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -498,7 +498,7 @@ export const courseContent = {
       {
         id: 7,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+3/FLOW+3_4.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+3/Week+3_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -512,7 +512,7 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+4/FLOW+4_1.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+4/Week+4_1.mp4",
         hasNextButton: true,
       },
       {
@@ -532,7 +532,7 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+4/Week+4_2.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+4/Week+4_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -784,7 +784,7 @@ export const courseContent = {
       {
         id: 5,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+4/Week+4_3.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+4/Week+4_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -826,7 +826,7 @@ export const courseContent = {
       {
         id: 7,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+4/Week+4_4.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+4/Week+4_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -840,7 +840,7 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+5/Week+5_1.mp4",
         hasNextButton: true,
       },
       {
@@ -859,7 +859,7 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+5/Week+5_1.mp4",
         hasNextButton: true,
       },
       {
@@ -979,7 +979,7 @@ export const courseContent = {
       {
         id: 5,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+5/Week+5_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -993,7 +993,7 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+6/Week+6_1.mp4",
         hasNextButton: true,
       },
       {
@@ -1012,7 +1012,7 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+6/Week+6_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1035,7 +1035,7 @@ export const courseContent = {
       {
         id: 5,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+6/Week+6_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1057,7 +1057,7 @@ export const courseContent = {
       {
         id: 7,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+6/Week+6_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1079,7 +1079,7 @@ export const courseContent = {
       {
         id: 9,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+6/Week+6_5.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1199,7 +1199,7 @@ export const courseContent = {
       {
         id: 12,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+6/Week+6_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1213,7 +1213,7 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+7/Week+7_1.mp4",
         hasNextButton: true,
       },
       {
@@ -1232,7 +1232,7 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+7/Week+7_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1379,7 +1379,7 @@ export const courseContent = {
       {
         id: 5,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+7/Week+7_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1395,7 +1395,7 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+8/Week+8_1.mp4",
         hasNextButton: true,
       },
       {
@@ -1415,7 +1415,7 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+8/Week+8_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1437,7 +1437,7 @@ export const courseContent = {
       {
         id: 5,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+8/Week+8_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1565,7 +1565,7 @@ export const courseContent = {
       {
         id: 7,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_2.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+8/Week+8_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1579,7 +1579,7 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+9/Week+9_1.mp4",
         hasNextButton: true,
       },
       {
@@ -1598,7 +1598,7 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+9/Week+9_2.mp4",
         hasNextButton: true,
       },
       {
@@ -1632,7 +1632,7 @@ export const courseContent = {
       {
         id: 5,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+9/Week+9_3.mp4",
         hasNextButton: true,
       },
       {
@@ -1705,7 +1705,7 @@ export const courseContent = {
       {
         id: 7,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+9/Week+9_4.mp4",
         hasNextButton: true,
       }
     ],
@@ -1716,7 +1716,7 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+10/Week+10_1.mp4",
         hasNextButton: true,
       },
       {
@@ -1854,7 +1854,7 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/compassion_videos/Week+5/Week+5_1.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+10/Week+10_2.mp4",
         hasNextButton: true,
       },
     ],

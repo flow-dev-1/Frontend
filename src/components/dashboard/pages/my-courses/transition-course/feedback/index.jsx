@@ -69,7 +69,7 @@ function TransitionFeedback() {
       ),
     },
     {
-      topic: "Self-Transition",
+      topic: "Growth and Fixed Mindset",
       component: (
         <Week2
           enrollmentId={enrollmentId}
@@ -78,7 +78,7 @@ function TransitionFeedback() {
       ),
     },
     {
-      topic: "Transition to Others",
+      topic: "Understanding what is in your control",
       component: (
         <Week3
           enrollmentId={enrollmentId}
@@ -87,7 +87,7 @@ function TransitionFeedback() {
       ),
     },
     {
-      topic: "Circle of Concern",
+      topic: "Understanding Values",
       component: (
         <Week4
           enrollmentId={enrollmentId}
