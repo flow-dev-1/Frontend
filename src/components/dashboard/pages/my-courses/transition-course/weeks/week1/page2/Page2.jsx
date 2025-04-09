@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import QuestionBox from "../../../components/QuestionBox";
-import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
 import { selectPageData, selectCurrentStep, } from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import Frame from "./components/Frame";
 import StepIndicator from "../../../components/StepIndicator";
-import { use } from "react";
 
 function Page2() {
   const dispatch = useDispatch(); // Initialize dispatch
@@ -17,9 +14,14 @@ function Page2() {
   const totalSteps = pageData?.steps?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
-  const step = pageData?.steps[currentStep - 1];
+
+  console.log(currentStep,"currentStep")
+  console.log(pageData, "pageData")
+  const step = pageData?.steps[currentStep - 1]; // Get the current step data
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
+
+  
   // console.log(userAnswers)
 
   useEffect(() => {
