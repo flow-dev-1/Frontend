@@ -39,8 +39,8 @@ function ProgressBar({ value, handleChange }) {
                         border: 2px solid white;
                     }
                 `}
-                </style>
-          
+            </style>
+
 
             {/* Progress Bar */}
             <input
@@ -57,12 +57,13 @@ function ProgressBar({ value, handleChange }) {
             />
 
 
-
-<div className="w-full grid grid-cols-3 mt-2 text-blue-600 text-2xl font-bold px-2">
-    <span className="text-left">0</span>
-    <span className="text-center">50</span>
-    <span className="text-right">100</span>
+<div className="d-flex justify-content-between gap-0 ms-2 align-left-lg-custom w-100">
+  <h2 className="text-gray font-lg">0</h2>
+  <h2 className="text-gray font-lg">50</h2>
+  <h2 className="text-gray font-lg">100</h2>
 </div>
+
+
         </div>
     );
 }
