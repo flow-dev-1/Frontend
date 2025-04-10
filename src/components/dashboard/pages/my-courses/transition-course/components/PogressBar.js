@@ -2,7 +2,7 @@ import React from "react";
 
 function ProgressBar({ value, handleChange }) {
     return (
-        <div className="w-full">
+        <div className="flex flex-col items-center w-full">
             {/* Display percentage above the bar */}
             <div className="text-center mb-5 mt-5">
                 <h1 className="text-blue bg-white py-10 px-5 text-2xl rounded d-inline py-4">
@@ -57,14 +57,12 @@ function ProgressBar({ value, handleChange }) {
             />
 
 
-<div className="relative w-full mt-2">
-  <span className="absolute left-0 text-gray-500 text-xl font-bold">0</span>
-  <span className="absolute left-1/2 transform -translate-x-1/2 text-gray-500 text-xl font-bold">50</span>
-  <span className="absolute right-0 text-gray-500 text-xl font-bold">100</span>
+
+<div className="w-full grid grid-cols-3 mt-2 text-blue-600 text-2xl font-bold px-2">
+    <span className="text-left">0</span>
+    <span className="text-center">50</span>
+    <span className="text-right">100</span>
 </div>
-
-
-
         </div>
     );
 }
