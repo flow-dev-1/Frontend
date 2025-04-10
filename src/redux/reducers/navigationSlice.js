@@ -3,6 +3,7 @@ import { courseContent as compassionCourseContent } from "../../components/dashb
 import { assessments as compassionAssessments } from "../../components/dashboard/pages/my-courses/compassion-course/weeks/data/assessment";
 import { courseContent as transitionCourseContent } from "../../components/dashboard/pages/my-courses/transition-course/data/activity";
 import { assessments as transitionAssessments } from "../../components/dashboard/pages/my-courses/transition-course/data/assessment";
+import { useLocation } from 'react-router-dom';
 
 const courseData = {
   'compassion': {
@@ -16,12 +17,25 @@ const courseData = {
 };
 
 const getCourseFromURL = () => {
-  const path = window.location.pathname;
-  const lastSegment = path.split('/').pop();
-  return lastSegment.toLowerCase() || 'compassion'; // default to compassion if no segment
+  // Add timeout to wait for route initialization
+  const path = window?.location?.pathname || '/';
+  
+  // Handle initial / case
+  if (path === '/') {
+    return 'compassion'; // default course
+  }
+
+  const segments = path.split('/').filter(Boolean);
+  const lastSegment = segments[segments.length - 1];
+  
+  // Validate course name
+  return ['compassion', 'transition'].includes(lastSegment?.toLowerCase()) 
+    ? lastSegment.toLowerCase() 
+    : 'compassion';
 };
+
 const initialState = {
-  currentCourse:  getCourseFromURL() || 'compassion',
+  currentCourse: 'compassion',
   currentWeek: 1,
   currentPage: 1,
   currentStep: 1,
@@ -33,6 +47,14 @@ const navigationSlice = createSlice({
   name: "navigation",
   initialState,
   reducers: {
+    setCourse: (state, action) => {
+      if (state.currentCourse !== action.payload) {
+        state.currentCourse = action.payload;
+        state.currentWeek = 1;
+        state.currentPage = 1;
+        state.currentStep = 1;
+      }
+    },
     updateCourseFromURL: (state) => {
       const newCourse = getCourseFromURL();
       if (state.currentCourse !== newCourse) {
@@ -232,7 +254,7 @@ const navigationSlice = createSlice({
 });
 
 export const {
-  setCurrentCourse,
+  setCourse,
   setCurrentWeek,
   setCurrentPage,
   setCurrentStep,

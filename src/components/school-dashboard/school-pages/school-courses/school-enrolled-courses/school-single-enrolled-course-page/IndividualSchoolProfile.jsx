@@ -35,7 +35,6 @@ export default function IndividualSchoolProfile({ onClose }) {
     refetchOnWindowFocus: false,
   })
 
-  console.log(data, 'data ooooooo')
 
   const openModal = () => {
     setIsOpen(true)

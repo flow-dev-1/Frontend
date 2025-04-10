@@ -27,7 +27,7 @@ export const assessments = {
           },
           { id: "D", text: "A strategy to avoid communication" },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 3,
@@ -52,7 +52,7 @@ export const assessments = {
           { id: "C", text: "It helps us avoid conflicts" },
           { id: "D", text: "It makes us appear more popular" },
         ],
-        correctOption: "D",
+        correctOption: "B",
       },
       {
         id: 5,
@@ -64,7 +64,7 @@ export const assessments = {
           { id: "C", text: "Need." },
           { id: "D", text: "Request." },
         ],
-        correctOption: "A",
+        correctOption: "D",
       },
     ],
   },
@@ -84,7 +84,7 @@ export const assessments = {
           { id: "C", text: "Comparing yourself to others" },
           { id: "D", text: "Being perfect in everything you do." },
         ],
-        correctOption: "A",
+        correctOption: "B",
       },
       {
         id: 2,
@@ -95,7 +95,7 @@ export const assessments = {
           { id: "C", text: "Speaking to yourself kindly when you fail." },
           { id: "D", text: "Blaming others for your problems." },
         ],
-        correctOption: "A",
+        correctOption: "C",
       },
       {
         id: 3,
@@ -115,7 +115,7 @@ export const assessments = {
             text: "Practicing mindfulness by paying attention to your emotions.",
           },
         ],
-        correctOption: "A",
+        correctOption: "C",
       },
       {
         id: 4,
@@ -130,7 +130,7 @@ export const assessments = {
           },
           { id: "D", text: "Ask others to tell you what you did wrong." },
         ],
-        correctOption: "A",
+        correctOption: "C",
       },
       {
         id: 5,
@@ -147,7 +147,7 @@ export const assessments = {
             text: "It allows us to criticize ourselves in order to avoid further mistakes.",
           },
         ],
-        correctOption: "A",
+        correctOption: "B",
       },
     ],
   },
