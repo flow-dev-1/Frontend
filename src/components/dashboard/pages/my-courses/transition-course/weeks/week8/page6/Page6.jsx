@@ -47,31 +47,23 @@ function WeekEightPage6() {
       return false;
     }
 
+    console.log(stepData, "Step Data")
+    if (currentStep !== 3) {
+      const values = Object.values(stepData.value);
 
-    const values = Object.values(stepData.value);
-    if (currentStep === 3) {
-
-      if (values.length < 1) {
-        setErrorMessage("Oops please enter a valid input!");
-        return false;
-      }
-
-    } else {
       if (values.length < 5) {
         setErrorMessage("At least 5 values are required!");
         return false;
       }
 
-    }
-
-    const emptyInputs = values.filter((value) => value.trim() === "");
-    if (emptyInputs.length > 0) {
-      setErrorMessage(`Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`);
-      return false;
+      const emptyInputs = values.filter((value) => value.trim() === "");
+      if (emptyInputs.length > 0) {
+        setErrorMessage(`Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`);
+        return false;
+      }
     }
 
     setErrorMessage(""); // Clear error if input is valid
-
     const activityData = {
       page: pageData.id,
       answer: answers
@@ -87,6 +79,8 @@ function WeekEightPage6() {
     // const step = pageData?.steps[currentStep - 1];
     // console.log(currentStep, step, "step")
     if (!step) return <div>Invalid Step</div>;
+
+    console.log(step, "Step here o")
 
     switch (step.type) {
       case "instruction":
@@ -136,9 +130,7 @@ function WeekEightPage6() {
           <SingleWhiteStarFrame
             data={{
               step: step.stepId,
-              questions: step.questions.map((q) => ({
-                [q.type]: q.question,
-              })),
+              question: step.question,
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}

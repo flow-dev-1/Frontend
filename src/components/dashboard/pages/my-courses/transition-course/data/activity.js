@@ -1451,7 +1451,7 @@ export const courseContent = {
             stepId: 1,
             type: "star",
             question:
-              "Your friends made plans without you.",
+              "Write down the things you are good at doing.",
             answers: 5,
             config: [
               {
@@ -1529,13 +1529,12 @@ export const courseContent = {
           {
             stepId: 3,
             type: "singleStar",
-            questions: [
-              { type: "Question", question: "Write down your Wishing Star here." }],
+            question: "Write down your Wishing Star here." ,
           },
           {
             stepId: 4,
             type: "smart",
-            question: "Write down your Wishing Star here.",
+            question: "Make your Wishing Star a SMART Goal.",
             answers: 5,
             config: [
               {
@@ -1649,7 +1648,7 @@ export const courseContent = {
           {
             stepId: 2,
             type: "scenario",
-            challenge: "Trying to make new friends but feeling like I don’t fit in..",
+            challenge: "Trying to make new friends but feeling like I don’t fit in.",
           },
           {
             stepId: 3,

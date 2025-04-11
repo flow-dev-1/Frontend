@@ -7,6 +7,11 @@ import Week2 from "./weeks/week2/Week2";
 import Week3 from "./weeks/week3/Week3";
 import Week4 from "./weeks/week4/Week4";
 import Week5 from "./weeks/week5/Week5";
+import Week6 from "./weeks/week6/Week6";
+import Week7 from "./weeks/week7/Week7";
+import Week8 from "./weeks/week8/Week8";
+import Week9 from "./weeks/week9/Week9";
+import Week10 from "./weeks/week10/Week10";
 import OverallFeedBack from "./weeks/overall/OverallFeedBack";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
@@ -29,12 +34,39 @@ function TransitionFeedback() {
   const [isWeekThreeLoaded, setWeekThreeData] = useState(false);
   const [isWeekFourLoaded, setWeekFourData] = useState(false);
   const [isWeekFiveLoaded, setWeekFiveData] = useState(false);
+  const [isWeekSixLoaded, setWeekSixData] = useState(false);
+  const [isWeekSevenLoaded, setWeekSevenData] = useState(false);
+  const [isWeekEightLoaded, setWeekEightData] = useState(false);
+  const [isWeekNineLoaded, setWeekNineData] = useState(false);
+  const [isWeekTenLoaded, setWeekTenData] = useState(false);
 
   const [allDataLoaded, setAllDataLoaded] = useState(false);
 
   useEffect(() => {
-    setAllDataLoaded(isWeekOneLoaded && isWeekTwoLoaded && isWeekThreeLoaded && isWeekFourLoaded && isWeekFiveLoaded);
-  }, [isWeekOneLoaded, isWeekTwoLoaded, isWeekThreeLoaded, isWeekFourLoaded, isWeekFiveLoaded]);
+    setAllDataLoaded(
+      isWeekOneLoaded && 
+      isWeekTwoLoaded && 
+      isWeekThreeLoaded && 
+      isWeekFourLoaded && 
+      isWeekFiveLoaded &&
+      isWeekSixLoaded &&
+      isWeekSevenLoaded &&
+      isWeekEightLoaded &&
+      isWeekNineLoaded &&
+      isWeekTenLoaded
+    );
+  }, [
+    isWeekOneLoaded, 
+    isWeekTwoLoaded, 
+    isWeekThreeLoaded, 
+    isWeekFourLoaded, 
+    isWeekFiveLoaded,
+    isWeekSixLoaded,
+    isWeekSevenLoaded,
+    isWeekEightLoaded,
+    isWeekNineLoaded, 
+    isWeekTenLoaded
+  ]);
 
   const currentWeek = activeIndex + 1;
 
@@ -96,9 +128,54 @@ function TransitionFeedback() {
       ),
     },
     {
-      topic: "Life Scenarios - Let’s wear the shoes of others",
+      topic: "Core Values and how they matter",
       component: (
         <Week5
+          enrollmentId={enrollmentId}
+          setWeekFiveData={setWeekFiveData}
+        />
+      ),
+    },
+    {
+      topic: "Social Skills (Navigating Relationships)",
+      component: (
+        <Week6
+          enrollmentId={enrollmentId}
+          setWeekOneData={setWeekOneData}
+        />
+      ),
+    },
+    {
+      topic: "Time Management",
+      component: (
+        <Week7
+          enrollmentId={enrollmentId}
+          setWeekTwoData={setWeekTwoData}
+        />
+      ),
+    },
+    {
+      topic: "Goal Setting",
+      component: (
+        <Week8
+          enrollmentId={enrollmentId}
+          setWeekThreeData={setWeekThreeData}
+        />
+      ),
+    },
+    {
+      topic: "Resilience and Introduction to Coping Skills",
+      component: (
+        <Week9
+          enrollmentId={enrollmentId}
+          setWeekFourData={setWeekFourData}
+        />
+      ),
+    },
+    {
+      topic: "Looking Ahead",
+      component: (
+        <Week10
           enrollmentId={enrollmentId}
           setWeekFiveData={setWeekFiveData}
         />
@@ -153,7 +230,7 @@ function TransitionFeedback() {
             Back to My Courses
           </button>
           <div className="compassion-title">
-            <h2> Seeing, Caring and Doing: </h2>
+            <h2> From Curious to Confident: Transition with Ease</h2>
             <h2 className="compassion">Transition</h2>
           </div>
 
@@ -164,7 +241,7 @@ function TransitionFeedback() {
                 className={
                   index + 1 <= currentWeek
                     ? "active-week"
-                    : index === 5
+                    : index === 10
                     ? "d-none"
                     : ""
                 }

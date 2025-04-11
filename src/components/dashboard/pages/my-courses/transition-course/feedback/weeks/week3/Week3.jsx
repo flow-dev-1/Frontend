@@ -55,7 +55,6 @@ function Week3({ enrollmentId, setWeekThreeData }) {
   const [q1, q2, q3, q4, q5] = activity3.steps;
   const [a1, a2, a3, a4, a5] = activityData?.[2]?.answer?.map(a => a.value) || [];
 
-  console.log(a1)
   function getActivityAnswer(activityId) {
     return activityData?.find((activity) => activity.page === activityId)
       ?.answer;
@@ -411,7 +410,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
                   ? "Great work! You’ve proven to have gained a good understanding of the key concepts that will help you navigate the exciting transition from primary to secondary school. You can start applying ideas like cultivating a growth mindset, focusing on what’s within your control, and understanding your core values. To build on this progress, try practicing these lessons in your daily life—whether it’s managing your time, setting goals, or building meaningful relationships. With consistent effort, you’ll feel more confident and ready to take on this new chapter. Keep it up—you’re doing well!"
                   : score < 95
                     ? "Excellent job! You’ve shown a strong grasp of the skills and mindset needed to transition smoothly into secondary school. Remember it’s highly important to keep applying what you’ve learned about time management, goal setting, and resilience in every way you can. To continue growing, focus on using these tools to face new challenges and opportunities everyday. Your hard work is paying off, and you’re well on your way to thriving in secondary school. Keep up the fantastic progress!"
-                    : score < 100
+                    : score <= 100
                       ? "Outstanding achievement! You’ve shown mastery and a deep understanding of the skills and mindset to navigate your transition into secondary school with confidence and purpose. Your understanding of growth and fixed mindsets, time management, and resilience is exceptional, and you’ve shown you can apply these concepts to real-life situations. You’re not only ready for this new stage but also equipped to make the most of it. Keep inspiring others with your example, and continue using these tools to grow and succeed in every area of your life. Well done—you’re ready to shine in secondary school!"
                       : ""}
           </p>

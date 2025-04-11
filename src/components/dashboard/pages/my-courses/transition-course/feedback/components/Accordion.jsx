@@ -30,7 +30,6 @@ function Accordion({
 
 
   const generatePDF = async () => {
-    console.log(hasPercentile, "Has Percentile")
     const originalState = activeIndex;
     setPdfLoading(true);
     setActiveIndex(null);
@@ -91,13 +90,13 @@ function Accordion({
           <div key={index} className="accordion-item">
             <div
               className={
-                index > 4
+                index > 9
                   ? "bg-blue-feedback  py-4 px-5 d-flex gap-3 align-items-center justify-space-between"
                   : "py-4 px-5 d-flex gap-3 align-items-center justify-space-between"
               }
             >
               <div className="d-flex align-items-center gap-3 flex-grow-1">
-                {index < 5 ? (
+                {index < 10 ? (
                   <h2 className="text-gray fs-1" onClick={() => handleToggle(index)} style={{ cursor: "pointer" }}>Week {index + 1}:</h2>
                 ) : (
                   <h2 className="text-gray fs-1" onClick={() => handleToggle(index)} style={{ cursor: "pointer" }}>Final Report:</h2>
@@ -109,7 +108,7 @@ function Accordion({
                 >
                   {item.title}
                 </div>
-                {index === 5 && (
+                {index === 10 && (
                   <p
                     className="text-blue fs-4"
                     style={{ zIndex: 100, cursor: "pointer" }}
