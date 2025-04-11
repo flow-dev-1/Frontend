@@ -2,72 +2,44 @@ import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import checkedImage from "../../../../../../../../assets/checkedbox.png";
 import unCheckedImage from "../../../../../../../../assets/uncheckedBox.png";
-
 import correct from "../../../../../../../../assets/correct.png";
 import wrong from "../../../../../../../../assets/wrong.png";
 import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
 } from "../../../../transition-course/data/index.js";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
 import adminService from "../../../../../../../../services/api/admin.js";
 import { calculateResult } from "../../../utility.js";
+import { useSelector } from "react-redux";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer.js";
 import Modal from "../../components/Modal.jsx";
-import { useMutation } from '@tanstack/react-query'
-import { useSelector } from "react-redux";
 
-function Week2({ enrollmentId, setWeekTwoData }) {
-  const { pages } = getWeekContentExcludingVideos(2);
-
-  const [activity1, activity2] = pages;
-  // const [q1, q2, q3, q4] = activity3.prompts;
+function Week8({ enrollmentId, setWeekThreeData }) {
+  const { pages } = getWeekContentExcludingVideos(3);
+  const [activity1, activity2, activity3] = pages;
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([]);
-
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState("");
   const [activityFeedbackId, setActivityFeedbackId] = useState(null);
-
   const { isAdmin, code } = useSelector(adminData);
 
-  const { questions: assessments } = getWeekAssessment(2);
+
+
+  const { questions: assessments } = getWeekAssessment(3);
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/transition-feedback-2", enrollmentId, 2],
-    queryFn: () => isAdmin ? adminService.getUserCourseData(enrollmentId, 2, code) : userService.getUserCourseData(enrollmentId, 2),
+    queryKey: ["dashboard/compassion-feedback-3", enrollmentId, 3],
+    queryFn: () => userService.getUserCourseData(enrollmentId, 3),
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
     keepPreviousData: false,
   });
 
-  const mutation = useMutation({
-    mutationFn: () => adminService.submitAdminFeedback(activityData, enrollmentId, 2, data?.activity?.user, code),
-    onSuccess: (data) => {
-      setModalData("")
-      // setIsOpen(true)
-      // toast.success(data.message)
-    },
-    onError: (error) => {
-      console.error('Registration error:', error)
-      setModalData("")
-      // toast.dismiss()
-      // toast.error(error?.message)
-      // navigate('/sign-in', { replace: true })
-    },
-  });
-
-  const handleModalOpen = () => {
-    setShowModal(true);
-  }
-
-  const handleModalClose = () => {
-    setActivityFeedbackId(null)
-    setShowModal(false);
-  }
 
 
   useEffect(() => {
@@ -75,43 +47,53 @@ function Week2({ enrollmentId, setWeekTwoData }) {
 
     setActivityData(data.activity?.activities);
     setAssessmentData(data.assessment?.assessments);
-    setWeekTwoData(true);
+    setWeekThreeData(true);
 
     return () => { };
   }, [data]);
 
-  function getActivityAnswer(activityId, itemId) {
-    if (!itemId) {
-      return activityData?.find((activity) => activity.page === activityId)
-        ?.answer;
-    } else {
-      const answersList = activityData?.find(
-        (activity) => activity.page === activityId
-      )?.answer;
+  const [q1, q2, q3, q4, q5] = activity3.steps;
+  const [a1, a2, a3, a4, a5] = activityData?.[2]?.answer?.map(a => a.value) || [];
 
-      const answerObject = answersList?.find(
-        (activity) => activity.id === itemId
-      )?.value;
-      return answerObject ? answerObject : "";
-    }
+  console.log(a1)
+  function getActivityAnswer(activityId) {
+    return activityData?.find((activity) => activity.page === activityId)
+      ?.answer;
   }
 
-  function getActivityFeedback(activityId, itemId, index) {
-    if (!itemId) {
-      return activityData?.find((activity) => activity.page === activityId)
-        ?.feedback;
-    } else {
-      const answersList = activityData?.find(
-        (activity) => activity.page === activityId
-      )?.answer;
+  function getActivityFeedback(activityId) {
+    return activityData?.find((activity) => activity.page === activityId)?.feedback;
 
-      const answerObject = answersList?.find(
-        (activity) => activity.id === itemId
-      )?.feedback;
-
-      return answerObject ? answerObject : null;
-    }
   }
+
+  const mutation = useMutation({
+    mutationFn: () => adminService.submitAdminFeedback(activityData, enrollmentId, 3, data?.activity?.user, code),
+    onSuccess: (data) => {
+      setModalData("");
+      // Handle success (e.g., show a success message)
+    },
+    onError: (error) => {
+      console.error('Feedback submission error:', error);
+      setModalData("");
+      // Handle error (e.g., show an error message)
+    },
+  });
+
+  const handleModalOpen = () => {
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setActivityFeedbackId(null);
+    setShowModal(false);
+  };
+
+  const submitFeedback = (value) => {
+    const answerData = activityData.find(item => item.page === activityFeedbackId.activityId);
+    answerData.feedback = value;
+    handleModalClose();
+    mutation.mutate();
+  };
 
   function drag1(type) {
     if (!activityData || !activityData[1] || !activityData[1].answer) return [];
@@ -122,9 +104,9 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         : activityData[1].answer.red;
 
 
-        // console.log(indices, "Indices")
+    // console.log(indices, "Indices")
 
-        // console.log(activity2,"Activity 2")
+    // console.log(activity2,"Activity 2")
     return indices?.map((index) => activity2?.images[index]) || [];
   }
 
@@ -134,33 +116,79 @@ function Week2({ enrollmentId, setWeekTwoData }) {
   }
 
   if (data?.status === "failed" || isError) {
-    return <div>{data?.message}</div>;
+    return <div>{data?.message || "Internal server error!"}</div>;
   }
 
   const score =
     calculateResult(assessments, assessmentData, assessments?.length) || 0;
 
-  const submitFeedback = (value) => {
-    // console.log(value, "value")
-    // console.log(activityData, "Activity Data")
-    // console.log(activityFeedbackId, "Activity feedback Id")
-    if (!activityFeedbackId?.itemId) {
-      const answerData = activityData.find(item => item.page === activityFeedbackId.activityId)
-      answerData.feedback = value
-      handleModalClose()
-      mutation.mutate()
-    } else {
+  const renderActivity3 = (question, answer, activityId, index) => {
+    return (
+      <div key={index}>
+      <div className="d-flex gap-3 align-items-center">
+        <h2 className="text-blue fs-1">Questions {index + 1}:</h2>
+        <p className="text-blue fs-4 mb-0">{question.title}</p>
+      </div>
 
-      const answerData = activityData.find(item => item.page === activityFeedbackId.activityId);
+      <div>
+        <span className="bg-green rounded-3 text-white px-3 py-1">
+        Within your control:
+        </span>
+      </div>
 
-      const feedbackData = answerData?.answer?.find(item => item.id === activityFeedbackId.itemId);
+      <div className="d-flex gap-3 align-items-center">
+        <h2 className="text-gray fs-1 mb-0">Answer:</h2>
+        <p className="fs-5 flex-grow-1 mb-0">{answer?.[0]}</p>
+        {(isAdmin && !activityData?.find(activity =>
+        activity.page === activityId)?.feedback) && (
+          <Icon
+          onClick={() => {
+            setActivityFeedbackId({ activityId })
+            handleModalOpen()
+          }}
+          style={{ color: "#D6D6D6" }}
+          width={35}
+          icon="tabler:message-2"
+          />
+        )}
+      </div>
 
-      feedbackData.feedback = value; // Set feedback entry with key as index
+      <div>
+        <span className="bg-orange rounded-3 text-muted px-3 py-1">
+        Outside your control:
+        </span>
+      </div>
 
-      handleModalClose()
-      mutation.mutate()
-        ;
-    }
+      <div className="d-flex gap-3 align-items-center">
+        <h2 className="text-gray fs-1 mb-0">Answer:</h2>
+        <p className="fs-5 flex-grow-1 mb-0">{answer?.[1]}</p>
+      </div>
+
+      {activityData?.find(activity =>
+        activity.page === activityId)?.feedback && (
+        <div className="d-flex gap-3">
+          <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start mb-0">
+          Feedback
+          </p>
+          <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded mb-0">
+          {getActivityFeedback(activityId)}
+          </p>
+          {isAdmin && (
+          <Icon
+            onClick={() => {
+            setModalData(getActivityFeedback(activityId))
+            setActivityFeedbackId({ activityId })
+            handleModalOpen()
+            }}
+            style={{ color: "#275DAD" }}
+            width={35}
+            icon="lucide:edit"
+          />
+          )}
+        </div>
+        )}
+      </div>
+    )
   }
 
   return (
@@ -172,7 +200,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{activity1.question} "Mindset"?</p>
+        <p className="text-blue fs-4">{activity1.question}</p>
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
@@ -232,7 +260,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         <div className="flex-grow-1 d-flex">
           <div className="flex-grow-1">
             <h2 className="text-center bg-green text-white py-3 fs-1">
-              Growth Mindset
+              Inner Circle
             </h2>
             <div className="px-5 py-3">
               {drag1("growth")?.map((item, idx) => (
@@ -243,8 +271,8 @@ function Week2({ enrollmentId, setWeekTwoData }) {
             </div>
           </div>
           <div className="flex-grow-1">
-            <h2 className="bg-red text-center text-white py-3 fs-1">
-              Fixed Mindset
+            <h2 className="bg-orange text-center text-white py-3 fs-1">
+              Outer Circle
             </h2>
             <div className="px-5 py-3">
               {drag1("fixed")?.map((item, idx) => (
@@ -296,6 +324,24 @@ function Week2({ enrollmentId, setWeekTwoData }) {
       }
       <hr />
 
+      {/* /* Activity 3  */}
+      <p className="bg-yellow py-3 px-5 text-gray d-inline-block rounded-5 fs-4">
+        Activity 3
+      </p>
+      <hr />
+      <>
+
+        {[q1, q2, q3, q4, q5].map((question, index) =>
+          renderActivity3(
+            question,
+            [a1, a2, a3, a4, a5][index],
+            activity3.id,
+            index
+          )
+        )}
+
+      </>
+      <hr />
       {/* Assesment 1 */}
       <p className="bg-yellow py-3 px-5 text-gray d-inline-block rounded-5 fs-4">
         Assessment 1
@@ -380,4 +426,4 @@ function Week2({ enrollmentId, setWeekTwoData }) {
   );
 }
 
-export default Week2;
+export default Week8;

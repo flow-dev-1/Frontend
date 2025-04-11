@@ -338,7 +338,7 @@ export const assessments = {
             text: "Ask someone else what you’re feeling.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 2,
@@ -362,7 +362,7 @@ export const assessments = {
             text: "Ignoring the person who upset you.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 3,
@@ -550,7 +550,7 @@ export const assessments = {
             text: "They avoid directly addressing the issue.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
     ],
   },

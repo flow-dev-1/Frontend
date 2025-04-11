@@ -18,7 +18,7 @@ import Modal from "../../components/Modal.jsx";
 import { useMutation } from '@tanstack/react-query'
 import { useSelector } from "react-redux";
 
-function Week2({ enrollmentId, setWeekTwoData }) {
+function Week7({ enrollmentId, setWeekTwoData }) {
   const { pages } = getWeekContentExcludingVideos(2);
 
   const [activity1, activity2] = pages;
@@ -380,4 +380,4 @@ function Week2({ enrollmentId, setWeekTwoData }) {
   );
 }
 
-export default Week2;
+export default Week7;
