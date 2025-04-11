@@ -13,18 +13,23 @@ import userService from "../../../../../../../../services/api/user.js";
 import { calculateResult } from "../../../utility.js";
 
 function Week10({ enrollmentId, setShowModal, setWeekFiveData }) {
-  const { pages } = getWeekContentExcludingVideos(5);
-  const [acitivity1] = pages;
-  const [q1, q2, q3, q4, q5, q6, q7, q8] = acitivity1.scenarios;
+  const { pages } = getWeekContentExcludingVideos(10);
+  const [activity1] = pages;
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([]);
 
-  const { questions: assessments } = getWeekAssessment(5);
+  console.log(activity1, "Activity 1");
+  const [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12] = activity1.steps;
+  const [a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12] = activityData?.[0]?.answer?.map(a => a.value) || [];
+
+  console.log(q1, "This is q1");
+  console.log(a1, "This is a1");
+  const { questions: assessments } = getWeekAssessment(10);
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/compassion-feedback-5", enrollmentId, 5],
-    queryFn: () => userService.getUserCourseData(enrollmentId, 5),
+    queryKey: ["dashboard/compassion-feedback-10", enrollmentId, 10],
+    queryFn: () => userService.getUserCourseData(enrollmentId, 10),
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -38,7 +43,7 @@ function Week10({ enrollmentId, setShowModal, setWeekFiveData }) {
     setAssessmentData(data.assessment?.assessments);
     setWeekFiveData(true);
 
-    return () => {};
+    return () => { };
   }, [data]);
 
   function getActivityAnswer(item) {
@@ -76,83 +81,36 @@ function Week10({ enrollmentId, setShowModal, setWeekFiveData }) {
         Activity 1
       </p>
       <hr />
-      <div className="d-flex gap-3">
-        <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{q1.question}</p>
-      </div>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">{getActivityAnswer(q1)}</p>
-        {/* <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" /> */}
-      </div>
-      <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          {getActivityFeedback(q2)}
-        </p>
-        {/* <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" /> */}
-      </div>
+      {[
+        [q1, a1], [q2, a2], [q3, a3], [q4, a4], 
+        [q5, a5], [q6, a6], [q7, a7], [q8, a8],
+        [q9, a9], [q10, a10], [q11, a11], [q12, a12]
+      ].map(([question, answer], index) => (
+        <React.Fragment key={index}>
+          <div className="d-flex gap-3">
+            <h2 className="text-blue fs-1">Question {index + 1}:</h2>
+            <p className="text-blue fs-4">{question?.questions?.[0]?.question}</p>
+          </div>
+          <div className="d-flex gap-3">
+            <h2 className="text-gray fs-1 text-gray">Answer:</h2>
+            <p className="fs-5 flex-grow-1">{answer?.[0]}</p>
+            {/* {(isAdmin && !activityData?.find((activity) => 
+              activity.page === activity1.id)?.feedback) && (
+              <Icon
+                onClick={() => {
+                  setActivityFeedbackId({ activityId: activity1.id })
+                  handleModalOpen()
+                }}
+                style={{ color: "#D6D6D6" }}
+                width={35}
+                icon="tabler:message-2"
+              />
+            )} */}
+          </div>
+          <hr />
+        </React.Fragment>
+      ))}
 
-      <div className="d-flex gap-3">
-        <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{q3.question}</p>
-      </div>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">{getActivityAnswer(q3)}</p>
-        {/* <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" /> */}
-      </div>
-      <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          {getActivityFeedback(q4)}
-        </p>
-        {/* <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" /> */}
-      </div>
-      <div className="d-flex gap-3">
-        <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{q5.question}</p>
-      </div>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">{getActivityAnswer(q5)}</p>
-        {/* <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" /> */}
-      </div>
-      <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          {getActivityFeedback(q6)}
-        </p>
-        {/* <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" /> */}
-      </div>
-      <div className="d-flex gap-3">
-        <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{q7.question}</p>
-      </div>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">{getActivityAnswer(q7)}.</p>
-        {/* <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" /> */}
-      </div>
-      <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-          Feedback
-        </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-          {getActivityFeedback(q8)}
-        </p>
-        {/* <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" /> */}
-      </div>
-
-      <hr />
-
-      <hr />
       {/* Assesment 1 */}
       <p className="bg-yellow py-3 px-5 text-gray d-inline-block rounded-5 fs-4">
         Assessment 1

@@ -31,7 +31,7 @@ function Week6({ enrollmentId, setWeekOneData }) {
   const { questions: assessments } = getWeekAssessment(6);
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/transition-feedback-1", enrollmentId, 6],
+    queryKey: ["dashboard/transition-feedback-6", enrollmentId, 6],
     queryFn: () => isAdmin ? adminService.getUserCourseData(enrollmentId, 6, code) : userService.getUserCourseData(enrollmentId, 6),
     enabled: !!enrollmentId,
     refetchOnMount: "always",

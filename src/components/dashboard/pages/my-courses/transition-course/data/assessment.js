@@ -604,7 +604,7 @@ export const assessments = {
             text: "A smartphone for texting.",
           },
         ],
-        correctOption: "B",
+        correctOption: "A",
       },
       {
         id: 3,
@@ -650,7 +650,7 @@ export const assessments = {
             text: "Do nothing.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 5,
@@ -671,7 +671,7 @@ export const assessments = {
             text: "Being more disorganized.",
           },
         ],
-        correctOption: "B",
+        correctOption: "A",
       },
     ],
   },
@@ -771,7 +771,7 @@ export const assessments = {
             text: "Measurable.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 5,
@@ -846,7 +846,7 @@ export const assessments = {
             text: "Spending all your time worrying about the situation.",
           },
         ],
-        correctOption: "B",
+        correctOption: "A",
       },
       {
         id: 3,
@@ -869,7 +869,7 @@ export const assessments = {
             text: "Giving up when something is difficult.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 4,
@@ -943,7 +943,7 @@ export const assessments = {
             text: " It helps you avoid challenges altogether.",
           },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 2,
@@ -967,7 +967,7 @@ export const assessments = {
             text: "I should avoid difficult subjects because they’re too hard.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 3,
@@ -990,7 +990,7 @@ export const assessments = {
             text: "Blaming others for your mistakes.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 4,
@@ -1034,7 +1034,7 @@ export const assessments = {
             text: "Changing your beliefs to fit in with a group.",
           },
         ],
-        correctOption: "B",
+        correctOption: "A",
       },
       {
         id: 6,
@@ -1058,7 +1058,7 @@ export const assessments = {
             text: "Expecting others to always agree with you.",
           },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 7,
@@ -1082,7 +1082,7 @@ export const assessments = {
             text: "Completing only the easiest tasks first.",
           },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 8,
@@ -1106,7 +1106,7 @@ export const assessments = {
             text: "Rely on others to complete the work for you.",
           },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 9,
@@ -1130,7 +1130,7 @@ export const assessments = {
             text: "Wait for someone else to solve your problems.",
           },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 10,
@@ -1154,7 +1154,7 @@ export const assessments = {
             text: "Focus only on academics and ignore other activities.",
           },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
     ],
   },

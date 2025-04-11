@@ -30,7 +30,6 @@ function Accordion({
 
 
   const generatePDF = async () => {
-    console.log(hasPercentile, "Has Percentile")
     const originalState = activeIndex;
     setPdfLoading(true);
     setActiveIndex(null);

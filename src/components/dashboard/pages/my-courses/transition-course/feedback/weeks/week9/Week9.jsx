@@ -18,7 +18,7 @@ import Modal from "../../components/Modal.jsx";
 import { useMutation } from '@tanstack/react-query'
 
 function Week9({ enrollmentId, setWeekFourData }) {
-  const { pages } = getWeekContentExcludingVideos(4);
+  const { pages } = getWeekContentExcludingVideos(9);
   const [activity1, activity2, activity3] = pages;
   const [activityData, setActivityData] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -27,17 +27,17 @@ function Week9({ enrollmentId, setWeekFourData }) {
   const [assessmentData, setAssessmentData] = useState([]);
   const { isAdmin, code } = useSelector(adminData);
 
-  const [Q1, Q2, Q3] = activity2.steps;
-  const [A1, A2, A3] = activityData?.[1]?.answer?.map(a => a.value) || [];
+  const [Q1, Q2] = activity2.steps;
+  const [A1, A2] = activityData?.[1]?.answer?.map(a => a.value) || [];
 
-  const [q1, q2, q3] = activity3.steps;
-  const [a1, a2, a3] = activityData?.[2]?.answer?.map(a => a.value) || [];
+  const [_, q1, q2, q3, q4, q5] = activity3.steps;
+  const [a1, a2, a3, a4, a5] = activityData?.[2]?.answer?.map(a => a.value) || [];
 
-  const { questions: assessments } = getWeekAssessment(4);
+  const { questions: assessments } = getWeekAssessment(9);
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/compassion-feedback-4", enrollmentId, 4],
-    queryFn: () => userService.getUserCourseData(enrollmentId, 4),
+    queryKey: ["dashboard/compassion-feedback-9", enrollmentId, 9],
+    queryFn: () => userService.getUserCourseData(enrollmentId, 9),
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -45,7 +45,7 @@ function Week9({ enrollmentId, setWeekFourData }) {
   });
 
   const mutation = useMutation({
-    mutationFn: () => adminService.submitAdminFeedback(activityData, enrollmentId, 4, data?.activity?.user, code),
+    mutationFn: () => adminService.submitAdminFeedback(activityData, enrollmentId, 9, data?.activity?.user, code),
     onSuccess: (data) => {
       setModalData("")
       // setIsOpen(true)
@@ -128,107 +128,80 @@ function Week9({ enrollmentId, setWeekFourData }) {
     }
   }
 
-  function renderActivity2() {
-    const renderAnswers = (question, answer) => {
-      if (!answer) return null;
-
-      const selectedIndices = Object.entries(answer)
-        .filter(([_, value]) => value === true)
-        .map(([index]) => parseInt(index));
-
-      const selectedValues = question
-        .filter((_, index) => selectedIndices.includes(index))
-        .map(item => item.value);
-
-      return selectedValues.join(", ");
-    };
+  const renderActivity3 = (question, answer, activityId, index) => {
 
     return (
-      <>
-        <div className="d-flex gap-3">
-          <h2 className="text-blue fs-1">Questions:</h2>
-          <p className="text-blue fs-4">{activity2?.instruction}</p>
-        </div>
+      <div key={index}>
+      <div>
+        <span style={{backgroundColor:"#FF728B"}} className="rounded-3 text-white px-3 py-1">
+        Challenge
+        </span>
+      </div>
 
-        <div className="d-flex gap-3">
-          <h2 className="text-gray fs-1 text-gray">Answer:</h2>
-          <ul className="list-unstyled">
-            {[[Q1, A1], [Q2, A2], [Q3, A3]].map(([question, answer], index) => (
-              <li key={index} className="mb-4">
-                <div className="d-flex align-items-start gap-3">
-                  <span className="fs-4">•</span>
-                  <div className="d-flex gap-3 flex-grow-1">
-                    <p className="text-blue fs-4 mb-0">{question.question}</p>
-                    <p className="text-gray fs-4 mb-0">
-                      {renderAnswers(question.options, answer)}
-                    </p>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </>
+      <div className="d-flex gap-3 align-items-center mb-2">
+        <p className="fs-5 flex-grow-1 mb-0">{question.challenge}</p>
+      </div>
 
-    );
+      <div>
+        <span className="bg-success rounded-3 text-white px-3 py-1">
+        Your "YET" statement
+        </span>
+      </div>
+
+      <div className="d-flex gap-3 align-items-center mb-3">
+        <h2 className="text-gray fs-1 mb-0">Answer:</h2>
+        <p className="fs-5 flex-grow-1 mb-0">{answer?.[0]}</p>
+        {
+        (isAdmin && !activityData?.find((activity) => activity.page === activityId)?.answer?.find(item => item.stepId === question.id)?.feedback?.[index]) && 
+        <Icon
+          onClick={() => {
+          setActivityFeedbackId({ activityId, itemId: question.id, index })
+          handleModalOpen()
+          }}
+          style={{ color: "#D6D6D6" }}
+          width={35}
+          icon="tabler:message-2"
+        />
+        }
+      </div>
+
+      {activityData?.find(activity =>
+        activity.page === activityId)?.answer?.find(item => item.stepId === question.id)?.feedback?.[index] && (
+        <div className="d-flex gap-3">
+          <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start mb-0">
+          Feedback
+          </p>
+          <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded mb-0">
+          {activityData?.find(activity =>
+            activity.page === activityId)?.answer?.find(item => item.stepId === question.id)?.feedback?.[index]}
+          </p>
+          {isAdmin && (
+          <Icon
+            onClick={() => {
+            setModalData(activityData?.find(activity =>
+              activity.page === activityId)?.answer?.find(item => item.stepId === question.id)?.feedback?.[index])
+            setActivityFeedbackId({ activityId, itemId: question.id, index })
+            handleModalOpen()
+            }}
+            style={{ color: "#275DAD" }}
+            width={35}
+            icon="lucide:edit"
+          />
+          )}
+        </div>
+        )}
+      </div>
+    )
   }
 
-  function renderActivity3() {
-    const questions = [q1, q2, q3];
-    const answers = [a1, a2, a3];
+  function drag1(type) {
+    if (!a5) return [];
 
-    return questions.map((question, index) => (
-      <>
-        <div className="d-flex gap-3">
-          <h2 className="text-blue fs-1">Questions:</h2>
-          <p className="text-blue fs-4">{question.question}</p>
-        </div>
-
-        <div className="d-flex gap-3">
-          <h2 className="text-gray fs-1 text-gray">Answer:</h2>
-          <ul className="list-unstyled">
-            {Object.values(answers[index] || {}).map((value, idx) => (
-              <li key={idx} className="fs-5">
-                {idx + 1}. {value}
-              </li>
-            ))}
-          </ul>
-
-          {(isAdmin && !activityData?.find((activity) => activity.page === activity3.id)?.feedback) &&
-            <Icon
-              onClick={() => {
-                setActivityFeedbackId({ activityId: activity3.id, itemId: index + 1 })
-                handleModalOpen()
-              }}
-              style={{ color: "#D6D6D6" }}
-              width={35}
-              icon="tabler:message-2"
-            />
-          }
-        </div>
-
-        {activityData?.find((activity) => activity.page === activity3.id)?.feedback && (
-          <div className="d-flex gap-3">
-            <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>
-            <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-              {getActivityFeedback(activity3.id, index + 1)}
-            </p>
-            {isAdmin &&
-              <Icon
-                onClick={() => {
-                  setModalData(getActivityFeedback(activity3.id))
-                  setActivityFeedbackId({ activityId: activity3.id, itemId: index + 1 })
-                  handleModalOpen()
-                }}
-                style={{ color: "#275DAD" }}
-                width={35}
-                icon="lucide:edit"
-              />
-            }
-          </div>
-        )}
-      </>
-    ));
+    const indices =
+      type === "healthy"
+        ? a5.green
+        : a5.red;
+    return indices?.map((index) => q5?.images[index]) || [];
   }
 
   return (
@@ -240,7 +213,7 @@ function Week9({ enrollmentId, setWeekFourData }) {
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{activity1.question} "Values"?</p>
+        <p className="text-blue fs-4">{activity1.question} "Resilience"?</p>
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answers:</h2>
@@ -291,7 +264,110 @@ function Week9({ enrollmentId, setWeekFourData }) {
         Activity 2
       </p>
       <hr />
-      {renderActivity2()}
+      <>
+        <div className="d-flex gap-3">
+          <h2 className="text-blue fs-1">Question 1:</h2>
+          <p className="text-blue fs-4">{Q1.question} "Coping Skills"?</p>
+        </div>
+        <div className="d-flex gap-3">
+          <h2 className="text-gray fs-1 text-gray">Answers:</h2>
+          {A1 && typeof A1 === 'object' ? A1[0] : ''}
+          {
+            (isAdmin && !activityData?.find((activity) => activity.page === activity1.id)?.feedback) && <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity1.id })
+                handleModalOpen()
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          }
+        </div>
+        {
+          // Show this only id theres a feedback
+          (activityData?.find((activity) => activity.page === activity1.id)
+            ?.feedback) && (
+            <div className="d-flex gap-3">
+              <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+                Feedback
+              </p>
+              <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+                {getActivityFeedback(activity1.id)}
+              </p>
+              {
+                isAdmin && <Icon
+                  onClick={() => {
+                    setModalData(getActivityFeedback(activity1.id))
+                    setActivityFeedbackId({ activityId: activity1.id })
+                    handleModalOpen()
+                  }}
+                  style={{ color: "#275DAD" }}
+                  width={35}
+                  icon="lucide:edit"
+                />
+              }
+
+            </div>
+          )
+        }
+      </>
+
+      <>
+        <div className="d-flex gap-3">
+          <h2 className="text-blue fs-1">Question 2:</h2>
+          <p className="text-blue fs-4">{Q2.question}</p>
+        </div>
+        <div className="d-flex gap-3">
+          <h2 className="text-gray fs-1 text-gray">Answers:</h2>
+          <ul className="list-unstyled">
+            {Object.values(A2 || {}).map((value, idx) => (
+              <li key={idx} className="fs-5">
+                {`${idx + 1}. ${value}`}
+
+              </li>
+            ))}
+          </ul>
+          {
+            (isAdmin && !activityData?.find((activity) => activity.page === activity1.id)?.feedback) && <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity1.id })
+                handleModalOpen()
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          }
+        </div>
+        {
+          // Show this only id theres a feedback
+          (activityData?.find((activity) => activity.page === activity1.id)
+            ?.feedback) && (
+            <div className="d-flex gap-3">
+              <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+                Feedback
+              </p>
+              <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+                {getActivityFeedback(activity1.id)}
+              </p>
+              {
+                isAdmin && <Icon
+                  onClick={() => {
+                    setModalData(getActivityFeedback(activity1.id))
+                    setActivityFeedbackId({ activityId: activity1.id })
+                    handleModalOpen()
+                  }}
+                  style={{ color: "#275DAD" }}
+                  width={35}
+                  icon="lucide:edit"
+                />
+              }
+
+            </div>
+          )
+        }
+      </>
       <hr />
 
       {/* Activity 3 */}
@@ -299,7 +375,97 @@ function Week9({ enrollmentId, setWeekFourData }) {
         Activity 3
       </p>
       <hr />
-      {renderActivity3()}
+
+      <>
+        <div className="d-flex gap-3 align-items-center">
+          <h2 className="text-blue fs-1">Question 1:</h2>
+          <p className="text-blue fs-4 mb-0">Use the power of yet to demonstrate resilience in challenging situations.</p>
+        </div>
+        {[q1, q2, q3, q4].map((question, index) =>
+          renderActivity3(
+            question,
+            [a1, a2, a3, a4][index],
+            activity3.id,
+            index
+          )
+        )}
+
+      </>
+
+      <>
+        <div className="d-flex gap-3 align-items-center">
+          <h2 className="text-blue fs-1">Question 2:</h2>
+          <p className="text-blue fs-4 mb-0">Drag-and-drop the statements on the left into any of these bowls.</p>
+        </div>
+        <div className="d-flex gap-3">
+          <h2 className="text-gray fs-1 text-gray">Answers:</h2>
+          <div className="flex-grow-1 d-flex">
+            <div className="flex-grow-1">
+              <h2 className="text-center bg-green text-white py-3 fs-1">
+                Healthy Skills
+              </h2>
+              <div className="px-5 py-3">
+                {drag1("healthy")?.map((item, idx) => (
+                  <p className="fs-4">
+                    {idx + 1}. {item}
+                  </p>
+                ))}
+              </div>
+            </div>
+            <div className="flex-grow-1">
+              <h2 className="bg-red text-center text-white py-3 fs-1">
+                Unhealthy Skills
+              </h2>
+              <div className="px-5 py-3">
+                {drag1("unhealthy")?.map((item, idx) => (
+                  <p className="fs-4">
+                    {idx + 1}. {item}
+                  </p>
+                ))}
+              </div>
+            </div>
+          </div>
+          {
+            (isAdmin && !activityData?.find((activity) => activity.page === activity2.id)?.feedback) && <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity2.id })
+                handleModalOpen()
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          }
+        </div>
+        {
+          // Show this only id theres a feedback
+          (activityData?.find((activity) => activity.page === activity2.id)
+            ?.feedback) && (
+            <div className="d-flex gap-3">
+              <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+                Feedback
+              </p>
+              <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+                {getActivityFeedback(activity2.id)}
+              </p>
+              {
+                isAdmin && <Icon
+                  onClick={() => {
+                    setModalData(getActivityFeedback(activity2.id))
+                    setActivityFeedbackId({ activityId: activity2.id })
+                    handleModalOpen()
+                  }}
+                  style={{ color: "#275DAD" }}
+                  width={35}
+                  icon="lucide:edit"
+                />
+              }
+
+            </div>
+          )
+        }
+
+      </>
 
       <hr />
 

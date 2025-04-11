@@ -34,12 +34,39 @@ function TransitionFeedback() {
   const [isWeekThreeLoaded, setWeekThreeData] = useState(false);
   const [isWeekFourLoaded, setWeekFourData] = useState(false);
   const [isWeekFiveLoaded, setWeekFiveData] = useState(false);
+  const [isWeekSixLoaded, setWeekSixData] = useState(false);
+  const [isWeekSevenLoaded, setWeekSevenData] = useState(false);
+  const [isWeekEightLoaded, setWeekEightData] = useState(false);
+  const [isWeekNineLoaded, setWeekNineData] = useState(false);
+  const [isWeekTenLoaded, setWeekTenData] = useState(false);
 
   const [allDataLoaded, setAllDataLoaded] = useState(false);
 
   useEffect(() => {
-    setAllDataLoaded(isWeekOneLoaded && isWeekTwoLoaded && isWeekThreeLoaded && isWeekFourLoaded && isWeekFiveLoaded);
-  }, [isWeekOneLoaded, isWeekTwoLoaded, isWeekThreeLoaded, isWeekFourLoaded, isWeekFiveLoaded]);
+    setAllDataLoaded(
+      isWeekOneLoaded && 
+      isWeekTwoLoaded && 
+      isWeekThreeLoaded && 
+      isWeekFourLoaded && 
+      isWeekFiveLoaded &&
+      isWeekSixLoaded &&
+      isWeekSevenLoaded &&
+      isWeekEightLoaded &&
+      isWeekNineLoaded &&
+      isWeekTenLoaded
+    );
+  }, [
+    isWeekOneLoaded, 
+    isWeekTwoLoaded, 
+    isWeekThreeLoaded, 
+    isWeekFourLoaded, 
+    isWeekFiveLoaded,
+    isWeekSixLoaded,
+    isWeekSevenLoaded,
+    isWeekEightLoaded,
+    isWeekNineLoaded, 
+    isWeekTenLoaded
+  ]);
 
   const currentWeek = activeIndex + 1;
 
