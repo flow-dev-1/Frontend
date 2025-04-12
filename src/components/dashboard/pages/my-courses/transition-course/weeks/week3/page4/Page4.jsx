@@ -49,7 +49,7 @@ function WeekThreePage4() {
     }
     return () => { }
 
-  }, [userAnswers,pageData])
+  }, [userAnswers, pageData])
 
 
 
@@ -122,10 +122,8 @@ function WeekThreePage4() {
 
   const saveUserInput = () => {
 
-    // if (!adminDatas.isAdmin && !myAnswer) {
-    //   setErrorMessage("Oops! Please enter a valid input!");
-    //   return false;
-    // }
+    if (adminDatas.isAdmin) return true
+
     if (bucketResults.green.length + bucketResults.red.length !== pageData.images.length) {
       setErrorMessage("Please make sure to fill all the buckets.");
       return false;
@@ -236,8 +234,8 @@ function WeekThreePage4() {
                       <div
                         className={
                           bucket.id === "green"
-                          ? "inner-bowl"
-                          : "outer-bowl" 
+                            ? "inner-bowl"
+                            : "outer-bowl"
                         }
                       >
                         {bucket.label}

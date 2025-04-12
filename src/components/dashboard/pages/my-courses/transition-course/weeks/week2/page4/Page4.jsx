@@ -124,9 +124,8 @@ function WeekTwoPage4() {
     //   setErrorMessage("Oops! Please enter a valid input!");
     //   return false;
     // }
+    if (adminDatas.isAdmin) return true
 
-    console.log(bucketResults.green.length + bucketResults.red.length, "bucket results")
-    console.log(pageData.images.length,"Images length")
     if (bucketResults.green.length + bucketResults.red.length !== pageData.images.length) {
       setErrorMessage("Please make sure to fill all the buckets.");
       return false;
