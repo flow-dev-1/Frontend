@@ -259,24 +259,28 @@ export const courseContent = {
         instruction:
           "Drag-and-drop the statements on the left into any of these bowls",
         images: [
+          "Michael Jordan",
           "I can get better at this if I keep practicing.",
           "I haven’t figured it out yet, but I will.",
           "Mistakes help me learn and improve.",
           "With effort, I can improve my skills.",
           "If I don’t understand it immediately, it means I’m not smart enough.",
 
+          "Serena Williams",
           "I’m either good at something or I’m not.",
           "I give up when things get too hard.",
           "I can’t change my abilities; I was born this way.",
           "I stick to what I’m good at and avoid new things.",
           "Hard work and effort lead to improvement.",
 
+          "Michelle Obama",
           "If I fail, it just shows I’m not cut out for it. ",
           "Why try? Others are just naturally better than me.",
           "If I need help, it means I’m not capable enough.",
           "I’ll keep trying, even when it’s tough.",
           "Learning is a journey; I don’t have to be perfect right away.",
 
+          "Justin Bieber",
           "If I don’t succeed on the first try, I’m not meant to do it.",
           "Mistakes help me learn and improve.",
           "My brain can grow with new information and practice",
@@ -295,7 +299,7 @@ export const courseContent = {
             image: "Red Bucket.svg",
           },
         ],
-        steps: 20,
+        steps: 24,
         navigation: {
           prev: true,
           next: true,
@@ -1529,7 +1533,7 @@ export const courseContent = {
           {
             stepId: 3,
             type: "singleStar",
-            question: "Write down your Wishing Star here." ,
+            question: "Write down your Wishing Star here.",
           },
           {
             stepId: 4,

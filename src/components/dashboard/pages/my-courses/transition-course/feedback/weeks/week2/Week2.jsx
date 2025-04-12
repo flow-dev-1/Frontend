@@ -116,16 +116,27 @@ function Week2({ enrollmentId, setWeekTwoData }) {
   function drag1(type) {
     if (!activityData || !activityData[1] || !activityData[1].answer) return [];
 
-    const indices =
-      type === "growth"
-        ? activityData[1].answer.green
-        : activityData[1].answer.red;
+    const featuredNames = [
+      "Michael Jordan",
+      "Serena Williams", 
+      "Michelle Obama",
+      "Justin Bieber"
+    ];
 
+    const indices = type === "growth" 
+      ? activityData[1].answer.green 
+      : activityData[1].answer.red;
 
-        // console.log(indices, "Indices")
+    const items = indices?.map((index) => activity2?.images[index]) || [];
 
-        // console.log(activity2,"Activity 2")
-    return indices?.map((index) => activity2?.images[index]) || [];
+    // Sort with featured names first
+    return items.sort((a, b) => {
+      const aFeatured = featuredNames.includes(a);
+      const bFeatured = featuredNames.includes(b);
+      if (aFeatured && !bFeatured) return -1;
+      if (!aFeatured && bFeatured) return 1;
+      return 0;
+    });
   }
 
 
