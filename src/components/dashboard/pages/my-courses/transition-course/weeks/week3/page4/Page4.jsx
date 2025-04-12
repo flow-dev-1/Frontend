@@ -126,8 +126,6 @@ function WeekThreePage4() {
     //   setErrorMessage("Oops! Please enter a valid input!");
     //   return false;
     // }
-
-    console.log(bucketResults, pageData.images.length, "bucket results")
     if (bucketResults.green.length + bucketResults.red.length !== pageData.images.length) {
       setErrorMessage("Please make sure to fill all the buckets.");
       return false;
@@ -228,7 +226,7 @@ function WeekThreePage4() {
                     >
                       <h2
                         className={
-                          bucket.id === "inner"
+                          bucket.id === "green"
                             ? "inner-count"
                             : "outer-count"
                         }
@@ -237,7 +235,7 @@ function WeekThreePage4() {
                       </h2>
                       <div
                         className={
-                          bucket.id === "inner"
+                          bucket.id === "green"
                           ? "inner-bowl"
                           : "outer-bowl" 
                         }
