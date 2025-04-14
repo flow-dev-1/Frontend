@@ -8,14 +8,19 @@ import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
 } from "../../../../transition-course/data/index.js";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
 import { calculateResult } from "../../../utility.js";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer.js";
 import { useSelector } from "react-redux";
+import adminService from "../../../../../../../../services/api/admin.js";
+import Modal from "../../components/Modal.jsx";
 
-function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
+function Week5({ enrollmentId, setWeekFiveData }) {
   const { pages } = getWeekContentExcludingVideos(5);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState("");
+
   const [activity1, activity2] = pages;
 
   const [activityData, setActivityData] = useState([]);
@@ -28,11 +33,23 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
     queryKey: ["dashboard/compassion-feedback-5", enrollmentId, 5],
-    queryFn: () => userService.getUserCourseData(enrollmentId, 5),
+    queryFn: () => isAdmin ? adminService.getUserCourseData(enrollmentId, 5, code) : userService.getUserCourseData(enrollmentId, 5),
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
     keepPreviousData: false,
+  });
+
+  const mutation = useMutation({
+    mutationFn: () => adminService.submitAdminFeedback(activityData, enrollmentId, 5, data?.activity?.user, code),
+    onSuccess: (data) => {
+      setModalData("")
+
+    },
+    onError: (error) => {
+      console.error('Registration error:', error)
+      setModalData("")
+    },
   });
 
   useEffect(() => {
@@ -47,31 +64,40 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
 
   const [q1, q2, q3, q4, q5] = activity2.steps;
   const [a1, a2, a3, a4, a5] = activityData?.[1]?.answer?.map(a => a.value) || [];
-
+  const [f1, f2, f3, f4, f5] = activityData?.[1]?.feedback?.map(a => a.value) || [];
 
   function getActivityAnswer(item) {
     const actData = activityData[0]?.answer;
     return actData
 
-    // console.log(actData, "actData");
-    // const userAnswer = actData?.find(
-    //   (activity) => activity.id === item?.id
-    // )?.value;
-
-    // return item?.options?.find((data) => data.id === userAnswer)?.text;
   }
 
-  function getActivityFeedback(item) {
-    const actData = activityData[0]?.answer;
-    const userAnswer = actData?.find(
-      (activity) => activity.id === item?.id - 1
-    )?.value;
-    return item?.feedback[userAnswer];
+  function getActivityFeedback(activityId, itemId, index) {
+    if (!itemId) {
+      return activityData?.find((activity) => activity.page === activityId)
+        ?.feedback;
+    } else {
+      const answersList = activityData?.find(
+        (activity) => activity.page === activityId
+      )?.feedback;
+      const answerObject = answersList?.find(
+        (activity) => activity.stepId === itemId
+      ).value;
+
+      // return answerObject ? answerObject[index] : null;
+      return answerObject ? answerObject : null;
+    }
   }
 
   const handleModalOpen = () => {
     setShowModal(true);
   }
+
+  const handleModalClose = () => {
+    setActivityFeedbackId(null)
+    setShowModal(false);
+  }
+
 
   if (isPending) {
     return <div>Loading...</div>;
@@ -84,7 +110,7 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
   const score =
     calculateResult(assessments, assessmentData, assessments?.length) || 0;
 
-  const renderActivity2 = (question, answer, activityId, index) => {
+  const renderActivity2 = (question, answer, feedback, activityId, index) => {
     return (
       <div key={index}>
         <div className="d-flex gap-3 align-items-center">
@@ -101,11 +127,10 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
         <div className="d-flex gap-3 align-items-center">
           <h2 className="text-gray fs-1 mb-0">Answer:</h2>
           <p className="fs-5 flex-grow-1 mb-0">{answer?.[0]}</p>
-          {(isAdmin && !activityData?.find(activity =>
-            activity.page === activityId)?.feedback) && (
+          {(isAdmin && !feedback) && (
               <Icon
                 onClick={() => {
-                  setActivityFeedbackId({ activityId })
+                  setActivityFeedbackId({ activityId, itemId: index + 1 })
                   handleModalOpen()
                 }}
                 style={{ color: "#D6D6D6" }}
@@ -137,20 +162,19 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
           <p className="fs-5 flex-grow-1 mb-0">{answer?.[2]}</p>
         </div>
 
-        {activityData?.find(activity =>
-          activity.page === activityId)?.feedback && (
+        {feedback && (
             <div className="d-flex gap-3">
               <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start mb-0">
                 Feedback
               </p>
               <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded mb-0">
-                {getActivityFeedback(activityId)}
+                {feedback}
               </p>
               {isAdmin && (
                 <Icon
                   onClick={() => {
-                    // setModalData(getActivityFeedback(activityId))
-                    setActivityFeedbackId({ activityId })
+                    setModalData(feedback)
+                    setActivityFeedbackId({ activityId,itemId: index + 1 })
                     handleModalOpen()
                   }}
                   style={{ color: "#275DAD" }}
@@ -162,6 +186,40 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
           )}
       </div>
     )
+  }
+
+  const submitFeedback = (value) => {
+
+    if (!activityFeedbackId?.itemId) {
+      const answerData = activityData.find(item => item.page === activityFeedbackId.activityId)
+      answerData.feedback = value
+      handleModalClose()
+      mutation.mutate()
+    } else {
+
+      const answerData = activityData?.find(item => item.page === activityFeedbackId.activityId);
+
+      if (!answerData.feedback) {
+        answerData.feedback = [];
+      }
+
+      const existingFeedbackIndex = answerData.feedback.findIndex(
+        item => item.stepId === activityFeedbackId.itemId
+      );
+
+      if (existingFeedbackIndex >= 0) {
+        answerData.feedback[existingFeedbackIndex].value = value;
+      } else {
+        answerData.feedback.push({
+          stepId: activityFeedbackId.itemId,
+          value: value
+        });
+      }
+
+      handleModalClose()
+      setModalData("")
+      mutation.mutate()
+    }
   }
 
   return (
@@ -177,7 +235,7 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-1 text-gray">Answer:</h2>
-        <ul className="list-unstyled">
+        <ul className="list-unstyled fs-5 flex-grow-1">
           {getActivityAnswer(activity1.id)?.map((item, idx) => (
             <li key={idx} className="fs-5">
               {idx + 1}. {item.value}
@@ -188,7 +246,7 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
         { //This is only Visible for Flow Admins
           (isAdmin && !activityData?.find((activity) => activity.page === activity1.id)?.feedback) && <Icon
             onClick={() => {
-              setActivityFeedbackId({ activityId: activity1.id, itemId: 1 })
+              setActivityFeedbackId({ activityId: activity1.id })
               handleModalOpen()
             }}
             style={{ color: "#D6D6D6" }}
@@ -199,7 +257,7 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
 
       </div>
 
-      {/* {
+      {
         // Show this only id theres a feedback
         (activityData?.find((activity) => activity.page === activity1.id)
           ?.feedback) && (
@@ -208,7 +266,7 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-              {getActivityFeedback(activity1.id, 1)}
+              {getActivityFeedback(activity1.id)}
             </p>
             {
               isAdmin && <Icon
@@ -225,7 +283,7 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
 
           </div>
         )
-      } */}
+      }
 
       <hr />
 
@@ -240,6 +298,7 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
           renderActivity2(
             question,
             [a1, a2, a3, a4, a5][index],
+            [f1, f2, f3, f4, f5][index],
             activity2.id,
             index
           )
@@ -321,6 +380,11 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
                       : ""}
           </p>
         </div>
+        <Modal
+          isOpen={showModal}
+          closeModal={handleModalClose}
+          data={modalData}
+          handleSubmit={submitFeedback} />
       </div>
     </>
   );

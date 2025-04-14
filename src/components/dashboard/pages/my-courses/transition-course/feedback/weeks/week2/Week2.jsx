@@ -103,12 +103,13 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     } else {
       const answersList = activityData?.find(
         (activity) => activity.page === activityId
-      )?.answer;
-
-      const answerObject = answersList?.find(
-        (activity) => activity.id === itemId
       )?.feedback;
 
+      const answerObject = answersList?.find(
+        (activity) => activity.stepId === itemId
+      ).value;
+
+      // return answerObject ? answerObject[index] : null;
       return answerObject ? answerObject : null;
     }
   }
@@ -152,9 +153,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     calculateResult(assessments, assessmentData, assessments?.length) || 0;
 
   const submitFeedback = (value) => {
-    // console.log(value, "value")
-    // console.log(activityData, "Activity Data")
-    // console.log(activityFeedbackId, "Activity feedback Id")
+
     if (!activityFeedbackId?.itemId) {
       const answerData = activityData.find(item => item.page === activityFeedbackId.activityId)
       answerData.feedback = value

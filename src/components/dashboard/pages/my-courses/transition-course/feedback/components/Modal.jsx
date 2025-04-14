@@ -42,7 +42,10 @@ function Modal({ isOpen, closeModal, data, handleSubmit }) {
         <div className="d-flex justify-content-end  px-4 pt-3 pb-4 border border-bottom-3">
           <button
             className="bg-blue text-white px-5 border-0 py-2 rounded-3"
-            onClick={() => handleSubmit(feedback)}
+            onClick={() => {
+              setFeedback("")
+              handleSubmit(feedback)
+            }}
           >
             Submit Feedback
           </button>
