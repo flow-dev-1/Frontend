@@ -32,12 +32,13 @@ function Week4({ enrollmentId, setWeekFourData }) {
 
   const [q1, q2, q3] = activity3.steps;
   const [a1, a2, a3] = activityData?.[2]?.answer?.map(a => a.value) || [];
+  const [f1, f2, f3] = activityData?.[2]?.feedback?.map(a => a.value) || [];
 
   const { questions: assessments } = getWeekAssessment(4);
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/compassion-feedback-4", enrollmentId, 4],
-    queryFn: () => userService.getUserCourseData(enrollmentId, 4),
+    queryKey: ["dashboard/transition-feedback-4", enrollmentId, 4],
+    queryFn: () => isAdmin ? adminService.getUserCourseData(enrollmentId, 4, code) : userService.getUserCourseData(enrollmentId, 4),
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -85,10 +86,21 @@ function Week4({ enrollmentId, setWeekFourData }) {
       ?.answer;
   }
 
-  function getActivityFeedback(activityId) {
-    return activityData?.find((activity) => activity.page === activityId)
-      ?.feedback;
+  function getActivityFeedback(activityId, itemId, index) {
+    if (!itemId) {
+      return activityData?.find((activity) => activity.page === activityId)
+        ?.feedback;
+    } else {
+      const answersList = activityData?.find(
+        (activity) => activity.page === activityId
+      )?.feedback;
+      const answerObject = answersList?.find(
+        (activity) => activity.stepId === itemId
+      ).value;
 
+      // return answerObject ? answerObject[index] : null;
+      return answerObject ? answerObject : null;
+    }
   }
 
 
@@ -104,9 +116,7 @@ function Week4({ enrollmentId, setWeekFourData }) {
     calculateResult(assessments, assessmentData, assessments?.length) || 0;
 
   const submitFeedback = (value) => {
-    // console.log(value, "value")
-    // console.log(activityData, "Activity Data")
-    // console.log(activityFeedbackId, "Activity feedback Id")
+
     if (!activityFeedbackId?.itemId) {
       const answerData = activityData.find(item => item.page === activityFeedbackId.activityId)
       answerData.feedback = value
@@ -114,17 +124,28 @@ function Week4({ enrollmentId, setWeekFourData }) {
       mutation.mutate()
     } else {
 
-      const answerData = activityData.find(item => item.page === activityFeedbackId.activityId);
+      const answerData = activityData?.find(item => item.page === activityFeedbackId.activityId);
 
-      const feedbackData = answerData?.answer?.find(item => item.stepId === activityFeedbackId.itemId);
-      if (!feedbackData.feedback) {
-        feedbackData.feedback = {};
+      if (!answerData.feedback) {
+        answerData.feedback = [];
       }
-      feedbackData.feedback[activityFeedbackId.index] = value; // Set feedback entry with key as index
+
+      const existingFeedbackIndex = answerData.feedback.findIndex(
+        item => item.stepId === activityFeedbackId.itemId
+      );
+
+      if (existingFeedbackIndex >= 0) {
+        answerData.feedback[existingFeedbackIndex].value = value;
+      } else {
+        answerData.feedback.push({
+          stepId: activityFeedbackId.itemId,
+          value: value
+        });
+      }
 
       handleModalClose()
+      setModalData("")
       mutation.mutate()
-      // mutation.mutate({ /* pass necessary data */ });
     }
   }
 
@@ -152,7 +173,7 @@ function Week4({ enrollmentId, setWeekFourData }) {
 
         <div className="d-flex gap-3">
           <h2 className="text-gray fs-1 text-gray">Answer:</h2>
-          <ul className="list-unstyled">
+          <ul className="list-unstyled fs-5 flex-grow-1">
             {[[Q1, A1], [Q2, A2], [Q3, A3]].map(([question, answer], index) => (
               <li key={index} className="mb-4">
                 <div className="d-flex align-items-start gap-3">
@@ -167,7 +188,47 @@ function Week4({ enrollmentId, setWeekFourData }) {
               </li>
             ))}
           </ul>
+
+          {
+            (isAdmin && !activityData?.find((activity) => activity.page === activity2.id)?.feedback) && <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity2.id })
+                handleModalOpen()
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          }
         </div>
+
+              {
+                // Show this only id theres a feedback
+                (activityData?.find((activity) => activity.page === activity2.id)
+                  ?.feedback) && (
+                  <div className="d-flex gap-3">
+                    <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+                      Feedback
+                    </p>
+                    <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+                      {getActivityFeedback(activity2.id)}
+                    </p>
+                    {
+                      isAdmin && <Icon
+                        onClick={() => {
+                          setModalData(getActivityFeedback(activity2.id))
+                          setActivityFeedbackId({ activityId: activity2.id })
+                          handleModalOpen()
+                        }}
+                        style={{ color: "#275DAD" }}
+                        width={35}
+                        icon="lucide:edit"
+                      />
+                    }
+        
+                  </div>
+                )
+              }
       </>
 
     );
@@ -176,6 +237,7 @@ function Week4({ enrollmentId, setWeekFourData }) {
   function renderActivity3() {
     const questions = [q1, q2, q3];
     const answers = [a1, a2, a3];
+    const feedbacks = [f1, f2, f3];
 
     return questions.map((question, index) => (
       <>
@@ -186,7 +248,7 @@ function Week4({ enrollmentId, setWeekFourData }) {
 
         <div className="d-flex gap-3">
           <h2 className="text-gray fs-1 text-gray">Answer:</h2>
-          <ul className="list-unstyled">
+          <ul className="list-unstyled fs-5 flex-grow-1">
             {Object.values(answers[index] || {}).map((value, idx) => (
               <li key={idx} className="fs-5">
                 {idx + 1}. {value}
@@ -194,7 +256,7 @@ function Week4({ enrollmentId, setWeekFourData }) {
             ))}
           </ul>
 
-          {(isAdmin && !activityData?.find((activity) => activity.page === activity3.id)?.feedback) &&
+          {(isAdmin && !feedbacks[index]) &&
             <Icon
               onClick={() => {
                 setActivityFeedbackId({ activityId: activity3.id, itemId: index + 1 })
@@ -207,16 +269,16 @@ function Week4({ enrollmentId, setWeekFourData }) {
           }
         </div>
 
-        {activityData?.find((activity) => activity.page === activity3.id)?.feedback && (
+        {feedbacks[index] && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>
             <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-              {getActivityFeedback(activity3.id, index + 1)}
+              {feedbacks[index]}
             </p>
             {isAdmin &&
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity3.id))
+                  setModalData(feedbacks[index])
                   setActivityFeedbackId({ activityId: activity3.id, itemId: index + 1 })
                   handleModalOpen()
                 }}

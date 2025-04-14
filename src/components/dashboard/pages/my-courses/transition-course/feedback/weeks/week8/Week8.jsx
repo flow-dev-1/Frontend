@@ -32,8 +32,8 @@ function Week8({ enrollmentId, setWeekThreeData }) {
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/compassion-feedback-8", enrollmentId, 8],
-    queryFn: () => userService.getUserCourseData(enrollmentId, 8),
+    queryKey: ["dashboard/transition-feedback-8", enrollmentId, 8],
+    queryFn: () => isAdmin ? adminService.getUserCourseData(enrollmentId, 8, code) : userService.getUserCourseData(enrollmentId, 8),
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -54,29 +54,44 @@ function Week8({ enrollmentId, setWeekThreeData }) {
 
   const [q1, q2, q3, q4] = activity3.steps;
   const [a1, a2, a3, a4] = activityData?.[2]?.answer?.map(a => a.value) || [];
+  const [f1, f2, f3, f4] = activityData?.[2]?.feedback?.map(a => a.value) || [];
 
   function getActivityAnswer(activityId) {
 
-    console.log(activityData?.find((activity) => activity.page === activityId))
     return activityData?.find((activity) => activity.page === activityId)
       ?.answer;
   }
 
-  function getActivityFeedback(activityId) {
-    return activityData?.find((activity) => activity.page === activityId)?.feedback;
+  function getActivityFeedback(activityId, itemId, index) {
+    if (!itemId) {
+      return activityData?.find((activity) => activity.page === activityId)
+        ?.feedback;
+    } else {
+      const answersList = activityData?.find(
+        (activity) => activity.page === activityId
+      )?.feedback;
+      const answerObject = answersList?.find(
+        (activity) => activity.stepId === itemId
+      ).value;
 
+      // return answerObject ? answerObject[index] : null;
+      return answerObject ? answerObject : null;
+    }
   }
 
   const mutation = useMutation({
     mutationFn: () => adminService.submitAdminFeedback(activityData, enrollmentId, 8, data?.activity?.user, code),
     onSuccess: (data) => {
-      setModalData("");
-      // Handle success (e.g., show a success message)
+      setModalData("")
+      // setIsOpen(true)
+      // toast.success(data.message)
     },
     onError: (error) => {
-      console.error('Feedback submission error:', error);
-      setModalData("");
-      // Handle error (e.g., show an error message)
+      console.error('Registration error:', error)
+      setModalData("")
+      // toast.dismiss()
+      // toast.error(error?.message)
+      // navigate('/sign-in', { replace: true })
     },
   });
 
@@ -90,25 +105,37 @@ function Week8({ enrollmentId, setWeekThreeData }) {
   };
 
   const submitFeedback = (value) => {
-    const answerData = activityData.find(item => item.page === activityFeedbackId.activityId);
-    answerData.feedback = value;
-    handleModalClose();
-    mutation.mutate();
-  };
 
-  function drag1(type) {
-    if (!activityData || !activityData[1] || !activityData[1].answer) return [];
+    if (!activityFeedbackId?.itemId) {
+      const answerData = activityData.find(item => item.page === activityFeedbackId.activityId)
+      answerData.feedback = value
+      handleModalClose()
+      mutation.mutate()
+    } else {
 
-    const indices =
-      type === "growth"
-        ? activityData[1].answer.green
-        : activityData[1].answer.red;
+      const answerData = activityData?.find(item => item.page === activityFeedbackId.activityId);
 
+      if (!answerData.feedback) {
+        answerData.feedback = [];
+      }
 
-    // console.log(indices, "Indices")
+      const existingFeedbackIndex = answerData.feedback.findIndex(
+        item => item.stepId === activityFeedbackId.itemId
+      );
 
-    // console.log(activity2,"Activity 2")
-    return indices?.map((index) => activity2?.images[index]) || [];
+      if (existingFeedbackIndex >= 0) {
+        answerData.feedback[existingFeedbackIndex].value = value;
+      } else {
+        answerData.feedback.push({
+          stepId: activityFeedbackId.itemId,
+          value: value
+        });
+      }
+
+      handleModalClose()
+      setModalData("")
+      mutation.mutate()
+    }
   }
 
 
@@ -123,11 +150,7 @@ function Week8({ enrollmentId, setWeekThreeData }) {
   const score =
     calculateResult(assessments, assessmentData, assessments?.length) || 0;
 
-  const renderActivity3 = (question, answer, activityId, index) => {
-
-    console.log(index, "Index")
-
-    console.log(answer, "Answer is here")
+  const renderActivity3 = (question, answer,feedback, activityId, index) => {
 
     return (
       <div key={index}>
@@ -141,7 +164,7 @@ function Week8({ enrollmentId, setWeekThreeData }) {
           {
             index === 2 ? <p className="fs-5 flex-grow-1">1. {answer}</p> :
 
-              <ul className="list-unstyled">
+              <ul className="list-unstyled fs-5 flex-grow-1">
                 {Object.values(answer || {}).map((value, idx) => (
                   <li key={idx} className="fs-5">
                     {index === 3 ? `${idx + 1}. ${['S', 'M', 'A', 'R', 'T'][idx]}: ${value}` : `${idx + 1}. ${value}`}
@@ -151,11 +174,10 @@ function Week8({ enrollmentId, setWeekThreeData }) {
               </ul>
           }
 
-          {(isAdmin && !activityData?.find(activity =>
-            activity.page === activityId)?.feedback) && (
+          {(isAdmin && !feedback) && (
               <Icon
                 onClick={() => {
-                  setActivityFeedbackId({ activityId })
+                  setActivityFeedbackId({ activityId, itemId: index + 1 })
                   handleModalOpen()
                 }}
                 style={{ color: "#D6D6D6" }}
@@ -165,20 +187,19 @@ function Week8({ enrollmentId, setWeekThreeData }) {
             )}
         </div>
 
-        {activityData?.find(activity =>
-          activity.page === activityId)?.feedback && (
+        {feedback && (
             <div className="d-flex gap-3">
               <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start mb-0">
                 Feedback
               </p>
               <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded mb-0">
-                {getActivityFeedback(activityId)}
+                {feedback}
               </p>
               {isAdmin && (
                 <Icon
                   onClick={() => {
-                    setModalData(getActivityFeedback(activityId))
-                    setActivityFeedbackId({ activityId })
+                    setModalData(feedback)
+                    setActivityFeedbackId({ activityId, itemId: index + 1 })
                     handleModalOpen()
                   }}
                   style={{ color: "#275DAD" }}
@@ -311,6 +332,7 @@ function Week8({ enrollmentId, setWeekThreeData }) {
           renderActivity3(
             question,
             [a1, a2, a3, a4][index],
+            [f1, f2, f3, f4][index],
             activity3.id,
             index
           )
