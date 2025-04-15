@@ -863,7 +863,7 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+5/Week+5_1.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+5/Week+5_2.mp4",
         hasNextButton: true,
       },
       {
@@ -983,7 +983,7 @@ export const courseContent = {
       {
         id: 5,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+5/Week+5_2.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/transition_videos/Week+5/Week+5_3.mp4",
         navigation: {
           prev: true,
           next: true,

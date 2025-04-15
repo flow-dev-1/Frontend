@@ -7,6 +7,8 @@ function VideoComponent({ videoSrc }) {
   const [percentageWatched, setPercentageWatched] = useState(3);
   const videoRef = React.createRef();
 
+  console.log(videoSrc,"Video src")
+
   useEffect(() => {
     const video = videoRef.current;
     const intervalId = setInterval(() => {
@@ -30,7 +32,7 @@ function VideoComponent({ videoSrc }) {
         controlsList="nodownload noremoteplayback"
         style={{ pointerEvents: "auto" }}
         onCanPlay={() => null}
-        onError={() => null}
+        onError={(e) => console.log(e,"This is error")}
       >
         <source src={videoSrc} type="video/mp4" />
         Your browser does not support the video tag.
