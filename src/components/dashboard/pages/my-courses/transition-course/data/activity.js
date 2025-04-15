@@ -373,12 +373,12 @@ export const courseContent = {
         buckets: [
           {
             id: "green",
-            label: "Inner Circle",
+            label: "In Your Control",
             count: 2,
           },
           {
             id: "red",
-            label: "Outer Circle",
+            label: "Out of Your Control",
             count: 2,
           },
         ],

@@ -62,6 +62,11 @@ function ProgressBar({ value, handleChange }) {
   <h2 className="text-gray font-lg">50</h2>
   <h2 className="text-gray font-lg">100</h2>
 </div>
+<div className="d-flex justify-content-between gap-0 ms-2 align-left-lg-custom w-100">
+  <h2 className="text-black font-lg">Poor</h2>
+  <h2 className="text-gray font-lg"></h2>
+  <h2 className="text-black font-lg">Great</h2>
+</div>
 
 
         </div>
