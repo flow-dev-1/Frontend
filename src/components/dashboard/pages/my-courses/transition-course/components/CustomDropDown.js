@@ -9,7 +9,10 @@ function CustomDropDown({ value, onChange, options = [] }) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
       >
-        <option value="" disabled>Select an option...</option>
+         <option value=""> </option>
+        <option value="" disabled hidden>
+          Select an option
+        </option>
         {options.map((option, index) => (
           <option key={index} value={option}>
             {option}
@@ -19,5 +22,6 @@ function CustomDropDown({ value, onChange, options = [] }) {
     </label>
   );
 }
+
 
 export default CustomDropDown;

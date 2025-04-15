@@ -83,13 +83,13 @@ function WeekNinePage6() {
         return (
           <QuestionBox>
             <div className="text-center mb-5">
-              <h2 className="text-white bg-blue py-4 px-5 fs-1 rounded d-inline">
+              <h2 className="text-white bg-blue py-2 px-5 fs-1 rounded d-inline">
                 Example
               </h2>
             </div>
             <div className="d-flex flex-column gap-3">
               <div className="mb-3">
-                <h2 className="text-white bg-red py-4 px-5 fs-1 rounded d-inline">
+                <h2 className="text-white bg-red py-2 px-5 fs-1 rounded d-inline">
                   Challenge
                 </h2>
               </div>
@@ -97,7 +97,7 @@ function WeekNinePage6() {
                 {step.challenge}
               </h2>
               <div className="mb-3">
-                <h2 className="text-white bg-green py-4 px-5 fs-1 rounded d-inline">
+                <h2 className="text-white bg-green py-2 px-5 fs-1 rounded d-inline">
                   Your YET Statement:
                 </h2>
               </div>
