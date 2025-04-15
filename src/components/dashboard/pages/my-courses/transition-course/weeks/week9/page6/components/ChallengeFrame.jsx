@@ -42,7 +42,7 @@ function ChallengeFrame({ data, answers, setAnswers, setErrorMessage }) {
     
           <div className="d-flex flex-column gap-3">
               <div className="mb-3">
-                <h2 className="text-white bg-red py-4 px-5 fs-1 rounded d-inline">
+                <h2 className="text-white bg-red py-2 px-5 fs-1 rounded d-inline">
                   Challenge
                 </h2>
               </div>
@@ -50,7 +50,7 @@ function ChallengeFrame({ data, answers, setAnswers, setErrorMessage }) {
                 {challenge}
               </h2>
               <div className="mb-3">
-                <h2 className="text-white bg-green py-4 px-5 fs-1 rounded d-inline">
+                <h2 className="text-white bg-green py-2 px-5 fs-1 rounded d-inline">
                   Your YET Statement:
                 </h2>
               </div>

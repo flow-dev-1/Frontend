@@ -180,7 +180,7 @@ function WeekThreePage4() {
           <Droppable droppableId="image">
             {(provided, snapshot) => (
               <div
-                className="d-flex p-5 justify-content-center align-items-center"
+                className="d-flex p-5 justify-content-center align-items-center w-50"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 style={{
@@ -223,20 +223,16 @@ function WeekThreePage4() {
                       }}
                     >
                       <h2
-                        className={
-                          bucket.id === "green"
-                            ? "inner-count"
-                            : "outer-count"
-                        }
+                        className={`${
+                          bucket.id === "green" ? "inner-count" : "outer-count"
+                        } text-center`}
                       >
                         {bucketResults[bucket.id]?.length}
                       </h2>
                       <div
-                        className={
-                          bucket.id === "green"
-                            ? "inner-bowl"
-                            : "outer-bowl"
-                        }
+                        className={`${
+                          bucket.id === "green" ? "inner-bowl" : "outer-bowl"
+                        } px-3 text-center`}
                       >
                         {bucket.label}
                       </div>

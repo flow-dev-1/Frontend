@@ -65,7 +65,7 @@ function ImageCheckBoxesFrame({ data, answers, setAnswers, setErrorMessage }) {
             <div
               className="mt-2 d-flex justify-content-center align-items-center px-5 py-2 mb-2"
               style={{
-                borderRadius: "45%",
+                borderRadius: "2em",
                 backgroundColor: option.colorCode,
                 color: "black",
                 fontWeight: "bold",
