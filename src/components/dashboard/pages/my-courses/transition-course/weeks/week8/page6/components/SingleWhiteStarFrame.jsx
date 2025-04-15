@@ -4,9 +4,9 @@ import QuestionBox from "../../../../components/QuestionBox";
 import WhiteStarSmallTextBox from "../../../../components/WhiteStarSmallTextBox";
 
 function SingleWhiteStarFrame({ data, answers, setAnswers, setErrorMessage }) {
-  const { step, questions } = data;
+  const { step, question } = data;
 
-  const handleInputChange = (index, value) => {
+  const handleInputChange = (value) => {
     setErrorMessage("");
     // Update answers state with the new value
     setAnswers((prevAnswers) => {
@@ -16,17 +16,12 @@ function SingleWhiteStarFrame({ data, answers, setAnswers, setErrorMessage }) {
       if (stepIndex !== -1) {
         updatedAnswers[stepIndex] = {
           ...updatedAnswers[stepIndex],
-          value: {
-            ...updatedAnswers[stepIndex].value,
-            [index]: value, // Update the specific index with the new value
-          },
+          value
         };
       } else {
         updatedAnswers.push({
           stepId: step,
-          value: {
-            [index]: value,
-          },
+          value,
         });
       }
 
@@ -36,24 +31,18 @@ function SingleWhiteStarFrame({ data, answers, setAnswers, setErrorMessage }) {
 
   return (
     <QuestionBox>
-
-      {questions.map((question, index) => {
-        const [key, value] = Object.entries(question)[0]; // extract the key value pair
-        return (
-          <div key={index} className="mb-2">
+          <div className="mb-2">
             <div className="d-flex gap-2 justify-content-center">
-            <h2 className="text-blue">{key}: </h2>
-              <h2 className="text-gray">{value}</h2>
+            <h2 className="text-blue">Question:</h2>
+              <h2 className="text-gray">{question}</h2>
             </div>
             <div className="d-flex justify-content-center">
               <WhiteStarSmallTextBox
-                value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
-                handleChange={(e) => handleInputChange(index, e.target.value)}
+                value={answers.find(answer => answer.stepId === step)?.value || ""}
+                handleChange={(e) => handleInputChange(e.target.value)}
               />
             </div>
           </div>
-        );
-      })}
     </QuestionBox>
   );
 }

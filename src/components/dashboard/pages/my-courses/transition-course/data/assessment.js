@@ -158,55 +158,55 @@ export const assessments = {
       {
         id: 1,
         question:
-          "Can you identify the 3 key steps we learned about showing compassion for others as discussed in the lesson 'This will help you apply them in your daily life'?",
+          "What does the concept of “control” mean in this context?",
         options: [
-          { id: "A", text: "Seeing, Ignoring, and Criticizing." },
-          { id: "B", text: "Seeing, Caring, and Doing." },
-          { id: "C", text: "Helping, Judging, and Complaining." },
-          { id: "D", text: "Listening, Arguing, and Avoiding." },
+          { id: "A", text: "The ability to stop anything from happening" },
+          { id: "B", text: "The influence we have over something or someone" },
+          { id: "C", text: "The power to control other people's actions" },
+          { id: "D", text: "Only focusing on what makes you happy" },
         ],
         correctOption: "B",
       },
       {
         id: 2,
         question:
-          "Which of the following is NOT a way of showing compassion to others?",
+          "Which of these would be inside your circle of control?",
         options: [
-          { id: "A", text: "Listening to a friend who is upset." },
-          { id: "B", text: "Laughing at someone who made a mistake." },
+          { id: "A", text: "How other people behave." },
+          { id: "B", text: "Your response to a challenge." },
           {
             id: "C",
-            text: "Offering help to a classmate struggling with a project.",
+            text: "The weather.",
           },
-          { id: "D", text: "Giving a compliment to cheer someone up." },
+          { id: "D", text: "What others think about you." },
         ],
         correctOption: "B",
       },
       {
         id: 3,
         question:
-          "When practicing compassion for others, what is the first thing you should do?",
+          "Flowie and Flowa gave an example about the weather. What part of it is in your control?",
         options: [
-          { id: "A", text: "Tell them what they did wrong." },
-          { id: "B", text: "Notice when someone needs help." },
-          { id: "C", text: "Ignore the situation and hope it improves." },
-          { id: "D", text: "Immediately fix their problem." },
+          { id: "A", text: "Deciding whether it rains or not." },
+          { id: "B", text: "How you prepare for the weather (e.g., wearing sunglasses or using an umbrella)." },
+          { id: "C", text: "The temperature outside." },
+          { id: "D", text: "How sunny it is." },
         ],
         correctOption: "B",
       },
       {
         id: 4,
-        question: "Why is listening considered an act of compassion?",
+        question: "What is one benefit of focusing on things within your control?",
         options: [
-          { id: "A", text: "It makes you look good in front of others." },
+          { id: "A", text: "It helps you worry less about things you cannot change." },
           {
             id: "B",
-            text: "It allows the person to feel heard and supported.",
+            text: "It allows you to control other people.",
           },
-          { id: "C", text: "It distracts you from your own problems." },
+          { id: "C", text: "It helps you avoid challenges altogether." },
           {
             id: "D",
-            text: "It helps you get more information about someone's issues.",
+            text: "It means you will always succeed in everything.",
           },
         ],
         correctOption: "A",
@@ -214,20 +214,20 @@ export const assessments = {
       {
         id: 5,
         question:
-          "Which of the following is a compassionate response when a friend fails a test?",
+          "Why is it helpful to understand what you can and cannot control as you enter secondary school?",
         options: [
-          { id: "A", text: '"It\'s your fault for not studying enough".' },
+          { id: "A", text: 'So you can control everything that happens to you.' },
           {
             id: "B",
-            text: "\"Everyone fails sometimes; it's okay. You'll do better next time.\"",
+            text: "To know that you can avoid all challenges.",
           },
           {
             id: "C",
-            text: '"This test wasn\'t even hard; how could you fail?"',
+            text: 'To focus energy on areas where you can make a difference.',
           },
           {
             id: "D",
-            text: "\"Let's just forget about it; it doesn't matter.\"",
+            text: "To change what other people think about you.",
           },
         ],
         correctOption: "C",
@@ -338,7 +338,7 @@ export const assessments = {
             text: "Ask someone else what you’re feeling.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 2,
@@ -362,7 +362,7 @@ export const assessments = {
             text: "Ignoring the person who upset you.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 3,
@@ -550,7 +550,7 @@ export const assessments = {
             text: "They avoid directly addressing the issue.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
     ],
   },
@@ -604,7 +604,7 @@ export const assessments = {
             text: "A smartphone for texting.",
           },
         ],
-        correctOption: "B",
+        correctOption: "A",
       },
       {
         id: 3,
@@ -650,7 +650,7 @@ export const assessments = {
             text: "Do nothing.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 5,
@@ -671,7 +671,7 @@ export const assessments = {
             text: "Being more disorganized.",
           },
         ],
-        correctOption: "B",
+        correctOption: "A",
       },
     ],
   },
@@ -771,7 +771,7 @@ export const assessments = {
             text: "Measurable.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 5,
@@ -846,7 +846,7 @@ export const assessments = {
             text: "Spending all your time worrying about the situation.",
           },
         ],
-        correctOption: "B",
+        correctOption: "A",
       },
       {
         id: 3,
@@ -869,7 +869,7 @@ export const assessments = {
             text: "Giving up when something is difficult.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 4,
@@ -943,7 +943,7 @@ export const assessments = {
             text: " It helps you avoid challenges altogether.",
           },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 2,
@@ -967,7 +967,7 @@ export const assessments = {
             text: "I should avoid difficult subjects because they’re too hard.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 3,
@@ -990,7 +990,7 @@ export const assessments = {
             text: "Blaming others for your mistakes.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 4,
@@ -1034,7 +1034,7 @@ export const assessments = {
             text: "Changing your beliefs to fit in with a group.",
           },
         ],
-        correctOption: "B",
+        correctOption: "A",
       },
       {
         id: 6,
@@ -1058,7 +1058,7 @@ export const assessments = {
             text: "Expecting others to always agree with you.",
           },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 7,
@@ -1082,7 +1082,7 @@ export const assessments = {
             text: "Completing only the easiest tasks first.",
           },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 8,
@@ -1106,7 +1106,7 @@ export const assessments = {
             text: "Rely on others to complete the work for you.",
           },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 9,
@@ -1130,7 +1130,7 @@ export const assessments = {
             text: "Wait for someone else to solve your problems.",
           },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 10,
@@ -1154,7 +1154,7 @@ export const assessments = {
             text: "Focus only on academics and ignore other activities.",
           },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
     ],
   },

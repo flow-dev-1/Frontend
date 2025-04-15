@@ -147,9 +147,9 @@ function App() {
           <Route
             path="/dashboard/transition/feedback"
             element={
-
-              <TransitionFeedback />
-
+              <ProtectedRoute>
+                <TransitionFeedback />
+              </ProtectedRoute>
             }
           />
 

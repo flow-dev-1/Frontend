@@ -8,32 +8,34 @@ import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
 } from "../../../../transition-course/data/index.js";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
 import { calculateResult } from "../../../utility.js";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer.js";
+import Modal from "../../components/Modal.jsx";
 import { useSelector } from "react-redux";
 import adminService from "../../../../../../../../services/api/admin.js";
-import Modal from "../../components/Modal.jsx";
 
-function Week5({ enrollmentId, setWeekFiveData }) {
-  const { pages } = getWeekContentExcludingVideos(5);
-  const [showModal, setShowModal] = useState(false);
-  const [modalData, setModalData] = useState("");
-
-  const [activity1, activity2] = pages;
-
+function Week10({ enrollmentId, setWeekFiveData }) {
+  const { pages } = getWeekContentExcludingVideos(10);
+  const [activity1] = pages;
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState("")
   const [activityFeedbackId, setActivityFeedbackId] = useState(null);
   const { isAdmin, code } = useSelector(adminData);
 
-  const { questions: assessments } = getWeekAssessment(5);
+  const [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12] = activity1.steps;
+  const [a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12] = activityData?.[0]?.answer?.map(a => a.value) || [];
+  const [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12] = activityData?.[0]?.feedback?.map(a => a.value) || [];
+
+  const { questions: assessments } = getWeekAssessment(10);
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/compassion-feedback-5", enrollmentId, 5],
-    queryFn: () => isAdmin ? adminService.getUserCourseData(enrollmentId, 5, code) : userService.getUserCourseData(enrollmentId, 5),
+    queryKey: ["dashboard/transition-feedback-10", enrollmentId, 10],
+    queryFn: () => isAdmin ? adminService.getUserCourseData(enrollmentId, 10, code) : userService.getUserCourseData(enrollmentId, 10),
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -41,14 +43,18 @@ function Week5({ enrollmentId, setWeekFiveData }) {
   });
 
   const mutation = useMutation({
-    mutationFn: () => adminService.submitAdminFeedback(activityData, enrollmentId, 5, data?.activity?.user, code),
+    mutationFn: () => adminService.submitAdminFeedback(activityData, enrollmentId, 10, data?.activity?.user, code),
     onSuccess: (data) => {
       setModalData("")
-
+      // setIsOpen(true)
+      // toast.success(data.message)
     },
     onError: (error) => {
       console.error('Registration error:', error)
       setModalData("")
+      // toast.dismiss()
+      // toast.error(error?.message)
+      // navigate('/sign-in', { replace: true })
     },
   });
 
@@ -62,33 +68,6 @@ function Week5({ enrollmentId, setWeekFiveData }) {
     return () => { };
   }, [data]);
 
-  const [q1, q2, q3, q4, q5] = activity2.steps;
-  const [a1, a2, a3, a4, a5] = activityData?.[1]?.answer?.map(a => a.value) || [];
-  const [f1, f2, f3, f4, f5] = activityData?.[1]?.feedback?.map(a => a.value) || [];
-
-  function getActivityAnswer(item) {
-    const actData = activityData[0]?.answer;
-    return actData
-
-  }
-
-  function getActivityFeedback(activityId, itemId, index) {
-    if (!itemId) {
-      return activityData?.find((activity) => activity.page === activityId)
-        ?.feedback;
-    } else {
-      const answersList = activityData?.find(
-        (activity) => activity.page === activityId
-      )?.feedback;
-      const answerObject = answersList?.find(
-        (activity) => activity.stepId === itemId
-      ).value;
-
-      // return answerObject ? answerObject[index] : null;
-      return answerObject ? answerObject : null;
-    }
-  }
-
   const handleModalOpen = () => {
     setShowModal(true);
   }
@@ -98,94 +77,21 @@ function Week5({ enrollmentId, setWeekFiveData }) {
     setShowModal(false);
   }
 
+  function getActivityAnswer(item) {
+    const actData = activityData[0]?.answer;
+    const userAnswer = actData?.find(
+      (activity) => activity.id === item?.id
+    )?.value;
 
-  if (isPending) {
-    return <div>Loading...</div>;
+    return item?.options?.find((data) => data.id === userAnswer)?.text;
   }
 
-  if (data?.status === "failed" || isError) {
-    return <div>{data?.message || "Internal server error!"}</div>;
-  }
-
-  const score =
-    calculateResult(assessments, assessmentData, assessments?.length) || 0;
-
-  const renderActivity2 = (question, answer, feedback, activityId, index) => {
-    return (
-      <div key={index}>
-        <div className="d-flex gap-3 align-items-center">
-          <h2 className="text-blue fs-1">Questions {index + 1}:</h2>
-          <p className="text-blue fs-4 mb-0">{question.title}</p>
-        </div>
-
-        <div>
-          <span className="bg-yellow rounded-3 text-muted px-3 py-1">
-            Identify the Emotion:
-          </span>
-        </div>
-
-        <div className="d-flex gap-3 align-items-center">
-          <h2 className="text-gray fs-1 mb-0">Answer:</h2>
-          <p className="fs-5 flex-grow-1 mb-0">{answer?.[0]}</p>
-          {(isAdmin && !feedback) && (
-              <Icon
-                onClick={() => {
-                  setActivityFeedbackId({ activityId, itemId: index + 1 })
-                  handleModalOpen()
-                }}
-                style={{ color: "#D6D6D6" }}
-                width={35}
-                icon="tabler:message-2"
-              />
-            )}
-        </div>
-
-        <div>
-          <span className="bg-orange rounded-3 text-muted px-3 py-1">
-            Reason for Emotion:
-          </span>
-        </div>
-
-        <div className="d-flex gap-3 align-items-center">
-          <h2 className="text-gray fs-1 mb-0">Answer:</h2>
-          <p className="fs-5 flex-grow-1 mb-0">{answer?.[1]}</p>
-        </div>
-
-        <div>
-          <span className="bg-green rounded-3 text-white px-3 py-1">
-            Respond with Emotional Intelligence:
-          </span>
-        </div>
-
-        <div className="d-flex gap-3 align-items-center">
-          <h2 className="text-gray fs-1 mb-0">Answer:</h2>
-          <p className="fs-5 flex-grow-1 mb-0">{answer?.[2]}</p>
-        </div>
-
-        {feedback && (
-            <div className="d-flex gap-3">
-              <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start mb-0">
-                Feedback
-              </p>
-              <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded mb-0">
-                {feedback}
-              </p>
-              {isAdmin && (
-                <Icon
-                  onClick={() => {
-                    setModalData(feedback)
-                    setActivityFeedbackId({ activityId,itemId: index + 1 })
-                    handleModalOpen()
-                  }}
-                  style={{ color: "#275DAD" }}
-                  width={35}
-                  icon="lucide:edit"
-                />
-              )}
-            </div>
-          )}
-      </div>
-    )
+  function getActivityFeedback(item) {
+    const actData = activityData[0]?.answer;
+    const userAnswer = actData?.find(
+      (activity) => activity.id === item?.id - 1
+    )?.value;
+    return item?.feedback[userAnswer];
   }
 
   const submitFeedback = (value) => {
@@ -222,6 +128,19 @@ function Week5({ enrollmentId, setWeekFiveData }) {
     }
   }
 
+  const score =
+    calculateResult(assessments, assessmentData, assessments?.length) || 0;
+
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (data?.status === "failed" || isError) {
+    return <div>{data?.message || "Internal server error!"}</div>;
+  }
+
+
+
   return (
     <>
       {/* Activity 1*/}
@@ -229,83 +148,57 @@ function Week5({ enrollmentId, setWeekFiveData }) {
         Activity 1
       </p>
       <hr />
-      <div className="d-flex gap-3">
-        <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{activity1.question}</p>
-      </div>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answer:</h2>
-        <ul className="list-unstyled fs-5 flex-grow-1">
-          {getActivityAnswer(activity1.id)?.map((item, idx) => (
-            <li key={idx} className="fs-5">
-              {idx + 1}. {item.value}
-            </li>
-          ))}
-        </ul>
-
-        { //This is only Visible for Flow Admins
-          (isAdmin && !activityData?.find((activity) => activity.page === activity1.id)?.feedback) && <Icon
-            onClick={() => {
-              setActivityFeedbackId({ activityId: activity1.id })
-              handleModalOpen()
-            }}
-            style={{ color: "#D6D6D6" }}
-            width={35}
-            icon="tabler:message-2"
-          />
-        }
-
-      </div>
-
-      {
-        // Show this only id theres a feedback
-        (activityData?.find((activity) => activity.page === activity1.id)
-          ?.feedback) && (
+      {[
+        [q1, a1, f1], [q2, a2, f2], [q3, a3, f3], [q4, a4, f4],
+        [q5, a5, f5], [q6, a6, f6], [q7, a7, f7], [q8, a8, f8],
+        [q9, a9, f9], [q10, a10, f10], [q11, a11, f11], [q12, a12, f12]
+      ].map(([question, answer, feedback], index) => (
+        <React.Fragment key={index}>
           <div className="d-flex gap-3">
-            <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
-              Feedback
-            </p>
-            <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
-              {getActivityFeedback(activity1.id)}
-            </p>
+            <h2 className="text-blue fs-1">Question {index + 1}:</h2>
+            <p className="text-blue fs-4">{question?.questions?.[0]?.question}</p>
+          </div>
+          <div className="d-flex gap-3">
+            <h2 className="text-gray fs-1 text-gray">Answer:</h2>
+            <p className="fs-5 flex-grow-1">{answer?.[0]}</p>
+
             {
-              isAdmin && <Icon
+              (isAdmin && !feedback) && <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity1.id))
-                  setActivityFeedbackId({ activityId: activity1.id })
+                  setActivityFeedbackId({ activityId: activity1.id, itemId: index + 1 })
                   handleModalOpen()
                 }}
-                style={{ color: "#275DAD" }}
+                style={{ color: "#D6D6D6" }}
                 width={35}
-                icon="lucide:edit"
+                icon="tabler:message-2"
               />
             }
 
           </div>
-        )
-      }
+          {feedback && (
+            <div className="d-flex gap-3">
+              <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">Feedback</p>
+              <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+                {feedback}
+              </p>
+              {isAdmin &&
+                <Icon
+                  onClick={() => {
+                    setModalData(feedback)
+                    setActivityFeedbackId({ activityId: activity1.id, itemId: index + 1 })
+                    handleModalOpen()
+                  }}
+                  style={{ color: "#275DAD" }}
+                  width={35}
+                  icon="lucide:edit"
+                />
+              }
+            </div>
+          )}
+          <hr />
+        </React.Fragment>
+      ))}
 
-      <hr />
-
-      {/* Activity 2 */}
-      <p className="bg-yellow py-3 px-5 text-gray d-inline-block rounded-5 fs-4">
-        Activity 2
-      </p>
-      <hr />
-      <>
-
-        {[q1, q2, q3, q4, q5].map((question, index) =>
-          renderActivity2(
-            question,
-            [a1, a2, a3, a4, a5][index],
-            [f1, f2, f3, f4, f5][index],
-            activity2.id,
-            index
-          )
-        )}
-
-      </>
-      <hr />
       {/* Assesment 1 */}
       <p className="bg-yellow py-3 px-5 text-gray d-inline-block rounded-5 fs-4">
         Assessment 1
@@ -390,4 +283,4 @@ function Week5({ enrollmentId, setWeekFiveData }) {
   );
 }
 
-export default Week5;
+export default Week10;

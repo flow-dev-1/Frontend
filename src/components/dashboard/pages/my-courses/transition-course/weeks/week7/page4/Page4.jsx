@@ -40,7 +40,6 @@ function WeekSevenPage4() {
     if (adminDatas.isAdmin) return true;
 
     const stepData = answers.find(item => item.stepId === currentStep);
-    console.log(stepData, "stepData")
 
     if (!stepData || !stepData.value) {
       setErrorMessage("Oops! All inputs must be filled out.");

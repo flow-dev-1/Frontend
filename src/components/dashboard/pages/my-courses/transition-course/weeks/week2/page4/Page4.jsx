@@ -39,14 +39,14 @@ function WeekTwoPage4() {
 
       setBucketResults(answerCopy);
 
-      if (currentStep == 1 ) {
+      if (currentStep == 1) {
         dispatch(setCurrentStep(totalSteps))
         setShowCurrentImage(false);
       }
     }
     return () => { }
 
-  }, [userAnswers,pageData])
+  }, [userAnswers, pageData])
 
 
 
@@ -124,7 +124,7 @@ function WeekTwoPage4() {
     //   setErrorMessage("Oops! Please enter a valid input!");
     //   return false;
     // }
-
+    if (adminDatas.isAdmin) return true
 
     if (bucketResults.green.length + bucketResults.red.length !== pageData.images.length) {
       setErrorMessage("Please make sure to fill all the buckets.");
@@ -237,7 +237,7 @@ function WeekTwoPage4() {
                         className={
                           bucket.id === "green"
                             ? "inner-bucket"
-                            : "both-bucket" 
+                            : "both-bucket"
                         }
                       >
                         {bucket.label}

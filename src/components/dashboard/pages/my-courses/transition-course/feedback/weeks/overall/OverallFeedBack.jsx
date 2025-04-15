@@ -6,7 +6,7 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer.j
 import userService from "../../../../../../../../services/api/user.js";
 import adminService from "../../../../../../../../services/api/admin.js";
 
-function OverallFeedBack({ enrollmentId,setHasPercentile}) {
+function OverallFeedBack({ enrollmentId, setHasPercentile }) {
   const [assessmentPercentile, setAssessmentPercentile] = useState(null);
   const { isAdmin, code } = useSelector(adminData);
 
@@ -29,15 +29,15 @@ function OverallFeedBack({ enrollmentId,setHasPercentile}) {
   function getFeedBackMessage(percentile) {
     switch (true) {
       case percentile >= 10 && percentile <= 39:
-        return "Well done on taking the first steps in understanding compassion! While you’re starting to grasp the basic concepts, there’s room to deepen your understanding and application. Reflect on the importance of showing kindness to yourself and others, and revisit topics like self-compassion and the circle of concern. Practice small, compassionate actions in your daily life, and think about how they make a difference. Remember, compassion is a skill that grows with practice, so keep learning and taking steps forward.";
+        return "Well done on starting your journey toward a smooth transition into secondary school! You’ve made an effort to understand important ideas like understanding your “why,” identifying what’s in your control, and the importance of values. There’s still room to deepen your understanding and practice what you’ve learned. Focus on building small habits, like managing your time more effectively or thinking about how a growth mindset can help you face challenges. Remember, every step you take brings you closer to feeling confident and ready for this new chapter. Keep trying—you’re capable of great things! Also, I recommend you take the course again from the beginning, as this will help you get more familiar with the concepts.";
       case percentile >= 40 && percentile <= 59:
-        return "Good job! You’ve shown some understanding of what it means to be compassionate. You’re beginning to appreciate the value of self-compassion and extending kindness to others. To build on this, focus on applying what you’ve learned about the circle of concern and putting yourself in others’ shoes. Consider how your actions can make a positive impact in real-life scenarios. With consistent practice, you’ll strengthen your ability to act compassionately toward yourself and those around you.";
+        return "Good job! You’ve made solid progress and shown a great understanding of how to transition into secondary school successfully. To build on this, try putting what you’ve learned into action more consistently. Practice navigating relationships with friends and family, and reflect on how your core values can guide your decisions. With steady effort, you’ll become even more prepared for this exciting new stage. Keep going—you’re on the right track!";
       case percentile >= 60 && percentile <= 79:
-        return "Great work! You have a solid understanding of compassion and its importance in daily life. You recognize the significance of self-compassion, extending kindness to others, and the concept of the circle of concern. To enhance your skills further, continue practicing what you’ve learned by actively considering how you can support and care for others in different scenarios. Think about how small acts of compassion can lead to meaningful change. Keep up the great effort!";
+        return "Great work! You’ve proven to have gained a good understanding of the key concepts that will help you navigate the exciting transition from primary to secondary school. You can start applying ideas like cultivating a growth mindset, focusing on what’s within your control, and understanding your core values. To build on this progress, try practicing these lessons in your daily life—whether it’s managing your time, setting goals, or building meaningful relationships. With consistent effort, you’ll feel more confident and ready to take on this new chapter. Keep it up—you’re doing well!";
       case percentile >= 80 && percentile <= 94:
-        return "Excellent work! You’ve developed a strong understanding of compassion and how to incorporate it into your life. You’ve shown the ability to be kind to yourself, care for others, and recognize your role in both your inner and outer circles of concern. To continue growing, challenge yourself with more complex life scenarios where you can apply empathy and compassion. You’re well on your way to making compassion a natural part of how you think and act—keep up the outstanding effort!";
+        return "Excellent job! You’ve shown a strong grasp of the skills and mindset needed to transition smoothly into secondary school. Remember it’s highly important to keep applying what you’ve learned about time management, goal setting, and resilience in every way you can. To continue growing, focus on using these tools to face new challenges and opportunities everyday. Your hard work is paying off, and you’re well on your way to thriving in secondary school. Keep up the fantastic progress!";
       case percentile >= 95 && percentile <= 100:
-        return "Outstanding achievement! You’ve demonstrated a deep and thoughtful understanding of compassion and its application in various aspects of life. Your ability to practice self-compassion, care for others, and act with empathy in different scenarios is truly commendable. You have learned to consistently recognize the impact of your actions and actively work to make a difference. Keep leading by example, and continue to inspire others with your compassionate mindset. Your dedication to compassion will have a lasting positive impact!";
+        return"Outstanding achievement! You’ve shown mastery and a deep understanding of the skills and mindset to navigate your transition into secondary school with confidence and purpose. Your understanding of growth and fixed mindsets, time management, and resilience is exceptional, and you’ve shown you can apply these concepts to real-life situations. You’re not only ready for this new stage but also equipped to make the most of it. Keep inspiring others with your example, and continue using these tools to grow and succeed in every area of your life. Well done—you’re ready to shine in secondary school!"
       default:
         return "";
     }
@@ -52,7 +52,7 @@ function OverallFeedBack({ enrollmentId,setHasPercentile}) {
   }
 
   return (
-    
+
     <>
       <div className="bg-compassion--feedback custom-border-20 question-box-container d-flex justify-content-center align-items-center flex-column gap-3">
         <img src={celebrate} alt="celebrate" className="text-center" />
@@ -61,22 +61,16 @@ function OverallFeedBack({ enrollmentId,setHasPercentile}) {
         </h1>
       </div>
       <p className="fs-3 text-gray mt-3">
-        Congratulations on completing the Compassion Curriculum! Over the past
-        weeks, you’ve discovered what it means to be compassionate, learned the
-        value of self-compassion, and explored ways to show kindness to others.
-        You’ve also gained insights into your Circle of Concern and practiced
-        applying compassion in real-life scenarios.
+        Congratulations on completing the Transition Curriculum!
+      </p>
+      <p className="fs-3 text-gray mt-3">
+        Over the past ten weeks, you’ve explored essential skills and concepts to prepare you for secondary school. From understanding your “why” to building resilience and setting goals, you’ve laid a strong foundation for success.
       </p>
       <p className="fs-3 text-gray my-3">
-        Compassion is a lifelong practice. The skills you’ve gained in this
-        course will help you navigate challenges, build meaningful connections,
-        and create a positive impact in your community. Continue to reflect on
-        what you’ve learned, strive to see the world from different
-        perspectives, and always choose kindness.
+        Remember, transition is an ongoing process. The lessons you’ve learned in this course will continue to guide you as you navigate new challenges and opportunities. Stay curious, keep growing, and never stop believing in yourself.
       </p>
       <p className="fs-3 text-gray">
-        Keep spreading compassion, and remember: even small acts of kindness can
-        make a big difference!
+        Good luck on your journey ahead, and always strive to be your best self!
       </p>
 
       <div className="bg-blue p-3 mt-2 rounded rounded-4">
