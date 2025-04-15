@@ -179,10 +179,10 @@ function WeekTwoPage4() {
     <DragDropContext onDragEnd={handleOnDragEnd}>
       <div className="d-flex flex-column align-items-center pt-2">
         <div className="d-flex custom-border-20">
-          <Droppable droppableId="image">
+          <Droppable droppableId="image" className="">
             {(provided, snapshot) => (
               <div
-                className="d-flex p-5 justify-content-center align-items-center"
+                className="d-flex p-5 justify-content-center align-items-center w-50"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 style={{

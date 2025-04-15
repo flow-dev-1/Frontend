@@ -1,9 +1,9 @@
 // src/components/Hurray.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import celebrate from "../../../../../../assets/celebrate.png";
-import FireWorks from "./FireWork";
+import ConfettiAnimation from "./FireWork"; // Import the new component
 import Button from "./Button";
 import {
   hideHurray,
@@ -11,14 +11,14 @@ import {
 } from "../../../../../../redux/reducers/navigationSlice";
 
 const Hurray = ({ currentWeek = 3 }) => {
-  const [showFireWork, setShowFireWork] = useState(true);
+  const [showConfetti, setShowConfetti] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isLastWeek } = useSelector(selectNavigationState);
 
   const handleNext = () => {
-    sessionStorage.setItem("flow-currentPage", 1)
-    sessionStorage.setItem("flow-currentStep", 1)
+    sessionStorage.setItem("flow-currentPage", 1);
+    sessionStorage.setItem("flow-currentStep", 1);
     if (isLastWeek) {
       navigate("/dashboard/my-courses");
     } else {
@@ -30,13 +30,12 @@ const Hurray = ({ currentWeek = 3 }) => {
     if (isLastWeek) {
       return "Back to Course";
     }
-    return `Go to Week ${currentWeek + 1}`;
-    
+    return `Proceed to Week ${currentWeek + 1}`;
   };
 
   return (
     <>
-      {showFireWork && <FireWorks setFirework={setShowFireWork} />}
+      {showConfetti && <ConfettiAnimation onComplete={() => setShowConfetti(false)} />}
       <div className="bg-sky-blue custom-border-20 question-box-container w-1029px d-flex justify-content-center align-items-center flex-column gap-3">
         <img src={celebrate} alt="celebrate" className="text-center" />
         <h1 className="text-white font-lg">Hurray!</h1>
