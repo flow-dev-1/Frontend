@@ -91,6 +91,7 @@ grid-auto-rows: max-content;
   align-items: center;
   width: 120px;
   height: 120px;
+  padding:1.5em ;
   background-size: contain;
 }
 

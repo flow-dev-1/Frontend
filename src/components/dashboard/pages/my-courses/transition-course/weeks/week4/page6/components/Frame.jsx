@@ -41,11 +41,13 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
       <div className="mb-2">
         <div className=" gap-2">
           {Array.from({ length: expectedAnswers }).map((_, textBoxIndex) => (
+            <div className="mb-4">
             <SmallTextBox
               key={textBoxIndex}
               value={answers.find(answer => answer.stepId === step)?.value?.[textBoxIndex] || ""}
               onChange={(e) => handleInputChange(textBoxIndex, e.target.value)}
             />
+            </div>
           ))}
         </div>
       </div>

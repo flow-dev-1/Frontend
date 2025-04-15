@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import QuestionBox from "../../../components/QuestionBox";
+import PaddlessQuestionBox from "../../../components/PaddlessQuestionBox";
 import Button from "../../../components/Button";
 import footballImage from "../../../../../../../../assets/footballers.png";
 import checkedImage from "../../../../../../../../assets/checkedbox.png";
@@ -24,7 +24,7 @@ function WeekEightPage2() {
     if (!userAnswers) return
     const response = userAnswers?.activities?.find(item => (item.page === pageData.id))
     setMyAnswer(response?.answer ? response.answer : "")
-    setSelectedOption(response?.answer ? response.answer : "")  
+    setSelectedOption(response?.answer ? response.answer : "")
     return () => { }
 
   }, [userAnswers])
@@ -36,7 +36,7 @@ function WeekEightPage2() {
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
-    
+
     if (!selectedOption) {
       setErrorMessage("Please select an option to continue!");
       return false;
@@ -54,11 +54,11 @@ function WeekEightPage2() {
   return (
 
     <>
-      <QuestionBox>
-        <div className="d-flex gap-0 align-items-center">
+      <PaddlessQuestionBox>
+        <div className="d-flex gap-0">
           {/* Form Section */}
-          <div className="flex-grow-1">
-            <form className="d-flex gap-2">
+          <div className="w-50 px-4 py-5">
+            <form className="d-flex gap-2 flex-column">
               <h2 className="text-blue fs-1">Question:</h2>
               <div className="gap-8 align-items-left">
                 <h3 className="fs-1">{pageData.question}</h3>
@@ -95,7 +95,8 @@ function WeekEightPage2() {
             </form>
           </div>
 
-          <div className="flex-grow-1 w-90">
+          {/* Image Section */}
+          <div className="w-50">
             <img
               src={footballImage}
               alt="Football Players"
@@ -107,7 +108,8 @@ function WeekEightPage2() {
             />
           </div>
         </div>
-      </QuestionBox>
+
+      </PaddlessQuestionBox>
 
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4">

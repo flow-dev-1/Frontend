@@ -184,7 +184,7 @@ function WeekThreePage4() {
           <Droppable droppableId="image">
             {(provided, snapshot) => (
               <div
-                className="d-flex p-5 justify-content-center align-items-center"
+                className="d-flex p-5 justify-content-center align-items-center w-50"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 style={{

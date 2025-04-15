@@ -58,7 +58,7 @@ function MultiLineColoredSmallTextBox({ data, answers, setAnswers, setErrorMessa
             <div
               className="mt-2 d-flex justify-content-center align-items-center p-2"
               style={{
-                borderRadius: "40%",
+                borderRadius: "2em",
                 backgroundColor: field.colorCode,
                 color: "black",
                 fontWeight: "bold",

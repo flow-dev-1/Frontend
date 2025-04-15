@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import communication from "../../../../../../../../assets/communication.png";
-import BigTextBox from "../../../components/BigTextBox";
+import SmallTextBox from "../../../components/SmallTextBox";
 import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
@@ -59,7 +59,7 @@ function WeekSixPage6() {
             {pageData.hasImage && <img src={communication} alt="Communication" />} ?
           </h2>
         </div>
-        <BigTextBox handleChange={handleInputChange} value={myAnswer} />
+        <SmallTextBox onChange={handleInputChange} value={myAnswer} />
       </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4">

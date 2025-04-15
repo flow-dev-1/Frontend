@@ -18,7 +18,7 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "How has been your learning process in Primary school?",
+                question: "What has your time in Primary school been like?",
               }
             ]
           },
