@@ -4,14 +4,26 @@ import checkedImage from '../../../../../../assets/selfawareness-images/checked.
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
 import { toast } from 'react-toastify'
 import userService from '../../../../../../services/api/user.js'
+import { useSelector, useDispatch } from "react-redux";
+import {
+  userAnswer,
+  updateData
+} from "../../../../../../redux/reducers/userAnswersReducer.js";
+
+import { useMutation } from '@tanstack/react-query'
+import { RotatingLines } from 'react-loader-spinner'
 
 export default function NewAssessmentForm({ onNext,
-   onBack,
-   course,
-   handleActivitySubmit
+  onBack,
+  course,
+  handleActivitySubmit,
+  activityData
 }) {
-  const [disableButton,setDisableButton] = useState(false)
-  const [isLoading,setIsLoading] = useState(false)
+  const dispatch = useDispatch();
+  const userAnswers = useSelector(userAnswer);
+  const [disableButton, setDisableButton] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
   const questionsArray = [
     {
       title:
@@ -112,7 +124,7 @@ export default function NewAssessmentForm({ onNext,
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState(() => {
-    const storedData = localStorage.getItem('new-assessment')
+    const storedData = localStorage.getItem('weekFiveAssessmentData')
     if (storedData) {
       try {
         const parsedData = JSON.parse(storedData)
@@ -124,8 +136,23 @@ export default function NewAssessmentForm({ onNext,
     }
     return []
   })
+
+
+  useEffect(() => {
+    // Load saved answers from localStorage on component mount
+    const savedAnswers = localStorage.getItem('weekFiveAssessmentData')
+    if (savedAnswers) {
+      const parsedAnswers = JSON.parse(savedAnswers)
+      if (parsedAnswers?.formattedData?.assessments) {
+        const assessmentData = parsedAnswers?.formattedData?.assessments[0]
+        setAnswers(assessmentData?.answers || [])
+      }
+    }
+
+  }, [])
+
   const [isSubmitted, setIsSubmitted] = useState(() => {
-    const storedData = localStorage.getItem('new-assessment')
+    const storedData = localStorage.getItem('weekFiveAssessmentData')
     return storedData ? JSON.parse(storedData).submitted || false : false
   })
 
@@ -156,11 +183,11 @@ export default function NewAssessmentForm({ onNext,
       toast.error('Please select an answer before proceeding.')
       return
     }
-    if (currentIndex < questionsArray.length-1) {
+    if (currentIndex < questionsArray.length - 1) {
       setCurrentIndex(currentIndex + 1)
     } else {
       saveNewAssessment()
-  
+
     }
   }
 
@@ -172,20 +199,33 @@ export default function NewAssessmentForm({ onNext,
     }
   }
 
+  // Mutation for saving user data
+  const mutation = useMutation({
+    mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
+    onSuccess: (data) => {
+      setIsLoading(false)
+      toast.dismiss()
+      toast.success(data.message || 'Answers saved successfully!'); // Show success toast
+      localStorage.removeItem('weekFiveAssessmentData')
+      onNext()
+    },
+    onError: (error) => {
+      console.log(error, "errorrrr")
+      toast.dismiss()
+      toast.error(error?.message || error?.error || 'Error saving answers'); // Show error toast
+    },
+  });
+
   const saveNewAssessment = async () => {
-    if(disableButton) return
-    setDisableButton(true)
+    if (disableButton) return
 
     try {
-      const activityResponse = await handleActivitySubmit();
-     
-      if (!activityResponse.success) {
-        setIsLoading(false)
-        toast.error(activityResponse?.message)
+      if (!activityData?.activities || activityData?.activities?.length !== 9) {
+        toast.error("Please complete all activities before submitting the assessment.");
         return
       }
 
-      const storedData = localStorage.getItem('new-assessment')
+      const storedData = localStorage.getItem('weekFiveAssessmentData')
       let savedAnswers = JSON.parse(storedData)
       const correctAnswers = [1, 0, 0] // Adjust according to correct answers
       const valuesToCheck = savedAnswers.assessment.answers
@@ -193,41 +233,52 @@ export default function NewAssessmentForm({ onNext,
       const correctCount = valuesToCheck.reduce((count, current, index) => {
         return current === correctAnswers[index] ? count + 1 : count
       }, 0)
-  
+
       const percentage = Math.round((correctCount / totalQuestions) * 100)
       toast.success(`You scored ${percentage}% in the quiz`)
-  
+
       const dataToSend = {
         rating: percentage,
         assessments: savedAnswers.assessment,
         week: 5,
       }
 
-      const response = await userService.postMyAssessment(
-        course.course?._id,
-        course._id,
-        dataToSend
-      );
+      const mutationData = {
+        ...userAnswers,
+        assessments: [savedAnswers.assessment],
+        activities: activityData?.activities,
+        rating: percentage.toString()
+      };
 
-      if (response.status === "success") {
-        toast.success(response.message);
-        onNext()
-        // setReviewPopUp(true)
-        setIsLoading(false)
-        setDisableButton(false)
-      } else if (response.status === "failed") {
-        toast.success(response.message);
-        onNext()
-        // setReviewPopUp(true)
-        setIsLoading(false)
-        setDisableButton(false)
-      } else {
-        setIsLoading(false)
-        setDisableButton(false)
-        toast.error('Something went wrong. Please contact flow admin for support!');
-      }
+      console.log(mutationData, "mutationData")
 
-      
+      mutation.mutate(mutationData);
+
+      // const response = await userService.postMyAssessment(
+      //   course.course?._id,
+      //   course._id,
+      //   dataToSend
+      // );
+
+      // if (response.status === "success") {
+      //   toast.success(response.message);
+      //   onNext()
+      //   // setReviewPopUp(true)
+      //   setIsLoading(false)
+      //   setDisableButton(false)
+      // } else if (response.status === "failed") {
+      //   toast.success(response.message);
+      //   onNext()
+      //   // setReviewPopUp(true)
+      //   setIsLoading(false)
+      //   setDisableButton(false)
+      // } else {
+      //   setIsLoading(false)
+      //   setDisableButton(false)
+      //   toast.error('Something went wrong. Please contact flow admin for support!');
+      // }
+
+
     } catch (error) {
       console.log(error)
       setIsLoading(false)
@@ -243,7 +294,7 @@ export default function NewAssessmentForm({ onNext,
       assessment: { answers },
       submitted: isSubmitted,
     }
-    localStorage.setItem('new-assessment', JSON.stringify(assessmentData))
+    localStorage.setItem('weekFiveAssessmentData', JSON.stringify(assessmentData))
   }, [answers, isSubmitted])
 
   const renderQuestion = () => {
@@ -253,8 +304,8 @@ export default function NewAssessmentForm({ onNext,
       <div className='week-two'>
         <div style={{ height: '550px' }} className='assessment question-box'>
           {currentIndex === 0 && (
-            <div style={{marginTop:"1rem"}} className='assessment-box'>
-              <h2 style={{ color: '#FAFAFA' }}>Assessment</h2>
+            <div style={{ marginTop: "1rem" }} className='assessment-box'>
+              <h2 style={{ color: '#FAFAFA', textAlign: "center" }}>Assessment</h2>
               <p style={{ color: '#FAFAFA' }} className='text-center'>
                 Scenario around your values.
               </p>
@@ -320,14 +371,27 @@ export default function NewAssessmentForm({ onNext,
         <button
           className='btn progress-btn btn-light'
           onClick={handlePreviousStepClick}
+          disabled={mutation.isPending}
         >
           {'<<<'} Back
         </button>
         <button
           className='btn progress-btn btn-dark'
           onClick={handleNextStepClick}
+          disabled={mutation.isPending}
         >
-          Next {'>>>'}
+          {
+            mutation.isPending ? <RotatingLines
+              className="me-2 text-white"
+              type="Oval"
+              strokeColor="white"
+              height={20}
+              width={20}
+            /> : <>
+              Next {'>>>'}
+            </>
+          }
+
         </button>
       </div>
     </div>

@@ -243,10 +243,11 @@ let questionsQuiz = [
       "Instruction: Match the following statements in the scenario to their respective value",
     options: [
       {
-        label: "A. Kindness - Sarah offers to help David with the books.",
-        color: "Red",
+        label:
+          "A. Kindness - Sarah remembers she has her own after-school activity but suggests they put David’s books in his locker first so he isn’t late to his next class.",
+        color: "Blue",
         checked: false,
-        isCorrect: true // Correct option
+        isCorrect: false
       },
       {
         label:
@@ -256,9 +257,15 @@ let questionsQuiz = [
         isCorrect: false
       },
       {
+        label: "A. Kindness - Sarah offers to help David with the books.",
+        color: "Red",
+        checked: false,
+        isCorrect: true // Correct option
+      },
+      {
         label:
-          "A. Kindness - Sarah remembers she has her own after-school activity but suggests they put David’s books in his locker first so he isn’t late to his next class.",
-        color: "Blue",
+          "B. Respect - Sarah remembers she has her own after-school activity but suggests they put David’s books in his locker first so he isn’t late to his next class.",
+        color: "Green",
         checked: false,
         isCorrect: false
       },
@@ -275,13 +282,7 @@ let questionsQuiz = [
         checked: false,
         isCorrect: false
       },
-      {
-        label:
-          "B. Respect - Sarah remembers she has her own after-school activity but suggests they put David’s books in his locker first so he isn’t late to his next class.",
-        color: "Green",
-        checked: false,
-        isCorrect: false
-      },
+
       {
         label:
           "C. Responsibility - Sarah remembers she has her own after-school activity but suggests they put David’s books in his locker first so he isn’t late to his next class.",
@@ -290,18 +291,18 @@ let questionsQuiz = [
         isCorrect: true // Correct option
       },
       {
-        label: "C. Responsibility - Sarah offers to help David with the books.",
-        color: "Yellow",
-        checked: false,
-        isCorrect: false
-      },
-      {
         label:
           "C. Responsibility - As they walk, Sarah asks David if everything is alright but doesn’t pry if he doesn’t want to talk.",
         color: "Red",
         checked: false,
         isCorrect: false
-      }
+      },
+      {
+        label: "C. Responsibility - Sarah offers to help David with the books.",
+        color: "Yellow",
+        checked: false,
+        isCorrect: false
+      },
     ]
   },
   {
@@ -310,13 +311,6 @@ let questionsQuiz = [
     instuction:
       "Instruction: Match the following statements in the scenario to their respective value",
     options: [
-      {
-        label:
-          "A. Loyalty - Despite having a busy schedule, Alex prioritizes helping Ben, honoring their friendship.",
-        color: "Green",
-        checked: false,
-        isCorrect: true // Correct option
-      },
       {
         label:
           "A. Loyalty - Both Alex and Ben arrive at Alex’s house on time, ensuring they have maximum time to work on the project.",
@@ -333,10 +327,24 @@ let questionsQuiz = [
       },
       {
         label:
+          "A. Loyalty - Despite having a busy schedule, Alex prioritizes helping Ben, honoring their friendship.",
+        color: "Green",
+        checked: false,
+        isCorrect: true // Correct option
+      },
+      {
+        label:
           "B. Punctuality - Both Alex and Ben arrive at Alex’s house on time, ensuring they have maximum time to work on the project.",
         color: "Red",
         checked: false,
         isCorrect: true // Correct option
+      },
+      {
+        label:
+          "B. Punctuality - Alex offers to let Ben use his advanced science equipment at home, knowing it will significantly improve their project.",
+        color: "Blue",
+        checked: false,
+        isCorrect: false
       },
       {
         label:
@@ -347,8 +355,8 @@ let questionsQuiz = [
       },
       {
         label:
-          "B. Punctuality - Alex offers to let Ben use his advanced science equipment at home, knowing it will significantly improve their project.",
-        color: "Blue",
+          "C. Generosity - Both Alex and Ben arrive at Alex’s house on time, ensuring they have maximum time to work on the project.",
+        color: "Green",
         checked: false,
         isCorrect: false
       },
@@ -366,178 +374,111 @@ let questionsQuiz = [
         checked: false,
         isCorrect: false
       },
-      {
-        label:
-          "C. Generosity - Both Alex and Ben arrive at Alex’s house on time, ensuring they have maximum time to work on the project.",
-        color: "Green",
-        checked: false,
-        isCorrect: false
-      }
+
     ]
   }
 ];
 
-const leftItemsArray = [
-  ["A. Kindness", "B. Respect", "C. Responsibility"],
-  ["A. Honesty", "B. Empathy", "C. Patience"]
-];
+const Week4 = ({ enrollmentId }) => {
+  const [percentage, setPercent] = useState(0)
 
-const rightItemsArray = [
-  [
-    "Sarah remembers she has her own after-school activity but suggests they put David's books in his locker first so he isn’t late to his next class.",
-    "As they walk, Sarah asks David if everything is alright but doesn’t pry if he doesn’t want to talk.",
-    "Sarah offers to help David with the books."
-  ],
-  [
-    "Tom tells the truth about accidentally breaking the vase.",
-    "Jane listens to her friend's problems without interrupting.",
-    "Emily waits patiently for her turn to speak during a group discussion."
-  ]
-];
-
-const Week4 = () => {
-  const week = 4;
-  const courseId = "66853bf50118e2e0a02b6a5a";
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["dashboard/feedback/self-awareness", courseId, week],
-    queryFn: () => userService.getMyActivites(courseId, week)
+  const { data, isPending, status, isError } = useQuery({
+    queryKey: ["dashboard/self-awereness-feedback-4", enrollmentId, 4],
+    queryFn: () => userService.getUserCourseData(enrollmentId, 4),
+    enabled: !!enrollmentId,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false,
   });
 
-  // console.log(data?.activity?.activities[5].answers[0]);
-
-  const [assessmentData, setAssessmentData] = useState(null);
-  const [assessmentLoading, setAssessmentLoading] = useState(true);
-  const [assessmentError, setAssessmentError] = useState(null);
 
   useEffect(() => {
-    const fetchAndProcessAssessmentData = async () => {
-      setAssessmentLoading(true);
-      try {
-        const data = await userService.getMyAssessment(courseId, week);
-        setAssessmentData(data);
+    if (!data) return
+    setPercent(data?.assessment?.rating || 0);
 
-        const assessmentForChecked =
-          data?.existingAssessment.assessments[0].answers;
-        const matchCount1 = data?.existingAssessment.assessments[0].matchesSet1;
-        const matchCount2 = data?.existingAssessment.assessments[0].matchesSet2;
-        // toast.success(matchCount1)
-        console.log(data?.existingAssessment.assessments[0].matchesSet1);
-        console.log(matchCount2);
-        const combinedArray1 = matchCount1.map((match) => {
-          const leftValue = leftItemsArray[0][match.left];
-          const rightValue = rightItemsArray[0][match.right];
-          return `${leftValue} - ${rightValue}`;
-        });
-        const combinedArray2 = matchCount1.map((match) => {
-          const leftValue = leftItemsArray[0][match.left];
-          const rightValue = rightItemsArray[0][match.right];
-          return `${leftValue} - ${rightValue}`;
-        });
+    const assessmentForChecked =
+      data?.assessment?.assessments[0]?.answers;
+    const matchCount1 = data?.assessment?.assessments[0].matchesSet1;
+    const matchCount2 = data?.assessment?.assessments[0].matchesSet2;
 
-        console.log(combinedArray1);
+    // Using the matchset to form probable answer 0-8
+    // true if selection matches index and false for odas
+    // e.g [true,false,false,...] correspond to {left:0,right:0} and so on
+ 
+    const combinedArray1 = Array(9).fill(false).map((_, index) => {
+      const leftIndex = Math.floor(index / 3); // 0 for first 3, 1 for next 3, etc
+      const rightIndex = index % 3; // cycles through 0,1,2 
 
-        if (assessmentForChecked && assessmentForChecked.length >= 5) {
-          const valuesToCheck = assessmentForChecked;
-          console.log(valuesToCheck);
+      return matchCount1?.some(match =>
+        match.left === leftIndex && match.right === rightIndex
+      );
+    });
 
-          questionsQuiz = questionsQuiz.map((question, index) => {
-            return {
-              ...question,
-              options: question.options.map((option, optionIndex) => {
-                let isChecked = false;
+    const combinedArray2 = Array(9).fill(false).map((_, index) => {
+      const leftIndex = Math.floor(index / 3); // 0 for first 3, 1 for next 3, etc
+      const rightIndex = index % 3; // cycles through 0,1,2 
 
-                // Mark options based on assessmentForChecked
-                if (optionIndex === valuesToCheck[index]) {
+      return matchCount2?.some(match =>
+        match.left === leftIndex && match.right === rightIndex
+      );
+    });
+
+    if (assessmentForChecked && assessmentForChecked.length >= 7) {
+      const valuesToCheck = assessmentForChecked;
+
+      questionsQuiz = questionsQuiz.map((question, index) => {
+        return {
+          ...question,
+          options: question.options.map((option, optionIndex) => {
+            let isChecked = false;
+
+            if (index < 8) {
+              // Mark options based on assessmentForChecked
+              if (optionIndex === valuesToCheck[index]) {
+                isChecked = true;
+              }
+            } else {
+
+              // For questions 8 and 9
+              if (index === 8) {
+                // Check matchCount1 for question 8
+                if (combinedArray1[optionIndex]) {
                   isChecked = true;
                 }
 
-                // Check if it's the 9th question and update based on combinedArray1
-                if (index === 8) {
-                  combinedArray1.forEach((selectedAnswer) => {
-                    question.options.forEach((option) => {
-                      const optionText = option.label.trim().toLowerCase();
-                      const selectedAnswerText = selectedAnswer
-                        .trim()
-                        .toLowerCase();
-
-                      if (optionText.includes(selectedAnswerText)) {
-                        if (option.isCorrect) {
-                          console.log(`${selectedAnswer} is Correct`);
-                        } else {
-                          console.log(`${selectedAnswer} is Incorrect`);
-                        }
-                      }
-                    });
-                  });
+              }else {
+                // Check matchCount2 for question 9
+                if (combinedArray2[optionIndex]) {
+                  isChecked = true;
                 }
+              }
 
-                // Check if it's the 10th question and update based on combinedArray2
-                if (index === 9) {
-                  combinedArray2.forEach((selectedAnswer) => {
-                    question.options.forEach((option) => {
-                      const optionText = option.label.trim().toLowerCase();
-                      const selectedAnswerText = selectedAnswer
-                        .trim()
-                        .toLowerCase();
+            }
 
-                      if (optionText.includes(selectedAnswerText)) {
-                        if (option.isCorrect) {
-                          console.log(`${selectedAnswer} is Correct`);
-                        } else {
-                          console.log(`${selectedAnswer} is Incorrect`);
-                        }
-                      }
-                    });
-                  });
-
-                  // Update isChecked based on matchCount2 for the 10th question
-                  matchCount2.forEach((match) => {
-                    if (match.left === 10 || match.right === 10) {
-                      if (
-                        optionIndex === match.left ||
-                        optionIndex === match.right
-                      ) {
-                        isChecked = true;
-                      }
-                    }
-                  });
-                }
-
-                return {
-                  ...option,
-                  checked: isChecked
-                };
-              })
+            return {
+              ...option,
+              checked: isChecked
             };
-          });
-        } else {
-          console.error("Assessment answers are missing or incomplete.");
-        }
-      } catch (error) {
-        setAssessmentError(error);
-      } finally {
-        setAssessmentLoading(false);
-      }
-    };
+          })
+        };
+      });
+    }
+  }, [data]);
 
-    fetchAndProcessAssessmentData();
-  }, [courseId, week]);
-
-  const percentage = assessmentData?.existingAssessment?.rating;
   // // console.log(updatedQuestionsQuiz);
 
-  if (isLoading || assessmentLoading) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
-  if (isError || assessmentError) {
-    return <div>Take Activity to see feedback.</div>;
+  if (isError || data?.status === "failed") {
+    return <div>{data?.message}.</div>;
   }
 
   const activities = [
     {
       question: "What exactly are “Values”??",
-      answer: data?.activity?.activities[1].answers[0]
+      answer: data?.activity?.activities[1].answers?.[0]
     },
     {
       question:
@@ -547,16 +488,16 @@ const Week4 = () => {
     {
       question:
         "Identify three (3) important people in your live and list their names below.",
-      answer: data?.activity?.activities[5].answers[0]
+      answer: data?.activity?.activities[5].answers?.[0]
     },
     {
       question: "Write out what these people think about you.",
-      answer: data?.activity?.activities[5].answers[1]
+      answer: data?.activity?.activities[5].answers?.[1]
     },
     {
       question:
         "Are you happy with what these people think about you? If no, what would you like to change? If yes, type “YES” in the box.",
-      answer: data?.activity?.activities[5].answers[2]
+      answer: data?.activity?.activities[5].answers?.[2]
     }
   ];
 
@@ -574,7 +515,7 @@ const Week4 = () => {
           {Array.isArray(activity.answer) ? (
             <ul className="answer-options4" style={{ paddingLeft: "1.5rem" }}>
               <div className="answer d-flex align-items-center gap-2">
-                <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+                <h4 style={{ fontSize: "14px", color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
                 {activity.answer.map((item, idx) => (
                   <li
                     key={idx}
@@ -593,7 +534,7 @@ const Week4 = () => {
             activity.answer !== null ? (
             <ol className="answer-options" style={{ paddingLeft: "1.5rem" }}>
               <div className="d-flex  gap-2">
-                <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+                <h4 style={{ fontSize: "14px", color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
                 <div>
                   {Object.entries(activity.answer).map(([key, value], idx) => (
                     <li
@@ -608,9 +549,9 @@ const Week4 = () => {
             </ol>
           ) : (
             <div className="answer d-flex gap-2">
-              <div className="d-flex  gap-2">
+              <div className="d-flex gap-2 align-items-center">
                 <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
-                <p>{activity.answer}</p>
+                <p style={{ fontSize: "14px" }}>{activity.answer}</p>
               </div>
             </div>
           )}
@@ -639,7 +580,7 @@ const Week4 = () => {
         </div>
       ))}
 
-      <p className="activity-badge">Assessment 3</p>
+      <p className="activity-badge">Assessment 4</p>
       {questionsQuiz.map((q, index) => (
         <div className="question-block" key={index}>
           <p className="question d-flex align-items-center gap-2">
@@ -656,7 +597,11 @@ const Week4 = () => {
                   alt={option.isCorrect ? "Checked" : "Unchecked"}
                   style={{ width: "20px", marginRight: "10px" }}
                 />
-                <span style={{ fontSize: "14px" }} className="option-label">
+                <span style={{
+                  fontSize: "14px",
+                  textAlign: "left",
+                  display: "block"
+                }} className="option-label">
                   {option.label}
                 </span>
                 <p style={{ width: "120px", textAlign: "center" }}>

@@ -316,82 +316,68 @@ let questionsQuiz = [
   }
 ];
 
-const Week3 = () => {
-  // const percentage = 20;
-
-  const week = 3;
-  const courseId = "66853bf50118e2e0a02b6a5a";
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["feedback-self-awareness-3", courseId, week],
-    queryFn: () => userService.getMyActivites(courseId, week)
+const Week3 = ({ enrollmentId }) => {
+  const [assessmentData, setAssessmentData] = useState(null);
+  const [percentage, setPercent] = useState(0);
+  const { data, isPending, status, isError } = useQuery({
+    queryKey: ["dashboard/self-awereness-feedback-3", enrollmentId, 3],
+    queryFn: () => userService.getUserCourseData(enrollmentId, 3),
+    enabled: !!enrollmentId,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false,
   });
 
-  // console.log(data?.activity?.activities[1]?.answers[0]);
-
-  const [assessmentData, setAssessmentData] = useState(null);
-  const [assessmentLoading, setAssessmentLoading] = useState(true);
-  const [assessmentError, setAssessmentError] = useState(null);
-
   useEffect(() => {
-    const fetchAndProcessAssessmentData = async () => {
-      setAssessmentLoading(true);
-      try {
-        const data = await userService.getMyAssessment(courseId, week);
-        setAssessmentData(data);
-        const assessmentForChecked =
-          data?.existingAssessment.assessments[0].answers;
-        // console.log(data?.existingAssessment.assessments[0].answers);
+    if (!data) return
+    setPercent(data?.assessment?.rating || 0);
 
-        // Ensure that assessmentForChecked is valid before slicing
-        if (assessmentForChecked && assessmentForChecked.length >= 5) {
-          const valuesToCheck = assessmentForChecked;
-          console.log(valuesToCheck);
+    const assessmentForChecked =
+      data?.assessment?.assessments[0].answers;
 
-          questionsQuiz = questionsQuiz.map((question, index) => {
+    setAssessmentData(assessmentForChecked)
+    // console.log(data?.existingAssessment.assessments[0].answers);
+
+    // Ensure that assessmentForChecked is valid before slicing
+    if (assessmentForChecked && assessmentForChecked.length >= 5) {
+      const valuesToCheck = assessmentForChecked;
+
+      questionsQuiz = questionsQuiz.map((question, index) => {
+        return {
+          ...question,
+          options: question.options.map((option, optionIndex) => {
             return {
-              ...question,
-              options: question.options.map((option, optionIndex) => {
-                return {
-                  ...option,
-                  checked: optionIndex === valuesToCheck[index]
-                };
-              })
+              ...option,
+              checked: optionIndex === valuesToCheck[index]
             };
-          });
-        } else {
-          console.error("Assessment answers are missing or incomplete.");
-        }
-      } catch (error) {
-        setAssessmentError(error);
-      } finally {
-        setAssessmentLoading(false);
-      }
-    };
+          })
+        };
+      });
+    }
 
-    fetchAndProcessAssessmentData();
-  }, [courseId, week]);
+  }, [data]);
 
-  const percentage = assessmentData?.existingAssessment?.rating;
   // // console.log(updatedQuestionsQuiz);
 
-  if (isLoading || assessmentLoading) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
-  if (isError || assessmentError) {
-    return <div>Take Activity to see feedback.</div>;
+  if (isError || data?.status === "failed") {
+    return <div>{data?.message}.</div>;
   }
+
 
   const activities = [
     {
       question: "What do you understand by the word “Mindset”?",
-      answer: data?.activity?.activities[1]?.answers[0],
+      answer: data?.activity?.activities[1]?.answers?.[0],
       feedback: data?.activity?.activities[1]?.feedback?.[0]
     },
     {
       question:
         "Do you feel like you have a growth mindset, or do you sometimes find yourself with a fixed mindset? Share your thoughts. It’s okay to be honest, this is all about learning and growing together!",
-      answer: data?.activity?.activities[3]?.answers[0],
+      answer: data?.activity?.activities[3]?.answers?.[0],
       feedback: data?.activity?.activities[3]?.feedback?.[0]
     },
     {
@@ -402,7 +388,7 @@ const Week3 = () => {
     {
       question:
         "List one (1) thing you will start working on, even on your growth journey.",
-      answer: data?.activity?.activities[5]?.answers[5],
+      answer: data?.activity?.activities[5]?.answers?.[5],
       feedback: data?.activity?.activities[5]?.feedback?.[1]
     }
   ];
@@ -482,7 +468,11 @@ const Week3 = () => {
                   alt={option.isCorrect ? "Checked" : "Unchecked"}
                   style={{ width: "20px", marginRight: "10px" }}
                 />
-                <span style={{ fontSize: "14px" }} className="option-label">
+                <span style={{
+                  fontSize: "14px",
+                  textAlign: "left",
+                  display: "block"
+                }} className="option-label">
                   {option.label}
                 </span>
                 <p style={{ width: "120px", textAlign: "center" }}>

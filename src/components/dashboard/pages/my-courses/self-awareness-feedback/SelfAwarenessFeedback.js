@@ -109,7 +109,7 @@ const SelfAwarenessFeedback = () => {
   return (
     <>
       {/* Loader Overlay */}
-      {(queryLoading || assessmentLoading || pdfLoading) && ( // SHOW LOADER WHEN PDF IS LOADING
+      {(pdfLoading) && ( // SHOW LOADER WHEN PDF IS LOADING
         <div className="loader-overlay">
           <ClimbingBoxLoader color="#275DAD" />
         </div>
@@ -138,7 +138,9 @@ const SelfAwarenessFeedback = () => {
               style={{ cursor: "pointer" }}
             />
           </div>
-          {(expandedWeek === 1 || expandedWeek === "all") && <Week1 />}
+          {(expandedWeek === 1 || expandedWeek === "all") && <Week1
+            enrollmentId={enrolmentData._id}
+          />}
         </div>
 
         {/* Week 2 */}
@@ -160,7 +162,9 @@ const SelfAwarenessFeedback = () => {
               style={{ cursor: "pointer" }}
             />
           </div>
-          {(expandedWeek === 2 || expandedWeek === "all") && <Week2 />}
+          {(expandedWeek === 2 || expandedWeek === "all") && <Week2
+            enrollmentId={enrolmentData._id}
+          />}
         </div>
 
         {/* Week 3 */}
@@ -180,7 +184,9 @@ const SelfAwarenessFeedback = () => {
               style={{ cursor: "pointer" }}
             />
           </div>
-          {(expandedWeek === 3 || expandedWeek === "all") && <Week3 />}
+          {(expandedWeek === 3 || expandedWeek === "all") && <Week3
+            enrollmentId={enrolmentData._id}
+          />}
         </div>
 
         {/* Week 4 */}
@@ -200,7 +206,9 @@ const SelfAwarenessFeedback = () => {
               style={{ cursor: "pointer" }}
             />
           </div>
-          {(expandedWeek === 4 || expandedWeek === "all") && <Week4 />}
+          {(expandedWeek === 4 || expandedWeek === "all") && <Week4
+            enrollmentId={enrolmentData._id}
+          />}
         </div>
 
         {/* Week 5 */}
@@ -222,7 +230,9 @@ const SelfAwarenessFeedback = () => {
               style={{ cursor: "pointer" }}
             />
           </div>
-          {(expandedWeek === 5 || expandedWeek === "all") && <Week5 />}
+          {(expandedWeek === 5 || expandedWeek === "all") && <Week5
+            enrollmentId={enrolmentData._id}
+          />}
         </div>
 
         {/* Final Report Section */}
@@ -245,9 +255,8 @@ const SelfAwarenessFeedback = () => {
                   fontSize: 16,
                 }}
                 download="SelfAwarenessSummary.pdf"
-                className={`download-link text-blue${
-                  !isDataLoaded ? "disabled" : ""
-                }`}
+                className={`download-link text-blue${!isDataLoaded ? "disabled" : ""
+                  }`}
                 onClick={(e) => !isDataLoaded && e.preventDefault()}
               >
                 (Download PDF)
@@ -269,8 +278,8 @@ const SelfAwarenessFeedback = () => {
             />
           </div>
         </div>
-        {(expandedWeek === 6 || expandedWeek === "all") && <HurrayComponent 
-        enrollmentData={enrolmentData}
+        {(expandedWeek === 6 || expandedWeek === "all") && <HurrayComponent
+          enrollmentData={enrolmentData}
         />}
       </div>
     </>

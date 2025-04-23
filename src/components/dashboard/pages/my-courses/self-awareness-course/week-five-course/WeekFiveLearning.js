@@ -15,55 +15,97 @@ import { toast, ToastContainer } from "react-toastify";
 import { useQuery } from '@tanstack/react-query';
 import QuestionComponent from './QuestionsComponent.js'
 import emoational_image from '../../../../../../assets/selfawareness-images/emotional-intelligence.png'
+import { useDispatch } from "react-redux";
+import {
+  updateData,
+} from "../../../../../../redux/reducers/userAnswersReducer.js";
 
-export default function WeekFourLearning({
+export default function WeekFiveLearning({
   course,
   courseId,
   onClose,
   currentWeekIndex,
 }) {
+  const dispatch = useDispatch();
   const [showPopup, setShowPopup] = useState(false)
+  const [formData, setFormData] = useState()
+
   const [currentActivity, setCurrentActivity] = useState(() => {
     const savedState = localStorage.getItem(
       `week-${currentWeekIndex}-currentActivity`
     )
     return savedState ? JSON.parse(savedState) : 1
   })
-        const week = 5;
-        const { data, isLoading, isError } = useQuery({
-          queryKey: [
-            "dashboard/self-awareness-course",
-            course?.course._id,
-            week
-          ],
-          queryFn: () => userService.getMyActivites(course?.course._id, week)
-        });
+  const week = 5;
 
-        // Check if data.activity exists and save it under one key 'activity1' in local storage
-        if (data?.activity) {
-          const activities = data.activity.activities;
+  const { data, isLoading, status, isError } = useQuery({
+    queryKey: ["self-awareness-course-5", courseId, week],
+    queryFn: () => userService.getUserCourseData(courseId, week),
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false
+  });
 
-          // Create an object with week and activities
-          const activityData = {
-            week: week,
-            activities: activities
-          };
+  // Check if data.activity exists and save it under one key 'activity1' in local storage
+  
+  useEffect(() => {
 
-          // Store the object in local storage under the key 'activity1'
-          localStorage.setItem(
-            "week-5-activityData",
-            JSON.stringify(activityData)
-          );
-        }
+    if (!data) return
 
-  const [formData, setFormData] = useState(() => {
-    const savedState = localStorage.getItem(
-      `week-${currentWeekIndex}-activityData`
-    )
-    return savedState
-      ? JSON.parse(savedState)
-      : { week: currentWeekIndex, activities: [] }
-  })
+    if (data.assessment && data.activity) {
+      const assessments = data?.assessment?.assessments;
+      const activities = data?.activity?.activities;
+      const percent = data?.assessment?.rating;
+
+      // Create an object with week and activities
+      const activityData = {
+        week: week,
+        activities: activities
+      };
+
+      const assessment_data = {
+        week: week,
+        percentage: percent,
+        assessments: assessments,
+        personalityColor:data?.assessment?.personalityColor ? data?.assessment?.personalityColor : "Yellow",
+      }
+
+      setFormData(activityData)
+      // Store the object in local storage under the key 'activity1'
+      localStorage.setItem("week-5-activityData", JSON.stringify(activityData));
+      localStorage.setItem(
+        "weekFiveAssessmentData",
+        JSON.stringify({ formattedData: assessment_data })
+      );
+      // This Dispatch will be used in submiting the data at the assessment page
+      dispatch(
+        updateData({
+          course: course?.course?._id,
+          courseEnrollmentId: courseId,
+          week,
+          activities: data.activity?.activities,
+          assessments: data.assessment?.assessments,
+        })
+      );
+    } else {
+      // New user
+      setFormData({
+        week: week,
+        activities: []
+      })
+      dispatch(
+        updateData({
+          course: course?.course?._id,
+          courseEnrollmentId: courseId,
+          week,
+          activities: [],
+          assessments: [],
+        })
+      );
+    }
+
+  }, [data])
+
 
   const [videoPlaying, setVideoPlaying] = useState(false)
   const [reviewPopUp, setReviewPopUp] = useState(false)
@@ -85,7 +127,7 @@ export default function WeekFourLearning({
 
   const handleNext = async (data = {}) => {
     setFormData((prevData) => {
-      const updatedActivities = prevData.activities.map((item) =>
+      const updatedActivities = prevData?.activities?.map((item) =>
         item.activity === currentActivity ? { ...item, ...data } : item
       )
       if (
@@ -275,7 +317,7 @@ export default function WeekFourLearning({
             handleNextWeekCourse={handleNextWeekCourse}
             onNext={handleNext}
             course={course}
-            handleActivitySubmit={handleSubmit}
+            activityData={formData}
           />
         )
       default:

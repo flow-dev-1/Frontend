@@ -172,93 +172,76 @@ let questionsQuiz = [
       },
       {
         label:
-          "B. Tell him about the strengths you have noticed he has and identify how to manage his weakness.",
+          "B. Tell him about your own weakness in hopes that it will get him to share as well.",
         color: "Green",
         checked: false, // This is the correct option (assuming)
         isCorrect: false
       },
       {
-        label: "C. Tell your other friends about this weakness.",
+        label: "C. Tell him about the strengths you have noticed he has and identify how to manage his weakness.",
         color: "Blue",
         checked: false, // This is not the correct option
-        isCorrect: false
+        isCorrect: true
       },
       {
         label:
-          "D. Tell him about your own weakness in hopes that it will get him to share as well.",
+          "D. Tell your other friends about this weakness.",
         color: "Yellow",
         checked: false, // This is not the correct option
-        isCorrect: true
+        isCorrect: false
       }
     ]
   }
 ];
 
-const Week2 = () => {
-  const week = 2;
-  const courseId = "66853bf50118e2e0a02b6a5a";
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["dashboard/feedback/self-awareness", courseId, week],
-    queryFn: () => userService.getMyActivites(courseId, week)
+const Week2 = ({ enrollmentId }) => {
+  const [assessmentData, setAssessmentData] = useState(null);
+  const [percentage, setPercent] = useState(0);
+
+  const { data, isPending, status, isError } = useQuery({
+    queryKey: ["dashboard/self-awereness-feedback-2", enrollmentId, 2],
+    queryFn: () => userService.getUserCourseData(enrollmentId, 2),
+    enabled: !!enrollmentId,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false,
   });
 
-  console.log(data,"Data")
-
-  const [assessmentData, setAssessmentData] = useState(null);
-  const [assessmentLoading, setAssessmentLoading] = useState(true);
-  const [assessmentError, setAssessmentError] = useState(null);
-
   useEffect(() => {
-    const fetchAndProcessAssessmentData = async () => {
-      setAssessmentLoading(true);
-      try {
-        const data = await userService.getMyAssessment(courseId, week);
-        setAssessmentData(data);
+    if (!data) return
+    setPercent(data?.assessment?.rating || 0);
+    const assessmentForChecked =
+      data?.assessment?.assessments[0].assessment?.answers;
+    setAssessmentData(assessmentForChecked)
 
-        const assessmentForChecked =
-          data?.existingAssessment?.assessments[0]?.assessment?.answers;
-        // console.log(data?.existingAssessment?.assessments[0]?.assessment?.answers[5]);
-        // Ensure that assessmentForChecked is valid before slicing
-        if (assessmentForChecked && assessmentForChecked.length >= 5) {
-          const valuesToCheck = assessmentForChecked.slice(0, 5);
-          console.log(valuesToCheck);
+    if (assessmentForChecked && assessmentForChecked.length >= 5) {
+      const valuesToCheck = assessmentForChecked.slice(0, 5);
 
-          questionsQuiz = questionsQuiz.map((question, index) => {
+      questionsQuiz = questionsQuiz.map((question, index) => {
+        return {
+          ...question,
+          options: question.options.map((option, optionIndex) => {
             return {
-              ...question,
-              options: question.options.map((option, optionIndex) => {
-                return {
-                  ...option,
-                  checked: optionIndex === valuesToCheck[index]
-                };
-              })
+              ...option,
+              checked: optionIndex === valuesToCheck[index]
             };
-          });
-
-          // You might want to update the state with the modified questionsQuiz
-          // console.log(questionsQuiz);
-        } else {
-          console.error("Assessment answers are missing or incomplete.");
-        }
-      } catch (error) {
-        setAssessmentError(error);
-      } finally {
-        setAssessmentLoading(false);
-      }
+          })
+        };
+      });
     };
 
-    fetchAndProcessAssessmentData();
-  }, [courseId, week]);
+  }, [data]);
 
   // console.log(updatedQuestionsQuiz);
 
-  if (isLoading || assessmentLoading) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
-  if (isError || data.status === "failed" || assessmentError) {
-    return <div>Take Activity to see feedback.</div>;
+  if (isError || data?.status === "failed") {
+    return <div>{data?.message}.</div>;
   }
+
   const strengths = data?.activity?.activities[3]?.answers?.strengths;
   const weaknesses = data?.activity?.activities[4]?.answers?.weakness;
 
@@ -275,13 +258,13 @@ const Week2 = () => {
       activity: 2, // New activity based on image
       question: "Identify your Strengths.",
       answer: strengths,
-   feedback: data?.activity?.activities?.[3]?.feedback?.[0]
+      feedback: data?.activity?.activities?.[3]?.feedback?.[0]
     },
     {
       activity: 3, // New activity based on image
       question: "Identify your Weaknesses.",
       answer: weaknesses,
-       feedback: data?.activity?.activities?.[4]?.feedback?.[0]
+      feedback: data?.activity?.activities?.[4]?.feedback?.[0]
     },
     // {
     //   activity: 4, // Another new activity based on image
@@ -298,7 +281,7 @@ const Week2 = () => {
         strengths: data?.activity?.activities[6]?.answers?.strengthsQ1,
         weaknesses: data?.activity?.activities[6]?.answers?.weaknessesQ1
       },
-          feedback: data?.activity?.activities[6]?.feedback ? data?.activity?.activities[6]?.feedback[0] : ""
+      feedback: data?.activity?.activities[6]?.feedback ? data?.activity?.activities[6]?.feedback[0] : ""
     },
     {
       activity: 4, // New activity based on the latest image
@@ -308,7 +291,7 @@ const Week2 = () => {
         strengths: data?.activity?.activities[6]?.answers?.strengthsQ2,
         weaknesses: data?.activity?.activities[6]?.answers?.weaknessesQ2
       },
-        feedback: data?.activity?.activities[6]?.feedback ? data?.activity?.activities[6]?.feedback[1] : ""
+      feedback: data?.activity?.activities[6]?.feedback ? data?.activity?.activities[6]?.feedback[1] : ""
     },
     {
       activity: 4, // New activity based on the latest image
@@ -327,9 +310,7 @@ const Week2 = () => {
       activity: 1,
       question:
         "What activity do you enjoy the most, and why do you think you are good at it?",
-      answer:
-        assessmentData?.existingAssessment?.assessments[0]?.assessment
-          ?.answers[5],
+      answer:assessmentData?.[5],
       feedback: ""
     },
 
@@ -337,9 +318,7 @@ const Week2 = () => {
       activity: 2, // New activity based on image
       question:
         "When working in a group, what role do you naturally take on (e.g., leader, planner, helper)? Can you give an example?",
-      answer:
-        assessmentData?.existingAssessment?.assessments[0]?.assessment
-          ?.answers[7],
+      answer:assessmentData?.[6],
       feedback:
         ""
     },
@@ -347,14 +326,13 @@ const Week2 = () => {
       activity: 3, // New activity based on image
       question:
         "Is there a task or subject that you avoid because you find it difficult? Why do you think it’s challenging for you?",
-      answer:
-        assessmentData?.existingAssessment?.assessments[0]?.assessment
-          ?.answers[8],
+      answer:assessmentData?.[7],
       feedback:
         ""
     }
   ];
-  const percentage = assessmentData?.existingAssessment?.rating;
+
+
   return (
     <div className="week-content">
       <p className="activity-badge">Activity 1</p>
@@ -561,7 +539,11 @@ const Week2 = () => {
                   alt={option.isCorrect ? "Checked" : "Unchecked"}
                   style={{ width: "20px", marginRight: "10px" }}
                 />
-                <span style={{ fontSize: "14px" }} className="option-label">
+                <span style={{
+                  fontSize: "14px",
+                  textAlign: "left",
+                  display: "block"
+                }} className="option-label">
                   {option.label}
                 </span>
                 <p style={{ width: "120px", textAlign: "center" }}>
@@ -588,6 +570,7 @@ const Week2 = () => {
           </div>
         </div>
       ))}
+      
       {quizEssay.map((activity, index) => (
         <div style={{ border: "none" }} className="activity" key={index}>
           <p className="question d-flex align-items-center gap-2">

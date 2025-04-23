@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import MyFireWorks from '../Fireworks'
 import strengthweakness from '../../../../../../assets/selfawareness-images/strengthweakness.png'
 import StrengthIdentification from './StrengthIdentification'
 import WeaknessIdentification from './WeaknessIdentification'
@@ -13,6 +12,10 @@ import userService from '../../../../../../services/api/user.js'
 import { toast, ToastContainer } from 'react-toastify'
 import EndOfCourseComponent from './EndOfCourseComponent.js'
 import { useQuery } from '@tanstack/react-query'
+import { useDispatch } from "react-redux";
+import {
+  updateData,
+} from "../../../../../../redux/reducers/userAnswersReducer.js";
 
 export default function WeekTwoLearning({
   course,
@@ -21,7 +24,7 @@ export default function WeekTwoLearning({
   currentWeekIndex,
   handleLinkClick,
 }) {
-  const [showPopup, setShowPopup] = useState(false)
+  const dispatch = useDispatch();
   const [currentActivity, setCurrentActivity] = useState(() => {
     const savedState = localStorage.getItem(
       `week-${currentWeekIndex}-currentActivity`
@@ -30,40 +33,37 @@ export default function WeekTwoLearning({
   })
   const [formData, setFormData] = useState()
   const week = 2;
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["self-awareness-course-2", course?.course?._id, week],
-    queryFn: () => userService.getMyActivites(course?.course?._id, week)
-  });
 
-  const { data: assessmentData, isLoading: assessmentLoading, status: assesmentStatus, isError: assessmentError } = useQuery({
-    queryKey: ["self-awareness-assessment-2", course?.course?._id, week],
-    queryFn: () => userService.getMyAssessment(course?.course?._id, week),
-    enabled: !!course?.course._id && !!week
+  const { data, isLoading, status, isError } = useQuery({
+    queryKey: ["self-awareness-course-1", courseId, week],
+    queryFn: () => userService.getUserCourseData(courseId, week),
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false
   });
 
 
   useEffect(() => {
 
-    if (!data || !assessmentData) return
+    if (!data) return
 
-    const assessments = assessmentData?.existingAssessment?.assessments;
-    const percent = assessmentData?.existingAssessment?.rating;
-    const color = assessmentData?.existingAssessment?.personalityColor;
-    // Check if data.activity exists and save it under one key 'activity1' in local storage
-    if (data?.activity && assessments?.length > 0) {
+    if (data.assessment && data.activity) {
 
-      const activities = data.activity.activities;
+      const assessments = data?.assessment?.assessments;
+      const activities = data?.activity?.activities;
+      const percent = data?.assessment?.rating;
+
       // Create an object with week and activities
       const activityData = {
         week: week,
         activities: activities
       };
 
-      const assessmentData = {
+      const assessment_data = {
         week: week,
         percentage: percent,
         assessments: assessments,
-        personalityColor: color
+        personalityColor: data?.assessment?.personalityColor ? data?.assessment?.personalityColor : "Yellow",
       }
 
       setFormData(activityData)
@@ -71,28 +71,37 @@ export default function WeekTwoLearning({
       localStorage.setItem("week-2-activityData", JSON.stringify(activityData));
       localStorage.setItem(
         "weekTwoAssessmentData",
-        JSON.stringify({ formData: assessmentData })
+        JSON.stringify({ formattedData: assessment_data })
       );
 
-
+      dispatch(
+        updateData({
+          course: course?.course?._id,
+          courseEnrollmentId: courseId,
+          week,
+          activities: data.activity?.activities,
+          assessments: data.assessment?.assessments,
+        })
+      );
     } else {
       // New user
       setFormData({
         week: week,
         activities: []
       })
+      dispatch(
+        updateData({
+          course: course?.course?._id,
+          courseEnrollmentId: courseId,
+          week,
+          activities: [],
+          assessments: [],
+        })
+      );
     }
 
-  }, [data, assessmentData])
+  }, [data])
 
-  // const [formData, setFormData] = useState(() => {
-  //   const savedState = localStorage.getItem(
-  //     `week-${currentWeekIndex}-activityData`
-  //   )
-  //   return savedState
-  //     ? JSON.parse(savedState)
-  //     : { week: currentWeekIndex, activities: [] }
-  // })
 
   const [videoPlaying, setVideoPlaying] = useState(false)
   const [reviewPopUp, setReviewPopUp] = useState(false)
@@ -114,7 +123,7 @@ export default function WeekTwoLearning({
   //  console.log(course.course._id)
   const handleNext = async (data = {}) => {
     setFormData((prevData) => {
-      const updatedActivities = prevData?.activities.map((item) =>
+      const updatedActivities = prevData?.activities?.map((item) =>
         item.activity === currentActivity ? { ...item, ...data } : item
       )
       if (
@@ -137,33 +146,6 @@ export default function WeekTwoLearning({
     setCurrentActivity((prev) => prev - 1)
   }
 
-  const handleSubmit = async () => {
-    console.log(formData, "FormData here o")
-
-    if (formData?.activities?.length < 8) {
-      return { success: false, message: "Submission failed" };
-    }
-
-    try {
-      const stringifiedFormData = JSON.stringify(formData)
-      const response = await userService.postMyActivity(course.course._id, stringifiedFormData);
-
-      if (response.success) {
-        toast.success(response?.message);
-        console.log("Submission successful:", response);
-        return { success: true, message: "Submission successful" };
-      } else {
-        toast.error("Activity submission failed. Please contact flow admin for support!");
-        console.error("Submission failed with response:", response);
-        return { success: false, message: "Submission failed" };
-      }
-    } catch (error) {
-      console.error('Submission failed:', error)
-      return { success: false, message: "Submission failed" };
-    }
-  }
-
-  const closeReviewPopUp = () => setReviewPopUp(false)
 
   const handleNextWeekCourse = () => {
     const nextWeekIndex = currentWeekIndex + 1
@@ -291,7 +273,7 @@ export default function WeekTwoLearning({
             handleNextWeekCourse={handleNextWeekCourse}
             onNext={handleNext}
             course={course}
-            handleActivitySubmit={handleSubmit}
+            activityData={formData}
           />
         )
       default:

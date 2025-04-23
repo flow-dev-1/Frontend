@@ -10,9 +10,13 @@ import NavigationButtons from '../week-two-screens/NavigationButtons'
 import QuestionComponent from './QuestionComponent'
 import userService from '../../../../../../services/api/user.js'
 import SecondQuestionComponent from './SecondQuestionComponet.js'
-import { useQuery } from '@tanstack/react-query'
 import { toast, ToastContainer } from 'react-toastify'
 import EndOfCourseComponent from './EndOfCourseComponent.js'
+import { useQuery } from '@tanstack/react-query'
+import { useDispatch } from "react-redux";
+import {
+  updateData,
+} from "../../../../../../redux/reducers/userAnswersReducer.js";
 
 export default function WeekThreeLearning({
   course,
@@ -21,6 +25,7 @@ export default function WeekThreeLearning({
   currentWeekIndex,
   handleLinkClick,
 }) {
+  const dispatch = useDispatch();
   const [showPopup, setShowPopup] = useState(false)
   const [currentActivity, setCurrentActivity] = useState(() => {
     const savedState = localStorage.getItem(
@@ -29,49 +34,75 @@ export default function WeekThreeLearning({
     return savedState ? JSON.parse(savedState) : 1
   })
 
-  const [formData, setFormData] = useState(() => {
-    const savedState = localStorage.getItem(
-      `week-${currentWeekIndex}-activityData`
-    )
-    return savedState
-      ? JSON.parse(savedState)
-      : { week: currentWeekIndex, activities: [] }
-  })
+  const [formData, setFormData] = useState()
+
 
   const week = 3
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['self-awareness-course-3', course?.course?._id, week],
-    queryFn: () => userService.getMyActivites(course?.course?._id, week),
-  })
-
-  const { data: assessmentData, isLoading: assessmentLoading, status: assesmentStatus, isError: assessmentError } = useQuery({
-    queryKey: ["self-awareness-assessment-3", course?.course?._id, week],
-    queryFn: () => userService.getMyAssessment(course?.course?._id, week),
-    enabled: !!course?.course._id && !!week
+  const { data, isLoading, status, isError } = useQuery({
+    queryKey: ["self-awareness-course-3", courseId, week],
+    queryFn: () => userService.getUserCourseData(courseId, week),
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false
   });
-
-  console.log(data,assessmentData,"Data here")
 
 
   useEffect(() => {
-    if (!data || !assessmentData) return
+    if (!data) return
 
-  if (data?.activity) {
-    const activities = data.activity.activities;
+    if (data.assessment && data.activity) {
+      const assessments = data?.assessment?.assessments;
+      const activities = data?.activity?.activities;
+      const percent = data?.assessment?.rating;
 
-    // Create an object with week and activities
-    const activityData = {
-      week: week,
-      activities: activities,
+      // Create an object with week and activities
+      const activityData = {
+        week: week,
+        activities: activities,
+      }
+
+      const assessment_data = {
+        week: week,
+        percentage: percent,
+        assessments: assessments,
+      }
+
+      setFormData(activityData)
+
+      // Store the object in local storage under the key 'activity1'
+      localStorage.setItem("week-3-activityData", JSON.stringify(activityData));
+      localStorage.setItem(
+        "weekThreeAssessmentData",
+        JSON.stringify({ formattedData: assessment_data })
+      );
+      // This Dispatch will be used in submiting the data at the assessment page
+      dispatch(
+        updateData({
+          course: course?.course?._id,
+          courseEnrollmentId: courseId,
+          week,
+          activities: data.activity?.activities,
+          assessments: data.assessment?.assessments,
+        })
+      );
+    } else {
+      setFormData({
+        week: week,
+        activities: []
+      })
+      dispatch(
+        updateData({
+          course: course?.course?._id,
+          courseEnrollmentId: courseId,
+          week,
+          activities: [],
+          assessments: [],
+        })
+      );
     }
 
-    // Store the object in local storage under the key 'activity1'
-    localStorage.setItem('week-3-activityData', JSON.stringify(activityData))
-  }
-
-
   }, [data])
-  
+
 
   const [videoPlaying, setVideoPlaying] = useState(false)
   const [reviewPopUp, setReviewPopUp] = useState(false)
@@ -93,14 +124,16 @@ export default function WeekThreeLearning({
 
   const handleNext = async (data = {}) => {
     setFormData((prevData) => {
-      const updatedActivities = prevData.activities.map((item) =>
+
+      const updatedActivities = prevData?.activities?.map((item) =>
         item.activity === currentActivity ? { ...item, ...data } : item
       )
       if (
-        !updatedActivities.find((item) => item.activity === currentActivity)
+        !updatedActivities?.find((item) => item.activity === currentActivity)
       ) {
-        updatedActivities.push({ activity: currentActivity, ...data })
+        updatedActivities?.push({ activity: currentActivity, ...data })
       }
+
       return { ...prevData, activities: updatedActivities }
     })
     const isLastActivity = currentActivity >= 8
@@ -114,32 +147,7 @@ export default function WeekThreeLearning({
   const handlePrevious = () => {
     setCurrentActivity((prev) => prev - 1)
   }
-
-  const handleSubmit = async () => {
-
-    if (formData?.activities?.length < 7) {
-      return { success: false, message: "Submission failed" };
-    }
-
-    try {
-      const stringifiedFormData = JSON.stringify(formData)
-      const response = await userService.postMyActivity(course.course._id, stringifiedFormData);
-
-      if (response.success) {
-        toast.success(response?.message);
-        console.log("Submission successful:", response);
-        return { success: true, message: "Submission successful" };
-      } else {
-        toast.error("Activity submission failed. Please contact flow admin for support!");
-        console.error("Submission failed with response:", response);
-        return { success: false, message: "Submission failed" };
-      }
-    } catch (error) {
-      console.error('Submission failed:', error)
-      return { success: false, message: "Submission failed" };
-    }
-  }
-
+  
   const closeReviewPopUp = () => setReviewPopUp(false)
 
   const handleNextWeekCourse = () => {
@@ -261,7 +269,7 @@ export default function WeekThreeLearning({
             handleNextWeekCourse={handleNextWeekCourse}
             onNext={handleNext}
             course={course}
-            handleActivitySubmit={handleSubmit}
+            activityData={formData}
           />
         )
       default:

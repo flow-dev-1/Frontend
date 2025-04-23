@@ -46,7 +46,7 @@ function WeekNinePage4() {
     if (currentStep !== 1) {
 
       if (values.length < 5) {
-        setErrorMessage("At least 5 values are required!");
+        setErrorMessage("At least 5 answers are required!");
         return false;
       }
     }

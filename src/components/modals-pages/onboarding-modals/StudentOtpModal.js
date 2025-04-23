@@ -38,7 +38,6 @@ export default function StudentOtpModal({
   }
 
   function handleSubmit() {
-    console.log(otp.join(''), 'OTP')
     mutation.mutate({ code: otp.join(''), enrollmentId })
   }
 

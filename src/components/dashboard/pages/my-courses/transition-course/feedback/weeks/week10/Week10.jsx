@@ -16,7 +16,7 @@ import Modal from "../../components/Modal.jsx";
 import { useSelector } from "react-redux";
 import adminService from "../../../../../../../../services/api/admin.js";
 
-function Week10({ enrollmentId, setWeekFiveData }) {
+function Week10({ enrollmentId, setWeekTenData }) {
   const { pages } = getWeekContentExcludingVideos(10);
   const [activity1] = pages;
   const [activityData, setActivityData] = useState([]);
@@ -63,7 +63,7 @@ function Week10({ enrollmentId, setWeekFiveData }) {
 
     setActivityData(data.activity?.activities);
     setAssessmentData(data.assessment?.assessments);
-    setWeekFiveData(true);
+    setWeekTenData(true);
 
     return () => { };
   }, [data]);

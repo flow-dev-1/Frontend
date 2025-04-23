@@ -316,6 +316,7 @@ class UserOBJ {
       throw err?.response?.data || err.message;
     }
   }
+  
   getUserCourseData = async (params1, week) => {
     try {
       const response = await api.get(

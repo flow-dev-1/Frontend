@@ -26,7 +26,8 @@ export default function SignIn() {
   const schema = yup.object().shape({
     usernameOrEmail: yup
       .string()
-      .required('Email address/Student ID is required!')
+      .email('Invalid email format')
+      .required('Email address is required!')
       .trim(),
     password: yup
       .string()
@@ -78,13 +79,13 @@ export default function SignIn() {
         <p className='text-center'>
           Enter your details to explore our offerings.
         </p>
-        <p className='text-center'>
+        {/* <p className='text-center'>
           <span className='span-role'>Students</span> - Use Student ID
         </p>
         <p className='text-center mb-3'>
           <span className='span-role'>Administrators & Educators </span> - Use
           Email
-        </p>
+        </p> */}
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div
@@ -92,7 +93,8 @@ export default function SignIn() {
             className='form-section d-flex flex-column align-items-center individual-signup'
           >
             <div className='form-group'>
-              <label style={{ border: 'none' }}>Email address/Student ID</label>
+              {/* <label style={{ border: 'none' }}>Email address/Student ID</label> */}
+              <label style={{ border: 'none' }}>Email address</label>
               <input
                 id={errors.usernameOrEmail && 'border-red'}
                 style={{ width: '100%', padding: '1rem .7rem' }}

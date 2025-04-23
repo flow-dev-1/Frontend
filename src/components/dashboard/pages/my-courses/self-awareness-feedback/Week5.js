@@ -370,70 +370,54 @@ const answersForCheck = [
   { src: emojiHappy, label: "Happy" }
 ];
 
-const Week5 = () => {
+const Week5 = ({ enrollmentId }) => {
   const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState({});
   const dropdownRefs = useRef([]);
-  const week = 5;
-  const courseId = "66853bf50118e2e0a02b6a5a";
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["dashboard/feedback/self-awareness", courseId, week],
-    queryFn: () => userService.getMyActivites(courseId, week)
+  const [assessmentData, setAssessmentData] = useState(null);
+  const [percentage, setPercent] = useState(0);
+
+  const { data, isPending, status, isError } = useQuery({
+    queryKey: ["dashboard/self-awereness-feedback-5", enrollmentId, 5],
+    queryFn: () => userService.getUserCourseData(enrollmentId, 5),
+    enabled: !!enrollmentId,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false,
   });
 
-  // console.log(data?.activity?.activities[1]?.answers[0]);
-
-  const [assessmentData, setAssessmentData] = useState(null);
-  const [assessmentLoading, setAssessmentLoading] = useState(true);
-  const [assessmentError, setAssessmentError] = useState(null);
-
   useEffect(() => {
-    const fetchAndProcessAssessmentData = async () => {
-      setAssessmentLoading(true);
-      try {
-        const data = await userService.getMyAssessment(courseId, week);
-        setAssessmentData(data);
-        const assessmentForChecked =
-          data?.existingAssessment.assessments[0].answers;
-        console.log(data);
+    if (!data) return
+    setPercent(data?.assessment?.rating || 0);
+    const assessmentForChecked =
+      data?.assessment.assessments[0].answers;
+    console.log(data);
 
-        // Ensure that assessmentForChecked is valid before slicing
-        if (assessmentForChecked && assessmentForChecked.length >= 5) {
-          const valuesToCheck = assessmentForChecked;
-          console.log(valuesToCheck);
+    // Ensure that assessmentForChecked is valid before slicing
+    if (assessmentForChecked && assessmentForChecked.length >= 5) {
+      const valuesToCheck = assessmentForChecked;
+      console.log(valuesToCheck);
 
-          questionsQuiz = questionsQuiz.map((question, index) => {
+      questionsQuiz = questionsQuiz.map((question, index) => {
+        return {
+          ...question,
+          options: question.options.map((option, optionIndex) => {
             return {
-              ...question,
-              options: question.options.map((option, optionIndex) => {
-                return {
-                  ...option,
-                  checked: optionIndex === valuesToCheck[index]
-                };
-              })
+              ...option,
+              checked: optionIndex === valuesToCheck[index]
             };
-          });
-        } else {
-          console.error("Assessment answers are missing or incomplete.");
-        }
-      } catch (error) {
-        setAssessmentError(error);
-      } finally {
-        setAssessmentLoading(false);
-      }
-    };
-
-    fetchAndProcessAssessmentData();
-  }, [courseId, week]);
+          })
+        };
+      });
+    }
+  }, [data]);
 
   const activitiesOne = [
     {
       question: " What do you understand by “Emotional Intelligence”?",
-      answer: data?.activity?.activities[1].answers[0]
+      answer: data?.activity?.activities[1].answers?.[0]
     }]
 
-  const percentage = assessmentData?.existingAssessment?.rating;
-  console.log("error", data?.activity?.activities[1].answers[0]);
   const Q1 = [
     data?.activity?.activities[5].answers.IWill[0],
     data?.activity?.activities[5].answers.IWillNot[0]
@@ -456,12 +440,13 @@ const Week5 = () => {
   ];
   // console.log(Q1);
   const activityData = data?.activity?.activities[3].answers;
-  if (isLoading || assessmentLoading) {
+
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
-  if (isError || assessmentError) {
-    return <div>Take Activity to see feedback.</div>;
+  if (isError || data?.status === "failed") {
+    return <div>{data?.message}.</div>;
   }
   // console.log(data?.activity?.activities[5]?.answers)
   const myChecked = data?.activity?.activities[3]?.answers
@@ -547,7 +532,7 @@ const Week5 = () => {
             <div className="answer d-flex gap-2">
               <div className="d-flex  gap-2">
                 <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
-                <p style={{ fontSize: "14px" }}>{activity.answer}</p>
+                <p style={{ fontSize: "14px", textAlign: "left", display: "block" }}>{activity.answer}</p>
               </div>
             </div>
           )}
@@ -764,7 +749,7 @@ const Week5 = () => {
                   alt={option.isCorrect ? "Checked" : "Unchecked"}
                   style={{ width: "20px", marginRight: "10px" }}
                 />
-                <span style={{ fontSize: "14px" }} className="option-label">
+                <span style={{ fontSize: "14px", textAlign: "left", display: "block"  }} className="option-label">
                   {option.label}
                 </span>
                 <p style={{ width: "120px", textAlign: "center" }}>
