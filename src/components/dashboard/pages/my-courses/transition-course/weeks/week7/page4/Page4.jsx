@@ -61,19 +61,19 @@ function WeekSevenPage4() {
 
     if (currentStep === 1 || currentStep=== 6) {
       if (valuesArray.length < 5) {
-        setErrorMessage("At least 5 values are required!");
+        setErrorMessage("At least 5 answers are required!");
         return false;
       }
     } else if (currentStep === 2) {
 
       if (valuesArray.length < 3) {
-        setErrorMessage("At least 3 values are required!");
+        setErrorMessage("At least 3 answers are required!");
         return false;
       }
     } else if (currentStep === 4) {
 
       if (valuesArray.length < 6) {
-        setErrorMessage("At least 6 values are required!");
+        setErrorMessage("At least 6 answers are required!");
         return false;
       }
     }

@@ -42,16 +42,25 @@ export default function IndividualOverview() {
     if (!data || !enrolledData) return
 
     if (user?.userType === "School") {
-      const genralCourses = data.courses.filter(course => course.access !== "School")
-      // Update to set displayCourses with both generalCourses and enrolledData.courses
-      const enrolledDataArray =
-      enrolledData?.courses?.map((item) => item.course) || []
-      setDisplayCourses([...genralCourses, ...enrolledDataArray])
+      const generalCourses = data.courses.filter(course => course.access !== "School");
+      const enrolledDataArray = enrolledData?.courses?.map((item) => item.course) || [];
+
+      // Create unique courses array using filter and some
+      const uniqueCourses = [
+        ...generalCourses,
+        ...enrolledDataArray.filter(enrolledCourse => 
+          !generalCourses.some(genCourse => 
+            genCourse._id === enrolledCourse._id
+          )
+        )
+      ];
+
+      setDisplayCourses(uniqueCourses);
 
     } else {
       // Show only General courses
-      const genralCourses = data.courses.filter(course => course.access !== "School")
-      setDisplayCourses(genralCourses)
+      const generalCourses = data.courses.filter(course => course.access !== "School");
+      setDisplayCourses(generalCourses);
     }
 
     return () => { }

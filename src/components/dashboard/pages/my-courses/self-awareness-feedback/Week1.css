@@ -96,7 +96,7 @@ div#badge {
   width: 70px;
   border-radius: 27px;
   font-size: 13px;
-  text-align: center;
+  text-align: left !important;
 }
 
 .color-label.red {
@@ -259,39 +259,46 @@ div#badge {
 #sometimes {
   background-color: #faaa74;
 }
-.pie{
+
+.pie {
   margin: auto;
 }
 
 .answers-container {
   display: flex;
-  justify-content: space-between; /* Ensures two columns */
-  gap: 10px; /* Adds space between the two columns */
+  justify-content: space-between;
+  /* Ensures two columns */
+  gap: 10px;
+  /* Adds space between the two columns */
 }
 
 .correct-options,
 .your-answers {
   display: flex;
-  flex-direction: column; /* Stack emojis vertically */
+  flex-direction: column;
+  /* Stack emojis vertically */
   flex: 1;
 }
 
 .emoji-container {
-  margin-bottom: 15px; /* Adds space between each emoji */
+  margin-bottom: 15px;
+  /* Adds space between each emoji */
 }
 
 .box {
   display: flex;
-  align-items: center; /* Aligns the emoji and label vertically */
+  align-items: center;
+  /* Aligns the emoji and label vertically */
   padding: 10px;
-  border: 1px solid #ccc; 
+  border: 1px solid #ccc;
   border-radius: 8px;
 }
 
 
 
 .correct-font {
-  text-align: center; /* Center the headers */
+  text-align: center;
+  /* Center the headers */
   margin-bottom: 20px;
   background-color: #50AA50;
   color: white;
@@ -299,8 +306,9 @@ div#badge {
   width: 170px;
 }
 
-.answer-font{
-  text-align: center; /* Center the headers */
+.answer-font {
+  text-align: center;
+  /* Center the headers */
   margin-bottom: 20px;
   color: #275DAD;
   background-color: #5CE1E6;
@@ -312,13 +320,13 @@ div#badge {
   width: 400px;
 }
 
-.dropdown-div{
+.dropdown-div {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
 }
 
-.activity-emoji{
+.activity-emoji {
   display: flex;
   align-items: center;
   justify-content: space-evenly;

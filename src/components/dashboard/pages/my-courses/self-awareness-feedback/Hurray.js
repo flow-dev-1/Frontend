@@ -4,13 +4,11 @@ import { useQuery } from '@tanstack/react-query';
 import userService from "../../../../../services/api/user.js";
 
 const HurrayComponent = ({ enrollmentData }) => {
-    console.log(enrollmentData, " enrollmentData")
-    const courseId = "66853bf50118e2e0a02b6a5a";
     const [assessmentPercentile, setAssessmentPercentile] = useState(null);
 
     const { data, isPending, status, isError } = useQuery({
         queryKey: ["dashboard/self-awareness-feedback-overall", enrollmentData._id, 1],
-        queryFn: () => userService.getUserCoursePercentile(courseId),
+        queryFn: () => userService.getUserCoursePercentile(enrollmentData._id),
         enabled: !!enrollmentData?._id,
         refetchOnMount: "always",
         refetchOnWindowFocus: true,
@@ -26,7 +24,7 @@ const HurrayComponent = ({ enrollmentData }) => {
 
     function getFeedBackMessage(percentile) {
         switch (true) {
-            case percentile >= 10 && percentile <= 39:
+            case percentile >= 0 && percentile <= 39:
                 return "It looks like you might be struggling with understanding Emotional Intelligence. Your answers indicate that you need more guidance on recognizing and managing emotions effectively. Review the materials on Emotional Intelligence again, and consider discussing them with a teacher, parent, or mentor. Practice applying these concepts in your daily life and don’t hesitate to ask for help or additional resources to improve your understanding.";
             case percentile >= 40 && percentile <= 59:
                 return "You have some understanding of Emotional Intelligence, but it appears that you might need more clarity on its full scope and impact. Your answers suggest that you could benefit from further reflection on these topics. Take time to learn more about the benefits of Emotional Intelligence and how to cultivate it. Consider discussing these concepts with a teacher or mentor for additional guidance.";
@@ -43,7 +41,7 @@ const HurrayComponent = ({ enrollmentData }) => {
 
     function getFeedBackRating(percentile) {
         switch (true) {
-            case percentile >= 10 && percentile <= 39:
+            case percentile >= 0 && percentile <= 39:
                 return `Keep trying! You scored ${percentile}%!`;
             case percentile >= 40 && percentile <= 59:
                 return `Nice effort! You scored ${percentile}%!`;

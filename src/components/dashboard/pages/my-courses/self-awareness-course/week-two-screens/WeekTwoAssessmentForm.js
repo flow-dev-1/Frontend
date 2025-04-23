@@ -7,23 +7,45 @@ import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModa
 import userService from '../../../../../../services/api/user.js'
 import { toast } from 'react-toastify'
 import { isDisabled } from '@testing-library/user-event/dist/utils/index.js'
+import { useMutation } from '@tanstack/react-query'
+import { useSelector, useDispatch } from "react-redux";
+import {
+  userAnswer,
+  updateData
+} from "../../../../../../redux/reducers/userAnswersReducer.js";
+import { RotatingLines } from 'react-loader-spinner'
 
 export default function WeekTwoAssessmentForm({ onBack,
   onNext,
   course,
-  handleActivitySubmit
+  activityData
 }) {
+  const dispatch = useDispatch();
+  const userAnswers = useSelector(userAnswer);
   const [currentIndex, setCurrentIndex] = useState(1)
   const [reviewPopUp, setReviewPopUp] = React.useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [disableButton,setDisableButton] = useState(false)
-  const [assessment, setAssessment] = useState(() => {
-    // Initialize assessment from localStorage if it exists
-    const storedAssessment = localStorage.getItem('week-two-assesment')
-    return storedAssessment
-      ? JSON.parse(storedAssessment)
-      : { week: 2, assessment: { answers: [] } }
+  const [disableButton, setDisableButton] = useState(false)
+  const [assessment, setAssessment] = useState({
+    assessment: {
+      answers: []
+    }
   })
+
+  useEffect(() => {
+    // Fetch the initial state or restore the assessment from localStorage
+    const storedAssessment = localStorage.getItem('weekTwoAssessmentData')
+
+    if (storedAssessment) {
+      const parsedData = JSON.parse(storedAssessment)
+
+      if (parsedData && parsedData.formattedData) {
+        console.log(parsedData.formattedData.assessments[0], "formattedData")
+        setAssessment(parsedData.formattedData.assessments[0])
+      }
+
+    }
+  }, [])
 
   const questionsArray = [
     {
@@ -101,7 +123,7 @@ export default function WeekTwoAssessmentForm({ onBack,
 
     if (currentIndex === 8) {
       saveWeekTwoAssessment()
-     
+
     }
   }
 
@@ -140,25 +162,44 @@ export default function WeekTwoAssessmentForm({ onBack,
 
   }
   const transformAssessmentData = () => {
-    return assessment.assessment.answers.map((answerIndex) => answerIndex)
+    return assessment?.assessment?.answers.map((answerIndex) => answerIndex)
   }
 
-  // Example usage:
-  // After handling question check, you might want to calculate the score:
-  const transformedData = transformAssessmentData()
+  // Mutation for saving user data
+  const mutation = useMutation({
+    mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
+    onSuccess: (data) => {
+      setDisableButton(false)
+      toast.dismiss()
+      toast.success(data.message || 'Answers saved successfully!'); // Show success toast
+      dispatch(updateData({
+        course: null,
+        courseEnrollmentId: null,
+        week: 1,
+        activities: [],
+        assessments: []
+      }))
+      localStorage.removeItem('weekTwoAssessmentData')
+      onNext()
+    },
+    onError: (error) => {
+      console.log(error, "errorrrr")
+      toast.dismiss()
+      toast.error(error?.message || error?.error || 'Error saving answers'); // Show error toast
+    },
+  });
 
   const saveWeekTwoAssessment = async () => {
-    if(disableButton) return
-    setDisableButton(true)
+    if (disableButton) return
+
     try {
-      const activityResponse = await handleActivitySubmit();
-     
-      if (!activityResponse.success) {
-        setIsLoading(false)
-        toast.error(activityResponse?.message)
+      if (!activityData?.activities || activityData?.activities?.length !== 8) {
+        toast.error("Please complete all activities before submitting the assessment.")
         return
       }
-      
+
+      // setDisableButton(true)
+
       const transformedData = transformAssessmentData()
       const valuesToCheck = transformedData.slice(0, 5)
       const correctAnswers = [3, 1, 1, 0, 2]
@@ -169,41 +210,16 @@ export default function WeekTwoAssessmentForm({ onBack,
 
       const percentage = Math.round((correctCount / totalQuestions) * 100)
       toast.success(`You scored ${percentage}% in the quiz`)
-      const dataToSend = {
-        rating: percentage,
-        assessments: assessment,
-        week: 2,
-      }
 
-      const response = await userService.postMyAssessment(
-        course.course?._id,
-        course._id,
-        dataToSend
-      );
+      const mutationData = {
+        ...userAnswers,
+        assessments: [assessment],
+        activities: activityData?.activities,
+        rating: percentage.toString()
+      };
 
-      if (response.status === "success") {
-        toast.success(response.message);
-        onNext()
-        setReviewPopUp(true)
-        setIsLoading(false)
-        setTimeout(() => {
-          setReviewPopUp(true)
-          setTimeout(() => {
-            setReviewPopUp(false)
-          }, 10000)
-        }, 1000)
-        setDisableButton(false)
-      } else if (response.status === "failed") {
-        toast.success(response.message);
-        onNext()
-        setReviewPopUp(true)
-        setIsLoading(false)
-        setDisableButton(false)
-      } else {
-        setIsLoading(false)
-        setDisableButton(false)
-        toast.error('Something went wrong. Please contact flow admin for support!');
-      }
+
+      mutation.mutate(mutationData);
 
     } catch (error) {
       console.log(error)
@@ -223,7 +239,7 @@ export default function WeekTwoAssessmentForm({ onBack,
           <div style={{ height: '550px' }} className='assessment question-box'>
             {currentIndex <= 1 && (
               <div className='assessment-box'>
-                <h2 style={{ color: '#FAFAFA' }}>Assessment</h2>
+                <h2 style={{ color: '#FAFAFA', textAlign: "center" }}>Assessment</h2>
                 <p style={{ color: '#FAFAFA' }} className='text-center'>
                   Scenario around your values.
                 </p>
@@ -250,13 +266,13 @@ export default function WeekTwoAssessmentForm({ onBack,
                   <li key={index} className='d-flex align-items-center my-2'>
                     <img
                       onClick={() => handleQuestionCheck(questionIndex, index)}
-                      className={`cursor-pointer mt-2 ${assessment.assessment.answers[questionIndex] !==
+                      className={`cursor-pointer mt-2 ${assessment?.assessment?.answers[questionIndex] !==
                         undefined
                         ? 'disabled'
                         : ''
                         }`}
                       src={
-                        assessment.assessment.answers[questionIndex] === index
+                        assessment?.assessment?.answers[questionIndex] === index
                           ? checkedImage
                           : unCheckedImage
                       }
@@ -315,13 +331,7 @@ export default function WeekTwoAssessmentForm({ onBack,
     }
   }
 
-  useEffect(() => {
-    // Fetch the initial state or restore the assessment from localStorage
-    const storedAssessment = localStorage.getItem('week-two-assessment')
-    if (storedAssessment) {
-      setAssessment(JSON.parse(storedAssessment))
-    }
-  }, [])
+
   return (
     <div>
       {renderQuestion()}
@@ -341,11 +351,23 @@ export default function WeekTwoAssessmentForm({ onBack,
         <button
           className='btn progress-btn btn-light'
           onClick={handlePreviousStepClick}
+          disabled={disableButton || mutation.isPending}
         >
           {'<<<'} Back
         </button>
-        <button className='btn progress-btn btn-dark' disabled={disableButton} onClick={handleStepClick}>
-          Next {'>>>'}
+        <button className='btn progress-btn btn-dark' disabled={disableButton || mutation.isPending} onClick={handleStepClick}>
+          {mutation.isPending ? <RotatingLines
+            className="me-2 text-white"
+            type="Oval"
+            strokeColor="white"
+            height={20}
+            width={20}
+          /> :
+            <>
+              Next {'>>>'}
+            </>
+
+          }
         </button>
       </div>
 

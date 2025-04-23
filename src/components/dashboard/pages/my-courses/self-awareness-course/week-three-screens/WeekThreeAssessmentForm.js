@@ -4,18 +4,29 @@ import checkedImage from '../../../../../../assets/selfawareness-images/checked.
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
 import { toast } from 'react-toastify'
 import userService from '../../../../../../services/api/user.js'
+import { useSelector, useDispatch } from "react-redux";
+import {
+  userAnswer,
+  updateData
+} from "../../../../../../redux/reducers/userAnswersReducer.js";
 
-export default function WeekThreeAssessmentForm({ 
-  onNext, 
+import { useMutation } from '@tanstack/react-query'
+import { RotatingLines } from 'react-loader-spinner'
+
+export default function WeekThreeAssessmentForm({
+  onNext,
   onBack,
   course,
-  handleActivitySubmit
- }) {
+  activityData
+}) {
+  const dispatch = useDispatch();
+  const userAnswers = useSelector(userAnswer);
   const [currentIndex, setCurrentIndex] = useState(1)
   const [selectedAnswers, setSelectedAnswers] = useState({})
   const [assessment, setAssessment] = useState([])
-  const [disableButton,setDisableButton] = useState(false)
-  const [isLoading,setIsLoading] = useState(false)
+  const [disableButton, setDisableButton] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  
   const questionsArray = [
     {
       title:
@@ -126,22 +137,57 @@ export default function WeekThreeAssessmentForm({
 
   useEffect(() => {
     // Load saved answers from localStorage on component mount
-    const savedAnswers = localStorage.getItem('week-three-assessment')
+    const savedAnswers = localStorage.getItem('weekThreeAssessmentData')
+
     if (savedAnswers) {
-      setSelectedAnswers(JSON.parse(savedAnswers))
+      const parsedData = JSON.parse(savedAnswers)
+      if (parsedData?.formattedData?.assessments) {
+
+        setSelectedAnswers(parsedData?.formattedData?.assessments?.[0].answers)
+      } else {
+        setSelectedAnswers(JSON.parse(savedAnswers))
+      }
+
     }
   }, [])
 
   useEffect(() => {
     // Save answers to localStorage whenever selectedAnswers changes
     localStorage.setItem(
-      'week-three-assessment',
+      'weekThreeAssessmentData',
       JSON.stringify(selectedAnswers)
     )
   }, [selectedAnswers])
+  // Mutation for saving user data
+  const mutation = useMutation({
+    mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
+    onSuccess: (data) => {
+      setDisableButton(false)
+      toast.dismiss()
+      toast.success(data.message || 'Answers saved successfully!'); // Show success toast
+      dispatch(updateData({
+        course: null,
+        courseEnrollmentId: null,
+        week: 1,
+        activities: [],
+        assessments: []
+      }))
+      localStorage.removeItem('weekThreeAssessmentData')
+      onNext()
+    },
+    onError: (error) => {
+      console.log(error, "errorrrr")
+      toast.dismiss()
+      toast.error(error?.message || error?.error || 'Error saving answers'); // Show error toast
+    },
+  });
+
 
   const handleNextStepClick = () => {
-    if (selectedAnswers[currentIndex] === undefined) {
+
+    console.log(selectedAnswers," selectedAnswers")
+
+    if (selectedAnswers[currentIndex - 1] === undefined) {
       toast.error('Please select an answer before proceeding.')
       return
     }
@@ -166,29 +212,25 @@ export default function WeekThreeAssessmentForm({
   }
 
   const handleQuestionCheck = (questionIndex, optionIndex) => {
-    if (selectedAnswers[questionIndex + 1] !== undefined) {
+    if (selectedAnswers[questionIndex] !== undefined) {
       toast.error('You cannot change your answer once it is saved.')
       return
     }
     setSelectedAnswers((prevState) => ({
       ...prevState,
-      [questionIndex + 1]: optionIndex,
+      [questionIndex]: optionIndex,
     }))
   }
 
-  const saveWeekThreeAssessment =async (result) => {
-    if(disableButton) return
-    setDisableButton(true)
+  const saveWeekThreeAssessment = async (result) => {
+    if (disableButton) return
+    // setDisableButton(true)
 
+    if (!activityData?.activities || activityData?.activities?.length !== 7) {
+      toast.error("Please complete all activities before submitting the assessment.")
+      return
+    }
     try {
-      const activityResponse = await handleActivitySubmit();
-     
-      if (!activityResponse.success) {
-        setIsLoading(false)
-        toast.error(activityResponse?.message)
-        return
-      }
-
       const correctAnswers = [1, 0, 1, 1, 1, 1, 1, 1, 1, 1]
       const totalQuestions = Object.keys(selectedAnswers).length
       const correctCount = Object.keys(selectedAnswers).reduce((count, key) => {
@@ -197,39 +239,25 @@ export default function WeekThreeAssessmentForm({
           ? count + 1
           : count
       }, 0)
-      
+
       const percentage = Math.round((correctCount / totalQuestions) * 100)
       toast.success(`You scored ${percentage}% in the quiz`)
-  
+
       const dataToSend = {
         rating: percentage,
         assessments: result.assessments,
         week: 3,
       }
-  
-      const response = await userService.postMyAssessment(
-        course.course?._id,
-        course._id,
-        dataToSend
-      );
 
-      if (response.status === "success") {
-        toast.success(response.message);
-        onNext()
-        // setReviewPopUp(true)
-        setIsLoading(false)
-        setDisableButton(false)
-      } else if (response.status === "failed") {
-        toast.success(response.message);
-        onNext()
-        // setReviewPopUp(true)
-        setIsLoading(false)
-        setDisableButton(false)
-      } else {
-        setIsLoading(false)
-        setDisableButton(false)
-        toast.error('Something went wrong. Please contact flow admin for support!');
-      }
+      const mutationData = {
+        ...userAnswers,
+        assessments: [result.assessments],
+        activities: activityData?.activities,
+        rating: percentage.toString()
+      };
+
+      mutation.mutate(mutationData);
+
 
     } catch (error) {
       console.log(error)
@@ -248,7 +276,7 @@ export default function WeekThreeAssessmentForm({
         >
           {currentIndex <= 1 && (
             <div className='assessment-box'>
-              <h2 style={{ color: '#FAFAFA' }}>Assessment</h2>
+              <h2 style={{ color: '#FAFAFA', textAlign: "center" }}>Assessment</h2>
               <p style={{ color: '#FAFAFA' }} className='text-center'>
                 Scenario around your values.
               </p>
@@ -271,7 +299,7 @@ export default function WeekThreeAssessmentForm({
                     onClick={() => handleQuestionCheck(currentIndex - 1, index)}
                     className='cursor-pointer'
                     src={
-                      selectedAnswers[currentIndex] === index
+                      selectedAnswers[currentIndex - 1] === index
                         ? checkedImage
                         : unCheckedImage
                     }
@@ -306,16 +334,26 @@ export default function WeekThreeAssessmentForm({
         <button
           className='btn progress-btn btn-light'
           onClick={handlePreviousStepClick}
-          disabled={disableButton}
+          disabled={mutation.isPending}
         >
           Back
         </button>
         <button
           className='btn progress-btn btn-dark'
           onClick={handleNextStepClick}
-          disabled={disableButton}
+          disabled={mutation.isPending}
         >
-          {currentIndex === questionsArray.length ? 'Submit' : 'Next'}
+          {mutation.isPending ? <RotatingLines
+            className="me-2 text-white"
+            type="Oval"
+            strokeColor="white"
+            height={20}
+            width={20}
+          /> :
+            currentIndex === questionsArray.length ?
+              'Submit' :
+              'Next'
+          }
         </button>
       </div>
     </div>

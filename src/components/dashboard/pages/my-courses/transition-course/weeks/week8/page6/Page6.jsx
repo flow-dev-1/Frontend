@@ -47,7 +47,6 @@ function WeekEightPage6() {
       return false;
     }
 
-    console.log(stepData, "Step Data")
     if (currentStep !== 3) {
       const values = Object.values(stepData.value);
 

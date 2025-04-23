@@ -15,8 +15,7 @@ import { useNavigate } from 'react-router-dom'
 export default function ParentGuardianForm({
   onSubmit,
   setStep,
-  initialData,
-  email,
+  initialData
 }) {
   const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
   const [countries, setCountries] = useState([])
@@ -59,7 +58,7 @@ export default function ParentGuardianForm({
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { ...initialData, email }, // Use initial data for default values
+    defaultValues: { ...initialData }, // Use initial data for default values
   })
 
   const selectedCountry = watch('country')
@@ -125,6 +124,7 @@ export default function ParentGuardianForm({
               type='text'
               placeholder='Type here...'
               {...register('guardianFullName')}
+              defaultValue={initialData?.guardianFullName}
             />
             {errors.guardianFullName && (
               <p className='error-message'>{errors.guardianFullName.message}</p>
@@ -136,8 +136,8 @@ export default function ParentGuardianForm({
               type='email'
               placeholder='Type here...'
               {...register('email')}
-              value={email} // Set the value to the email prop
-              // disabled // Disable the input field
+              defaultValue={initialData?.email}
+
             />
             {errors.email && (
               <p className='error-message'>{errors.email.message}</p>
@@ -150,6 +150,7 @@ export default function ParentGuardianForm({
                 placeholder='Enter phone number'
                 onChange={(val) => setValue('phone', val)}
                 defaultCountry='NG'
+                value={initialData?.phone}
                 onCountryChange={(country) => {
                   if (country) {
                     setCountryCode(getCountryCallingCode(country))
@@ -176,7 +177,10 @@ export default function ParentGuardianForm({
           </div>
           <div className='form-group'>
             <label>Country *</label>
-            <select {...register('country')}>
+            <select
+              {...register('country')}
+              defaultValue={initialData?.country || 'Nigeria'}
+            >
               <option value='Nigeria'>Nigeria</option>
               {countries.map((country) => (
                 <option key={country.cca2} value={country.name.common}>
@@ -191,7 +195,7 @@ export default function ParentGuardianForm({
           <div className='form-group'>
             <label>State *</label>
             {isNigeria ? (
-              <select {...register('state')}>
+              <select {...register('state')} defaultValue={initialData?.state}>
                 <option value=''>Select State</option>
                 {states.map((state) => (
                   <option key={state} value={state}>
@@ -213,7 +217,7 @@ export default function ParentGuardianForm({
           <div className='form-group'>
             <label>LGA *</label>
             {isNigeria && availableLGAs.length > 0 ? (
-              <select {...register('lga')}>
+              <select {...register('lga')} defaultValue={initialData?.lga}>
                 <option value=''>Select LGA</option>
                 {availableLGAs.map((lga) => (
                   <option key={lga} value={lga}>

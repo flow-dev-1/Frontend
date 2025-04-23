@@ -1812,7 +1812,7 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "If I need to set a new goal, I’ll plan by first..."
+                question: "If I need to set a new goal, I’ll plan by..."
               }
             ]
           },

@@ -3,26 +3,37 @@ import checkedImage from '../../../../../../assets/selfawareness-images/checked.
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
 import userService from '../../../../../../services/api/user.js'
 import '../newcourse.css'
-import Modal from 'react-modal'
-import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModal'
 import { toast } from 'react-toastify'
+import { useSelector, useDispatch } from "react-redux";
+import {
+  userAnswer,
+  updateData
+} from "../../../../../../redux/reducers/userAnswersReducer.js";
+
+import { useMutation } from '@tanstack/react-query'
+import { RotatingLines } from 'react-loader-spinner'
+
 
 export default function WeekOneAssessmentForm({
   onSubmit,
   onNext,
   onBack,
   course,
-  handleActivitySubmit
+  activityData
 }) {
+  const dispatch = useDispatch();
+  const userAnswers = useSelector(userAnswer);
   const [currentIndex, setCurrentIndex] = useState(1)
   const [reviewPopUp, setReviewPopUp] = useState(false)
   const [personalityColor, setPersonalityColor] = useState('')
   const [questionChecked, setQuestionChecked] = useState([])
-  const [isLoading,setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     // Check if the assessment data is already in localStorage
     const storedData = localStorage.getItem('weekOneAssessmentData')
+
+
     if (storedData) {
       const parsedData = JSON.parse(storedData)
       if (
@@ -286,12 +297,6 @@ export default function WeekOneAssessmentForm({
   }
 
   const handleQuestionCheck = (questionIndex, optionIndex) => {
-    // If the assessment is already completed, prevent further selection
-    if (localStorage.getItem('weekOneAssessmentData')) {
-      toast.error('You have already taken the assessment.')
-      return
-    }
-
     setQuestionChecked((prevState) => {
       const newState = [...prevState]
       newState[questionIndex] = optionIndex
@@ -299,17 +304,42 @@ export default function WeekOneAssessmentForm({
     })
   }
 
+  // Mutation for saving user data
+  const mutation = useMutation({
+    mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
+    onSuccess: (data) => {
+      setIsLoading(false)
+      toast.dismiss()
+      toast.success(data.message || 'Answers saved successfully!'); // Show success toast
+      dispatch(updateData({
+        course: null,
+        courseEnrollmentId: null,
+        week: 1,
+        activities: [],
+        assessments: []
+      }))
+      localStorage.removeItem('weekOneAssessmentData')
+      onNext()
+    },
+    onError: (error) => {
+      console.log(error, "errorrrr")
+      toast.dismiss()
+      toast.error(error?.message || error?.error || 'Error saving answers'); // Show error toast
+    },
+  });
+
   const saveAssessmentData = async () => {
-    if(isLoading) return
+    if (isLoading) return
+
+    //For week 1 there ought to be 14 activities
+    if (!activityData?.activities || activityData?.activities?.length !== 14) {
+      toast.error("Please complete all activities before submitting the assessment.")
+      return
+
+    }
     setIsLoading(true)
 
-    // First Submit Activity if it doesnt work dont submit Assessment
     try {
-      const activityResponse = await handleActivitySubmit();
-      if (!activityResponse.success) {
-        setIsLoading(false)
-        return
-      }
 
       const questionsArray = getQuestionsArray()
 
@@ -344,32 +374,16 @@ export default function WeekOneAssessmentForm({
         JSON.stringify({ formattedData, percentage })
       )
 
-      const response = await userService.postMyAssessment(
-        course.course?._id,
-        course._id,
-        JSON.stringify({
-          week: formattedData.week,
-          assessments: formattedData.assessments,
-          rating: percentage,
-          percentage,
-          personalityColor: formattedData.personalityColor,
-        })
-      );
+      const mutationData = {
+        ...userAnswers,
+        assessments: formattedData.assessments,
+        activities: activityData?.activities,
+        personalityColor: formattedData.personalityColor,
+        rating: percentage.toString()
+      };
 
-      if (response.status === "success") {
-        toast.success(response.message);
-        onNext()
-        setReviewPopUp(true)
-        setIsLoading(false)
-      } else if (response.status === "failed") {
-        toast.success(response.message);
-        onNext()
-        setReviewPopUp(true)
-        setIsLoading(false)
-      } else {
-        setIsLoading(false)
-        toast.error('Something went wrong. Please contact flow admin for support!');
-      }
+      mutation.mutate(mutationData);
+
 
     } catch (error) {
       console.log(error)
@@ -482,16 +496,27 @@ export default function WeekOneAssessmentForm({
         <button
           className='btn progress-btn btn-light'
           onClick={handlePreviousStepClick}
-          disabled={isLoading}
+          disabled={mutation.isPending}
         >
           {'<<<'} Back
         </button>
         <button
           className='btn progress-btn btn-dark'
           onClick={handleNextStepClick}
-          disabled={isLoading}
+          disabled={mutation.isPending}
         >
-          Next {'>>>'}
+          {mutation.isPending ? <RotatingLines
+            className="me-2 text-white"
+            type="Oval"
+            strokeColor="white"
+            height={20}
+            width={20}
+          /> :
+            <>
+              Next {'>>>'}
+            </>
+
+          }
         </button>
       </div>
     </div>

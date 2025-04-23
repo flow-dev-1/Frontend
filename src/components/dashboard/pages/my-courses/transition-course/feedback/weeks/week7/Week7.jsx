@@ -18,7 +18,7 @@ import Modal from "../../components/Modal.jsx";
 import { useMutation } from '@tanstack/react-query'
 import { useSelector } from "react-redux";
 
-function Week7({ enrollmentId, setWeekTwoData }) {
+function Week7({ enrollmentId, setWeekSevenData }) {
   const { pages } = getWeekContentExcludingVideos(7);
 
   const [activity1, activity2] = pages;
@@ -82,7 +82,7 @@ function Week7({ enrollmentId, setWeekTwoData }) {
 
     setActivityData(data.activity?.activities);
     setAssessmentData(data.assessment?.assessments);
-    setWeekTwoData(true);
+    setWeekSevenData(true);
 
     return () => { };
   }, [data]);

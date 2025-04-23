@@ -5,17 +5,29 @@ import unCheckedImage from '../../../../../../assets/selfawareness-images/not-ch
 import { toast } from 'react-toastify'
 import userService from '../../../../../../services/api/user.js'
 import MatchingComponent from './MatchingComponent.js'
+import { useSelector, useDispatch } from "react-redux";
+import {
+  userAnswer,
+  updateData
+} from "../../../../../../redux/reducers/userAnswersReducer.js";
+import { useMutation } from '@tanstack/react-query'
+import { RotatingLines } from 'react-loader-spinner'
 
 export default function WeekFourAssessmentForm({
   onNext,
   onBack,
   course,
-  handleActivitySubmit
+  activityData
+
 }) {
+  const dispatch = useDispatch();
+  const userAnswers = useSelector(userAnswer);
   const [arrows, setArrows] = useState([]) // State for managing arrows
   const [arrows2, setArrows2] = useState([]) // State for managing arrows
   const [disableButton, setDisableButton] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [matchesSet1, setMatchesSet1] = useState([])
+  const [matchesSet2, setMatchesSet2] = useState([])
   // Sample items for matching
 
   const questionsArray = [
@@ -119,6 +131,8 @@ export default function WeekFourAssessmentForm({
     ,
   ]
 
+
+
   const handleNext = () => {
     console.log('All items matched. Moving to next screen.')
     // Navigate to the next screen or handle the next step
@@ -126,7 +140,7 @@ export default function WeekFourAssessmentForm({
 
   const [currentIndex, setCurrentIndex] = useState(1)
   const [answers, setAnswers] = useState(() => {
-    const storedData = localStorage.getItem('week-four-assessment')
+    const storedData = localStorage.getItem('weekFourAssessmentData')
     if (storedData) {
       try {
         const parsedData = JSON.parse(storedData)
@@ -139,8 +153,31 @@ export default function WeekFourAssessmentForm({
     return []
   })
 
-  const [matchesSet1, setMatchesSet1] = useState([])
-  const [matchesSet2, setMatchesSet2] = useState([])
+  useEffect(() => {
+    // Load saved answers from localStorage on component mount
+    const savedAnswers = localStorage.getItem('weekFourAssessmentData')
+    if(savedAnswers) {
+      const parsedAnswers = JSON.parse(savedAnswers)
+      if(parsedAnswers?.formattedData?.assessments){
+        const assessmentData = parsedAnswers?.formattedData?.assessments[0]
+        setAnswers(assessmentData?.answers || [])
+        setMatchesSet1(assessmentData?.matchesSet1 || [])
+        setMatchesSet2(assessmentData?.matchesSet2 || [])
+      }
+    }
+
+  }, [])
+
+  useEffect(() => {
+    const assessmentData = {
+      week: 4,
+      assessment: { answers, matchesSet1, matchesSet2 },
+    }
+    localStorage.setItem('weekFourAssessmentData', JSON.stringify(assessmentData))
+
+  }, [answers, matchesSet1, matchesSet2])
+
+
 
   const handleMatch = (leftIndex, rightIndex) => {
 
@@ -227,29 +264,40 @@ export default function WeekFourAssessmentForm({
     }
   }
 
-  useEffect(() => {
-    const assessmentData = {
-      week: 4,
-      assessment: { answers, matchesSet1, matchesSet2 },
-    }
-    localStorage.setItem('week-four-assessment', JSON.stringify(assessmentData))
-
-  }, [answers, matchesSet1,matchesSet2])
+  // Mutation for saving user data
+  const mutation = useMutation({
+    mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
+    onSuccess: (data) => {
+      setIsLoading(false)
+      toast.dismiss()
+      toast.success(data.message || 'Answers saved successfully!'); // Show success toast
+      dispatch(updateData({
+        course: null,
+        courseEnrollmentId: null,
+        week: 1,
+        activities: [],
+        assessments: []
+      }))
+      localStorage.removeItem('weekFourAssessmentData')
+      onNext()
+    },
+    onError: (error) => {
+      console.log(error, "errorrrr")
+      toast.dismiss()
+      toast.error(error?.message || error?.error || 'Error saving answers'); // Show error toast
+    },
+  });
 
   const saveWeekFourAssessment = async () => {
     if (disableButton) return
-    setDisableButton(true)
 
     try {
-      const activityResponse = await handleActivitySubmit();
-
-      if (!activityResponse.success) {
-        setIsLoading(false)
-        toast.error(activityResponse?.message)
+      if (!activityData?.activities || activityData?.activities?.length !== 9) {
+        toast.error("Please complete all activities before submitting the assessment.");
         return
       }
 
-      const storedData = localStorage.getItem('week-four-assessment')
+      const storedData = localStorage.getItem('weekFourAssessmentData')
       let savedAnswers = JSON.parse(storedData)
 
       const correctAnswers = [0, 2, 1, 1, 2, 2, 1, 2]
@@ -290,34 +338,15 @@ export default function WeekFourAssessmentForm({
 
       toast.success(`You scored ${percentage}% in the quiz`)
 
-      const dataToSend = {
-        rating: percentage,
-        assessments: savedAnswers.assessment,
-        week: 4,
-      }
-      const response = await userService.postMyAssessment(
-        course.course?._id,
-        course._id,
-        dataToSend
-      );
+      const mutationData = {
+        ...userAnswers,
+        assessments: [savedAnswers.assessment],
+        activities: activityData?.activities,
+        rating: percentage.toString()
+      };
 
-      if (response.status === "success") {
-        toast.success(response.message);
-        onNext()
-        // setReviewPopUp(true)
-        setIsLoading(false)
-        setDisableButton(false)
-      } else if (response.status === "failed") {
-        toast.success(response.message);
-        onNext()
-        // setReviewPopUp(true)
-        setIsLoading(false)
-        setDisableButton(false)
-      } else {
-        setIsLoading(false)
-        setDisableButton(false)
-        toast.error('Something went wrong. Please contact flow admin for support!');
-      }
+      mutation.mutate(mutationData);
+
 
     } catch (error) {
       console.log(error)
@@ -427,14 +456,28 @@ export default function WeekFourAssessmentForm({
         <button
           className='btn progress-btn btn-light'
           onClick={handlePreviousStepClick}
+          disabled={mutation.isPending}
         >
           {'<<<'} Back
         </button>
         <button
           className='btn progress-btn btn-dark'
           onClick={handleNextStepClick}
+          disabled={mutation.isPending}
         >
-          Next {'>>>'}
+          {
+            mutation.isPending ? <RotatingLines
+              className="me-2 text-white"
+              type="Oval"
+              strokeColor="white"
+              height={20}
+              width={20}
+            /> :
+              <>
+                Next {'>>>'}
+              </>
+          }
+
         </button>
       </div>
     </div>

@@ -14,6 +14,10 @@ import userService from '../../../../../../services/api/user.js'
 import { toast, ToastContainer } from 'react-toastify'
 import EndOfCourseComponent from './EndOfCourseComponent'
 import { useQuery } from '@tanstack/react-query'
+import { useDispatch } from "react-redux";
+import {
+  updateData,
+} from "../../../../../../redux/reducers/userAnswersReducer.js";
 
 export default function WeekFourLearning({
   course,
@@ -22,6 +26,7 @@ export default function WeekFourLearning({
   courseId,
   handleLinkClick,
 }) {
+  const dispatch = useDispatch();
   const [showPopup, setShowPopup] = useState(false)
   const [currentActivity, setCurrentActivity] = useState(() => {
     const savedState = localStorage.getItem(
@@ -30,40 +35,74 @@ export default function WeekFourLearning({
     return savedState ? JSON.parse(savedState) : 1
   })
   const week = 4;
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["self-awareness-course-4", course?.course._id, week],
-    queryFn: () => userService.getMyActivites(course?.course._id, week)
+  const [formData, setFormData] = useState()
+
+  const { data, isLoading, status, isError } = useQuery({
+    queryKey: ["self-awareness-course-4", courseId, week],
+    queryFn: () => userService.getUserCourseData(courseId, week),
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false
   });
 
-  // Check if data.activity exists and save it under one key 'activity1' in local storage
-  if (data?.activity) {
-    const activities = data.activity.activities;
+  useEffect(() => {
 
-    // Create an object with week and activities
-    const activityData = {
-      week: week,
-      activities: activities
-    };
+    if (!data) return
 
-    // Store the object in local storage under the key 'activity1'
-    localStorage.setItem(
-      "week-4-activityData",
-      JSON.stringify(activityData)
-    );
+    if (data.assessment && data.activity) {
+      const assessments = data?.assessment?.assessments;
+      const activities = data?.activity?.activities;
+      const percent = data?.assessment?.rating;
 
-    console.log(
-      "Week and activities saved to localStorage under 'activity1'"
-    );
-  }
+      // Create an object with week and activities
+      const activityData = {
+        week: week,
+        activities: activities
+      };
 
-  const [formData, setFormData] = useState(() => {
-    const savedState = localStorage.getItem(
-      `week-${currentWeekIndex}-activityData`
-    )
-    return savedState
-      ? JSON.parse(savedState)
-      : { week: currentWeekIndex, activities: [] }
-  })
+      const assessment_data = {
+        week: week,
+        percentage: percent,
+        assessments: assessments,
+     
+      }
+
+      setFormData(activityData)
+      // Store the object in local storage under the key 'activity1'
+      localStorage.setItem("week-4-activityData", JSON.stringify(activityData));
+      localStorage.setItem(
+        "weekFourAssessmentData",
+        JSON.stringify({ formattedData: assessment_data })
+      );
+      // This Dispatch will be used in submiting the data at the assessment page
+      dispatch(
+        updateData({
+          course: course?.course?._id,
+          courseEnrollmentId: courseId,
+          week,
+          activities: data.activity?.activities,
+          assessments: data.assessment?.assessments,
+        })
+      );
+    } else {
+      // New user
+      setFormData({
+        week: week,
+        activities: []
+      })
+      dispatch(
+        updateData({
+          course: course?.course?._id,
+          courseEnrollmentId: courseId,
+          week,
+          activities: [],
+          assessments: [],
+        })
+      );
+    }
+
+  }, [data])
+
 
   const [videoPlaying, setVideoPlaying] = useState(false)
   const [reviewPopUp, setReviewPopUp] = useState(false)
@@ -116,33 +155,7 @@ export default function WeekFourLearning({
       state: { course, weekIndex: nextWeekIndex },
     })
   }
- 
-  const handleSubmit = async () => {
 
-    if (formData?.activities?.length < 9) {
-      return { success: false, message: "Submission failed" };
-    }
-
-    try {
-      const stringifiedFormData = JSON.stringify(formData)
-      const response = await userService.postMyActivity(course.course._id, stringifiedFormData);
-
-      if (response.success) {
-        toast.success(response?.message);
-        console.log("Submission successful:", response);
-        return { success: true, message: "Submission successful" };
-      } else {
-        toast.error("Activity submission failed. Please contact flow admin for support!");
-        console.error("Submission failed with response:", response);
-        return { success: false, message: "Submission failed" };
-      }
-    } catch (error) {
-      console.error('Submission failed:', error)
-      return { success: false, message: "Submission failed" };
-    }
-  }
-
-  console.log(formData)
   const renderActivityContent = () => {
     switch (currentActivity) {
       case 1:
@@ -285,7 +298,7 @@ export default function WeekFourLearning({
             handleNextWeekCourse={handleNextWeekCourse}
             onNext={handleNext}
             course={course}
-            handleActivitySubmit={handleSubmit}
+            activityData={formData}
           />
         )
       default:

@@ -130,7 +130,7 @@ export const assessments = {
           },
           { id: "D", text: "It doesn’t apply outside academics. " },
         ],
-        correctOption: "A",
+        correctOption: "B",
       },
       {
         id: 5,
@@ -862,7 +862,7 @@ export const assessments = {
           },
           {
             id: "C",
-            text: "Accepting that you haven’t succeeded but will keep trying.",
+            text: "Accepting that you haven’t succeeded, but will keep trying.",
           },
           {
             id: "D",

@@ -1007,40 +1007,31 @@ const questionsArrayGreenFormatted = [
   // Add more questions if needed
 ];
 
-const Week1 = () => {
-  const week = 1;
-  const courseId = "66853bf50118e2e0a02b6a5a";
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["dashboard/feedback/self-awareness", courseId, week],
-    queryFn: () => userService.getMyActivites(courseId, week)
-  });
+const Week1 = ({ enrollmentId }) => {
 
-  console.log(data, "week 1 report")
-
-  const [assessmentData, setAssessmentData] = useState(null);
-  const [assessmentLoading, setAssessmentLoading] = useState(true);
-  const [assessmentError, setAssessmentError] = useState(null);
+  const [assessments, setAssessmentData] = useState([]);
+  const [percent, setPercent] = useState(0);
+  const [color, setColor] = useState(null);
   const [quizQuestions, setQuizQuestions] = useState([]);
 
+  const { data, isPending, status, isError } = useQuery({
+    queryKey: ["dashboard/self-awereness-feedback-1", enrollmentId, 1],
+    queryFn: () => userService.getUserCourseData(enrollmentId, 1),
+    enabled: !!enrollmentId,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false,
+  });
+
   useEffect(() => {
-    const fetchAssessmentData = async () => {
-      setAssessmentLoading(true);
-      try {
-        const data = await userService.getMyAssessment(courseId, week);
-        setAssessmentData(data);
-      } catch (error) {
-        setAssessmentError(error);
-      } finally {
-        setAssessmentLoading(false);
-      }
-    };
+    if (!data) return
+    setAssessmentData(data?.assessment?.assessments)
+    setPercent(data?.assessment?.rating || 0);
+    setColor(data?.assessment?.personalityColor)
+  }, [data]);
 
-    fetchAssessmentData();
-  }, [courseId, week]);
 
-  const assessments = assessmentData?.existingAssessment?.assessments;
-  const percent = assessmentData?.existingAssessment?.rating;
-  const color = assessmentData?.existingAssessment?.personalityColor;
+
   // console.log(percent)
   function getQuestionsByColor(color) {
     switch (color) {
@@ -1085,12 +1076,12 @@ const Week1 = () => {
     }
   }, [color, assessments]);
 
-  if (isLoading || assessmentLoading) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
-  if (isError || data.status === "failed" || assessmentError) {
-    return <div>Take Activity to see feedback.</div>;
+  if (isError || data?.status === "failed") {
+    return <div>{data?.message}.</div>;
   }
 
   const buckets = data?.activity?.activities[5].buckets;
@@ -1343,24 +1334,24 @@ const Week1 = () => {
 
 
           {activity?.feedback?.length > 0 && (
-          <p className="feedback">
-            <div id="badge">Feedback:</div>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem"
-              }}
-            >
-              <div className="feedback-card">{activity?.feedback}</div>
-              {/* <Icon
+            <p className="feedback">
+              <div id="badge">Feedback:</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem"
+                }}
+              >
+                <div className="feedback-card">{activity?.feedback}</div>
+                {/* <Icon
                 style={{ color: "#275DAD" }}
                 width={20}
                 icon="lucide:edit"
               /> */}
-            </div>
-          </p>
+              </div>
+            </p>
 
           )}
         </div>
@@ -1382,7 +1373,11 @@ const Week1 = () => {
                   alt={option.checked ? "Checked" : "Unchecked"}
                   style={{ width: "20px", marginRight: "10px" }}
                 />
-                <span style={{ fontSize: "14px" }} className="option-label">
+                <span style={{
+                  fontSize: "14px",
+                  textAlign: "left",
+                  display: "block"
+                }} className="option-label">
                   {option.label}
                 </span>
                 <span className={`color-label ${option.color.toLowerCase()}`}>
@@ -1415,26 +1410,26 @@ const Week1 = () => {
               icon="hugeicons:comment-01"
             /> */}
           </p>
-          
+
           {activity?.feedback?.length > 0 && (
-          <p className="feedback">
-            <div id="badge">Feedback:</div>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem"
-              }}
-            >
-              <div className="feedback-card">{activity.feedback}</div>
-              {/* <Icon
+            <p className="feedback">
+              <div id="badge">Feedback:</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem"
+                }}
+              >
+                <div className="feedback-card">{activity.feedback}</div>
+                {/* <Icon
                 style={{ color: "#275DAD" }}
                 width={20}
                 icon="lucide:edit"
               /> */}
-            </div>
-          </p>
+              </div>
+            </p>
           )}
 
         </div>
@@ -1456,7 +1451,11 @@ const Week1 = () => {
                   alt={option.isCorrect ? "Checked" : "Unchecked"}
                   style={{ width: "20px", marginRight: "10px" }}
                 />
-                <span style={{ fontSize: "14px" }} className="option-label">
+                <span style={{
+                  fontSize: "14px",
+                  textAlign: "left",
+                  display: "block"
+                }} className="option-label">
                   {option.label}
                 </span>
                 <p style={{ width: "120px", textAlign: "center" }}>
@@ -1483,7 +1482,7 @@ const Week1 = () => {
           </div>
         </div>
       ))}
-      <FinalReport rate={percent} />{" "}
+      <FinalReport rate={data?.assessment?.rating || percent} />{" "}
     </div>
   );
 };

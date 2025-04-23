@@ -141,7 +141,7 @@ function TransitionFeedback() {
       component: (
         <Week6
           enrollmentId={enrollmentId}
-          setWeekOneData={setWeekOneData}
+          setWeekSixData={setWeekSixData}
         />
       ),
     },
@@ -150,7 +150,7 @@ function TransitionFeedback() {
       component: (
         <Week7
           enrollmentId={enrollmentId}
-          setWeekTwoData={setWeekTwoData}
+          setWeekSevenData={setWeekSevenData}
         />
       ),
     },
@@ -159,7 +159,7 @@ function TransitionFeedback() {
       component: (
         <Week8
           enrollmentId={enrollmentId}
-          setWeekThreeData={setWeekThreeData}
+          setWeekEightData={setWeekEightData}
         />
       ),
     },
@@ -168,7 +168,7 @@ function TransitionFeedback() {
       component: (
         <Week9
           enrollmentId={enrollmentId}
-          setWeekFourData={setWeekFourData}
+          setWeekNineData={setWeekNineData}
         />
       ),
     },
@@ -177,7 +177,7 @@ function TransitionFeedback() {
       component: (
         <Week10
           enrollmentId={enrollmentId}
-          setWeekFiveData={setWeekFiveData}
+          setWeekTenData={setWeekTenData}
         />
       ),
     },
@@ -252,7 +252,7 @@ function TransitionFeedback() {
                     className="course-list-icon"
                   />
                 </div>
-                <span className={index === 5 ? "d-none" : ""}>
+                <span className={index === 10 ? "d-none" : ""}>
                   Week
                   {index + 1}
                 </span>
