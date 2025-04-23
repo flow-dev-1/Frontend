@@ -297,12 +297,6 @@ export default function WeekOneAssessmentForm({
   }
 
   const handleQuestionCheck = (questionIndex, optionIndex) => {
-    // If the assessment is already completed, prevent further selection
-    if (localStorage.getItem('weekOneAssessmentData')) {
-      toast.error('You have already taken the assessment.')
-      return
-    }
-
     setQuestionChecked((prevState) => {
       const newState = [...prevState]
       newState[questionIndex] = optionIndex
