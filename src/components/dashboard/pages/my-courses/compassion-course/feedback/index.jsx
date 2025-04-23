@@ -137,7 +137,7 @@ function CompassionFeedback() {
             disabled={isAdmin?.isAdmin}
             onClick={() =>isSchool ? navigate("/school-dashboard") : navigate("/dashboard")}
             className="navbar-logo"
-            style={{ border: "none" }} // Remove button outline
+            style={{ border: 'none', background:"#FFF" }} // Remove button outline
           >
             <img src={logo} alt="" />
           </button>
@@ -156,7 +156,7 @@ function CompassionFeedback() {
             disabled={isAdmin?.isAdmin}
             onClick={() => isSchool ? navigate(-1, { replace: true }) : navigate("/dashboard/my-courses")}
             className="back"
-            style={{ cursor: "pointer", border: "none" }}
+            style={{ cursor: "pointer", border: 'none', background:"#f8f5f5"}}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
             {isSchool ? "Go back" : "Back to My Courses"}

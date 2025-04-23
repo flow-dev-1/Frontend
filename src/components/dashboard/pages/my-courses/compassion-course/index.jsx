@@ -295,7 +295,7 @@ const CourseContent = () => {
             disabled={isAdmin}
             onClick={()=>navigate("/dashboard")}
             className="navbar-logo"
-            style={{ border: 'none' }} // Remove button outline
+            style={{ border: 'none', background:"#FFF" }} 
           >
             <img src={logo} alt="" />
           </button>
@@ -315,7 +315,7 @@ const CourseContent = () => {
             disabled={isAdmin}
             onClick={()=>navigate("/dashboard/my-courses")}
             className="back"
-            style={{ cursor: "pointer",border:'none' }}
+            style={{ cursor: "pointer", border: 'none', background:"#f8f5f5"}}
          
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
