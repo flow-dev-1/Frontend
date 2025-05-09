@@ -72,7 +72,7 @@ p.error-message {
 }
 
 .registration-page.sign-in {
-  width: fit-content;
+  /* width: fit-content; */
 }
 
 .registration-page form {
