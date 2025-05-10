@@ -17,17 +17,17 @@ function CompassionFeedback() {
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
-  const [isSchool, setIsSchool] = useState(false)
+  const [isSchool, setIsSchool] = useState(false);
 
   // This is used to trigger the report download.
-  const [hasPercentile, setHasPercentile] = useState(false)
+  const [hasPercentile, setHasPercentile] = useState(false);
   const isAdmin = useSelector(adminData);
 
   const { user } = useSelector((state) => state?.user);
 
   useEffect(() => {
     if (user?.isSchool) {
-      setIsSchool(true)
+      setIsSchool(true);
     }
   }, [user]);
 
@@ -42,8 +42,20 @@ function CompassionFeedback() {
   const [allDataLoaded, setAllDataLoaded] = useState(false);
 
   useEffect(() => {
-    setAllDataLoaded(isWeekOneLoaded && isWeekTwoLoaded && isWeekThreeLoaded && isWeekFourLoaded && isWeekFiveLoaded);
-  }, [isWeekOneLoaded, isWeekTwoLoaded, isWeekThreeLoaded, isWeekFourLoaded, isWeekFiveLoaded]);
+    setAllDataLoaded(
+      isWeekOneLoaded &&
+        isWeekTwoLoaded &&
+        isWeekThreeLoaded &&
+        isWeekFourLoaded &&
+        isWeekFiveLoaded
+    );
+  }, [
+    isWeekOneLoaded,
+    isWeekTwoLoaded,
+    isWeekThreeLoaded,
+    isWeekFourLoaded,
+    isWeekFiveLoaded,
+  ]);
 
   const currentWeek = activeIndex + 1;
 
@@ -56,34 +68,27 @@ function CompassionFeedback() {
     if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
-
-      const courseEnrollmentId = sessionStorage.getItem("flow-courseEnrollmentId")
-      if (!courseEnrollmentId) return
-      setEnrollmentId(courseEnrollmentId)
+      const courseEnrollmentId = sessionStorage.getItem(
+        "flow-courseEnrollmentId"
+      );
+      if (!courseEnrollmentId) return;
+      setEnrollmentId(courseEnrollmentId);
     } else {
       setEnrollmentId(enrolmentData._id);
     }
-
-
   }, []);
 
   const weekContents = [
     {
       topic: "Introduction to Compassion",
       component: (
-        <Week1
-          enrollmentId={enrollmentId}
-          setWeekOneData={setWeekOneData}
-        />
+        <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} />
       ),
     },
     {
       topic: "Self-Compassion",
       component: (
-        <Week2
-          enrollmentId={enrollmentId}
-          setWeekTwoData={setWeekTwoData}
-        />
+        <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} />
       ),
     },
     {
@@ -98,28 +103,24 @@ function CompassionFeedback() {
     {
       topic: "Circle of Concern",
       component: (
-        <Week4
-          enrollmentId={enrollmentId}
-          setWeekFourData={setWeekFourData}
-        />
+        <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} />
       ),
     },
     {
       topic: "Life Scenarios - Let’s wear the shoes of others",
       component: (
-        <Week5
-          enrollmentId={enrollmentId}
-          setWeekFiveData={setWeekFiveData}
-        />
+        <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} />
       ),
     },
     {
       topic: "Summary of your journey through Compassion",
-      component: <OverallFeedBack
-        enrollmentId={enrollmentId}
-        setHasPercentile={setHasPercentile}
-      //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
-      />,
+      component: (
+        <OverallFeedBack
+          enrollmentId={enrollmentId}
+          setHasPercentile={setHasPercentile}
+          //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
+        />
+      ),
     },
   ];
 
@@ -135,15 +136,17 @@ function CompassionFeedback() {
         <div className="container">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() =>isSchool ? navigate("/school-dashboard") : navigate("/dashboard")}
+            onClick={() =>
+              isSchool ? navigate("/school-dashboard") : navigate("/dashboard")
+            }
             className="navbar-logo"
-            style={{ border: 'none', background:"#FFF" }} // Remove button outline
+            style={{ border: "none", background: "#FFF" }} // Remove button outline
           >
             <img src={logo} alt="" />
           </button>
           <div
             className="navbar-logo"
-            onClick={() => { }}
+            onClick={() => {}}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -151,12 +154,16 @@ function CompassionFeedback() {
         </div>
       </nav>
       <div className="main-content">
-        <aside>
+        <aside className="d-none d-lg-block">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => isSchool ? navigate(-1, { replace: true }) : navigate("/dashboard/my-courses")}
+            onClick={() =>
+              isSchool
+                ? navigate(-1, { replace: true })
+                : navigate("/dashboard/my-courses")
+            }
             className="back"
-            style={{ cursor: "pointer", border: 'none', background:"#f8f5f5"}}
+            style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
             {isSchool ? "Go back" : "Back to My Courses"}
@@ -174,8 +181,8 @@ function CompassionFeedback() {
                   index + 1 <= currentWeek
                     ? "active-week"
                     : index === 5
-                      ? "d-none"
-                      : ""
+                    ? "d-none"
+                    : ""
                 }
               >
                 <div className="icon">
@@ -194,6 +201,15 @@ function CompassionFeedback() {
           </ul>
         </aside>
         <section className="week-content position-relative mb-5 ">
+          <Link
+            disabled={isAdmin}
+            to={"/dashboard/my-courses"}
+            className="back text-black mb-5 p-3 d-lg-none"
+            style={{ cursor: "pointer", border: "none" }}
+          >
+            <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
+            Back to My Courses
+          </Link>
           <Accordion
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
@@ -209,4 +225,3 @@ function CompassionFeedback() {
 }
 
 export default CompassionFeedback;
-
