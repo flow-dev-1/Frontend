@@ -107,7 +107,7 @@ export default function Dashboard() {
       location.pathname.startsWith("/dashboard/self-awareness-course") ? (
         <SelfAwarenessCourse />
       ) : (
-        <div className="dashboard">
+        <div className="dashboard ">
           <Sidebar className="sidebar-content" />
           <div className="dashboard-content">
             <Outlet />
