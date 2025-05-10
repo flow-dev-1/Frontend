@@ -144,8 +144,8 @@ p.error-message {
   padding: 0 10px;
 }
 
-.input-with-icon input[type='password'],
-.input-with-icon input[type='text'] {
+.input-with-icon input[type="password"],
+.input-with-icon input[type="text"] {
   flex: 1;
   outline: none;
   border: none;
@@ -160,8 +160,8 @@ p.error-message {
   background-color: #F8F8F8;
 } */
 
-input[type='password']::-webkit-input-placeholder:-webkit-autofill,
-input[type='text']::-webkit-input-placeholder:-webkit-autofill {
+input[type="password"]::-webkit-input-placeholder:-webkit-autofill,
+input[type="text"]::-webkit-input-placeholder:-webkit-autofill {
   background-color: #f8f8f8;
 }
 
