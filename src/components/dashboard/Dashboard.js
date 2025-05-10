@@ -1,19 +1,22 @@
-import { Outlet, Link, useLocation } from 'react-router-dom'
-import './dashboard.css'
-import Sidebar from './sidebar/SideBar'
-import { useDispatch } from 'react-redux'
-import { Navigate, useNavigate } from 'react-router-dom'
-import logo from '../../assets/logo.png'
-import { loginSuccess, logoutSuccess } from '../../redux/reducers/userReducer'
-import SingleCoursePage from './pages/my-courses/single-course-page/SingleCoursePage'
-import { clearToken } from '../../redux/reducers/jwtReducer'
-import SelfAwarenessCourse from './pages/my-courses/self-awareness-course/SelfAwarenessCourse'
-import { updateData } from '../../redux/reducers/userAnswersReducer'
+import { Outlet, Link, useLocation } from "react-router-dom";
+import "./dashboard.css";
+import Sidebar from "./sidebar/SideBar";
+import { useDispatch } from "react-redux";
+import { Navigate, useNavigate } from "react-router-dom";
+import logo from "../../assets/logo.png";
+import { loginSuccess, logoutSuccess } from "../../redux/reducers/userReducer";
+import SingleCoursePage from "./pages/my-courses/single-course-page/SingleCoursePage";
+import { clearToken } from "../../redux/reducers/jwtReducer";
+import SelfAwarenessCourse from "./pages/my-courses/self-awareness-course/SelfAwarenessCourse";
+import { updateData } from "../../redux/reducers/userAnswersReducer";
+import { Icon } from "@iconify/react";
+import { useState } from "react";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const [menuVisible, setMenuVisible] = useState(false);
 
   // Get the JWT token from local storage
   // const auth_token =
@@ -27,19 +30,25 @@ export default function Dashboard() {
 
   const logOut = () => {
     // localStorage.removeItem('Flow-Auth-Token');
-    localStorage.clear()
-    sessionStorage.clear()
-    dispatch(logoutSuccess())
-    dispatch(clearToken())
-    dispatch(updateData({
-      course:null,
-      courseEnrollmentId:null,
-      week:1,
-      activities:[],
-      assessments:[]
-    }))
-    navigate('/sign-in', { replace: true })
-  }
+    localStorage.clear();
+    sessionStorage.clear();
+    dispatch(logoutSuccess());
+    dispatch(clearToken());
+    dispatch(
+      updateData({
+        course: null,
+        courseEnrollmentId: null,
+        week: 1,
+        activities: [],
+        assessments: [],
+      })
+    );
+    navigate("/sign-in", { replace: true });
+  };
+
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible);
+  };
 
   return (
     // <div className="dashboard">
@@ -56,11 +65,31 @@ export default function Dashboard() {
             <img src={logo} alt="" />
           </Link>
           <div
-            className='navbar-logo'
+            className="navbar-logo d-none d-lg-block"
             onClick={logOut}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: "pointer" }}
           >
             Logout
+          </div>
+          <div className="position-relative d-block d-lg-none ">
+            <Icon
+              icon="mdi:menu"
+              width={30}
+              onClick={toggleMenu}
+              style={{ cursor: "pointer" }}
+            />
+            {menuVisible && (
+              <div
+                className="d-lg-none position-absolute text-black p-1"
+                style={{
+                  top: "45px",
+                }}
+              >
+                <div onClick={logOut} style={{ cursor: "pointer" }}>
+                  Logout
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </nav>
@@ -75,12 +104,12 @@ export default function Dashboard() {
       {location.pathname.startsWith("/dashboard/my-courses/") ? (
         <SingleCoursePage />
       ) : // <SelfAwarenessCourse />
-      location.pathname.startsWith('/dashboard/self-awareness-course') ? (
+      location.pathname.startsWith("/dashboard/self-awareness-course") ? (
         <SelfAwarenessCourse />
       ) : (
-        <div className='dashboard'>
-          <Sidebar className='sidebar-content' />
-          <div className='dashboard-content'>
+        <div className="dashboard">
+          <Sidebar className="sidebar-content" />
+          <div className="dashboard-content">
             <Outlet />
           </div>
         </div>
