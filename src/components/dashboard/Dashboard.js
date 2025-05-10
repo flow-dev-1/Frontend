@@ -82,11 +82,36 @@ export default function Dashboard() {
               <div
                 className="d-lg-none position-absolute text-black p-1"
                 style={{
-                  top: "45px",
+                  top: "30px",
+                  left: "-100px",
                 }}
               >
-                <div onClick={logOut} style={{ cursor: "pointer" }}>
-                  Logout
+                <div
+                  style={{ cursor: "pointer" }}
+                  className="border-5 px-4 pt-4 pb-1 text-white bg-sky-blue"
+                >
+                  <ul className="d-flex gap-3 flex-column">
+                    <li className="fs-5">
+                      <Link to={"/dashboard"}>Overview</Link>
+                    </li>
+                    <li className="fs-5">
+                      <Link to={"/dashboard/profile"}>Profile</Link>
+                    </li>
+                    <li className="fs-5">
+                      <Link to={"/dashboard/my-courses"}>MyCourse</Link>
+                    </li>
+                    <li className="fs-5">
+                      <Link to={"/dashboard/support"}>Support</Link>
+                    </li>
+                    <li className="fs-5">
+                      <Link to={"/dashboard/payment-history"}>
+                        Payment History
+                      </Link>
+                    </li>
+                    <li className="fs-5 text-danger" onClick={logOut}>
+                      Log Out
+                    </li>
+                  </ul>
                 </div>
               </div>
             )}
