@@ -66,9 +66,9 @@ function App() {
             <Route index element={<SignIn />} />
             {/* <Route path='sign-in' element={<SigninCategory />} /> */}
 
-            <Route path="/sign-up" element={<SignupCategory />} />
+            {/* <Route path="/sign-up" element={<SignupCategory />} /> */}
             <Route
-              path="/individual/sign-up"
+              path="/sign-up"
               element={<IndividualCategory />}
             />
 

@@ -193,7 +193,7 @@ export default function StudentDetailsForm({
       <div className={`form-container ${isLoading ? 'disabled' : ''}`}>
         <div className='top-section mt-2'>
           <h2 className='d-flex justify-content-between align-center'>
-            Student Details {students.length + 1} {/* Display student number */}
+            Child Details
             <Icon
               icon='radix-icons:cross-1'
               onClick={() => navigate('/', { replace: true })}
@@ -204,7 +204,7 @@ export default function StudentDetailsForm({
           <span>*Indicates Required</span>
           <p>
             <span>
-              Kindly take note of the Student ID and Password created as it will
+              Kindly take note of the Password created as it will
               be used as sign-In details.
             </span>
           </p>

@@ -18,7 +18,6 @@ export default function StudentRegistrationForm() {
       setStep(2)
     } else {
       // Final submission
-      console.log('Final submission data', parentFormData)
     }
   }
 
