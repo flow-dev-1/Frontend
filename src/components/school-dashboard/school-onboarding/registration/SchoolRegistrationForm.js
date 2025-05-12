@@ -192,7 +192,7 @@ export default function SchoolRegistrationForm() {
 
   return (
     <div className='registration-page'>
-      <div style={{ paddingTop: '3rem' }} className='top-section'>
+      <div className='top-section'>
         <h2>Register as a school</h2>
         <hr />
         <span>*Indicates Required</span>

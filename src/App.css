@@ -116,9 +116,9 @@ input:-webkit-autofill:active {
 .root-layout {
   background-image: url("./assets/Hero.png");
   background-position: center;
-  background-size: cover;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -472,4 +472,21 @@ input {
 .form-container.disabled {
   pointer-events: none;
   opacity: 0.5;
+}
+
+
+
+ @media (min-width: 480px) {
+  .back-btn{
+  margin-left: 0rem;
+  margin-bottom: 2rem;
+  }
+ }
+
+ @media (max-width: 769px) {
+  .root-layout {
+      height: fit-content;
+      margin-top: 1rem;
+      padding: 2rem;
+  }
 }

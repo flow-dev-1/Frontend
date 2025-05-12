@@ -31,10 +31,10 @@ export default function IndividualCategory() {
                                 const state = {
                                     type: 'Educator',
                                 };
-                                navigate('/individual/sign-up/educators')
+                                // navigate('/individual/sign-up/educators')
                             }}
                         >
-                            Register Now
+                            Join the Waitlist
                         </button>
                     </div>
                 </div>
@@ -42,7 +42,7 @@ export default function IndividualCategory() {
                 <div className='signup-option'>
                     <img src={studentImage} alt='School' className='card-image' />
                     <div className='card-content'>
-                        <h2> For Students</h2>
+                        <h2> For Child</h2>
                         <button
                             className='btn signup-button'
                             onClick={() => {

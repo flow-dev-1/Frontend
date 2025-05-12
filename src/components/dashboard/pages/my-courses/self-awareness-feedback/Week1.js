@@ -17,27 +17,27 @@ let questions = [
         label:
           "A. You immediately take charge, assigning tasks to ensure everything is done efficiently.",
         color: "Red",
-        checked: false
+        checked: false,
       },
       {
         label:
           "B. You suggest a detailed plan, making sure everyone understands their responsibilities and feels comfortable.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label:
           "C. You prefer to discuss everyone's strengths and weaknesses first, ensuring tasks are assigned according to individual abilities.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label:
           "D. You focus on making the process enjoyable, suggesting creative ideas and encouraging a fun atmosphere.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question:
@@ -47,27 +47,27 @@ let questions = [
         label:
           "A. Ensuring that tasks are delegated effectively and deadlines are met.",
         color: "Red",
-        checked: false
+        checked: false,
       },
       {
         label:
           "B. Making sure everyone feels included and their opinions are considered.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label:
           "C. Analyzing the team’s skills and assigning tasks accordingly to maximize productivity.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label:
           "D. Encouraging a creative approach and fostering a positive team environment.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question:
@@ -77,27 +77,27 @@ let questions = [
         label:
           "A. You jump straight in and start tackling the problem with a clear plan.",
         color: "Red",
-        checked: false
+        checked: false,
       },
       {
         label:
           "B. You gather information and consult with others before taking action.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label:
           "C. You take time to understand the problem thoroughly and consider different solutions.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label:
           "D. You brainstorm with others to come up with innovative and unconventional solutions.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question: "I like to:",
@@ -105,24 +105,24 @@ let questions = [
       {
         label: "A. Act on a moment’s notice; do risky things.",
         color: "Red",
-        checked: true
+        checked: true,
       },
       {
         label: "B. Provide answers or give thought to people’s questions.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label: "C. Help maintain a sense of harmony and togetherness.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label: "D. Be responsible, dependable, and helpful to others.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question: "One thing I am really good at is:",
@@ -130,24 +130,24 @@ let questions = [
       {
         label: "A. Acting courageously.",
         color: "Red",
-        checked: true
+        checked: true,
       },
       {
         label: "B. Thinking.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label: "C. Being sensitive.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label: "D. Organizing.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question: "Friends who know me best would say that I am:",
@@ -155,24 +155,24 @@ let questions = [
       {
         label: "A. Competitive.",
         color: "Red",
-        checked: true
+        checked: true,
       },
       {
         label: "B. Reserved, thoughtful.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label: "C. Emotional, friendly.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label: "D. Neat, prepared.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question: "My basic approach to life is:",
@@ -180,24 +180,24 @@ let questions = [
       {
         label: "A. To take one day at a time and have fun.",
         color: "Red",
-        checked: true
+        checked: true,
       },
       {
         label: "B. To figure out what life is all about.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label: "C. To help others and be happy and succeed.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label: "D. To plan for the future and make it as good as possible.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question: "When I am feeling discouraged or “down in the dumps”:",
@@ -205,26 +205,26 @@ let questions = [
       {
         label: "A. I often become rude, mad, or sometimes even mean.",
         color: "Red",
-        checked: true
+        checked: true,
       },
       {
         label:
           "B. I withdraw, don’t talk very much, and try to think my way out of the problem.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label:
           "C. I feel emotional, am sad, and usually like to talk it over with someone close to me.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label: "D. I try to figure out what’s causing the problem and fix it.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question: "I feel good about myself when:",
@@ -232,24 +232,24 @@ let questions = [
       {
         label: "A. I can do things that are difficult.",
         color: "Red",
-        checked: true
+        checked: true,
       },
       {
         label: "B. I can solve problems or figure things out.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label: "C. I can help other people.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label: "D. I am appreciated or rewarded for things I do.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question:
@@ -259,27 +259,27 @@ let questions = [
         label:
           "A. Charming, a natural leader, clever, someone who is fun to have around.",
         color: "Red",
-        checked: false
+        checked: false,
       },
       {
         label:
           "B. Thoughtful, someone who has good answers, someone who likes to figure out problems.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label:
           "C. Nice, friendly, someone who gets along with other students and is helpful to the teacher and others.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label:
           "D. Neat, organized, prepared, someone who does assignments and is a good student.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question:
@@ -288,24 +288,24 @@ let questions = [
       {
         label: "A. Rowdy or a little wild.",
         color: "Red",
-        checked: true
+        checked: true,
       },
       {
         label: "B. Arrogant.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label: "C. Talkative.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label: "D. Someone who wants things my way; dominant; worrying.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question: "When I am faced with a challenge:",
@@ -313,26 +313,26 @@ let questions = [
       {
         label: "A. I dive in headfirst and take immediate action.",
         color: "Red",
-        checked: true
+        checked: true,
       },
       {
         label: "B. I analyze the situation and come up with a strategy.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label:
           "C. I consider how it will impact the people involved and try to keep everyone calm.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label: "D. I make a detailed plan and follow it step by step.",
         color: "Yellow",
-        checked: false
-      }
-    ]
-  }
+        checked: false,
+      },
+    ],
+  },
 ];
 
 let personalityFeedback = {
@@ -340,7 +340,7 @@ let personalityFeedback = {
     red: 25,
     green: 25,
     blue: 25,
-    yellow: 25
+    yellow: 25,
   },
   colors: {
     red: {
@@ -352,7 +352,7 @@ let personalityFeedback = {
       challenges:
         "May be impulsive, impatient, and can sometimes overlook details in favor of quick decisions.",
       challengesExp:
-        "People who align more with the Red personality often thrive in dynamic situations where quick thinking and decisive action are needed. However, they may need to be mindful of their tendency to act before fully considering all consequences."
+        "People who align more with the Red personality often thrive in dynamic situations where quick thinking and decisive action are needed. However, they may need to be mindful of their tendency to act before fully considering all consequences.",
     },
     green: {
       title: "Green",
@@ -362,7 +362,7 @@ let personalityFeedback = {
       challenges:
         "May overthink or become indecisive, can be perceived as distant or overly critical.",
       challengesExp:
-        "If you dominantly have a Green personality, you likely excel in situations that require careful thought and analysis. Your logical approach is a valuable asset, but balancing it with consideration for emotional and social factors is important."
+        "If you dominantly have a Green personality, you likely excel in situations that require careful thought and analysis. Your logical approach is a valuable asset, but balancing it with consideration for emotional and social factors is important.",
     },
     blue: {
       title: "Blue",
@@ -372,7 +372,7 @@ let personalityFeedback = {
       challenges:
         "May struggle with setting boundaries, can be overly sensitive or avoid conflict.",
       challengesExp:
-        "If your results aligned more with the Blue personality are often the glue that holds groups together, providing support and fostering harmony. However, it’s essential to establish boundaries to avoid becoming overwhelmed by others’ needs."
+        "If your results aligned more with the Blue personality are often the glue that holds groups together, providing support and fostering harmony. However, it’s essential to establish boundaries to avoid becoming overwhelmed by others’ needs.",
     },
     yellow: {
       title: "Yellow",
@@ -382,9 +382,9 @@ let personalityFeedback = {
       challenges:
         "May avoid serious tasks or become easily distracted, struggles with long-term focus.",
       challengesExp:
-        "If your results aligned more with the Yellow personality, your strength lies in your ability to create order and maintain stability. You are the person others rely on for consistency and thoroughness, though it’s beneficial to remain open to new ideas and changes."
-    }
-  }
+        "If your results aligned more with the Yellow personality, your strength lies in your ability to create order and maintain stability. You are the person others rely on for consistency and thoroughness, though it’s beneficial to remain open to new ideas and changes.",
+    },
+  },
 };
 
 const questionsArrayRedFormatted = [
@@ -397,30 +397,30 @@ const questionsArrayRedFormatted = [
           "A. You immediately take charge, assigning tasks to ensure everything is done efficiently.",
         color: "Red",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label:
           "B. You suggest a detailed plan, making sure everyone understands their responsibilities and feels comfortable.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label:
           "C. You prefer to discuss everyone's strengths and weaknesses first, ensuring tasks are assigned according to individual abilities.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label:
           "D. You focus on making the process enjoyable, suggesting creative ideas and encouraging a fun atmosphere.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "How do you approach situations that involve risk?",
@@ -429,27 +429,27 @@ const questionsArrayRedFormatted = [
         label: "A. I embrace risks, seeing them as opportunities.",
         color: "Red",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. I weigh the pros and cons but am open to taking risks.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. I prefer to minimize risks and proceed with caution.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. I avoid risks whenever possible.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "In a competitive situation, how do you typically feel?",
@@ -458,27 +458,27 @@ const questionsArrayRedFormatted = [
         label: "A. I like competition and aim to win.",
         color: "Red",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. I enjoy competition but also focus on fair play.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. I participate, but winning isn’t my main goal.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. I avoid competition and prefer cooperative situations.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question:
@@ -488,28 +488,28 @@ const questionsArrayRedFormatted = [
         label: "A. I dive in immediately and start tackling it head-on.",
         color: "Red",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. I quickly assess the situation and then take action.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label:
           "C. I take time to analyze before deciding on a course of action.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. I feel hesitant and may delay starting.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question:
@@ -520,29 +520,29 @@ const questionsArrayRedFormatted = [
           "A. I suggest adventurous or spontaneous ideas to keep things exciting.",
         color: "Red",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label:
           "B. I propose activities that are fun but also consider everyone's preferences.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. I prefer to go along with others’ suggestions.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. I stick to well-planned and familiar activities.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
-  }
+        isCorrect: false,
+      },
+    ],
+  },
   // Add more questions if needed
 ];
 
@@ -555,28 +555,28 @@ const questionsArrayBlueFormatted = [
         label: "A. I focus on ensuring everyone feels included and valued.",
         color: "Blue",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. I bring up new ideas and focus on just the planning aspect.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. I take charge and make decisions for the group.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label:
           "D. I prefer to focus on the technical aspects and problem-solving.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question:
@@ -586,27 +586,27 @@ const questionsArrayBlueFormatted = [
         label: "A. I focus on ensuring everyone feels included and valued.",
         color: "Blue",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. I suggest practical solutions to help them feel better.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. I give them space to process their emotions alone.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. I focus on getting them to move past it and carry on.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "In a conflict, what is your usual response?",
@@ -616,28 +616,28 @@ const questionsArrayBlueFormatted = [
           "A. I try to mediate and find a solution that keeps everyone happy.",
         color: "Blue",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label:
           "B. I discuss the issues openly and try to resolve them logically.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. I assert my position and work to get my point across.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. I avoid the conflict and hope it resolves itself.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "When making decisions, what do you consider most?",
@@ -646,27 +646,27 @@ const questionsArrayBlueFormatted = [
         label: "A. How it will affect the people involved and their feelings.",
         color: "Blue",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. The logical outcomes and possible consequences.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. How quickly I can implement the decision.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. The rules and guidelines that should be followed.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "How do you typically show you care about someone?",
@@ -675,28 +675,28 @@ const questionsArrayBlueFormatted = [
         label: "A. I spend quality time with them and offer emotional support.",
         color: "Blue",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. I give them thoughtful advice or help them solve problems.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. I involve them in fun and exciting activities.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. I do things for them or help with their responsibilities.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
-  }
+        isCorrect: false,
+      },
+    ],
+  },
   // Add more questions if needed
 ];
 
@@ -709,27 +709,27 @@ const questionsArrayYellowFormatted = [
           "A. Ensure everything is organized and everyone knows their tasks.",
         color: "Yellow",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Lead the group and make quick decisions.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. Provide emotional support and encourage everyone.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. Offer innovative ideas and solutions.",
         color: "Green",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "How do you handle unexpected changes or challenges?",
@@ -738,28 +738,28 @@ const questionsArrayYellowFormatted = [
         label: "A. Make a detailed plan to address the changes.",
         color: "Yellow",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Adapt quickly and go with the flow.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. Seek support from others and talk through the issues.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label:
           "D. Avoid the challenge if possible and focus on something else.",
         color: "Green",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "In a social setting, how do you usually behave?",
@@ -768,27 +768,27 @@ const questionsArrayYellowFormatted = [
         label: "A. Keep everything organized and ensure everyone is on track.",
         color: "Yellow",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Engage in conversations and make new connections.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. Take charge and organize the event or activity.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. Support and help others feel included and valued.",
         color: "Green",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "When making decisions, what is your primary focus?",
@@ -798,27 +798,27 @@ const questionsArrayYellowFormatted = [
           "A. Making sure the decision aligns with long-term goals and values.",
         color: "Yellow",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Quickly resolving the issue to move on to other tasks.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. Considering how the decision will affect everyone involved.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. Following a detailed plan and ensuring accuracy.",
         color: "Green",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "How do you feel about setting and achieving goals?",
@@ -828,30 +828,30 @@ const questionsArrayYellowFormatted = [
           "A. Setting clear goals and making sure they are achieved is very important.",
         color: "Yellow",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label:
           "B. Achieving goals is less important than having fun and enjoying the process.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. There is no need to set goals.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label:
           "D. Prefer to set goals but not worry too much about following through.",
         color: "Green",
         checked: false,
-        isCorrect: false
-      }
-    ]
-  }
+        isCorrect: false,
+      },
+    ],
+  },
   // Add more questions if needed
 ];
 
@@ -863,27 +863,27 @@ const questionsArrayGreenFormatted = [
         label: "A. Analyze the situation thoroughly before acting.",
         color: "Green",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Act based on my first thought.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. Seek advice from others before making a decision.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. Ignore the problem and hope it resolves itself.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "How do you prefer to spend your free time?",
@@ -893,27 +893,27 @@ const questionsArrayGreenFormatted = [
           "A. Engaging in intellectual activities, like reading or puzzles.",
         color: "Green",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Socializing with friends and family.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. Participating in adventurous or spontaneous activities.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. Watching movies.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "When working on a group project, how do you contribute?",
@@ -922,27 +922,27 @@ const questionsArrayGreenFormatted = [
         label: "A. Provide logical analysis and critical thinking.",
         color: "Green",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Offer emotional support and encourage teamwork.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. Take the lead and make quick decisions.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. Just do my allocated part.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question:
@@ -952,27 +952,27 @@ const questionsArrayGreenFormatted = [
         label: "A. Gathering and evaluating all the relevant information.",
         color: "Green",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Considering how the decision will impact others.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. Making a decision quickly to keep things moving.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. I focus on my feelings.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "When you encounter a new concept or idea, how do you react?",
@@ -981,34 +981,33 @@ const questionsArrayGreenFormatted = [
         label: "A. Research and seek to understand it deeply.",
         color: "Green",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Embrace it enthusiastically and share it with others.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label:
           "C. I immediately reject it if it does not align with my values.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. Implement it immediately.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
-  }
+        isCorrect: false,
+      },
+    ],
+  },
   // Add more questions if needed
 ];
 
 const Week1 = ({ enrollmentId }) => {
-
   const [assessments, setAssessmentData] = useState([]);
   const [percent, setPercent] = useState(0);
   const [color, setColor] = useState(null);
@@ -1024,13 +1023,11 @@ const Week1 = ({ enrollmentId }) => {
   });
 
   useEffect(() => {
-    if (!data) return
-    setAssessmentData(data?.assessment?.assessments)
+    if (!data) return;
+    setAssessmentData(data?.assessment?.assessments);
     setPercent(data?.assessment?.rating || 0);
-    setColor(data?.assessment?.personalityColor)
+    setColor(data?.assessment?.personalityColor);
   }, [data]);
-
-
 
   // console.log(percent)
   function getQuestionsByColor(color) {
@@ -1089,7 +1086,7 @@ const Week1 = ({ enrollmentId }) => {
   const mappedContent = {
     yes: buckets?.yes?.map((item) => item.content),
     no: buckets?.no?.map((item) => item.content),
-    sometimes: buckets?.sometimes.map((item) => item.content)
+    sometimes: buckets?.sometimes.map((item) => item.content),
   };
 
   const backendAnswers = data?.activity?.activities[9].questionChecked;
@@ -1120,7 +1117,7 @@ const Week1 = ({ enrollmentId }) => {
         "Drag-and-drop the statements on the left into any of these bowls.",
       answer: mappedContent,
       feedback: data?.activity?.activities?.[5]?.feedback?.[0] || "",
-    }
+    },
   ];
   const activityFour = [
     {
@@ -1131,7 +1128,7 @@ const Week1 = ({ enrollmentId }) => {
         data?.activity?.activities?.[7].answer?.selectedPersonality,
       explanation: data?.activity?.activities?.[7].answer?.explanation,
       feedback: data?.activity?.activities?.[7]?.feedback?.[0] || "",
-    }
+    },
   ];
   const activityAnswers = data?.activity?.activities?.[12]?.answers || [];
   // console.log(activityAnswers);
@@ -1157,7 +1154,7 @@ const Week1 = ({ enrollmentId }) => {
       answer: data?.activity?.activities?.[13].answers[1].answer,
 
       feedback: data?.activity?.activities?.[13]?.feedback?.[2] || [],
-    }
+    },
   ];
 
   // console.log(data?.activity?.activities?.[7].answer.selectedPersonality);
@@ -1168,9 +1165,9 @@ const Week1 = ({ enrollmentId }) => {
       options: question.options.map((option) => {
         return {
           ...option,
-          checked: selectedAnswers.includes(option.label) // Check if the selected answer matches the option label
+          checked: selectedAnswers.includes(option.label), // Check if the selected answer matches the option label
         };
-      })
+      }),
     };
   });
 
@@ -1196,7 +1193,7 @@ const Week1 = ({ enrollmentId }) => {
     0: { name: "Red", color: "#FF0500" },
     1: { name: "Green", color: "#2CCF4F" },
     2: { name: "Blue", color: "#0093FF" },
-    3: { name: "Yellow", color: "#FEF900" }
+    3: { name: "Yellow", color: "#FEF900" },
   };
 
   // Prepare pie chart data
@@ -1209,14 +1206,14 @@ const Week1 = ({ enrollmentId }) => {
     return {
       name,
       value: percentage, // Set percentage value
-      color
+      color,
     };
   });
 
   // console.log(pieChart);
 
   return (
-    <div className="week-content">
+    <div className="week-content w-auto">
       {activities?.map((activity, index) => (
         <div style={{ border: "none" }} className="activity" key={index}>
           <p className="activity-badge">Activity {activity?.activity}</p>
@@ -1294,7 +1291,7 @@ const Week1 = ({ enrollmentId }) => {
                   width: "100%",
                   display: "flex",
                   alignItems: "center",
-                  gap: "1rem"
+                  gap: "1rem",
                 }}
               >
                 <div className="feedback-card">{activity?.feedback}</div>
@@ -1306,7 +1303,6 @@ const Week1 = ({ enrollmentId }) => {
               </div>
             </p>
           )}
-
         </div>
       ))}
       {activityFour?.map((activity, index) => (
@@ -1332,7 +1328,6 @@ const Week1 = ({ enrollmentId }) => {
             /> */}
           </p>
 
-
           {activity?.feedback?.length > 0 && (
             <p className="feedback">
               <div id="badge">Feedback:</div>
@@ -1341,7 +1336,7 @@ const Week1 = ({ enrollmentId }) => {
                   width: "100%",
                   display: "flex",
                   alignItems: "center",
-                  gap: "1rem"
+                  gap: "1rem",
                 }}
               >
                 <div className="feedback-card">{activity?.feedback}</div>
@@ -1352,7 +1347,6 @@ const Week1 = ({ enrollmentId }) => {
               /> */}
               </div>
             </p>
-
           )}
         </div>
       ))}
@@ -1373,11 +1367,14 @@ const Week1 = ({ enrollmentId }) => {
                   alt={option.checked ? "Checked" : "Unchecked"}
                   style={{ width: "20px", marginRight: "10px" }}
                 />
-                <span style={{
-                  fontSize: "14px",
-                  textAlign: "left",
-                  display: "block"
-                }} className="option-label">
+                <span
+                  style={{
+                    fontSize: "14px",
+                    textAlign: "left",
+                    display: "block",
+                  }}
+                  className="option-label"
+                >
                   {option.label}
                 </span>
                 <span className={`color-label ${option.color.toLowerCase()}`}>
@@ -1419,7 +1416,7 @@ const Week1 = ({ enrollmentId }) => {
                   width: "100%",
                   display: "flex",
                   alignItems: "center",
-                  gap: "1rem"
+                  gap: "1rem",
                 }}
               >
                 <div className="feedback-card">{activity.feedback}</div>
@@ -1431,7 +1428,6 @@ const Week1 = ({ enrollmentId }) => {
               </div>
             </p>
           )}
-
         </div>
       ))}
       <p className="activity-badge">Assessment 1</p>
@@ -1451,11 +1447,14 @@ const Week1 = ({ enrollmentId }) => {
                   alt={option.isCorrect ? "Checked" : "Unchecked"}
                   style={{ width: "20px", marginRight: "10px" }}
                 />
-                <span style={{
-                  fontSize: "14px",
-                  textAlign: "left",
-                  display: "block"
-                }} className="option-label">
+                <span
+                  style={{
+                    fontSize: "14px",
+                    textAlign: "left",
+                    display: "block",
+                  }}
+                  className="option-label"
+                >
                   {option.label}
                 </span>
                 <p style={{ width: "120px", textAlign: "center" }}>

@@ -24,7 +24,7 @@ function TransitionFeedback() {
   const [enrollmentId, setEnrollmentId] = useState(null);
 
   // This is used to trigger the report download.
-  const [hasPercentile,setHasPercentile] = useState(false)
+  const [hasPercentile, setHasPercentile] = useState(false);
   const isAdmin = useSelector(adminData);
 
   // states to check a certain week data has been loaded
@@ -44,28 +44,28 @@ function TransitionFeedback() {
 
   useEffect(() => {
     setAllDataLoaded(
-      isWeekOneLoaded && 
-      isWeekTwoLoaded && 
-      isWeekThreeLoaded && 
-      isWeekFourLoaded && 
-      isWeekFiveLoaded &&
-      isWeekSixLoaded &&
-      isWeekSevenLoaded &&
-      isWeekEightLoaded &&
-      isWeekNineLoaded &&
-      isWeekTenLoaded
+      isWeekOneLoaded &&
+        isWeekTwoLoaded &&
+        isWeekThreeLoaded &&
+        isWeekFourLoaded &&
+        isWeekFiveLoaded &&
+        isWeekSixLoaded &&
+        isWeekSevenLoaded &&
+        isWeekEightLoaded &&
+        isWeekNineLoaded &&
+        isWeekTenLoaded
     );
   }, [
-    isWeekOneLoaded, 
-    isWeekTwoLoaded, 
-    isWeekThreeLoaded, 
-    isWeekFourLoaded, 
+    isWeekOneLoaded,
+    isWeekTwoLoaded,
+    isWeekThreeLoaded,
+    isWeekFourLoaded,
     isWeekFiveLoaded,
     isWeekSixLoaded,
     isWeekSevenLoaded,
     isWeekEightLoaded,
-    isWeekNineLoaded, 
-    isWeekTenLoaded
+    isWeekNineLoaded,
+    isWeekTenLoaded,
   ]);
 
   const currentWeek = activeIndex + 1;
@@ -79,34 +79,27 @@ function TransitionFeedback() {
     if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
-
-      const courseEnrollmentId = sessionStorage.getItem("flow-courseEnrollmentId")
-      if (!courseEnrollmentId) return
-      setEnrollmentId(courseEnrollmentId)
+      const courseEnrollmentId = sessionStorage.getItem(
+        "flow-courseEnrollmentId"
+      );
+      if (!courseEnrollmentId) return;
+      setEnrollmentId(courseEnrollmentId);
     } else {
       setEnrollmentId(enrolmentData._id);
     }
-
-
   }, []);
 
   const weekContents = [
     {
       topic: "Introduction to Transition",
       component: (
-        <Week1
-          enrollmentId={enrollmentId}
-          setWeekOneData={setWeekOneData}
-        />
+        <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} />
       ),
     },
     {
       topic: "Growth and Fixed Mindset",
       component: (
-        <Week2
-          enrollmentId={enrollmentId}
-          setWeekTwoData={setWeekTwoData}
-        />
+        <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} />
       ),
     },
     {
@@ -121,28 +114,19 @@ function TransitionFeedback() {
     {
       topic: "Understanding Values",
       component: (
-        <Week4
-          enrollmentId={enrollmentId}
-          setWeekFourData={setWeekFourData}
-        />
+        <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} />
       ),
     },
     {
       topic: "Core Values and how they matter",
       component: (
-        <Week5
-          enrollmentId={enrollmentId}
-          setWeekFiveData={setWeekFiveData}
-        />
+        <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} />
       ),
     },
     {
       topic: "Social Skills (Navigating Relationships)",
       component: (
-        <Week6
-          enrollmentId={enrollmentId}
-          setWeekSixData={setWeekSixData}
-        />
+        <Week6 enrollmentId={enrollmentId} setWeekSixData={setWeekSixData} />
       ),
     },
     {
@@ -166,28 +150,24 @@ function TransitionFeedback() {
     {
       topic: "Resilience and Introduction to Coping Skills",
       component: (
-        <Week9
-          enrollmentId={enrollmentId}
-          setWeekNineData={setWeekNineData}
-        />
+        <Week9 enrollmentId={enrollmentId} setWeekNineData={setWeekNineData} />
       ),
     },
     {
       topic: "Looking Ahead",
       component: (
-        <Week10
-          enrollmentId={enrollmentId}
-          setWeekTenData={setWeekTenData}
-        />
+        <Week10 enrollmentId={enrollmentId} setWeekTenData={setWeekTenData} />
       ),
     },
     {
       topic: "Summary of your journey through Transition",
-      component: <OverallFeedBack
-        enrollmentId={enrollmentId}
-        setHasPercentile={setHasPercentile}
-      //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
-      />,
+      component: (
+        <OverallFeedBack
+          enrollmentId={enrollmentId}
+          setHasPercentile={setHasPercentile}
+          //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
+        />
+      ),
     },
   ];
 
@@ -205,7 +185,7 @@ function TransitionFeedback() {
             disabled={isAdmin?.isAdmin}
             onClick={() => navigate("/dashboard")}
             className="navbar-logo"
-            style={{ border: 'none', background:"#FFF" }} 
+            style={{ border: "none", background: "#FFF" }}
           >
             <img src={logo} alt="" />
           </button>
@@ -219,12 +199,12 @@ function TransitionFeedback() {
         </div>
       </nav>
       <div className="main-content">
-        <aside>
+        <aside className="d-none d-lg-block">
           <button
             disabled={isAdmin?.isAdmin}
             onClick={() => navigate("/dashboard/my-courses")}
             className="back"
-            style={{ cursor: "pointer", border: 'none', background:"#f8f5f5"}}
+            style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
             Back to My Courses
@@ -262,6 +242,15 @@ function TransitionFeedback() {
           </ul>
         </aside>
         <section className="week-content position-relative mb-5 ">
+          <Link
+            disabled={isAdmin}
+            to={"/dashboard/my-courses"}
+            className="back text-black mb-5 p-3 d-lg-none"
+            style={{ cursor: "pointer", border: "none" }}
+          >
+            <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
+            Back to My Courses
+          </Link>
           <Accordion
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}

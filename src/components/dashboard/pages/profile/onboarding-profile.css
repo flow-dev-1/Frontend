@@ -4,13 +4,13 @@
 .registration-page {
   width: 900px;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 20px auto 0 auto;
-  padding: 20px 30px;
+  /* flex-direction: column;
+  justify-content: center; */
+  /* margin: 20px auto 0 auto; */
+  /* padding: 20px 30px; */
   background-color: #fff;
   border-radius: 15px;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 input:focus {
   border: 1px solid #275dad !important;
@@ -72,7 +72,7 @@ p.error-message {
 }
 
 .registration-page.sign-in {
-  width: fit-content;
+  /* width: fit-content; */
 }
 
 .registration-page form {
@@ -97,7 +97,8 @@ p.error-message {
 
 .registration-page .form-section {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  margin: 1rem 30px;
+  /* grid-template-columns: 1fr 1fr 1fr; */
   /* grid-column-gap: 15px; */
   gap: 10px;
 }
@@ -143,8 +144,8 @@ p.error-message {
   padding: 0 10px;
 }
 
-.input-with-icon input[type='password'],
-.input-with-icon input[type='text'] {
+.input-with-icon input[type="password"],
+.input-with-icon input[type="text"] {
   flex: 1;
   outline: none;
   border: none;
@@ -159,8 +160,8 @@ p.error-message {
   background-color: #F8F8F8;
 } */
 
-input[type='password']::-webkit-input-placeholder:-webkit-autofill,
-input[type='text']::-webkit-input-placeholder:-webkit-autofill {
+input[type="password"]::-webkit-input-placeholder:-webkit-autofill,
+input[type="text"]::-webkit-input-placeholder:-webkit-autofill {
   background-color: #f8f8f8;
 }
 
@@ -208,10 +209,10 @@ input[type='text']::-webkit-input-placeholder:-webkit-autofill {
 
 .registration-page .bottom-section {
   margin-top: 10px;
-  text-align: center;
+  /* text-align: center; */
   display: flex;
-  align-items: center;
-  justify-content: space-around;
+  /* align-items: center; */
+  /* justify-content: space-around; */
 }
 
 .error-message {

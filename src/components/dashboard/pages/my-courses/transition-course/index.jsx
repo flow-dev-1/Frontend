@@ -17,7 +17,6 @@ import "./index.css";
 import PopUp from "./components/ReviewPopUp";
 import Hurray from "./components/Hurray";
 
-
 // Week 1
 import Page1 from "./weeks/week1/page1/Page1";
 import Page2 from "./weeks/week1/page2/Page2";
@@ -70,8 +69,6 @@ import WeekFivePage4 from "./weeks/week5/page4/Page4.jsx";
 import WeekFivePage5 from "./weeks/week5/page5/Page5.jsx";
 import WeekFivePage6 from "./weeks/week5/page6/Page6.jsx";
 
-
-
 // Week6
 import WeekSixPage1 from "./weeks/week6/page1/Page1.jsx";
 import WeekSixPage2 from "./weeks/week6/page2/Page2.jsx";
@@ -121,7 +118,6 @@ import WeekTenPage2 from "./weeks/week10/page2/Page2.jsx";
 import WeekTenPage3 from "./weeks/week10/page3/Page3.jsx";
 import WeekTenPage4 from "./weeks/week10/page4/Page4.jsx";
 
-
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../services/api/user.js";
@@ -131,12 +127,11 @@ import {
 } from "../../../../../redux/reducers/userAnswersReducer.js";
 import { adminData } from "../../../../../redux/reducers/adminReducer.js";
 
-import { setCourse } from '../../../../../redux/reducers/navigationSlice.js';
-
+import { setCourse } from "../../../../../redux/reducers/navigationSlice.js";
 
 const WeekContent = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const userAnswers = useSelector(userAnswer);
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
@@ -150,7 +145,7 @@ const WeekContent = () => {
     //toDo: Only Enrolled Users or Admin can access this course
     if (!enrolmentData && !isAdmin) return navigate("/sign-in");
     setEnrollmentId(enrolmentData?._id);
-    setCourse(enrolmentData?.course?._id)
+    setCourse(enrolmentData?.course?._id);
   }, []);
 
   useEffect(() => {
@@ -169,7 +164,7 @@ const WeekContent = () => {
     dispatch(setCurrentPage(currentPage));
     dispatch(setCurrentStep(currentStep));
 
-    return () => { };
+    return () => {};
   }, [dispatch]); // Added dispatch to dependency array
 
   const currentWeek = useSelector(selectCurrentWeek);
@@ -179,7 +174,11 @@ const WeekContent = () => {
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isLoading, status, isError } = useQuery({
-    queryKey: [`dashboard-transition-course-${currentWeek}`, enrollmentId, currentWeek],
+    queryKey: [
+      `dashboard-transition-course-${currentWeek}`,
+      enrollmentId,
+      currentWeek,
+    ],
     queryFn: () => userService.getUserCourseData(enrollmentId, currentWeek),
     enabled: !!enrollmentId && !!currentWeek,
     refetchOnMount: "always",
@@ -188,7 +187,6 @@ const WeekContent = () => {
   });
 
   // console.log(data,"Course data here")
-
 
   useEffect(() => {
     if (!data) return;
@@ -204,11 +202,12 @@ const WeekContent = () => {
         })
       );
     } else {
-
       dispatch(
         updateData({
           course: course,
-          courseEnrollmentId: enrollmentId ? enrollmentId : userAnswers.courseEnrollmentId,
+          courseEnrollmentId: enrollmentId
+            ? enrollmentId
+            : userAnswers.courseEnrollmentId,
           week: currentWeek,
           activities: userAnswers.activities,
           assessments: userAnswers.assessments,
@@ -216,7 +215,7 @@ const WeekContent = () => {
       );
     }
 
-    return () => { };
+    return () => {};
   }, [data]);
 
   // If showing hurray, render that instead
@@ -459,7 +458,7 @@ const WeekContent = () => {
 const CourseContent = () => {
   const { isAdmin } = useSelector(adminData);
   const currentWeek = useSelector(selectCurrentWeek);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
 
@@ -476,12 +475,11 @@ const CourseContent = () => {
     "Looking Ahead",
   ];
 
-
   useEffect(() => {
-    const segments = location.pathname.split('/').filter(Boolean);
+    const segments = location.pathname.split("/").filter(Boolean);
     const lastSegment = segments[segments.length - 1];
-    
-    if (['compassion', 'transition'].includes(lastSegment?.toLowerCase())) {
+
+    if (["compassion", "transition"].includes(lastSegment?.toLowerCase())) {
       dispatch(setCourse(lastSegment.toLowerCase()));
     }
   }, [location.pathname, dispatch]);
@@ -494,13 +492,13 @@ const CourseContent = () => {
             disabled={isAdmin}
             onClick={() => navigate("/dashboard")}
             className="navbar-logo"
-            style={{ border: 'none', background:"#FFF" }} // Remove button outline
+            style={{ border: "none", background: "#FFF" }} // Remove button outline
           >
             <img src={logo} alt="" />
           </button>
           <div
             className="navbar-logo"
-            onClick={() => { }}
+            onClick={() => {}}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -514,15 +512,14 @@ const CourseContent = () => {
             disabled={isAdmin}
             onClick={() => navigate("/dashboard/my-courses")}
             className="back"
-            style={{ cursor: "pointer", border: 'none', background:"#f8f5f5"}}
-
+            style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
             Back to My Courses
           </button>
 
           <div className="compassion-title">
-            <h2> From Curious to Confident: Transition with Ease  </h2>
+            <h2> From Curious to Confident: Transition with Ease </h2>
             <h2 className="compassion">Transition</h2>
           </div>
 

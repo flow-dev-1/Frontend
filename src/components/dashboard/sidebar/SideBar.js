@@ -1,110 +1,114 @@
-import React, { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { Icon } from '@iconify/react'
-import './sidebar.css'
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Icon } from "@iconify/react";
+import "./sidebar.css";
 
 function Sidebar() {
-  const location = useLocation()
-  const [isCoursesOpen, setIsCoursesOpen] = useState(false)
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
-  const [clicked, setClicked] = useState(false)
+  const location = useLocation();
+  const [isCoursesOpen, setIsCoursesOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [clicked, setClicked] = useState(false);
 
   const toggleCourses = () => {
-    setIsCoursesOpen(!isCoursesOpen)
-  }
+    setIsCoursesOpen(!isCoursesOpen);
+  };
 
   const toggleSettings = () => {
-    setIsSettingsOpen(!isSettingsOpen)
-  }
+    setIsSettingsOpen(!isSettingsOpen);
+  };
 
   const isActiveLink = (path) => {
-    return location.pathname === path
-  }
+    return location.pathname === path;
+  };
 
   const handleClick = () => {
-    setClicked(!clicked)
-  }
+    setClicked(!clicked);
+  };
 
   const closeSidebar = () => {
-    setClicked(false)
-  }
+    setClicked(false);
+  };
 
   return (
-    <div className={`sidebar-user ${clicked ? 'open' : ''}`}>
-      <div className='sidebar-user-content'>
-        <ul className='sidebar-user-menu mt-3 desktop'>
+    <div className={`sidebar-user ${clicked ? "open" : ""}`}>
+      <div className="sidebar-user-content">
+        <ul className="sidebar-user-menu mt-3 desktop">
           <li>
             <Link
-              to='/dashboard'
-              className={`link ${isActiveLink('/dashboard') ? 'active' : ''}`}
+              to="/dashboard"
+              className={`link ${isActiveLink("/dashboard") ? "active" : ""}`}
               onClick={closeSidebar}
             >
-              <Icon icon='ion:grid-outline' className='sidebar-icon' />
-              Overview
+              <Icon icon="ion:grid-outline" className="sidebar-icon" />
+              <span className="d-none d-lg-block">Overview</span>
             </Link>
           </li>
 
           <li>
             <Link
-              to='/dashboard/profile'
+              to="/dashboard/profile"
               className={`link ${
-                isActiveLink('/dashboard/profile') ? 'active' : ''
+                isActiveLink("/dashboard/profile") ? "active" : ""
               }`}
               onClick={closeSidebar}
             >
-              <Icon icon='uiw:user-add' className='sidebar-icon' />
-              Profile
+              <Icon icon="uiw:user-add" className="sidebar-icon" />
+              <span className="d-none d-lg-block">Profile</span>
             </Link>
           </li>
           <li>
             <Link
-              to='/dashboard/my-courses'
+              to="/dashboard/my-courses"
               className={`link ${
-                isActiveLink('/dashboard/my-courses') ? 'active' : ''
+                isActiveLink("/dashboard/my-courses") ? "active" : ""
               }`}
               onClick={closeSidebar}
             >
-              <Icon icon='bi:book' className='sidebar-icon' />
-              My Course
-            </Link>
-          </li>
-
-          <li>
-            <Link
-              to='/dashboard/support'
-              className={`link ${
-                isActiveLink('/dashboard/support') ? 'active' : ''
-              }`}
-              onClick={closeSidebar}
-            >
-              <Icon icon='ph:users-light' className='sidebar-icon' />
-              Support
+              <Icon icon="bi:book" className="sidebar-icon" />
+              <span className="d-none d-lg-block">My Course</span>
             </Link>
           </li>
 
           <li>
             <Link
-              to='/dashboard/payment-history'
+              to="/dashboard/support"
               className={`link ${
-                isActiveLink('/dashboard/payment-history') ? 'active' : ''
+                isActiveLink("/dashboard/support") ? "active" : ""
               }`}
               onClick={closeSidebar}
             >
-              <Icon width={26} icon='solar:dollar-outline' className='sidebar-icon' />
-              Payment History
+              <Icon icon="ph:users-light" className="sidebar-icon" />
+              <span className="d-none d-lg-block">Support</span>
+            </Link>
+          </li>
+
+          <li>
+            <Link
+              to="/dashboard/payment-history"
+              className={`link ${
+                isActiveLink("/dashboard/payment-history") ? "active" : ""
+              }`}
+              onClick={closeSidebar}
+            >
+              <Icon
+                width={26}
+                icon="solar:dollar-outline"
+                className="sidebar-icon"
+              />
+              <span className="d-none d-lg-block">Payment History</span>
             </Link>
           </li>
         </ul>
 
-        <div className='hamburger-icon' onClick={handleClick}>
+        <div className="hamburger-icon" onClick={handleClick}>
           <Icon
-            icon={clicked ? 'jam:close' : 'ci:menu-alt-03'}
-            className={clicked ? 'close' : 'bar'}
+            icon={clicked ? "jam:close" : "ci:menu-alt-03"}
+            className={clicked ? "close" : "bar"}
           />
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Sidebar
+export default Sidebar;

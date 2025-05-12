@@ -173,7 +173,7 @@ export default function SignIn() {
             </button>
           </div>
         </form>
-        <p className='text-center'>
+        <p className='text-center mb-0'>
           Don’t have an account? <Link to='/sign-up'>Sign Up</Link>
         </p>
       </div>
