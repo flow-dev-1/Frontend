@@ -282,6 +282,10 @@ p span,
   border: 1px solid #d2d3d6;
 }
 
+.success-modal {
+  margin: 0 30px;
+}
+
 .success-modal .icon-with-bg {
   width: 75px;
   height: 75px;

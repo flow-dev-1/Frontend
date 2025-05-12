@@ -381,7 +381,7 @@ export default function EducatorRegistrationForm() {
       </form>
 
       <Modal
-        isOpen={!modalIsOpen}
+        isOpen={modalIsOpen}
         shouldCloseOnOverlayClick={false}
         contentLabel="Registration Modal"
         className="custom-modal-otp"
