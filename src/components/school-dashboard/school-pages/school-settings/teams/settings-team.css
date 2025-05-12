@@ -191,7 +191,7 @@ tbody {
 }
 
 .checkmark:after {
-  content: '';
+  content: "";
   position: absolute;
   left: 35%;
   top: 15%;

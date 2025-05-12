@@ -305,7 +305,7 @@ p span,
 }
 
 .otp-input {
-  text-wrap: nowrap;
+  /* text-wrap: nowrap; */
 }
 
 .modal-content h2 {
@@ -319,11 +319,11 @@ p span,
 }
 
 .modal-content .submit-btn {
-  width: 300px;
+  /* width: 300px; */
 }
 
 .otp-input input {
-  width: 60px;
+  /* width: 60px; */
   height: 45px;
   border-radius: 4px;
   font-size: 18px;

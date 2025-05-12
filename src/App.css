@@ -163,7 +163,7 @@ input:-webkit-autofill:active {
 }
 
 .modal-content {
-  width: max-content;
+  /* width: fit-content; */
   display: flex;
   align-items: center;
   justify-content: center;

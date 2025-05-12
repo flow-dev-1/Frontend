@@ -2,7 +2,7 @@
 
 /* Styles for the registration page */
 .registration-page {
-  /* width: 900px; */
+  /* width: auto; */
   display: flex;
   /* flex-direction: column;
   justify-content: center; */
@@ -251,7 +251,8 @@ p span,
 }
 
 .otp-input {
-  text-wrap: nowrap;
+  /* text-wrap: nowrap; */
+  padding: 0 20px;
 }
 
 .modal-content h2 {
@@ -265,11 +266,12 @@ p span,
 }
 
 .modal-content .submit-btn {
-  width: 300px;
+  /* max-width: 300px; */
+  /* margin: 0 20px; */
 }
 
 .otp-input input {
-  width: 60px;
+  /* width: 60px; */
   height: 45px;
   border-radius: 4px;
   font-size: 18px;
