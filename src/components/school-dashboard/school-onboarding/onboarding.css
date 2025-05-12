@@ -467,6 +467,10 @@ input[type="checkbox"]:focus {
     padding: 1rem;
   }
 
+  .registration-page.two.overflow-hidden {
+    width: 280px;
+  }
+
   .signup-options {
     justify-items: space-around;
   }
