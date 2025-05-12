@@ -2,7 +2,7 @@
 
 /* Styles for the registration page */
 .registration-page {
-  width: 900px;
+  /* width: 900px; */
   display: flex;
   /* flex-direction: column;
   justify-content: center; */
@@ -97,7 +97,7 @@ p.error-message {
 
 .registration-page .form-section {
   display: grid;
-  margin: 1rem 30px;
+  margin: 1rem 0px;
   /* grid-template-columns: 1fr 1fr 1fr; */
   /* grid-column-gap: 15px; */
   gap: 10px;

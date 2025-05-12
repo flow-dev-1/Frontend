@@ -2,7 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&display=swap");
 /* Styles for the registration page */
 .registration-page {
-  width: 700px;
+  /* width: 700px; */
   display: flex;
   height: 480px;
   /* flex-direction: column;
@@ -32,7 +32,7 @@ input {
 }
 
 .registration-page.two {
-  width: 400px;
+  /* width: 400px; */
   display: flex;
   height: 500px;
   flex-direction: column;
@@ -109,7 +109,7 @@ p {
   /* grid-template-columns: 1fr 1fr 1fr; */
   /* grid-column-gap: 15px; */
   gap: 1rem;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   padding-left: 1rem;
 }
 
@@ -479,7 +479,7 @@ input[type="checkbox"]:focus {
     grid-template-columns: 1fr;
   }
   .registration-page {
-    width: 380px;
+    width: 280px;
     height: fit-content;
     overflow-y: hidden;
   }

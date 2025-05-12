@@ -2,7 +2,7 @@
 
 /* Styles for the registration page */
 .registration-page {
-  width: 700px;
+  /* width: 700px; */
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
@@ -144,8 +144,8 @@ p.error-message {
   padding: 0 10px;
 }
 
-.input-with-icon input[type='password'],
-.input-with-icon input[type='text'] {
+.input-with-icon input[type="password"],
+.input-with-icon input[type="text"] {
   flex: 1;
   outline: none;
   border: none;
@@ -160,15 +160,15 @@ p.error-message {
   background-color: #F8F8F8;
 } */
 
-input[type='password']::-webkit-input-placeholder:-webkit-autofill,
-input[type='text']::-webkit-input-placeholder:-webkit-autofill {
+input[type="password"]::-webkit-input-placeholder:-webkit-autofill,
+input[type="text"]::-webkit-input-placeholder:-webkit-autofill {
   background-color: #f8f8f8;
 }
 
 .registration-page .form-group select {
   appearance: none;
   -webkit-appearance: none;
-  background-image: url('../../assets/dropdown-arrow.png');
+  background-image: url("../../assets/dropdown-arrow.png");
   background-repeat: no-repeat;
   background-position: right 10px center;
   /* background-size: 15px; */
@@ -329,4 +329,3 @@ select.PhoneInputCountrySelect {
 .add-more-student button span {
   color: #275dad !important;
 }
-
