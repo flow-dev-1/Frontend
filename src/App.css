@@ -114,6 +114,7 @@ input:-webkit-autofill:active {
 }
 
 .root-layout {
+  width: 100%;
   background-image: url("./assets/Hero.png");
   background-position: center;
   background-size: 100% 100%;

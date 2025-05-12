@@ -473,6 +473,7 @@ input[type="checkbox"]:focus {
 
   .signup-options {
     justify-items: space-around;
+    width: 200px;
   }
 
   .registration-page .form-section {
@@ -482,5 +483,9 @@ input[type="checkbox"]:focus {
     width: 280px;
     height: fit-content;
     overflow-y: hidden;
+  }
+  .back-btn {
+    margin-left: -50px;
+    margin-bottom: 30px;
   }
 }
