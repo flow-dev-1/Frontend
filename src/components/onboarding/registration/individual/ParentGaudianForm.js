@@ -99,8 +99,8 @@ export default function ParentGuardianForm({ onSubmit, setStep, initialData }) {
 
   return (
     <div
-      className="registration-page overflow-hidden "
-      style={{ height: "400px" }}
+      className="registration-page overflow-hidden"
+      style={{ height: "fit-content", minWidth: "280px" }}
     >
       <div className="top-section mt-2">
         <h2 className="d-flex justify-content-between align-center">
