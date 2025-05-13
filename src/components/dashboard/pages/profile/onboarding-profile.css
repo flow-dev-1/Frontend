@@ -2,7 +2,7 @@
 
 /* Styles for the registration page */
 .registration-page {
-  width: 900px;
+  /* width: auto; */
   display: flex;
   /* flex-direction: column;
   justify-content: center; */
@@ -97,7 +97,7 @@ p.error-message {
 
 .registration-page .form-section {
   display: grid;
-  margin: 1rem 30px;
+  margin: 1rem 0px;
   /* grid-template-columns: 1fr 1fr 1fr; */
   /* grid-column-gap: 15px; */
   gap: 10px;
@@ -251,7 +251,8 @@ p span,
 }
 
 .otp-input {
-  text-wrap: nowrap;
+  /* text-wrap: nowrap; */
+  padding: 0 20px;
 }
 
 .modal-content h2 {
@@ -265,11 +266,12 @@ p span,
 }
 
 .modal-content .submit-btn {
-  width: 300px;
+  /* max-width: 300px; */
+  /* margin: 0 20px; */
 }
 
 .otp-input input {
-  width: 60px;
+  /* width: 60px; */
   height: 45px;
   border-radius: 4px;
   font-size: 18px;
@@ -278,6 +280,10 @@ p span,
   margin: 0.5rem;
   background-color: #f8f8f8;
   border: 1px solid #d2d3d6;
+}
+
+.success-modal {
+  margin: 0 30px;
 }
 
 .success-modal .icon-with-bg {

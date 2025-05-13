@@ -2,12 +2,12 @@
 @import url("https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&display=swap");
 /* Styles for the registration page */
 .registration-page {
-  width: 700px;
+  /* width: 700px; */
   display: flex;
   height: 480px;
   /* flex-direction: column;
   justify-content: center; */
-  /* margin: 60px auto 0 auto; */
+  margin: auto 100px;
   /* padding: 20px 30px; */
   background-color: #fff;
   border-radius: 15px;
@@ -32,7 +32,7 @@ input {
 }
 
 .registration-page.two {
-  width: 400px;
+  /* width: 400px; */
   display: flex;
   height: 500px;
   flex-direction: column;
@@ -109,7 +109,7 @@ p {
   /* grid-template-columns: 1fr 1fr 1fr; */
   /* grid-column-gap: 15px; */
   gap: 1rem;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   padding-left: 1rem;
 }
 
@@ -305,7 +305,7 @@ p span,
 }
 
 .otp-input {
-  text-wrap: nowrap;
+  /* text-wrap: nowrap; */
 }
 
 .modal-content h2 {
@@ -319,11 +319,11 @@ p span,
 }
 
 .modal-content .submit-btn {
-  width: 300px;
+  /* width: 300px; */
 }
 
 .otp-input input {
-  width: 60px;
+  /* width: 60px; */
   height: 45px;
   border-radius: 4px;
   font-size: 18px;
@@ -467,16 +467,25 @@ input[type="checkbox"]:focus {
     padding: 1rem;
   }
 
+  .registration-page.two.overflow-hidden {
+    width: 280px;
+  }
+
   .signup-options {
     justify-items: space-around;
+    width: 200px;
   }
 
   .registration-page .form-section {
     grid-template-columns: 1fr;
   }
   .registration-page {
-    width: 380px;
+    width: 280px;
     height: fit-content;
     overflow-y: hidden;
+  }
+  .back-btn {
+    margin-left: -50px;
+    margin-bottom: 30px;
   }
 }
