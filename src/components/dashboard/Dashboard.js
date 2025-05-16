@@ -52,13 +52,7 @@ export default function Dashboard() {
 
   return (
     // <div className="dashboard">
-    <div
-      className={
-        location.pathname === "/dashboard/my-courses"
-          ? "course-page"
-          : "dashboard"
-      }
-    >
+    <div className={location.pathname === "/dashboard/my-courses" ? "" : ""}>
       <nav className="navbar">
         <div className="container">
           <Link to="/dashboard" className="navbar-logo">
@@ -71,7 +65,7 @@ export default function Dashboard() {
           >
             Logout
           </div>
-          <div className="position-relative d-block d-lg-none ">
+          <div className="d-block d-lg-none position-relative">
             <Icon
               icon="mdi:menu"
               width={30}
@@ -80,35 +74,42 @@ export default function Dashboard() {
             />
             {menuVisible && (
               <div
-                className="d-lg-none position-absolute text-black p-1"
+                className="d-lg-none position-absolute"
                 style={{
                   top: "30px",
                   left: "-100px",
+                  borderRadius: "15px",
+                  border: "1px solid rgba(244, 241, 241, 0.9)",
                 }}
               >
                 <div
-                  style={{ cursor: "pointer" }}
-                  className="border-5 px-4 pt-4 pb-1 text-white bg-sky-blue"
+                  style={{
+                    cursor: "pointer",
+                    overflow: "hidden",
+                    borderRadius: "15px",
+                    background: "rgba(255,255,255,0.9)",
+                  }}
+                  className="border-5 px-4 pt-4 pb-1"
                 >
                   <ul className="d-flex gap-3 flex-column">
-                    <li className="fs-5">
+                    <li className="">
                       <Link to={"/dashboard"}>Overview</Link>
                     </li>
-                    <li className="fs-5">
+                    <li className="">
                       <Link to={"/dashboard/profile"}>Profile</Link>
                     </li>
-                    <li className="fs-5">
+                    <li className="">
                       <Link to={"/dashboard/my-courses"}>MyCourse</Link>
                     </li>
-                    <li className="fs-5">
+                    <li className="">
                       <Link to={"/dashboard/support"}>Support</Link>
                     </li>
-                    <li className="fs-5">
+                    <li className="text-nowrap">
                       <Link to={"/dashboard/payment-history"}>
                         Payment History
                       </Link>
                     </li>
-                    <li className="fs-5 text-danger" onClick={logOut}>
+                    <li className=" text-danger" onClick={logOut}>
                       Log Out
                     </li>
                   </ul>
