@@ -8,7 +8,6 @@ function AssessmentQuestion({
   selectedOption,
   onOptionSelect,
 }) {
-
   const { question, options } = data;
 
   const handleOptionClick = (optionKey) => {
@@ -18,7 +17,7 @@ function AssessmentQuestion({
   };
 
   return (
-    <div className="ms-5">
+    <div className="ms-3 ms-md-5">
       <form>
         <div className="d-flex gap-2">
           <h3 className="fs-1">{currentStep}.</h3>

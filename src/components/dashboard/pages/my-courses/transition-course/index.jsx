@@ -506,8 +506,8 @@ const CourseContent = () => {
         </div>
       </nav>
 
-      <div className="main-content">
-        <aside>
+      <div className="main-content flex-column-reverse flex-md-row">
+        <aside className="d-md-none d-lg-block m-4">
           <button
             disabled={isAdmin}
             onClick={() => navigate("/dashboard/my-courses")}
@@ -543,6 +543,27 @@ const CourseContent = () => {
               </li>
             ))}
           </ul>
+        </aside>
+        <aside
+          className="d-none d-md-block d-lg-none"
+          style={{
+            flexBasis: "0px",
+            background: "#00BCC3",
+          }}
+        >
+          <button
+            disabled={isAdmin}
+            onClick={() => navigate("/dashboard/my-courses")}
+            className="p-3"
+            style={{
+              cursor: "pointer",
+              border: "none",
+              background: "#f8f5f5",
+              borderRadius: "50%",
+            }}
+          >
+            <Icon icon="mdi:arrow-right" width="20" height="20" />
+          </button>
         </aside>
         <section className="week-content position-relative">
           <WeekContent />

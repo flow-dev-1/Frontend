@@ -6,11 +6,13 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, title, questions } = data;
 
   const handleInputChange = (index, value) => {
-    setErrorMessage(""); 
+    setErrorMessage("");
     // Update answers state with the new value
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
-      const stepIndex = updatedAnswers.findIndex((answer) => answer.stepId === step);
+      const stepIndex = updatedAnswers.findIndex(
+        (answer) => answer.stepId === step
+      );
 
       if (stepIndex !== -1) {
         updatedAnswers[stepIndex] = {
@@ -21,7 +23,7 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
       } else {
         updatedAnswers.push({
           stepId: step,
-          value
+          value,
         });
       }
 
@@ -37,12 +39,14 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
         const [key, value] = Object.entries(question)[0]; // extract the key value pair
         return (
           <div key={index} className="mb-2">
-            <div className="d-flex gap-2">
+            <div className="d-flex gap-2 flex-column flex-md-row">
               <h2 className="text-blue">{key}: </h2>
               <h2 className="text-gray">{value}</h2>
             </div>
-            <BigTextBox 
-              value={answers.find(answer => answer.stepId === step)?.value|| ""} // Pass the current answer
+            <BigTextBox
+              value={
+                answers.find((answer) => answer.stepId === step)?.value || ""
+              } // Pass the current answer
               handleChange={(e) => handleInputChange(index, e.target.value)} // Handle input change
             />
           </div>
