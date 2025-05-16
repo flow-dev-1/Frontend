@@ -2,8 +2,8 @@ import React from "react";
 
 function ColoredSmallSquaredTextBox({ color, value, onChange }) {
   const customStyle = {
-    width: "15vw",
-    height: "15vw",
+    width: "180px",
+    height: "180px",
     fontSize: "18px",
     border: `3px solid ${color}`,
     borderRadius: "50%",
@@ -30,11 +30,11 @@ function ColoredSmallSquaredTextBox({ color, value, onChange }) {
         style={customStyle}
         value={value}
         onChange={onChange}
-        onFocus={(e) =>
-          (e.target.style.boxShadow = `0 0 15px ${color}`) // Glow effect on focus
+        onFocus={
+          (e) => (e.target.style.boxShadow = `0 0 15px ${color}`) // Glow effect on focus
         }
-        onBlur={(e) =>
-          (e.target.style.boxShadow = `0 0 10px ${color}`) // Return to initial glow effect on blur
+        onBlur={
+          (e) => (e.target.style.boxShadow = `0 0 10px ${color}`) // Return to initial glow effect on blur
         }
       />
     </label>
