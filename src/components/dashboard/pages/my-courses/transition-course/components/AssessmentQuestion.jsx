@@ -31,7 +31,7 @@ function AssessmentQuestion({
           return (
             <div
               key={index}
-              className="ms-7 d-flex gap-2 mb-3 align-items-center"
+              className="ms-7 d-flex gap-2 mb-3 align-md-items-center align-content-start"
               onClick={() => handleOptionClick(optionKey)}
               style={{ cursor: "pointer" }}
             >
