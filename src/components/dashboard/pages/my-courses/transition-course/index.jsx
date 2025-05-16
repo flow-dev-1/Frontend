@@ -457,7 +457,7 @@ const WeekContent = () => {
 
 const CourseContent = () => {
   const { isAdmin } = useSelector(adminData);
-  const currentWeek = useSelector(selectCurrentWeek);
+  const currentWeek = 2 | useSelector(selectCurrentWeek);
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
