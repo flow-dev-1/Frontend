@@ -1,6 +1,8 @@
 .custom-border-20 {
   border: 20px solid #08bcc4;
   border-radius: 8px;
+  min-width: fit-content;
+  width: 100%;
 }
 
 .small-input {
@@ -443,7 +445,13 @@ button {
   border-width: 6px !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 769px) {
+  .arrow-head {
+    width: 70px;
+  }
+  .cardboard-image {
+    width: 200px;
+  }
 }
 @media (max-width: 480px) {
   .question-image {
@@ -451,5 +459,18 @@ button {
   }
   .ms-7 {
     margin-left: 0px;
+  }
+  .arrow-head {
+    width: 50px;
+  }
+
+  .inner-bucket,
+  .outer-bucket,
+  .both-bucket {
+    width: 100px !important;
+    font-size: 12px;
+  }
+  .cardboard-image {
+    width: 150px;
   }
 }
