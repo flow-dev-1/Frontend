@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import CardBoard from "./CardBoard";
 import ArrowTrail from "../../../../../../../../../assets/ArrowTrail.svg";
-import '../page6.css';
-
+import "../page6.css";
 
 const InternalStepIndicator = ({ totalSteps, currentStep }) => {
   return (
@@ -18,7 +17,6 @@ const InternalStepIndicator = ({ totalSteps, currentStep }) => {
             borderRadius: "8px",
             cursor: index <= currentStep ? "pointer" : "default",
           }}
-
         />
       ))}
     </div>
@@ -26,71 +24,81 @@ const InternalStepIndicator = ({ totalSteps, currentStep }) => {
 };
 
 const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
-  
   const { images, buckets, instruction } = info;
   const [bucketResults, setBucketResults] = useState({ green: [], red: [] });
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     if (!answers?.length) return;
-    
-    const existingAnswer = answers.find(answer => answer.stepId === 6);
+
+    const existingAnswer = answers.find((answer) => answer.stepId === 6);
     if (existingAnswer?.value) {
       setBucketResults({
         green: existingAnswer.value.green || [],
-        red: existingAnswer.value.red || []
+        red: existingAnswer.value.red || [],
       });
-      
+
       // Update currentImageIndex based on total dropped items
-      const totalDropped = 
-        (existingAnswer.value.green?.length || 0) + 
+      const totalDropped =
+        (existingAnswer.value.green?.length || 0) +
         (existingAnswer.value.red?.length || 0);
       setCurrentImageIndex(totalDropped);
     }
   }, [answers]);
 
-  const totalDropped = Object.values(bucketResults).reduce((sum, arr) => sum + arr.length, 0);
+  const totalDropped = Object.values(bucketResults).reduce(
+    (sum, arr) => sum + arr.length,
+    0
+  );
   const allImagesDropped = totalDropped >= images.length;
 
   const handleOnDragEnd = (result) => {
     if (!result.destination) return;
-    
+
     setErrorMessage("");
     const { source, destination } = result;
-    
+
     if (source.droppableId === "image" && destination.droppableId !== "image") {
       const draggedIndex = currentImageIndex;
-      
+
       // Update bucket results
       const newBucketResults = {
         ...bucketResults,
-        [destination.droppableId]: [...(bucketResults[destination.droppableId] || []), draggedIndex],
+        [destination.droppableId]: [
+          ...(bucketResults[destination.droppableId] || []),
+          draggedIndex,
+        ],
       };
       setBucketResults(newBucketResults);
-      
+
       // Update answers state
       setAnswers((prevAnswers) => {
-        const existingAnswerIndex = prevAnswers.findIndex(answer => answer.stepId === 6);
-        
+        const existingAnswerIndex = prevAnswers.findIndex(
+          (answer) => answer.stepId === 6
+        );
+
         if (existingAnswerIndex !== -1) {
           // Update existing answer
           const updatedAnswers = [...prevAnswers];
           updatedAnswers[existingAnswerIndex] = {
             ...updatedAnswers[existingAnswerIndex],
-            value: newBucketResults
+            value: newBucketResults,
           };
           return updatedAnswers;
         } else {
           // Create new answer
-          return [...prevAnswers, {
-            stepId: 6,
-            value: newBucketResults
-          }];
+          return [
+            ...prevAnswers,
+            {
+              stepId: 6,
+              value: newBucketResults,
+            },
+          ];
         }
       });
 
       // Update current image index
-      setCurrentImageIndex((prevIndex) => 
+      setCurrentImageIndex((prevIndex) =>
         prevIndex + 1 < images.length ? prevIndex + 1 : prevIndex
       );
     }
@@ -104,11 +112,17 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
 
   const renderDragItem = () => {
     if (currentImageIndex >= images.length || allImagesDropped) return null;
-    
-    const imagePath = require(`../../../../../../../../../assets/drag-images/transition-drag-images/week9/image${currentImageIndex + 1}.png`);
-    
+
+    const imagePath = require(`../../../../../../../../../assets/drag-images/transition-drag-images/week9/image${
+      currentImageIndex + 1
+    }.png`);
+
     return (
-      <Draggable draggableId={`image-${currentImageIndex}`} index={0} isDragDisabled={allImagesDropped}>
+      <Draggable
+        draggableId={`image-${currentImageIndex}`}
+        index={0}
+        isDragDisabled={allImagesDropped}
+      >
         {(provided, snapshot) => (
           <div
             ref={provided.innerRef}
@@ -116,9 +130,15 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
             {...provided.dragHandleProps}
             style={{
               ...provided.draggableProps.style,
-              cursor: allImagesDropped ? "not-allowed" : snapshot.isDragging ? "grabbing" : "grab",
+              cursor: allImagesDropped
+                ? "not-allowed"
+                : snapshot.isDragging
+                ? "grabbing"
+                : "grab",
               opacity: allImagesDropped ? 0.5 : 1,
-              transform: `${provided.draggableProps.style?.transform || ""} ${snapshot.isDragging ? "scale(0.3)" : ""}`,
+              transform: `${provided.draggableProps.style?.transform || ""} ${
+                snapshot.isDragging ? "scale(0.3)" : ""
+              }`,
               zIndex: snapshot.isDragging ? 9999 : 1,
             }}
           >
@@ -130,75 +150,106 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
   };
 
   return (
-    <> <InternalStepIndicator totalSteps={images.length} currentStep={currentImageIndex + 1} />
-    <DragDropContext
-      onDragEnd={handleOnDragEnd}>
-      <div className="d-flex flex-column align-items-center pt-2">
-        {/* Step Indicator */}
-      
+    <>
+      {" "}
+      <InternalStepIndicator
+        totalSteps={images.length}
+        currentStep={currentImageIndex + 1}
+      />
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <div className="d-flex flex-column align-items-center pt-2">
+          {/* Step Indicator */}
 
-        <div className="d-flex custom-border-20">
-          <Droppable droppableId="image">
-            {(provided, snapshot) => (
-              <div
-                className="d-flex p-5 justify-content-center align-items-center w-100"
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                style={{
-                  minHeight: "200px",
-                  transition: "background-color 0.2s ease",
-                  backgroundColor: snapshot.isDraggingOver ? "rgba(255, 255, 255, 0.1)" : "transparent",
-                }}
-              >
-                {renderDragItem()}
-                {provided.placeholder}
+          <div className="d-flex custom-border-20 flex-column flex-md-row">
+            <Droppable droppableId="image">
+              {(provided, snapshot) => (
+                <div
+                  className="d-flex p-5 justify-content-center align-items-center"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  style={{
+                    minHeight: "200px",
+                    transition: "background-color 0.2s ease",
+                    backgroundColor: snapshot.isDraggingOver
+                      ? "rgba(255, 255, 255, 0.1)"
+                      : "transparent",
+                  }}
+                >
+                  {renderDragItem()}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+            <div className="bg-blue">
+              <div className="d-flex align-items-start mb-2">
+                <img
+                  src={ArrowTrail}
+                  alt="arrow trail"
+                  className="arrow-head"
+                />
+                <div className="text-center text-white pt-2">
+                  <h1>{instruction}</h1>
+                </div>
+                <img
+                  src={ArrowTrail}
+                  alt="arrow trail"
+                  className="arrow-head"
+                />
               </div>
-            )}
-          </Droppable>
-          <div className="bg-blue w-50">
-            <div className="d-flex align-items-start mb-2">
-              <img src={ArrowTrail} alt="arrow trail" />
-              <div className="text-center text-white pt-2">
-                <h1>{instruction}</h1>
+              <div className="d-flex justify-content-around align-items-center  px-0 py-0 px-md-4 py-md-2">
+                {buckets &&
+                  buckets.map((bucket) => (
+                    <Droppable key={bucket.title} droppableId={bucket.id}>
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          className="p-0 p-md-2"
+                          {...provided.droppableProps}
+                          style={{
+                            backgroundColor: snapshot.isDraggingOver
+                              ? "rgba(255, 255, 255, 0.1)"
+                              : "transparent",
+                            padding: "20px",
+                            borderRadius: "8px",
+                            minHeight: "100px",
+                            height: "300px",
+                            // width: "200px",
+                            width: snapshot.isDraggingOver ? "200px" : "",
+                          }}
+                        >
+                          <h2
+                            className={
+                              bucket.id === "green"
+                                ? "inner-count"
+                                : "both-count"
+                            }
+                          >
+                            {bucketResults[bucket.id]?.length || 0}
+                          </h2>
+                          <div
+                            className={
+                              bucket.id === "green"
+                                ? "inner-bucket"
+                                : "both-bucket"
+                            }
+                          >
+                            {bucket.title}
+                          </div>
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  ))}
               </div>
-              <img src={ArrowTrail} alt="arrow trail" />
-            </div>
-            <div className="d-flex justify-content-around align-items-center px-4 py-2">
-              {buckets && buckets.map((bucket) => (
-                <Droppable key={bucket.title} droppableId={bucket.id}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      style={{
-                        backgroundColor: snapshot.isDraggingOver ? "rgba(255, 255, 255, 0.1)" : "transparent",
-                        padding: "20px",
-                        borderRadius: "8px",
-                        minHeight: "100px",
-                        height: "300px",
-                        width: "200px",
-                      }}
-                    >
-                      <h2 className={bucket.id === "green" ? "inner-count" : "both-count"}>
-                        {bucketResults[bucket.id]?.length || 0}
-                      </h2>
-                      <div className={bucket.id === "green" ? "inner-bucket" : "both-bucket"}>
-                        {bucket.title}
-                      </div>
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              ))}
             </div>
           </div>
+          {allImagesDropped && (
+            <p style={{ color: "red", fontWeight: "bold" }}>
+              All images have been placed!
+            </p>
+          )}
         </div>
-        {allImagesDropped && (
-          <p style={{ color: "red", fontWeight: "bold" }}>All images have been placed!</p>
-        )}
-      </div>
-    </DragDropContext>
-
+      </DragDropContext>
     </>
   );
 };
