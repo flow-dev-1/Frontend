@@ -30,7 +30,7 @@ function Sidebar() {
   };
 
   return (
-    <div className={`sidebar-user d-none d-lg-block${clicked ? "open" : ""}`}>
+    <div className={`sidebar-user d-none d-lg-block ${clicked ? "open" : ""}`}>
       <div className="sidebar-user-content">
         <ul className="sidebar-user-menu mt-3 desktop">
           <li>

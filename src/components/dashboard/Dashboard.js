@@ -46,11 +46,15 @@ export default function Dashboard() {
     );
     navigate("/sign-in", { replace: true });
   };
+  const isActiveLink = (path) => {
+    return location.pathname === path;
+  };
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
-  const toggleSideBar = () => {
+  const toggleSideBar = (e) => {
+    e.stopPropagation();
     setSideBarVisible(!sideBarVisible);
   };
 
@@ -60,8 +64,102 @@ export default function Dashboard() {
       <nav className="navbar">
         <div className="container">
           <div className="d-none d-md-block d-lg-none">
-            <p onClick={toggleSideBar}>Book</p>
-            {sideBarVisible && <aside>SideBar Content goes here</aside>}
+            <Icon
+              icon="mdi:book-open"
+              color="skyblue" //TODO : change colour to match design
+              width={30}
+              onClick={toggleSideBar}
+              style={{ cursor: "pointer" }}
+            />
+            {sideBarVisible && (
+              <div
+                className="fixed-top bg-dark bg-opacity-50 vh-100"
+                onClick={(e) => toggleSideBar(e)}
+              >
+                <div
+                  className="bg-light d-inline-block h-100"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <ul
+                    className="sidebar-user-menu h-100 px-1"
+                    style={{ background: "#00bcc3", margin: 0 }}
+                  >
+                    <li>
+                      <Link
+                        to="/dashboard"
+                        className={`link ${
+                          isActiveLink("/dashboard") ? "active" : ""
+                        }`}
+                        onClick={toggleSideBar}
+                      >
+                        <Icon
+                          icon="ion:grid-outline"
+                          className="sidebar-icon"
+                        />
+                        Overview
+                      </Link>
+                    </li>
+
+                    <li>
+                      <Link
+                        to="/dashboard/profile"
+                        className={`link ${
+                          isActiveLink("/dashboard/profile") ? "active" : ""
+                        }`}
+                        onClick={toggleSideBar}
+                      >
+                        <Icon icon="uiw:user-add" className="sidebar-icon" />
+                        Profile
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/dashboard/my-courses"
+                        className={`link ${
+                          isActiveLink("/dashboard/my-courses") ? "active" : ""
+                        }`}
+                        onClick={toggleSideBar}
+                      >
+                        <Icon icon="bi:book" className="sidebar-icon" />
+                        My Course
+                      </Link>
+                    </li>
+
+                    <li>
+                      <Link
+                        to="/dashboard/support"
+                        className={`link ${
+                          isActiveLink("/dashboard/support") ? "active" : ""
+                        }`}
+                        onClick={toggleSideBar}
+                      >
+                        <Icon icon="ph:users-light" className="sidebar-icon" />
+                        Support
+                      </Link>
+                    </li>
+
+                    <li>
+                      <Link
+                        to="/dashboard/payment-history"
+                        className={`link ${
+                          isActiveLink("/dashboard/payment-history")
+                            ? "active"
+                            : ""
+                        }`}
+                        onClick={toggleSideBar}
+                      >
+                        <Icon
+                          width={26}
+                          icon="solar:dollar-outline"
+                          className="sidebar-icon"
+                        />
+                        Payment History
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            )}
           </div>
           <Link to="/dashboard" className="navbar-logo">
             <img src={logo} alt="" />
@@ -100,19 +198,19 @@ export default function Dashboard() {
                   className="border-5 px-4 pt-4 pb-1"
                 >
                   <ul className="d-flex gap-3 flex-column">
-                    <li className="">
+                    <li className="d-md-none">
                       <Link to={"/dashboard"}>Overview</Link>
                     </li>
-                    <li className="">
+                    <li className="d-md-none">
                       <Link to={"/dashboard/profile"}>Profile</Link>
                     </li>
-                    <li className="">
+                    <li className="d-md-none">
                       <Link to={"/dashboard/my-courses"}>MyCourse</Link>
                     </li>
-                    <li className="">
+                    <li className="d-md-none">
                       <Link to={"/dashboard/support"}>Support</Link>
                     </li>
-                    <li className="text-nowrap">
+                    <li className="d-md-none text-nowrap">
                       <Link to={"/dashboard/payment-history"}>
                         Payment History
                       </Link>
