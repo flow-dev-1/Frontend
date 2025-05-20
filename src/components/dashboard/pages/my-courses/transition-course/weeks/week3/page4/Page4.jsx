@@ -188,7 +188,7 @@ function WeekThreePage4() {
           <Droppable droppableId="image">
             {(provided, snapshot) => (
               <div
-                className="d-flex p-5 justify-content-center align-items-center w-50"
+                className="d-flex p-5 justify-content-center align-items-center "
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 style={{
@@ -206,19 +206,20 @@ function WeekThreePage4() {
           </Droppable>
           <div className="bg-blue">
             <div className="d-flex align-items-start mb-2">
-              <img src={ArrowTrail} alt="arrow trail" />
+              <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
               <div className="text-center text-white pt-2">
                 <h1>{pageData.instruction}</h1>
               </div>
-              <img src={ArrowTrail} alt="arrow trail" />
+              <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
             </div>
-            <div className="d-flex justify-content-around align-items-center px-4 py-2">
+            <div className="d-flex justify-content-around align-items-center px-0 py-0 px-md-4 py-md-2">
               {pageData.buckets.map((bucket) => (
                 <Droppable key={bucket.id} droppableId={bucket.id}>
                   {(provided, snapshot) => (
                     <div
                       ref={provided.innerRef}
                       {...provided.droppableProps}
+                      className="p-0 p-md-2"
                       style={{
                         backgroundColor: snapshot.isDraggingOver
                           ? "rgba(255, 255, 255, 0.1)"
@@ -227,7 +228,8 @@ function WeekThreePage4() {
                         borderRadius: "8px",
                         minHeight: "100px",
                         height: "300px",
-                        width: "200px",
+                        width: snapshot.isDraggingOver ? "200px" : "",
+                        // width: "200px",
                       }}
                     >
                       <h2

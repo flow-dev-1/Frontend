@@ -470,7 +470,19 @@ button {
     width: 100px !important;
     font-size: 12px;
   }
+  .inner-circle,
+  .outer-circle,
+  .both-bucket {
+    /* width: 100px !important;
+    font-size: 12px; */
+  }
   .cardboard-image {
     width: 150px;
+  }
+
+  .inner-bowl,
+  .outer-bowl {
+    width: 100px !important;
+    font-size: 12px;
   }
 }
