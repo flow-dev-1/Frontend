@@ -3,14 +3,21 @@ import QuestionBox from "../../../../components/QuestionBox";
 
 import ColoredSmallSquaredTextBox from "../../../../components/ColoredSmallSquaredTextBox";
 
-function ColoredSmallSquaredBoxFrame({ data, answers, setAnswers, setErrorMessage }) {
+function ColoredSmallSquaredBoxFrame({
+  data,
+  answers,
+  setAnswers,
+  setErrorMessage,
+}) {
   const { step, title, info } = data;
 
   const handleInputChange = (index, value) => {
     setErrorMessage("");
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
-      const stepIndex = updatedAnswers.findIndex((answer) => answer.stepId === step);
+      const stepIndex = updatedAnswers.findIndex(
+        (answer) => answer.stepId === step
+      );
 
       if (stepIndex !== -1) {
         updatedAnswers[stepIndex] = {
@@ -35,19 +42,21 @@ function ColoredSmallSquaredBoxFrame({ data, answers, setAnswers, setErrorMessag
 
   return (
     <QuestionBox>
-
-      <div className="d-flex gap-2">
+      <div className="d-flex gap-2 flex-column flex-md-row">
         <h2 className="text-blue">Question: </h2>
         <h2 className="text-gray">{title}</h2>
       </div>
 
-      <div className="d-flex gap-3 justify-content-center">
+      <div className="d-flex gap-3 justify-content-center flex-column flex-md-row">
         {info.map((field, index) => (
           <div key={index} className="d-flex flex-column align-items-center">
-
             <ColoredSmallSquaredTextBox
               color={field.colorCode}
-              value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
+              value={
+                answers.find((answer) => answer.stepId === step)?.value?.[
+                  index
+                ] || ""
+              }
               onChange={(e) => handleInputChange(index, e.target.value)}
             />
             <div
@@ -68,7 +77,6 @@ function ColoredSmallSquaredBoxFrame({ data, answers, setAnswers, setErrorMessag
           </div>
         ))}
       </div>
-
     </QuestionBox>
   );
 }

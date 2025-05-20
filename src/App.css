@@ -132,7 +132,8 @@ input:-webkit-autofill:active {
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 20px;
-  width: fit-content;
+  /* width: fit-content; */
+  width: 100%;
   border-radius: 22px;
   z-index: 4000;
 }

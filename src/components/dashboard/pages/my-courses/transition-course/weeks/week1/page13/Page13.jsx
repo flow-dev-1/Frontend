@@ -10,8 +10,8 @@ function Page13() {
   return (
     <>
       <VideoComponent videoSrc={pageData.videoSrc} />
-      <div className="d-flex justify-content-center mt-4">
-      <Button text="Prev" />
+      <div className="d-flex justify-content-center mt-4 gap-4 gap-96px">
+        <Button text="Prev" />
         <Button text="Next" />
       </div>
     </>

@@ -20,7 +20,7 @@ input:focus {
   top: 0.75rem !important;
 }
 
-.action-btns {
+/* .action-btns {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,7 +33,7 @@ input:focus {
   padding: 0.2rem 4rem;
   border: none;
   background-color: none;
-}
+} */
 
 #root
   > div.root-layout

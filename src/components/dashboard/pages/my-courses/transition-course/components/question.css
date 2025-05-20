@@ -9,10 +9,10 @@
   outline: none;
 }
 
-
 .small-input-label {
   background: url("../../../../../../assets/smallTextBox.png") no-repeat;
   background-size: 100% 100%;
+  background-position: cover;
 }
 
 .small-input:focus {
@@ -52,7 +52,7 @@
   /* Ensure the default dropdown arrow appears */
   -webkit-appearance: menulist; /* Safari */
   -moz-appearance: menulist; /* Firefox */
-  appearance: menulist; 
+  appearance: menulist;
 }
 
 .dropdown-input-label {
@@ -68,13 +68,11 @@
   box-shadow: none !important;
 }
 
-
 .colored-small-input {
   width: 100%;
   border: none;
   outline: none;
 }
-
 
 .yellow-colored-small-input-label {
   background: url("../../../../../../assets/yellowSmallTextBox.png") no-repeat;
@@ -102,8 +100,9 @@
 }
 
 .heart-input {
-  width: 80%; /* Adjust based on the heart size */
-  height: 80%;
+  /* width: 80%;  */
+  /* height: 80%; */
+  width: 100px;
   background: transparent;
   border: none;
   outline: none;
@@ -117,65 +116,57 @@
 
 .heart-input-label {
   background: url("../../../../../../assets/heartTextBox.png") no-repeat;
-  background-size: 80% 80%;
+  background-size: 100% 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 60%;
-  height: 100%;
-  padding-top:4em;
-  padding-bottom:12em;
-  padding-left:3em;
-  padding-right:8em;
-  margin-left: 5em;
-  margin-right: 5em;
+  /* width: 100%; */
+  height: 200px;
+  /* padding-top: 4em;
+  padding-bottom: 12em;
+  padding-left: 3em;
+  padding-right: 8em; */
+  /* margin-left: 5em;
+  margin-right: 5em; */
   position: relative;
- 
 }
 
-.colored-small-heart-input-label{
+.colored-small-heart-input-label {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding-top:3%;
+  padding-top: 3%;
   padding-bottom: 8%;
   margin-top: 8%;
   /* padding-bottom:140px; */
-  padding-left:2%;
-  padding-right:2%;
+  padding-left: 2%;
+  padding-right: 2%;
   position: relative;
- 
 }
 .yellow-colored-small-input-label {
   background: url("../../../../../../assets/yellowHeartSmallText.png") no-repeat;
   background-size: 100% 100%;
- 
 }
 
 .pink-colored-small-input-label {
   background: url("../../../../../../assets/pinkHeartSmallText.png") no-repeat;
   background-size: 100% 100%;
- 
 }
 
 .blue-colored-small-input-label {
   background: url("../../../../../../assets/blueHeartSmallText.png") no-repeat;
   background-size: 100% 100%;
-
- 
 }
 
 .orange-colored-small-input-label {
   background: url("../../../../../../assets/orangeHeartSmallText.png") no-repeat;
   background-size: 100% 100%;
- 
 }
 
 .green-colored-small-input-label {
   background: url("../../../../../../assets/greenHeartSmallText.png") no-repeat;
   background-size: 100% 100%;
- 
 }
 
 .heart-input:focus {
@@ -186,50 +177,43 @@
 
 /* Star Input Boxes */
 
-.colored-small-star-input-label{
+.colored-small-star-input-label {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding-top:6.1%;
-  padding-bottom:6%;
+  padding-top: 6.1%;
+  padding-bottom: 6%;
   margin-top: 8%;
   font-size: 22px;
   /* padding-bottom:140px; */
-  padding-left:4.5%;
-  padding-right:2.2%;
+  padding-left: 4.5%;
+  padding-right: 2.2%;
   position: relative;
- 
 }
 .yellow-star-colored-small-input-label {
   background: url("../../../../../../assets/yellowStarSmallText.png") no-repeat;
   background-size: 100% 100%;
- 
 }
 
 .pink-star-colored-small-input-label {
   background: url("../../../../../../assets/pinkStarSmallText.png") no-repeat;
   background-size: 100% 100%;
- 
 }
 
 .blue-star-colored-small-input-label {
   background: url("../../../../../../assets/blueStarSmallText.png") no-repeat;
   background-size: 100% 100%;
-
- 
 }
 
 .orange-star-colored-small-input-label {
   background: url("../../../../../../assets/orangeStarSmallText.png") no-repeat;
   background-size: 100% 100%;
- 
 }
 
 .green-star-colored-small-input-label {
   background: url("../../../../../../assets/greenStarSmallText.png") no-repeat;
   background-size: 100% 100%;
- 
 }
 
 .colored-star-input:focus {
@@ -238,7 +222,7 @@
   box-shadow: none !important;
 }
 .colored-star-input {
- font-weight: bold;
+  font-weight: bold;
   font-size: 15px;
 }
 .colored-star-input::placeholder {
@@ -246,27 +230,25 @@
   font-size: 15px;
 }
 
-.white-colored-small-star-input-label{
+.white-colored-small-star-input-label {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 50%;
-  padding-top:15%;
-  padding-bottom:7%;
-  padding-left:55px;
-  padding-right:0%;
+  padding-top: 15%;
+  padding-bottom: 7%;
+  padding-left: 55px;
+  padding-right: 0%;
   margin-top: 8%;
   margin-left: 5%;
   margin-right: 5%;
   font-size: 25px;
   position: relative;
- 
 }
 
 .white-star-colored-small-input-label {
   background: url("../../../../../../assets/singleWhiteStarFrame.png") no-repeat;
   background-size: 100% 100%;
- 
 }
 
 .white-star-input:focus {
@@ -275,7 +257,7 @@
   box-shadow: none !important;
 }
 .white-star-input {
- font-weight: bold;
+  font-weight: bold;
   font-size: 20px;
 }
 .white-star-input::placeholder {
@@ -287,8 +269,6 @@
   outline: none !important;
   box-shadow: none !important;
 }
-
-
 
 ::placeholder {
   font-weight: bold;
@@ -322,7 +302,7 @@
 .bg-worksheet {
   background-color: rgb(110, 222, 235);
   background-image: url(../../../../../../assets/selfawareness-images/course-bg.png);
-  background-size: cover;
+  background-size: 100% 100%;
   background-position: center;
 }
 
@@ -456,11 +436,20 @@ button {
   background: #fd483d;
 }
 .border-blue {
-  border-color: #329BD6 !important;
+  border-color: #329bd6 !important;
 }
 
 .border-6 {
   border-width: 6px !important;
 }
 
-
+@media (max-width: 768px) {
+}
+@media (max-width: 480px) {
+  .question-image {
+    width: 100px;
+  }
+  .ms-7 {
+    margin-left: 0px;
+  }
+}

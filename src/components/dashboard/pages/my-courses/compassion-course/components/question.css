@@ -52,7 +52,7 @@
 .bg-worksheet {
   background-color: rgb(110, 222, 235);
   background-image: url(../../../../../../assets/selfawareness-images/course-bg.png);
-  background-size: cover;
+  background-size: 100% 100%;
   background-position: center;
 }
 
@@ -186,7 +186,7 @@ button {
   background: #fd483d;
 }
 .border-blue {
-  border-color: #329BD6 !important;
+  border-color: #329bd6 !important;
 }
 
 .border-6 {

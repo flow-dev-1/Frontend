@@ -11,7 +11,9 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
     setErrorMessage("");
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
-      const pageIndex = updatedAnswers.findIndex((answer) => answer.stepId === step);
+      const pageIndex = updatedAnswers.findIndex(
+        (answer) => answer.stepId === step
+      );
 
       if (pageIndex !== -1) {
         updatedAnswers[pageIndex] = {
@@ -34,19 +36,25 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
 
   return (
     <QuestionBox>
-      <div className="d-flex gap-2">
-        <h2 className="text-blue">Question: </h2>
-        <h2 className="text-gray">
+      <div className="d-flex gap-2  flex-column flex-md-row">
+        <h2 className="text-blue fs-1">Question: </h2>
+        <h2 className="text-gray fs-1">
           {info.question}
-          {info.hasImage && <img src={Coping} alt="Coping Skill" />}?
-
+          {info.hasImage && (
+            <img src={Coping} alt="Coping Skill" className="question-image" />
+          )}
+          ?
         </h2>
       </div>
       <div className="d-flex flex-column gap-3 justify-content-center">
         {[...Array(fieldCount)].map((_, index) => (
           <MediumTextBox
             key={index}
-            value={answers.find((answer) => answer.stepId === step)?.value?.[index] || ""}
+            value={
+              answers.find((answer) => answer.stepId === step)?.value?.[
+                index
+              ] || ""
+            }
             handleChange={(e) => handleInputChange(index, e.target.value)}
           />
         ))}

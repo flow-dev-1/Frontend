@@ -6,10 +6,12 @@ function SmartFrame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, question, config } = data;
 
   const handleInputChange = (textBoxIndex, value) => {
-    setErrorMessage(""); 
+    setErrorMessage("");
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
-      const stepIndex = updatedAnswers.findIndex((answer) => answer.stepId === step);
+      const stepIndex = updatedAnswers.findIndex(
+        (answer) => answer.stepId === step
+      );
 
       if (stepIndex !== -1) {
         updatedAnswers[stepIndex] = {
@@ -34,17 +36,21 @@ function SmartFrame({ data, answers, setAnswers, setErrorMessage }) {
 
   return (
     <QuestionBox>
-      <div className="d-flex gap-2 justify-content-center">
-        <h2 className="text-blue">Question:  </h2>
-        <h2 className="text-gray">{question}</h2>
+      <div className="d-flex gap-2 justify-content-center flex-column flex-md-row">
+        <h2 className="text-blue fs-1">Question: </h2>
+        <h2 className="text-gray fs-1">{question}</h2>
       </div>
       <div className="mb-2">
         <div className="gap-2">
           {config.map((item, textBoxIndex) => (
             <SmartTextBox
               key={textBoxIndex}
-              label={item.title}  // ✅ Fix: Use `item.title`
-              value={answers.find(answer => answer.stepId === step)?.value?.[textBoxIndex] || ""}
+              label={item.title} // ✅ Fix: Use `item.title`
+              value={
+                answers.find((answer) => answer.stepId === step)?.value?.[
+                  textBoxIndex
+                ] || ""
+              }
               onChange={(e) => handleInputChange(textBoxIndex, e.target.value)}
             />
           ))}

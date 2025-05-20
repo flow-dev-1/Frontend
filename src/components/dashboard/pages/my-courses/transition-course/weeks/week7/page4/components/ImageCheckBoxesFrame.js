@@ -14,10 +14,18 @@ function ImageCheckBoxesFrame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, title, info } = data;
   const [selectedOptions, setSelectedOptions] = useState({});
 
-  const images = [watchingTv, spendingTimeOnePhone, GistingAndGossiping, playingGames, playingAround, socialMedia];
+  const images = [
+    watchingTv,
+    spendingTimeOnePhone,
+    GistingAndGossiping,
+    playingGames,
+    playingAround,
+    socialMedia,
+  ];
 
   useEffect(() => {
-    const existingAnswers = answers.find((answer) => answer.stepId === step)?.value || {};
+    const existingAnswers =
+      answers.find((answer) => answer.stepId === step)?.value || {};
     setSelectedOptions(existingAnswers);
   }, [answers, step]);
 
@@ -30,7 +38,9 @@ function ImageCheckBoxesFrame({ data, answers, setAnswers, setErrorMessage }) {
       };
       setAnswers((prevAnswers) => {
         const updatedAnswers = [...prevAnswers];
-        const stepIndex = updatedAnswers.findIndex((answer) => answer.stepId === step);
+        const stepIndex = updatedAnswers.findIndex(
+          (answer) => answer.stepId === step
+        );
 
         if (stepIndex !== -1) {
           updatedAnswers[stepIndex] = { stepId: step, value: updatedOptions };
@@ -45,22 +55,27 @@ function ImageCheckBoxesFrame({ data, answers, setAnswers, setErrorMessage }) {
 
   return (
     <QuestionBox>
-      <div className="d-flex gap-2">
-        <h2 className="text-blue">Question:</h2>
-        <h2 className="text-gray">{title}</h2>
+      <div className="d-flex gap-2 flex-column flex-md-row">
+        <h2 className="text-blue fs-1">Question:</h2>
+        <h2 className="text-gray fs-1">{title}</h2>
       </div>
 
       <div
-        className="d-grid"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "20px",
-          justifyContent: "center",
-        }}
+        className="row g-2"
+        style={
+          {
+            // display: "grid",
+            // gridTemplateColumns: "repeat(3, 1fr)",
+            // gap: "20px",
+            // justifyContent: "center",
+          }
+        }
       >
         {info.map((option, index) => (
-          <div key={index} className="d-flex flex-column align-items-center">
+          <div
+            key={index}
+            className="col-12 col-md-6 col-lg-4 col-xl-3  d-flex flex-column align-items-center"
+          >
             {/* Title with Background Color */}
             <div
               className="mt-2 d-flex justify-content-center align-items-center px-5 py-2 mb-2"
@@ -71,6 +86,7 @@ function ImageCheckBoxesFrame({ data, answers, setAnswers, setErrorMessage }) {
                 fontWeight: "bold",
                 fontSize: "15px",
                 textAlign: "center",
+                flex: "1",
               }}
             >
               {option.title}

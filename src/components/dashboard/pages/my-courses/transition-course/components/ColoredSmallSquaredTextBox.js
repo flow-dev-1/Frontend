@@ -3,6 +3,7 @@ import React from "react";
 function ColoredSmallSquaredTextBox({ color, value, onChange }) {
   const customStyle = {
     maxWidth: "100%",
+    width: "180px",
     fontSize: "20px",
     border: `3px solid ${color}`, // Dynamic border color
     outline: `none`, // Remove default outline
@@ -20,11 +21,11 @@ function ColoredSmallSquaredTextBox({ color, value, onChange }) {
         style={customStyle}
         value={value}
         onChange={onChange}
-        onFocus={(e) =>
-          (e.target.style.boxShadow = `0 0 15px ${color}`) // Glow effect on focus
+        onFocus={
+          (e) => (e.target.style.boxShadow = `0 0 15px ${color}`) // Glow effect on focus
         }
-        onBlur={(e) =>
-          (e.target.style.boxShadow = `0 0 10px ${color}`) // Return to initial glow effect on blur
+        onBlur={
+          (e) => (e.target.style.boxShadow = `0 0 10px ${color}`) // Return to initial glow effect on blur
         }
       />
     </label>

@@ -119,12 +119,12 @@ export default function IndividualProfile({ onClose }) {
                 </div>
               </div>
 
-              <p>
+              <p className="text-nowrap">
                 {user?.lga?.toUpperCase() || "Add Info"} |{" "}
                 {user?.state?.toUpperCase() || "Add Info"}{" "}
               </p>
-              <p></p>
-              <p>
+              {/* <p></p> */}
+              <p className="text-nowrap text-center">
                 {user?.country?.toUpperCase()}
                 <img
                   src={flag}
