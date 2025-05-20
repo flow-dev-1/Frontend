@@ -141,16 +141,16 @@
 } */
 @media (max-width: 992px) {
   .sidebar-user-menu {
-    width: 70px;
+    /* width: 70px; */
     display: flex;
     justify-content: center;
   }
-  .sidebar-user {
+  /* .sidebar-user {
     width: 100px;
-  }
+  } */
 
   .dashboard-content {
-    margin: 50px 0 0 0;
+    /* margin: 50px 0 0 0; */
   }
 }
 @media (max-width: 480px) {
@@ -159,6 +159,17 @@
   }
 
   .dashboard-content {
-    margin: 50px 0 0 0;
+    /* margin: 50px 0 0 0; */
+  }
+}
+@media (max-width: 768px) {
+  .dashboard-content {
+    margin: 0 !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dashboard-content {
+    margin: 50px 0 0 250px;
   }
 }

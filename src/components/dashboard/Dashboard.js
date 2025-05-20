@@ -17,6 +17,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const location = useLocation();
   const [menuVisible, setMenuVisible] = useState(false);
+  const [sideBarVisible, setSideBarVisible] = useState(false);
 
   // Get the JWT token from local storage
   // const auth_token =
@@ -49,12 +50,19 @@ export default function Dashboard() {
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
+  const toggleSideBar = () => {
+    setSideBarVisible(!sideBarVisible);
+  };
 
   return (
     // <div className="dashboard">
     <div className={location.pathname === "/dashboard/my-courses" ? "" : ""}>
       <nav className="navbar">
         <div className="container">
+          <div className="d-none d-md-block d-lg-none">
+            <p onClick={toggleSideBar}>Book</p>
+            {sideBarVisible && <aside>SideBar Content goes here</aside>}
+          </div>
           <Link to="/dashboard" className="navbar-logo">
             <img src={logo} alt="" />
           </Link>
