@@ -101,7 +101,7 @@ function WeekFivePage2() {
       case "question":
         return (
           <div>
-            <form className="d-flex gap-3">
+            <form className="d-flex gap-3  flex-column flex-md-row">
               <h2 className="text-blue fs-1">{scenario.title}: </h2>
               <div className="">
                 <h3 className="fs-1">{scenario.question}</h3>
@@ -117,7 +117,7 @@ function WeekFivePage2() {
                   return (
                     <div
                       key={index}
-                      className="ms-5 d-flex gap-2 mb-3 align-items-center"
+                      className="ms-0 ms-md-5 d-flex gap-2 mb-3 align-items-center"
                     >
                       <input
                         type="radio"
