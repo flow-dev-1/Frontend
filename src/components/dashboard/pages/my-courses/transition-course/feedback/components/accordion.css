@@ -2,6 +2,10 @@
   background-color: #5ce1e6;
 }
 
+.accordion {
+  margin: 0 10px;
+}
+
 .accordion-header {
   border-radius: 4px;
   margin-bottom: 40px;
@@ -24,4 +28,10 @@
   background: url("../../../../../../../assets/compassion-feedback.png")
     no-repeat;
   background-size: 100% 100%;
+}
+
+@media (max-width: 768px) {
+  .accordion-content {
+    padding: 10px;
+  }
 }
