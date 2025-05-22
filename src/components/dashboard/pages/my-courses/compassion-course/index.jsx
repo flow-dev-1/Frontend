@@ -68,12 +68,12 @@ import { adminData } from "../../../../../redux/reducers/adminReducer.js";
 
 const WeekContent = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const userAnswers = useSelector(userAnswer);
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
   const [course, setCourse] = useState(null);
-  const {isAdmin} = useSelector(adminData);
+  const { isAdmin } = useSelector(adminData);
 
   // Access data from location.state
   const enrolmentData = location.state?.enrollmentData; // Assuming enrollData is passed in state
@@ -82,7 +82,7 @@ const WeekContent = () => {
     //toDo: Only Enrolled Users or Admin can access this course
     if (!enrolmentData && !isAdmin) return navigate("/sign-in");
     setEnrollmentId(enrolmentData?._id);
-    setCourse(enrolmentData?.course?._id)
+    setCourse(enrolmentData?.course?._id);
   }, []);
 
   useEffect(() => {
@@ -101,7 +101,7 @@ const WeekContent = () => {
     dispatch(setCurrentPage(currentPage));
     dispatch(setCurrentStep(currentStep));
 
-    return () => { };
+    return () => {};
   }, [dispatch]); // Added dispatch to dependency array
 
   const currentWeek = useSelector(selectCurrentWeek);
@@ -111,14 +111,17 @@ const WeekContent = () => {
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isLoading, status, isError } = useQuery({
-    queryKey: [`dashboard-compassion-course-${currentWeek}`, enrollmentId, currentWeek],
+    queryKey: [
+      `dashboard-compassion-course-${currentWeek}`,
+      enrollmentId,
+      currentWeek,
+    ],
     queryFn: () => userService.getUserCourseData(enrollmentId, currentWeek),
     enabled: !!enrollmentId && !!currentWeek,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
     keepPreviousData: false,
   });
-
 
   useEffect(() => {
     if (!data) return;
@@ -137,7 +140,9 @@ const WeekContent = () => {
       dispatch(
         updateData({
           course: course,
-          courseEnrollmentId:enrollmentId ? enrollmentId : userAnswers.courseEnrollmentId,
+          courseEnrollmentId: enrollmentId
+            ? enrollmentId
+            : userAnswers.courseEnrollmentId,
           week: currentWeek,
           activities: userAnswers.activities,
           assessments: userAnswers.assessments,
@@ -145,7 +150,7 @@ const WeekContent = () => {
       );
     }
 
-    return () => { };
+    return () => {};
   }, [data]);
 
   // If showing hurray, render that instead
@@ -275,9 +280,9 @@ const WeekContent = () => {
 };
 
 const CourseContent = () => {
-  const {isAdmin} = useSelector(adminData);
+  const { isAdmin } = useSelector(adminData);
   const currentWeek = useSelector(selectCurrentWeek);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const weeksTopic = [
     "Introduction to Compassion",
@@ -293,15 +298,15 @@ const CourseContent = () => {
         <div className="container">
           <button
             disabled={isAdmin}
-            onClick={()=>navigate("/dashboard")}
+            onClick={() => navigate("/dashboard")}
             className="navbar-logo"
-            style={{ border: 'none', background:"#FFF" }} 
+            style={{ border: "none", background: "#FFF" }}
           >
             <img src={logo} alt="" />
           </button>
           <div
             className="navbar-logo"
-            onClick={() => { }}
+            onClick={() => {}}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -313,10 +318,9 @@ const CourseContent = () => {
         <aside>
           <button
             disabled={isAdmin}
-            onClick={()=>navigate("/dashboard/my-courses")}
+            onClick={() => navigate("/dashboard/my-courses")}
             className="back"
-            style={{ cursor: "pointer", border: 'none', background:"#f8f5f5"}}
-         
+            style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
             Back to My Courses
