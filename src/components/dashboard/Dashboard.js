@@ -63,7 +63,7 @@ export default function Dashboard() {
     <div className={location.pathname === "/dashboard/my-courses" ? "" : ""}>
       <nav className="navbar">
         <div className="container">
-          <div className="d-none d-md-block d-lg-none">
+          <div className="book-icon-landscape">
             <Icon
               icon="mdi:book-open"
               color="skyblue" //TODO : change colour to match design
