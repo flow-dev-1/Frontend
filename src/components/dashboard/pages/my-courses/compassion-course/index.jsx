@@ -65,6 +65,8 @@ import {
   userAnswer,
 } from "../../../../../redux/reducers/userAnswersReducer.js";
 import { adminData } from "../../../../../redux/reducers/adminReducer.js";
+import { logoutSuccess } from "../../../../../redux/reducers/userReducer.js";
+import { clearToken } from "../../../../../redux/reducers/jwtReducer.js";
 
 const WeekContent = () => {
   const dispatch = useDispatch();
@@ -283,6 +285,10 @@ const CourseContent = () => {
   const { isAdmin } = useSelector(adminData);
   const currentWeek = useSelector(selectCurrentWeek);
   const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
+
+  const [menuVisible, setMenuVisible] = useState(false);
 
   const weeksTopic = [
     "Introduction to Compassion",
@@ -291,6 +297,27 @@ const CourseContent = () => {
     "Circle of concern",
     `Life Scenarios - Let's wear the shoes of Others`,
   ];
+  const logOut = () => {
+    // localStorage.removeItem('Flow-Auth-Token');
+    localStorage.clear();
+    sessionStorage.clear();
+    dispatch(logoutSuccess());
+    dispatch(clearToken());
+    dispatch(
+      updateData({
+        course: null,
+        courseEnrollmentId: null,
+        week: 1,
+        activities: [],
+        assessments: [],
+      })
+    );
+    navigate("/sign-in", { replace: true });
+  };
+
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible);
+  };
 
   return (
     <>
@@ -305,17 +332,71 @@ const CourseContent = () => {
             <img src={logo} alt="" />
           </button>
           <div
-            className="navbar-logo"
+            className="navbar-logo d-none d-lg-block"
             onClick={() => {}}
             style={{ cursor: "pointer" }}
           >
             Logout
           </div>
+          <div className="d-block d-lg-none position-relative">
+            <Icon
+              icon="mdi:menu"
+              width={30}
+              onClick={toggleMenu}
+              style={{
+                cursor: "pointer",
+              }}
+            />
+            {menuVisible && (
+              <div
+                className="d-lg-none position-absolute"
+                style={{
+                  top: "30px",
+                  left: "-100px",
+                  borderRadius: "15px",
+                  border: "1px solid rgba(244, 241, 241, 0.9)",
+                }}
+              >
+                <div
+                  style={{
+                    cursor: "pointer",
+                    overflow: "hidden",
+                    borderRadius: "15px",
+                    background: "rgba(255,255,255,0.9)",
+                  }}
+                  className="border-5 px-4 pt-4 pb-1"
+                >
+                  <ul className="d-flex gap-3 flex-column">
+                    <li className="">
+                      <Link to={"/dashboard"}>Overview</Link>
+                    </li>
+                    <li className="">
+                      <Link to={"/dashboard/profile"}>Profile</Link>
+                    </li>
+                    <li className="">
+                      <Link to={"/dashboard/my-courses"}>MyCourse</Link>
+                    </li>
+                    <li className="">
+                      <Link to={"/dashboard/support"}>Support</Link>
+                    </li>
+                    <li className="text-nowrap">
+                      <Link to={"/dashboard/payment-history"}>
+                        Payment History
+                      </Link>
+                    </li>
+                    <li className=" text-danger" onClick={logOut}>
+                      Log Out
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </nav>
 
-      <div className="main-content">
-        <aside>
+      <div className="main-content flex-column-reverse flex-md-row">
+        <aside className="d-md-none d-lg-block m-4">
           <button
             disabled={isAdmin}
             onClick={() => navigate("/dashboard/my-courses")}
@@ -327,8 +408,8 @@ const CourseContent = () => {
           </button>
 
           <div className="compassion-title">
-            <h2> Seeing, Caring and Doing: </h2>
-            <h2 className="compassion">Compassion</h2>
+            <h2 className="fs-5 fs-md-3"> Seeing, Caring and Doing: </h2>
+            <h2 className="compassion fs-5">Compassion</h2>
           </div>
 
           <ul className="compassion-list">
@@ -351,6 +432,27 @@ const CourseContent = () => {
               </li>
             ))}
           </ul>
+        </aside>
+        <aside
+          className="d-none d-md-block d-lg-none"
+          style={{
+            flexBasis: "0px",
+            background: "#00BCC3",
+          }}
+        >
+          <button
+            disabled={isAdmin}
+            onClick={() => navigate("/dashboard/my-courses")}
+            className="p-3"
+            style={{
+              cursor: "pointer",
+              border: "none",
+              background: "#f8f5f5",
+              borderRadius: "50%",
+            }}
+          >
+            <Icon icon="mdi:arrow-right" width="20" height="20" />
+          </button>
         </aside>
         <section className="week-content position-relative">
           <WeekContent />
