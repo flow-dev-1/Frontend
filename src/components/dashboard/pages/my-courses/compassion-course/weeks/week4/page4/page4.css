@@ -1,5 +1,6 @@
 .options {
-  padding: clamp(10px, 2vw, 20px);
+  /* padding: clamp(10px, 2vw, 20px); */
+  padding: 5px;
   border-radius: 5px;
   text-align: center;
   /* grid-auto-rows: min-content; */
@@ -12,7 +13,7 @@
   /* flex-grow: 1; */
   flex-basis: 50%;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  /* grid-template-columns: 1fr 1fr 1fr; */
   grid-auto-rows: max-content;
 }
 
@@ -102,4 +103,44 @@
 
 .bg-drag-blue {
   background: #329bd6;
+}
+
+@media (max-width: 575.98px) {
+  .drag-flex-basis {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Small devices (tablets, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .drag-flex-basis {
+    /* grid-template-columns: 1fr 1fr; */
+  }
+}
+
+/* Medium devices (desktops, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .drag-flex-basis {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .arrow-head {
+    width: 70px;
+  }
+}
+
+/* Large devices (large desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .drag-flex-basis {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+/* Extra large devices (larger desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .drag-flex-basis {
+    /* grid-template-columns: 1fr 1fr 1fr 1fr; */
+  }
+  /* .cardboard-image {
+    width: 50px;
+  } */
 }
