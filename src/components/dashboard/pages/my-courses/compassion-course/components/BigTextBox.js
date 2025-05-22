@@ -10,7 +10,7 @@ function BigTextBox({ handleChange, value }) {
         placeholder="Type your answer here..."
         style={{
           maxWidth: "100%",
-          fontSize: "25px",
+          // fontSize: "25px",
         }}
         value={value}
         onChange={handleChange ? handleChange : () => {}}
