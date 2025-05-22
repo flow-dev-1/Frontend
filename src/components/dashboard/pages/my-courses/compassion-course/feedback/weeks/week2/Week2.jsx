@@ -409,7 +409,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
       <div className="bg-button p-3 p-md-5 rounded-4">
         <h2 className="text-white fs-md-md-1">Weekly Report</h2>
         <div className="d-flex flex-column flex-md-row gap-4">
-          <h2 className="text-gray fs-md-md-1 ratio-1x1 bg-aqua rounded-4 p-3 p-md-5 d-flex justify-content-center border border-6 border-blue">
+          <h2 className="text-gray fs-md-1 ratio-1x1 bg-aqua rounded-4 p-3 p-md-5 d-flex justify-content-center border border-6 border-blue">
             {score}%
           </h2>
           <p className="text-white">
