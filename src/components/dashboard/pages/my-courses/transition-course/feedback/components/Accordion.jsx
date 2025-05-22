@@ -94,7 +94,7 @@ function Accordion({
               <div className="d-flex align-items-center gap-3 flex-grow-1">
                 {index < 10 ? (
                   <h2
-                    className="text-gray"
+                    className="text-gray text-nowrap"
                     onClick={() => handleToggle(index)}
                     style={{ cursor: "pointer" }}
                   >
@@ -142,7 +142,7 @@ function Accordion({
             </div>
             {(activeIndex === index || activeIndex === null) && (
               <div className="accordion-content">
-                <p>{item.content}</p>
+                <div>{item.content}</div>
               </div>
             )}
           </div>
