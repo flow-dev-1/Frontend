@@ -12,7 +12,10 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
 
   const { data, isPending, status, isError } = useQuery({
     queryKey: ["dashboard/compassion-feedback-overall", enrollmentId, 1],
-    queryFn: () => isAdmin ? adminService.getUserCourseData(enrollmentId, 1, code) : userService.getUserCoursePercentile(enrollmentId),
+    queryFn: () =>
+      isAdmin
+        ? adminService.getUserCourseData(enrollmentId, 1, code)
+        : userService.getUserCoursePercentile(enrollmentId),
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -21,9 +24,9 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
 
   useEffect(() => {
     if (!data || data?.status === "failed") return;
-    setAssessmentPercentile(data?.averagePercent)
-    setHasPercentile(true)
-    return () => { };
+    setAssessmentPercentile(data?.averagePercent);
+    setHasPercentile(true);
+    return () => {};
   }, [data]);
 
   function getFeedBackMessage(percentile) {
@@ -37,7 +40,7 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
       case percentile >= 80 && percentile <= 94:
         return "Excellent job! You’ve shown a strong grasp of the skills and mindset needed to transition smoothly into secondary school. Remember it’s highly important to keep applying what you’ve learned about time management, goal setting, and resilience in every way you can. To continue growing, focus on using these tools to face new challenges and opportunities everyday. Your hard work is paying off, and you’re well on your way to thriving in secondary school. Keep up the fantastic progress!";
       case percentile >= 95 && percentile <= 100:
-        return"Outstanding achievement! You’ve shown mastery and a deep understanding of the skills and mindset to navigate your transition into secondary school with confidence and purpose. Your understanding of growth and fixed mindsets, time management, and resilience is exceptional, and you’ve shown you can apply these concepts to real-life situations. You’re not only ready for this new stage but also equipped to make the most of it. Keep inspiring others with your example, and continue using these tools to grow and succeed in every area of your life. Well done—you’re ready to shine in secondary school!"
+        return "Outstanding achievement! You’ve shown mastery and a deep understanding of the skills and mindset to navigate your transition into secondary school with confidence and purpose. Your understanding of growth and fixed mindsets, time management, and resilience is exceptional, and you’ve shown you can apply these concepts to real-life situations. You’re not only ready for this new stage but also equipped to make the most of it. Keep inspiring others with your example, and continue using these tools to grow and succeed in every area of your life. Well done—you’re ready to shine in secondary school!";
       default:
         return "";
     }
@@ -48,11 +51,14 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
   }
 
   if (data?.status === "failed" || isError) {
-    return <div style={{ color: 'red' }}>{data?.message || "Internal server error!"}</div>;
+    return (
+      <div style={{ color: "red" }}>
+        {data?.message || "Internal server error!"}
+      </div>
+    );
   }
 
   return (
-
     <>
       <div className="bg-compassion--feedback custom-border-20 question-box-container d-flex justify-content-center align-items-center flex-column gap-3">
         <img src={celebrate} alt="celebrate" className="text-center" />
@@ -60,22 +66,28 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
           Hurray!
         </h1>
       </div>
-      <p className="fs-3 text-gray mt-3">
+      <p className="fs-md-3 text-gray mt-3">
         Congratulations on completing the Transition Curriculum!
       </p>
-      <p className="fs-3 text-gray mt-3">
-        Over the past ten weeks, you’ve explored essential skills and concepts to prepare you for secondary school. From understanding your “why” to building resilience and setting goals, you’ve laid a strong foundation for success.
+      <p className="fs-md-3 text-gray mt-3">
+        Over the past ten weeks, you’ve explored essential skills and concepts
+        to prepare you for secondary school. From understanding your “why” to
+        building resilience and setting goals, you’ve laid a strong foundation
+        for success.
       </p>
-      <p className="fs-3 text-gray my-3">
-        Remember, transition is an ongoing process. The lessons you’ve learned in this course will continue to guide you as you navigate new challenges and opportunities. Stay curious, keep growing, and never stop believing in yourself.
+      <p className="fs-md-3 text-gray my-3">
+        Remember, transition is an ongoing process. The lessons you’ve learned
+        in this course will continue to guide you as you navigate new challenges
+        and opportunities. Stay curious, keep growing, and never stop believing
+        in yourself.
       </p>
-      <p className="fs-3 text-gray">
+      <p className="fs-md-3 text-gray">
         Good luck on your journey ahead, and always strive to be your best self!
       </p>
 
-      <div className="bg-blue p-3 mt-2 rounded rounded-4">
-        <h2 className="text-white fs-1">Overall Feedback</h2>
-        <p className="text-white fs-3">
+      <div className="bg-blue p-1 p-md-3 mt-2 rounded rounded-md-4">
+        <h2 className="text-white fs-md-1">Overall Feedback</h2>
+        <p className="text-white fs-md-3">
           {getFeedBackMessage(assessmentPercentile)}
         </p>
       </div>
