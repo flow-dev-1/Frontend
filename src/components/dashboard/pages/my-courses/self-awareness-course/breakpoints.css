@@ -1,0 +1,31 @@
+/* mobile first to align with bootstrap */
+/* tablet */
+@media only screen and (min-width: 576px) {
+	.self-awareness .video-div {
+		padding: 24px;
+		background-color: transparent;
+		height: 320px;
+	}
+
+	.self-awareness .custom-video,
+	.self-awareness .video-thumbnail {
+		margin-top: -10px;
+		height: 100%;
+	}
+
+	.self-awareness .question-box {
+		width: 100%;
+	}
+}
+
+/* desktop */
+@media only screen and (min-width: 768px) {
+	.self-awareness .video-div {
+		height: 480px;
+	}
+
+	.self-awareness .custom-video,
+	.self-awareness .video-thumbnail {
+		height: 100%;
+	}
+}
