@@ -56,7 +56,7 @@ function WeekThreePage10() {
         <h2 className="text-center text-blue fs-1 letter">
           Write a letter of Compassion to Others.
         </h2>
-        <div className="letter-container">
+        <div className="letter-container flex-column flex-md-row">
           <div className="letter-info">
             {pageData.instructions.map((instruction, index) => (
               <h3 key={index} className={index === 0 ? "mb-4" : ""}>
@@ -65,7 +65,10 @@ function WeekThreePage10() {
             ))}
           </div>
           <div className="letter-content">
-            <label className="w-100 py-5 px-3 border-0" style={{ height: "100%" }}>
+            <label
+              className="w-100 py-md-5 px-3 border-0"
+              style={{ height: "100%" }}
+            >
               <textarea
                 className="border-0 w-100 bg-transparent border-outline-0 resize-none"
                 cols={pageData.textareaConfig.cols}
@@ -79,7 +82,7 @@ function WeekThreePage10() {
         </div>
       </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
-      <div className="d-flex justify-content-center gap-96px mt-4">
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>

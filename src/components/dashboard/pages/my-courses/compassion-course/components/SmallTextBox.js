@@ -6,7 +6,7 @@ function SmallTextBox({ value, onChange }) {
       <input
         className=" border-0 bg-transparent border-outline-0  form-control small-input"
         placeholder="Type your answer here..."
-        style={{ maxWidth: "100%", fontSize: "20px" }}
+        style={{ maxWidth: "100%" }}
         value={value}
         onChange={onChange}
       />

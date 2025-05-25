@@ -44,7 +44,7 @@ aside .back {
 
 .compassion-title h2 {
   color: white;
-  font-size: 23px;
+  /* font-size: 23px; */
 }
 .compassion-title .compassion {
   color: aquamarine;
@@ -60,14 +60,14 @@ aside .back {
 .compassion-list li {
   display: flex;
   align-items: center;
-  font-size: 14px;
+  /* font-size: 14px; */
   gap: 10px;
   opacity: 0.5;
 }
 
 .compassion-list li .icon {
   flex-shrink: 0;
-  font-size: 20px;
+  /* font-size: 20px; */
 }
 
 .compassion-list li.active-week {

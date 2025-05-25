@@ -7,12 +7,18 @@ import heartImage from "../../../../../../../../assets/heart-image.png";
 import hugImage2 from "../../../../../../../../assets/hug-image-2.png";
 import QuestionBox from "../../../components/QuestionBox";
 import Button from "../../../components/Button";
-import { selectPageData, selectCurrentStep } from "../../../../../../../../redux/reducers/navigationSlice";
-import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  selectPageData,
+  selectCurrentStep,
+} from "../../../../../../../../redux/reducers/navigationSlice";
+import {
+  userAnswer,
+  saveActivity,
+} from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
 function WeekTwoPage6() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
@@ -20,17 +26,17 @@ function WeekTwoPage6() {
   const userAnswers = useSelector(userAnswer);
 
   useEffect(() => {
-
-    if (!userAnswers) return
-    const response = userAnswers.activities?.find(item => (item.page === pageData.id))
-    const answerCopy = response?.answer ? [...response.answer] : []
-    setAnswers(answerCopy)
-    return () => { }
-
-  }, [userAnswers])
+    if (!userAnswers) return;
+    const response = userAnswers.activities?.find(
+      (item) => item.page === pageData.id
+    );
+    const answerCopy = response?.answer ? [...response.answer] : [];
+    setAnswers(answerCopy);
+    return () => {};
+  }, [userAnswers]);
 
   const saveUserInput = () => {
-    if (adminDatas.isAdmin) return true
+    if (adminDatas.isAdmin) return true;
     if (answers.length < 4) {
       setErrorMessage("At least 4 values are required!");
       return false;
@@ -38,7 +44,9 @@ function WeekTwoPage6() {
 
     const emptyInputs = answers.filter((item) => item?.value?.trim() === "");
     if (emptyInputs.length > 0) {
-      setErrorMessage(`Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`);
+      setErrorMessage(
+        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
+      );
       return false;
     }
 
@@ -46,7 +54,7 @@ function WeekTwoPage6() {
 
     const activityData = {
       page: pageData.id,
-      answer: answers
+      answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
@@ -57,52 +65,80 @@ function WeekTwoPage6() {
     setErrorMessage("");
     // Update answers state with the new value
     setAnswers((prevAnswers) => {
-        // Check if the answer already exists
-        const existingAnswerIndex = prevAnswers.findIndex(answer => answer.id === id);
-        if (existingAnswerIndex > -1) {
-            // Update existing answer
-            const updatedAnswers = [...prevAnswers];
-            updatedAnswers[existingAnswerIndex] = { ...updatedAnswers[existingAnswerIndex], value }; // Create a new object
-            return updatedAnswers;
-        } else {
-            // Add new answer
-            return [...prevAnswers, { id, value }];
-        }
+      // Check if the answer already exists
+      const existingAnswerIndex = prevAnswers.findIndex(
+        (answer) => answer.id === id
+      );
+      if (existingAnswerIndex > -1) {
+        // Update existing answer
+        const updatedAnswers = [...prevAnswers];
+        updatedAnswers[existingAnswerIndex] = {
+          ...updatedAnswers[existingAnswerIndex],
+          value,
+        }; // Create a new object
+        return updatedAnswers;
+      } else {
+        // Add new answer
+        return [...prevAnswers, { id, value }];
+      }
     });
   };
 
   // Map image imports to their filenames
   const imageMap = {
-    'heart-image.png': heartImage,
-    'hug-image.png': hugImage,
-    'hug-image-2.png': hugImage2,
-    'wish-image.png': wishImage,
+    "heart-image.png": heartImage,
+    "hug-image.png": hugImage,
+    "hug-image-2.png": hugImage2,
+    "wish-image.png": wishImage,
   };
 
   return (
     <>
       <QuestionBox>
-        <div className="container">
+        {/* <div className="container flex-wrap gap-4">
           {pageData.prompts.map((item, index) => (
             <div key={index} className="container-item">
-              <h3 className="fs-1">{item.title}...</h3>
+              <h3 className="fs-md-1 text-nowrap">{item.title}...</h3>
               <img src={imageMap[item.imgSrc]} alt="images" />
               <input
                 type={pageData.inputType}
                 placeholder={pageData.inputPlaceholder}
-                value={answers.find(answer => answer.id === item.id)?.value || ''} 
-                onChange={(e)=>handleInputChange(item.id,e.target.value)}
+                value={
+                  answers.find((answer) => answer.id === item.id)?.value || ""
+                }
+                onChange={(e) => handleInputChange(item.id, e.target.value)}
               />
             </div>
           ))}
+        </div> */}
+
+        <div className="container">
+          <div className="row">
+            {pageData.prompts.map((item, index) => (
+              <div
+                key={index}
+                className="container-item col-12 col-md-6 col-lg-4 g-2"
+              >
+                <h3 className="fs-md-1 text-nowrap">{item.title}...</h3>
+                <img src={imageMap[item.imgSrc]} alt="images" />
+                <input
+                  type={pageData.inputType}
+                  placeholder={pageData.inputPlaceholder}
+                  value={
+                    answers.find((answer) => answer.id === item.id)?.value || ""
+                  }
+                  onChange={(e) => handleInputChange(item.id, e.target.value)}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </QuestionBox>
-      {errorMessage && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
-      <div className="d-flex justify-content-center gap-96px mt-4 ">
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
+      {/* Display error message */}
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
-        <Button text="Next"
-          customOnClick={saveUserInput}
-        />
+        <Button text="Next" customOnClick={saveUserInput} />
       </div>
     </>
   );

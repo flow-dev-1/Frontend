@@ -63,7 +63,7 @@ export default function Dashboard() {
     <div className={location.pathname === "/dashboard/my-courses" ? "" : ""}>
       <nav className="navbar">
         <div className="container">
-          <div className="d-none d-md-block d-lg-none">
+          <div className="book-icon-landscape">
             <Icon
               icon="mdi:book-open"
               color="skyblue" //TODO : change colour to match design
@@ -82,7 +82,11 @@ export default function Dashboard() {
                 >
                   <ul
                     className="sidebar-user-menu h-100 px-1"
-                    style={{ background: "#00bcc3", margin: 0 }}
+                    style={{
+                      background: "#00bcc3",
+                      margin: 0,
+                      paddingTop: "50px",
+                    }}
                   >
                     <li>
                       <Link
@@ -241,6 +245,84 @@ export default function Dashboard() {
       ) : (
         <div className="dashboard ">
           <Sidebar className="sidebar-content" />
+          <div
+            className="bg-light sidebar-user-tablet-icons vh-100"
+            onClick={(e) => e.stopPropagation()}
+            // style={{ width: "0px" }}
+          >
+            <ul
+              className="sidebar-user-menu h-100 px-1 w-"
+              style={{
+                background: "#00bcc3",
+                margin: 0,
+                width: "fit-content",
+                paddingTop: "70px",
+              }}
+            >
+              <li style={{ width: "fit-content" }}>
+                <Link
+                  to="/dashboard"
+                  className={`link ${
+                    isActiveLink("/dashboard") ? "active" : ""
+                  }`}
+                  onClick={toggleSideBar}
+                >
+                  <Icon icon="ion:grid-outline" className="sidebar-icon" />
+                </Link>
+              </li>
+
+              <li style={{ width: "fit-content" }}>
+                <Link
+                  to="/dashboard/profile"
+                  className={`link ${
+                    isActiveLink("/dashboard/profile") ? "active" : ""
+                  }`}
+                  onClick={toggleSideBar}
+                >
+                  <Icon icon="uiw:user-add" className="sidebar-icon" />
+                </Link>
+              </li>
+              <li style={{ width: "fit-content" }}>
+                <Link
+                  to="/dashboard/my-courses"
+                  className={`link ${
+                    isActiveLink("/dashboard/my-courses") ? "active" : ""
+                  }`}
+                  onClick={toggleSideBar}
+                >
+                  <Icon icon="bi:book" className="sidebar-icon" />
+                </Link>
+              </li>
+
+              <li style={{ width: "fit-content" }}>
+                <Link
+                  to="/dashboard/support"
+                  className={`link ${
+                    isActiveLink("/dashboard/support") ? "active" : ""
+                  }`}
+                  onClick={toggleSideBar}
+                >
+                  <Icon icon="ph:users-light" className="sidebar-icon" />
+                </Link>
+              </li>
+
+              <li style={{ width: "fit-content" }}>
+                <Link
+                  to="/dashboard/payment-history"
+                  className={`link ${
+                    isActiveLink("/dashboard/payment-history") ? "active" : ""
+                  }`}
+                  onClick={toggleSideBar}
+                >
+                  <Icon
+                    width={26}
+                    icon="solar:dollar-outline"
+                    className="sidebar-icon"
+                  />
+                </Link>
+              </li>
+            </ul>
+          </div>
           <div className="dashboard-content">
             <Outlet />
           </div>

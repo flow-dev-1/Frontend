@@ -590,7 +590,7 @@ const CourseContent = () => {
           <button
             disabled={isAdmin}
             onClick={() => navigate("/dashboard/my-courses")}
-            className="back"
+            className="back fs-6"
             style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
@@ -598,8 +598,10 @@ const CourseContent = () => {
           </button>
 
           <div className="compassion-title">
-            <h2> From Curious to Confident: Transition with Ease </h2>
-            <h2 className="compassion">Transition</h2>
+            <h2 className="fs-5 fs-md-3">
+              From Curious to Confident: Transition with Ease
+            </h2>
+            <h2 className="compassion fs-5">Transition</h2>
           </div>
 
           <ul className="compassion-list">
@@ -611,14 +613,14 @@ const CourseContent = () => {
                 <div className="icon">
                   <Icon
                     icon="icon-park-outline:check-one"
-                    className="course-list-icon"
+                    className="course-list-icon "
                   />
                 </div>
-                <span>
+                <span className="">
                   Week
                   {index + 1}
                 </span>
-                <span>{item} </span>
+                <span className="">{item} </span>
               </li>
             ))}
           </ul>

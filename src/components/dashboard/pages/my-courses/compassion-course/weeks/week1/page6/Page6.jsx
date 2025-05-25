@@ -8,9 +8,11 @@ import {
   selectCurrentStep,
 } from "../../../../../../../../redux/reducers/navigationSlice";
 import StepIndicator from "../../../components/StepIndicator";
-import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  userAnswer,
+  saveActivity,
+} from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-
 
 function Page6() {
   const dispatch = useDispatch(); // Initialize dispatch
@@ -25,19 +27,19 @@ function Page6() {
   // console.log(userAnswers)
 
   useEffect(() => {
-
-    if (!userAnswers) return
-    const response = userAnswers.activities?.find(item => (item.page === pageData.id))
-    setAnswers(response?.answer ? response.answer : [])
-    return () => { }
-
-  }, [userAnswers])
+    if (!userAnswers) return;
+    const response = userAnswers.activities?.find(
+      (item) => item.page === pageData.id
+    );
+    setAnswers(response?.answer ? response.answer : []);
+    return () => {};
+  }, [userAnswers]);
 
   const saveUserInput = () => {
     if (currentStep === 1) return true;
-    if (adminDatas.isAdmin) return true
+    if (adminDatas.isAdmin) return true;
 
-    const stepData = answers.find(item => item.stepId === currentStep);
+    const stepData = answers.find((item) => item.stepId === currentStep);
     if (!stepData) {
       setErrorMessage("Oops! All inputs must be filled out.");
       return false;
@@ -51,15 +53,17 @@ function Page6() {
 
     const emptyInputs = values.filter((value) => value.trim() === "");
     if (emptyInputs.length > 0) {
-      setErrorMessage(`Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`);
+      setErrorMessage(
+        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
+      );
       return false;
     }
 
     setErrorMessage(""); // Clear error if input is valid
-    
+
     const activityData = {
       page: pageData.id,
-      answer: answers
+      answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
@@ -77,12 +81,12 @@ function Page6() {
       case "instruction":
         return (
           <QuestionBox>
-            <div className="text-center mb-5">
-              <h2 className="text-white bg-blue p-4 fs-1 rounded d-inline">
+            <div className="text-center mb-5 mt-4">
+              <h2 className="text-white bg-blue p-md-4 p-2 rounded d-inline">
                 {step.title}
               </h2>
             </div>
-            <div className="d-flex gap-2">
+            <div className="d-flex gap-2  flex-column flex-md-row">
               <h2 className="text-blue fs-1">Instructions: </h2>
               <h2 className="text-gray fs-1">{step.instructions}</h2>
             </div>
@@ -111,13 +115,14 @@ function Page6() {
   return (
     <>
       {renderStep()}
-      {(currentStep !== 1 && errorMessage) && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
+      {currentStep !== 1 && errorMessage && (
+        <div className="text-danger">{errorMessage}</div>
+      )}{" "}
+      {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
-      <div className="d-flex justify-content-center gap-96px mt-4 ">
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
-        <Button text="Next"
-          customOnClick={saveUserInput}
-        />
+        <Button text="Next" customOnClick={saveUserInput} />
       </div>
     </>
   );
