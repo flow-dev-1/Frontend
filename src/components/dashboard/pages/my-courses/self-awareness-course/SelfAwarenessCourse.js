@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import './newcourse.css';
-import './defaultStyles.css';
+import './breakpoints.css';
 import './styles.css';
 import courseOne from '../../../../../assets/course1.png';
 import WeekOneLearning from './week-one-screens/WeekOneLearning';
