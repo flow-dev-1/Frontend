@@ -72,16 +72,16 @@ const QuestionComponent = ({
 
         <ToastContainer />
       </div>
-      <div className='d-flex align-items-center justify-content-around mt-5'>
-        {onBack && (
-          <button className='btn progress-btn btn-light' onClick={onBack}>
-            {'<<<'} Back
-          </button>
-        )}
-        <button className='btn progress-btn btn-dark' onClick={handleNextClick}>
-          Next {'>>>'}
-        </button>
-      </div>
+			<div className="progression-btns mt-3">
+				{onBack && (
+					<button className="btn prev light" onClick={onBack}>
+						{'<<< Back'}
+					</button>
+				)}
+				<button className="btn next dark" onClick={handleNextClick}>
+					{'Next >>>'}
+				</button>
+			</div>
     </div>
   )
 }

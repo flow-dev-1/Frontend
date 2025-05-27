@@ -158,7 +158,20 @@ function SelfAwarenessCourse() {
 				<>
 					{/* course menu */}
 					<div className="course-menu">
-						<div className="course-menu-collapsed">menu</div>
+						<div className="course-menu-collapsed">
+							<button
+								onClick={() => navigate('/dashboard/my-courses')}
+								className="p-2"
+								style={{
+									cursor: 'pointer',
+									border: 'none',
+									background: '#f8f5f5',
+									borderRadius: '50%',
+								}}
+							>
+								<Icon icon="mdi:arrow-right" width="20" height="20" />
+							</button>
+						</div>
 
 						<div className="course-menu-expanded">
 							<p
@@ -174,29 +187,33 @@ function SelfAwarenessCourse() {
 								<h2 className="sub-title">{courses.subtitle}</h2>
 							</div>
 
-							<div className="sub-courses mt-2">
+							<ul className="sub-courses mt-2">
 								{courses.catalogue.map((week, index) => (
-									<button
-										key={index}
-										className={`course-week-button ${
-											`week${index + 1}` === activeLink ? 'active' : ''
-										}`}
-										onClick={() => handleLinkClick(index)}
-										disabled={disableCourse(index + 1)}
-									>
-										<div>
-											<Icon
-												icon="icon-park-outline:check-one"
-												className="course-list-icon"
-											/>
-										</div>
-										<div className="d-flex align-items-center">
-											<p className="text-nowrap">{`Week ${index + 1} `}</p>
-											<p className="text-wrap ms-3">{week.weekLesson}</p>
-										</div>
-									</button>
+									<li key={index} className='sub-course'>
+										<button
+											key={index}
+											className={`course-week-button ${
+												`week${index + 1}` === activeLink ? 'active' : ''
+											}`}
+											onClick={() => handleLinkClick(index)}
+											disabled={disableCourse(index + 1)}
+										>
+											<div>
+												<Icon
+													icon="icon-park-outline:check-one"
+													className="course-list-icon"
+												/>
+											</div>
+											<div className="d-flex align-items-center">
+												<p className="text-nowrap">{`Week ${
+													index + 1
+												} `}</p>
+												<p className="ms-3">{week.weekLesson}</p>
+											</div>
+										</button>
+									</li>
 								))}
-							</div>
+							</ul>
 						</div>
 					</div>
 
