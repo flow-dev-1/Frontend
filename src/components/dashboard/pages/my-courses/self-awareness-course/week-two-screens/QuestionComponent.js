@@ -56,7 +56,7 @@ const QuestionComponent = ({
           >
             {questionText}
           </h2>
-          {imageSrc && <img src={imageSrc} alt={altText} className='mx-2' />}
+          {imageSrc && <img src={imageSrc} alt={altText} className='question-box-img mx-2' />}
           <h2 style={{ fontSize: '35px', color: '#5B616A' }} className=''>
             {altText}
           </h2>

@@ -1,5 +1,4 @@
 import React from 'react';
-import './button.css';
 
 function Button({ text, variant, onClickNext, onClickPrev }) {
 	if (variant == 'next') {

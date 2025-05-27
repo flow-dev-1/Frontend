@@ -90,7 +90,7 @@ export default function StrengthIdentification({ formData, onNext, onBack, activ
 	};
 
 	return (
-		<div className="">
+		<>
 			<div className="week-two question-box py-4">
 				<div className="d-flex align-items-start">
 					<div className="question-box-header mx-auto">
@@ -101,7 +101,7 @@ export default function StrengthIdentification({ formData, onNext, onBack, activ
 					</div>
 				</div>
 				<div className="assessment checkbox-questions mt-4">
-					<ul className="p-0">
+					<ul className="p-0" style={{width: '100%'}}>
 						{questionsArray.map((item, index) => (
 							<li key={index} className="d-flex">
 								<img
@@ -123,6 +123,6 @@ export default function StrengthIdentification({ formData, onNext, onBack, activ
 					onClickPrev={onBack}
 				/>
 			</div>
-		</div>
+		</>
 	);
 }

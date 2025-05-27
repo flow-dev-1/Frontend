@@ -170,6 +170,17 @@
 	font-size: 32px;
 }
 
+.self-awareness .question-box {
+	width: 100%;
+	height: 100%;
+	background: url('../../../../../assets/selfawareness-images/course-bg.png') #6edeeb;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	border: 10px solid #00bcc3;
+	padding: 10px 25px;
+}
+
 .self-awareness .question-box-header {
 	display: flex;
 	justify-content: start;
@@ -195,19 +206,6 @@
 	margin-top: -0.5rem;
 }
 
-.self-awareness .question-box {
-	width: 100%;
-	height: 100%;
-
-	background: url('../../../../../assets/selfawareness-images/course-bg.png') #6edeeb;
-
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: cover;
-	border: 10px solid #00bcc3;
-	padding: 10px 25px;
-}
-
 .question-bot {
 	width: 100%;
 	/* height: 470px;  */
@@ -222,9 +220,9 @@
 	width: 100%;
 }
 
-.self-awareness .question-box.week-two {
+/* .self-awareness .question-box.week-two {
 	width: fit-content;
-}
+} */
 
 .text-area-box {
 	width: 100%;
@@ -472,18 +470,21 @@
 }
 
 .self-awareness .week-two .checkbox-questions ul {
+	width: 100%;
 	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	gap: 15px 10px;
+	grid-template-columns: repeat(auto-fit, minmax(180px, max-content));
+	gap: 10px;
 }
-.self-awareness .week-two.scenario .checkbox-questions ul {
+
+/* .self-awareness .week-two.scenario .checkbox-questions ul {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
 	gap: 0px 0px;
-}
-.self-awareness .week-two.scenario .checkbox-questions.weakness ul {
+} */
+
+/* .self-awareness .week-two.scenario .checkbox-questions.weakness ul {
 	grid-template-columns: repeat(1, 1fr);
-}
+} */
 
 .self-awareness .checkbox-questions li img {
 	width: 50px;
@@ -514,7 +515,7 @@
 }
 
 .self-awareness .question-box .scenario-number {
-	background-color: #fff0d7;
+	background-color: #fff0d775;
 	border: 4px solid #5b616a;
 	border-radius: 50px;
 	text-align: center;

@@ -26,7 +26,7 @@ const EndOfCourseComponent = ({
         />
       }
 
-      <div className="d-flex align-items-center justify-content-around mx-auto mt-5">
+      <div className="d-flex align-items-center justify-content-around mx-auto mt-3">
         {/* <button
           className='btn progress-btn btn-light'
           onClick={() => setCurrentActivity(1)}

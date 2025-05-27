@@ -208,7 +208,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 		if (questionData.questionList) {
 			return (
 				<div className="week-two">
-					<div style={{ height: '550px' }} className="assessment question-box">
+					<div className="assessment question-box">
 						{currentIndex <= 1 && (
 							<div className="assessment-box">
 								<h2 style={{ color: '#FAFAFA', textAlign: 'center' }}>
@@ -310,7 +310,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 			{renderQuestion()}
 
 			<div className="slider-indicator">
-				<ul className="p-0 mt-5">
+				<ul className="p-0 mt-3">
 					{Array.from({ length: questionsArray.length }, (_, index) => (
 						<li
 							key={index + 1}

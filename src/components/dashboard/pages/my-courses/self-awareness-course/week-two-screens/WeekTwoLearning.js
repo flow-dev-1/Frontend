@@ -277,7 +277,7 @@ export default function WeekTwoLearning({
 	};
 
 	return (
-		<div>
+		<div className='week-learning'>
 			<ToastContainer />
 			<div className="content-container">{renderActivityContent()}</div>
 		</div>

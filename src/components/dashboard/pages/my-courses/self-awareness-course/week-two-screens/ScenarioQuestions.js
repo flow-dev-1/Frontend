@@ -155,26 +155,23 @@ export default function ScenarioQuestions({ onBack, onNext, formData, activityIn
 		const currentQuestion = questionsArray[currentIndex - 1];
 		return (
 			<div className="week-two scenario">
-				<div style={{ height: '550px' }} className="assessment question-box py-4">
-					<div
-						className="scenario-number px-4 mt-8 mb-3 mx-auto"
-						style={{ marginTop: '1rem' }}
-					>
+				<div className="assessment question-box py-4">
+					<div className="scenario-number px-4 mt-8 mb-3 mx-auto">
 						<h1 className="text-center my-0">Scenario {currentIndex}</h1>
 					</div>
 					<div className="question-box-header align-items-start">
 						<h1 className="mb-0 ">Question: </h1>
 						<h2
-							style={{ color: '#5B616A', fontSize: '38px' }}
+							style={{ color: '#5B616A', fontSize: '34px' }}
 							className="mb-0 ms-3 text-center"
 						>
 							{currentQuestion.title}
 						</h2>
 					</div>
 
-					<div className="d-flex justify-content-around mt-2">
-						<div className="text-center checkbox-questions strength">
-							<img src={strengthImg} alt="" />
+					<div className="d-flex flex-column flex-md-row justify-content-around mt-3">
+						<div className="d-flex flex-column text-center checkbox-questions  strength">
+							<img src={strengthImg} alt="" style={{ width: '100px' }}  />
 							<ul className="p-0 mt-4">
 								{currentQuestion.questionList.map((item, index) => (
 									<li key={index} className="d-flex my-1">
@@ -196,7 +193,7 @@ export default function ScenarioQuestions({ onBack, onNext, formData, activityIn
 							</ul>
 						</div>
 						<div className="d-flex flex-column text-center checkbox-questions weakness">
-							<img style={{ width: '120px' }} src={weeknessImg} alt="" />
+							<img style={{ width: '100px' }} src={weeknessImg} alt="" />
 							<ul className="p-0 mt-4">
 								{currentQuestion.questionListNegative.map((item, index) => (
 									<li key={index} className="d-flex my-2">
