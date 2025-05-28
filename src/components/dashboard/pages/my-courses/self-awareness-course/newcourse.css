@@ -524,7 +524,7 @@
 
 /* Mindset Section */
 .self-awareness .question-box.mindset .scrollable {
-	max-height: 250px;
+	max-height: 280px;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	/* overscroll-behavior-y: none; */

@@ -15,7 +15,7 @@ function Button({ text, variant, onClickNext, onClickPrev }) {
 		return (
 			<div className="progression-btns">
 				<button className="btn light" onClick={() => onClickPrev()}>
-					{'<<< Prev'}
+					{'<<< Back'}
 				</button>
 			</div>
 		);
@@ -24,7 +24,7 @@ function Button({ text, variant, onClickNext, onClickPrev }) {
 	return (
 		<div className="progression-btns">
 			<button className="btn prev light" onClick={() => onClickPrev()}>
-				{'<<< Prev'}
+				{'<<< Back'}
 			</button>
 			<button className="btn next dark" onClick={() => onClickNext()}>
 				{'Next >>>'}
