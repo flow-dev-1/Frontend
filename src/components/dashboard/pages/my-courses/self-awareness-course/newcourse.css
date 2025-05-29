@@ -245,7 +245,6 @@
 	overflow-y: auto;
 }
 
-
 /* .text-area-box.two {
 	height: 90px;
 	padding
@@ -443,7 +442,6 @@
 	width: 40px;
 }
 
-
 /* .self-awareness .question-box.personality-question .text-area-box,
 .self-awareness .question-box.assessment .text-area-box,
 .self-awareness .question-box.mindset .text-area-box,
@@ -534,7 +532,7 @@
 	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 	gap: 6px;
 	padding: 8px 12px;
-	margin: 0; 
+	margin: 0;
 }
 
 .self-awareness .flip-div ul li {
@@ -617,25 +615,22 @@ img.value-description-img {
 	border: 1px solid #000; /* For debugging visibility */
 	position: absolute; /* Or relative based on layout */
 }
+
 .self-awareness .week-two .dropdown-select-section {
-	width: 200px;
+	width: 100%;
 	display: grid;
-	gap: 10px 30px;
-	align-items: center;
-	/* justify-content: center; */
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: 10px;
 }
 
+.self-awareness .week-two .dropdown-select,
 .self-awareness .week-two .dropdown-div {
-	width: 200px;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+	width: 100%;
 	padding: 10px;
 	background-image: url('../../../../../assets/selfawareness-images/emocom-images/drop-down-bg.png');
 	background-repeat: no-repeat;
 	background-position: center;
-	background-size: contain;
+	background-size: 100% 100%;
 }
 
 .self-awareness .week-two.scenario .dropdown-div {
@@ -657,7 +652,6 @@ img.value-description-img {
 }
 .self-awareness .week-two.scenario .emoji-value-option {
 	width: 300px;
-
 	bottom: 0%;
 }
 

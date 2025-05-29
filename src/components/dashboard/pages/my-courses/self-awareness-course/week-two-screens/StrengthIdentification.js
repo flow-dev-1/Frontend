@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png';
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png';
-import '../newcourse.css';
+
 import ProgressionButtons from '../components/ProgressionButtons';
 import { toast } from 'react-toastify';
 

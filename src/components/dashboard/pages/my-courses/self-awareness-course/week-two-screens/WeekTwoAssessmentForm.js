@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import '../newcourse.css';
 import Modal from 'react-modal';
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png';
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png';

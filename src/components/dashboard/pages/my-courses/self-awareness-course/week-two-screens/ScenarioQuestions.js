@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import '../newcourse.css';
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png';
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png';
 import strengthImg from '../../../../../../assets/selfawareness-images/strength.png';
