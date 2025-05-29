@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../newcourse.css';
 
 export default function QuestionFromVideo({ formData, onBack, onNext }) {
 	const [currentIndex, setCurrentIndex] = useState(1);

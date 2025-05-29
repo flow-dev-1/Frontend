@@ -4,7 +4,6 @@ import dragdropArrow from '../../../../../../assets/selfawareness-images/dragdro
 import bucketYes from '../../../../../../assets/selfawareness-images/bucket-yes.png';
 import bucketNo from '../../../../../../assets/selfawareness-images/bucket-no.png';
 import bucketSometimes from '../../../../../../assets/selfawareness-images/bucket-sometimes.png';
-import '../newcourse.css';
 import { Icon } from '@iconify/react';
 import cardOne from '../../../../../../assets/selfawareness-images/card-one.png';
 import cardTwo from '../../../../../../assets/selfawareness-images/card-two.png';

@@ -34,7 +34,7 @@ const VideoComponent = ({ videoSrc }) => {
       {!error && (
         <video
           className='custom-video'
-          width="100%"
+          // width="100%"
           controls
           controlsList="nodownload noremoteplayback"
           style={{ pointerEvents: 'auto' }} 

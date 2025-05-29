@@ -5,7 +5,6 @@ import celebrate from '../../../../../../assets/celebrate.png';
 import mindset from '../../../../../../assets/selfawareness-images/mindset.png';
 import QuestionFromVideo from './QuestionFromVideo';
 import WeekThreeAssessmentForm from './WeekThreeAssessmentForm';
-import VideoComponent from './VideoComponent';
 import QuestionComponent from './QuestionComponent';
 import userService from '../../../../../../services/api/user.js';
 import { toast, ToastContainer } from 'react-toastify';
@@ -15,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import { updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
 
 import ProgressionButtons from '../components/ProgressionButtons.jsx';
+import VideoComponent from '../components/VideoComponent.jsx';
 
 export default function WeekThreeLearning({
 	course,

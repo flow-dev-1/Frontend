@@ -7,9 +7,7 @@ import MindSetFlipQuestion from './MindSetFlipQuestion'
 import WeekFourAssessmentForm from './WeekFourAssessmentForm'
 import QuestionAboutPeople from './QuestionAboutPeople'
 import CoreValuesQuestion from './CoreValuesQuestion'
-import VideoComponent from './VideoComponent'
 import QuestionComponent from './QuestionComponent'
-import NavigationButtons from './NavigationButtons'
 import userService from '../../../../../../services/api/user.js'
 import { toast, ToastContainer } from 'react-toastify'
 import EndOfCourseComponent from './EndOfCourseComponent'
@@ -18,6 +16,9 @@ import { useDispatch } from "react-redux";
 import {
   updateData,
 } from "../../../../../../redux/reducers/userAnswersReducer.js";
+
+import ProgressionButtons from '../components/ProgressionButtons.jsx';
+import VideoComponent from '../components/VideoComponent.jsx';
 
 export default function WeekFourLearning({
   course,
@@ -166,7 +167,9 @@ export default function WeekFourLearning({
               setVideoPlaying={setVideoPlaying}
               videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-4/FLOW-4_1.mp4'
             />
-            <NavigationButtons onNext={() => handleNext()} isBackDisabled />
+						<div className="mt-3">
+							<ProgressionButtons variant="next" onClickNext={handleNext} />
+						</div>
           </>
         )
       case 2:
@@ -177,7 +180,7 @@ export default function WeekFourLearning({
             suffix='?'
             imageSrc={values}
             formData={formData}
-            altText='values image'
+            altText=''
             onBack={handlePrevious}
             onNext={(answers) =>
               handleNext({
@@ -194,10 +197,9 @@ export default function WeekFourLearning({
               setVideoPlaying={setVideoPlaying}
               videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-4/FLOW-4_2.mp4'
             />
-            <NavigationButtons
-              onBack={handlePrevious}
-              onNext={() => handleNext()}
-            />
+						<div className="mt-3">
+							<ProgressionButtons variant="both" onClickNext={handleNext} onClickPrev={handlePrevious} />
+						</div>
           </>
         )
       case 4:
@@ -225,10 +227,9 @@ export default function WeekFourLearning({
               setVideoPlaying={setVideoPlaying}
               videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-4/FLOW-4_3.mp4'
             />
-            <NavigationButtons
-              onBack={handlePrevious}
-              onNext={() => handleNext()}
-            />
+						<div className="mt-3">
+							<ProgressionButtons variant="both" onClickNext={handleNext} onClickPrev={handlePrevious} />
+						</div>
           </>
         )
       case 6:
@@ -254,10 +255,9 @@ export default function WeekFourLearning({
               setVideoPlaying={setVideoPlaying}
               videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-4/FLOW-4_4.mp4'
             />
-            <NavigationButtons
-              onBack={handlePrevious}
-              onNext={() => handleNext()}
-            />
+						<div className="mt-3">
+							<ProgressionButtons variant="both" onClickNext={handleNext} onClickPrev={handlePrevious} />
+						</div>
           </>
         )
 
@@ -285,10 +285,9 @@ export default function WeekFourLearning({
               setVideoPlaying={setVideoPlaying}
               videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-4/FLOW-4_5.mp4'
             />
-            <NavigationButtons
-              onBack={handlePrevious}
-              onNext={() => handleNext()}
-            />
+						<div className="mt-3">
+							<ProgressionButtons variant="both" onClickNext={handleNext} onClickPrev={handlePrevious} />
+						</div>
           </>
         )
       case 10:
@@ -315,7 +314,7 @@ export default function WeekFourLearning({
   }
 
   return (
-    <div>
+    <div className='week-learning'>
       <ToastContainer />
       <div className='content-container'>{renderActivityContent()}</div>
     </div>

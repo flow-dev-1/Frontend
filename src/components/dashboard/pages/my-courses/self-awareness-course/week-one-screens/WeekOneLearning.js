@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
-import VideoComponent from './VideoComponent';
 import QuestionComponent from './QuestionComponent';
 import DragDropComponent from './DragAndDrop';
 import EndOfCourseComponent from './EndOfCourseComponent';
@@ -23,6 +22,7 @@ import { useDispatch } from 'react-redux';
 import { updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
 
 import ProgressionButtons from '../components/ProgressionButtons.jsx';
+import VideoComponent from '../components/VideoComponent.jsx';
 
 export default function WeekOneLearning({
 	course,

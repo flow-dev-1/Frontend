@@ -5,16 +5,16 @@ import StrengthIdentification from './StrengthIdentification';
 import WeaknessIdentification from './WeaknessIdentification';
 import ScenarioQuestions from './ScenarioQuestions';
 import WeekTwoAssessmentForm from './WeekTwoAssessmentForm';
-import VideoComponent from './VideoComponent';
 import QuestionComponent from './QuestionComponent';
-import NavigationButtons from './NavigationButtons';
-import ProgressionButtons from '../components/ProgressionButtons.jsx';
 import userService from '../../../../../../services/api/user.js';
 import { toast, ToastContainer } from 'react-toastify';
 import EndOfCourseComponent from './EndOfCourseComponent.js';
 import { useQuery } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
+
+import ProgressionButtons from '../components/ProgressionButtons.jsx';
+import VideoComponent from '../components/VideoComponent.jsx';
 
 export default function WeekTwoLearning({
 	course,

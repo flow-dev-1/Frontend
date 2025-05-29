@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png';
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png';
 import userService from '../../../../../../services/api/user.js';
-import '../newcourse.css';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import { userAnswer, updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
