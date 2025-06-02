@@ -21,3 +21,15 @@
 .course-sidebar-content {
   width: 100%;
 }
+
+/* sidebar-content */
+
+@media screen and (max-width: 1024px) and (orientation: landscape) {
+  .sidebar-user {
+    display: none !important;
+  }
+  .dashboard-content {
+    width: 100%;
+    margin: 50px 0 0 !important;
+  }
+}
