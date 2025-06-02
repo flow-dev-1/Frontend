@@ -18,13 +18,13 @@ const Support = () => {
         </p>
         <ul>
           <li>
-            <strong>Email:</strong> support@flow.ng
+            <strong>Email:</strong> hello@flow.ng
           </li>
           <li>
-            <strong>Phone:</strong> +1 (800) 123-4567
+            <strong>Phone:</strong> +234 913 500 9066
           </li>
           <li>
-            <strong>WhatsApp Chat:</strong> +234-8976545
+            <strong>WhatsApp Chat:</strong> +234 913 500 9066
           </li>
         </ul>
       </div>
