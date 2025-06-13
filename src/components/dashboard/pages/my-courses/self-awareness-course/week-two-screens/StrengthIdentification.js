@@ -110,7 +110,7 @@ export default function StrengthIdentification({ formData, onNext, onBack, activ
 									src={questionChecked[index] ? checkedImage : unCheckedImage}
 									alt=""
 								/>
-								<p className="question-p ms-2 text-nowrap">{item}</p>
+								<p className="question-p ms-2 text-nowrap text-gray">{item}</p>
 							</li>
 						))}
 					</ul>
