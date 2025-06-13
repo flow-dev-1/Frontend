@@ -144,7 +144,7 @@ export default function MindSetFlipQuestion({ onSubmit, onBack, onNext, activity
                   className='d-flex'
 								>
 									<div onClick={() => handleItemClick(item)} className='flex-fill'>
-										<p className="question-p py-2">{item}</p>
+										<p className="question-p py-2 text-gray">{item}</p>
 									</div>
 									<img
 										onClick={() =>
