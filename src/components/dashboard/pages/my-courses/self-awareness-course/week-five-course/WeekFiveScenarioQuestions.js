@@ -153,7 +153,7 @@ export default function WeekFiveScenarioQuestions({ onNext, onBack, formData, ac
 			<div className="week-two scenario">
 				<div className="assessment question-box py-4">
 					<div className="scenario-number px-4 mb-3 mx-auto">
-						<h1 className="text-center my-0">Scenario {currentIndex}</h1>
+						<h1 className="text-center my-0 text-gray">Scenario {currentIndex}</h1>
 					</div>
 					<div className="question-box-header align-items-start">
 						<h2 style={{ color: '#5B616A' }} className="mb-0 ms-3 text-center">

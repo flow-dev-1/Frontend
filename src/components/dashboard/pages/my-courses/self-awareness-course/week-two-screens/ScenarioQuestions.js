@@ -156,7 +156,7 @@ export default function ScenarioQuestions({ onBack, onNext, formData, activityIn
 			<div className="week-two scenario">
 				<div className="assessment question-box py-4">
 					<div className="scenario-number px-4 mt-8 mb-3 mx-auto">
-						<h1 className="text-center my-0">Scenario {currentIndex}</h1>
+						<h1 className="text-center my-0 text-gray">Scenario {currentIndex}</h1>
 					</div>
 					<div className="question-box-header align-items-start">
 						<h1 className="mb-0 ">Question: </h1>
