@@ -65,7 +65,7 @@ export default function CoreValuesQuestion({ onBack, onNext, formData, activityI
 						{questionsArray.map((item, index) => (
 							<li key={index} className="d-flex">
 								<div>
-									<p className="question-p text-body">{item}</p>
+									<p className="question-p text-gray">{item}</p>
 								</div>
 								<img
 									onClick={() => handleQuestionCheck(item)}
