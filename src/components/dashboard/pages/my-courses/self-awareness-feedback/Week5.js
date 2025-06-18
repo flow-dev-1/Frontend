@@ -415,31 +415,32 @@ const Week5 = ({ enrollmentId }) => {
   const activitiesOne = [
     {
       question: " What do you understand by “Emotional Intelligence”?",
-      answer: data?.activity?.activities[1].answers?.[0]
+      answer: data?.activity?.activities[1].answers?.[0],
+      feedback: data?.activity?.activities[1].feedback?.[0]
     }]
 
   const Q1 = [
-    data?.activity?.activities[5].answers.IWill[0],
-    data?.activity?.activities[5].answers.IWillNot[0]
+    data?.activity?.activities[5]?.answers?.IWill?.[0],
+    data?.activity?.activities[5]?.answers?.IWillNot?.[0]
   ];
   const Q2 = [
-    data?.activity?.activities[5].answers.IWill[1],
-    data?.activity?.activities[5].answers.IWillNot[1]
+    data?.activity?.activities[5]?.answers?.IWill?.[1],
+    data?.activity?.activities[5]?.answers?.IWillNot?.[1]
   ];
   const Q3 = [
-    data?.activity?.activities[5].answers.IWill[2],
-    data?.activity?.activities[5].answers.IWillNot[2]
+    data?.activity?.activities[5]?.answers?.IWill?.[2],
+    data?.activity?.activities[5]?.answers?.IWillNot?.[2]
   ];
   // FLS9982
   const Q4 = [
-    data?.activity?.activities[5].answers.IWill[3],
-    data?.activity?.activities[5].answers.IWill[3]
+    data?.activity?.activities[5]?.answers?.IWill?.[3],
+    data?.activity?.activities[5]?.answers?.IWill?.[3]
   ]; const Q5 = [
-    data?.activity?.activities[5].answers.IWill[4],
-    data?.activity?.activities[5].answers.IWillNot[4]
+    data?.activity?.activities[5]?.answers?.IWill?.[4],
+    data?.activity?.activities[5]?.answers?.IWillNot?.[4]
   ];
   // console.log(Q1);
-  const activityData = data?.activity?.activities[3].answers;
+  const activityData = data?.activity?.activities?.[3]?.answers;
 
   if (isPending) {
     return <div>Loading...</div>;
@@ -454,27 +455,32 @@ const Week5 = ({ enrollmentId }) => {
     {
       question:
         "Two classmates, Sarah and Alex, have been assigned to work on a group project together. However, they have different ideas about how to approach the project, and tensions are rising between them. Sarah wants to take the lead and implement her ideas, while Alex feels sidelined and frustrated. If you were Sarah, how would you respond to this situation?",
-      answer: Q1
+      answer: Q1,
+      feedback: data?.activity?.activities[5].feedback?.[0]
     },
     {
       question:
         "During lunch break, a group of students starts pressuring Jack to skip class and join them in going to an off-campus party. Jack is torn between wanting to fit in with his peers and knowing that skipping class is against school rules and could negatively affect his grades. If you were Jack, how would you respond to this peer pressure situation?",
-      answer: Q2
+      answer: Q2,
+      feedback: data?.activity?.activities[5].feedback?.[1]
     },
     {
       question:
         "During a class presentation, James receives feedback from his teacher and classmates that his delivery was too monotone and he needs to work on his public speaking skills. James feels embarrassed and defensive, as he put a lot of effort into preparing for the presentation. If you were James, how would you respond to this situation?",
-      answer: Q3
+      answer: Q3,
+      feedback: data?.activity?.activities[5].feedback?.[2]
     },
     {
       question:
         "Tom has been feeling overwhelmed with schoolwork and family issues at home. This is beginning to make him quiet and easily tired. If you were Tom, how would you respond to this situation?",
-      answer: Q4
+      answer: Q4,
+      feedback: data?.activity?.activities[5].feedback?.[3]
     },
     {
       question:
         "Emily has been rehearsing for weeks to audition for the school play. However, when the cast list is posted, she discovers that she didn't get a part. She feels disappointed, rejected, and unsure of her abilities. If you were Emily, how would you respond to this situation?",
-      answer: Q5
+      answer: Q5,
+      feedback: data?.activity?.activities[5].feedback?.[4]
     }
   ];
 
@@ -538,26 +544,19 @@ const Week5 = ({ enrollmentId }) => {
           )}
 
           {/* Conditionally render feedback */}
-          {activity.feedback && (
-            <div className="feedback">
-              <div id="badge">Feedback:</div>
-              <div
-                style={{
+          {activity?.feedback?.length > 0 && (
+              <div className="feedback" style={{ marginTop: "1rem" }}>
+                <div id="badge">Feedback:</div>
+                <div style={{
                   width: "100%",
                   display: "flex",
                   alignItems: "center",
                   gap: "1rem"
-                }}
-              >
-                <div className="feedback-card">{activity.feedback}</div>
-                <Icon
-                  style={{ color: "#275DAD" }}
-                  width={20}
-                  icon="lucide:edit"
-                />
+                }}>
+                  <div className="feedback-card">{activity.feedback}</div>
+                </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
       ))}
       <p className="activity-badge">Activity 2</p>
@@ -571,7 +570,7 @@ const Week5 = ({ enrollmentId }) => {
           <div className="your-answers">
             <p className="answer-font">Your answer</p>
             {emojis.map((emoji, index) => {
-              const activityEmoji = getActivityEmoji(activityData[index]);
+              const activityEmoji = getActivityEmoji(activityData?.[index]);
 
               return (
                 <div key={index} className="emoji-container">
@@ -650,25 +649,20 @@ const Week5 = ({ enrollmentId }) => {
 
           {/* Conditionally render feedback */}
           {activity.feedback && (
-            <div className="feedback">
-              <div id="badge">Feedback:</div>
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "1rem"
-                }}
-              >
-                <div className="feedback-card">{activity.feedback}</div>
-                <Icon
-                  style={{ color: "#275DAD" }}
-                  width={20}
-                  icon="lucide:edit"
-                />
+              <div className="feedback">
+                <div id="badge">Feedback:</div>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1rem"
+                  }}
+                >
+                  <div className="feedback-card">{activity.feedback}</div>
+                </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
       ))}
 
@@ -685,8 +679,8 @@ const Week5 = ({ enrollmentId }) => {
           {/* Your Answer Column */}
           <div className="your-answers">
             <p className="answer-font">Your answer</p>
-            {checkList.map((check, index) => {
-              const answerEmoji = emojis.find(
+            {checkList?.map((check, index) => {
+              const answerEmoji = emojis?.find(
                 (emoji) => emoji.label === myChecked[index]
               );
 

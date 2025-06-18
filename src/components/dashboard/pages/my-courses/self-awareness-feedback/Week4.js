@@ -477,27 +477,34 @@ const Week4 = ({ enrollmentId }) => {
 
   const activities = [
     {
+      activity: 1,
       question: "What exactly are “Values”??",
-      answer: data?.activity?.activities[1].answers?.[0]
+      answer: data?.activity?.activities[1].answers[0],
+      feedback: data?.activity?.activities[1].feedback
     },
     {
-      question:
-        "Flip each card to know more about the values. Select the box on each card to pick the values you feel are a big part of who you are.",
-      answer: data?.activity?.activities[3].answers
+      activity: 2,
+      question: "Flip each card to know more about the values. Select the box on each card to pick the values you feel are a big part of who you are.",
+      answer: data?.activity?.activities[3].answers,
+      feedback: data?.activity?.activities[3].feedback
     },
     {
-      question:
-        "Identify three (3) important people in your live and list their names below.",
-      answer: data?.activity?.activities[5].answers?.[0]
+      activity: 3,
+      question: "Identify three (3) important people in your live and list their names below.",
+      answer: data?.activity?.activities[5].answers[0],
+      feedback: data?.activity?.activities?.[5]?.feedback?.[0]
     },
     {
+      activity: 4,
       question: "Write out what these people think about you.",
-      answer: data?.activity?.activities[5].answers?.[1]
+      answer: data?.activity?.activities[5].answers[1],
+      feedback: data?.activity?.activities?.[5]?.feedback?.[1]
     },
     {
-      question:
-        "Are you happy with what these people think about you? If no, what would you like to change? If yes, type “YES” in the box.",
-      answer: data?.activity?.activities[5].answers?.[2]
+      activity: 5,
+      question: "Are you happy with what these people think about you? If no, what would you like to change? If yes, type “YES” in the box.",
+      answer: data?.activity?.activities[5].answers[2],
+      feedback: data?.activity?.activities?.[5]?.feedback?.[2]
     }
   ];
 
@@ -557,26 +564,19 @@ const Week4 = ({ enrollmentId }) => {
           )}
 
           {/* Conditionally render feedback */}
-          {activity.feedback && (
-            <div className="feedback">
-              <div id="badge">Feedback:</div>
-              <div
-                style={{
+          {activity?.feedback?.length > 0 && (
+              <div className="feedback" style={{ marginTop: "1rem" }}>
+                <div id="badge">Feedback:</div>
+                <div style={{
                   width: "100%",
                   display: "flex",
                   alignItems: "center",
                   gap: "1rem"
-                }}
-              >
-                <div className="feedback-card">{activity.feedback}</div>
-                <Icon
-                  style={{ color: "#275DAD" }}
-                  width={20}
-                  icon="lucide:edit"
-                />
+                }}>
+                  <div className="feedback-card">{activity.feedback}</div>
+                </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
       ))}
 

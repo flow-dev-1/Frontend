@@ -172,20 +172,20 @@ let questionsQuiz = [
       },
       {
         label:
-          "B. Tell him about your own weakness in hopes that it will get him to share as well.",
+          "B. Tell him about the strengths you have noticed he has and identify how to manage his weakness.",
         color: "Green",
         checked: false, // This is the correct option (assuming)
-        isCorrect: false
-      },
-      {
-        label: "C. Tell him about the strengths you have noticed he has and identify how to manage his weakness.",
-        color: "Blue",
-        checked: false, // This is not the correct option
         isCorrect: true
       },
       {
+        label: "C. Tell your other friends about this weakness.",
+        color: "Blue",
+        checked: false, // This is not the correct option
+        isCorrect: false
+      },
+      {
         label:
-          "D. Tell your other friends about this weakness.",
+          "D. Tell him about your own weakness in hopes that it will get him to share as well.",
         color: "Yellow",
         checked: false, // This is not the correct option
         isCorrect: false
@@ -193,6 +193,7 @@ let questionsQuiz = [
     ]
   }
 ];
+
 
 const Week2 = ({ enrollmentId }) => {
   const [assessmentData, setAssessmentData] = useState(null);
@@ -331,6 +332,11 @@ const Week2 = ({ enrollmentId }) => {
         ""
     }
   ];
+
+  // This is a utility function to help correct the assessment
+  function correctAnswer(params) {
+    
+  }
 
 
   return (

@@ -247,35 +247,39 @@ const SelfAwarenessFeedback = () => {
               <span style={{ fontSize: "14px" }}>
                 Summary of your journey through Self Awareness
               </span>
-              {/* Disable download if data is still loading */}
-              <a
-                style={{
-                  zIndex: 100,
-                  cursor: "pointer",
-                  fontSize: 16,
-                }}
-                download="SelfAwarenessSummary.pdf"
-                className={`download-link text-blue${!isDataLoaded ? "disabled" : ""
-                  }`}
-                onClick={(e) => !isDataLoaded && e.preventDefault()}
-              >
-                (Download PDF)
-                <Icon
-                  onClick={isDataLoaded ? generatePDF : null}
-                  icon="bi:download"
-                  style={{ cursor: isDataLoaded ? "pointer" : "not-allowed" }}
-                />
-              </a>
+
             </h2>
-            <Icon
+
+            {/* Disable download if data is still loading */}
+            <p
+              style={{
+                zIndex: 100,
+                cursor: "pointer",
+                fontSize: 16,
+                color: "#007ACC" 
+              }}
+              download="SelfAwarenessSummary.pdf"
+              className={`download-link text-blue${!isDataLoaded ? "disabled" : ""
+                }`}
+                onClick={isDataLoaded ? generatePDF : null}
+              // onClick={(e) => !isDataLoaded && e.preventDefault()}
+            >
+              (Download PDF)
+              <Icon
+               
+                icon="bi:download"
+                style={{ cursor: isDataLoaded ? "pointer" : "not-allowed" }}
+              />
+            </p>
+            {/* <Icon
               icon={
                 expandedWeek === 6 || expandedWeek === "all"
                   ? "simple-line-icons:arrow-up"
                   : "simple-line-icons:arrow-down"
               }
-              onClick={() => toggleWeek(6)}
+              onClick={() => toggleWeek("all")}
               style={{ cursor: "pointer" }}
-            />
+            /> */}
           </div>
         </div>
         {(expandedWeek === 6 || expandedWeek === "all") && <HurrayComponent

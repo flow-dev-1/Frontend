@@ -227,7 +227,7 @@ export default function NewAssessmentForm({ onNext,
 
       const storedData = localStorage.getItem('weekFiveAssessmentData')
       let savedAnswers = JSON.parse(storedData)
-      const correctAnswers = [1, 0, 0] // Adjust according to correct answers
+      const correctAnswers = [1, 1, 1, 1, 1, 0, 0, 1, 2, 1] // Adjust according to correct answers
       const valuesToCheck = savedAnswers.assessment.answers
       const totalQuestions = valuesToCheck.length
       const correctCount = valuesToCheck.reduce((count, current, index) => {
@@ -250,33 +250,7 @@ export default function NewAssessmentForm({ onNext,
         rating: percentage.toString()
       };
 
-      console.log(mutationData, "mutationData")
-
       mutation.mutate(mutationData);
-
-      // const response = await userService.postMyAssessment(
-      //   course.course?._id,
-      //   course._id,
-      //   dataToSend
-      // );
-
-      // if (response.status === "success") {
-      //   toast.success(response.message);
-      //   onNext()
-      //   // setReviewPopUp(true)
-      //   setIsLoading(false)
-      //   setDisableButton(false)
-      // } else if (response.status === "failed") {
-      //   toast.success(response.message);
-      //   onNext()
-      //   // setReviewPopUp(true)
-      //   setIsLoading(false)
-      //   setDisableButton(false)
-      // } else {
-      //   setIsLoading(false)
-      //   setDisableButton(false)
-      //   toast.error('Something went wrong. Please contact flow admin for support!');
-      // }
 
 
     } catch (error) {

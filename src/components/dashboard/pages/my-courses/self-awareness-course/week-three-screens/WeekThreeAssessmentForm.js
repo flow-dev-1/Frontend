@@ -185,8 +185,6 @@ export default function WeekThreeAssessmentForm({
 
   const handleNextStepClick = () => {
 
-    console.log(selectedAnswers," selectedAnswers")
-
     if (selectedAnswers[currentIndex - 1] === undefined) {
       toast.error('Please select an answer before proceeding.')
       return
@@ -232,15 +230,17 @@ export default function WeekThreeAssessmentForm({
     }
     try {
       const correctAnswers = [1, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+
       const totalQuestions = Object.keys(selectedAnswers).length
       const correctCount = Object.keys(selectedAnswers).reduce((count, key) => {
-        const selectedAnswerIndex = key - 1 // Adjusting for 0-indexing in correctAnswers array
+        const selectedAnswerIndex = key // Adjusting for 0-indexing in correctAnswers array
         return selectedAnswers[key] === correctAnswers[selectedAnswerIndex]
           ? count + 1
           : count
       }, 0)
 
       const percentage = Math.round((correctCount / totalQuestions) * 100)
+
       toast.success(`You scored ${percentage}% in the quiz`)
 
       const dataToSend = {
