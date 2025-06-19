@@ -72,79 +72,79 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
   return (
     <>
       {/* Activity 1*/}
-      <p className="bg-yellow py-3 px-5 text-gray d-inline-block rounded-5 fs-4">
+      <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
         Activity 1
       </p>
       <hr />
       <div className="d-flex gap-3">
-        <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{q1.question}</p>
+        <h2 className="text-blue fs-md-1">Questions:</h2>
+        <p className="text-blue fs-md-4">{q1.question}</p>
       </div>
       <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">{getActivityAnswer(q1)}</p>
+        <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(q1)}</p>
         {/* <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" /> */}
       </div>
       <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+        <p className="text-bg-secondary rounded-4 px-2 px-md-3 fs-md-5 align-self-start">
           Feedback
         </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+        <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
           {getActivityFeedback(q2)}
         </p>
         {/* <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" /> */}
       </div>
 
       <div className="d-flex gap-3">
-        <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{q3.question}</p>
+        <h2 className="text-blue fs-md-1">Questions:</h2>
+        <p className="text-blue fs-md-4">{q3.question}</p>
       </div>
       <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">{getActivityAnswer(q3)}</p>
+        <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(q3)}</p>
         {/* <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" /> */}
       </div>
       <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+        <p className="text-bg-secondary rounded-4 px-2 px-md-3 fs-md-5 align-self-start">
           Feedback
         </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+        <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
           {getActivityFeedback(q4)}
         </p>
         {/* <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" /> */}
       </div>
       <div className="d-flex gap-3">
-        <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{q5.question}</p>
+        <h2 className="text-blue fs-md-1">Questions:</h2>
+        <p className="text-blue fs-md-4">{q5.question}</p>
       </div>
       <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">{getActivityAnswer(q5)}</p>
+        <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(q5)}</p>
         {/* <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" /> */}
       </div>
       <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+        <p className="text-bg-secondary rounded-4 px-2 px-md-3 fs-md-5 align-self-start">
           Feedback
         </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+        <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
           {getActivityFeedback(q6)}
         </p>
         {/* <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" /> */}
       </div>
       <div className="d-flex gap-3">
-        <h2 className="text-blue fs-1">Questions:</h2>
-        <p className="text-blue fs-4">{q7.question}</p>
+        <h2 className="text-blue fs-md-1">Questions:</h2>
+        <p className="text-blue fs-md-4">{q7.question}</p>
       </div>
       <div className="d-flex gap-3">
-        <h2 className="text-gray fs-1 text-gray">Answers:</h2>
-        <p className="fs-5 flex-grow-1">{getActivityAnswer(q7)}.</p>
+        <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(q7)}.</p>
         {/* <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#D6D6D6" }} width={35} icon="tabler:message-2" /> */}
       </div>
       <div className="d-flex gap-3">
-        <p className="text-bg-secondary rounded-4 px-3 fs-5 align-self-start">
+        <p className="text-bg-secondary rounded-4 px-2 px-md-3 fs-md-5 align-self-start">
           Feedback
         </p>
-        <p className="bg-step-active text-gray fs-5 flex-grow-1 p-2 rounded">
+        <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
           {getActivityFeedback(q8)}
         </p>
         {/* <Icon  onClick = {()=> setShowModal(true)} style={{ color: "#275DAD" }} width={35} icon="lucide:edit" /> */}
@@ -154,7 +154,7 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
 
       <hr />
       {/* Assesment 1 */}
-      <p className="bg-yellow py-3 px-5 text-gray d-inline-block rounded-5 fs-4">
+      <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
         Assessment 1
       </p>
       <hr />
@@ -165,8 +165,10 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
         return (
           <>
             <div className="d-flex gap-3" key={i}>
-              <h2 className="text-blue fs-1 text-nowrap">Questions {i + 1}:</h2>
-              <p className="text-blue fs-4">{question}</p>
+              <h2 className="text-blue fs-md-1 text-nowrap">
+                Questions {i + 1}:
+              </h2>
+              <p className="text-blue fs-md-4">{question}</p>
             </div>
             {options.map((option, index) => {
               const optionKey = Object.keys(option)[0];
@@ -190,12 +192,21 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
                   {isCorrectOption ? (
                     <p className="d-flex gap-1">
                       {" "}
-                      <img src={correct} alt="" /> Correct
+                      <img
+                        src={correct}
+                        alt=""
+                        style={{ width: 20, height: 20 }}
+                      />{" "}
+                      Correct
                     </p>
                   ) : (
                     <p className="d-flex gap-1">
                       {" "}
-                      <img src={wrong} alt="" />
+                      <img
+                        src={wrong}
+                        alt=""
+                        style={{ width: 20, height: 20 }}
+                      />
                       Wrong
                     </p>
                   )}
@@ -207,10 +218,10 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
       })}
       <hr />
       {/* Weekly Report */}
-      <div className="bg-button p-5 rounded-4">
-        <h2 className="text-white fs-1">Weekly Report</h2>
-        <div className="d-flex gap-4">
-          <h2 className="text-gray fs-1 ratio-1x1 bg-aqua rounded-4 p-5 d-flex justify-content-center align-items-center border border-6 border-blue">
+      <div className="bg-button p-3 p-md-5 rounded-4">
+        <h2 className="text-white fs-md-1">Weekly Report</h2>
+        <div className="d-flex flex-column flex-md-row gap-4">
+          <h2 className="text-gray fs-md-1 ratio-1x1 bg-aqua rounded-4 p-3 p-md-5 d-flex justify-content-center border border-6 border-blue">
             {score}%
           </h2>
           <p className="text-white">

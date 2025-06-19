@@ -6,11 +6,12 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, info } = data;
 
   const handleInputChange = (value) => {
-
     setErrorMessage("");
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
-      const pageIndex = updatedAnswers.findIndex((answer) => answer.stepId === step);
+      const pageIndex = updatedAnswers.findIndex(
+        (answer) => answer.stepId === step
+      );
 
       if (pageIndex !== -1) {
         updatedAnswers[pageIndex] = {
@@ -30,15 +31,15 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
 
   return (
     <QuestionBox>
-      <div className="d-flex gap-2">
-        <h2 className="text-blue">Question: </h2>
-        <h2 className="text-gray">{info.question}</h2>
+      <div className="d-flex gap-2 flex-column flex-md-row">
+        <h2 className="text-blue fs-1">Question: </h2>
+        <h2 className="text-gray fs-1">{info.question}</h2>
       </div>
       <div className="d-flex flex-column gap-3 justify-content-center">
-          <MediumTextBox
-            value={answers.find((answer) => answer.stepId === step)?.value || ""}
-            handleChange={(e) => handleInputChange(e.target.value)}
-          />
+        <MediumTextBox
+          value={answers.find((answer) => answer.stepId === step)?.value || ""}
+          handleChange={(e) => handleInputChange(e.target.value)}
+        />
       </div>
     </QuestionBox>
   );

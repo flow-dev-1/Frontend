@@ -11,12 +11,14 @@ function SingleWhiteStarFrame({ data, answers, setAnswers, setErrorMessage }) {
     // Update answers state with the new value
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
-      const stepIndex = updatedAnswers.findIndex((answer) => answer.stepId === step);
+      const stepIndex = updatedAnswers.findIndex(
+        (answer) => answer.stepId === step
+      );
 
       if (stepIndex !== -1) {
         updatedAnswers[stepIndex] = {
           ...updatedAnswers[stepIndex],
-          value
+          value,
         };
       } else {
         updatedAnswers.push({
@@ -31,18 +33,20 @@ function SingleWhiteStarFrame({ data, answers, setAnswers, setErrorMessage }) {
 
   return (
     <QuestionBox>
-          <div className="mb-2">
-            <div className="d-flex gap-2 justify-content-center">
-            <h2 className="text-blue">Question:</h2>
-              <h2 className="text-gray">{question}</h2>
-            </div>
-            <div className="d-flex justify-content-center">
-              <WhiteStarSmallTextBox
-                value={answers.find(answer => answer.stepId === step)?.value || ""}
-                handleChange={(e) => handleInputChange(e.target.value)}
-              />
-            </div>
-          </div>
+      <div className="mb-2">
+        <div className="d-flex gap-2 justify-content-center flex-column flex-md-row">
+          <h2 className="text-blue fs-1">Question:</h2>
+          <h2 className="text-gray fs-1">{question}</h2>
+        </div>
+        <div className="d-flex justify-content-center">
+          <WhiteStarSmallTextBox
+            value={
+              answers.find((answer) => answer.stepId === step)?.value || ""
+            }
+            handleChange={(e) => handleInputChange(e.target.value)}
+          />
+        </div>
+      </div>
     </QuestionBox>
   );
 }

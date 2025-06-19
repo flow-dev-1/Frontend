@@ -6,21 +6,25 @@ import checkedImage from "../../../../../../../../assets/checkedbox.png";
 import uncheckedImage from "../../../../../../../../assets/uncheckedBox.png";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
-
+import {
+  userAnswer,
+  saveActivity,
+} from "../../../../../../../../redux/reducers/userAnswersReducer";
 
 function Page2() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
   const userAnswers = useSelector(userAnswer);
-  const [myAnswer, setMyAnswer] = useState(userAnswers)
+  const [myAnswer, setMyAnswer] = useState(userAnswers);
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedOption, setSelectedOption] = useState(null);
 
   useEffect(() => {
     if (!userAnswers) return;
-    const response = userAnswers?.activities?.find(item => (item.page === pageData.id));
+    const response = userAnswers?.activities?.find(
+      (item) => item.page === pageData.id
+    );
     const savedAnswer = response?.answer ? response.answer : "";
     setMyAnswer(savedAnswer);
     setSelectedOption(savedAnswer); // Also set the selected option
@@ -40,23 +44,23 @@ function Page2() {
     }
 
     setErrorMessage("");
-    dispatch(saveActivity({
-      page: pageData.id,
-      answer: selectedOption
-    }));
+    dispatch(
+      saveActivity({
+        page: pageData.id,
+        answer: selectedOption,
+      })
+    );
     return true;
-  }
-
+  };
 
   return (
-
     <>
       <QuestionBox>
         <div className="d-flex gap-2 ms-5 align-center-lg-custom">
           <div className="">
-            <form className="d-flex gap-3">
+            <form className="d-flex gap-3 flex-column flex-md-row">
               <h2 className="text-blue fs-1">Question:</h2>
-              <div className="d-flex flex-wrap gap-8 align-items-center">
+              <div className="d-flex flex-wrap gap-3 flex-row flex-md-column gap-md-8 align-items-center">
                 <h3 className="fs-1">{pageData.question}</h3>
                 {pageData.options.map((option, index) => {
                   const optionKey = Object.keys(option);
@@ -64,7 +68,10 @@ function Page2() {
                   const optionText = option[optionKey[1]];
                   const isChecked = selectedOption === optionID;
                   return (
-                    <div key={index} className="d-flex gap-3 align-items-center py-5">
+                    <div
+                      key={index}
+                      className="d-flex gap-3 align-items-center py-0 py-md-5"
+                    >
                       <input
                         type="radio"
                         id={optionID}
@@ -83,23 +90,23 @@ function Page2() {
                           setSelectedOption(optionID);
                         }}
                       />
-                      <label htmlFor={optionID} className="fs-2">{optionText}</label>
+                      <label htmlFor={optionID} className="fs-1">
+                        {optionText}
+                      </label>
                     </div>
                   );
                 })}
               </div>
-
             </form>
           </div>
         </div>
       </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
-      <div className="d-flex justify-content-center gap-96px mt-4">
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
     </>
-
   );
 }
 

@@ -4,14 +4,19 @@ import QuestionBox from "../../../components/QuestionBox";
 import Button from "../../../components/Button";
 import checkedImage from "../../../../../../../../assets/checkedbox.png";
 import uncheckedImage from "../../../../../../../../assets/uncheckedBox.png";
-import { selectCurrentStep, selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+import {
+  selectCurrentStep,
+  selectPageData,
+} from "../../../../../../../../redux/reducers/navigationSlice";
 import StepIndicator from "../../../components/StepIndicator";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
-
+import {
+  userAnswer,
+  saveActivity,
+} from "../../../../../../../../redux/reducers/userAnswersReducer";
 
 function WeekThreePage4() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const currentStep = useSelector(selectCurrentStep);
   const pageData = useSelector(selectPageData);
   const totalSteps = pageData?.steps?.length || 0;
@@ -21,21 +26,21 @@ function WeekThreePage4() {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-
-    if (!userAnswers) return
-    const response = userAnswers?.activities?.find(item => (item.page === pageData.id))
-    setSelectedOption(response?.answer ? response.answer : "")
-    return () => { }
-
-  }, [userAnswers])
+    if (!userAnswers) return;
+    const response = userAnswers?.activities?.find(
+      (item) => item.page === pageData.id
+    );
+    setSelectedOption(response?.answer ? response.answer : "");
+    return () => {};
+  }, [userAnswers]);
 
   const handleOptionChange = (e) => {
-    setErrorMessage("")
+    setErrorMessage("");
     setSelectedOption(e.target.value);
   };
 
   const saveUserInput = () => {
-    if (currentStep === 1) return true
+    if (currentStep === 1) return true;
     // if (!adminDatas.isAdmin && !myAnswer) {
     //   setErrorMessage("Oops! Please enter a valid input!");
     //   return false;
@@ -43,21 +48,21 @@ function WeekThreePage4() {
 
     if (!selectedOption) {
       setErrorMessage("Please make sure to select an option.");
-      return false
+      return false;
     } else if (selectedOption !== "A") {
       setErrorMessage("Please select the right option to proceed.");
-      return false
-
+      return false;
     } // Clear error if input is valid
     // Allow flow admin to proceed without input but do not dispatch answer
-    if (adminDatas.isAdmin) return true
-    dispatch(saveActivity({
-      page: pageData.id,
-      answer: selectedOption
-    }))
-    return true
-  }
-
+    if (adminDatas.isAdmin) return true;
+    dispatch(
+      saveActivity({
+        page: pageData.id,
+        answer: selectedOption,
+      })
+    );
+    return true;
+  };
 
   const renderStep = () => {
     const scenario = pageData?.steps[currentStep - 1];
@@ -68,7 +73,7 @@ function WeekThreePage4() {
       case "question":
         return (
           <div className="">
-            <form className="d-flex gap-3">
+            <form className="d-flex gap-3 flex-column flex-md-row">
               <h2 className="text-blue fs-1">Question: </h2>
               <div className="">
                 <h3 className="fs-1">{scenario.question}</h3>
@@ -81,7 +86,7 @@ function WeekThreePage4() {
                   return (
                     <div
                       key={index}
-                      className="ms-5 d-flex gap-2 mb-3 align-items-center"
+                      className="ms-0 ms-md-5 d-flex gap-2 mb-3 align-items-center"
                     >
                       <input
                         type="radio"
@@ -97,8 +102,8 @@ function WeekThreePage4() {
                         alt={optionKey}
                         style={{ width: 20, height: 20, cursor: "pointer" }}
                         onClick={() => {
-                          setErrorMessage("")
-                          setSelectedOption(optionID)
+                          setErrorMessage("");
+                          setSelectedOption(optionID);
                         }}
                       />
                       <label
@@ -112,7 +117,9 @@ function WeekThreePage4() {
           </div>
         );
       case "feedback":
-        const feedbackMessage = scenario.message[selectedOption] || "Please make sure to select an option.";
+        const feedbackMessage =
+          scenario.message[selectedOption] ||
+          "Please make sure to select an option.";
         return (
           <div
             className="d-flex justify-content-center align-items-center"
@@ -129,14 +136,14 @@ function WeekThreePage4() {
   return (
     <>
       <QuestionBox>{renderStep()}</QuestionBox>
-      {(currentStep !== 1 && errorMessage) && <div className="text-danger">{errorMessage}</div>}
+      {currentStep !== 1 && errorMessage && (
+        <div className="text-danger">{errorMessage}</div>
+      )}
       <StepIndicator totalSteps={totalSteps} />
 
-      <div className="d-flex justify-content-center gap-96px mt-4 ">
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
-        <Button text="Next"
-          customOnClick={saveUserInput}
-        />
+        <Button text="Next" customOnClick={saveUserInput} />
       </div>
     </>
   );

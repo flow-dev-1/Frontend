@@ -20,7 +20,7 @@ export default function SigninCategory() {
         <h2>Back to Home</h2>
       </div>
 
-      <div className="signup-options">
+      <div className="signup-options flex-column flex-lg-row gap-5 gap-lg-3">
         <div className="signup-option">
           <img src={schoolImage} alt="School" className="card-image" />
           <div className="card-content">

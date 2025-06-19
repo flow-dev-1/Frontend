@@ -12,7 +12,9 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
     setErrorMessage("");
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
-      const stepIndex = updatedAnswers.findIndex((answer) => answer.stepId === step);
+      const stepIndex = updatedAnswers.findIndex(
+        (answer) => answer.stepId === step
+      );
 
       if (stepIndex !== -1) {
         updatedAnswers[stepIndex] = {
@@ -37,22 +39,36 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
 
   return (
     <QuestionBox>
-      <h2 className="text-gray text-center fs-1"><joe className="text-blue ">Situation {step}:</joe> {title}</h2>
+      <h2 className="text-gray fs-1">
+        <joe className="text-blue ">
+          Situation {step}:<br className="d-md-none" />
+        </joe>{" "}
+        {title}
+      </h2>
 
       {questions.map((q, index) => (
         <div key={index} className="mb-2">
           <>
             <h2 className="text-gray">{q.question}</h2>
-            {
-              q?.type === "smallSelect" ? (<SmallSelectBox
-                value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
+            {q?.type === "smallSelect" ? (
+              <SmallSelectBox
+                value={
+                  answers.find((answer) => answer.stepId === step)?.value?.[
+                    index
+                  ] || ""
+                }
                 onChange={(e) => handleInputChange(index, e.target.value)}
-              />) : (<SmallTextBox
-                value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
+              />
+            ) : (
+              <SmallTextBox
+                value={
+                  answers.find((answer) => answer.stepId === step)?.value?.[
+                    index
+                  ] || ""
+                }
                 onChange={(e) => handleInputChange(index, e.target.value)}
-              />)
-            }
-
+              />
+            )}
           </>
         </div>
       ))}

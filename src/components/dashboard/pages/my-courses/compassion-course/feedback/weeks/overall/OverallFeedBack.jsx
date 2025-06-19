@@ -6,13 +6,16 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer.j
 import userService from "../../../../../../../../services/api/user.js";
 import adminService from "../../../../../../../../services/api/admin.js";
 
-function OverallFeedBack({ enrollmentId,setHasPercentile}) {
+function OverallFeedBack({ enrollmentId, setHasPercentile }) {
   const [assessmentPercentile, setAssessmentPercentile] = useState(null);
   const { isAdmin, code } = useSelector(adminData);
 
   const { data, isPending, status, isError } = useQuery({
     queryKey: ["dashboard/compassion-feedback-overall", enrollmentId, 1],
-    queryFn: () => isAdmin ? adminService.getUserCourseData(enrollmentId, 1, code) : userService.getUserCoursePercentile(enrollmentId),
+    queryFn: () =>
+      isAdmin
+        ? adminService.getUserCourseData(enrollmentId, 1, code)
+        : userService.getUserCoursePercentile(enrollmentId),
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -21,9 +24,9 @@ function OverallFeedBack({ enrollmentId,setHasPercentile}) {
 
   useEffect(() => {
     if (!data || data?.status === "failed") return;
-    setAssessmentPercentile(data?.averagePercent)
-    setHasPercentile(true)
-    return () => { };
+    setAssessmentPercentile(data?.averagePercent);
+    setHasPercentile(true);
+    return () => {};
   }, [data]);
 
   function getFeedBackMessage(percentile) {
@@ -48,11 +51,14 @@ function OverallFeedBack({ enrollmentId,setHasPercentile}) {
   }
 
   if (data?.status === "failed" || isError) {
-    return <div style={{ color: 'red' }}>{data?.message || "Internal server error!"}</div>;
+    return (
+      <div style={{ color: "red" }}>
+        {data?.message || "Internal server error!"}
+      </div>
+    );
   }
 
   return (
-    
     <>
       <div className="bg-compassion--feedback custom-border-20 question-box-container d-flex justify-content-center align-items-center flex-column gap-3">
         <img src={celebrate} alt="celebrate" className="text-center" />
@@ -60,28 +66,28 @@ function OverallFeedBack({ enrollmentId,setHasPercentile}) {
           Hurray!
         </h1>
       </div>
-      <p className="fs-3 text-gray mt-3">
+      <p className="fs-md-3 text-gray mt-3">
         Congratulations on completing the Compassion Curriculum! Over the past
         weeks, you’ve discovered what it means to be compassionate, learned the
         value of self-compassion, and explored ways to show kindness to others.
         You’ve also gained insights into your Circle of Concern and practiced
         applying compassion in real-life scenarios.
       </p>
-      <p className="fs-3 text-gray my-3">
+      <p className="fs-md-3 text-gray my-3">
         Compassion is a lifelong practice. The skills you’ve gained in this
         course will help you navigate challenges, build meaningful connections,
         and create a positive impact in your community. Continue to reflect on
         what you’ve learned, strive to see the world from different
         perspectives, and always choose kindness.
       </p>
-      <p className="fs-3 text-gray">
+      <p className="fs-md-3 text-gray">
         Keep spreading compassion, and remember: even small acts of kindness can
         make a big difference!
       </p>
 
-      <div className="bg-blue p-3 mt-2 rounded rounded-4">
-        <h2 className="text-white fs-1">Overall Feedback</h2>
-        <p className="text-white fs-3">
+      <div className="bg-blue p-1 p-md-3 mt-2 rounded rounded-md-4">
+        <h2 className="text-white fs-md-1">Overall Feedback</h2>
+        <p className="text-white fs-md-3">
           {getFeedBackMessage(assessmentPercentile)}
         </p>
       </div>

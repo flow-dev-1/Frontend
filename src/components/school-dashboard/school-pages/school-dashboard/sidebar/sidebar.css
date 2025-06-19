@@ -139,18 +139,25 @@
     width: 70px;
   }
 } */
+.book-icon-landscape {
+  display: none;
+}
+.sidebar-user-tablet-icons {
+  display: none;
+}
+
 @media (max-width: 992px) {
   .sidebar-user-menu {
-    width: 70px;
+    /* width: 70px; */
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
   }
-  .sidebar-user {
+  /* .sidebar-user {
     width: 100px;
-  }
+  } */
 
   .dashboard-content {
-    margin: 50px 0 0 0;
+    /* margin: 50px 0 0 0; */
   }
 }
 @media (max-width: 480px) {
@@ -159,6 +166,67 @@
   }
 
   .dashboard-content {
-    margin: 50px 0 0 0;
+    /* margin: 50px 0 0 0; */
+  }
+  .sidebar-user-tablet-icons {
+    display: none !important;
+  }
+}
+@media (max-width: 768px) {
+  .dashboard-content {
+    margin: 0 !important;
+  }
+  .sidebar-user {
+    display: none;
+  }
+}
+@media (max-width: 1024px) {
+  /* .sidebar-user-menu .link {
+    width: 40px;
+    height: 40px;
+  } */
+
+  .sidebar-user-tablet {
+    display: none;
+  }
+  .sidebar-user-tablet-icons {
+    display: inline-block;
+  }
+
+  .sidebar-user-menu .link {
+    width: 40px;
+    height: 40px;
+  }
+}
+@media (max-width: 1024px) and (orientation: landscape) {
+  .sidebar-user-menu .link {
+    width: 200px;
+    height: 40px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dashboard-content {
+    margin: 50px 0 0 250px;
+  }
+  .sidebar-user {
+    display: block;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  .book-icon-landscape {
+    display: block;
+  }
+  .sidebar-user-tablet-icons {
+    display: none !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .sidebar-user-menu .link {
+    width: 40px;
+    height: 40px;
+  }
+  .sidebar-user-tablet-icons {
+    display: inline-block;
   }
 }

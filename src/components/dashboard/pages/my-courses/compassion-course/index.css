@@ -3,7 +3,8 @@
   margin-top: 59.6px;
   margin-bottom: 50px;
   padding-bottom: 20px;
-  max-height: 82vh;
+  /* max-height: 82vh; */
+  /* flex-direction: column-reverse; */
 }
 
 aside {
@@ -43,7 +44,7 @@ aside .back {
 
 .compassion-title h2 {
   color: white;
-  font-size: 23px;
+  /* font-size: 23px; */
 }
 .compassion-title .compassion {
   color: aquamarine;
@@ -59,14 +60,14 @@ aside .back {
 .compassion-list li {
   display: flex;
   align-items: center;
-  font-size: 14px;
+  /* font-size: 14px; */
   gap: 10px;
   opacity: 0.5;
 }
 
 .compassion-list li .icon {
   flex-shrink: 0;
-  font-size: 20px;
+  /* font-size: 20px; */
 }
 
 .compassion-list li.active-week {
@@ -86,13 +87,40 @@ aside .back {
   height: 570px;
 }
 
-  .align-center-lg-custom {
-    align-items: stretch;
-  }
-
+.align-center-lg-custom {
+  align-items: stretch;
+}
 
 @media (min-width: 1711px) {
   .align-center-lg-custom {
     align-items: center;
+  }
+}
+
+.week-content {
+  /* background: transparent; */
+  /* position: fixed; */
+  /* top: -50px; */
+  /* left: 360px; */
+  flex-basis: 70vw;
+  border-radius: 10px;
+  /* padding: 40px 10px; */
+  margin: 40px 100px 0 40px;
+  flex-grow: 2;
+  /* width: 70%; */
+}
+
+@media (max-width: 768px) {
+}
+@media (max-width: 480px) {
+  .week-content {
+    /* flex-basis: 100vw; */
+    /* flex: 1; */
+    /* border-radius: 10px; */
+    /* padding: 40px 10px; */
+    /* margin: 40px 100px 0 40px; */
+    /* flex-grow: 2; */
+    /* width: 70%; */
+    margin: 30px 10px;
   }
 }

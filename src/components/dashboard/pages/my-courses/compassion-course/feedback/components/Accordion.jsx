@@ -11,7 +11,7 @@ function Accordion({
   items,
   allDataLoaded,
   hasPercentile,
-  setHasPercentile
+  setHasPercentile,
 }) {
   const contentRef = useRef();
   const [pdfLoading, setPdfLoading] = useState(false);
@@ -23,14 +23,12 @@ function Accordion({
   };
 
   useEffect(() => {
-    if (!startDownload) return
-    generatePDF()
-
-  }, [hasPercentile, allDataLoaded])
-
+    if (!startDownload) return;
+    generatePDF();
+  }, [hasPercentile, allDataLoaded]);
 
   const generatePDF = async () => {
-    console.log(hasPercentile, "Has Percentile")
+    console.log(hasPercentile, "Has Percentile");
     const originalState = activeIndex;
     setPdfLoading(true);
     setActiveIndex(null);
@@ -41,9 +39,9 @@ function Accordion({
       return;
     }
 
-    if(allDataLoaded){
+    if (allDataLoaded) {
       setTimeout(() => {
-        console.log(allDataLoaded, "All data loaded")
+        console.log(allDataLoaded, "All data loaded");
         const input = contentRef.current;
 
         html2canvas(input).then((canvas) => {
@@ -68,11 +66,10 @@ function Accordion({
           pdf.save("CompassionFeedback.pdf");
           setActiveIndex("");
           setPdfLoading(false);
-          setHasPercentile(false)
+          setHasPercentile(false);
         });
       }, 1000);
     }
-
   };
 
   return (
@@ -83,7 +80,7 @@ function Accordion({
         </div>
       )}
       <div className="accordion" ref={contentRef}>
-        <h2 className="accordion-header p-4 fs-1 bg-blue text-center text-white">
+        <h2 className="accordion-header p-lg-2 p-md-4 bg-blue text-center text-white">
           Feedback for Compassion
         </h2>
 
@@ -98,12 +95,24 @@ function Accordion({
             >
               <div className="d-flex align-items-center gap-3 flex-grow-1">
                 {index < 5 ? (
-                  <h2 className="text-gray fs-1" onClick={() => handleToggle(index)} style={{ cursor: "pointer" }}>Week {index + 1}:</h2>
+                  <h2
+                    className="text-gray  text-nowrap"
+                    onClick={() => handleToggle(index)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Week {index + 1}:
+                  </h2>
                 ) : (
-                  <h2 className="text-gray fs-1" onClick={() => handleToggle(index)} style={{ cursor: "pointer" }}>Final Report:</h2>
+                  <h2
+                    className="text-gray "
+                    onClick={() => handleToggle(index)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Final Report:
+                  </h2>
                 )}
                 <div
-                  className="fs-4 text-gray "
+                  className="text-gray "
                   onClick={() => handleToggle(index)}
                   style={{ cursor: "pointer" }}
                 >
@@ -111,13 +120,12 @@ function Accordion({
                 </div>
                 {index === 5 && (
                   <p
-                    className="text-blue fs-4"
+                    className="text-blue"
                     style={{ zIndex: 100, cursor: "pointer" }}
                     onClick={() => {
-                      handleToggle(index)
-                      setStartDownload(true)
-                    }
-                    }
+                      handleToggle(index);
+                      setStartDownload(true);
+                    }}
                   >
                     {pdfLoading ? "Generating PDF..." : "(Download PDF)"}{" "}
                     <Icon icon="bi:download" />

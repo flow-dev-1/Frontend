@@ -5,11 +5,13 @@ import ProgressBar from "../../../components/PogressBar";
 import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
-
+import {
+  userAnswer,
+  saveActivity,
+} from "../../../../../../../../redux/reducers/userAnswersReducer";
 
 function Page2() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
   const userAnswers = useSelector(userAnswer);
@@ -17,19 +19,20 @@ function Page2() {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
+    if (!userAnswers) return;
+    const response = userAnswers?.activities?.find(
+      (item) => item.page === pageData.id
+    );
 
-    if (!userAnswers) return
-    const response = userAnswers?.activities?.find(item => (item.page === pageData.id))
-
-    setMyAnswer(response?.answer ? response.answer : 0)
-    return () => { }
-
-  }, [userAnswers])
-
+    setMyAnswer(response?.answer ? response.answer : 0);
+    return () => {};
+  }, [userAnswers]);
 
   const saveUserInput = () => {
-    
-    if (!adminDatas.isAdmin && (!myAnswer || myAnswer === '0' || myAnswer === 0)) {
+    if (
+      !adminDatas.isAdmin &&
+      (!myAnswer || myAnswer === "0" || myAnswer === 0)
+    ) {
       setErrorMessage("Oops! Please select a valid input!");
       return false;
     }
@@ -37,32 +40,31 @@ function Page2() {
     setErrorMessage(""); // Clear error if input is valid
     // Allow flow admin to proceed without input but do not dispatch answer
     // if (adminDatas.isAdmin) return true
-    dispatch(saveActivity({
-      page: pageData.id,
-      answer: myAnswer
-    }))
-    return true
-  }
+    dispatch(
+      saveActivity({
+        page: pageData.id,
+        answer: myAnswer,
+      })
+    );
+    return true;
+  };
 
   const handleInputChange = (e) => {
     setErrorMessage("");
-    setMyAnswer(e.target.value)
-  }
-
+    setMyAnswer(e.target.value);
+  };
 
   return (
     <>
       <QuestionBox>
-        <div className="d-flex gap-3 ms-5 align-center-lg-custom">
-          <h2 className="text-blue font-lg">Question: </h2>
-          <h2 className="text-gray font-lg">
-            {pageData.question}{" "}
-          </h2>
+        <div className="d-flex gap-3 ms-5 align-center-lg-custom flex-column flex-md-row">
+          <h2 className="text-blue fs-1">Question: </h2>
+          <h2 className="text-gray fs-1">{pageData.question} </h2>
         </div>
-        <ProgressBar handleChange={handleInputChange} value={myAnswer}/>
+        <ProgressBar handleChange={handleInputChange} value={myAnswer} />
       </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
-      <div className="d-flex justify-content-center gap-96px mt-4">
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>

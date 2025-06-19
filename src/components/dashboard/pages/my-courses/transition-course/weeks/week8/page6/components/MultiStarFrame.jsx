@@ -10,7 +10,9 @@ function MultiStarFrame({ data, answers, setAnswers, setErrorMessage }) {
     setErrorMessage("");
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
-      const stepIndex = updatedAnswers.findIndex((answer) => answer.stepId === step);
+      const stepIndex = updatedAnswers.findIndex(
+        (answer) => answer.stepId === step
+      );
 
       if (stepIndex !== -1) {
         updatedAnswers[stepIndex] = {
@@ -34,30 +36,30 @@ function MultiStarFrame({ data, answers, setAnswers, setErrorMessage }) {
   };
 
   return (
-   <>
-   
-   <QuestionBox>
-      <div className="d-flex gap-2">
-        <h2 className="text-blue">Question: </h2>
-        <h2 className="text-gray">{question}</h2>
-      </div>
-      <div className="mb-2">
-        <div className="d-flex gap-2">
-           {config.map((textBoxConfig, index) => (
-            <ColoredStarTextBox
-              key={index}
-              color={textBoxConfig.color}
-              value={answers.find(answer => answer.stepId === step)?.value?.[index] || ""}
-              handleChange={(e) => handleInputChange(index, e.target.value)}
-            />
-          ))}
+    <>
+      <QuestionBox>
+        <div className="d-flex gap-2 flex-column flex-md-row">
+          <h2 className="text-blue fs-1">Question: </h2>
+          <h2 className="text-gray fs-1">{question}</h2>
         </div>
-      </div>
-    </QuestionBox>
-   </>
-
-
-
+        <div className="mb-2">
+          <div className="d-flex gap-2 flex-column flex-md-row align-content-center">
+            {config.map((textBoxConfig, index) => (
+              <ColoredStarTextBox
+                key={index}
+                color={textBoxConfig.color}
+                value={
+                  answers.find((answer) => answer.stepId === step)?.value?.[
+                    index
+                  ] || ""
+                }
+                handleChange={(e) => handleInputChange(index, e.target.value)}
+              />
+            ))}
+          </div>
+        </div>
+      </QuestionBox>
+    </>
   );
 }
 

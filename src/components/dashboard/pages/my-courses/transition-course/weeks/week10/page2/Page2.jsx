@@ -8,9 +8,11 @@ import {
   selectCurrentStep,
 } from "../../../../../../../../redux/reducers/navigationSlice";
 import StepIndicator from "../../../components/StepIndicator";
-import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  userAnswer,
+  saveActivity,
+} from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-
 
 function WeekTenPage2() {
   const dispatch = useDispatch(); // Initialize dispatch
@@ -26,32 +28,35 @@ function WeekTenPage2() {
 
   useEffect(() => {
     if (!userAnswers) return;
-    const response = userAnswers.activities?.find(item => item.page === pageData.id);
+    const response = userAnswers.activities?.find(
+      (item) => item.page === pageData.id
+    );
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
-
-  }, [userAnswers])
+  }, [userAnswers]);
 
   const saveUserInput = () => {
-    if (adminDatas.isAdmin) return true
+    if (adminDatas.isAdmin) return true;
 
-    const stepData = answers.find(item => item.stepId === currentStep);
+    const stepData = answers.find((item) => item.stepId === currentStep);
     if (!stepData) {
-      setErrorMessage("Oops! Please enter a valid input.")
+      setErrorMessage("Oops! Please enter a valid input.");
       return false;
     }
 
     const values = Object.values(stepData.value);
     const emptyInputs = values.filter((value) => value.trim() === "");
     if (emptyInputs.length > 0) {
-      setErrorMessage(`Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`);
+      setErrorMessage(
+        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
+      );
       return false;
     }
 
     setErrorMessage(""); // Clear error if input is valid
-    
+
     const activityData = {
       page: pageData.id,
-      answer: answers
+      answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
@@ -87,7 +92,7 @@ function WeekTenPage2() {
               step: step.stepId,
               title: step.title,
               questions: step.questions.map((q) => ({
-               question: q.question,
+                question: q.question,
               })),
             }}
             setErrorMessage={setErrorMessage}
@@ -103,13 +108,12 @@ function WeekTenPage2() {
   return (
     <>
       {renderStep()}
-      {errorMessage && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
+      {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
-      <div className="d-flex justify-content-center gap-96px mt-4 ">
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
-        <Button text="Next"
-          customOnClick={saveUserInput}
-        />
+        <Button text="Next" customOnClick={saveUserInput} />
       </div>
     </>
   );

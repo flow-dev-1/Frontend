@@ -10,7 +10,7 @@ export default function IndividualCategory() {
   const navigate = useNavigate();
 
   return (
-    <div className="signup-category ">
+    <div className="signup-category">
       {/* <div > */}
 
       <div className="back-btn">
@@ -20,7 +20,7 @@ export default function IndividualCategory() {
         <h2>Back to Home</h2>
       </div>
 
-      <div className="signup-options">
+      <div className="signup-options flex-column flex-lg-row gap-5 gap-lg-3">
         <div className="signup-option">
           <img src={educatorImage} alt="School" className="card-image" />
           <div className="card-content">

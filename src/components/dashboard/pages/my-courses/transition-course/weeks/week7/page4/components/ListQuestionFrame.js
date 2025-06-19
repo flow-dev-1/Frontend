@@ -1,22 +1,20 @@
 import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
 
-
 function ListQuestionFrame({ data, answers, setAnswers, setErrorMessage }) {
-
-
-  console.log(data,"Hereeeeeeeeeee")
+  console.log(data, "Hereeeeeeeeeee");
 
   const { stepId, question, numberOfInputs } = data;
 
   // console.log(stepId, question, numberOfInputs, "data")
-  
-  const handleInputChange = (index, value) => {
 
+  const handleInputChange = (index, value) => {
     setErrorMessage("");
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
-      const pageIndex = updatedAnswers.findIndex((answer) => answer.stepId === stepId);
+      const pageIndex = updatedAnswers.findIndex(
+        (answer) => answer.stepId === stepId
+      );
 
       if (pageIndex !== -1) {
         updatedAnswers[pageIndex] = {
@@ -38,9 +36,9 @@ function ListQuestionFrame({ data, answers, setAnswers, setErrorMessage }) {
 
   return (
     <QuestionBox>
-      <div className="d-flex gap-2">
-        <h2 className="text-blue">Question: </h2>
-        <h2 className="text-gray">{question}</h2>
+      <div className="d-flex gap-2 flex-column flex-md-row">
+        <h2 className="text-blue fs-1">Question: </h2>
+        <h2 className="text-gray fs-1">{question}</h2>
       </div>
 
       <div className="input-container py-5 px-5">
@@ -50,7 +48,11 @@ function ListQuestionFrame({ data, answers, setAnswers, setErrorMessage }) {
             <input
               type="text"
               placeholder={"Type your answer here"}
-              value={answers.find(answer => answer.stepId === stepId)?.value?.[index] || ""}
+              value={
+                answers.find((answer) => answer.stepId === stepId)?.value?.[
+                  index
+                ] || ""
+              }
               onChange={(e) => handleInputChange(index, e.target.value)}
             />
           </div>

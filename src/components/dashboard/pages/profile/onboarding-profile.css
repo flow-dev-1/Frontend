@@ -22,15 +22,16 @@ input:focus {
 
 .action-btns {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  /* align-items: center; */
+  /* justify-content: center; */
   gap: 2rem;
   margin-top: 1.5rem;
 }
 
 .action-btns button {
-  display: block;
-  padding: 0.2rem 4rem;
+  /* display: block; */
+  flex: 1;
+  /* padding: 0.2em 4em; */
   border: none;
   background-color: none;
 }

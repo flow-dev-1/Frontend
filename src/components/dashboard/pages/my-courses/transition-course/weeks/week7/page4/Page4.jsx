@@ -12,9 +12,11 @@ import MultiLineColoredSmallTextBox from "./components/MultiLineColoredSmallText
 import ColoredSmallSquaredBoxFrame from "./components/ColoredSmallSquaredBoxFrame";
 import ImageCheckBoxesFrame from "./components/ImageCheckBoxesFrame";
 import ListQuestionFrame from "./components/ListQuestionFrame";
-import { userAnswer, saveActivity } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  userAnswer,
+  saveActivity,
+} from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-
 
 function WeekSevenPage4() {
   const dispatch = useDispatch(); // Initialize dispatch
@@ -29,49 +31,49 @@ function WeekSevenPage4() {
   // console.log(userAnswers)
 
   useEffect(() => {
-
     if (!userAnswers) return;
-    const response = userAnswers.activities?.find(item => item.page === pageData.id);
+    const response = userAnswers.activities?.find(
+      (item) => item.page === pageData.id
+    );
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
-
-  }, [userAnswers])
+  }, [userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
 
-    const stepData = answers.find(item => item.stepId === currentStep);
+    const stepData = answers.find((item) => item.stepId === currentStep);
 
     if (!stepData || !stepData.value) {
       setErrorMessage("Oops! All inputs must be filled out.");
       return false;
     }
 
-
-
     if (currentStep === 3 || currentStep === 5) {
-      dispatch(saveActivity({
-        page: pageData.id,
-        answer: answers
-      }));
+      dispatch(
+        saveActivity({
+          page: pageData.id,
+          answer: answers,
+        })
+      );
       return true;
     }
 
     const valuesArray = Object.values(stepData.value);
-    const emptyInputs = valuesArray.filter(value => !value || value?.trim() === "");
+    const emptyInputs = valuesArray.filter(
+      (value) => !value || value?.trim() === ""
+    );
 
-    if (currentStep === 1 || currentStep=== 6) {
+    if (currentStep === 1 || currentStep === 6) {
       if (valuesArray.length < 5) {
         setErrorMessage("At least 5 answers are required!");
         return false;
       }
     } else if (currentStep === 2) {
-
       if (valuesArray.length < 3) {
         setErrorMessage("At least 3 answers are required!");
         return false;
       }
     } else if (currentStep === 4) {
-
       if (valuesArray.length < 6) {
         setErrorMessage("At least 6 answers are required!");
         return false;
@@ -79,15 +81,19 @@ function WeekSevenPage4() {
     }
 
     if (emptyInputs.length > 0) {
-      setErrorMessage(`Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`);
+      setErrorMessage(
+        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
+      );
       return false;
     }
 
     setErrorMessage("");
-    dispatch(saveActivity({
-      page: pageData.id,
-      answer: answers
-    }));
+    dispatch(
+      saveActivity({
+        page: pageData.id,
+        answer: answers,
+      })
+    );
     return true;
   };
 
@@ -105,7 +111,7 @@ function WeekSevenPage4() {
             data={{
               stepId: step?.stepId,
               question: step?.question,
-              numberOfInputs: step?.numberOfInputs
+              numberOfInputs: step?.numberOfInputs,
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
@@ -173,13 +179,12 @@ function WeekSevenPage4() {
   return (
     <>
       {renderStep()}
-      {errorMessage && <div className="text-danger">{errorMessage}</div>} {/* Display error message */}
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
+      {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
-      <div className="d-flex justify-content-center gap-96px mt-4 ">
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
-        <Button text="Next"
-          customOnClick={saveUserInput}
-        />
+        <Button text="Next" customOnClick={saveUserInput} />
       </div>
     </>
   );

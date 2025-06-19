@@ -105,92 +105,91 @@ function WeekFourPage4() {
 
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
-      <div>
-        <div className="custom-border-20 question-box-container d-flex">
-          <Droppable droppableId="options">
-            {(provided) => (
-              <div
-                className="p-5 gap-5 drag-flex-basis"
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {options.map((option, index) => (
-                  <Draggable
-                    key={`option-${index}`}
-                    draggableId={`option-${index}`}
-                    index={index}
-                  >
-                    {(provided, snapshot) => (
-                      <h2
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className={`fs-1 ${checkIndex(index + 1)} ${
-                          snapshot.isDragging ? "dragging" : ""
-                        }`}
-                        style={{
-                          ...provided.draggableProps.style,
-                          cursor: snapshot.isDragging ? "grabbing" : "grab",
-                        }}
-                      >
-                        {option}
-                      </h2>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-          <div className="col bg-blue">
-            <div className="d-flex align-items-start mb-5">
-              <img src={ArrowTrail} alt="arrow trail" />
-              <div className="text-center text-white pt-2">
-                <h1>{pageData.instruction}</h1>
-              </div>
-              <img src={ArrowTrail} alt="arrow trail" />
-            </div>
-            <div className="d-flex justify-content-around px-4">
-              {pageData.bowls.map((bowl, index) => (
-                <Droppable key={bowl.id} droppableId={bowl.id}>
+      <div className="custom-border-20 question-box-container d-flex flex-column flex-md-row">
+        <Droppable droppableId="options">
+          {(provided) => (
+            <div
+              className="p-1 p-lg-5 gap-1 drag-flex-basis"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {options.map((option, index) => (
+                <Draggable
+                  key={`option-${index}`}
+                  draggableId={`option-${index}`}
+                  index={index}
+                >
                   {(provided, snapshot) => (
-                    <div
-                      className="my-2"
+                    <h2
                       ref={provided.innerRef}
-                      {...provided.droppableProps}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      className={`${checkIndex(index + 1)} ${
+                        snapshot.isDragging ? "dragging" : ""
+                      }`}
                       style={{
-                        backgroundColor: snapshot.isDraggingOver
-                          ? "rgba(255, 255, 255, 0.1)"
-                          : "transparent",
-                        padding: "1.25rem",
-                        borderRadius: "0.5rem",
-                        minHeight: "6.25rem",
-                        height: "18.75rem",
+                        ...provided.draggableProps.style,
+                        cursor: snapshot.isDragging ? "grabbing" : "grab",
                       }}
                     >
-                      <h2
-                        className={
-                          bowl.id === "inner" ? "inner-count" : "outer-count"
-                        }
-                      >
-                        {bowls[bowl.id] ? bowls[bowl.id].length : 0}
-                      </h2>
-                      <div
-                        className={
-                          bowl.id === "inner" ? "inner-bowl" : "outer-bowl"
-                        }
-                      >
-                        {bowl.label}
-                      </div>
-                      {provided.placeholder}
-                    </div>
+                      {option}
+                    </h2>
                   )}
-                </Droppable>
+                </Draggable>
               ))}
+              {provided.placeholder}
             </div>
+          )}
+        </Droppable>
+        <div className="col bg-blue">
+          <div className="d-flex align-items-start mb-md-5 justify-content-center mb-2">
+            <img src={ArrowTrail} alt="arrow tail" className="arrow-head" />
+            <div className="text-center text-white pt-2">
+              <h1>{pageData.instruction}</h1>
+            </div>
+            <img src={ArrowTrail} alt="arrow tail" className="arrow-head" />
+          </div>
+          <div className="d-flex justify-content-around p-2 px-md-4">
+            {pageData.bowls.map((bowl, index) => (
+              <Droppable key={bowl.id} droppableId={bowl.id}>
+                {(provided, snapshot) => (
+                  <div
+                    className="my-2"
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    style={{
+                      backgroundColor: snapshot.isDraggingOver
+                        ? "rgba(255, 255, 255, 0.1)"
+                        : "transparent",
+                      // padding: "1.25rem",
+                      borderRadius: "0.5rem",
+                      minHeight: "6.25rem",
+                      height: "18.75rem",
+                    }}
+                  >
+                    <h2
+                      className={
+                        bowl.id === "inner" ? "inner-count" : "outer-count"
+                      }
+                    >
+                      {bowls[bowl.id] ? bowls[bowl.id].length : 0}
+                    </h2>
+                    <div
+                      className={
+                        bowl.id === "inner" ? "inner-bowl" : "outer-bowl"
+                      }
+                    >
+                      {bowl.label}
+                    </div>
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            ))}
           </div>
         </div>
       </div>
+
       <p
         className="fs-5 d-flex justify-content-center gap-3 align-items-center mt-3 fs-2"
         onClick={resetDragAndDrop}
@@ -200,7 +199,7 @@ function WeekFourPage4() {
         Refresh
       </p>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
-      <div className="d-flex justify-content-center gap-6 mt-4 w-full max-w-[64.31rem]">
+      <div className="d-flex justify-content-center gap-4 mt-4 w-full max-w-[64.31rem]">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
