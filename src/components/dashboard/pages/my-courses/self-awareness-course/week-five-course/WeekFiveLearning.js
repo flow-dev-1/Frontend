@@ -8,8 +8,6 @@ import EmojiEmotionMatch from './EmojiEmotionMatch'
 import WeekFiveScenarioQuestions from './WeekFiveScenarioQuestions'
 import EmojiRespond from './EmojiRespond'
 import EndOfCourseComponent from './EndOfCourseComponent'
-import NavigationButtons from './NavigationButtons'
-import VideoComponent from './VideoComponent'
 import userService from "../../../../../../services/api/user.js";
 import { toast, ToastContainer } from "react-toastify";
 import { useQuery } from '@tanstack/react-query';
@@ -19,6 +17,9 @@ import { useDispatch } from "react-redux";
 import {
   updateData,
 } from "../../../../../../redux/reducers/userAnswersReducer.js";
+
+import ProgressionButtons from '../components/ProgressionButtons.jsx';
+import VideoComponent from '../components/VideoComponent.jsx';
 
 export default function WeekFiveLearning({
   course,
@@ -190,7 +191,9 @@ export default function WeekFiveLearning({
               setVideoPlaying={setVideoPlaying}
               videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-5/FLOW-5_1.mp4'
             />
-            <NavigationButtons onNext={() => handleNext()} isBackDisabled />
+						<div className="mt-3">
+							<ProgressionButtons variant="next" onClickNext={handleNext} />
+						</div>
           </>
         )
 
@@ -214,10 +217,9 @@ export default function WeekFiveLearning({
               setVideoPlaying={setVideoPlaying}
               videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-5/FLOW-5_2.mp4'
             />
-            <NavigationButtons
-              onBack={handlePrevious}
-              onNext={() => handleNext()}
-            />
+						<div className="mt-3">
+							<ProgressionButtons variant="both" onClickNext={handleNext} onClickPrev={handlePrevious} />
+						</div>
           </>
         )
       case 4:
@@ -244,10 +246,9 @@ export default function WeekFiveLearning({
               setVideoPlaying={setVideoPlaying}
               videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-5/FLOW-5_3.mp4'
             />
-            <NavigationButtons
-              onBack={handlePrevious}
-              onNext={() => handleNext()}
-            />
+						<div className="mt-3">
+							<ProgressionButtons variant="both" onClickNext={handleNext} onClickPrev={handlePrevious} />
+						</div>
           </>
         )
       case 6:
@@ -275,10 +276,9 @@ export default function WeekFiveLearning({
               setVideoPlaying={setVideoPlaying}
               videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-5/FLOW-5_4.mp4'
             />
-            <NavigationButtons
-              onBack={handlePrevious}
-              onNext={() => handleNext()}
-            />
+						<div className="mt-3">
+							<ProgressionButtons variant="both" onClickNext={handleNext} onClickPrev={handlePrevious} />
+						</div>
           </>
         )
       case 8:
@@ -304,10 +304,9 @@ export default function WeekFiveLearning({
               setVideoPlaying={setVideoPlaying}
               videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-5/FLOW-5_5.mp4'
             />
-            <NavigationButtons
-              onBack={handlePrevious}
-              onNext={() => handleNext()}
-            />
+						<div className="mt-3">
+							<ProgressionButtons variant="both" onClickNext={handleNext} onClickPrev={handlePrevious} />
+						</div>
           </>
         )
       case 10:
@@ -332,7 +331,7 @@ export default function WeekFiveLearning({
   }
 
   return (
-    <div>
+    <div className='week-learning'>
       <ToastContainer />
       <div className='content-container'>{renderActivityContent()}</div>
     </div>

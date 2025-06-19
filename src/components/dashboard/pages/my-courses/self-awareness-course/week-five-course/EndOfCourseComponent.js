@@ -81,14 +81,12 @@ const EndOfCourseComponent = ({ currentWeekIndex, handleNextWeekCourse }) => {
         />
       }
 
-      <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-        <button
-          className='btn progress-btn btn-dark rounded-3'
-          onClick={() => navigate('/dashboard/my-courses')}
-        >
-          Go to My Courses {'>>>>'}
-        </button>
-      </div>
+			<div className="progression-btns mt-3">
+				<button className="btn next dark" 
+          onClick={() => navigate('/dashboard/my-courses')}>
+           {'Go to My Courses >>>>'}
+				</button>
+			</div>
 
       {/* Custom Modal */}
       {isModalVisible && (

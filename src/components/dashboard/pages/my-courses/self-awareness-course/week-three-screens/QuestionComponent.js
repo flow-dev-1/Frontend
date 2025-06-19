@@ -56,7 +56,7 @@ const QuestionComponent = ({
           >
             {questionText}
           </h2>
-          {imageSrc && <img src={imageSrc} alt={altText} />}
+          {imageSrc && <img src={imageSrc} alt={altText} className="question-box-img"  />}
           <h2 style={{ fontSize: '36px', color: '#5b6161' }}>{altText}</h2>
         </div>
         <div className='text-area-box px-4 mt-4'>
@@ -70,16 +70,16 @@ const QuestionComponent = ({
 
         <ToastContainer />
       </div>
-      <div className='d-flex align-items-center justify-content-around mt-5'>
-        {onBack && (
-          <button className='btn progress-btn btn-light' onClick={onBack}>
-            {'<<<'} Back
-          </button>
-        )}
-        <button className='btn progress-btn btn-dark' onClick={handleNextClick}>
-          Next {'>>>'}
-        </button>
-      </div>
+			<div className="progression-btns mt-3">
+				{onBack && (
+					<button className="btn prev light" onClick={onBack}>
+						{'<<< Back'}
+					</button>
+				)}
+				<button className="btn next dark" onClick={handleNextClick}>
+					{'Next >>>'}
+				</button>
+			</div>
     </div>
   )
 }

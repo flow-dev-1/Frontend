@@ -1,0 +1,198 @@
+.week-learning,
+.content-container {
+	width: 100%;
+}
+
+.self-awareness .drag-drop {
+	width: 100%;
+	/* height: fit-content; */
+	display: flex;
+	flex-direction: column-reverse;
+	border: 10px solid #00bcc3;
+}
+
+.self-awareness .card-slider {
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.self-awareness img.slider-img-card {
+	max-width: 70%;
+	object-fit: contain;
+	object-position: center;
+}
+
+.self-awareness .drop-card {
+	background-color: #1f60c1;
+	padding: 0 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.self-awareness .drop-card .drop-card-header {
+	display: flex;
+	width: 100%;
+	align-items: flex-start;
+	color: #fff;
+	text-align: center;
+}
+
+.self-awareness .drag-drop .drop-card-header h2 {
+	font-size: 20px;
+	margin-top: 15px;
+	line-height: normal;
+	margin-bottom: 0;
+	text-align: center;
+}
+
+.self-awareness .drop-card .drop-card-header img {
+	width: 60px;
+	height: 100%;
+}
+
+.self-awareness .drag-drop .bucket-section {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+.self-awareness .drag-drop .bucket {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 0 8px;
+}
+
+.self-awareness .drag-drop .bucket .bucket-item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	background-color: #fff;
+	border: 3px solid;
+	border-radius: 50px;
+	line-height: 0;
+	margin-bottom: 15px;
+	text-align: center;
+}
+
+.self-awareness .progression-btns {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+}
+
+.self-awareness .progression-btns .btn {
+	flex: 1;
+	width: 100%;
+	font-size: 14px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0.5rem;
+	border-radius: 5px;
+}
+
+.self-awareness .progression-btns .btn.light {
+	color: #329bd6;
+	background-color: #ffffff;
+	border: 2px solid #329bd6;
+}
+
+.self-awareness .progression-btns .btn.dark {
+	color: #ffffff;
+	background-color: #329bd6;
+	border: 2px solid #329bd6;
+}
+
+/* mobile first to align with bootstrap */
+/* tablet */
+@media only screen and (min-width: 576px) {
+	.self-awareness .video-div {
+		padding: 0 24px;
+		background-color: transparent;
+		height: 320px;
+	}
+
+	.self-awareness .custom-video,
+	.self-awareness .video-thumbnail {
+		height: 100%;
+	}
+
+	.self-awareness .question-box {
+		width: 100%;
+	}
+
+	.self-awareness .progression-buttons {
+		gap: 1rem;
+	}
+
+	.self-awareness .progression-btns .btn {
+		max-width: 200px;
+		font-size: 16px;
+	}
+
+	.self-awareness .slider-indicator ul li {
+		width: 20px;
+		height: 10px;
+	}
+
+	.self-awareness .drop-card .drop-card-header {
+		display: flex;
+		color: #fff;
+		text-align: center;
+	}
+
+	.self-awareness .drag-drop .drop-card-header h2 {
+		font-size: 24px;
+		margin-top: 15px;
+	}
+
+	.self-awareness .drop-card .drop-card-header img {
+		width: 72px;
+	}
+
+	.self-awareness .personality-type div img {
+		width: 100%;
+	}
+}
+
+/* desktop */
+@media only screen and (min-width: 768px) {
+	.self-awareness .video-div {
+		height: 480px;
+	}
+
+	.self-awareness .custom-video,
+	.self-awareness .video-thumbnail {
+		height: 100%;
+	}
+
+	.self-awareness .drag-drop {
+		flex-direction: row;
+		min-height: 360px;
+	}
+
+	.self-awareness .card-slider {
+		flex: 1;
+		width: 50%;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.self-awareness .drop-card {
+		flex: 1;
+		width: 50%;
+		background-color: #1f60c1;
+		padding: 0 12px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+}

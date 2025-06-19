@@ -1,202 +1,228 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
-import { Icon } from '@iconify/react'
-import './newcourse.css'
-import courseOne from '../../../../../assets/course1.png'
-import WeekOneLearning from './week-one-screens/WeekOneLearning'
-import WeekTwoLearning from './week-two-screens/WeekTwoLearning'
-import WeekThreeLearning from './week-three-screens/WeekThreeLearning'
-import WeekFourLearning from './week-four-screens/WeekFourLearning'
-import WeekFiveLearning from './week-five-course/WeekFiveLearning'
-import { decryptId } from '../../../../../utils/encryption'
-import userService from '../../../../../services/api/user'
-import { useQuery } from '@tanstack/react-query'
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Icon } from '@iconify/react';
+import './newcourse.css';
+import './breakpoints.css';
+import './styles.css';
+import courseOne from '../../../../../assets/course1.png';
+import WeekOneLearning from './week-one-screens/WeekOneLearning';
+import WeekTwoLearning from './week-two-screens/WeekTwoLearning';
+import WeekThreeLearning from './week-three-screens/WeekThreeLearning';
+import WeekFourLearning from './week-four-screens/WeekFourLearning';
+import WeekFiveLearning from './week-five-course/WeekFiveLearning';
+import { decryptId } from '../../../../../utils/encryption';
+import userService from '../../../../../services/api/user';
+import { useQuery } from '@tanstack/react-query';
 
 function SelfAwarenessCourse() {
+	const [open, setOpen] = useState(false);
+	const location = useLocation();
+	const navigate = useNavigate();
+	const [id, setId] = useState('');
+	const [course, setCourse] = useState(null);
 
-  const [open, setOpen] = useState(false)
-  const location = useLocation()
-  const navigate = useNavigate()
-  const [id, setId] = useState("")
-  const [course, setCourse] = useState(null)
+	// Access data from location.state
+	const enrolmentData = location.state?.enrollmentData; // Assuming enrollData is passed in state
 
-  // Access data from location.state
-  const enrolmentData = location.state?.enrollmentData; // Assuming enrollData is passed in state
+	useEffect(() => {
+		//toDo: Only Enrolled Users or Admin can access this course
+		if (!enrolmentData) return navigate('/dashboard');
+		setId(enrolmentData?._id);
+		setCourse(enrolmentData);
+		setOpen(true);
+	}, []);
 
+	const {
+		data: completedWeeks,
+		isLoading,
+		isError,
+	} = useQuery({
+		queryKey: ['completed-weeks', course?._id],
+		queryFn: () => userService.getCompletedWeeks(course?._id),
+	});
 
-  useEffect(() => {
-    //toDo: Only Enrolled Users or Admin can access this course
-    if (!enrolmentData) return navigate("/dashboard");
-    setId(enrolmentData?._id);
-    setCourse(enrolmentData)
-    setOpen(true)
+	// New state to track completed weeks
+	const [completedWeeksState, setCompletedWeeksState] = useState([]);
 
-  }, []);
+	// Update completedWeeksState whenever the query data changes
+	useEffect(() => {
+		if (completedWeeks && completedWeeks.weeks) {
+			setCompletedWeeksState(completedWeeks.weeks);
+		}
+	}, [completedWeeks]);
 
+	// useEffect(() => {
+	//   if (!course) return navigate("/dashboard")
+	//   setOpen(true)
+	// }, [location, course, navigate])
 
-  const { data: completedWeeks, isLoading, isError } = useQuery({
-    queryKey: ['completed-weeks', course?._id],
-    queryFn: () => userService.getCompletedWeeks(course?._id),
-  })
+	const storedWeekIndex = localStorage.getItem(`currentWeek-${id}`) || '1';
+	const initialWeekIndex = parseInt(storedWeekIndex, 10);
 
-  // New state to track completed weeks
-  const [completedWeeksState, setCompletedWeeksState] = useState([])
+	const [activeLink, setActiveLink] = useState(`week${initialWeekIndex}`);
+	const [currentWeekIndex, setCurrentWeekIndex] = useState(initialWeekIndex);
 
-  // Update completedWeeksState whenever the query data changes
-  useEffect(() => {
-    if (completedWeeks && completedWeeks.weeks) {
-      setCompletedWeeksState(completedWeeks.weeks)
-    }
-  }, [completedWeeks])
+	const courses = {
+		id: 1,
+		image: courseOne,
+		title: 'Knowing Yourself Better:',
+		subtitle: 'Self Awareness',
+		overviewDescription:
+			'The curriculum combines engaging educational content, interactive activities, and reflective discussions to create an environment that nurtures resilience, creativity, and a lifelong love for learning. From understanding the power of "yet" to exploring the potential of the human brain, each weeks session delves into different aspects of the growth mindset.',
+		description:
+			'The "Growth Mindset Course" is a 10-week program designed to introduce and instill the principles of a growth mindset in children.',
+		catalogue: [
+			{ weekLesson: 'Introduction to Self-Awareness' },
+			{ weekLesson: 'Identifying Strengths and Weaknesses' },
+			{ weekLesson: 'Understanding Mindset' },
+			{ weekLesson: 'Identifying Values' },
+			{ weekLesson: 'Emotional Intelligence and Communication Skills' },
+		],
+		enrolled: true,
+	};
 
-  // useEffect(() => {
-  //   if (!course) return navigate("/dashboard")
-  //   setOpen(true)
-  // }, [location, course, navigate])
+	const handleLinkClick = (index) => {
+		setActiveLink(`week${index + 1}`);
+		setCurrentWeekIndex(index + 1);
+		localStorage.setItem(`currentWeek-${id}`, index + 1);
+	};
 
-  const storedWeekIndex = localStorage.getItem(`currentWeek-${id}`) || '1'
-  const initialWeekIndex = parseInt(storedWeekIndex, 10)
+	const renderSidebarContent = () => {
+		const weekIndex = parseInt(activeLink.replace('week', ''), 10) - 1;
+		switch (weekIndex) {
+			case 0:
+				return (
+					<WeekOneLearning
+						courseId={id}
+						course={course}
+						currentWeekIndex={currentWeekIndex}
+						handleLinkClick={handleLinkClick}
+					/>
+				);
+			case 1:
+				return (
+					<WeekTwoLearning
+						courseId={id}
+						course={course}
+						currentWeekIndex={currentWeekIndex}
+						handleLinkClick={handleLinkClick}
+					/>
+				);
+			case 2:
+				return (
+					<WeekThreeLearning
+						courseId={id}
+						course={course}
+						currentWeekIndex={currentWeekIndex}
+						handleLinkClick={handleLinkClick}
+					/>
+				);
+			case 3:
+				return (
+					<WeekFourLearning
+						courseId={id}
+						course={course}
+						currentWeekIndex={currentWeekIndex}
+						handleLinkClick={handleLinkClick}
+					/>
+				);
+			case 4:
+				return (
+					<WeekFiveLearning
+						courseId={id}
+						course={course}
+						currentWeekIndex={currentWeekIndex}
+						handleLinkClick={handleLinkClick}
+					/>
+				);
+			default:
+				return <p>Select a week to view its content.</p>;
+		}
+	};
 
-  const [activeLink, setActiveLink] = useState(`week${initialWeekIndex}`)
-  const [currentWeekIndex, setCurrentWeekIndex] = useState(initialWeekIndex)
+	const disableCourse = (index) => {
+		const data = completedWeeksState; // Use updated state
+		if (data.includes(index.toString())) {
+			return false;
+		}
+		const lastItemPlusOne = Number(data[data.length - 1]) + 1;
+		if (index === lastItemPlusOne) {
+			return false;
+		}
+		return true;
+	};
 
-  const courses = {
-    id: 1,
-    image: courseOne,
-    title: 'Knowing Yourself Better:',
-    subtitle: 'Self Awareness',
-    overviewDescription:
-      'The curriculum combines engaging educational content, interactive activities, and reflective discussions to create an environment that nurtures resilience, creativity, and a lifelong love for learning. From understanding the power of "yet" to exploring the potential of the human brain, each weeks session delves into different aspects of the growth mindset.',
-    description:
-      'The "Growth Mindset Course" is a 10-week program designed to introduce and instill the principles of a growth mindset in children.',
-    catalogue: [
-      { weekLesson: 'Introduction to Self-Awareness' },
-      { weekLesson: 'Identifying Strengths and Weaknesses' },
-      { weekLesson: 'Understanding Mindset' },
-      { weekLesson: 'Identifying Values' },
-      { weekLesson: 'Emotional Intelligence and Communication Skills' },
-    ],
-    enrolled: true,
-  }
+	return (
+		<div className="self-awareness course-profile">
+			{open && (
+				<>
+					{/* course menu */}
+					<div className="course-menu">
+						<div className="course-menu-collapsed">
+							<button
+								onClick={() => navigate('/dashboard/my-courses')}
+								className="p-2"
+								style={{
+									cursor: 'pointer',
+									border: 'none',
+									background: '#f8f5f5',
+									borderRadius: '50%',
+								}}
+							>
+								<Icon icon="mdi:arrow-right" width="20" height="20" />
+							</button>
+						</div>
 
-  const handleLinkClick = (index) => {
-    setActiveLink(`week${index + 1}`)
-    setCurrentWeekIndex(index + 1)
-    localStorage.setItem(`currentWeek-${id}`, index + 1)
-  }
+						<div className="course-menu-expanded">
+							<p
+								className="back-to-course-list"
+								onClick={() => navigate('/dashboard/my-courses')}
+							>
+								<Icon icon="fa6-solid:arrow-left-long" className="me-2" />
+								Back to My Courses
+							</p>
 
-  const renderSidebarContent = () => {
-    const weekIndex = parseInt(activeLink.replace('week', ''), 10) - 1
-    switch (weekIndex) {
-      case 0:
-        return (
-          <WeekOneLearning
-            courseId={id}
-            course={course}
-            currentWeekIndex={currentWeekIndex}
-            handleLinkClick={handleLinkClick}
-          />
-        )
-      case 1:
-        return (
-          <WeekTwoLearning
-            courseId={id}
-            course={course}
-            currentWeekIndex={currentWeekIndex}
-            handleLinkClick={handleLinkClick}
-          />
-        )
-      case 2:
-        return (
-          <WeekThreeLearning
-            courseId={id}
-            course={course}
-            currentWeekIndex={currentWeekIndex}
-            handleLinkClick={handleLinkClick}
-          />
-        )
-      case 3:
-        return (
-          <WeekFourLearning
-            courseId={id}
-            course={course}
-            currentWeekIndex={currentWeekIndex}
-            handleLinkClick={handleLinkClick}
-          />
-        )
-      case 4:
-        return (
-          <WeekFiveLearning
-            courseId={id}
-            course={course}
-            currentWeekIndex={currentWeekIndex}
-            handleLinkClick={handleLinkClick}
-          />
-        )
-      default:
-        return <p>Select a week to view its content.</p>
-    }
-  }
+							<div className="course-title-text mt-3">
+								<h2>{courses.title}</h2>
+								<h2 className="sub-title">{courses.subtitle}</h2>
+							</div>
 
-  const disableCourse = (index) => {
-    const data = completedWeeksState // Use updated state
-    if (data.includes((index).toString())) {
-      return false;
-    }
-    const lastItemPlusOne = Number(data[data.length - 1]) + 1;
-    if (index === lastItemPlusOne) {
-      return false;
-    }
-    return true;
-  };
+							<ul className="sub-courses mt-2">
+								{courses.catalogue.map((week, index) => (
+									<li key={index} className='sub-course'>
+										<button
+											key={index}
+											className={`course-week-button ${
+												`week${index + 1}` === activeLink ? 'active' : ''
+											}`}
+											onClick={() => handleLinkClick(index)}
+											disabled={disableCourse(index + 1)}
+										>
+											<div>
+												<Icon
+													icon="icon-park-outline:check-one"
+													className="course-list-icon"
+												/>
+											</div>
+											<div className="d-flex align-items-center">
+												<p className="text-nowrap">{`Week ${
+													index + 1
+												} `}</p>
+												<p className="ms-3">{week.weekLesson}</p>
+											</div>
+										</button>
+									</li>
+								))}
+							</ul>
+						</div>
+					</div>
 
-  return (
-    <div className='self-awareness course-profile'>
-      {open && (
-        <>
-          <div className='mt-5 course-links'>
-            <div className='about-courses-menu mt-5'>
-              <p
-                className='back-to-course-list'
-                onClick={() => navigate('/dashboard/my-courses')}
-              >
-                <Icon icon='fa6-solid:arrow-left-long' className='me-2' />
-                Back to My Courses
-              </p>
-
-              <div className='course-title-text mt-3'>
-                <h2>{courses.title}</h2>
-                <h2 className='sub-title'>{courses.subtitle}</h2>
-              </div>
-
-              <div className='sub-courses mt-2'>
-                {courses.catalogue.map((week, index) => (
-                  <button
-                    key={index}
-                    className={`course-week-button ${`week${index + 1}` === activeLink ? 'active' : ''}`}
-                    onClick={() => handleLinkClick(index)}
-                    disabled={disableCourse(index + 1)}
-                  >
-                    <div>
-                      <Icon
-                        icon='icon-park-outline:check-one'
-                        className='course-list-icon'
-                      />
-                    </div>
-                    <div className='d-flex align-items-center'>
-                      <p className='text-nowrap'>{`Week ${index + 1} `}</p>
-                      <p className='text-wrap ms-3'>{week.weekLesson}</p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className='course-sidebar-content'>{renderSidebarContent()}</div>
-        </>
-      )}
-    </div>
-  )
+					{/* course content to take up the remainig space */}
+					<div className="course-content">{renderSidebarContent()}</div>
+				</>
+			)}
+		</div>
+	);
 }
 
-export default SelfAwarenessCourse
+export default SelfAwarenessCourse;

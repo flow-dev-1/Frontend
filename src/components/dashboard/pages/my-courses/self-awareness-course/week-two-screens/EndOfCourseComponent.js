@@ -26,15 +26,15 @@ const EndOfCourseComponent = ({
         />
       }
 
-      <div className="d-flex align-items-center justify-content-around mx-auto mt-5">
+      <div className="progression-btns mt-3">
         {/* <button
-          className='btn progress-btn btn-light'
+          className='btn prev ight'
           onClick={() => setCurrentActivity(1)}
         >
           {'<<<'} Retake Lesson
         </button> */}
         <button
-          className="btn progress-btn btn-dark rounded-3"
+          className="btn next dark"
           onClick={() => handleLinkClick(2)}
         >
           Proceed to Week {currentWeekIndex + 1} {">>>"}

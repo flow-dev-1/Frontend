@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png'
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
-import '../newcourse.css'
-import NavigationButtons from './NavigationButtons'
+
+import ProgressionButtons from '../components/ProgressionButtons';
 import { toast } from 'react-toastify'
 
 export default function WeaknessIdentification({
@@ -118,7 +118,13 @@ export default function WeaknessIdentification({
           </ul>
         </div>
       </div>
-      <NavigationButtons onBack={onBack} onNext={handleSubmit} />
+			<div className="mt-3">
+				<ProgressionButtons
+					variant={'both'}
+					onClickNext={handleSubmit}
+					onClickPrev={onBack}
+				/>
+			</div>
     </div>
   )
 }

@@ -104,14 +104,14 @@ const PersonalityDescriptionComponent = ({
         </div>
       </div>
 
-      <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-        <button className='btn progress-btn btn-light' onClick={onBack}>
-          {'<<<'} Back
-        </button>
-        <button className='btn progress-btn btn-dark' onClick={handleNext}>
-          Next {'>>>'}
-        </button>
-      </div>
+			<div className="progression-btns mt-3">
+					<button className="btn prev light" onClick={onBack}>
+						{'<<< Back'}
+					</button>
+				<button className="btn next dark" onClick={handleNext}>
+					{'Next >>>'}
+				</button>
+			</div>
     </div>
   )
 }

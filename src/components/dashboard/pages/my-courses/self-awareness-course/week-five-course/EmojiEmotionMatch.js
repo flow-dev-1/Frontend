@@ -1,170 +1,161 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { Icon } from '@iconify/react'
-import '../newcourse.css'
+import React, { useState, useRef, useEffect } from 'react';
+import { Icon } from '@iconify/react';
 
-import emojiSad from '../../../../../../assets/selfawareness-images/emocom-images/sad.png'
-import emojiAngry from '../../../../../../assets/selfawareness-images/emocom-images/angry.png'
-import emojiAnxiety from '../../../../../../assets/selfawareness-images/emocom-images/anxiety.png'
-import emojiBored from '../../../../../../assets/selfawareness-images/emocom-images/bored.png'
-import emojiHappy from '../../../../../../assets/selfawareness-images/emocom-images/happy.png'
-import emojiEnvy from '../../../../../../assets/selfawareness-images/emocom-images/envy.png'
-import emojiFear from '../../../../../../assets/selfawareness-images/emocom-images/fear.png'
-import emojiJoy from '../../../../../../assets/selfawareness-images/emocom-images/joy.png'
-import emojiNostalgia from '../../../../../../assets/selfawareness-images/emocom-images/nostalgia.png'
-import { toast } from 'react-toastify'
+import emojiSad from '../../../../../../assets/selfawareness-images/emocom-images/sad.png';
+import emojiAngry from '../../../../../../assets/selfawareness-images/emocom-images/angry.png';
+import emojiAnxiety from '../../../../../../assets/selfawareness-images/emocom-images/anxiety.png';
+import emojiBored from '../../../../../../assets/selfawareness-images/emocom-images/bored.png';
+import emojiHappy from '../../../../../../assets/selfawareness-images/emocom-images/happy.png';
+import emojiEnvy from '../../../../../../assets/selfawareness-images/emocom-images/envy.png';
+import emojiFear from '../../../../../../assets/selfawareness-images/emocom-images/fear.png';
+import emojiJoy from '../../../../../../assets/selfawareness-images/emocom-images/joy.png';
+import emojiNostalgia from '../../../../../../assets/selfawareness-images/emocom-images/nostalgia.png';
+import { toast } from 'react-toastify';
 
-export default function EmojiEmotionMatch({
-  onBack,
-  onNext,
-  activityIndex,
-  formData,
-}) {
-  const [openDropdownIndex, setOpenDropdownIndex] = useState(null)
-  const [selectedOptions, setSelectedOptions] = useState({})
-  const dropdownRefs = useRef([])
+import ProgressionButtons from '../components/ProgressionButtons';
 
-  const emojis = [
-    { src: emojiHappy, label: 'Happy' },
-    { src: emojiSad, label: 'Sad' },
-    { src: emojiAngry, label: 'Angry' },
-    { src: emojiFear, label: 'Fear' },
-    { src: emojiJoy, label: 'Joy' },
-    { src: emojiAnxiety, label: 'Anxiety' },
-    { src: emojiNostalgia, label: 'Nostalgia' },
-    { src: emojiEnvy, label: 'Envy' },
-    { src: emojiBored, label: 'Bored' },
-  ]
+export default function EmojiEmotionMatch({ onBack, onNext, activityIndex, formData }) {
+	const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
+	const [selectedOptions, setSelectedOptions] = useState({});
+	const dropdownRefs = useRef([]);
 
-  const options = [
-    'Happy',
-    'Sad',
-    'Angry',
-    'Fear',
-    'Joy',
-    'Anxiety',
-    'Nostalgia',
-    'Envy',
-    'Bored',
-  ]
+	const emojis = [
+		{ src: emojiHappy, label: 'Happy' },
+		{ src: emojiSad, label: 'Sad' },
+		{ src: emojiAngry, label: 'Angry' },
+		{ src: emojiFear, label: 'Fear' },
+		{ src: emojiJoy, label: 'Joy' },
+		{ src: emojiAnxiety, label: 'Anxiety' },
+		{ src: emojiNostalgia, label: 'Nostalgia' },
+		{ src: emojiEnvy, label: 'Envy' },
+		{ src: emojiBored, label: 'Bored' },
+	];
 
-  // Populate selectedOptions from formData on mount
-  useEffect(() => {
-    if (formData && formData.activities) {
-      const activityData = formData.activities.find(
-        (activity) => activity.activity === activityIndex
-      )
-      if (activityData && activityData.answers) {
-        const initialSelectedOptions = activityData.answers.reduce(
-          (acc, answer, index) => {
-            acc[index] = answer
-            return acc
-          },
-          {}
-        )
-        setSelectedOptions(initialSelectedOptions)
-      }
-    }
-  }, [formData, activityIndex])
+	const options = [
+		'Happy',
+		'Sad',
+		'Angry',
+		'Fear',
+		'Joy',
+		'Anxiety',
+		'Nostalgia',
+		'Envy',
+		'Bored',
+	];
 
-  const handleEmojiClick = (index) => {
-    setOpenDropdownIndex(index === openDropdownIndex ? null : index)
-  }
+	// Populate selectedOptions from formData on mount
+	useEffect(() => {
+		if (formData && formData.activities) {
+			const activityData = formData.activities.find(
+				(activity) => activity.activity === activityIndex
+			);
+			if (activityData && activityData.answers) {
+				const initialSelectedOptions = activityData.answers.reduce((acc, answer, index) => {
+					acc[index] = answer;
+					return acc;
+				}, {});
+				setSelectedOptions(initialSelectedOptions);
+			}
+		}
+	}, [formData, activityIndex]);
 
-  const handleOptionClick = (index, option) => {
-    setSelectedOptions((prev) => ({
-      ...prev,
-      [index]: option,
-    }))
-    setOpenDropdownIndex(null) // Close dropdown after selection
-  }
+	const handleEmojiClick = (index) => {
+		setOpenDropdownIndex(index === openDropdownIndex ? null : index);
+	};
 
-  const handleSubmit = () => {
-    if (Object.keys(selectedOptions).length === emojis.length) {
-      const answerArray = emojis.map((_, i) => selectedOptions[i])
-      onNext(answerArray) // Trigger the onComplete callback with selected options
-    } else {
-      toast.error(
-        'Please match all emojis with the correct emotions before proceeding.'
-      )
-    }
-  }
+	const handleOptionClick = (index, option) => {
+		setSelectedOptions((prev) => ({
+			...prev,
+			[index]: option,
+		}));
+		setOpenDropdownIndex(null); // Close dropdown after selection
+	};
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        dropdownRefs.current &&
-        !dropdownRefs.current.some((ref) => ref && ref.contains(event.target))
-      ) {
-        setOpenDropdownIndex(null) // Close dropdown if click is outside
-      }
-    }
+	const handleSubmit = () => {
+		if (Object.keys(selectedOptions).length === emojis.length) {
+			const answerArray = emojis.map((_, i) => selectedOptions[i]);
+			onNext(answerArray); // Trigger the onComplete callback with selected options
+		} else {
+			toast.error('Please match all emojis with the correct emotions before proceeding.');
+		}
+	};
 
-    document.addEventListener('mousedown', handleClickOutside)
+	useEffect(() => {
+		const handleClickOutside = (event) => {
+			if (
+				dropdownRefs.current &&
+				!dropdownRefs.current.some((ref) => ref && ref.contains(event.target))
+			) {
+				setOpenDropdownIndex(null); // Close dropdown if click is outside
+			}
+		};
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
+		document.addEventListener('mousedown', handleClickOutside);
 
-  return (
-    <div className=''>
-      <div className='week-two question-box py-4'>
-        <div className='align-items-start'>
-          <div className='question-box-header mx-auto'>
-            <h1 className='mb-0'>Instructions:</h1>
-            <h2 style={{ color: '#5B616A' }} className='mb-0 d-flex ms-3'>
-              Kindly match the emojis to the right emotions.
-            </h2>
-          </div>
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, []);
 
-          <div className='dropdown-select-section mt-5'>
-            {emojis.map((emoji, index) => (
-              <div
-                key={index}
-                ref={(el) => (dropdownRefs.current[index] = el)}
-                className=''
-              >
-                <div className='dropdown-div'>
-                  <img src={emoji.src} alt={emoji.label} />
-                  <span className='selected-option'>
-                    {selectedOptions[index] || ''}
-                  </span>
-                  <Icon
-                    icon={
-                      openDropdownIndex === index
-                        ? 'iconamoon:arrow-up-2-thin'
-                        : 'iconamoon:arrow-down-2-thin'
-                    }
-                    className='fs-2'
-                    onClick={() => handleEmojiClick(index)}
-                  />
-                </div>
+	return (
+		<>
+			<div className="week-two question-box py-4">
+				<div className="question-box-header mx-auto">
+					<h1 className="mb-0">Instructions:</h1>
+					<h2 style={{ color: '#5B616A' }} className="mb-0 d-flex ms-3">
+						Kindly match the emojis to the right emotions.
+					</h2>
+				</div>
 
-                {openDropdownIndex === index && (
-                  <ul className='emoji-value-option'>
-                    {options.map((option, optionIndex) => (
-                      <li
-                        key={optionIndex}
-                        onClick={() => handleOptionClick(index, option)}
-                      >
-                        {option}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className='d-flex align-items-center justify-content-around mt-5'>
-        <button className='btn progress-btn btn-light' onClick={onBack}>
-          {'<<<'} Back
-        </button>
-        <button className='btn progress-btn btn-dark' onClick={handleSubmit}>
-          Next {'>>>'}
-        </button>
-      </div>
-    </div>
-  )
+				<div className="dropdown-select-section mt-5">
+					{emojis.map((emoji, index) => (
+						<div
+							key={index}
+							ref={(el) => (dropdownRefs.current[index] = el)}
+							className="dropdown-select text-body"
+						>
+							<div className="d-flex justify-between align-items-center">
+								<img src={emoji.src} alt={emoji.label} />
+								<span
+									className="selected-option flex-fill text-center px-2 py-3"
+									onClick={() => handleEmojiClick(index)}
+								>
+									{selectedOptions[index] || ''}
+								</span>
+								<Icon
+									icon={
+										openDropdownIndex === index
+											? 'iconamoon:arrow-up-2-thin'
+											: 'iconamoon:arrow-down-2-thin'
+									}
+									className="fs-2 cursor-pointer"
+									onClick={() => handleEmojiClick(index)}
+								/>
+							</div>
+
+							{openDropdownIndex === index && (
+								<ul className="emoji-value-option">
+									{options.map((option, optionIndex) => (
+										<li
+											key={optionIndex}
+											onClick={() => handleOptionClick(index, option)}
+										>
+											{option}
+										</li>
+									))}
+								</ul>
+							)}
+						</div>
+					))}
+				</div>
+			</div>
+			<div className="mt-3">
+				<ProgressionButtons
+					variant={'both'}
+					onClickPrev={onBack}
+					onClickNext={handleSubmit}
+				/>
+			</div>
+		</>
+	);
 }
