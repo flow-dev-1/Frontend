@@ -201,6 +201,12 @@ function WeekFourPage6() {
                     : "transparent",
                 }}
               >
+                {currentStep === totalSteps && (
+                  <span
+                    className="d-none d-md-block w-lg-50"
+                    style={{ width: "150px" }}
+                  ></span>
+                )}
                 {renderStep()}
                 {provided.placeholder}
               </div>
