@@ -3,8 +3,8 @@ import React from "react";
 function ColoredSmallSquaredTextBox({ color, value, onChange }) {
   const customStyle = {
     maxWidth: "100%",
-    width: "180px",
-    fontSize: "20px",
+    // width: "180px",
+    fontSize: "1.2rem",
     border: `3px solid ${color}`, // Dynamic border color
     outline: `none`, // Remove default outline
     boxShadow: `0 0 10px ${color}`, // Highlight color
