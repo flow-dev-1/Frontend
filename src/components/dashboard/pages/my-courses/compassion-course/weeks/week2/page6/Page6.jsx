@@ -117,7 +117,7 @@ function WeekTwoPage6() {
             {pageData.prompts.map((item, index) => (
               <div
                 key={index}
-                className="container-item col-12 col-md-6 col-lg-4 g-2"
+                className="container-item col-12 col-md-6 col-lg-3 g-2"
               >
                 <h3 className="fs-md-1 text-nowrap">{item.title}...</h3>
                 <img src={imageMap[item.imgSrc]} alt="images" />
