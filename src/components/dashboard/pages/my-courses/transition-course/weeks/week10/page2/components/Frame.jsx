@@ -39,7 +39,7 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
   return (
     <QuestionBox>
       <div className="d-flex flex-column align-items-center text-start text-md-center w-100">
-        <img src={futureMe} alt="Future Me" className="mb-3 w-75" />
+        <img src={futureMe} alt="Future Me" className="mb-3" />
 
         {questions.map((q, index) => (
           <div
