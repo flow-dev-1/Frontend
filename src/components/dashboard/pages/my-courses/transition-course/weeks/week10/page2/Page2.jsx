@@ -75,7 +75,7 @@ function WeekTenPage2() {
         return (
           <QuestionBox>
             <div className="text-center mb-5">
-              <h2 className="text-white bg-blue p-4 fs-1 rounded d-inline">
+              <h2 className="text-white bg-blue p-1 p-md-4 fs-1 rounded d-inline">
                 {step.title}
               </h2>
             </div>

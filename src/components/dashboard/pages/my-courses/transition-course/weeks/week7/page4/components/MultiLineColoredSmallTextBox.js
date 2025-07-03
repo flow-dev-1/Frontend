@@ -48,44 +48,40 @@ function MultiLineColoredSmallTextBox({
       </div>
 
       {/* Use CSS Grid to ensure 3 columns per row */}
-      <div
-        className="d-flex flex-wrap justify-content-around gap-"
-        style={
-          {
-            // display: "grid",
-            // gridTemplateColumns: "repeat(4, 1fr)", // Ensures 3 columns per row
-            // gap: "20px", // Adds spacing between elements
-            // justifyContent: "center",
-          }
-        }
-      >
-        {info.map((field, index) => (
-          <div key={index} className="d-flex flex-column align-items-center">
-            <div
-              className="mt-2 d-flex justify-content-center align-items-center p-2"
-              style={{
-                borderRadius: "2em",
-                backgroundColor: field.colorCode,
-                color: "black",
-                fontWeight: "bold",
-                fontSize: "15px",
-                textAlign: "center",
-              }}
-            >
-              {field.number}
-            </div>
 
-            <ColoredSmallSquaredTextBox
-              color={field.colorCode}
-              value={
-                answers.find((answer) => answer.stepId === step)?.value?.[
-                  index
-                ] || ""
-              }
-              onChange={(e) => handleInputChange(index, e.target.value)}
-            />
-          </div>
-        ))}
+      <div className="container">
+        <div className="row">
+          {info.map((field, index) => (
+            <div
+              key={index}
+              className="col-12 col-md-6 col-lg-4 col-xl-3 d-flex flex-column align-items-center"
+            >
+              <div
+                className="mt-2 d-flex justify-content-center align-items-center p-2"
+                style={{
+                  borderRadius: "2em",
+                  backgroundColor: field.colorCode,
+                  color: "black",
+                  fontWeight: "bold",
+                  fontSize: "15px",
+                  textAlign: "center",
+                }}
+              >
+                {field.number}
+              </div>
+
+              <ColoredSmallSquaredTextBox
+                color={field.colorCode}
+                value={
+                  answers.find((answer) => answer.stepId === step)?.value?.[
+                    index
+                  ] || ""
+                }
+                onChange={(e) => handleInputChange(index, e.target.value)}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </QuestionBox>
   );
