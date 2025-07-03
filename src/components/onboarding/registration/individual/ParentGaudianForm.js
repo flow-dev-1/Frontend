@@ -11,8 +11,10 @@ import { Icon } from "@iconify/react";
 import { lgas } from "../../../states/lgas";
 import { states } from "../../../states";
 import { useNavigate } from "react-router-dom";
+import "./ParentGaurdianForm.css"; // Import the CSS file for styling
 
-export default function ParentGuardianForm({ onSubmit, setStep, initialData }) {
+export default function
+  ParentGuardianForm({ onSubmit, setStep, initialData }) {
   const [countryCode, setCountryCode] = useState(getCountryCallingCode("NG"));
   const [countries, setCountries] = useState([]);
   const [isNigeria, setIsNigeria] = useState(
@@ -235,18 +237,7 @@ export default function ParentGuardianForm({ onSubmit, setStep, initialData }) {
           </div>
         </div>
         <div style={{ width: "30%", margin: "1.2rem auto", marginTop: "3rem" }}>
-          <button
-            style={{
-              backgroundColor: "#275DAD",
-              borderRadius: "5px",
-              color: "#fff",
-              border: "none",
-              padding: ".3rem ",
-              display: "block",
-              width: "100%",
-            }}
-            type="submit"
-          >
+          <button className="sign-up-responsive-button" type="submit">
             Continue
           </button>
         </div>
