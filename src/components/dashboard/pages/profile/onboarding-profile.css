@@ -251,10 +251,7 @@ p span,
   width: 300px;
 }
 
-.otp-input {
-  /* text-wrap: nowrap; */
-  padding: 0 20px;
-}
+
 
 .modal-content h2 {
   font-size: 40px;
@@ -271,8 +268,15 @@ p span,
   /* margin: 0 20px; */
 }
 
-.otp-input input {
-  /* width: 60px; */
+
+.individual-otp-input {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.individual-otp-input input {
+  width: 60px; /* Default width for larger screens */
   height: 45px;
   border-radius: 4px;
   font-size: 18px;
@@ -281,6 +285,33 @@ p span,
   margin: 0.5rem;
   background-color: #f8f8f8;
   border: 1px solid #d2d3d6;
+}
+
+@media (max-width: 768px) {
+  .individual-otp-input input {
+    width: 100%; /* Full width on smaller screens */
+    font-size: 16px; /* Adjust font size for readability */
+    padding: 0.5rem; /* Add padding for better appearance */
+  }
+}
+
+@media (max-width: 660px) {
+  .individual-otp-input input {
+    width: 120%; /* Full width on smaller screens */
+    font-size: 20px; /* Adjust font size for readability */
+    padding: 0rem 0.2rem; /* Add padding for better appearance */
+    margin: 0 !important;
+    
+  }
+}
+
+@media (max-width: 560px) {
+  .individual-otp-input input {
+    width: 200%; /* Full width on smaller screens */
+    font-size: 18px; /* Adjust font size for readability */
+    padding: 0rem 0.1rem; /* Add padding for better appearance */
+    
+  }
 }
 
 .success-modal {

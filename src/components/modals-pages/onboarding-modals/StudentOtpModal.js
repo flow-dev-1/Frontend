@@ -85,7 +85,7 @@ export default function StudentOtpModal({
           Kindly enter the OTP sent to{' '}
           <span style={{ color: '##275DAD' }}>{email}</span>
         </p>
-        <div className='otp-input my-1'>
+        <div className='individual-otp-input my-1'>
           {otp.map((digit, index) => (
             <input
               type='text'
