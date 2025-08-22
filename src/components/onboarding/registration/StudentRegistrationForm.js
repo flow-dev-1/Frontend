@@ -17,11 +17,8 @@ export default function StudentRegistrationForm() {
       // Move to the next step
       setStep(2);
     } else {
-      // Final submission
-      // <<<<<<< HEAD
       console.log("Final submission data", parentFormData);
-      // =======
-      // >>>>>>> 53efed9afc0e542bf31c855db6859c3b8438dfb0
+
     }
   };
   if (step === 1)

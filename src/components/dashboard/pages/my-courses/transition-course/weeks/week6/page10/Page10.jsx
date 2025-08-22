@@ -190,7 +190,7 @@ function WeekTwoPage4() {
           <Droppable droppableId="image">
             {(provided, snapshot) => (
               <div
-                className="d-flex p-5 justify-content-center align-items-center"
+                className="d-flex p-5 justify-content-center align-items-center w-lg-50"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 style={{
@@ -201,12 +201,18 @@ function WeekTwoPage4() {
                     : "transparent",
                 }}
               >
+                {currentStep === totalSteps && (
+                  <span
+                    className="d-none d-md-block w-lg-50"
+                    style={{ width: "150px" }}
+                  ></span>
+                )}
                 {renderStep()}
                 {provided.placeholder}
               </div>
             )}
           </Droppable>
-          <div className="bg-blue">
+          <div className="bg-blue w-lg-50">
             <div className="d-flex align-items-start mb-2">
               <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
               <div className="text-center text-white pt-2">

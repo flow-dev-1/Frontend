@@ -1,0 +1,37 @@
+.student-details-action-btns {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-top: 1.5rem;
+  }
+  
+  .student-details-action-btns button {
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .student-details-action-btns .back-button {
+    background-color: #fff;
+    color: #275dad;
+    border: 1px solid #275dad;
+  }
+  
+  .student-details-action-btns .submit-button {
+    background-color: #275dad;
+    color: #fff;
+    border: none;
+  }
+  
+
+  @media (max-width: 480px) {
+    .student-details-action-btns {
+      flex-direction: column; /* Stack buttons vertically */
+      align-items: center;
+    }
+  
+    .student-details-action-btns button {
+      width: 100%; /* Make buttons take full width */
+    }
+  }

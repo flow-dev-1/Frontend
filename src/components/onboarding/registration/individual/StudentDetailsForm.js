@@ -13,6 +13,8 @@ import { useDispatch } from 'react-redux'
 import { setToken } from '../../../../redux/reducers/jwtReducer'
 import { toast } from 'react-toastify'
 import { Navigate, useNavigate } from 'react-router-dom'
+import "./studentDetailsForm.css"; // Import the CSS file for styling
+
 
 // Schema definition
 const studentSchema = yup.object().shape({
@@ -177,7 +179,7 @@ export default function StudentDetailsForm({
   return (
     <div
       className='registration-page add-student overflow-hidden'
-      style={{ height: '450px', position: 'relative' }}
+      style={{ height: 'fit-content', position: 'relative' }}
     >
       {isLoading && (
         <div className='loading-overlay'>
@@ -316,38 +318,29 @@ export default function StudentDetailsForm({
             </button>
           </div> */}
         </form>
-        <div className='action-btns'>
+        <div className="student-details-action-btns action-btns">
           <button
-            style={{
-              backgroundColor: '#fff',
-              color: '#275DAD',
-              border: '1px solid #275DAD',
-              borderRadius: '5px',
-            }}
+            className="back-button"
             onClick={() => setStep(1)}
             disabled={isLoading}
           >
             Back
           </button>
           <button
-            style={{
-              backgroundColor: '#275DAD',
-              color: '#fff',
-              borderRadius: '5px',
-            }}
-            type='button'
+            className="submit-button"
+            type="button"
             onClick={submitHandler}
             disabled={isLoading}
           >
             {mutation.isPending ? (
               <RotatingLines
-                type='Oval'
-                style={{ color: '#FFF' }}
+                type="Oval"
+                style={{ color: "#FFF" }}
                 height={20}
                 width={20}
               />
             ) : (
-              'Submit'
+              "Submit"
             )}
           </button>
         </div>
