@@ -3,7 +3,8 @@ import { courseContent as compassionCourseContent } from "../../components/dashb
 import { assessments as compassionAssessments } from "../../components/dashboard/pages/my-courses/compassion-course/weeks/data/assessment";
 import { courseContent as transitionCourseContent } from "../../components/dashboard/pages/my-courses/transition-course/data/activity";
 import { assessments as transitionAssessments } from "../../components/dashboard/pages/my-courses/transition-course/data/assessment";
-import { useLocation } from 'react-router-dom';
+import { courseContent as resilienceCourseContent } from "../../components/dashboard/pages/my-courses/resilience-grit/data/activity";
+import { assessments as resilienceAssessments } from "../../components/dashboard/pages/my-courses/resilience-grit/data/assessment";
 
 const courseData = {
   'compassion': {
@@ -13,29 +14,36 @@ const courseData = {
   'transition': {
     courseContent: transitionCourseContent,
     assessments: transitionAssessments
+  },
+  'resilience': {
+    courseContent: resilienceCourseContent,
+    assessments: resilienceAssessments
   }
 };
 
 const getCourseFromURL = () => {
   // Add timeout to wait for route initialization
   const path = window?.location?.pathname || '/';
-  
+
   // Handle initial / case
   if (path === '/') {
-    return 'compassion'; // default course
+    // return 'compassion'; // default course
+    return 'resilience'; // default course
   }
 
   const segments = path.split('/').filter(Boolean);
   const lastSegment = segments[segments.length - 1];
-  
+
   // Validate course name
-  return ['compassion', 'transition'].includes(lastSegment?.toLowerCase()) 
-    ? lastSegment.toLowerCase() 
-    : 'compassion';
+  return ['compassion', 'transition', 'resilience'].includes(lastSegment?.toLowerCase())
+    ? lastSegment.toLowerCase()
+    // : 'compassion';
+    : 'resilience';
 };
 
 const initialState = {
-  currentCourse: 'compassion',
+  // currentCourse: 'compassion',
+  currentCourse: 'resilience',
   currentWeek: 1,
   currentPage: 1,
   currentStep: 1,
@@ -64,7 +72,7 @@ const navigationSlice = createSlice({
         state.currentStep = 1;
         state.showReview = false;
         state.showHurray = false;
-        
+
         sessionStorage.setItem("flow-currentWeek", "1");
         sessionStorage.setItem("flow-currentPage", "1");
         sessionStorage.setItem("flow-currentStep", "1");
@@ -87,22 +95,25 @@ const navigationSlice = createSlice({
     },
     navigateNext: (state) => {
       const { courseContent, assessments } = courseData[state.currentCourse];
+
       const weekData = courseContent[`week${state.currentWeek}`];
       const totalWeeks = Object.keys(courseContent).length;
       const totalPages = weekData?.pages?.length || 0;
+
       const isAssessmentPage = state.currentPage > totalPages;
       const isLastWeek = state.currentWeek === totalWeeks;
+      const isFirstWeek = state.currentWeek === 1;
 
       if (isAssessmentPage) {
         const assessmentData = assessments[`week${state.currentWeek}`];
+
         const totalQuestions = assessmentData?.questions?.length || 0;
         const isLastQuestion = state.currentStep === totalQuestions;
 
         if (isLastQuestion) {
-
-          if(state.currentCourse === 'transition' && state.currentWeek === 10) {
+          if (state.currentCourse === 'transition' && state.currentWeek === 10) {
             state.showReview = true;
-          }else if (state.currentCourse !== 'transition' && state.currentWeek === 5) {
+          } else if (state.currentCourse !== 'transition' && (state.currentWeek === 5|| isFirstWeek)) {
             state.showReview = true;
           } else {
             state.showHurray = true;
@@ -218,7 +229,7 @@ const navigationSlice = createSlice({
         if (!isFirstWeek) {
           state.currentWeek -= 1;
           const prevWeekPages =
-          courseContent[`week${state.currentWeek}`]?.pages.length || 1;
+            courseContent[`week${state.currentWeek}`]?.pages.length || 1;
           state.currentPage = prevWeekPages;
           state.currentStep = 1;
           sessionStorage.setItem("flow-currentWeek", state.currentWeek);

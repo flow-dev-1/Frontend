@@ -55,6 +55,7 @@ import CompassionFeedback from "./components/dashboard/pages/my-courses/compassi
 
 import TransitionCourse from "./components/dashboard/pages/my-courses/transition-course/index.jsx";
 import TransitionFeedback from "./components/dashboard/pages/my-courses/transition-course/feedback/index.jsx";
+import ResilienceCourse from "./components/dashboard/pages/my-courses/resilience-grit/index.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -153,8 +154,22 @@ function App() {
             }
           />
 
-
-
+          <Route
+            path="/resilience"
+            element={
+              // <ProtectedRoute>
+              <ResilienceCourse />
+              // </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/resilience-grit/feedback"
+            element={
+              // <ProtectedRoute>
+              <ResilienceCourse />
+              // </ProtectedRoute>
+            }
+          />
         </Route>
 
 

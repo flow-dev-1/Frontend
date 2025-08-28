@@ -7,10 +7,9 @@ function ChallengeFrame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, challenge, info } = data;
   const fieldCount = 1; // Default to 1 if not provided
 
-  console.log(answers, "Answers");
 
   const checkData = answers.find((answer) => answer.stepId === step)?.value;
-  console.log(checkData, "Check Data");
+
 
   const handleInputChange = (index, value) => {
     setErrorMessage("");

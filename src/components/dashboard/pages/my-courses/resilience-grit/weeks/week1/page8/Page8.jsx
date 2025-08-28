@@ -1,0 +1,137 @@
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import QuestionBox from "../../../components/QuestionBox";
+import DragAndDropFrame from "./components/DranAndDropFrame";
+import Button from "../../../components/Button";
+import ColoredBox from "../../../components/ColoredBox";
+import {
+  selectPageData,
+  selectCurrentStep,
+} from "../../../../../../../../redux/reducers/navigationSlice";
+import StepIndicator from "../../../components/StepIndicator";
+import {
+  userAnswer,
+  saveActivity,
+} from "../../../../../../../../redux/reducers/userAnswersReducer";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+
+function Page8() {
+  const dispatch = useDispatch(); // Initialize dispatch
+  const pageData = useSelector(selectPageData);
+  const currentStep = useSelector(selectCurrentStep);
+  const totalSteps = pageData?.steps?.length || 0;
+  const [answers, setAnswers] = useState([]); // State to hold answers
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const step = pageData?.steps[currentStep - 1];
+  const userAnswers = useSelector(userAnswer);
+  const adminDatas = useSelector(adminData);
+  // console.log(userAnswers)
+
+  console.log(pageData, "This is page data here o!");
+
+  useEffect(() => {
+    // if (!userAnswers) return;
+    // const response = userAnswers.activities?.find(
+    //   (item) => item.page === pageData.id
+    // );
+
+    // console.log(response, "This is reponse here o!");
+    // setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+  }, [userAnswers]);
+
+  const saveUserInput = () => {
+    if (adminDatas.isAdmin) return true;
+    if (currentStep === 1) return true;
+
+    const stepData = answers.find((item) => item.stepId === currentStep);
+
+    if (!stepData) {
+      setErrorMessage("Oops! All inputs must be filled out.");
+      // return false;
+      return true;
+    }
+
+    const values = Object.values(stepData.value);
+    if (values.length < 1) {
+      setErrorMessage("At least 1 value are required!");
+      return false;
+    }
+
+    if (currentStep !== 1 && currentStep !== 6) {
+      const emptyInputs = values.filter((value) => value?.trim() === "");
+      if (emptyInputs.length > 0) {
+        setErrorMessage(
+          `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
+        );
+        return false;
+      }
+    }
+
+    setErrorMessage(""); // Clear error if input is valid
+
+    const activityData = {
+      page: pageData.id,
+      answer: answers,
+    };
+    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+
+    return true;
+  };
+
+  // console.log(answers, "Answers")
+
+  const renderStep = () => {
+    if (!step) return <div>Invalid Step</div>;
+
+    switch (step.type) {
+      case "instruction":
+        return (
+          <QuestionBox>
+            <div className="text-center mb-5 mt-3 mt-md-0">
+              <h1 className="text-white bg-blue py-2 px-5 rounded d-inline display-4">
+                Instruction
+              </h1>
+            </div>
+
+            <div className="text-center mb-5 mt-3 mt-md-0">
+              <h1 className="text-gray py-2 px-5 rounded d-inline display-5">
+                You will be presented with four (4) scenarios and you are expected to drag and drop the scenarios to either resilience or grit.
+              </h1>
+            </div>
+          </QuestionBox>
+        );
+      case "imageDragAndDrop":
+        return (
+          <DragAndDropFrame
+            info={{
+              images: step.images,
+              buckets: step.buckets,
+              instruction: step.instruction,
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        );
+      default:
+        return <div>Unknown step type</div>;
+    }
+  };
+
+  return (
+    <>
+      {renderStep()}
+      {currentStep !== 1 && errorMessage && (
+        <div className="text-danger">{errorMessage}</div>
+      )}{" "}
+      {/* Display error message */}
+      <StepIndicator totalSteps={totalSteps} />
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
+        <Button text="Prev" />
+        <Button text="Next" customOnClick={saveUserInput} />
+      </div>
+    </>
+  );
+}
+
+export default Page8;
