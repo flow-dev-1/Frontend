@@ -112,9 +112,8 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
   const renderDragItem = () => {
     if (currentImageIndex >= images.length || allImagesDropped) return null;
 
-    const imagePath = require(`../../../../../../../../../assets/drag-images/resilience-drag-images/week1/image${
-      currentImageIndex + 1
-    }.png`);
+    const imagePath = require(`../../../../../../../../../assets/drag-images/resilience-drag-images/week1/image${currentImageIndex + 1
+      }.png`);
 
     return (
       <Draggable
@@ -132,12 +131,11 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
               cursor: allImagesDropped
                 ? "not-allowed"
                 : snapshot.isDragging
-                ? "grabbing"
-                : "grab",
+                  ? "grabbing"
+                  : "grab",
               opacity: allImagesDropped ? 0.5 : 1,
-              transform: `${provided.draggableProps.style?.transform || ""} ${
-                snapshot.isDragging ? "scale(0.3)" : ""
-              }`,
+              transform: `${provided.draggableProps.style?.transform || ""} ${snapshot.isDragging ? "scale(0.3)" : ""
+                }`,
               zIndex: snapshot.isDragging ? 9999 : 1,
             }}
           >
@@ -156,14 +154,13 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
         currentStep={currentImageIndex + 1}
       />
       <DragDropContext onDragEnd={handleOnDragEnd}>
-        <div className="d-flex flex-column align-items-center pt-2">
-          {/* Step Indicator */}
-
-          <div className="d-flex custom-border-20 flex-column flex-md-row">
+        <div className="row custom-border-20 w-100 m-0">
+          {/* Left Droppable (50%) */}
+          <div className="col-12 col-md-6 d-flex justify-content-center align-items-center p-4">
             <Droppable droppableId="image">
               {(provided, snapshot) => (
                 <div
-                  className="d-flex p-5 justify-content-center align-items-center w-lg-50"
+                  className="w-100 d-flex justify-content-center align-items-center"
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                   style={{
@@ -175,86 +172,63 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
                   }}
                 >
                   {allImagesDropped && (
-                    <span
-                      className="d-none d-md-block w-lg-50"
-                      style={{ width: "150px" }}
-                    ></span>
+                    <span className="d-none d-md-block" style={{ width: "150px" }} />
                   )}
                   {renderDragItem()}
                   {provided.placeholder}
                 </div>
               )}
             </Droppable>
-            <div className="bg-blue w-lg-50">
-              <div className="d-flex align-items-start mb-2">
-                <img
-                  src={ArrowTrail}
-                  alt="arrow trail"
-                  className="arrow-head"
-                />
-                <div className="text-center text-white pt-2">
-                  <h1>{instruction}</h1>
-                </div>
-                <img
-                  src={ArrowTrail}
-                  alt="arrow trail"
-                  className="arrow-head"
-                />
+          </div>
+
+          {/* Right Buckets (50%) */}
+          <div className="col-12 col-md-6 bg-blue p-4">
+            <div className="d-flex align-items-start mb-2">
+              <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
+              <div className="text-center text-white pt-2 flex-grow-1">
+                <h1>{instruction}</h1>
               </div>
-              <div className="d-flex justify-content-around align-items-center  px-0 py-0 px-md-4 py-md-2">
-                {buckets &&
-                  buckets.map((bucket) => (
-                    <Droppable key={bucket.title} droppableId={bucket.id}>
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          className="p-0 p-md-2"
-                          {...provided.droppableProps}
-                          style={{
-                            backgroundColor: snapshot.isDraggingOver
-                              ? "rgba(255, 255, 255, 0.1)"
-                              : "transparent",
-                            padding: "20px",
-                            borderRadius: "8px",
-                            minHeight: "100px",
-                            height: "300px",
-                            // width: "200px",
-                            width: snapshot.isDraggingOver ? "200px" : "",
-                          }}
+              <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
+            </div>
+
+            <div className="d-flex justify-content-around align-items-center flex-wrap">
+              {buckets &&
+                buckets.map((bucket) => (
+                  <Droppable key={bucket.title} droppableId={bucket.id}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        className="p-2 flex-fill m-2 draggable-bucket"
+                        {...provided.droppableProps}
+                        style={{
+                          backgroundColor: snapshot.isDraggingOver
+                            ? "rgba(255, 255, 255, 0.1)"
+                            : "transparent",
+                        }}
+                      >
+                        <h2
+                          className={
+                            bucket.id === "green" ? "inner-count" : "outer-count"
+                          }
                         >
-                          <h2
-                            className={
-                              bucket.id === "green"
-                                ? "inner-count"
-                                : "outer-count"
-                            }
-                          
-                          >
-                            {bucketResults[bucket.id]?.length || 0}
-                          </h2>
-                          <div
-                            className={
-                              bucket.id === "green"
-                                ? "inner-bucket"
-                                : "outer-bucket"
-                            }
-                          >
-                            {bucket.title}
-                          </div>
-                          {provided.placeholder}
+                          {bucketResults[bucket.id]?.length || 0}
+                        </h2>
+                        <div
+                          className={
+                            bucket.id === "green" ? "inner-bucket" : "outer-bucket"
+                          }
+                        >
+                          {bucket.title}
                         </div>
-                      )}
-                    </Droppable>
-                  ))}
-              </div>
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                ))}
             </div>
           </div>
-          {allImagesDropped && (
-            <p style={{ color: "red", fontWeight: "bold" }}>
-              All images have been placed!
-            </p>
-          )}
         </div>
+
       </DragDropContext>
     </>
   );

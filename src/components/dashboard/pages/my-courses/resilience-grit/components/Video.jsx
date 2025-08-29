@@ -7,8 +7,6 @@ function VideoComponent({ videoSrc }) {
   const [percentageWatched, setPercentageWatched] = useState(3);
   const videoRef = React.createRef();
 
-  console.log(videoSrc,"Video src")
-
   useEffect(() => {
     const video = videoRef.current;
     const intervalId = setInterval(() => {

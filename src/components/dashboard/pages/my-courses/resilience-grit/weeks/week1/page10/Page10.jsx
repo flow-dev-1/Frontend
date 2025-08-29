@@ -14,6 +14,7 @@ import {
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import MultiLineColoredSmallTextBox from "./components/MultiLineColoredSmallTextBox";
 
+
 function Page10() {
   const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);

@@ -10,7 +10,7 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
-
+import "./page2.css";
 function WeekTwoPage2() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
@@ -60,9 +60,9 @@ function WeekTwoPage2() {
           <div>
             <form className="d-flex gap-3 flex-column align-items-center w-100">
               {/* Question text */}
-              <div className="d-flex align-items-start mb-4">
-                <h2 className="text-blue me-3 display-4">Question:</h2>
-                <h2 className="text-gray display-4">{pageData.question}</h2>
+              <div className="d-flex align-items-start mb-4 ">
+                <h2 className="text-blue me-3 week-2-question-text">Question:</h2>
+                <h2 className="text-gray week-2-question-text">{pageData.question}</h2>
               </div>
 
               {/* Options evenly spaced */}

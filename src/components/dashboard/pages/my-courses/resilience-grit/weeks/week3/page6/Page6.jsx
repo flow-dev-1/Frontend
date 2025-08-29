@@ -61,9 +61,8 @@ function Page6() {
     const image = pageData.images[i];
     imageMap[
       image
-    ] = require(`../../../../../../../../assets/drag-images/resilience-drag-images/week3/image${
-      i + 1
-    }.png`);
+    ] = require(`../../../../../../../../assets/drag-images/resilience-drag-images/week3/image${i + 1
+      }.png`);
   }
   const handleOnDragEnd = (result) => {
     if (!result.destination) {
@@ -111,9 +110,8 @@ function Page6() {
             style={{
               ...provided.draggableProps.style,
               cursor: snapshot.isDragging ? "grabbing" : "grab",
-              transform: `${provided.draggableProps.style?.transform || ""} ${
-                snapshot.isDragging ? "scale(0.3)" : ""
-              }`,
+              transform: `${provided.draggableProps.style?.transform || ""} ${snapshot.isDragging ? "scale(0.3)" : ""
+                }`,
               zIndex: snapshot.isDragging ? 9999 : 1,
             }}
           >
@@ -185,13 +183,76 @@ function Page6() {
   };
 
   return (
+
+    // Delete this if all has been confirmed good
+
+    // <DragDropContext onDragEnd={handleOnDragEnd}>
+    //   <div className="d-flex flex-column align-items-center pt-2">
+    //     <div className="d-flex custom-border-20 flex-column flex-md-row">
+    //       <Droppable droppableId="image">
+    //         {(provided, snapshot) => (
+    //           <div
+    //             className="d-flex p-5 justify-content-center align-items-center w-lg-50"
+    //             {...provided.droppableProps}
+    //             ref={provided.innerRef}
+    //             style={{
+    //               minHeight: "200px",
+    //               transition: "background-color 0.2s ease",
+    //               backgroundColor: snapshot.isDraggingOver
+    //                 ? "rgba(255, 255, 255, 0.1)"
+    //                 : "transparent",
+    //             }}
+    //           >
+
+    //             {renderStep()}
+    //             {provided.placeholder}
+    //           </div>
+    //         )}
+    //       </Droppable>
+    //       <div className="bg-blue w-lg-50">
+    //         <div className="d-flex align-items-start mb-2">
+    //           <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
+    //           <div className="text-center text-white pt-2">
+    //             <h1>{pageData.instruction}</h1>
+    //           </div>
+    //           <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
+    //         </div>
+    //         <div className="d-flex justify-content-around align-items-center  px-0 py-0 px-md-4 py-md-2">
+    //           {pageData.buckets.map((bucket) => (
+    //             <Droppable key={bucket.id} droppableId={bucket.id}>
+    //               {(provided, snapshot) => (
+    //                 <div
+    //                   ref={provided.innerRef}
+    //                   className="p-0 p-md-2 draggable-bucket"
+    //                   {...provided.droppableProps}
+    //                   style={{
+    //                     backgroundColor: snapshot.isDraggingOver
+    //                       ? "rgba(255, 255, 255, 0.1)"
+    //                       : "transparent",
+
+    //                   }}
+    //                 >
+
+
+    //                   {provided.placeholder}
+    //                 </div>
+    //               )}
+    //             </Droppable>
+    //           ))}
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+
+    // </DragDropContext>
     <DragDropContext onDragEnd={handleOnDragEnd}>
-      <div className="d-flex flex-column align-items-center pt-2">
-        <div className="d-flex custom-border-20 flex-column flex-md-row">
+      <div className="row custom-border-20 w-100 m-0">
+        {/* Left Droppable (50%) */}
+        <div className="col-12 col-md-6 d-flex justify-content-center align-items-center p-4">
           <Droppable droppableId="image">
             {(provided, snapshot) => (
               <div
-                className="d-flex p-5 justify-content-center align-items-center w-lg-50"
+                className="w-100 d-flex justify-content-center align-items-center"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 style={{
@@ -202,6 +263,7 @@ function Page6() {
                     : "transparent",
                 }}
               >
+
                 {currentStep === totalSteps && (
                   <span
                     className="d-none d-md-block w-lg-50"
@@ -213,32 +275,30 @@ function Page6() {
               </div>
             )}
           </Droppable>
-          <div className="bg-blue w-lg-50">
-            <div className="d-flex align-items-start mb-2">
-              <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
-              <div className="text-center text-white pt-2">
-                <h1>{pageData.instruction}</h1>
-              </div>
-              <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
+        </div>
+
+        {/* Right Buckets (50%) */}
+        <div className="col-12 col-md-6 bg-blue p-4">
+          <div className="d-flex align-items-start mb-2">
+            <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
+            <div className="text-center text-white pt-2 flex-grow-1">
+            <h1>{pageData.instruction}</h1>
             </div>
-            <div className="d-flex justify-content-around align-items-center  px-0 py-0 px-md-4 py-md-2">
-              {pageData.buckets.map((bucket) => (
-                <Droppable key={bucket.id} droppableId={bucket.id}>
+            <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
+          </div>
+
+          <div className="d-flex justify-content-around align-items-center flex-wrap">
+            {pageData.buckets.map((bucket) => (
+                <Droppable key={bucket.title} droppableId={bucket.id}>
                   {(provided, snapshot) => (
                     <div
                       ref={provided.innerRef}
-                      className="p-0 p-md-2"
+                      className="p-2 flex-fill m-2 draggable-bucket"
                       {...provided.droppableProps}
                       style={{
                         backgroundColor: snapshot.isDraggingOver
                           ? "rgba(255, 255, 255, 0.1)"
                           : "transparent",
-                        padding: "20px",
-                        borderRadius: "8px",
-                        minHeight: "100px",
-                        height: "300px",
-                        width: snapshot.isDraggingOver ? "200px" : "",
-                        // width: "200px",
                       }}
                     >
                       <h2
@@ -260,7 +320,6 @@ function Page6() {
                   )}
                 </Droppable>
               ))}
-            </div>
           </div>
         </div>
       </div>

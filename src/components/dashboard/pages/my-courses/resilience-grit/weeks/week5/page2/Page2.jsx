@@ -25,7 +25,7 @@ function WeekFivePage2() {
       (item) => item.page === pageData.id
     );
     setMyAnswer(response?.answer ? response.answer : "");
-    return () => {};
+    return () => { };
   }, [userAnswers]);
 
   const saveUserInput = () => {
@@ -54,15 +54,24 @@ function WeekFivePage2() {
   return (
     <>
       <QuestionBox>
-        <div className="d-flex gap-3 align-center-lg-custom flex-column flex-md-row">
-          <h2 className="text-blue fs-1">Question: </h2>
-          <h2 className="text-gray fs-1">
-            {pageData.question}{" "}
-            {pageData.hasImage && (
-              <img src={coping} alt="coping" className="question-image" />
-            )}{" "}
-            ?
-          </h2>
+
+        <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-center">
+          <h2 className="text-blue fs-1 mb-0 flex-shrink-0">Question:</h2>
+
+          <div className="d-flex align-items-center flex-grow-1 min-w-0">
+            <h2 className="text-gray fs-1 mb-0 text-truncate flex-grow-1">
+              {pageData.question}
+              {pageData.hasImage && (
+                <img
+                  src={coping}
+                  alt="self-compassion"
+                  className="ms-2 question-image img-fluid"
+                  style={{ maxWidth: "20rem", height: "auto" }}
+                />
+              )}
+              ?
+            </h2>
+          </div>
         </div>
         <BigTextBox handleChange={handleInputChange} value={myAnswer} />
       </QuestionBox>

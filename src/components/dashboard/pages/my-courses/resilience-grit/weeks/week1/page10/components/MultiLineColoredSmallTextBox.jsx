@@ -1,7 +1,7 @@
 import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
 import ColoredTextField from "../../../../components/ColoredTextField";
-
+import "../page10.css"
 function MultiLineColoredSmallTextBox({
   data,
   answers,
@@ -11,7 +11,7 @@ function MultiLineColoredSmallTextBox({
   const { step, title, info } = data;
 
   const handleInputChange = (index, value) => {
-    console.log("Yeahhhhhhhhh");
+
     setErrorMessage("");
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
@@ -52,16 +52,16 @@ function MultiLineColoredSmallTextBox({
             >
               {/* Label */}
               <h2
-                className="d-flex justify-content-center align-items-center p-3"
+                className="d-flex justify-content-center align-items-center p-3 text-nowrap label-box"
                 style={{
                   borderRadius: "2em",
                   backgroundColor: field.colorCode,
                   color: "white",
                   fontWeight: "bold",
-                  fontSize: "32px",
+                  fontSize: "clamp(18px, 2vw, 32px)",   // ✅ scales with screen size
                   textAlign: "center",
                   minHeight: "60px",
-                  margin: index == 0 ? "0 100px 0 50px" : "0 50px 0 100px",
+                  margin: index === 0 ? "0 4vw 0 2vw" : "0 2vw 0 4vw", // ✅ use %/vw instead of px
                 }}
               >
                 {field.number}

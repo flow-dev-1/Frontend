@@ -11,7 +11,6 @@ import {
   setCurrentPage,
   setCurrentStep,
 } from "../../../../../redux/reducers/navigationSlice.js";
-import "./index.css";
 
 // Import components
 import PopUp from "./components/ReviewPopUp";
@@ -428,7 +427,7 @@ const CourseContent = () => {
       </nav>
 
       <div className="main-content flex-column-reverse flex-md-row">
-        <aside className="d-md-none d-lg-block m-4">
+        <aside className="d-md-none d-lg-block aside-class">
           <button
             disabled={isAdmin}
             onClick={() => navigate("/dashboard/my-courses")}
