@@ -12,7 +12,8 @@ const StepIndicator = ({ totalSteps }) => {
           key={index}
           className={`${index + 1 <= currentStep ? "bg-step-active" : "bg-step"}`}
           style={{
-            flexBasis: "35px",
+            // flexBasis: "35px",
+            width: "35px",
             height: "17px",
             borderRadius: "8px",
           }}

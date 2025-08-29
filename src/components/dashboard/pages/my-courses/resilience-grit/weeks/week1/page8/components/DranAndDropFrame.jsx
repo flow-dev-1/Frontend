@@ -2,27 +2,11 @@ import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import CardBoard from "./CardBoard";
 import ArrowTrail from "../../../../../../../../../assets/ArrowTrail.svg";
+import { set } from "react-hook-form";
 
-const InternalStepIndicator = ({ totalSteps, currentStep }) => {
-  return (
-    <div className="d-flex justify-content-center mt-4" style={{ gap: "10px" }}>
-      {[...Array(totalSteps)].map((_, index) => (
-        <div
-          key={index}
-          className={`${index + 1 <= currentStep ? "bg-green" : "bg-gray"}`}
-          style={{
-            flexBasis: "35px",
-            height: "17px",
-            borderRadius: "8px",
-            cursor: index <= currentStep ? "pointer" : "default",
-          }}
-        />
-      ))}
-    </div>
-  );
-};
 
-const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
+
+const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers,setCurrentImageIndex1,setDragDropImageLength }) => {
   const { images, buckets, instruction } = info;
   const [bucketResults, setBucketResults] = useState({ green: [], red: [] });
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -42,6 +26,7 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
         (existingAnswer.value.green?.length || 0) +
         (existingAnswer.value.red?.length || 0);
       setCurrentImageIndex(totalDropped);
+      setCurrentImageIndex1(totalDropped)
     }
   }, [answers]);
 
@@ -100,14 +85,25 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
       setCurrentImageIndex((prevIndex) =>
         prevIndex + 1 < images.length ? prevIndex + 1 : prevIndex
       );
+      setCurrentImageIndex1((prevIndex) =>  
+        prevIndex + 1 < images.length ? prevIndex + 1 : prevIndex
+      )
     }
   };
 
   const goToStep = (index) => {
     if (index < currentImageIndex) {
       setCurrentImageIndex(index);
+      setCurrentImageIndex1(index)
     }
   };
+
+  useEffect(() => {
+    setDragDropImageLength(images.length)
+  
+    return () => {}
+  }, [images])
+  
 
   const renderDragItem = () => {
     if (currentImageIndex >= images.length || allImagesDropped) return null;
@@ -149,10 +145,10 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers }) => {
   return (
     <>
       {" "}
-      <InternalStepIndicator
+      {/* <InternalStepIndicator
         totalSteps={images.length}
         currentStep={currentImageIndex + 1}
-      />
+      /> */}
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <div className="row custom-border-20 w-100 m-0">
           {/* Left Droppable (50%) */}

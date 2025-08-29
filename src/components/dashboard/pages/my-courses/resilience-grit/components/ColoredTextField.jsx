@@ -7,12 +7,12 @@ function ColoredTextField({ handleChange, value, color, index }) {
             style={{ display: "flex", flexGrow: 1 }}
         >
             <textarea
-                className="border-0 bg-transparent no-scrollbar w-100 h-100 resize-none text-center"
-                placeholder="Type your answer here..."
+                className="border-0 bg-transparent no-scrollbar w-100 h-100 resize-none text-center colored-text-box"
+                placeholder=""
                 value={value}
                 onChange={handleChange}
                 style={{
-                    minHeight: "120px",
+                    minHeight: "60px",
                     outline: "none",      // ✅ remove blue outline
                     boxShadow: "none",    // ✅ remove shadow highlight
                 }}

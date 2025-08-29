@@ -15,6 +15,26 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
+const InternalStepIndicator = ({ totalSteps, currentStep }) => {
+  return (
+    <div className="d-flex justify-content-center mt-4" style={{ gap: "10px" }}>
+      {[...Array(totalSteps)].map((_, index) => (
+        <div
+          key={index}
+          className={`${index + 2 <= currentStep ? "bg-step-active" : "bg-step"}`}
+          style={{
+            // flexBasis: "35px",
+            width: "35px",
+            height: "17px",
+            borderRadius: "8px",
+            cursor: index <= currentStep ? "pointer" : "default",
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 function Page8() {
   const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
@@ -25,9 +45,9 @@ function Page8() {
   const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
-  // console.log(userAnswers)
+  const [dragDropImageLength, setDragDropImageLength] = useState(4)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
-  console.log(pageData, "This is page data here o!");
 
   useEffect(() => {
     // if (!userAnswers) return;
@@ -111,6 +131,8 @@ function Page8() {
             setErrorMessage={setErrorMessage}
             answers={answers}
             setAnswers={setAnswers}
+            setCurrentImageIndex1={setCurrentImageIndex}
+            setDragDropImageLength={setDragDropImageLength}
           />
         );
       default:
@@ -125,7 +147,15 @@ function Page8() {
         <div className="text-danger">{errorMessage}</div>
       )}{" "}
       {/* Display error message */}
-      <StepIndicator totalSteps={totalSteps} />
+      <div className="d-flex justify-content-center align-items-center mt-2 gap-2">
+          <StepIndicator totalSteps={totalSteps} />
+          <InternalStepIndicator
+            totalSteps={dragDropImageLength}
+            currentStep={currentImageIndex + 1}
+          />
+
+      </div>
+
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />

@@ -87,12 +87,12 @@ function WeekFourPage4() {
           <div className="row justify-content-between align-items-start g-4">
             {/* Question heading */}
             <div className="d-flex gap-3 flex-column flex-md-row align-items-start mb-4">
-              <h2 className="text-blue display-5">Question: </h2>
-              <h2 className="text-gray display-5">{pageData.question}</h2>
+              <h2 className="text-blue week-2-question-text">Question: </h2>
+              <h2 className="text-gray week-2-question-text">{pageData.question}</h2>
             </div>
 
             {/* Fields in a straight line */}
-            <div className="d-flex flex-row justify-content-between align-items-start w-100 gap-5">
+            <div className="d-flex flex-row justify-content-between align-items-start w-100 gap-1">
               {pageData.fields.map((field, index) => (
                 <div
                   key={index}
