@@ -278,10 +278,10 @@ function Page6() {
         </div>
 
         {/* Right Buckets (50%) */}
-        <div className="col-12 col-md-6 bg-blue p-4">
+        <div className="col-12 col-md-6 bg-blue px-4 py-2">
           <div className="d-flex align-items-start mb-2">
             <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
-            <div className="text-center text-white pt-2 flex-grow-1">
+            <div className="text-center text-white pt-2 flex-grow-1 resilience-drag-instruction h1">
             <h1>{pageData.instruction}</h1>
             </div>
             <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />

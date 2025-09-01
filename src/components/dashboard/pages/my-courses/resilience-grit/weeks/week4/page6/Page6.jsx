@@ -82,7 +82,7 @@ function WeekFourPage6() {
           <QuestionBox>
             <div className="p-5">
               <div className="text-center mb-5 mt-4 mt-md-0">
-                <h2 className="text-white bg-blue p-4 fs-1 rounded d-inline display-4 text-center">
+                <h2 className="text-white bg-blue px-3 py-2 fs-1 rounded d-inline display-4 text-center">
                   {step.type}
                 </h2>
               </div>

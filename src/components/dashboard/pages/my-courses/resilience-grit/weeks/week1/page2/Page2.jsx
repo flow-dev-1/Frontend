@@ -75,7 +75,7 @@ function Page2() {
         <BigTextBox handleChange={handleInputChange} value={myAnswer} />
       </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
-      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
+      <div className="d-flex justify-content-center gap-96px mt-3 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>

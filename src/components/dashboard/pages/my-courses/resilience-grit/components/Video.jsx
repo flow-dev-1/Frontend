@@ -24,7 +24,7 @@ function VideoComponent({ videoSrc }) {
   return (
     <div style={{ position: "relative",}}>
       <video
-        className="custom-video"
+        className="resilience-custom-video"
         ref={videoRef}
         controls
         controlsList="nodownload noremoteplayback"

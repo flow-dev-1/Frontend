@@ -14,7 +14,7 @@
   .multi-input-title {
     font-size: clamp(24px, 4vw, 36px);
     font-weight: 500;
-    margin-bottom: 1rem;
+    margin-bottom: .2rem;
     line-height: 1.4;
   }
   
@@ -24,6 +24,7 @@
     font-weight: 600;
     margin: 0 8px;
     display: inline-block;
+    font-size: 1.5rem;
   }
   
   .highlight-words:first-of-type {
@@ -46,9 +47,9 @@
   .input-list {
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: .3rem;
     max-width: 1500px;
-    margin: 0 auto;
+    margin: 10px auto;
   }
   
   .input-row {
@@ -97,7 +98,15 @@
 
   @media (max-width: 1400px) {
     .highlight-words {
-      padding: 4px 15px;
+      padding: 2px 10px;
+      font-size: 1.5rem;
+    }
+    .multi-input-title {
+      margin-bottom: .1rem;
+      line-height: 1.2;
+    }
+    .multi-input-field {
+      height: 45px;
 
     }
     

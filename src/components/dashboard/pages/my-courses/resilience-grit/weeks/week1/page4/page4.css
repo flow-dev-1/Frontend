@@ -3,6 +3,7 @@
     height: 325px;
     background: url("../../../../../../../../assets/big-rect.png") no-repeat;
     background-size: 100% 100%;
+    padding: 3rem;
   }
   
   .input-label {
@@ -35,5 +36,15 @@
   .label-input-container {
     justify-content: center;
     align-items: center;
+  }
+
+  @media (max-width: 1400px) {
+    .input-container {
+      height: 255px;
+      padding: 1rem 2.5rem 0rem 2.5rem;
+    }
+    .resilience-input {
+      padding: 10px !important;
+    }
   }
   

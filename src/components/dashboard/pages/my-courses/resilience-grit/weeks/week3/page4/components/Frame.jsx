@@ -46,8 +46,8 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
                         className="mb-2 w-100 d-flex flex-column align-items-start"
                     >
                         <div className="d-flex gap-2 flex-row justify-content-center align-items-baseline mb-2">
-                            <h2 className="text-blue text-nowrap display-5">Situation {step - 1}:</h2>
-                            <h2 className="text-gray text-start display-5">{q.question}</h2>
+                            <h2 className="text-blue text-nowrap week-2-question-text">Situation {step - 1}:</h2>
+                            <h2 className="text-gray text-start week-2-question-text">{q.question}</h2>
                         </div>
 
                         <MediumTextBox

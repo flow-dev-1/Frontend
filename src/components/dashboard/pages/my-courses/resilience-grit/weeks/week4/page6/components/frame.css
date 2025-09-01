@@ -4,14 +4,14 @@
     display: flex;
     align-items: center;
     /* justify-content: center; */
-    padding:0 1rem;
+    padding:0 0rem;
     margin-bottom: -30rem ;
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   }
   
   .mm-map {
     position: relative;
-    width: min(92vw, 1000px);
+    width: min(92vw, 900px);
     aspect-ratio: 8 / 5; /* Keeps the original 800x500 proportion */
     margin: 0 auto;
   }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import CardBoard from "./CardBoard";
 import ArrowTrail from "../../../../../../../../../assets/ArrowTrail.svg";
-import { set } from "react-hook-form";
+import "../page8.css"
 
 
 
@@ -145,10 +145,6 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers,setCurren
   return (
     <>
       {" "}
-      {/* <InternalStepIndicator
-        totalSteps={images.length}
-        currentStep={currentImageIndex + 1}
-      /> */}
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <div className="row custom-border-20 w-100 m-0">
           {/* Left Droppable (50%) */}
@@ -178,13 +174,13 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers,setCurren
           </div>
 
           {/* Right Buckets (50%) */}
-          <div className="col-12 col-md-6 bg-blue p-4">
+          <div className="col-12 col-md-6 bg-blue px-4 py-3">
             <div className="d-flex align-items-start mb-2">
               <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
-              <div className="text-center text-white pt-2 flex-grow-1">
+              <div className="text-center text-white pt-1 flex-grow-1 resilience-drag-instruction">
                 <h1>{instruction}</h1>
               </div>
-              <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
+              <img src={ArrowTrail} alt="arrow trail" className="arrow-head arrow-tail" />
             </div>
 
             <div className="d-flex justify-content-around align-items-center flex-wrap">
@@ -194,7 +190,7 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers,setCurren
                     {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
-                        className="p-2 flex-fill m-2 draggable-bucket"
+                        className="pt-1 flex-fill draggable-bucket"
                         {...provided.droppableProps}
                         style={{
                           backgroundColor: snapshot.isDraggingOver

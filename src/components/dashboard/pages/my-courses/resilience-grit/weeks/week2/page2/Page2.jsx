@@ -56,7 +56,7 @@ function WeekTwoPage2() {
   return (
     <>
       <QuestionBox>
-        <div className="d-flex gap-2 ms-5 align-center-lg-custom">
+        <div className="d-flex gap-2 mt-5 ms-5 align-center-lg-custom">
           <div>
             <form className="d-flex gap-3 flex-column align-items-center w-100">
               {/* Question text */}

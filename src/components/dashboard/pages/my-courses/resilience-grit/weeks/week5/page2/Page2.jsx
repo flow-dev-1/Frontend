@@ -55,7 +55,7 @@ function WeekFivePage2() {
     <>
       <QuestionBox>
 
-        <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-center">
+        <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-center mt-2">
           <h2 className="text-blue fs-1 mb-0 flex-shrink-0">Question:</h2>
 
           <div className="d-flex align-items-center flex-grow-1 min-w-0">

@@ -82,14 +82,14 @@ function Page10() {
       case "instruction":
         return (
           <QuestionBox>
-            <div className="text-center mb-5 mt-3 mt-md-0">
-              <h1 className="text-white bg-blue py-2 px-5 rounded d-inline display-4">
+             <div className="text-center mb-5 mt-5 mt-md-4">
+              <h1 className="text-white bg-blue py-2 px-5 rounded d-inline week-2-question-text">
                 Instruction
               </h1>
             </div>
 
             <div className="text-center mb-5 mt-3 mt-md-0">
-              <h1 className="text-gray py-2 px-5 rounded d-inline display-5">
+              <h1 className="text-gray py-2 px-5 rounded d-inline week-2-question-text">
                 Mention four (4) things you are struggling with and use the power of yet to turn them into things you can still achieve.
               </h1>
             </div>

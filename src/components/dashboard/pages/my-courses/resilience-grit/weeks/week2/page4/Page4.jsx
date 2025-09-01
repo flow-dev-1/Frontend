@@ -83,12 +83,12 @@ function WeekTwoPage4() {
           <QuestionBox>
             <div className="p-5">
               <div className="text-center mb-5 mt-4 mt-md-0">
-                <h2 className="text-white bg-blue p-4 fs-1 rounded d-inline display-4 text-center">
+                <h2 className="text-white bg-blue p-3 fs-1 rounded d-inline week-2-question-text text-center">
                   {step.title}
                 </h2>
               </div>
               <h2 className="text-gray display-5 text-center">{step.instructions[0]}</h2>
-              <h2 className="text-gray mt-5 text-center display-4">
+              <h2 className="text-gray mt-5 text-center week-2-question-text">
                 <joe className="text-blue">{step.options}</joe>
               </h2>
             </div>
