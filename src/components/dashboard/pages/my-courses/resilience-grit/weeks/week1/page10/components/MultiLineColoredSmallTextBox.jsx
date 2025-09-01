@@ -42,7 +42,7 @@ function MultiLineColoredSmallTextBox({
 
   return (
     <QuestionBox>
-      <div className="container">
+      <div className="container resilience-multi-colored-small-text-box mt-5">
         <div className="row justify-content-between align-items-start g-4">
           {info?.map((field, index) => (
             <div

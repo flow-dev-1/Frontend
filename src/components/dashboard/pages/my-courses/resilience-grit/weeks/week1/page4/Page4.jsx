@@ -81,18 +81,19 @@ function Page4() {
   return (
     <>
       <QuestionBox>
-        <div className="d-flex gap-3 mb-3 flex-column flex-md-row">
-          <h2 className="text-blue fs-1">Question:</h2>
-          <h2 className="text-gray fs-1">{pageData.question}</h2>
+        <div className="d-flex gap-3 flex-column flex-md-row">
+          <h2 className="text-blue week-2-question-text">Question:</h2>
+          <h2 className="text-gray week-2-question-text">{pageData.question}</h2>
         </div>
 
-        <div className="input-container py-4 px-3 py-md-5 px-md-5">
+        <div className="input-container">
           {[...Array(pageData.numberOfInputs || 5)].map((_, index) => (
             <div key={index}>
               <div className="d-flex gap-3 label-input-container">
                 <p className="input-label">{index + 1}.</p>
                 <input
                   type="text"
+                  className="resilience-input"
                   placeholder={
                     pageData.inputPlaceholder || "Type your answer here"
                   }

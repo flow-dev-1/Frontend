@@ -117,7 +117,7 @@ function WeekFourPage4() {
                   </h2>
 
                   {/* Expanding Textarea */}
-                  <div className="w-100 mt-3">
+                  <div className="w-100">
                     <ColoredTextField
                       index={index}
                       color={field.textFieldColor}

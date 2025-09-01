@@ -457,9 +457,8 @@ const CourseContent = () => {
                     className="course-list-icon "
                   />
                 </div>
-                <span className="">
-                  Week
-                  {index + 1}
+                <span style={{ whiteSpace: "nowrap" }}>
+                  Week {index + 1}
                 </span>
                 <span className="">{item} </span>
               </li>

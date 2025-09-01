@@ -12,7 +12,6 @@ function ColoredTextField({ handleChange, value, color, index }) {
                 value={value}
                 onChange={handleChange}
                 style={{
-                    minHeight: "60px",
                     outline: "none",      // ✅ remove blue outline
                     boxShadow: "none",    // ✅ remove shadow highlight
                 }}

@@ -40,7 +40,7 @@ const Button = ({ loading, text, customOnClick }) => {
 
   return (
     <button
-      className={`btn fs-5 rounded w-200px h-50px d-flex align-items-center justify-content-center ${
+      className={`btn fs-5 rounded w-200px h-40px d-flex align-items-center justify-content-center ${
         isNextButton || customOnClick
           ? "bg-button text-white border-0 hover-prev"
           : isPrevButton

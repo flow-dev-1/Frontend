@@ -84,7 +84,7 @@ function WeekFivePage6() {
           <QuestionBox>
             <div className="p-5">
               <div className="text-center mb-5 mt-4 mt-md-0">
-                <h2 className="text-white bg-blue p-4 fs-1 rounded d-inline display-4 text-center">
+                <h2 className="text-white bg-blue px-5 py-1 fs-1 rounded d-inline display-4 text-center">
                   {step.title}
                 </h2>
               </div>

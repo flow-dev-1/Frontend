@@ -5,8 +5,9 @@
   width: 100%;
 }
 
-.small-input {
+.resilience-small-input {
   width: 100%;
+  padding: 5rem 2rem;
   border: none;
   outline: none;
 }
@@ -408,9 +409,9 @@
   font-size: 48px;
 }
 
-.question-box-container {
-  min-height: calc(75vh - 120px);
-  padding: 5rem 2rem;
+.resilience-question-box-container {
+  height: 65vh;
+  padding: 1rem 2rem;
   /* width: max-content; */
 }
 
@@ -475,9 +476,14 @@ button {
   min-height: 100px;
 } */
 @media (max-width: 1400px) {
+
   .question-box-container {
     margin-right: 1rem;
     /* width: max-content; */
+  }
+
+  .resilience-small-input {
+    padding: 2rem 2rem;
   }
   
 }

@@ -107,16 +107,16 @@ function Page8() {
       case "instruction":
         return (
           <QuestionBox>
-            <div className="text-center mb-5 mt-3 mt-md-0">
-              <h1 className="text-white bg-blue py-2 px-5 rounded d-inline display-4">
+            <div className="text-center mb-5 mt-5 mt-md-4">
+              <h1 className="text-white bg-blue py-2 px-5 rounded d-inline week-2-question-text">
                 Instruction
               </h1>
             </div>
 
             <div className="text-center mb-5 mt-3 mt-md-0">
-              <h1 className="text-gray py-2 px-5 rounded d-inline display-5">
+              <h2 className="text-gray py-2 px-5 rounded d-inline week-2-question-text">
                 You will be presented with four (4) scenarios and you are expected to drag and drop the scenarios to either resilience or grit.
-              </h1>
+              </h2>
             </div>
           </QuestionBox>
         );
@@ -147,7 +147,7 @@ function Page8() {
         <div className="text-danger">{errorMessage}</div>
       )}{" "}
       {/* Display error message */}
-      <div className="d-flex justify-content-center align-items-center mt-2 gap-2">
+      <div className="d-flex justify-content-center align-items-center gap-2">
           <StepIndicator totalSteps={totalSteps} />
           <InternalStepIndicator
             totalSteps={dragDropImageLength}
@@ -156,7 +156,7 @@ function Page8() {
 
       </div>
 
-      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
+      <div className="d-flex justify-content-center gap-96px mt-3 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>

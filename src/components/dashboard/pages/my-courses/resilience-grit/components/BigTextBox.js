@@ -2,7 +2,7 @@ import React from "react";
 
 function BigTextBox({ handleChange, value }) {
   return (
-    <label className="small-input p-5 border-0 small-input-label">
+    <label className="resilience-small-input border-0 small-input-label">
       <textarea
         className="form-control border-0 bg-transparent border-outline-0 no-scrollbar w-100 resize-none"
         cols={80}
