@@ -15,6 +15,8 @@ export default function PopUp() {
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
 
+  console.log(userAnswers,"User abswers")
+
   const handleEmojiClick = (value) => {
 
     if (adminDatas.isAdmin) return window.close();
@@ -22,8 +24,7 @@ export default function PopUp() {
       toast.error("Something went wrong!")
 
       // This is the correct thing. Temprory commented out!
-      // return
-      return dispatch(hideReviewPopup());
+      return
     }
     mutation.mutate({ reaction: value })
   }

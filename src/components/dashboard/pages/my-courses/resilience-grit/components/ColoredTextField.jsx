@@ -1,6 +1,6 @@
 import React from "react";
 
-function ColoredTextField({ handleChange, value, color, index }) {
+function ColoredTextField({ handleChange, value, color}) {
     return (
         <label
             className={`colored-star-input border-0 ${color}-rectangle-colored-small-input-label  ${color}-colored-input-label p-5`}

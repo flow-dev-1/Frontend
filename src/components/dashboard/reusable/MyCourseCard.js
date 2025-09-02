@@ -36,6 +36,8 @@ const MyCourseCard = ({ course }) => {
   const handleFeedbackNavigation = (course) => {
     if (course?.course.title === "Self Awareness") {
       navigate(`/dashboard/feedback/self-awareness`, { state: { enrollmentData: course } })
+    } else if(course?.course.title === "Resilience & Grit") {
+      navigate(`/dashboard/resilience_grit/feedback`, { state: { enrollmentData: course } })
     } else {
       navigate(`/dashboard/${course?.course.title}/feedback`, { state: { enrollmentData: course } })
     }
@@ -56,6 +58,11 @@ const MyCourseCard = ({ course }) => {
         state: { enrollmentData: course },
       })
       localStorage.setItem(`${course._id}-can-see`, true)
+    } else if(course?.course.title === "Resilience & Grit") {
+      navigate(`/dashboard/resilience_grit`, {
+        state: { enrollmentData: course },
+      })
+
     } else {
       navigate(`/dashboard/${course?.course?.title}`, {
         state: { enrollmentData: course }

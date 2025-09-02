@@ -15,7 +15,7 @@ const courseData = {
     courseContent: transitionCourseContent,
     assessments: transitionAssessments
   },
-  'resilience': {
+  'resilience_grit': {
     courseContent: resilienceCourseContent,
     assessments: resilienceAssessments
   }
@@ -27,23 +27,20 @@ const getCourseFromURL = () => {
 
   // Handle initial / case
   if (path === '/') {
-    // return 'compassion'; // default course
-    return 'resilience'; // default course
+    return 'compassion'; // default course
   }
 
   const segments = path.split('/').filter(Boolean);
   const lastSegment = segments[segments.length - 1];
 
   // Validate course name
-  return ['compassion', 'transition', 'resilience'].includes(lastSegment?.toLowerCase())
+  return ['compassion', 'transition', 'resilience_grit'].includes(lastSegment?.toLowerCase())
     ? lastSegment.toLowerCase()
-    // : 'compassion';
-    : 'resilience';
+    : 'compassion';
 };
 
 const initialState = {
-  // currentCourse: 'compassion',
-  currentCourse: 'resilience',
+  currentCourse: 'compassion',
   currentWeek: 1,
   currentPage: 1,
   currentStep: 1,

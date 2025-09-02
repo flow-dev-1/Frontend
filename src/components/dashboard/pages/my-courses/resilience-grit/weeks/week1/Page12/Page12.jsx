@@ -37,7 +37,7 @@ function WeekOneAssessment() {
   useEffect(() => {
     if (!userAnswers) return;
     setAnswers(userAnswers?.assessments || []);
-    return () => {};
+    return () => { };
   }, [userAnswers]);
 
   // Mutation for saving user data
@@ -53,15 +53,15 @@ function WeekOneAssessment() {
         )}% in the quiz`
       );
       toast.success(data.message || "Answers saved successfully!"); // Show success toast
-      dispatch(
-        updateData({
-          course: null,
-          courseEnrollmentId: null,
-          week: 1,
-          activities: [],
-          assessments: [],
-        })
-      );
+      // dispatch(
+      //   updateData({
+      //     course: null,
+      //     courseEnrollmentId: null,
+      //     week: 1,
+      //     activities: [],
+      //     assessments: [],
+      //   })
+      // );
       dispatch(navigateNext());
     },
     onError: (error) => {
@@ -109,62 +109,55 @@ function WeekOneAssessment() {
     dispatch(saveAssessment(answers));
 
     if (isLastQuestion) {
+
+      console.log(userAnswers.activities, "userAnswers.activities");
+
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 6;
+        answers.length !== totalSteps || userAnswers.activities.length !== 5;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(
           "Oops! Some unanswered questions have been detected. Kindly go back and review!"
         );
-        // return false;
-        return true
+        return false;
       }
 
-      // For nested questions check that all answeres were provided
+      // For nested questions check that all answeres were provided. when page is refreshed data may be lost
 
-      // Page 2 has nested questions
+      // Page 4 has nested questions
       const selectedActivity = userAnswers.activities.find(
-        (activity) => activity.page === 2
+        (activity) => activity.page === 4
       );
-      const isValidActivity =
-        selectedActivity &&
+
+      const selectedActivityIsValid = (selectedActivity &&
         Array.isArray(selectedActivity.answer) &&
-        selectedActivity.answer.length === 3;
+        selectedActivity.answer.length === 5);
 
-      if (isValidActivity) {
-        const userScore = calculateResult(
-          assessmentData.questions,
-          answers,
-          totalSteps
-        );
 
-        console.log(userScore, "userScore");
+      // Page 8 has nested questions
+      const selectedActivity1 = userAnswers.activities.find(
+        (activity) => activity.page === 8
+      );
+      const totalDroped = selectedActivity1?.answer?.[0].value?.green?.length + selectedActivity1?.answer?.[0].value?.red?.length
 
-        mutation.mutate({
-          ...userAnswers,
-          assessments: answers,
-          rating: userScore.toString(),
-        });
+      const selectedActivity1IsValid = totalDroped === 4
 
-        //*****************This will come in later wen the code begins to break or escape questions ******/
+      // Page 10 has nested questions
+      const selectedActivity2 = userAnswers.activities.find(
+        (activity) => activity.page === 10
+      );
 
-        // const isValid = selectedActivity.answer.every(item =>
-        //   item.stepId !== undefined &&
-        //   item.value &&
-        //   Object.keys(item.value).length === 3
-        // );
+      const selectedActivity2isValid = selectedActivity2?.answer?.every(item => item.stepId !== undefined &&
+        item.value)
 
-        // if (isValid) {
-        //   const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
+      if (selectedActivityIsValid && selectedActivity1IsValid && selectedActivity2isValid) {
 
-        //   console.log(userScore, "userScore")
+          const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
 
-        //   // mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
-        // } else {
+          console.log(userAnswers, userScore, "userScore")
 
-        //   setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-        //   return false;
-        // }
+          mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
+
       } else {
         setErrorMessage(
           "Oops! Some unanswered questions have been detected. Kindly go back and review!"

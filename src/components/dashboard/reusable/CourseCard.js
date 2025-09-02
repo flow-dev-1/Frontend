@@ -55,7 +55,9 @@ const CourseCard = ({
   const handleCourseNavigation = (course) => {
     if(course?.title === "Self Awareness"){
       navigate(`/dashboard/self-awareness-course`, { state: { enrollmentData: isEnrolled } })
-    }else{
+    }else if(course.title === "Resilience & Grit") {
+      navigate(`/dashboard/resilience_grit`, { state: { enrollmentData: isEnrolled } })
+    }else {
       navigate(`/dashboard/${course?.title}`, { state: { enrollmentData: isEnrolled } })
     }
 

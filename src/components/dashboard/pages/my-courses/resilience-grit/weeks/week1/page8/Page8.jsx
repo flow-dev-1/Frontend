@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import DragAndDropFrame from "./components/DranAndDropFrame";
 import Button from "../../../components/Button";
-import ColoredBox from "../../../components/ColoredBox";
+
 import {
   selectPageData,
   selectCurrentStep,
@@ -48,15 +48,14 @@ function Page8() {
   const [dragDropImageLength, setDragDropImageLength] = useState(4)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
-
   useEffect(() => {
-    // if (!userAnswers) return;
-    // const response = userAnswers.activities?.find(
-    //   (item) => item.page === pageData.id
-    // );
+    if (!userAnswers) return;
 
-    // console.log(response, "This is reponse here o!");
-    // setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    const response = userAnswers.activities?.find(
+      (item) => item.page === pageData.id
+    );
+
+    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
   }, [userAnswers]);
 
   const saveUserInput = () => {
@@ -66,29 +65,21 @@ function Page8() {
     const stepData = answers.find((item) => item.stepId === currentStep);
 
     if (!stepData) {
-      setErrorMessage("Oops! All inputs must be filled out.");
-      // return false;
-      return true;
-    }
-
-    const values = Object.values(stepData.value);
-    if (values.length < 1) {
-      setErrorMessage("At least 1 value are required!");
+      setErrorMessage("Oops! All Images must be placed in the buckects.");
       return false;
     }
 
-    if (currentStep !== 1 && currentStep !== 6) {
-      const emptyInputs = values.filter((value) => value?.trim() === "");
-      if (emptyInputs.length > 0) {
-        setErrorMessage(
-          `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
-        );
-        return false;
-      }
+    // Check total images dropped
+    const totalDropped = (stepData.value.green?.length || 0) +
+      (stepData.value.red?.length || 0);
+
+    if (totalDropped !== dragDropImageLength) {
+      setErrorMessage(`Please place all ${dragDropImageLength} images in the buckets.`);
+      return false;
     }
 
     setErrorMessage(""); // Clear error if input is valid
-
+  
     const activityData = {
       page: pageData.id,
       answer: answers,
@@ -148,11 +139,11 @@ function Page8() {
       )}{" "}
       {/* Display error message */}
       <div className="d-flex justify-content-center align-items-center gap-2">
-          <StepIndicator totalSteps={totalSteps} />
-          <InternalStepIndicator
-            totalSteps={dragDropImageLength}
-            currentStep={currentImageIndex + 1}
-          />
+        <StepIndicator totalSteps={totalSteps} />
+        <InternalStepIndicator
+          totalSteps={dragDropImageLength}
+          currentStep={currentImageIndex + 1}
+        />
 
       </div>
 

@@ -42,13 +42,12 @@ function Page10() {
     const stepData = answers.find((item) => item.stepId === currentStep);
     if (!stepData) {
       setErrorMessage("Oops! All inputs must be filled out.");
-      // return false;
-      return true;
+      return false;
     }
 
     const values = Object.values(stepData.value);
-    if (values.length < 3) {
-      setErrorMessage("At least 3 values are required!");
+    if (values.length < 2) {
+      setErrorMessage("At least 2 values are required!");
       return false;
     }
 

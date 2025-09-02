@@ -155,19 +155,19 @@ function App() {
           />
 
           <Route
-            path="/resilience"
+            path="/dashboard/resilience_grit"
             element={
-              // <ProtectedRoute>
-              <ResilienceCourse />
-              // </ProtectedRoute>
+              <ProtectedRoute>
+                <ResilienceCourse />
+              </ProtectedRoute>
             }
           />
           <Route
-            path="/dashboard/resilience-grit/feedback"
+            path="/dashboard/resilience_grit/feedback"
             element={
-              // <ProtectedRoute>
-              <ResilienceCourse />
-              // </ProtectedRoute>
+              <ProtectedRoute>
+                <ResilienceCourse />
+              </ProtectedRoute>
             }
           />
         </Route>

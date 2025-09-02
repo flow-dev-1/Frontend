@@ -96,9 +96,9 @@ const WeekContent = () => {
 
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
-    // if (!enrolmentData && !isAdmin) return navigate("/sign-in");
-    // setEnrollmentId(enrolmentData?._id);
-    // setCourse(enrolmentData?.course?._id);
+    if (!enrolmentData && !isAdmin) return navigate("/sign-in");
+    setEnrollmentId(enrolmentData?._id);
+    setCourse(enrolmentData?.course?._id);
   }, []);
 
   useEffect(() => {
@@ -323,7 +323,7 @@ const CourseContent = () => {
     const lastSegment = segments[segments.length - 1];
 
     // This is an important section that affects course rendering!
-    if (["compassion", "transition", "resilience"].includes(lastSegment?.toLowerCase())) {
+    if (["compassion", "transition", "resilience_grit"].includes(lastSegment?.toLowerCase())) {
       dispatch(setCourse(lastSegment.toLowerCase()));
     }
   }, [location.pathname, dispatch]);
@@ -343,7 +343,7 @@ const CourseContent = () => {
         assessments: [],
       })
     );
-    // navigate("/sign-in", { replace: true });
+    navigate("/sign-in", { replace: true });
   };
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);

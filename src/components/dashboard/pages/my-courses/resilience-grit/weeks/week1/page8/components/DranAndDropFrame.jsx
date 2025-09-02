@@ -14,7 +14,7 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers,setCurren
   useEffect(() => {
     if (!answers?.length) return;
 
-    const existingAnswer = answers.find((answer) => answer.stepId === 6);
+    const existingAnswer = answers.find((answer) => answer.stepId === 2);
     if (existingAnswer?.value) {
       setBucketResults({
         green: existingAnswer.value.green || [],
@@ -58,7 +58,7 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers,setCurren
       // Update answers state
       setAnswers((prevAnswers) => {
         const existingAnswerIndex = prevAnswers.findIndex(
-          (answer) => answer.stepId === 6
+          (answer) => answer.stepId === 2
         );
 
         if (existingAnswerIndex !== -1) {
@@ -74,7 +74,7 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers,setCurren
           return [
             ...prevAnswers,
             {
-              stepId: 6,
+              stepId: 2,
               value: newBucketResults,
             },
           ];

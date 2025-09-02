@@ -75,7 +75,7 @@ function MultiLineColoredSmallTextBox({
                   value={
                     answers.find((answer) => answer.stepId === step)?.value?.[index] || ""
                   }
-                  onChange={(e) => handleInputChange(index, e.target.value)}
+                  handleChange={(e) => handleInputChange(index, e.target.value)}
                 />
               </div>
             </div>
