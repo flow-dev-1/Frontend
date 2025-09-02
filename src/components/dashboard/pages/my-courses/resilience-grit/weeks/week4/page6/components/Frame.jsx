@@ -3,7 +3,7 @@ import { useState } from 'react';
 import QuestionBox from "../../../../components/QuestionBox";
 import "./frame.css"
 
-const Frame = () => {
+const Frame = ({ setErrorMessage, answers, setAnswers }) => {
   // Converted from 800x500 to percentage coordinates for responsiveness
   const [nodes, setNodes] = useState([
     { id: '1', text: '', borderColor: '#ef4444', x: 50, y: 10 },   // top (red)
@@ -18,6 +18,26 @@ const Frame = () => {
 
   const updateNodeText = (id, text) => {
     setNodes((prev) => prev.map((node) => (node.id === id ? { ...node, text } : node)));
+    setErrorMessage("");
+    // Update answers state with the new value
+    setAnswers((prevAnswers) => {
+      // Check if the answer already exists
+      const existingAnswerIndex = prevAnswers.findIndex(
+        (answer) => answer.id === id
+      );
+      if (existingAnswerIndex > -1) {
+        // Update existing answer
+        const updatedAnswers = [...prevAnswers];
+        updatedAnswers[existingAnswerIndex] = {
+          ...updatedAnswers[existingAnswerIndex],
+          text,
+        };
+        return updatedAnswers;
+      } else {
+        // Add new answer
+        return [...prevAnswers, { id, text }];
+      }
+    });
   };
 
   return (
@@ -62,7 +82,8 @@ const Frame = () => {
                 type="text"
                 className="mm-input"
                 placeholder="Type here..."
-                value={node.text}
+                value={answers.find((answer) => answer.id === node.id)?.text ||
+                  node.text}
                 onChange={(e) => updateNodeText(node.id, e.target.value)}
               />
             </div>

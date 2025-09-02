@@ -2,6 +2,7 @@ import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
 import ColoredTextField from "../../../../components/ColoredTextField";
 import "../page10.css"
+
 function MultiLineColoredSmallTextBox({
   data,
   answers,

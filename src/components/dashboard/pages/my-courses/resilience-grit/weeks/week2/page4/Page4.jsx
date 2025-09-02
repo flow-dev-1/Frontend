@@ -41,8 +41,7 @@ function WeekTwoPage4() {
     const stepData = answers.find((item) => item.stepId === currentStep);
     if (!stepData) {
       setErrorMessage("Oops! All inputs must be filled out.");
-      return true;
-      // return false;
+      return false;
     }
 
     const values = Object.values(stepData.value);
@@ -73,8 +72,7 @@ function WeekTwoPage4() {
   // console.log(answers, "Answers")
 
   const renderStep = () => {
-    // const step = pageData?.steps[currentStep - 1];
-    // console.log(currentStep, step, "step")
+
     if (!step) return <div>Invalid Step</div>;
 
     switch (step.type) {

@@ -97,7 +97,6 @@ function WeekTwoAssessment() {
 
   const saveUserData = () => {
     if (adminDatas.isAdmin) return true;
-    return true;
     const stepData = answers.find((item) => item.id === currentStep);
     if (!stepData) {
       setErrorMessage("Oops! Please choose an option to proceed.");

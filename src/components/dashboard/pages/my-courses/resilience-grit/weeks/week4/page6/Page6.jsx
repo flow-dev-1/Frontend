@@ -27,48 +27,43 @@ function WeekFourPage6() {
   // console.log(userAnswers)
 
   useEffect(() => {
-    // if (!userAnswers) return;
-    // const response = userAnswers.activities?.find(
-    //   (item) => item.page === pageData.id
-    // );
-    // setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    if (!userAnswers) return;
+    const response = userAnswers.activities?.find(
+      (item) => item.page === pageData.id
+    );
+    const answerCopy = response?.answer ? [...response.answer] : [];
+    setAnswers(answerCopy);
+    return () => {};
   }, [userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
+    if(currentStep === 1) return true;
+
+    console.log(answers, "Answers");
+    if (answers.length < 5) {
+      setErrorMessage("At least 5 values are required!");
+      return false;
+    }
+
+    const emptyInputs = answers.filter((item) => item?.text?.trim() === "");
+    if (emptyInputs.length > 0) {
+      setErrorMessage(
+        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
+      );
+      return false;
+    }
+
+    setErrorMessage(""); // Clear error if input is valid
+
+    const activityData = {
+      page: pageData.id,
+      answer: answers,
+    };
+    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+
     return true;
-
-    // const stepData = answers.find((item) => item.stepId === currentStep);
-    // if (!stepData) {
-    //   setErrorMessage("Oops! All inputs must be filled out.");
-    //   return false;
-    // }
-
-    // const values = Object.values(stepData.value);
-    // // if (values.length < 3) {
-    // //   setErrorMessage("At least 3 values are required!");
-    // //   return false;
-    // // }
-
-    // const emptyInputs = values.filter((value) => value.trim() === "");
-    // if (emptyInputs.length > 0) {
-    //   setErrorMessage(
-    //     `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
-    //   );
-    //   return false;
-    // }
-
-    // setErrorMessage(""); // Clear error if input is valid
-
-    // const activityData = {
-    //   page: pageData.id,
-    //   answer: answers,
-    // };
-    // dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
-
-    // return true;
   };
-
   // console.log(answers, "Answers")
 
   const renderStep = () => {

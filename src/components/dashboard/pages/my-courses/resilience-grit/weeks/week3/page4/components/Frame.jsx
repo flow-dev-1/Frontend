@@ -6,7 +6,7 @@ import futureMe from "../../../../../../../../../assets/dearFutureMe.png";
 function Frame({ data, answers, setAnswers, setErrorMessage }) {
     const { step, title, questions } = data;
 
-    const handleInputChange = (index, value) => {
+    const handleInputChange = (value) => {
         setErrorMessage("");
         // Update answers state with the new value
         setAnswers((prevAnswers) => {
@@ -18,17 +18,12 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
             if (stepIndex !== -1) {
                 updatedAnswers[stepIndex] = {
                     ...updatedAnswers[stepIndex],
-                    value: {
-                        ...updatedAnswers[stepIndex].value,
-                        [index]: value, // Update the specific index with the new value
-                    },
+                    value:value
                 };
             } else {
                 updatedAnswers.push({
                     stepId: step,
-                    value: {
-                        [index]: value,
-                    },
+                    value: value,
                 });
             }
 
@@ -52,11 +47,9 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
 
                         <MediumTextBox
                             value={
-                                answers.find((answer) => answer.stepId === step)?.value?.[
-                                index
-                                ] || ""
+                                answers.find((answer) => answer.stepId === step)?.value || ""
                             }
-                            handleChange={(e) => handleInputChange(index, e.target.value)}
+                            handleChange={(e) => handleInputChange(e.target.value)}
                         />
                     </div>
                 ))}

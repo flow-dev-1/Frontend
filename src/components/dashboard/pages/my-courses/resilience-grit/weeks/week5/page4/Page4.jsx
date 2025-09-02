@@ -13,85 +13,60 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import MultiInput from "./components/MultiInputs";
 
-function WeekFivePage4({ data, answers, setAnswers }) {
+function WeekFivePage4() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
   const userAnswers = useSelector(userAnswer);
-  const [myAnswer, setMyAnswer] = useState(userAnswers);
+  const [answers, setAnswers] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (!userAnswers) return;
-    const response = userAnswers?.activities?.find(
+    const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setMyAnswer(response?.answer ? response.answer : "");
+    const answerCopy = response?.answer ? [...response.answer] : [];
+    setAnswers(answerCopy);
     return () => { };
   }, [userAnswers]);
 
   const saveUserInput = () => {
-    return true
-    if (!adminDatas.isAdmin && !myAnswer) {
-      setErrorMessage("Oops! Please enter a valid input!");
+    if (adminDatas.isAdmin) return true;
+    if (answers.length < 5) {
+      setErrorMessage("At least 5 values are required!");
       return false;
     }
 
+    const emptyInputs = answers.filter((item) => item?.value?.trim() === "");
+    if (emptyInputs.length > 0) {
+      setErrorMessage(
+        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
+      );
+      return false;
+    }
 
     setErrorMessage(""); // Clear error if input is valid
-    // Allow flow admin to proceed without input but do not dispatch answer
-    if (adminDatas.isAdmin) return true;
-    dispatch(
-      saveActivity({
-        page: pageData.id,
-        answer: myAnswer,
-      })
-    );
+
+    const activityData = {
+      page: pageData.id,
+      answer: answers,
+    };
+    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+
     return true;
   };
 
 
-  const handleInputChange = (textBoxIndex, value) => {
-    // setErrorMessage("");
-    // setAnswers((prevAnswers) => {
-    //   const updatedAnswers = [...prevAnswers];
-    //   const stepIndex = updatedAnswers.findIndex(
-    //     (answer) => answer.stepId === step
-    //   );
-
-    //   if (stepIndex !== -1) {
-    //     updatedAnswers[stepIndex] = {
-    //       ...updatedAnswers[stepIndex],
-    //       value: {
-    //         ...updatedAnswers[stepIndex].value,
-    //         [textBoxIndex]: value, // Update specific index
-    //       },
-    //     };
-    //   } else {
-    //     updatedAnswers.push({
-    //       stepId: step,
-    //       value: {
-    //         [textBoxIndex]: value,
-    //       },
-    //     });
-    //   }
-
-    //   return updatedAnswers;
-    // });
-  };
 
   return (
     <>
       <QuestionBox>
         <MultiInput
           pageData={pageData}
-          // label={item.title} // ✅ Fix: Use `item.title`
-          // value={
-          //   answers.find((answer) => answer.stepId === step)?.value?.[
-          //   textBoxIndex
-          //   ] || ""
-          // }
-          onChange={(e) => handleInputChange(e.target.value)}
+          answers = {answers}
+          setAnswers={setAnswers}
+          setErrorMessage={setErrorMessage}
         />
       </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}

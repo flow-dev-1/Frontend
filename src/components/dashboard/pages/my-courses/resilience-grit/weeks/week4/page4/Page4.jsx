@@ -20,6 +20,8 @@ function WeekFourPage4() {
 
   const userAnswers = useSelector(userAnswer);
 
+  
+
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
@@ -32,8 +34,8 @@ function WeekFourPage4() {
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
-    if (answers.length < 5) {
-      setErrorMessage("At least 5 values are required!");
+    if (answers.length < 3) {
+      setErrorMessage("At least 3 values are required!");
       return false;
     }
 
@@ -121,7 +123,11 @@ function WeekFourPage4() {
                     <ColoredTextField
                       index={index}
                       color={field.textFieldColor}
-                      onChange={(e) => handleInputChange(index, e.target.value)}
+                      value={
+                        answers.find((answer) => answer.index === index)?.value ||
+                        ""
+                      }
+                      handleChange={(e) => handleInputChange(index, e.target.value)}
                     />
                   </div>
                 </div>

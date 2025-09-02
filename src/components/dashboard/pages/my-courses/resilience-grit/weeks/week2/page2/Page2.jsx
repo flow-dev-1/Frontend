@@ -11,6 +11,7 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import "./page2.css";
+
 function WeekTwoPage2() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);

@@ -39,19 +39,19 @@ function Page6() {
   // }, [currentStep])
 
   useEffect(() => {
-    // if (!userAnswers) return;
-    // const response = userAnswers?.activities?.find(
-    //   (item) => item.page === pageData.id
-    // );
-    // if (response?.answer) {
-    //   const answerCopy = { ...response.answer };
-    //   setBucketResults(answerCopy);
-    //   if (currentStep === 1) {
-    //     dispatch(setCurrentStep(totalSteps));
-    //     setShowCurrentImage(false);
-    //   }
-    // }
-    // return () => {};
+    if (!userAnswers) return;
+    const response = userAnswers?.activities?.find(
+      (item) => item.page === pageData.id
+    );
+    if (response?.answer) {
+      const answerCopy = { ...response.answer };
+      setBucketResults(answerCopy);
+      if (currentStep === 1) {
+        dispatch(setCurrentStep(totalSteps));
+        setShowCurrentImage(false);
+      }
+    }
+    return () => {};
   }, [userAnswers, pageData]);
 
   // console.log("Page Data Images:", pageData.images);
@@ -183,68 +183,6 @@ function Page6() {
   };
 
   return (
-
-    // Delete this if all has been confirmed good
-
-    // <DragDropContext onDragEnd={handleOnDragEnd}>
-    //   <div className="d-flex flex-column align-items-center pt-2">
-    //     <div className="d-flex custom-border-20 flex-column flex-md-row">
-    //       <Droppable droppableId="image">
-    //         {(provided, snapshot) => (
-    //           <div
-    //             className="d-flex p-5 justify-content-center align-items-center w-lg-50"
-    //             {...provided.droppableProps}
-    //             ref={provided.innerRef}
-    //             style={{
-    //               minHeight: "200px",
-    //               transition: "background-color 0.2s ease",
-    //               backgroundColor: snapshot.isDraggingOver
-    //                 ? "rgba(255, 255, 255, 0.1)"
-    //                 : "transparent",
-    //             }}
-    //           >
-
-    //             {renderStep()}
-    //             {provided.placeholder}
-    //           </div>
-    //         )}
-    //       </Droppable>
-    //       <div className="bg-blue w-lg-50">
-    //         <div className="d-flex align-items-start mb-2">
-    //           <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
-    //           <div className="text-center text-white pt-2">
-    //             <h1>{pageData.instruction}</h1>
-    //           </div>
-    //           <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
-    //         </div>
-    //         <div className="d-flex justify-content-around align-items-center  px-0 py-0 px-md-4 py-md-2">
-    //           {pageData.buckets.map((bucket) => (
-    //             <Droppable key={bucket.id} droppableId={bucket.id}>
-    //               {(provided, snapshot) => (
-    //                 <div
-    //                   ref={provided.innerRef}
-    //                   className="p-0 p-md-2 draggable-bucket"
-    //                   {...provided.droppableProps}
-    //                   style={{
-    //                     backgroundColor: snapshot.isDraggingOver
-    //                       ? "rgba(255, 255, 255, 0.1)"
-    //                       : "transparent",
-
-    //                   }}
-    //                 >
-
-
-    //                   {provided.placeholder}
-    //                 </div>
-    //               )}
-    //             </Droppable>
-    //           ))}
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-
-    // </DragDropContext>
     <DragDropContext onDragEnd={handleOnDragEnd}>
       <div className="row custom-border-20 w-100 m-0">
         {/* Left Droppable (50%) */}

@@ -233,7 +233,7 @@ export const courseContent = {
       {
         id: 2,
         type: "radio",
-        question: "Just a quick question, have you ever seen or heard of a building that collapsed?? ",
+        question: "Just a quick question, have you ever seen or heard of a building that collapsed? ",
         options: [
           { id: "A", text: "YES" },
           { id: "B", text: "NO" },
