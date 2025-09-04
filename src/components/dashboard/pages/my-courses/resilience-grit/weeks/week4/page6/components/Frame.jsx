@@ -41,7 +41,9 @@ const Frame = ({ setErrorMessage, answers, setAnswers }) => {
   };
 
   return (
-    <QuestionBox>
+    <QuestionBox
+    extraMobileStyle={"mobile-group-1"}
+    >
       <div className="mm-outer">
         <div className="mm-map">
           {/* Connection Lines (percentage-based, scales responsively) */}

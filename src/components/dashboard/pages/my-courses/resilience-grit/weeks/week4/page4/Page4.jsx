@@ -10,6 +10,7 @@ import {
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import QuestionBox from "../../../components/QuestionBox";
 import ColoredTextField from "../../../components/ColoredTextField";
+import "./page4.css"
 
 function WeekFourPage4() {
   const pageData = useSelector(selectPageData);
@@ -20,7 +21,7 @@ function WeekFourPage4() {
 
   const userAnswers = useSelector(userAnswer);
 
-  
+
 
   useEffect(() => {
     if (!userAnswers) return;
@@ -84,35 +85,30 @@ function WeekFourPage4() {
 
   return (
     <>
-      <QuestionBox>
+      <QuestionBox
+      extraMobileStyle={"mobile-group-2"}
+      >
         <div className="container">
           <div className="row justify-content-between align-items-start g-4">
             {/* Question heading */}
             <div className="d-flex gap-3 flex-column flex-md-row align-items-start mb-4">
-              <h2 className="text-blue week-2-question-text">Question: </h2>
-              <h2 className="text-gray week-2-question-text">{pageData.question}</h2>
+              <h2 className="text-blue week-2-question-text week-4-question-text-mobile">Question: </h2>
+              <h2 className="text-gray week-2-question-text week-4-question-text">{pageData.question}</h2>
             </div>
 
-            {/* Fields in a straight line */}
-            <div className="d-flex flex-row justify-content-between align-items-start w-100 gap-1">
+            {/* Fields stack on mobile, row on desktop */}
+            <div className="d-flex flex-column flex-md-row justify-content-between align-items-start w-100 gap-3">
               {pageData.fields.map((field, index) => (
                 <div
                   key={index}
                   className="d-flex flex-column align-items-center flex-fill px-3"
-                  style={{ minWidth: "150px" }} // ensures each block has room
+                  style={{ minWidth: { md: "150px" } }}
                 >
                   {/* Label */}
                   <h2
-                    className="d-flex justify-content-center align-items-center p-3 px-5"
+                    className="d-flex justify-content-center align-items-center p-3 px-5 week-4-label"
                     style={{
-                      borderRadius: "2em",
-                      backgroundColor: field.colorCode,
-                      color: "white",
-                      fontWeight: "bold",
-                      fontSize: "32px",
-                      textAlign: "center",
-                      minHeight: "60px",
-                      minWidth: "60px",
+                      backgroundColor: field.colorCode
                     }}
                   >
                     {field.number}
@@ -123,11 +119,9 @@ function WeekFourPage4() {
                     <ColoredTextField
                       index={index}
                       color={field.textFieldColor}
-                      value={
-                        answers.find((answer) => answer.index === index)?.value ||
-                        ""
-                      }
+                      value={answers.find((answer) => answer.index === index)?.value || ""}
                       handleChange={(e) => handleInputChange(index, e.target.value)}
+                      extraMobileStyles={"week-4-textarea"}
                     />
                   </div>
                 </div>

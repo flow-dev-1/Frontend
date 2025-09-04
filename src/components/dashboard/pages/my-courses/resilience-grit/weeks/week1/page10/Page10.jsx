@@ -80,7 +80,7 @@ function Page10() {
     switch (step.type) {
       case "instruction":
         return (
-          <QuestionBox>
+          <QuestionBox >
              <div className="text-center mb-5 mt-5 mt-md-4">
               <h1 className="text-white bg-blue py-2 px-5 rounded d-inline week-2-question-text">
                 Instruction

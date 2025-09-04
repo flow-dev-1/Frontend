@@ -202,7 +202,9 @@ function WeekOneAssessment() {
 
   return (
     <>
-      <QuestionBox>
+      <QuestionBox
+        extraMobileStyle={"mobile-group-2"}
+      >
         <div className="bg-blue text-white px-3 py-1 mb-2 assessment-header">
           <h2 className="fs-1 text-white text-center">
             {assessmentData.title}

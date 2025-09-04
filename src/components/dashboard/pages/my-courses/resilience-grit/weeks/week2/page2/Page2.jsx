@@ -61,13 +61,13 @@ function WeekTwoPage2() {
           <div>
             <form className="d-flex gap-3 flex-column align-items-center w-100">
               {/* Question text */}
-              <div className="d-flex align-items-start mb-4 ">
-                <h2 className="text-blue me-3 week-2-question-text">Question:</h2>
-                <h2 className="text-gray week-2-question-text">{pageData.question}</h2>
+              <div className="d-flex flex-column flex-md-row align-items-start mb-4">
+                <h2 className="text-blue me-3 week-2-question-text week-2-question-text-mobile">Question:</h2>
+                <h2 className="text-gray week-2-question-text week-2-question-text-mobile">{pageData.question}</h2>
               </div>
 
               {/* Options evenly spaced */}
-              <div className="d-flex flex-row justify-content-evenly align-items-center w-50">
+              <div className="d-flex flex-row justify-content-evenly align-items-center w-70 w-md-50 options-text">
                 {pageData.options.map((option, index) => {
                   const optionKey = Object.keys(option);
                   const optionID = option[optionKey[0]];
@@ -77,7 +77,7 @@ function WeekTwoPage2() {
                   return (
                     <div
                       key={index}
-                      className="d-flex gap-3 align-items-center"
+                      className="d-flex gap-3 align-items-center "
                     >
                       <input
                         type="radio"

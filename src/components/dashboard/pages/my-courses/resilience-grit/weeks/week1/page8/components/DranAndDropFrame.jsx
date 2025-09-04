@@ -207,10 +207,13 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers,setCurren
                         </h2>
                         <div
                           className={
-                            bucket.id === "green" ? "inner-bucket" : "outer-bucket"
+                            bucket.id === "green" ? "inner-bucket bucket-text" : "outer-bucket bucket-text"
                           }
                         >
+                          <p className="text-center">
                           {bucket.title}
+                          </p>
+                         
                         </div>
                         {provided.placeholder}
                       </div>

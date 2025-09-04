@@ -42,7 +42,9 @@ function MultiLineColoredSmallTextBox({
   };
 
   return (
-    <QuestionBox>
+    <QuestionBox
+      extraMobileStyle={"mobile-group-1"}
+    >
       <div className="container resilience-multi-colored-small-text-box mt-5">
         <div className="row justify-content-between align-items-start g-4">
           {info?.map((field, index) => (
@@ -53,23 +55,16 @@ function MultiLineColoredSmallTextBox({
             >
               {/* Label */}
               <h2
-                className="d-flex justify-content-center align-items-center p-3 text-nowrap label-box"
+                className="d-flex justify-content-center align-items-center text-nowrap label-box multi-colored-small-text-box-label"
                 style={{
-                  borderRadius: "2em",
-                  backgroundColor: field.colorCode,
-                  color: "white",
-                  fontWeight: "bold",
-                  fontSize: "clamp(18px, 2vw, 32px)",   // ✅ scales with screen size
-                  textAlign: "center",
-                  minHeight: "60px",
-                  margin: index === 0 ? "0 4vw 0 2vw" : "0 2vw 0 4vw", // ✅ use %/vw instead of px
+                  backgroundColor: field.colorCode
                 }}
               >
                 {field.number}
               </h2>
 
               {/* Expanding Textarea */}
-              <div className={`flex-grow-1 d-flex ${index == 0 ? "me-5" : "ms-5"}`}>
+              <div className="text-field-container">
                 <ColoredTextField
                   index={index}
                   color={field.textFieldColor}
