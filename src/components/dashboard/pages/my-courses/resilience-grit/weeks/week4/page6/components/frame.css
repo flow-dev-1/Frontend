@@ -1,97 +1,127 @@
 /* Responsive, pure CSS mind map styles */
 
 .mm-outer {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  padding: 0 0rem;
+  margin-bottom: -30rem;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+.mm-map {
+  position: relative;
+  width: min(92vw, 900px);
+  aspect-ratio: 8 / 5;
+  /* Keeps the original 800x500 proportion */
+  margin: 0 auto;
+}
+
+.mm-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.mm-svg line {
+  stroke: #000000;
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+  /* keep line thickness consistent while scaling */
+}
+
+/* Central node */
+.mm-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 20;
+  transform: translate(-50%, -50%);
+}
+
+.mm-center-circle {
+  width: clamp(64px, 10vw, 100px);
+  height: clamp(64px, 10vw, 100px);
+  border-radius: 50%;
+  background: #275dad;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.25);
+}
+
+.mm-center-text {
+  color: #ffffff;
+  font-weight: 100;
+  font-size: clamp(50px, 3.2vw, 28px);
+}
+
+/* Node wrapper positioned by CSS vars */
+.mm-node {
+  position: absolute;
+  left: calc(var(--x) * 1%);
+  top: calc(var(--y) * 1%);
+  transform: translate(-50%, -50%);
+  z-index: 15;
+}
+
+/* Node input */
+.mm-input {
+  width: clamp(140px, 22vw, 240px);
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background: #f3f4f6;
+  border: 2px solid var(--border, #e5e7eb);
+  outline: none;
+  text-align: center;
+  color: #374151;
+  font-size: clamp(12px, 1.6vw, 14px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.mm-input::placeholder {
+  color: rgba(55, 65, 81, 0.6);
+}
+
+.mm-input:focus {
+  background: #ffffff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Small screens */
+@media (max-width: 769px) {
+
+  .mm-outer {
     display: flex;
     align-items: center;
     /* justify-content: center; */
-    padding:0 0rem;
-    margin-bottom: -30rem ;
+    padding: 0 0rem;
+    margin-bottom: 0rem;
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   }
-  
+
   .mm-map {
     position: relative;
-    width: min(92vw, 900px);
-    aspect-ratio: 8 / 5; /* Keeps the original 800x500 proportion */
-    margin: 0 auto;
+    width: min(85vw, 750px);
+    aspect-ratio: 8 / 5;
+    /* Keeps the original 800x500 proportion */
+    margin: 3rem auto 0rem auto;
+
   }
-  
-  .mm-svg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 10;
+}
+
+/* Small screens */
+@media (max-width: 480px) {
+  .mm-outer {
+    padding: 1rem;
   }
-  .mm-svg line {
-    stroke: #000000;
-    stroke-width: 1px;
-    vector-effect: non-scaling-stroke; /* keep line thickness consistent while scaling */
-  }
-  
-  /* Central node */
-  .mm-center {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    z-index: 20;
-    transform: translate(-50%, -50%);
-  }
-  .mm-center-circle {
-    width: clamp(64px, 10vw, 100px);
-    height: clamp(64px, 10vw, 100px);
-    border-radius: 50%;
-    background: #275dad;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.25);
-  }
-  .mm-center-text {
-    color: #ffffff;
-    font-weight: 100;
-    font-size: clamp(50px, 3.2vw, 28px);
-  }
-  
-  /* Node wrapper positioned by CSS vars */
-  .mm-node {
-    position: absolute;
-    left: calc(var(--x) * 1%);
-    top: calc(var(--y) * 1%);
-    transform: translate(-50%, -50%);
-    z-index: 15;
-  }
-  
-  /* Node input */
+
   .mm-input {
-    width: clamp(140px, 22vw, 240px);
-    padding: 8px 16px;
-    border-radius: 9999px;
-    background: #f3f4f6;
-    border: 2px solid var(--border, #e5e7eb);
-    outline: none;
-    text-align: center;
-    color: #374151;
-    font-size: clamp(12px, 1.6vw, 14px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-    transition: box-shadow 0.2s ease, background 0.2s ease;
+    width: clamp(120px, 48vw, 200px);
+    padding: 6px 12px;
   }
-  .mm-input::placeholder {
-    color: rgba(55, 65, 81, 0.6);
-  }
-  .mm-input:focus {
-    background: #ffffff;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  }
-  
-  /* Small screens */
-  @media (max-width: 480px) {
-    .mm-outer {
-      padding: 1rem;
-    }
-    .mm-input {
-      width: clamp(120px, 48vw, 200px);
-      padding: 6px 12px;
-    }
-  }
+}

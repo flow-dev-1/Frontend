@@ -11,7 +11,7 @@ import {
   setCurrentPage,
   setCurrentStep,
 } from "../../../../../redux/reducers/navigationSlice.js";
-
+import "./index.css"
 // Import components
 import PopUp from "./components/ReviewPopUp";
 import Hurray from "./components/Hurray";
@@ -486,7 +486,7 @@ const CourseContent = () => {
             <Icon icon="mdi:arrow-right" width="20" height="20" />
           </button>
         </aside>
-        <section className="week-content position-relative">
+        <section className="week-content resilience-week-content position-relative">
           <WeekContent />
         </section>
       </div>

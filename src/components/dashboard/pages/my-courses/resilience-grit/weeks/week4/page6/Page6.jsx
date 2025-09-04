@@ -40,7 +40,6 @@ function WeekFourPage6() {
     if (adminDatas.isAdmin) return true;
     if(currentStep === 1) return true;
 
-    console.log(answers, "Answers");
     if (answers.length < 5) {
       setErrorMessage("At least 5 values are required!");
       return false;

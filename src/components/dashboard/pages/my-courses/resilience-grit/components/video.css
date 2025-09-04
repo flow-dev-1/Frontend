@@ -5,3 +5,10 @@
   object-fit: fill;
   /* aspect-ratio: 1; */
 }
+
+@media (max-width: 769px) {
+  .resilience-custom-video {
+    height: 40vh;
+    object-fit: contain;
+  }
+}

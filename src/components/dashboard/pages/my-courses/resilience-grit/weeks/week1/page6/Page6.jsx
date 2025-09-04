@@ -64,7 +64,7 @@ function Page6() {
                   <img
                     src={grit}
                     alt="self-compassion"
-                    className="ms-2 question-image img-fluid"
+                    className="ms-2 question-image resilience-question-image img-fluid"
                     style={{ maxWidth: "20rem", height: "auto" }}
                   />
                 )}

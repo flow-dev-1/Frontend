@@ -65,8 +65,7 @@ function WeekFivePage2() {
                 <img
                   src={coping}
                   alt="self-compassion"
-                  className="ms-2 question-image img-fluid"
-                  style={{ maxWidth: "20rem", height: "auto" }}
+                  className="ms-2 question-image resilience-question-image img-fluid"
                 />
               )}
               ?

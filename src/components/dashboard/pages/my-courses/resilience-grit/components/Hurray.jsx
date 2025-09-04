@@ -8,6 +8,7 @@ import {
   hideHurray,
   selectNavigationState,
 } from "../../../../../../redux/reducers/navigationSlice";
+import "./question.css"
 
 const Hurray = ({ currentWeek = 3 }) => {
   const [showConfetti, setShowConfetti] = useState(true);
@@ -51,7 +52,7 @@ const Hurray = ({ currentWeek = 3 }) => {
               key={week}
               src={require(`../../../../../../assets/week${week}End.png`)}
               alt={`Week ${week} celebration`}
-              className="text-center"
+              className="text-center hurray-img"
             />
           )
         ))}

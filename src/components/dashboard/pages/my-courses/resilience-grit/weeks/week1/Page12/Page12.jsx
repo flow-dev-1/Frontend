@@ -203,7 +203,7 @@ function WeekOneAssessment() {
   return (
     <>
       <QuestionBox>
-        <div className="bg-blue text-white px-3 py-1 mb-2">
+        <div className="bg-blue text-white px-3 py-1 mb-2 assessment-header">
           <h2 className="fs-1 text-white text-center">
             {assessmentData.title}
           </h2>

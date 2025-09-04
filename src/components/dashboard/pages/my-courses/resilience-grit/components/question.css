@@ -430,6 +430,10 @@
   padding: 1rem 2rem;
   /* width: max-content; */
 }
+.resilience-question-image{
+  max-width: 20rem;
+  height: auto;
+}
 
 label {
   font-size: 1.2em;
@@ -505,11 +509,31 @@ button {
 }
 
 @media (max-width: 769px) {
+  .custom-border-20 {
+    border: 10px solid #08bcc4;
+    border-radius: 8px;
+    min-width: fit-content;
+    width: 100%;
+  }
+  
+  .resilience-question-box-container {
+    min-height: 37vh;
+    max-height: 40vh;
+    padding: 1rem .5rem;
+    /* width: max-content; */
+  }
+  .resilience-question-image{
+    max-width: 10rem;
+
+  }
   .arrow-head {
     width: 70px;
   }
   .cardboard-image {
     width: 200px;
+  }
+  .hurray-img{
+    width: 100%;
   }
 }
 @media (max-width: 480px) {

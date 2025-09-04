@@ -195,7 +195,7 @@ function WeekThreeAssessment() {
   return (
     <>
       <QuestionBox>
-        <div className="bg-blue text-white p-3 mb-3">
+        <div className="bg-blue text-white p-3 mb-3 assessment-header">
           <h2 className="fs-1 text-white text-center">
             {assessmentData.title}
           </h2>
