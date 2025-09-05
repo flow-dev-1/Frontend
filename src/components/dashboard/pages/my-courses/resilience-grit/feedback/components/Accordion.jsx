@@ -79,20 +79,20 @@ function Accordion({
       )}
       <div className="accordion" ref={contentRef}>
         <h2 className="accordion-header p-lg-2 p-md-4 bg-blue text-center text-white">
-          Feedback for Compassion
+          Feedback for Resilience & Grit
         </h2>
 
         {items.map((item, index) => (
           <div key={index} className="accordion-item">
             <div
               className={
-                index > 9
+                index > 4
                   ? "bg-blue-feedback  py-4 px-5 d-flex gap-3 align-items-center justify-space-between"
                   : "py-4 px-5 d-flex gap-3 align-items-center justify-space-between"
               }
             >
               <div className="d-flex align-items-center gap-3 flex-grow-1">
-                {index < 10 ? (
+                {index < 5 ? (
                   <h2
                     className="text-gray text-nowrap"
                     onClick={() => handleToggle(index)}
@@ -116,7 +116,7 @@ function Accordion({
                 >
                   {item.title}
                 </div>
-                {index === 10 && (
+                {index === 5 && (
                   <p
                     className="text-blue"
                     style={{ zIndex: 100, cursor: "pointer" }}

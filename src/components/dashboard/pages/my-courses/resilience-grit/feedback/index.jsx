@@ -7,17 +7,12 @@ import Week2 from "./weeks/week2/Week2";
 import Week3 from "./weeks/week3/Week3";
 import Week4 from "./weeks/week4/Week4";
 import Week5 from "./weeks/week5/Week5";
-import Week6 from "./weeks/week6/Week6";
-import Week7 from "./weeks/week7/Week7";
-import Week8 from "./weeks/week8/Week8";
-import Week9 from "./weeks/week9/Week9";
-import Week10 from "./weeks/week10/Week10";
 import OverallFeedBack from "./weeks/overall/OverallFeedBack";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
 
-function TransitionFeedback() {
+function ResilienceFeedback() {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
@@ -48,12 +43,7 @@ function TransitionFeedback() {
         isWeekTwoLoaded &&
         isWeekThreeLoaded &&
         isWeekFourLoaded &&
-        isWeekFiveLoaded &&
-        isWeekSixLoaded &&
-        isWeekSevenLoaded &&
-        isWeekEightLoaded &&
-        isWeekNineLoaded &&
-        isWeekTenLoaded
+        isWeekFiveLoaded 
     );
   }, [
     isWeekOneLoaded,
@@ -61,11 +51,6 @@ function TransitionFeedback() {
     isWeekThreeLoaded,
     isWeekFourLoaded,
     isWeekFiveLoaded,
-    isWeekSixLoaded,
-    isWeekSevenLoaded,
-    isWeekEightLoaded,
-    isWeekNineLoaded,
-    isWeekTenLoaded,
   ]);
 
   const currentWeek = activeIndex + 1;
@@ -75,6 +60,7 @@ function TransitionFeedback() {
 
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
+    console.log(enrolmentData, "enrollmentId");
 
     if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
 
@@ -91,19 +77,19 @@ function TransitionFeedback() {
 
   const weekContents = [
     {
-      topic: "Introduction to Transition",
+      topic:  "Introduction to Resilience and Grit",
       component: (
         <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} />
       ),
     },
     {
-      topic: "Growth and Fixed Mindset",
+      topic:  "Developing Resilience",
       component: (
         <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} />
       ),
     },
     {
-      topic: "Understanding what is in your control",
+      topic:  "Understanding the Concept of Adaptability and Its Application",
       component: (
         <Week3
           enrollmentId={enrollmentId}
@@ -112,55 +98,20 @@ function TransitionFeedback() {
       ),
     },
     {
-      topic: "Understanding Values",
+      topic:  "The Role of Support Systems",
       component: (
         <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} />
       ),
     },
     {
-      topic: "Core Values and how they matter",
+      topic:    "Coping Skills",
       component: (
         <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} />
       ),
     },
+
     {
-      topic: "Social Skills (Navigating Relationships)",
-      component: (
-        <Week6 enrollmentId={enrollmentId} setWeekSixData={setWeekSixData} />
-      ),
-    },
-    {
-      topic: "Time Management",
-      component: (
-        <Week7
-          enrollmentId={enrollmentId}
-          setWeekSevenData={setWeekSevenData}
-        />
-      ),
-    },
-    {
-      topic: "Goal Setting",
-      component: (
-        <Week8
-          enrollmentId={enrollmentId}
-          setWeekEightData={setWeekEightData}
-        />
-      ),
-    },
-    {
-      topic: "Resilience and Introduction to Coping Skills",
-      component: (
-        <Week9 enrollmentId={enrollmentId} setWeekNineData={setWeekNineData} />
-      ),
-    },
-    {
-      topic: "Looking Ahead",
-      component: (
-        <Week10 enrollmentId={enrollmentId} setWeekTenData={setWeekTenData} />
-      ),
-    },
-    {
-      topic: "Summary of your journey through Transition",
+      topic: "Summary of your journey through Resilience & Grit",
       component: (
         <OverallFeedBack
           enrollmentId={enrollmentId}
@@ -210,8 +161,10 @@ function TransitionFeedback() {
             Back to My Courses
           </button>
           <div className="compassion-title">
-            <h2> From Curious to Confident: Transition with Ease</h2>
-            <h2 className="compassion">Transition</h2>
+          <h2 className="fs-5 fs-md-3">
+              Stay Strong, Keep Going!
+            </h2>
+          <h2 className="compassion fs-5">Resilience & Grit</h2>
           </div>
 
           <ul className="compassion-list">
@@ -221,7 +174,7 @@ function TransitionFeedback() {
                 className={
                   index + 1 <= currentWeek
                     ? "active-week"
-                    : index === 10
+                    : index === 5
                     ? "d-none"
                     : ""
                 }
@@ -232,7 +185,7 @@ function TransitionFeedback() {
                     className="course-list-icon"
                   />
                 </div>
-                <span className={index === 10 ? "d-none" : ""}>
+                <span className={index === 5 ? "d-none" : ""}>
                   Week
                   {index + 1}
                 </span>
@@ -265,6 +218,6 @@ function TransitionFeedback() {
   );
 }
 
-export default TransitionFeedback;
+export default ResilienceFeedback;
 
 // week 4, all drag and drop

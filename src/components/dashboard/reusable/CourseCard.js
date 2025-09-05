@@ -46,6 +46,8 @@ const CourseCard = ({
   const handleFeedbackNavigation = (course) => {
     if(course?.title === "Self Awareness"){
       navigate(`/dashboard/feedback/self-awareness`, { state: { enrollmentData: isEnrolled } })
+    }else if(course.title === "Resilience & Grit"){
+      navigate(`/dashboard/resilience_grit/feedback`, { state: { enrollmentData: isEnrolled } })
     }else{
       navigate(`/dashboard/${course?.title}/feedback`, { state: { enrollmentData: isEnrolled } })
     }
