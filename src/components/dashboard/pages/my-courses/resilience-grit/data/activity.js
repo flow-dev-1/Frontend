@@ -103,10 +103,10 @@ export const courseContent = {
 
             ],
             images: [
-              "Write",
-              "Walk away",
-              "Belly Breathing",
-              "Exercise",
+              "Sam has been practicing the piano for months, even though learning new songs is really hard. He doesn’t give up, even when it takes a long time to get it right.",
+              "Chris is writing a book. It’s taking a really long time, but he’s excited to finish it, even though it’s hard to think of new ideas sometimes.",
+              "Emma’s science project didn’t go as planned. She felt frustrated, but after taking a deep breath, she decided to figure out how to fix it and finish her project.",
+              "After losing a big game, Lucy felt sad, but she reminded herself to keep her head up and practice for the next one.",
             ]
 
           },
@@ -894,7 +894,7 @@ export const courseContent = {
       {
         id: 7,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_3.mp4",
+        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
         navigation: {
           prev: true,
           next: true,

@@ -60,7 +60,6 @@ function ResilienceFeedback() {
 
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
-    console.log(enrolmentData, "enrollmentId");
 
     if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
 

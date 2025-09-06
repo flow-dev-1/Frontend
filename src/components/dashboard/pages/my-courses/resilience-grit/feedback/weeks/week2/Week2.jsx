@@ -8,7 +8,7 @@ import wrong from "../../../../../../../../assets/wrong.png";
 import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
-} from "../../../../transition-course/data/index.js";
+} from "../../../../resilience-grit/data/index.js";
 import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
 import adminService from "../../../../../../../../services/api/admin.js";
@@ -36,7 +36,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/transition-feedback-2", enrollmentId, 2],
+    queryKey: ["dashboard/resilience-feedback-2", enrollmentId, 2],
     queryFn: () =>
       isAdmin
         ? adminService.getUserCourseData(enrollmentId, 2, code)
@@ -86,7 +86,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     setAssessmentData(data.assessment?.assessments);
     setWeekTwoData(true);
 
-    return () => {};
+    return () => { };
   }, [data]);
 
   function getActivityAnswer(activityId, itemId) {
@@ -123,31 +123,28 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     }
   }
 
-  function drag1(type) {
+  function def(type) {
     if (!activityData || !activityData[1] || !activityData[1].answer) return [];
 
-    const featuredNames = [
-      "Michael Jordan",
-      "Serena Williams",
-      "Michelle Obama",
-      "Justin Bieber",
-    ];
+    console.log(activityData[1].answer.map(item => item.value), "activityData[1]?.answer");
 
-    const indices =
-      type === "growth"
-        ? activityData[1].answer.green
-        : activityData[1].answer.red;
+    const data =
+      type === "question"
+        ? activity2.steps.filter(item => item.type === "dropdownScenario").map(item => item.question)
+        : activityData[1].answer.map(item => item.value);
 
-    const items = indices?.map((index) => activity2?.images[index]) || [];
+    return data
 
-    // Sort with featured names first
-    return items.sort((a, b) => {
-      const aFeatured = featuredNames.includes(a);
-      const bFeatured = featuredNames.includes(b);
-      if (aFeatured && !bFeatured) return -1;
-      if (!aFeatured && bFeatured) return 1;
-      return 0;
-    });
+    // const items = indices?.map((index) => activity2?.images[index]) || [];
+
+    // // Sort with featured names first
+    // return items.sort((a, b) => {
+    //   const aFeatured = featuredNames.includes(a);
+    //   const bFeatured = featuredNames.includes(b);
+    //   if (aFeatured && !bFeatured) return -1;
+    //   if (!aFeatured && bFeatured) return 1;
+    //   return 0;
+    // });
   }
 
   if (isPending) {
@@ -194,11 +191,11 @@ function Week2({ enrollmentId, setWeekTwoData }) {
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-md-1">Questions:</h2>
-        <p className="text-blue fs-md-4">{activity1.question} "Mindset"?</p>
+        <p className="text-blue fs-md-4">{activity1.question}</p>
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity1.id) === "A" ? "Yes" : "No"}</p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity1.id)
             ?.feedback && (
@@ -248,39 +245,41 @@ function Week2({ enrollmentId, setWeekTwoData }) {
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-md-1">Questions:</h2>
-        <p className="text-blue fs-md-4">{activity2.instruction}</p>
+        <p className="text-blue fs-md-4">Match the right ‘C’ to their correct definition.</p>
       </div>
       <div className="d-flex gap-3">
-        <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <div className="flex-grow-1 d-flex">
-          <div className="flex-grow-1">
-            <h2 className="text-center bg-green text-white py-md-3 py-0 py-md-1 fs-md-1">
-              Growth Mindset
+        <h2 className="text-gray fs-md-1">Answers:</h2>
+
+        <div className="d-flex flex-column flex-grow-1">
+          {/* Headers row */}
+          <div className="d-flex">
+            <h2 className="col-6 text-center bg-green text-white py-md-3 py-1 fs-md-1">
+              Definitions
             </h2>
-            <div className="px-md-5 px-2 py-md-3 py-0 py-md-1">
-              {drag1("growth")?.map((item, idx) => (
-                <p className="fs-md-4">
-                  {idx + 1}. {item}
-                </p>
-              ))}
-            </div>
-          </div>
-          <div className="flex-grow-1">
-            <h2 className="bg-red text-center text-white py-md-3 py-0 py-md-1 fs-md-1">
-              Fixed Mindset
+            <h2 className="col-6 text-center bg-red text-white py-md-3 py-1 fs-md-1">
+              The "C"
             </h2>
-            <div className="px-md-5 px-2 py-md-3 py-0 py-md-1">
-              {drag1("fixed")?.map((item, idx) => (
-                <p className="fs-md-4">
-                  {idx + 1}. {item}
-                </p>
-              ))}
-            </div>
           </div>
+
+          {/* Items rows */}
+          {Array.from({ length: 7 }).map((_, idx) => (
+            <div key={idx} className="d-flex">
+              <div className="col-6 px-md-5 px-2 py-md-3 py-1">
+                <p className="fs-md-4 mb-0">
+                  {idx + 1}. {def("question")?.[idx]}
+                </p>
+              </div>
+              <div className="col-6 px-md-5 px-2 py-md-3 py-1">
+                <p className="fs-md-4 mb-0">
+                  {idx + 1}. {def("fixed")?.[idx]}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
+
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity2.id)
-            ?.feedback && (
+          !activityData?.find((a) => a.page === activity2.id)?.feedback && (
             <Icon
               onClick={() => {
                 setActivityFeedbackId({ activityId: activity2.id });
@@ -292,6 +291,8 @@ function Week2({ enrollmentId, setWeekTwoData }) {
             />
           )}
       </div>
+
+
       {
         // Show this only id theres a feedback
         activityData?.find((activity) => activity.page === activity2.id)
@@ -393,16 +394,16 @@ function Week2({ enrollmentId, setWeekTwoData }) {
           </h2>
           <p className="text-white">
             {score < 40
-              ? "Well done on starting your journey toward a smooth transition into secondary school! You’ve made an effort to understand important ideas like understanding your “why,” identifying what’s in your control, and the importance of values. There’s still room to deepen your understanding and practice what you’ve learned. Focus on building small habits, like managing your time more effectively or thinking about how a growth mindset can help you face challenges. Remember, every step you take brings you closer to feeling confident and ready for this new chapter. Keep trying—you’re capable of great things! Also, I recommend you take the course again from the beginning, as this will help you get more familiar with the concepts."
+              ? "Well done on starting your journey into understanding resilience! You’ve gained a basic understanding of the words, ‘Resilience’ and ‘Grit’. However, you need to revisit the course again and listen more attentively to the lessons. You can reach out to your teachers or classmates for help if you still find yourself struggling. Reaching out for help shows that you are a smart person."
               : score < 60
-              ? "Good job! You’ve made solid progress and shown a great understanding of how to transition into secondary school successfully. To build on this, try putting what you’ve learned into action more consistently. Practice navigating relationships with friends and family, and reflect on how your core values can guide your decisions. With steady effort, you’ll become even more prepared for this exciting new stage. Keep going—you’re on the right track!"
-              : score < 80
-              ? "Great work! You’ve proven to have gained a good understanding of the key concepts that will help you navigate the exciting transition from primary to secondary school. You can start applying ideas like cultivating a growth mindset, focusing on what’s within your control, and understanding your core values. To build on this progress, try practicing these lessons in your daily life—whether it’s managing your time, setting goals, or building meaningful relationships. With consistent effort, you’ll feel more confident and ready to take on this new chapter. Keep it up—you’re doing well!"
-              : score < 95
-              ? "Excellent job! You’ve shown a strong grasp of the skills and mindset needed to transition smoothly into secondary school. Remember it’s highly important to keep applying what you’ve learned about time management, goal setting, and resilience in every way you can. To continue growing, focus on using these tools to face new challenges and opportunities everyday. Your hard work is paying off, and you’re well on your way to thriving in secondary school. Keep up the fantastic progress!"
-              : score <= 100
-              ? "Outstanding achievement! You’ve shown mastery and a deep understanding of the skills and mindset to navigate your transition into secondary school with confidence and purpose. Your understanding of growth and fixed mindsets, time management, and resilience is exceptional, and you’ve shown you can apply these concepts to real-life situations. You’re not only ready for this new stage but also equipped to make the most of it. Keep inspiring others with your example, and continue using these tools to grow and succeed in every area of your life. Well done—you’re ready to shine in secondary school!"
-              : ""}
+                ? "Good job! You’ve shown a good understanding of resilience and grits. You’re beginning to grasp concepts like the 7 C’s and the role of support systems in building resilience. To deepen your understanding, try practicing adaptability in real-life scenarios and applying the coping skills you have learned. Work on applying these principles when facing challenges, no matter how little or insignificant the challenge might seem; with consistent effort, you’ll strengthen your resilient bones."
+                : score < 80
+                  ? "Great work! You’ve developed a solid understanding of resilience and grit. To take it a step further, focus on building stronger connections with your support network and practicing coping skills in real-life situations. Apply these principles consistently, even in small challenges, to strengthen your resilience and ability to bounce back. Keep up the good work—you’re on the right track!"
+                  : score < 95
+                    ? "Excellent job! You’ve shown a strong understanding of resilience and how to build it into your life. You have learned to effectively use strategies like the 7 C’s, practicing adaptability, and relying on your support systems when needed. To continue growing, focus on maintaining these habits and applying them in different areas of your life, whether it’s personal goals or overcoming unexpected challenges. Remember, resilience is a skill that gets stronger with use, and your dedication is truly inspiring. Keep pushing forward—you’re doing amazing!"
+                    : score <= 100
+                      ? "Outstanding achievement! You’ve demonstrated exceptional mastery of resilience and grit. Your understanding of the 7 C’s, adaptability, and the role of support systems will help you greatly as you handle challenges. You’ve not only learned to bounce back but to thrive and grow stronger in the process. Keep building on this incredible foundation and inspiring others with your example. Your hard work and perseverance are commendable—your resilience is a skill that will serve you for a lifetime!"
+                      : ""}
           </p>
         </div>
         <Modal
