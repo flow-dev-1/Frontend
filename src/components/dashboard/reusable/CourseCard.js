@@ -97,10 +97,10 @@ const CourseCard = ({
               {truncateText(course?.description, 100)}
             </p>
             <div className='d-flex icons'>
-              <span>
+              {/* <span>
                 <Icon icon='solar:user-linear' />
                 {course?.courseEnrollment.length}
-              </span>
+              </span> */}
               <span>
                 <Icon icon='mingcute:thumb-up-line' />{' '}
                 {likesPercent(

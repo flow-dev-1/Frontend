@@ -24,8 +24,7 @@ function Page4() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    const answerCopy = response?.answer ? [...response.answer] : [];
-    setAnswers(answerCopy);
+    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
     return () => {};
   }, [userAnswers]);
 
