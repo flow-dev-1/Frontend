@@ -126,8 +126,6 @@ function Week2({ enrollmentId, setWeekTwoData }) {
   function def(type) {
     if (!activityData || !activityData[1] || !activityData[1].answer) return [];
 
-    console.log(activityData[1].answer.map(item => item.value), "activityData[1]?.answer");
-
     const data =
       type === "question"
         ? activity2.steps.filter(item => item.type === "dropdownScenario").map(item => item.question)

@@ -28,7 +28,7 @@ function WeekFourPage4() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    const answerCopy = response?.answer ? [...response.answer] : [];
+    const answerCopy =  adminDatas.isAdmin ? [] : response?.answer ? [...response.answer] : [];
     setAnswers(answerCopy);
     return () => { };
   }, [userAnswers]);

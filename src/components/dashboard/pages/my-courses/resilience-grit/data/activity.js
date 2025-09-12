@@ -414,8 +414,44 @@ export const courseContent = {
           next: true,
         },
       },
+
       {
         id: 4,
+        type: "imageDragAndDrop",
+        instruction:
+          "Drag-and-drop the statements on the left into any of these bowls",
+        images: [
+          "Ability to adjust to new situations, changes, or challenges.",
+          "Expecting everything to stay the same and being frustrated when it doesn’t.",
+          "Does not mean you have to like change all the time.",
+          "Sticking to just one way of doing things, even when it’s not working.",
+          "Staying calm, thinking through the situation, and coming up with a new plan.",
+          "Refusing to try new things because they seem too hard.",
+          "Being open to trying new things and not getting stuck when things don’t go according to plan.",
+          "Avoiding change or pretending it’s not happening.",
+          "Knowing how to handle change when it happens.",
+          "Panicking when something unexpected happens."
+        ],
+        buckets: [
+          {
+            id: "green",
+            label: "Adaptability",
+            count: 5,
+          },
+          {
+            id: "red",
+            label: "Not Adaptability",
+            count: 5,
+          },
+        ],
+        steps: 10,
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 5,
         type: "multiStep",
         steps: [
           {
@@ -486,54 +522,9 @@ export const courseContent = {
         },
       },
       {
-        id: 5,
+        id: 6,
         type: "video",
         videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_3.mp4",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 6,
-        type: "imageDragAndDrop",
-        instruction:
-          "Drag-and-drop the statements on the left into any of these bowls",
-        images: [
-          "Ability to adjust to new situations, changes, or challenges.",
-          "Expecting everything to stay the same and being frustrated when it doesn’t.",
-          "Does not mean you have to like change all the time.",
-          "Sticking to just one way of doing things, even when it’s not working.",
-          "Staying calm, thinking through the situation, and coming up with a new plan.",
-          "Refusing to try new things because they seem too hard.",
-          "Being open to trying new things and not getting stuck when things don’t go according to plan.",
-          "Avoiding change or pretending it’s not happening.",
-          "Knowing how to handle change when it happens.",
-          "Panicking when something unexpected happens."
-        ],
-        buckets: [
-          {
-            id: "green",
-            label: "Adaptability",
-            count: 5,
-          },
-          {
-            id: "red",
-            label: "Not Adaptability",
-            count: 5,
-          },
-        ],
-        steps: 10,
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-
-      {
-        id: 7,
-        type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_4.mp4",
         navigation: {
           prev: true,
           next: true,

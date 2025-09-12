@@ -254,6 +254,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
         )
       }
       <hr />
+      
       {/* Activity 2 */}
       <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
         Activity 2

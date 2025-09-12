@@ -28,10 +28,15 @@ function WeekFourPage6() {
 
   useEffect(() => {
     if (!userAnswers) return;
-    const response = userAnswers.activities?.find(
+    const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    const answerCopy = response?.answer ? [...response.answer] : [];
+
+    if (adminDatas.isAdmin) {
+      setAnswers([]);
+      return;
+    };
+    const answerCopy =   response?.answer  ? [...response?.answer] : [];
     setAnswers(answerCopy);
     return () => {};
   }, [userAnswers]);

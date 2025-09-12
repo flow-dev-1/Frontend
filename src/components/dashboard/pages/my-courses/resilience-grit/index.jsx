@@ -47,7 +47,6 @@ import WeekThreePage4 from "./weeks/week3/page4/Page4";
 import WeekThreePage5 from "./weeks/week3/page5/Page5";
 import WeekThreePage6 from "./weeks/week3/page6/Page6";
 import WeekThreePage7 from "./weeks/week3/page7/Page7";
-import WeekThreePage8 from "./weeks/week3/page8/Page8";
 
 // Week 4
 import WeekFourPage1 from "./weeks/week4/page1/Page1";
@@ -241,8 +240,7 @@ const WeekContent = () => {
             return <WeekThreePage6 />;
           case 7:
             return <WeekThreePage7 />;
-          case 8:
-            return <WeekThreePage8 />;
+
           default:
             return null;
         }

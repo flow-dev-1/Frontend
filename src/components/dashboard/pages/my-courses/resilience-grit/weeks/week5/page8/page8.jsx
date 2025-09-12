@@ -21,7 +21,6 @@ import { toast } from "react-toastify";
 import userService from "../../../../../../../../services/api/user";
 import { calculateResult } from "../../../utility";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-import { use } from "react";
 
 function WeekFiveAssessment() {
   const dispatch = useDispatch();

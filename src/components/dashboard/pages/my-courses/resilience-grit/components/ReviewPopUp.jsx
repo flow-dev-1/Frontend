@@ -15,11 +15,13 @@ export default function PopUp() {
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
 
-  console.log(userAnswers,"User abswers")
-
   const handleEmojiClick = (value) => {
 
-    if (adminDatas.isAdmin) return window.close();
+    if (adminDatas.isAdmin){
+      dispatch(hideReviewPopup());
+      return 
+      // window.close();
+    } 
     if (!userAnswers.course || !value) {
       toast.error("Something went wrong!")
 

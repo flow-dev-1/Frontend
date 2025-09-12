@@ -26,19 +26,18 @@ function Week3({ enrollmentId, setWeekThreeData }) {
   const [activityFeedbackId, setActivityFeedbackId] = useState(null);
   const { isAdmin, code } = useSelector(adminData);
 
-  console.log(activity2.steps," Activity 2 Steps")
 
-  const [_,q1, q2, q3, q4, q5] = activity2.steps;
+  const [_, q1, q2, q3, q4, q5] = activity3.steps;
   const [a1, a2, a3, a4, a5] =
-    activityData?.[1]?.answer?.map((a) => a.value) || [];
-  const [f1, f2, f3, f4, f5, f6] =
-    activityData?.[0]?.feedback?.map((a) => a.value) || [];
+    activityData?.[2]?.answer?.map((a) => a.value) || [];
+  const [f1, f2, f3, f4, f5] =
+    activityData?.[2]?.feedback?.map((a) => a.value) || [];
 
   const { questions: assessments } = getWeekAssessment(3);
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/transition-feedback-3", enrollmentId, 3],
+    queryKey: ["dashboard/resilience-feedback-3", enrollmentId, 3],
     queryFn: () =>
       isAdmin
         ? adminService.getUserCourseData(enrollmentId, 3, code)
@@ -56,7 +55,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
     setAssessmentData(data.assessment?.assessments);
     setWeekThreeData(true);
 
-    return () => {};
+    return () => { };
   }, [data]);
 
   // const [q1, q2, q3, q4, q5] = activity3.steps;
@@ -153,20 +152,17 @@ function Week3({ enrollmentId, setWeekThreeData }) {
   };
 
   function drag1(type) {
-    console.log(activityData, "Activity Data")
-    if (!activityData || !activityData[2] || !activityData[2].answer) return [];
+    if (!activityData || !activityData[1] || !activityData[1].answer) return [];
 
     const indices =
       type === "growth"
-        ? activityData[2]?.answer?.green
-        : activityData[2]?.answer?.red
-
-        console.log(activity3, "Activity 3")
+        ? activityData[1]?.answer?.green
+        : activityData[1]?.answer?.red
 
     // console.log(indices, "Indices")
 
     // console.log(activity2,"Activity 2")
-    return indices?.map((index) => activity3?.images[index]) || [];
+    return indices?.map((index) => activity2?.images[index]) || [];
   }
 
   if (isPending) {
@@ -303,79 +299,11 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           </div>
         )
       }
-<hr />
+      <hr />
 
-      {/* Activity 2*/}
+      {/* Activity 2  */}
       <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
         Activity 2
-      </p>
-      <hr />
-      {[
-        [q1, a1, f1],
-        [q2, a2, f2],
-        [q3, a3, f3],
-        [q4, a4, f4],
-        [q5, a5, f5],
-      ].map(([question, answer, feedback], index) => (
-        <React.Fragment key={index}>
-          <div className="d-flex gap-3">
-            <h2 className="text-blue fs-md-1 text-nowrap">Question {index + 1}:</h2>
-            <p className="text-blue fs-md-4">
-              {question?.questions?.[0]?.question}
-            </p>
-          </div>
-          <div className="d-flex gap-3">
-            <h2 className="text-gray fs-md-1 text-gray">Answer:</h2>
-            <p className="fs-md-5 flex-grow-1">{answer?.[0]}</p>
-
-            {isAdmin && !feedback && (
-              <Icon
-                onClick={() => {
-                  setActivityFeedbackId({
-                    activityId: activity1.id,
-                    itemId: index + 1,
-                  });
-                  handleModalOpen();
-                }}
-                style={{ color: "#D6D6D6" }}
-                width={35}
-                icon="tabler:message-2"
-              />
-            )}
-          </div>
-          {feedback && (
-            <div className="d-flex gap-3">
-              <p className="text-bg-secondary rounded-4 px-2 px-md-3 fs-md-5 align-self-start">
-                Feedback
-              </p>
-              <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-1 p-md-2 rounded">
-                {feedback}
-              </p>
-              {isAdmin && (
-                <Icon
-                  onClick={() => {
-                    setModalData(feedback);
-                    setActivityFeedbackId({
-                      activityId: activity1.id,
-                      itemId: index + 1,
-                    });
-                    handleModalOpen();
-                  }}
-                  style={{ color: "#275DAD" }}
-                  width={35}
-                  icon="lucide:edit"
-                />
-              )}
-            </div>
-          )}
-          <hr />
-        </React.Fragment>
-      ))}
-
-
-      {/* Activity 3  */}
-      <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
-        Activity 3
       </p>
       <hr />
       <div className="d-flex gap-3">
@@ -411,11 +339,11 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           </div>
         </div>
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity3.id)
+          !activityData?.find((activity) => activity.page === activity2.id)
             ?.feedback && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity3.id });
+                setActivityFeedbackId({ activityId: activity2.id });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -426,20 +354,20 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity3.id)
+        activityData?.find((activity) => activity.page === activity2.id)
           ?.feedback && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-1 p-md-2 rounded">
-              {getActivityFeedback(activity3.id)}
+              {getActivityFeedback(activity2.id)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity3.id));
-                  setActivityFeedbackId({ activityId: activity3.id });
+                  setModalData(getActivityFeedback(activity2.id));
+                  setActivityFeedbackId({ activityId: activity2.id });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -452,6 +380,72 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       }
       <hr />
 
+      {/* Activity 3*/}
+      <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
+        Activity 3
+      </p>
+      <hr />
+      {[
+        [q1, a1, f1],
+        [q2, a2, f2],
+        [q3, a3, f3],
+        [q4, a4, f4],
+        [q5, a5, f5],
+      ].map(([question, answer, feedback], index) => (
+        <React.Fragment key={index}>
+          <div className="d-flex gap-3">
+            <h2 className="text-blue fs-md-1 text-nowrap">Question {index + 1}:</h2>
+            <p className="text-blue fs-md-4">
+              {question?.questions?.[0]?.question}
+            </p>
+          </div>
+          <div className="d-flex gap-3">
+            <h2 className="text-gray fs-md-1 text-gray">Answer:</h2>
+            <p className="fs-md-5 flex-grow-1">{answer}</p>
+
+            {isAdmin && !feedback && (
+              <Icon
+                onClick={() => {
+                  setActivityFeedbackId({
+                    activityId: activity3.id,
+                    itemId: index + 1,
+                  });
+                  handleModalOpen();
+                }}
+                style={{ color: "#D6D6D6" }}
+                width={35}
+                icon="tabler:message-2"
+              />
+            )}
+          </div>
+          {feedback && (
+            <div className="d-flex gap-3">
+              <p className="text-bg-secondary rounded-4 px-2 px-md-3 fs-md-5 align-self-start">
+                Feedback
+              </p>
+              <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-1 p-md-2 rounded">
+                {feedback}
+              </p>
+              {isAdmin && (
+                <Icon
+                  onClick={() => {
+                    setModalData(feedback);
+                    setActivityFeedbackId({
+                      activityId: activity3.id,
+                      itemId: index + 1,
+                    });
+                    handleModalOpen();
+                  }}
+                  style={{ color: "#275DAD" }}
+                  width={35}
+                  icon="lucide:edit"
+                />
+              )}
+            </div>
+          )}
+          <hr />
+        </React.Fragment>
+      ))}
 
       {/* Assesment 1 */}
       <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
