@@ -227,7 +227,7 @@ const SchoolCourseCard = ({
             style={{ margin: "1rem 0", width: "40%" }}
             className="users-review"
           >
-            <div
+            {/* <div
               style={
                 course.status === "published"
                   ? { color: "#329BD6" }
@@ -239,7 +239,7 @@ const SchoolCourseCard = ({
                 <Icon icon="fluent:people-24-regular" width={20} />{" "}
               </span>
               {course?.courseEnrollment?.length}
-            </div>
+            </div> */}
             <div
               style={
                 course.status === "published"

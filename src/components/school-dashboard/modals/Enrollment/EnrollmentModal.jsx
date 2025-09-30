@@ -204,7 +204,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
           className="enroll-heading-flex"
           style={{ margin: "0", color: "#5B616A" }}
         >
-          Enroll Students
+          Enroll Class
           <span
             onClick={onRequestClose}
             style={{ color: "#5B616A", cursor: "pointer" }}
@@ -468,7 +468,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                 visible={true}
               />
             ) : (
-              "Send invite"
+              "Submit"
             )}
           </button>
           {/* {isFileUploaded && mutation.isPending && (

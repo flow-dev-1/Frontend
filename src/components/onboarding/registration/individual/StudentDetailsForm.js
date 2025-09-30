@@ -94,8 +94,10 @@ export default function StudentDetailsForm({
       console.log('Error submitting form', error)
       toast.dismiss()
       toast.error(
-        error?.message || 'An error occurred. Please try again.'
-      )
+        typeof error === "string"
+          ? error
+          : error?.message || error?.error || JSON.stringify(error) || "An error occurred. Please try again."
+      );
     },
   })
 

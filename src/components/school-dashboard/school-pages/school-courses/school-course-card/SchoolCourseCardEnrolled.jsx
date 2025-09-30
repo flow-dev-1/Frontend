@@ -135,12 +135,12 @@ const handleToggle = (courseId) => {
               justifyContent: "space-between"
             }}
           >
-            <div style={{ color: "#329bd6" }} className="users-count">
+            {/* <div style={{ color: "#329bd6" }} className="users-count">
               <span>
                 <Icon icon="fluent:people-24-regular" width={20} />{" "}
               </span>
               {course?.courseEnrollment?.length}
-            </div>
+            </div> */}
             <div style={{ color: "#329bd6" }} className="likes-count">
               <span>
                 <Icon icon="mingcute:thumb-up-line" width={18} />{" "}
