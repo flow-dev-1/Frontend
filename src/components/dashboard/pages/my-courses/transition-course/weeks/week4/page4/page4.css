@@ -80,9 +80,19 @@
   background: url("../../../../../../../../assets/Buckets/red.png") no-repeat;
 }
 
+.inner-box {
+  background: url("../../../../../../../../assets/tot-images/yes.png") no-repeat;
+}
+
+.outer-box {
+  background: url("../../../../../../../../assets/tot-images/no.png") no-repeat;
+}
+
 .inner-bucket,
 .outer-bucket,
-.both-bucket {
+.both-bucket,
+.inner-box,
+.outer-box {
   color: #fff;
   font-weight: bold;
   display: flex;

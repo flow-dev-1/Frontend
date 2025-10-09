@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+.tot-text h1 {
+  font-family: 'Montserrat', system-ui, -apple-system, sans-serif !important;
+  font-weight: 700 !important;
+}
+.feeling-modal {
+  max-width: 620px;
+  width: 90%;
+  background-color: white;
+  border-radius: 1rem;
+  top: 5rem;
+  left: 5rem;
+}

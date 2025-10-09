@@ -1,0 +1,10 @@
+@media (max-width: 769px) {
+    .resilience-week-content {
+        padding: 0 0px !important;
+        margin: 1rem 5px 0 0 !important;
+    }
+    .assessment-header {
+        padding: 0 !important;
+        margin-bottom: 1rem !important;
+    }
+}

@@ -57,6 +57,7 @@ import TransitionCourse from "./components/dashboard/pages/my-courses/transition
 import TransitionFeedback from "./components/dashboard/pages/my-courses/transition-course/feedback/index.jsx";
 import ResilienceCourse from "./components/dashboard/pages/my-courses/resilience-grit/index.jsx";
 import ResilienceFeedback from "./components/dashboard/pages/my-courses/resilience-grit/feedback/index.jsx";
+import TOTCourse from "./components/dashboard/pages/my-courses/TOT/index.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -167,8 +168,25 @@ function App() {
             path="/dashboard/resilience_grit/feedback"
             element={
               <ProtectedRoute>
-                <ResilienceFeedback/>
+                <ResilienceFeedback />
               </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/dashboard/tot"
+            element={
+              // <ProtectedRoute>
+              <TOTCourse />
+              // </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/tot/feedback"
+            element={
+              // <ProtectedRoute>
+              <ResilienceFeedback />
+              // </ProtectedRoute>
             }
           />
         </Route>

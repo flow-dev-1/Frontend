@@ -6,6 +6,9 @@ import { assessments as transitionAssessments } from "../../components/dashboard
 import { courseContent as resilienceCourseContent } from "../../components/dashboard/pages/my-courses/resilience-grit/data/activity";
 import { assessments as resilienceAssessments } from "../../components/dashboard/pages/my-courses/resilience-grit/data/assessment";
 
+import { courseContent as totCourseContent } from "../../components/dashboard/pages/my-courses/TOT/data/activity";
+import { assessments as totAssessments } from "../../components/dashboard/pages/my-courses/TOT/data/assessment";
+
 const courseData = {
   'compassion': {
     courseContent: compassionCourseContent,
@@ -18,6 +21,10 @@ const courseData = {
   'resilience_grit': {
     courseContent: resilienceCourseContent,
     assessments: resilienceAssessments
+  },
+  'tot': {
+    courseContent: totCourseContent,
+    assessments: totAssessments
   }
 };
 
@@ -34,7 +41,7 @@ const getCourseFromURL = () => {
   const lastSegment = segments[segments.length - 1];
 
   // Validate course name
-  return ['compassion', 'transition', 'resilience_grit'].includes(lastSegment?.toLowerCase())
+  return ['compassion', 'transition', 'resilience_grit','tot'].includes(lastSegment?.toLowerCase())
     ? lastSegment.toLowerCase()
     : 'compassion';
 };
@@ -110,7 +117,7 @@ const navigationSlice = createSlice({
         if (isLastQuestion) {
           if (state.currentCourse === 'transition' && state.currentWeek === 10) {
             state.showReview = true;
-          } else if (state.currentCourse !== 'transition' && (state.currentWeek === 5|| isFirstWeek)) {
+          } else if (state.currentCourse !== 'transition' && (state.currentWeek === 5 || isFirstWeek)) {
             state.showReview = true;
           } else {
             state.showHurray = true;
