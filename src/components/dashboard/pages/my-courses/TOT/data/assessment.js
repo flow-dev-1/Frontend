@@ -1,6 +1,6 @@
 export const assessments = {
   week1: {
-    title: "Assessment",
+    title: "Post Assessment",
     subtitle: "Let's test your knowledge",
     questions: [
       {
@@ -23,7 +23,7 @@ export const assessments = {
           { id: "C", text: "Teaching students to recall and retain subject-specific information for exams." },
           { id: "D", text: "Guiding learners to weigh consequences and make ethical, constructive choices." },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 3,
@@ -45,7 +45,7 @@ export const assessments = {
           { id: "C", text: "Noticing moments of personal frustration and intentionally responding in calm, constructive ways." },
           { id: "D", text: "Responding to misbehavior primarily with firm rules and consequences." },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 5,
@@ -56,63 +56,63 @@ export const assessments = {
           { id: "C", text: "By encouraging a strengths-based approach that highlights gratitude, resilience, and overall well-being." },
           { id: "D", text: "By minimizing the role of emotions in learning environments." },
         ],
+        correctOption: "C",
+      },
+      {
+        id: 6,
+        question: "Why might many people struggle to identify their personal strengths compared to their weaknesses?",
+        options: [
+          { id: "A", text: "Because they believe weaknesses are more important to acknowledge and correct." },
+          { id: "B", text: "Because they've had more practice noticing flaws than recognizing what they do well." },
+          { id: "C", text: "Because strengths are rarely discussed or valued in learning environments." },
+          { id: "D", text: "Because strengths don't play a meaningful role in personal or academic growth." },
+        ],
         correctOption: "B",
       },
       {
-          id: 6,
-          question: "Why might many people struggle to identify their personal strengths compared to their weaknesses?",
-          options: [
-            { id: "A", text: "Because they believe weaknesses are more important to acknowledge and correct." },
-            { id: "B", text: "Because they’ve had more practice noticing flaws than recognizing what they do well." },
-            { id: "C", text: "Because strengths are rarely discussed or valued in learning environments." },
-            { id: "D", text: "Because strengths don’t play a meaningful role in personal or academic growth." },
-          ],
-          correctOption: "B",
-        },
-        {
-          id: 7,
-          question: "Which of the following teaching practices best reflects a strengths-based approach in the classroom?",
-          options: [
-            { id: "A", text: "Focusing recognition on students with the highest academic scores." },
-            { id: "B", text: "Noticing and nurturing each student’s unique qualities, efforts, and growth areas." },
-            { id: "C", text: "Giving the same praise to all students to keep the environment positive." },
-            { id: "D", text: "Minimizing corrective feedback to avoid hurting students’ confidence." },
-          ],
-          correctOption: "B",
-        },
-        {
-          id: 8,
-          question: "What is one meaningful way gratitude can shape student behavior and classroom engagement?",
-          options: [
-            { id: "A", text: "It helps reduce stress levels, strengthens peer relationships, and boosts emotional well-being." },
-            { id: "B", text: "It leads students to comply more strictly with classroom rules and authority figures." },
-            { id: "C", text: "It replaces the need for teaching conflict resolution or emotional regulation skills." },
-            { id: "D", text: "It tends to benefit students who are already performing well academically." },
-          ],
-          correctOption: "B",
-        },
-        {
-          id: 9,
-          question: "A student expresses frustration during a lesson, saying, “I just can’t do this.” Which of the following teacher responses best reflects the application of Social-Emotional Learning and Positive Psychology?",
-          options: [
-            { id: "A", text: "Let’s take a moment to remember something you’ve done well before, maybe we can use that as a starting point." },
-            { id: "B", text: "Try not to think too much about it. Just move on to the next activity." },
-            { id: "C", text: "Why don’t you let your classmate handle this one so we can keep moving?." },
-            { id: "D", text: "We’ll talk about this later,  let’s focus on something else right now.." },
-          ],
-          correctOption: "B",
-        },
-        {
-          id: 10,
-          question: "Why is it important for educators to practice SEL in their own lives?",
-          options: [
-            { id: "A", text: "To avoid engaging emotionally with students and completely miss SEL’s true purpose." },
-            { id: "B", text: "To fulfill mandated requirements for social-emotional learning within the curriculum." },
-            { id: "C", text: "To manage their own emotions and demonstrate healthy coping strategies to students." },
-            { id: "D", text: "To foster genuine relationships, model emotional skills, and support classroom culture." },
-          ],
-          correctOption: "B",
-        },
+        id: 7,
+        question: "Which of the following teaching practices best reflects a strengths-based approach in the classroom?",
+        options: [
+          { id: "A", text: "Focusing recognition on students with the highest academic scores." },
+          { id: "B", text: "Noticing and nurturing each student's unique qualities, efforts, and growth areas." },
+          { id: "C", text: "Giving the same praise to all students to keep the environment positive." },
+          { id: "D", text: "Minimizing corrective feedback to avoid hurting students' confidence." },
+        ],
+        correctOption: "B",
+      },
+      {
+        id: 8,
+        question: "What is one meaningful way gratitude can shape student behavior and classroom engagement?",
+        options: [
+          { id: "A", text: "It helps reduce stress levels, strengthens peer relationships, and boosts emotional well-being." },
+          { id: "B", text: "It leads students to comply more strictly with classroom rules and authority figures." },
+          { id: "C", text: "It replaces the need for teaching conflict resolution or emotional regulation skills." },
+          { id: "D", text: "It tends to benefit students who are already performing well academically." },
+        ],
+        correctOption: "A",
+      },
+      {
+        id: 9,
+        question: `A student expresses frustration during a lesson, saying, "I just can't do this." Which of the following teacher responses best reflects the application of Social-Emotional Learning and Positive Psychology?`,
+        options: [
+          { id: "A", text: "Let's take a moment to remember something you've done well before, maybe we can use that as a starting point." },
+          { id: "B", text: "Try not to think too much about it. Just move on to the next activity." },
+          { id: "C", text: "Why don't you let your classmate handle this one so we can keep moving?." },
+          { id: "D", text: "We'll talk about this later,  let's focus on something else right now.." },
+        ],
+        correctOption: "A",
+      },
+      {
+        id: 10,
+        question: "Why is it important for educators to practice SEL in their own lives?",
+        options: [
+          { id: "A", text: "To avoid engaging emotionally with students and completely miss SEL's true purpose." },
+          { id: "B", text: "To fulfill mandated requirements for social-emotional learning within the curriculum." },
+          { id: "C", text: "To manage their own emotions and demonstrate healthy coping strategies to students." },
+          { id: "D", text: "To foster genuine relationships, model emotional skills, and support classroom culture." },
+        ],
+        correctOption: "D",
+      },
     ],
   },
   week2: {
