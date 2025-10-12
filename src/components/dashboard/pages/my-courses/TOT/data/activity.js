@@ -626,115 +626,40 @@ export const courseContent = {
             stepId: 1,
             type: "instruction",
             title: "Instruction",
-            instructions: ["Match the right ‘C’ to their correct definition."],
-            options:
-              "Competence, Confidence, Coping, Control, Character, Connections, and Contribution.",
+            instructions: [
+              "For this next activity, you will be shown different scenarios. \n Type out the strength you feel is present in that scenario.",
+            ],
           },
 
           {
             stepId: 2,
-            type: "dropdownScenario",
-            question:
-              "The belief in your own ability to handle situations, challenges, and tasks with confidence and success.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "A student helps a classmate solve a math problem.",
+              },
             ],
           },
           {
             stepId: 3,
-            type: "dropdownScenario",
-            question:
-              "The people in your life who support, guide, and help you through challenges.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "A student stands up for a friend being teased.",
+              },
             ],
           },
           {
             stepId: 4,
-            type: "dropdownScenario",
-            question:
-              "Your values and sense of right and wrong that help guide your decisions and actions in difficult situations.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
-            ],
-          },
-          {
-            stepId: 5,
-            type: "dropdownScenario",
-            question:
-              "The skills and strategies you use to manage stress, challenges, and emotions in tough situations.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
-            ],
-          },
-
-          {
-            stepId: 6,
-            type: "dropdownScenario",
-            question:
-              "The understanding that you can contribute positively to the world around you, helping others and making a difference.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
-            ],
-          },
-          {
-            stepId: 7,
-            type: "dropdownScenario",
-            question:
-              "The ability to successfully perform tasks or overcome challenges by using your skills, knowledge, and abilities.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
-            ],
-          },
-          {
-            stepId: 8,
-            type: "dropdownScenario",
-            question:
-              "The feeling of being in charge of your own actions, responses, and decisions, even if you can’t control everything around you.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "A student organizes their group’s project work.",
+              },
             ],
           },
         ],
