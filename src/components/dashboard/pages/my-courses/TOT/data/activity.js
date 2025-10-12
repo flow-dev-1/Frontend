@@ -599,8 +599,7 @@ export const courseContent = {
       {
         id: 16,
         type: "listQuestion",
-        question:
-          "Can you mention some challenges you have encountered and bounced back from?",
+        question: `“What is Right with Me? (my Strengths)”.`,
         inputCount: 5,
         inputType: "text",
         inputPlaceholder: "Type your answer here",

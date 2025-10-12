@@ -70,7 +70,6 @@ function WeekTwoPage4() {
   };
 
   const renderStep = () => {
-    console.log(step);
     if (!step) return <div>Invalid Step</div>;
 
     switch (step.type) {
