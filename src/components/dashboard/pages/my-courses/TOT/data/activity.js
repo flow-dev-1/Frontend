@@ -657,8 +657,7 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question:
-                  "A student organizes their group’s project work.",
+                question: "A student organizes their group’s project work.",
               },
             ],
           },
@@ -681,8 +680,7 @@ export const courseContent = {
       {
         id: 20,
         type: "listQuestion",
-        question:
-          "Who are the three top people you go to when you need help with a situation?",
+        question: "List out two things you are grateful for.",
         inputCount: 3,
         fields: [
           {
@@ -721,115 +719,31 @@ export const courseContent = {
             stepId: 1,
             type: "instruction",
             title: "Instruction",
-            instructions: ["Match the right ‘C’ to their correct definition."],
-            options:
-              "Competence, Confidence, Coping, Control, Character, Connections, and Contribution.",
+            instructions: [
+              "In the next activity, you will be asked to reframe a teacher’s statement to reflect a strength based feedback.",
+            ],
           },
 
           {
             stepId: 2,
-            type: "dropdownScenario",
-            question:
-              "The belief in your own ability to handle situations, challenges, and tasks with confidence and success.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "I sometimes doubt whether I’m making a real difference in my students’ lives.",
+              },
             ],
           },
           {
             stepId: 3,
-            type: "dropdownScenario",
-            question:
-              "The people in your life who support, guide, and help you through challenges.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
-            ],
-          },
-          {
-            stepId: 4,
-            type: "dropdownScenario",
-            question:
-              "Your values and sense of right and wrong that help guide your decisions and actions in difficult situations.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
-            ],
-          },
-          {
-            stepId: 5,
-            type: "dropdownScenario",
-            question:
-              "The skills and strategies you use to manage stress, challenges, and emotions in tough situations.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
-            ],
-          },
-
-          {
-            stepId: 6,
-            type: "dropdownScenario",
-            question:
-              "The understanding that you can contribute positively to the world around you, helping others and making a difference.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
-            ],
-          },
-          {
-            stepId: 7,
-            type: "dropdownScenario",
-            question:
-              "The ability to successfully perform tasks or overcome challenges by using your skills, knowledge, and abilities.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
-            ],
-          },
-          {
-            stepId: 8,
-            type: "dropdownScenario",
-            question:
-              "The feeling of being in charge of your own actions, responses, and decisions, even if you can’t control everything around you.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "There’s never enough time to get everything done, and I feel overwhelmed",
+              },
             ],
           },
         ],

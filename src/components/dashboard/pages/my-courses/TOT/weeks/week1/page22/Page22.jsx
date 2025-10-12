@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import Frame from "./components/Frame";
+import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
 import {
   selectPageData,
@@ -13,30 +13,31 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import Frame from "./components/Frame";
 
-function Page18() {
+function Page22() {
   const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
   const totalSteps = pageData?.steps?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
+
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
-  // console.log(userAnswers)
 
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
+
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
   }, [userAnswers]);
 
   const saveUserInput = () => {
     if (currentStep === 1) return true;
-    return true
     if (adminDatas.isAdmin) return true;
 
     const stepData = answers.find((item) => item.stepId === currentStep);
@@ -70,37 +71,54 @@ function Page18() {
     return true;
   };
 
-  // console.log(answers, "Answers")
+  const handleInputChange = (e) => {
+    setErrorMessage("");
+    setAnswers(e.target.value);
+  };
 
   const renderStep = () => {
-
     if (!step) return <div>Invalid Step</div>;
 
     switch (step.type) {
       case "instruction":
         return (
-          <QuestionBox>
-            <div className="p-5">
-              <div className="text-center mb-5 mt-4 mt-md-0">
-                <h2 className="text-white bg-blue p-3 fs-1 rounded d-inline week-2-question-text text-center">
-                  {step.title}
-                </h2>
-              </div>
-              <h2 className="text-gray display-5 text-center">{step.instructions[0]}</h2>
-              <h2 className="text-gray mt-5 text-center week-2-question-text">
-                <joe className="text-blue">{step.options}</joe>
-              </h2>
+          <QuestionBox extraStyle="bg-blue">
+            <div className="text-center mb-5 mt-5 mt-md-4">
+              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction">
+                Instruction
+              </h1>
             </div>
 
+            <div className="text-center mb-5 mt-3 mt-md-0">
+              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text fs-5 ">
+                In the next activity, you will be asked to reframe a teacher’s
+                statement to reflect a strength based feedback.
+              </h2>
+
+              <h2 className="text-gray bg-step-active py-1 px-5 tot-week-2-question-text fs-5 text-start d-inline-block">
+                Example:
+              </h2>
+              <h2 className="text-white px-5 d-inline-block text-start tot-week-2-question-text fs-5">
+                <span className="fs-bold">If a teacher says:</span> I try to
+                help my students stay focused, but they always get distracted.
+              </h2>
+              <br />
+              <h2 className="text-white px-5 d-inline-block text-start tot-week-2-question-text fs-5">
+                <span className="fs-bold">A reframe would be: </span>You are
+                patient and committed to your students' success!
+              </h2>
+            </div>
           </QuestionBox>
         );
-      case "dropdownScenario":
+      case "scenario":
         return (
           <Frame
             data={{
               step: step.stepId,
-              question: step.question,
-              options: step.options,
+              question: step.questions[0].question,
+              questions: step.questions.map((q) => ({
+                [q.type]: q.question,
+              })),
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
@@ -128,4 +146,4 @@ function Page18() {
   );
 }
 
-export default Page18;
+export default Page22;

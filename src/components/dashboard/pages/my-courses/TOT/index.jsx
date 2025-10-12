@@ -11,7 +11,7 @@ import {
   setCurrentPage,
   setCurrentStep,
 } from "../../../../../redux/reducers/navigationSlice.js";
-import "./index.css"
+import "./index.css";
 // Import components
 import PopUp from "./components/ReviewPopUp";
 import Hurray from "./components/Hurray";
@@ -41,7 +41,6 @@ import Page21 from "./weeks/week1/page21/Page21.jsx";
 import Page22 from "./weeks/week1/page22/Page22.jsx";
 import Page23 from "./weeks/week1/page23/Page23.jsx";
 import Page24 from "./weeks/week1/page24/Page24.jsx";
-
 
 // Week 2
 import WeekTwoPage1 from "./weeks/week2/page1/Page1";
@@ -128,7 +127,7 @@ const WeekContent = () => {
     dispatch(setCurrentPage(currentPage));
     dispatch(setCurrentStep(currentStep));
 
-    return () => { };
+    return () => {};
   }, [dispatch]); // Added dispatch to dependency array
 
   const currentWeek = useSelector(selectCurrentWeek);
@@ -179,7 +178,7 @@ const WeekContent = () => {
       );
     }
 
-    return () => { };
+    return () => {};
   }, [data]);
 
   // If showing hurray, render that instead
@@ -350,7 +349,7 @@ const CourseContent = () => {
     "Building Relationships & Creating a Safe Classroom",
     "Growth Mindset & Resilience for Educators",
     "Integrating SEL into Teaching Methods",
-    "Teacher Well-being & Sustainable SEL Practices"
+    "Teacher Well-being & Sustainable SEL Practices",
   ];
 
   useEffect(() => {
@@ -398,7 +397,7 @@ const CourseContent = () => {
           </button>
           <div
             className="navbar-logo d-none d-lg-block"
-            onClick={() => { }}
+            onClick={() => {}}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -474,9 +473,7 @@ const CourseContent = () => {
           </button>
 
           <div className="compassion-title">
-            <h2 className="fs-5 fs-md-3">
-              SEL for Educators:
-            </h2>
+            <h2 className="fs-5 fs-md-3">SEL for Educators:</h2>
             <h2 className="compassion fs-5">ToT Course 1</h2>
           </div>
 
@@ -492,9 +489,7 @@ const CourseContent = () => {
                     className="course-list-icon "
                   />
                 </div>
-                <span style={{ whiteSpace: "nowrap" }}>
-                  Week {index + 1}
-                </span>
+                <span style={{ whiteSpace: "nowrap" }}>Week {index + 1}</span>
                 <span className="">{item} </span>
               </li>
             ))}
@@ -534,4 +529,3 @@ const TOTCourse = () => {
 };
 
 export default TOTCourse;
-
