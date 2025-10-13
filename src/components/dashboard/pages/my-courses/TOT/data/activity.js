@@ -1053,6 +1053,57 @@ export const courseContent = {
           next: true,
         },
       },
+      {
+        id: 6,
+        type: "multiStep",
+        title: "Write a letter to yourself.",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            challenge:
+              "In this next activity, we are going to recognize different emotional triggers by grouping them into: ",
+            statement: "Mildly triggering, Frustrating and Highly triggering.",
+          },
+          {
+            stepId: 2,
+            type: "imageDragAndDrop",
+            instruction:
+              "Drag-and-drop the statements on the left into any of these bowls.",
+            steps: 4,
+            buckets: [
+              {
+                id: "green",
+                title: "Mild",
+              },
+              {
+                id: "orange",
+                title: "Frustrate",
+              },
+              {
+                id: "red",
+                title: "High",
+              },
+            ],
+            images: [
+              "A student refuses to follow instructions during a lesson.",
+              "A colleague dismisses your idea in a staff meeting.",
+              "A student constantly interrupts you while you’re speaking.",
+              "A parent questions your teaching methods during a parents-teachers meeting.",
+              "A student makes a disrespectful comment about your appearance.",
+              "Your head of department gives you negative feedback on your performance unexpectedly.",
+              "A student rolls their eyes and mutters something rude during a lesson.",
+              "You receive a last-minute schedule change that disrupts your plans for the day.",
+              "A student deliberately tries to provoke other students during group work.",
+              "A colleague blames you for an issue that wasn't your fault.",
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
     ],
   },
   week3: {

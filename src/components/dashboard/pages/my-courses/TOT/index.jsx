@@ -48,7 +48,7 @@ import WeekTwoPage2 from "./weeks/week2/page2/Page2";
 import WeekTwoPage3 from "./weeks/week2/page3/Page3";
 import WeekTwoPage4 from "./weeks/week2/page4/Page4";
 import WeekTwoPage5 from "./weeks/week2/page5/Page5";
-import WeekTwoPage6 from "./weeks/week2/page6/Page6";
+import WeekTwoPage6 from "./weeks/week2/page6/Page6.jsx";
 
 // Week 3
 import WeekThreePage1 from "./weeks/week3/page1/Page1";
