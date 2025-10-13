@@ -775,14 +775,13 @@ export const courseContent = {
         hasNextButton: true,
       },
       {
-        id: 2,
-        type: "radio",
-        question:
-          "Just a quick question, have you ever seen or heard of a building that collapsed? ",
-        options: [
-          { id: "A", text: "YES" },
-          { id: "B", text: "NO" },
-        ],
+        id: 8,
+        type: "question",
+        questionType: "text",
+        question: "Do you remember what we discussed last week?",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
         navigation: {
           prev: true,
           next: true,

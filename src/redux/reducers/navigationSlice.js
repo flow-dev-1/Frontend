@@ -10,44 +10,46 @@ import { courseContent as totCourseContent } from "../../components/dashboard/pa
 import { assessments as totAssessments } from "../../components/dashboard/pages/my-courses/TOT/data/assessment";
 
 const courseData = {
-  'compassion': {
+  compassion: {
     courseContent: compassionCourseContent,
-    assessments: compassionAssessments
+    assessments: compassionAssessments,
   },
-  'transition': {
+  transition: {
     courseContent: transitionCourseContent,
-    assessments: transitionAssessments
+    assessments: transitionAssessments,
   },
-  'resilience_grit': {
+  resilience_grit: {
     courseContent: resilienceCourseContent,
-    assessments: resilienceAssessments
+    assessments: resilienceAssessments,
   },
-  'tot': {
+  tot: {
     courseContent: totCourseContent,
-    assessments: totAssessments
-  }
+    assessments: totAssessments,
+  },
 };
 
 const getCourseFromURL = () => {
   // Add timeout to wait for route initialization
-  const path = window?.location?.pathname || '/';
+  const path = window?.location?.pathname || "/";
 
   // Handle initial / case
-  if (path === '/') {
-    return 'compassion'; // default course
+  if (path === "/") {
+    return "compassion"; // default course
   }
 
-  const segments = path.split('/').filter(Boolean);
+  const segments = path.split("/").filter(Boolean);
   const lastSegment = segments[segments.length - 1];
 
   // Validate course name
-  return ['compassion', 'transition', 'resilience_grit','tot'].includes(lastSegment?.toLowerCase())
+  return ["compassion", "transition", "resilience_grit", "tot"].includes(
+    lastSegment?.toLowerCase()
+  )
     ? lastSegment.toLowerCase()
-    : 'compassion';
+    : "compassion";
 };
 
 const initialState = {
-  currentCourse: 'compassion',
+  currentCourse: "compassion",
   currentWeek: 1,
   currentPage: 1,
   currentStep: 1,
@@ -62,8 +64,9 @@ const navigationSlice = createSlice({
     setCourse: (state, action) => {
       if (state.currentCourse !== action.payload) {
         state.currentCourse = action.payload;
-        state.currentWeek = 1;
-        state.currentPage = 1;
+        // state.currentWeek = 1;
+        state.currentWeek = 2;
+        state.currentPage = 2;
         state.currentStep = 1;
       }
     },
@@ -115,9 +118,15 @@ const navigationSlice = createSlice({
         const isLastQuestion = state.currentStep === totalQuestions;
 
         if (isLastQuestion) {
-          if (state.currentCourse === 'transition' && state.currentWeek === 10) {
+          if (
+            state.currentCourse === "transition" &&
+            state.currentWeek === 10
+          ) {
             state.showReview = true;
-          } else if (state.currentCourse !== 'transition' && (state.currentWeek === 5 || isFirstWeek)) {
+          } else if (
+            state.currentCourse !== "transition" &&
+            (state.currentWeek === 5 || isFirstWeek)
+          ) {
             state.showReview = true;
           } else {
             state.showHurray = true;
