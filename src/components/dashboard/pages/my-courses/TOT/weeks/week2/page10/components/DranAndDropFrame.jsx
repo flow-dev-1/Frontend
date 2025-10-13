@@ -2,22 +2,13 @@ import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import CardBoard from "./CardBoard";
 import ArrowTrail from "../../../../../../../../../assets/ArrowTrail.svg";
-import "../page6.css";
+import "../page10.css"
 
-const DragAndDropFrame = ({
-  info,
-  setErrorMessage,
-  answers,
-  setAnswers,
-  setCurrentImageIndex1,
-  setDragDropImageLength,
-}) => {
+
+
+const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers,setCurrentImageIndex1,setDragDropImageLength }) => {
   const { images, buckets, instruction } = info;
-  const [bucketResults, setBucketResults] = useState({
-    green: [],
-    red: [],
-    orange: [],
-  });
+  const [bucketResults, setBucketResults] = useState({ green: [], red: [] });
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
@@ -28,16 +19,14 @@ const DragAndDropFrame = ({
       setBucketResults({
         green: existingAnswer.value.green || [],
         red: existingAnswer.value.red || [],
-        orange: existingAnswer.value.orange || [],
       });
 
       // Update currentImageIndex based on total dropped items
       const totalDropped =
         (existingAnswer.value.green?.length || 0) +
-        (existingAnswer.value.red?.length || 0) +
-        (existingAnswer.value.orange?.length || 0);
+        (existingAnswer.value.red?.length || 0);
       setCurrentImageIndex(totalDropped);
-      setCurrentImageIndex1(totalDropped);
+      setCurrentImageIndex1(totalDropped)
     }
   }, [answers]);
 
@@ -96,31 +85,31 @@ const DragAndDropFrame = ({
       setCurrentImageIndex((prevIndex) =>
         prevIndex + 1 < images.length ? prevIndex + 1 : prevIndex
       );
-      setCurrentImageIndex1((prevIndex) =>
+      setCurrentImageIndex1((prevIndex) =>  
         prevIndex + 1 < images.length ? prevIndex + 1 : prevIndex
-      );
+      )
     }
   };
 
   const goToStep = (index) => {
     if (index < currentImageIndex) {
       setCurrentImageIndex(index);
-      setCurrentImageIndex1(index);
+      setCurrentImageIndex1(index)
     }
   };
 
   useEffect(() => {
-    setDragDropImageLength(images.length);
-
-    return () => {};
-  }, [images]);
+    setDragDropImageLength(images.length)
+  
+    return () => {}
+  }, [images])
+  
 
   const renderDragItem = () => {
     if (currentImageIndex >= images.length || allImagesDropped) return null;
 
-    const imagePath = require(`../../../../../../../../../assets/drag-images/tot-drag-images/week2/page6/image${
-      currentImageIndex + 1
-    }.png`);
+    const imagePath = require(`../../../../../../../../../assets/drag-images/resilience-drag-images/week1/image${currentImageIndex + 1
+      }.png`);
 
     return (
       <Draggable
@@ -138,12 +127,11 @@ const DragAndDropFrame = ({
               cursor: allImagesDropped
                 ? "not-allowed"
                 : snapshot.isDragging
-                ? "grabbing"
-                : "grab",
+                  ? "grabbing"
+                  : "grab",
               opacity: allImagesDropped ? 0.5 : 1,
-              transform: `${provided.draggableProps.style?.transform || ""} ${
-                snapshot.isDragging ? "scale(0.3)" : ""
-              }`,
+              transform: `${provided.draggableProps.style?.transform || ""} ${snapshot.isDragging ? "scale(0.3)" : ""
+                }`,
               zIndex: snapshot.isDragging ? 9999 : 1,
             }}
           >
@@ -176,10 +164,7 @@ const DragAndDropFrame = ({
                   }}
                 >
                   {allImagesDropped && (
-                    <span
-                      className="d-none d-md-block"
-                      style={{ width: "150px" }}
-                    />
+                    <span className="d-none d-md-block" style={{ width: "150px" }} />
                   )}
                   {renderDragItem()}
                   {provided.placeholder}
@@ -192,14 +177,10 @@ const DragAndDropFrame = ({
           <div className="col-12 col-md-6 bg-blue px-4 py-3">
             <div className="d-flex align-items-start mb-2">
               <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
-              <div className="text-center text-white pt-1 flex-grow-1 tot-drag-instruction">
-                <h1 className="fs-3">{instruction}</h1>
+              <div className="text-center text-white pt-1 flex-grow-1 resilience-drag-instruction">
+                <h1>{instruction}</h1>
               </div>
-              <img
-                src={ArrowTrail}
-                alt="arrow trail"
-                className="arrow-head arrow-tail"
-              />
+              <img src={ArrowTrail} alt="arrow trail" className="arrow-head arrow-tail" />
             </div>
 
             <div className="d-flex justify-content-around align-items-center flex-wrap">
@@ -219,27 +200,20 @@ const DragAndDropFrame = ({
                       >
                         <h2
                           className={
-                            bucket.id === "green"
-                              ? "inner-count"
-                              : bucket.id === "orange"
-                              ? "outer-count"
-                              : "both-count"
+                            bucket.id === "green" ? "inner-count" : "outer-count"
                           }
                         >
                           {bucketResults[bucket.id]?.length || 0}
                         </h2>
                         <div
                           className={
-                            bucket.id === "green"
-                              ? "inner-bucket bucket-text"
-                              : bucket.id === "orange"
-                              ? "outer-bucket bucket-text"
-                              : "both-bucket bucket-text"
+                            bucket.id === "green" ? "inner-bucket bucket-text" : "outer-bucket bucket-text"
                           }
                         >
-                          {/* <p className="text-center">
+                          <p className="text-center">
                           {bucket.title}
-                          </p> */}
+                          </p>
+                         
                         </div>
                         {provided.placeholder}
                       </div>
@@ -249,6 +223,7 @@ const DragAndDropFrame = ({
             </div>
           </div>
         </div>
+
       </DragDropContext>
     </>
   );
