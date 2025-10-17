@@ -1,273 +1,100 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import ArrowTrail from "../../../../../../../../assets/ArrowTrail.svg";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "../../../components/Button";
 import {
   selectPageData,
   selectCurrentStep,
-  setCurrentStep,
-  navigateNext,
 } from "../../../../../../../../redux/reducers/navigationSlice";
-import CardBoard from "./components/CardBoard";
-import StepIndicator from "../../../components/StepIndicator";
-import { useDispatch } from "react-redux";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import adaptabilitymale from "../../../../../../../../assets/resilience-grit-images/adaptabilitymale.png"
-import adaptabilityfemale from "../../../../../../../../assets/resilience-grit-images/adaptabilityfemale.png";
+import Frame from "./components/Frame";
+import StepIndicator from "../../../components/StepIndicator";
 
 function Page4() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
-  const totalSteps = pageData.images.length;
-  const adminDatas = useSelector(adminData);
-  const userAnswers = useSelector(userAnswer);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [showCurrentImage, setShowCurrentImage] = useState(true);
-  const [bucketResults, setBucketResults] = useState({
-    green: [],
-    red: [],
-  });
+  const totalSteps = pageData?.steps?.length || 0;
+  const [answers, setAnswers] = useState([]); // State to hold answers
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
 
-  // useEffect(() => {
-  //   setShowCurrentImage(true);
-  // }, [currentStep])
+  const step = pageData?.steps[currentStep - 1]; // Get the current step data
+  const userAnswers = useSelector(userAnswer);
+  const adminDatas = useSelector(adminData);
+
+  // console.log(pageData)
 
   useEffect(() => {
     if (!userAnswers) return;
-    const response = userAnswers?.activities?.find(
+    const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    if (response?.answer) {
-      const answerCopy = { ...response.answer };
-      setBucketResults(answerCopy);
-      if (currentStep === 1) {
-        dispatch(setCurrentStep(totalSteps));
-        setShowCurrentImage(false);
-      }
-    }
-    return () => {};
-  }, [userAnswers, pageData]);
 
-  // console.log("Page Data Images:", pageData.images);
-  const imageMap = {};
-
-  for (let i = 0; i < pageData.images.length; i++) {
-    const image = pageData.images[i];
-    imageMap[
-      image
-    ] = require(`../../../../../../../../assets/drag-images/resilience-drag-images/week3/image${i + 1
-      }.png`);
-  }
-  const handleOnDragEnd = (result) => {
-    if (!result.destination) {
-      return;
-    }
-    setErrorMessage("");
-
-    const { source, destination } = result;
-
-    // If dragging from image area to a bucket
-    if (source.droppableId === "image" && destination.droppableId !== "image") {
-      const currentImage = pageData.images[currentStep - 1];
-      const draggedIndex = pageData?.images.indexOf(currentImage);
-
-      // Ensure each bucket is initialized as an array
-      const newBucketResults = {
-        ...bucketResults,
-        green: bucketResults.green || [],
-        red: bucketResults.red || [],
-        [destination.droppableId]: [
-          ...(bucketResults[destination.droppableId] || []),
-          draggedIndex,
-        ],
-      };
-
-      setBucketResults(newBucketResults);
-      setShowCurrentImage(false);
-
-      if (currentStep < totalSteps) {
-        dispatch(navigateNext());
-        setShowCurrentImage(true);
-      }
-    }
-  };
-
-  const renderStep = () => {
-    const currentImage = pageData.images[currentStep - 1];
-    return showCurrentImage && currentImage ? (
-      <Draggable draggableId="current-image" index={currentStep}>
-        {(provided, snapshot) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            style={{
-              ...provided.draggableProps.style,
-              cursor: snapshot.isDragging ? "grabbing" : "grab",
-              transform: `${provided.draggableProps.style?.transform || ""} ${snapshot.isDragging ? "scale(0.3)" : ""
-                }`,
-              zIndex: snapshot.isDragging ? 9999 : 1,
-            }}
-          >
-            <CardBoard imgSrc={imageMap[currentImage]} />
-          </div>
-        )}
-      </Draggable>
-    ) : null;
-  };
+    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+  }, [userAnswers]);
 
   const saveUserInput = () => {
-    // if (!adminDatas.isAdmin && !myAnswer) {
-    //   setErrorMessage("Oops! Please enter a valid input!");
-    //   return false;
-    // }
-    if (
-      bucketResults.green.length + bucketResults.red.length !==
-      pageData.images.length
-    ) {
-      setErrorMessage("Please make sure to fill all the buckets.");
+    if (adminDatas.isAdmin) return true;
+
+    const stepData = answers.find((item) => item.stepId === currentStep);
+
+    if (!stepData || !stepData.value || stepData.value.trim() === "") {
+      setErrorMessage("Oops! Please enter a valid input!");
       return false;
     }
+    setErrorMessage(""); // Clear error if input is valid
 
-    setErrorMessage("");
-    // Allow flow admin to proceed without input but do not dispatch answer
-    // if (adminDatas.isAdmin) return true
-    dispatch(
-      saveActivity({
-        page: pageData.id,
-        answer: bucketResults,
-      })
-    );
+    const activityData = {
+      page: pageData.id,
+      answer: answers,
+    };
+    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+
     return true;
   };
 
-  const handlePrevious = () => {
-    // console.log(currentStep)
-    // console.log(bucketResults,"bucket results")
-    // Page coming from
-    const afterCurrentImage = pageData.images[currentStep - 1];
-    const currentImage = pageData.images[currentStep - 2];
+  // console.log(answers, "Answers")
 
-    // Remove afterCurrentImage and currentImage from bucketResults if they exist
-    const afterCurrentIndex = pageData.images.indexOf(afterCurrentImage);
-    const currentIndex = pageData.images.indexOf(currentImage);
+  const renderStep = () => {
+    // const step = pageData?.steps[currentStep - 1];
+    // console.log(currentStep, step, "step")
+    if (!step) return <div>Invalid Step</div>;
 
-    // Check if afterCurrentImage exists in any bucket and remove it
-    Object.keys(bucketResults).forEach((bucket) => {
-      if (bucketResults[bucket].includes(afterCurrentIndex)) {
-        bucketResults[bucket] = bucketResults[bucket].filter(
-          (index) => index !== afterCurrentIndex
+    switch (step.type) {
+      case "scenario":
+        return (
+          <Frame
+            data={{
+              step: step.stepId,
+              question: step.question,
+              questions: step.questions.map((q) => ({
+                [q.type]: q.question,
+              })),
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
         );
-      }
-      if (bucketResults[bucket].includes(currentIndex)) {
-        bucketResults[bucket] = bucketResults[bucket].filter(
-          (index) => index !== currentIndex
-        );
-      }
-    });
-
-    // Update the state with the modified bucket results
-    setBucketResults({
-      ...bucketResults,
-      // Ensure to keep the updated bucket results
-    });
-
-    setShowCurrentImage(true);
-    return true;
+      default:
+        return <div>Unknown step type</div>;
+    }
   };
 
   return (
-    <DragDropContext onDragEnd={handleOnDragEnd}>
-      <div className="row custom-border-20 w-100 m-0">
-        {/* Left Droppable (50%) */}
-        <div className="col-12 col-md-6 d-flex justify-content-center align-items-center p-4">
-          <Droppable droppableId="image">
-            {(provided, snapshot) => (
-              <div
-                className="w-100 d-flex justify-content-center align-items-center"
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                style={{
-                  minHeight: "200px",
-                  transition: "background-color 0.2s ease",
-                  backgroundColor: snapshot.isDraggingOver
-                    ? "rgba(255, 255, 255, 0.1)"
-                    : "transparent",
-                }}
-              >
-
-                {currentStep === totalSteps && (
-                  <span
-                    className="d-none d-md-block w-lg-50"
-                    style={{ width: "150px" }}
-                  ></span>
-                )}
-                {renderStep()}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </div>
-
-        {/* Right Buckets (50%) */}
-        <div className="col-12 col-md-6 bg-blue px-4 py-2">
-          <div className="d-flex align-items-start mb-2">
-            <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
-            <div className="text-center text-white pt-2 flex-grow-1 resilience-drag-instruction h1">
-            <h1>{pageData.instruction}</h1>
-            </div>
-            <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
-          </div>
-
-          <div className="d-flex justify-content-around align-items-center flex-wrap">
-            {pageData.buckets.map((bucket) => (
-                <Droppable key={bucket.title} droppableId={bucket.id}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      className="p-2 flex-fill m-2 draggable-bucket"
-                      {...provided.droppableProps}
-                      style={{
-                        backgroundColor: snapshot.isDraggingOver
-                          ? "rgba(255, 255, 255, 0.1)"
-                          : "transparent",
-                      }}
-                    >
-                      <h2
-                        className={
-                          bucket.id === "green" ? "inner-count" : "both-count"
-                        }
-                      >
-                        {bucketResults[bucket.id]?.length}
-                      </h2>
-                      <div
-                        className={
-                          bucket.id === "green" ? "inner-bucket" : "both-bucket"
-                        }
-                      >
-                        <img src={bucket.id === "green" ? adaptabilitymale : adaptabilityfemale} alt="arrow trail" className="arrow-head mt-3" />
-                      </div>
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              ))}
-          </div>
-        </div>
-      </div>
-      {errorMessage && <div className="text-danger">{errorMessage}</div>}
+    <>
+      {renderStep()}
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
+      {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
-      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
-        <Button text="Prev" customOnClick={handlePrevious} />
+      <div className="d-flex justify-content-center gap-96px gap-4 mt-4 ">
+        <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
-    </DragDropContext>
+    </>
   );
 }
 

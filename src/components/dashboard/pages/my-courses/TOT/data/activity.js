@@ -1252,39 +1252,35 @@ export const courseContent = {
 
       {
         id: 4,
-        type: "imageDragAndDrop",
-        instruction:
-          "Drag-and-drop the statements on the left into any of these bowls",
-        images: [
-          "Ability to adjust to new situations, changes, or challenges.",
-          "Expecting everything to stay the same and being frustrated when it doesn’t.",
-          "Does not mean you have to like change all the time.",
-          "Sticking to just one way of doing things, even when it’s not working.",
-          "Staying calm, thinking through the situation, and coming up with a new plan.",
-          "Refusing to try new things because they seem too hard.",
-          "Being open to trying new things and not getting stuck when things don’t go according to plan.",
-          "Avoiding change or pretending it’s not happening.",
-          "Knowing how to handle change when it happens.",
-          "Panicking when something unexpected happens.",
-        ],
-        buckets: [
+        type: "multiStep",
+        steps: [
           {
-            id: "green",
-            label: "Adaptability",
-            count: 5,
+            stepId: 1,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "What has your time in Primary school been like?",
+              },
+            ],
           },
           {
-            id: "red",
-            label: "Not Adaptability",
-            count: 5,
+            stepId: 2,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "What will be your favorite memory as you leave?",
+              },
+            ],
           },
         ],
-        steps: 10,
         navigation: {
           prev: true,
           next: true,
         },
       },
+
       {
         id: 5,
         type: "multiStep",
