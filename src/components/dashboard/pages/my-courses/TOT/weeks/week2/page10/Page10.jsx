@@ -35,7 +35,7 @@ const InternalStepIndicator = ({ totalSteps, currentStep }) => {
   );
 };
 
-function Page10() {
+function WeekTwoPage10() {
   const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
@@ -160,4 +160,4 @@ function Page10() {
   );
 }
 
-export default Page10;
+export default WeekTwoPage10;

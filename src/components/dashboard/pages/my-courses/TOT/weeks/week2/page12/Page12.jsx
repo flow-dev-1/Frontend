@@ -11,7 +11,7 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import adaptability from "../../../../../../../../assets/resilience-grit-images/adaptability.png";
 
-function Page12() {
+function WeekTwoPage12() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
@@ -76,4 +76,4 @@ function Page12() {
   );
 }
 
-export default Page12;
+export default WeekTwoPage12;

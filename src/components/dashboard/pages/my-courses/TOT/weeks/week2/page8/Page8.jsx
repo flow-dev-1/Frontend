@@ -11,7 +11,7 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import adaptability from "../../../../../../../../assets/resilience-grit-images/adaptability.png";
 
-function Page8() {
+function WeekTwoPage8() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
@@ -53,21 +53,20 @@ function Page8() {
 
   return (
     <>
-      <QuestionBox
-        extraStyle="bg-custom-blue"
-      >
+      <QuestionBox extraStyle="bg-custom-blue">
         <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-start mt-4">
-          <h2 className="text-blue fs-1 mb-0 flex-shrink-0 tot-question-text">Question:</h2>
+          <h2 className="text-blue fs-1 mb-0 flex-shrink-0 tot-question-text">
+            Question:
+          </h2>
 
           <div className="d-flex flex-column flex-grow-1 min-w-0 tot-question-text">
             <h2 className="text-gray fs-1 mb-2 ">
-              Imagine a world where emotions don’t matter in education.
+              Which triggers were common for you?
             </h2>
             <h2 className="text-gray fs-1 mb-2">
-              A world where we only focus on grades and tests.
+              Do you think teachers have the same triggers?
             </h2>
-            <h2 className="text-gray fs-1 mb-4">
-              What would that look like?
+            <h2 className="text-gray fs-1 mb-4"> Why do you think so?
             </h2>
           </div>
         </div>
@@ -82,4 +81,4 @@ function Page8() {
   );
 }
 
-export default Page8;
+export default WeekTwoPage8;

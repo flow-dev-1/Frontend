@@ -49,6 +49,12 @@ import WeekTwoPage3 from "./weeks/week2/page3/Page3";
 import WeekTwoPage4 from "./weeks/week2/page4/Page4";
 import WeekTwoPage5 from "./weeks/week2/page5/Page5";
 import WeekTwoPage6 from "./weeks/week2/page6/Page6.jsx";
+import WeekTwoPage7 from "./weeks/week2/page7/Page7.jsx";
+import WeekTwoPage8 from "./weeks/week2/page8/Page8.jsx";
+import WeekTwoPage9 from "./weeks/week2/page9/Page9.jsx";
+import WeekTwoPage10 from "./weeks/week2/page10/Page10.jsx";
+import WeekTwoPage11 from "./weeks/week2/page11/Page11.jsx";
+import WeekTwoPage12 from "./weeks/week2/page12/Page12.jsx";
 
 // Week 3
 import WeekThreePage1 from "./weeks/week3/page1/Page1";
@@ -91,6 +97,7 @@ import { adminData } from "../../../../../redux/reducers/adminReducer.js";
 import { setCourse } from "../../../../../redux/reducers/navigationSlice.js";
 import { logoutSuccess } from "../../../../../redux/reducers/userReducer.js";
 import { clearToken } from "../../../../../redux/reducers/jwtReducer.js";
+
 
 const WeekContent = () => {
   const dispatch = useDispatch();
@@ -256,6 +263,18 @@ const WeekContent = () => {
             return <WeekTwoPage5 />;
           case 6:
             return <WeekTwoPage6 />;
+          case 7:
+            return <WeekTwoPage7 />;
+          case 8:
+            return <WeekTwoPage8 />;
+          case 9:
+            return <WeekTwoPage9 />;
+          case 10:
+            return <WeekTwoPage10 />;
+          case 11:
+            return <WeekTwoPage11 />;
+          case 12:
+            return <WeekTwoPage12 />;
           default:
             return null;
         }
