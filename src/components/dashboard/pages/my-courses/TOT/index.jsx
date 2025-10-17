@@ -55,6 +55,8 @@ import WeekTwoPage9 from "./weeks/week2/page9/Page9.jsx";
 import WeekTwoPage10 from "./weeks/week2/page10/Page10.jsx";
 import WeekTwoPage11 from "./weeks/week2/page11/Page11.jsx";
 import WeekTwoPage12 from "./weeks/week2/page12/Page12.jsx";
+import WeekTwoPage13 from "./weeks/week2/page13/Page13.jsx";
+import WeekTwoAssessment from "./weeks/week2/page24/Page14.jsx";
 
 // Week 3
 import WeekThreePage1 from "./weeks/week3/page1/Page1";
@@ -275,6 +277,10 @@ const WeekContent = () => {
             return <WeekTwoPage11 />;
           case 12:
             return <WeekTwoPage12 />;
+          case 13:
+            return <WeekTwoPage13 />;
+          case 14:
+            return <WeekTwoAssessment />;
           default:
             return null;
         }

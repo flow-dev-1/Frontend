@@ -1194,10 +1194,21 @@ export const courseContent = {
         id: 12,
         type: "question",
         questionType: "text",
-        question: "Which triggers were common for you? Do you think teachers have the same triggers? Why do you think so?",
+        question:
+          "Which triggers were common for you? Do you think teachers have the same triggers? Why do you think so?",
         hasImage: false,
         imageSrc: "mindset.png",
         inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 13,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
         navigation: {
           prev: true,
           next: true,
