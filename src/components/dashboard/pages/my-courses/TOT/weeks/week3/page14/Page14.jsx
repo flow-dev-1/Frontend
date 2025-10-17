@@ -22,7 +22,7 @@ import userService from "../../../../../../../../services/api/user";
 import { calculateResult } from "../../../utility";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
-function WeekThreeAssessment() {
+function WeekFourAssessment() {
   const dispatch = useDispatch();
   const currentStep = useSelector(selectCurrentStep);
   const currentWeek = useSelector(selectCurrentWeek);
@@ -241,4 +241,4 @@ function WeekThreeAssessment() {
   );
 }
 
-export default WeekThreeAssessment;
+export default WeekFourAssessment;

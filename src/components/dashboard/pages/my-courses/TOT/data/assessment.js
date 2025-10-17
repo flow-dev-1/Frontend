@@ -491,97 +491,244 @@ export const assessments = {
     ],
   },
   week3: {
-    title: "Assessment",
+    title: "Post-Assessment",
     subtitle: "Let's test your knowledge",
     questions: [
       {
         id: 1,
-        question: "Tolu is described as adaptable. This means she?",
+        question:
+          "Why are strong teacher-student relationships considered foundational to effective learning?",
         options: [
           {
             id: "A",
-            text: "Is able to change who you are when challenges arise.",
-          },
-          { id: "B", text: "Resists changes to maintain stability." },
-          {
-            id: "C",
-            text: "Adjusts to new situations or challenges while staying true to herself.",
-          },
-          { id: "D", text: "Ignores problems and hope they go away." },
-        ],
-        correctOption: "C",
-      },
-      {
-        id: 2,
-        question: "Which of the following is an example of adaptability?",
-        options: [
-          {
-            id: "A",
-            text: "Sticking to your original plan even if things go wrong.",
+            text: "They foster a sense of emotional safety and trust, which supports engagement and risk-taking.",
           },
           {
             id: "B",
-            text: "Trying a new study method when your usual one isn’t working.",
+            text: "They lead students to follow instructions more consistently, reducing the need for discipline.",
           },
-          { id: "C", text: "Getting frustrated when plans change." },
-          { id: "D", text: "Avoiding new experiences to stay comfortable." },
-        ],
-        correctOption: "B",
-      },
-      {
-        id: 3,
-        question: "Why is adaptability important for resilience?",
-        options: [
-          { id: "A", text: "It helps you avoid change altogether." },
-          { id: "B", text: "It teaches you to be less emotional." },
           {
             id: "C",
-            text: "It allows you to handle unexpected changes and grow from them.",
+            text: "They give teachers greater influence over student behavior and decision-making.",
           },
           {
             id: "D",
-            text: "It ensures that everything goes according to plan.",
+            text: "They make students more likely to comply with classroom routines and academic demands.",
           },
         ],
-        correctOption: "C",
+        correctOption: "A",
+      },
+      {
+        id: 2,
+        question:
+          "How can teachers build positive connections with students on a daily basis?",
+        options: [
+          {
+            id: "A",
+            text: "By consistently showing care for students’ development through intentional check-ins and positive interactions.",
+          },
+          {
+            id: "B",
+            text: "By tracking students’ academic performance as the main indicator of growth and engagement.",
+          },
+          {
+            id: "C",
+            text: "By keeping conversations strictly academic to avoid blurring professional boundaries.",
+          },
+          {
+            id: "D",
+            text: "By minimizing informal exchanges to maintain discipline and authority in the classroom.",
+          },
+        ],
+        correctOption: "A",
+      },
+      {
+        id: 3,
+        question:
+          "What is an important strategy for demonstrating active listening?",
+        options: [
+          {
+            id: "A",
+            text: "Waiting patiently for the student to finish before offering clarification or correction.",
+          },
+          {
+            id: "B",
+            text: "Making eye contact, listening fully, and responding in a way that shows you understand.",
+          },
+          {
+            id: "C",
+            text: "Planning what to say next so you can guide the student toward the right answer.",
+          },
+          {
+            id: "D",
+            text: "Reducing eye contact so the student feels less pressure while speaking.",
+          },
+        ],
+        correctOption: "B",
       },
       {
         id: 4,
         question:
-          "What should you do when you face a sudden, unexpected challenge?",
+          "What type of praise is most effective for encouraging student motivation?",
         options: [
-          { id: "A", text: "Panic and immediately give up." },
+          {
+            id: "A",
+            text: "Highlighting a student’s consistent effort and growth to reinforce a sense of personal progress.",
+          },
           {
             id: "B",
-            text: "Take a deep breath, assess the situation, and find a solution.",
+            text: "Praising students by pointing out how they’re doing better than others in the class.",
           },
-          { id: "C", text: "Blame others for the problem." },
+          {
+            id: "C",
+            text: "Focusing praise on flawless work to set a high standard for success.",
+          },
           {
             id: "D",
-            text: "Stick to your usual way of doing things without considering new ideas.",
+            text: "Waiting to offer praise until students seek it out to avoid giving too much attention.",
+          },
+        ],
+        correctOption: "A",
+      },
+      {
+        id: 5,
+        question:
+          "Which of the following is an example of effective positive reinforcement?",
+        options: [
+          {
+            id: "A",
+            text: "Acknowledging a student’s specific behavior by linking it to a positive value or class norm.",
+          },
+          {
+            id: "B",
+            text: "Pointing out what a student should already know to motivate them to try harder.",
+          },
+          {
+            id: "C",
+            text: "Offering a reward if the student performs well to encourage better results.",
+          },
+          {
+            id: "D",
+            text: "Comparing a student’s behavior to others in the class to highlight expectations.",
+          },
+        ],
+        correctOption: "A",
+      },
+      {
+        id: 6,
+        question:
+          "What is the main goal of restorative practices in classroom conflict resolution?",
+        options: [
+          {
+            id: "A",
+            text: "To ensure consequences are felt strongly enough to prevent future misbehavior.",
+          },
+          {
+            id: "B",
+            text: "To repair harm by helping those involved reflect, take responsibility, and rebuild trust.",
+          },
+          {
+            id: "C",
+            text: "To maintain order by removing students who disrupt the learning environment.",
+          },
+          {
+            id: "D",
+            text: "To reinforce the teacher’s authority by gaining student agreement on the outcome.",
           },
         ],
         correctOption: "B",
       },
       {
-        id: 5,
-        question: "How can you practice adaptability in your daily life?",
+        id: 7,
+        question:
+          "Which of the following is a key step in a restorative conversation?",
         options: [
           {
             id: "A",
-            text: "By avoiding new experiences to prevent discomfort.",
+            text: "Removing the student from the space to avoid further disruption before addressing the issue.",
           },
           {
             id: "B",
-            text: "By staying rigid in your mindset to maintain control.",
+            text: "Prioritizing the rules over the student’s feelings to maintain consistency.",
           },
           {
             id: "C",
-            text: "By trying new hobbies or handling changes in plans calmly.",
+            text: "Inviting the student to reflect on the impact of their actions on others involved.",
           },
           {
             id: "D",
-            text: "By only focusing on tasks you already know how to do.",
+            text: "Pointing out what the student did wrong and explaining why it warrants guilt.",
+          },
+        ],
+        correctOption: "C",
+      },
+      {
+        id: 8,
+        question:
+          "How can teachers encourage students to take responsibility during conflict resolution?",
+        options: [
+          {
+            id: "A",
+            text: "Requiring a quick apology to restore order and move on.",
+          },
+          {
+            id: "B",
+            text: "Creating space for reflection and helping students explore the impact of their actions on others.",
+          },
+          {
+            id: "C",
+            text: "Applying consequences promptly to discourage repeated behavior.",
+          },
+          {
+            id: "D",
+            text: "Choosing not to address the issue to prevent further disruption in the moment.",
+          },
+        ],
+        correctOption: "B",
+      },
+      {
+        id: 9,
+        question: "Why is positive reinforcement important in the classroom?",
+        options: [
+          {
+            id: "A",
+            text: "It strengthens desirable behaviors by helping students connect effort with positive outcomes.",
+          },
+          {
+            id: "B",
+            text: "It allows teachers to reward good behavior selectively, depending on the student.",
+          },
+          {
+            id: "C",
+            text: "It reduces the workload of lesson planning by keeping students better behaved.",
+          },
+          {
+            id: "D",
+            text: "It motivates students by encouraging them to seek praise and outperform their peers.",
+          },
+        ],
+        correctOption: "A",
+      },
+      {
+        id: 10,
+        question:
+          "Which of the following is NOT an example of active listening?",
+        options: [
+          {
+            id: "A",
+            text: "Giving occasional nods and saying things like “I understand” while the student speaks.",
+          },
+          {
+            id: "B",
+            text: "Asking questions to better understand the student's perspective.",
+          },
+          {
+            id: "C",
+            text: "Glancing at your phone briefly while the student talks, as long as you’re still hearing them.",
+          },
+          {
+            id: "D",
+            text: "Summarizing what the student said to show that you were listening attentively.",
           },
         ],
         correctOption: "C",
