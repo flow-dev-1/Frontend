@@ -1194,8 +1194,8 @@ export const courseContent = {
         id: 12,
         type: "question",
         questionType: "text",
-        question: "What do you understand by the word",
-        hasImage: true,
+        question: "Which triggers were common for you? Do you think teachers have the same triggers? Why do you think so?",
+        hasImage: false,
         imageSrc: "mindset.png",
         inputType: "bigTextBox",
         navigation: {
