@@ -1487,6 +1487,65 @@ export const courseContent = {
           next: true,
         },
       },
+      {
+        id: 9,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_1.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 10,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Identify the strength being displayed and then write a short praise statement that reinforces this behavior. An example has been done for you.",
+            ],
+          },
+
+          {
+            stepId: 2,
+            type: "example",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "A student works diligently on a task they find difficult, showing improvement over time.",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "A student actively participates in group discussions, offering insightful comments and listening to others.",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "A student is kind to a peer who is feeling upset, offering comfort and support without being asked.",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
     ],
   },
   week4: {

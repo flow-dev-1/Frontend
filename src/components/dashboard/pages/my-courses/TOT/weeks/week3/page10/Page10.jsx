@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import DragAndDropFrame from "./components/DranAndDropFrame";
+import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
-
 import {
   selectPageData,
   selectCurrentStep,
@@ -14,26 +13,7 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-
-const InternalStepIndicator = ({ totalSteps, currentStep }) => {
-  return (
-    <div className="d-flex justify-content-center mt-4" style={{ gap: "10px" }}>
-      {[...Array(totalSteps)].map((_, index) => (
-        <div
-          key={index}
-          className={`${index + 2 <= currentStep ? "bg-step-active" : "bg-step"}`}
-          style={{
-            // flexBasis: "35px",
-            width: "35px",
-            height: "17px",
-            borderRadius: "8px",
-            cursor: index <= currentStep ? "pointer" : "default",
-          }}
-        />
-      ))}
-    </div>
-  );
-};
+import Frame from "./components/Frame";
 
 function WeekThreePage10() {
   const dispatch = useDispatch(); // Initialize dispatch
@@ -41,16 +21,14 @@ function WeekThreePage10() {
   const currentStep = useSelector(selectCurrentStep);
   const totalSteps = pageData?.steps?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
+
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
-  const [dragDropImageLength, setDragDropImageLength] = useState(4)
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
   useEffect(() => {
     if (!userAnswers) return;
-
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
@@ -59,22 +37,26 @@ function WeekThreePage10() {
   }, [userAnswers]);
 
   const saveUserInput = () => {
+    if (currentStep === 1 || currentStep === 2) return true;
     if (adminDatas.isAdmin) return true;
-    if (currentStep === 1) return true;
 
     const stepData = answers.find((item) => item.stepId === currentStep);
-
     if (!stepData) {
-      setErrorMessage("Oops! All Images must be placed in the buckects.");
+      setErrorMessage("Oops! All inputs must be filled out.");
       return false;
     }
 
-    // Check total images dropped
-    const totalDropped = (stepData.value.green?.length || 0) +
-      (stepData.value.red?.length || 0);
+    const values = Object.values(stepData.value);
+    if (values.length < 3) {
+      setErrorMessage("At least 3 values are required!");
+      return false;
+    }
 
-    if (totalDropped !== dragDropImageLength) {
-      setErrorMessage(`Please place all ${dragDropImageLength} images in the buckets.`);
+    const emptyInputs = values.filter((value) => value.trim() === "");
+    if (emptyInputs.length > 0) {
+      setErrorMessage(
+        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
+      );
       return false;
     }
 
@@ -89,7 +71,10 @@ function WeekThreePage10() {
     return true;
   };
 
-  // console.log(answers, "Answers")
+  const handleInputChange = (e) => {
+    setErrorMessage("");
+    setAnswers(e.target.value);
+  };
 
   const renderStep = () => {
     if (!step) return <div>Invalid Step</div>;
@@ -106,29 +91,48 @@ function WeekThreePage10() {
 
             <div className="text-center mb-5 mt-3 mt-md-0">
               <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
-                You will be shown some classroom scenarios with two  <br />
-                decisions. and two boxes labelled <span className="fw-bold">“SEL”</span> and <span className="fw-bold">“Not SEL”</span>.
+                Identify the strength being displayed and then write a short
+                <br />
+                praise statement that reinforces this behavior.
               </h2>
-              <br /><br />
+              <br />
+              <br />
+              <br />
               <h2 className="text-white px-5 d-inline-block text-start tot-week-2-question-text">
-                Drag and drop your decisions in the appropriate decision box.
+                An example has been done for you.
               </h2>
             </div>
           </QuestionBox>
         );
-      case "imageDragAndDrop":
+      case "example":
         return (
-          <DragAndDropFrame
-            info={{
-              images: step.images,
-              buckets: step.buckets,
-              instruction: step.instruction,
+          <Frame
+            data={{
+              step: step.stepId,
+              question: step.questions[0].question,
+              questions: step.questions.map((q) => ({
+                [q.type]: q.question,
+              })),
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
             setAnswers={setAnswers}
-            setCurrentImageIndex1={setCurrentImageIndex}
-            setDragDropImageLength={setDragDropImageLength}
+            type={step.type}
+          />
+        );
+      case "scenario":
+        return (
+          <Frame
+            data={{
+              step: step.stepId,
+              question: step.questions[0].question,
+              questions: step.questions.map((q) => ({
+                [q.type]: q.question,
+              })),
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
           />
         );
       default:
@@ -143,16 +147,8 @@ function WeekThreePage10() {
         <div className="text-danger">{errorMessage}</div>
       )}{" "}
       {/* Display error message */}
-      <div className="d-flex justify-content-center align-items-center gap-2">
-        <StepIndicator totalSteps={totalSteps} />
-        <InternalStepIndicator
-          totalSteps={dragDropImageLength}
-          currentStep={currentImageIndex + 1}
-        />
-
-      </div>
-
-      <div className="d-flex justify-content-center gap-96px mt-3 gap-4">
+      <StepIndicator totalSteps={totalSteps} />
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
