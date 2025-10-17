@@ -1546,6 +1546,96 @@ export const courseContent = {
           next: true,
         },
       },
+      {
+        id: 11,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_1.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 12,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Read the following scenario and write a response that encourages reflection (what was happening for you when you were talking out of turn?), responsibility (when you talk out of turn, it disrupts everyone’s learning), and repairing (what can we do to ensure everyone has a chance to speak during the lesson?) the relationship with the student. \nThink about how your response can guide the student toward understanding the impact of their actions, taking responsibility, and making amends.",
+            ],
+          },
+
+          {
+            stepId: 2,
+            type: "scenario",
+            questions: [
+              {
+                type: "scenario",
+                question:
+                  "A student has repeatedly been talking out of turn during your class, disrupting the flow of the class. Despite being cautioned several times, they continue to ignore your warnings. Your response should include three simple components:",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "question",
+            questions: [
+              {
+                type: "reflect",
+                question:
+                  "A question for the student to reflect on their behavior:",
+              },
+              {
+                type: "explain",
+                question:
+                  "A statement explaining how their actions affect others:",
+              },
+              {
+                type: "suggestion",
+                question:
+                  "A suggestion for how they can improve in the future:",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "scenario",
+            questions: [
+              {
+                type: "scenario",
+                question:
+                  "A group of students were asked to work as a group in science class.During this exercise, you noticed a student ran out of the classroom in tears. Further investigation revealed that another student in the group made a teasing comment, but the first student did not find it funny. The second student has refused to apologise because they believe they have done nothing wrong, claiming it was a joke.",
+              },
+            ],
+          },
+          {
+            stepId: 5,
+            type: "question",
+            questions: [
+              {
+                type: "reflect",
+                question:
+                  "A question for the student to reflect on their behavior:",
+              },
+              {
+                type: "explain",
+                question:
+                  "A statement explaining how their actions affect others:",
+              },
+              {
+                type: "suggestion",
+                question:
+                  "A suggestion for how they can improve in the future:",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
     ],
   },
   week4: {
