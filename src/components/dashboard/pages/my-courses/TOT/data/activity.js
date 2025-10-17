@@ -1283,73 +1283,9 @@ export const courseContent = {
 
       {
         id: 5,
-        type: "multiStep",
-        steps: [
-          {
-            stepId: 1,
-            type: "instruction",
-            title: "Instruction",
-            instructions: [
-              "For each situation, explain how you will adapt in the given situation.",
-            ],
-          },
-          {
-            stepId: 2,
-            type: "scenario",
-            questions: [
-              {
-                type: "Question",
-                question:
-                  "You’re feeling overwhelmed with schoolwork and aren’t sure how to manage all the assignments and exams coming up.",
-              },
-            ],
-          },
-          {
-            stepId: 3,
-            type: "scenario",
-            questions: [
-              {
-                type: "Question",
-                question:
-                  "Your friend is going through a tough time, and you decide to spend some time with them to listen and offer support.",
-              },
-            ],
-          },
-          {
-            stepId: 4,
-            type: "scenario",
-            questions: [
-              {
-                type: "Question",
-                question:
-                  "You’ve recently learned how to play the guitar, and although it was tough in the beginning, you kept practicing and now feel proud of what you’ve achieved.",
-              },
-            ],
-          },
-          {
-            stepId: 5,
-            type: "scenario",
-            questions: [
-              {
-                type: "Question",
-                question:
-                  "You’re in a situation where you don’t know the outcome, but you remind yourself to focus on what you can do and how you can handle your emotions.",
-              },
-            ],
-          },
-          {
-            stepId: 6,
-            type: "scenario",
-            questions: [
-              {
-                type: "Question",
-                question:
-                  "You volunteered at a local charity event and helped organize a charity event. You felt great knowing that you made a positive impact",
-              },
-            ],
-          },
-        ],
-
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1357,9 +1293,158 @@ export const courseContent = {
       },
       {
         id: 6,
-        type: "video",
-        videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_3.mp4",
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Building connections with your students takes small but powerful activities and moments. In this next activity, you will be presented with different behaviors and scenarios. Select the appropriate behavior tha matches each scenario from the dropdown.",
+            ],
+            options:
+              "Competence, Confidence, Coping, Control, Character, Connections, and Contribution.",
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question:
+              "A student seems withdrawn after failing a test. The teacher sits with them privately, acknowledges their feelings, and helps them create a study plan.",
+            options: [
+              {
+                id: "A",
+                text: "Active Listening",
+              },
+              {
+                id: "B",
+                text: "Encouragement & Praise",
+              },
+              {
+                id: "C",
+                text: "Fairness & Consistency",
+              },
+              {
+                id: "D",
+                text: "Emotional Support",
+              },
+              {
+                id: "E",
+                text: "Showing Interest in Students' Lives",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question:
+              "During a class discussion, a teacher repeats and validates a quiet student’s point, making sure their voice is heard.",
+            options: [
+              {
+                id: "A",
+                text: "Active Listening",
+              },
+              {
+                id: "B",
+                text: "Encouragement & Praise",
+              },
+              {
+                id: "C",
+                text: "Fairness & Consistency",
+              },
+              {
+                id: "D",
+                text: "Emotional Support",
+              },
+              {
+                id: "E",
+                text: "Showing Interest in Students' Lives",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "dropdownScenario",
+            question: `A student struggles with a task but keeps trying. The teacher praises their persistence, saying, "I love how you’re not giving up!"`,
+            options: [
+              {
+                id: "A",
+                text: "Active Listening",
+              },
+              {
+                id: "B",
+                text: "Encouragement & Praise",
+              },
+              {
+                id: "C",
+                text: "Fairness & Consistency",
+              },
+              {
+                id: "D",
+                text: "Emotional Support",
+              },
+              {
+                id: "E",
+                text: "Showing Interest in Students' Lives",
+              },
+            ],
+          },
+          {
+            stepId: 5,
+            type: "dropdownScenario",
+            question:
+              "A teacher ensures that all students take turns answering questions, even the quieter ones, and applies the same classroom rules to everyone.",
+            options: [
+              {
+                id: "A",
+                text: "Active Listening",
+              },
+              {
+                id: "B",
+                text: "Encouragement & Praise",
+              },
+              {
+                id: "C",
+                text: "Fairness & Consistency",
+              },
+              {
+                id: "D",
+                text: "Emotional Support",
+              },
+              {
+                id: "E",
+                text: "Showing Interest in Students' Lives",
+              },
+            ],
+          },
+          {
+            stepId: 6,
+            type: "dropdownScenario",
+            question:
+              "Before class, a teacher casually asks a student about their weekend football match and remembers to check in later on how it went.",
+            options: [
+              {
+                id: "A",
+                text: "Active Listening",
+              },
+              {
+                id: "B",
+                text: "Encouragement & Praise",
+              },
+              {
+                id: "C",
+                text: "Fairness & Consistency",
+              },
+              {
+                id: "D",
+                text: "Emotional Support",
+              },
+              {
+                id: "E",
+                text: "Showing Interest in Students' Lives",
+              },
+            ],
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
