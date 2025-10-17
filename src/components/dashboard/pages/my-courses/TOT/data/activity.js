@@ -1450,6 +1450,43 @@ export const courseContent = {
           next: true,
         },
       },
+      {
+        id: 7,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_1.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 8,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "What has your time in Primary school been like?",
+              },
+            ],
+          },
+          {
+            stepId: 2,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "What will be your favorite memory as you leave?",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
     ],
   },
   week4: {

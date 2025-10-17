@@ -3,7 +3,8 @@
 
 .tot-question-box-container {
   padding: 1rem 2rem;
-  height: 50vh;
+  min-height: 50vh;
+ /* height: 50vh; */
 }
 .tot-assessment-header h2 {
   font-family: "Montserrat", system-ui, -apple-system, sans-serif !important;
