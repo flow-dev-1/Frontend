@@ -1,96 +1,68 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import QuestionBox from "../../../components/QuestionBox";
+import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-import "./page4.css";
-import Frame from "./components/Frame";
+import adaptability from "../../../../../../../../assets/resilience-grit-images/adaptability.png";
 
 function Page4() {
-  const pageData = useSelector(selectPageData);
   const dispatch = useDispatch();
-  const [answers, setAnswers] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
+  const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
   const userAnswers = useSelector(userAnswer);
+  const [myAnswer, setMyAnswer] = useState(userAnswers);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Load user answers (normalize them to always use `id`)
   useEffect(() => {
     if (!userAnswers) return;
-    const response = userAnswers.activities?.find(
+    const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-
-    if (!Array.isArray(response?.answer)) {
-      setAnswers([]);
-      return;
-    }
-
-    // Normalize any legacy data that might use stepId instead of id
-    const normalized = response.answer.map((item) =>
-      item.id
-        ? item
-        : item.stepId
-        ? { ...item, id: item.stepId }
-        : { ...item, id: pageData.id }
-    );
-
-    setAnswers(normalized);
-  }, [userAnswers, pageData.id]);
+    setMyAnswer(response?.answer ? response.answer : "");
+    return () => {};
+  }, [userAnswers]);
 
   const saveUserInput = () => {
-    if (adminDatas?.isAdmin) return true;
-
-    // Find answers for the current page
-    const stepData = answers.find((item) => item.id === pageData.id);
-
-    if (!stepData) {
-      setErrorMessage("Oops! All inputs must be filled out.");
+    if (!adminDatas.isAdmin && !myAnswer) {
+      setErrorMessage("Oops! Please enter a valid input!");
       return false;
     }
 
-    // Dynamically get all question types for this page 
-    const requiredFields = Array.isArray(pageData.questions)
-      ? pageData.questions.map((q) => q.type)
-      : [];
-
-    // Check if all required fields are filled
-    const missingFields = requiredFields.filter(
-      (field) => !stepData[field] || stepData[field].trim() === ""
+    setErrorMessage(""); // Clear error if input is valid
+    // Allow flow admin to proceed without input but do not dispatch answer
+    if (adminDatas.isAdmin) return true;
+    dispatch(
+      saveActivity({
+        page: pageData.id,
+        answer: myAnswer,
+      })
     );
-
-    if (missingFields.length > 0) {
-      setErrorMessage(
-        `Please fill out all inputs. Missing: ${missingFields.join(", ")}.`
-      );
-      return false;
-    }
-
-    setErrorMessage("");
-    const activityData = {
-      page: pageData.id,
-      answer: answers,
-    };
-
-    dispatch(saveActivity(activityData));
     return true;
+  };
+
+  const handleInputChange = (e) => {
+    setErrorMessage("");
+    setMyAnswer(e.target.value);
   };
 
   return (
     <>
-      <Frame
-        data={{
-          step: pageData.id,
-          questions: pageData.questions,
-        }}
-        setErrorMessage={setErrorMessage}
-        answers={answers}
-        setAnswers={setAnswers}
-      />
+      <QuestionBox extraStyle="bg-custom-blue">
+        <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-start mt-4">
+          <div className="d-flex flex-column flex-grow-1 min-w-0 tot-question-text">
+            <h2 className="text-gray fs-1 mb-2 fw-bolder">
+              {pageData.question}
+            </h2>
+          </div>
+        </div>
+        <BigTextBox handleChange={handleInputChange} value={myAnswer} />
+      </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />

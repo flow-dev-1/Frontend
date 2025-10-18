@@ -2339,19 +2339,12 @@ export const courseContent = {
       {
         id: 4,
         type: "question",
-        questions: [
-          {
-            type: "subject",
-            question: "What subject(s) do you teach?",
-          },
-          {
-            type: "skill",
-            question:
-              "Which SEL skill do you think is or can be embedded in it?",
-          },
-        ],
-        inputType: "text",
-        inputPlaceholder: "Type your answer here",
+        questionType: "text",
+        question:
+          "Write down three ways you recharge whenever you feel burnout.",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
         navigation: {
           prev: true,
           next: true,
@@ -2370,22 +2363,12 @@ export const courseContent = {
       {
         id: 6,
         type: "question",
-        questions: [
-          {
-            type: "game",
-            question: "Name of Game:",
-          },
-          {
-            type: "instructions",
-            question: "Instructions:",
-          },
-          {
-            type: "connection",
-            question: "SEL Connection:",
-          },
-        ],
-        inputType: "text",
-        inputPlaceholder: "Type your answer here",
+        questionType: "text",
+        question:
+          "What is one moment from your recent teaching experience that made you feel grateful?",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
         navigation: {
           prev: true,
           next: true,
