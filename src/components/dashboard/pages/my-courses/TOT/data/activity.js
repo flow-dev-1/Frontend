@@ -2387,110 +2387,50 @@ export const courseContent = {
       {
         id: 8,
         type: "multiStep",
+        title: "Write a letter to yourself.",
         steps: [
           {
             stepId: 1,
             type: "instruction",
-            title: "Instruction",
-            instructions: [
-              "The next activity helps you think about how to intentionally use storytelling to spark meaningful conversations in your classroom. \nSelect the appropriate SEL skills that matches the story.",
-            ],
-            options:
-              "Competence, Confidence, Coping, Control, Character, Connections, and Contribution.",
+            challenge:
+              "Drag and drop each item into the circle where it best fits. \nFor example, close colleagues might belong in your Inner Circle, while a school wellness program could go in the Middle Circle. \nA potential partnership with a community organization would fit into the Outer Circle.",
+            statement: "Mildly triggering, Frustrating and Highly triggering.",
           },
           {
             stepId: 2,
-            type: "dropdownScenario",
-            question:
-              "Tunde failed his first Spanish test. Instead of giving up, he asked for help and practiced every evening until he improved.",
-            options: [
+            type: "imageDragAndDrop",
+            instruction:
+              "Drag-and-drop the statements on the left into any of these bowls.",
+            steps: 4,
+            buckets: [
               {
-                id: "A",
-                text: "Self-awareness & Emotional Regulation",
+                id: "green",
+                title: "Inner Circle",
               },
               {
-                id: "B",
-                text: "Resilience",
+                id: "orange",
+                title: "Middle Circle",
               },
               {
-                id: "C",
-                text: "Empathy",
-              },
-              {
-                id: "D",
-                text: "Collaboration & Social Awareness",
+                id: "red",
+                title: "Outer Circle",
               },
             ],
-          },
-          {
-            stepId: 3,
-            type: "dropdownScenario",
-            question:
-              "During a class discussion, a teacher repeats and validates a quiet student’s point, making sure their voice is heard.",
-            options: [
-              {
-                id: "A",
-                text: "Self-awareness & Emotional Regulation",
-              },
-              {
-                id: "B",
-                text: "Resilience",
-              },
-              {
-                id: "C",
-                text: "Empathy",
-              },
-              {
-                id: "D",
-                text: "Collaboration & Social Awareness",
-              },
-            ],
-          },
-          {
-            stepId: 4,
-            type: "dropdownScenario",
-            question: `Amina noticed her classmate was upset. She sat with her, listened to her problems, and comforted her by sharing a similar experience."`,
-            options: [
-              {
-                id: "A",
-                text: "Self-awareness & Emotional Regulation",
-              },
-              {
-                id: "B",
-                text: "Resilience",
-              },
-              {
-                id: "C",
-                text: "Empathy",
-              },
-              {
-                id: "D",
-                text: "Collaboration & Social Awareness",
-              },
-            ],
-          },
-          {
-            stepId: 5,
-            type: "dropdownScenario",
-            question:
-              "Chijioke always knew he could do math, but when a difficult problem came up, he froze. After speaking with his teacher and some reflection, he realized he needed to stay calm and keep trying.",
-            options: [
-              {
-                id: "A",
-                text: "Self-awareness & Emotional Regulation",
-              },
-              {
-                id: "B",
-                text: "Resilience",
-              },
-              {
-                id: "C",
-                text: "Empathy",
-              },
-              {
-                id: "D",
-                text: "Collaboration & Social Awareness",
-              },
+            images: [
+              "Close colleagues or team members",
+              "Immediate family",
+              "A trusted friend",
+              "Daily self-care practices (e.g., mindfulness, exercise, watching favourite movie)",
+              "Classroom routines that bring calm (e.g., breaks)",
+              "Student support (e.g., positive relationships with students)",
+              "School counselor",
+              "Mentor or senior colleague",
+              "Online support groups or communities",
+              "Principal or school leadership team",
+              "School wellness programs",
+              "SEL and Positive Psychology workshops",
+              "Partnerships with parents or caregivers",
+              "Peer teacher groups or networks",
             ],
           },
         ],

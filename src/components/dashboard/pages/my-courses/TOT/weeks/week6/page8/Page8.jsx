@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import Frame from "./components/Frame";
+import DragAndDropFrame from "./components/DranAndDropFrame";
 import Button from "../../../components/Button";
+
 import {
   selectPageData,
   selectCurrentStep,
@@ -14,7 +15,29 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
-function WeekFivePage8() {
+const InternalStepIndicator = ({ totalSteps, currentStep }) => {
+  return (
+    <div className="d-flex justify-content-center mt-4 flex-wrap" style={{ gap: "10px" }}>
+      {[...Array(totalSteps)].map((_, index) => (
+        <div
+          key={index}
+          className={`${
+            index + 2 <= currentStep ? "bg-step-active" : "bg-step"
+          }`}
+          style={{
+            // flexBasis: "35px",
+            width: "35px",
+            height: "17px",
+            borderRadius: "8px",
+            cursor: index <= currentStep ? "pointer" : "default",
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+function Page8() {
   const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
@@ -24,36 +47,37 @@ function WeekFivePage8() {
   const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
-  // console.log(userAnswers)
+  const [dragDropImageLength, setDragDropImageLength] = useState(4);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     if (!userAnswers) return;
+
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
+
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
   }, [userAnswers]);
 
   const saveUserInput = () => {
-    if (currentStep === 1) return true;
     if (adminDatas.isAdmin) return true;
+    if (currentStep === 1) return true;
 
     const stepData = answers.find((item) => item.stepId === currentStep);
+
     if (!stepData) {
-      setErrorMessage("Oops! All inputs must be filled out.");
+      setErrorMessage("Oops! All Images must be placed in the buckects.");
       return false;
     }
 
-    const values = Object.values(stepData.value);
-    if (values.length < 1) {
-      setErrorMessage("At least 1 value are required!");
-      return false;
-    }
+    // Check total images dropped
+    const totalDropped =
+      (stepData.value.green?.length || 0) + (stepData.value.red?.length || 0);
 
-    const emptyInputs = values.filter((value) => value.trim() === "");
-    if (emptyInputs.length > 0) {
+    if (totalDropped !== dragDropImageLength) {
       setErrorMessage(
-        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
+        `Please place all ${dragDropImageLength} images in the buckets.`
       );
       return false;
     }
@@ -69,6 +93,8 @@ function WeekFivePage8() {
     return true;
   };
 
+  // console.log(answers, "Answers")
+
   const renderStep = () => {
     if (!step) return <div>Invalid Step</div>;
 
@@ -77,39 +103,39 @@ function WeekFivePage8() {
         return (
           <QuestionBox extraStyle="bg-blue">
             <div className="text-center mb-5 mt-5 mt-md-4">
-              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction">
+              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction mt-5">
                 Instruction
               </h1>
             </div>
 
             <div className="text-center mb-5 mt-3 mt-md-0">
               <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
-                The next activity helps you think about how to intentionally use
-                <br />
-                storytelling to spark meaningful conversations in your
-                <br />
-                classroom.
-                <br />
-                <br />
-                <br />
-                Select the appropriate SEL skills that matches the story.
+                In this next activity, we are going to recognize different
+                emotional triggers by grouping them into:
               </h2>
-              {/* <h2 className="text-white px-5 d-inline-block text-start tot-week-2-question-text">
-              </h2> */}
+              <br />
+              <br />
+              <h2 className="text-white d-inline-block text-start tot-week-2-question-text">
+                <span className="fw-bold">Mildly triggering, Frustrating </span>{" "}
+                and
+                <span className="fw-bold">Highly triggering. </span>
+              </h2>
             </div>
           </QuestionBox>
         );
-      case "dropdownScenario":
+      case "imageDragAndDrop":
         return (
-          <Frame
-            data={{
-              step: step.stepId,
-              question: step.question,
-              options: step.options,
+          <DragAndDropFrame
+            info={{
+              images: step.images,
+              buckets: step.buckets,
+              instruction: step.instruction,
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
             setAnswers={setAnswers}
+            setCurrentImageIndex1={setCurrentImageIndex}
+            setDragDropImageLength={setDragDropImageLength}
           />
         );
       default:
@@ -124,8 +150,14 @@ function WeekFivePage8() {
         <div className="text-danger">{errorMessage}</div>
       )}{" "}
       {/* Display error message */}
-      <StepIndicator totalSteps={totalSteps} />
-      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
+      <div className="d-flex justify-content-center align-items-center gap-2">
+        <StepIndicator totalSteps={totalSteps} />
+        <InternalStepIndicator
+          totalSteps={dragDropImageLength}
+          currentStep={currentImageIndex + 1}
+        />
+      </div>
+      <div className="d-flex justify-content-center gap-96px mt-3 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
@@ -133,4 +165,4 @@ function WeekFivePage8() {
   );
 }
 
-export default WeekFivePage8;
+export default Page8;

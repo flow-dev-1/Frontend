@@ -118,7 +118,7 @@ const DragAndDropFrame = ({
   const renderDragItem = () => {
     if (currentImageIndex >= images.length || allImagesDropped) return null;
 
-    const imagePath = require(`../../../../../../../../../assets/drag-images/tot-drag-images/week2/page6/image${
+    const imagePath = require(`../../../../../../../../../assets/drag-images/tot-drag-images/week6/page8/image${
       currentImageIndex + 1
     }.png`);
 
@@ -231,10 +231,10 @@ const DragAndDropFrame = ({
                         <div
                           className={
                             bucket.id === "green"
-                              ? "inner-bucket bucket-text"
+                              ? "inner-bowl bucket-text"
                               : bucket.id === "orange"
-                              ? "outer-bucket bucket-text"
-                              : "both-bucket bucket-text"
+                              ? "outer-bowl bucket-text"
+                              : "both-bowl bucket-text"
                           }
                         >
                           <p className="text-center">
