@@ -2170,12 +2170,160 @@ export const courseContent = {
       },
       {
         id: 2,
-        type: "question",
-        questionType: "text",
-        question: "What do you understand by the word",
-        hasImage: true,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Below are six statements related to how you may have been feeling recently. For each one, choose the option that best reflects your experience:  Never, Occasionally, Frequently, Always.",
+            ],
+            options:
+              "Competence, Confidence, Coping, Control, Character, Connections, and Contribution.",
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question: "I often feel emotionally drained.",
+            options: [
+              {
+                id: "A",
+                text: "Never",
+              },
+              {
+                id: "B",
+                text: "Occasionally",
+              },
+              {
+                id: "C",
+                text: "Frequently",
+              },
+              {
+                id: "D",
+                text: "Always",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question: "I feel disconnected from my students.",
+            options: [
+              {
+                id: "A",
+                text: "Never",
+              },
+              {
+                id: "B",
+                text: "Occasionally",
+              },
+              {
+                id: "C",
+                text: "Frequently",
+              },
+              {
+                id: "D",
+                text: "Always",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "dropdownScenario",
+            question: `I find myself getting easily irritated by small things recently.`,
+            options: [
+              {
+                id: "A",
+                text: "Never",
+              },
+              {
+                id: "B",
+                text: "Occasionally",
+              },
+              {
+                id: "C",
+                text: "Frequently",
+              },
+              {
+                id: "D",
+                text: "Always",
+              },
+            ],
+          },
+          {
+            stepId: 5,
+            type: "dropdownScenario",
+            question:
+              "I struggle to fall asleep, stay asleep, or feel rested in the mornings.",
+            options: [
+              {
+                id: "A",
+                text: "Never",
+              },
+              {
+                id: "B",
+                text: "Occasionally",
+              },
+              {
+                id: "C",
+                text: "Frequently",
+              },
+              {
+                id: "D",
+                text: "Always",
+              },
+            ],
+          },
+          {
+            stepId: 6,
+            type: "dropdownScenario",
+            question:
+              "I feel like I’m constantly behind or drowning in responsibilities.",
+            options: [
+              {
+                id: "A",
+                text: "Never",
+              },
+              {
+                id: "B",
+                text: "Occasionally",
+              },
+              {
+                id: "C",
+                text: "Frequently",
+              },
+              {
+                id: "D",
+                text: "Always",
+              },
+            ],
+          },
+          {
+            stepId: 7,
+            type: "dropdownScenario",
+            question:
+              "I often experience headaches, body tension, or stomach issues during the workday.",
+            options: [
+              {
+                id: "A",
+                text: "Never",
+              },
+              {
+                id: "B",
+                text: "Occasionally",
+              },
+              {
+                id: "C",
+                text: "Frequently",
+              },
+              {
+                id: "D",
+                text: "Always",
+              },
+            ],
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
