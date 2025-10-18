@@ -2132,6 +2132,20 @@ export const courseContent = {
           next: true,
         },
       },
+      {
+        id: 10,
+        type: "question",
+        questionType: "text",
+        question:
+          "Document your current classroom routines. Make it simple, realistic, and something you do consistently.",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
     ],
   },
 };
