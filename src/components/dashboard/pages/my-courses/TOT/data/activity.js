@@ -1635,7 +1635,7 @@ export const courseContent = {
           prev: true,
           next: true,
         },
-      }, 
+      },
       {
         id: 13,
         type: "video",
@@ -1680,30 +1680,52 @@ export const courseContent = {
       },
       {
         id: 4,
-        type: "listQuestion",
-        question:
-          "Who are the three top people you go to when you need help with a situation?",
-        inputCount: 3,
-        fields: [
+        type: "multiStep",
+        title: "Write a letter to yourself.",
+        steps: [
           {
-            number: "1",
-            textFieldColor: "green",
-            colorCode: "#4CB748",
-          },
-          {
-            number: "2",
-            textFieldColor: "orange",
-            colorCode: "#FDD8B6",
+            stepId: 1,
+            type: "instruction",
+            instruction:
+              "Drag the statements that show a fixed mindset into the fixed mindset box and the statements that show a growth mindset to the appropriate box. This activity will help you practice how to identify fixed and growth mindset thinking patterns in everyday scenarios.",
           },
 
           {
-            number: "3",
-            textFieldColor: "blue",
-            colorCode: "#01A7FF",
+            stepId: 2,
+            type: "imageDragAndDrop",
+            instruction:
+              "Drag-and-drop the statements on the left into any of these bowls.",
+            steps: 4,
+            buckets: [
+              {
+                id: "green",
+                title: "Yes",
+              },
+              {
+                id: "red",
+                title: "No",
+              },
+            ],
+            images: [
+              "I can’t do this.",
+              "I can learn this if I keep trying.",
+              "This is tough now, but I’ll get better over time.",
+              "This subject just isn't for me.",
+              "Mistakes help me grow.",
+              "This is for new age teachers, I am not one of them.",
+              "This may take time and effort.",
+              "I failed this time, so I’ll probably keep failing.",
+              "I hate making mistakes, it means I’m not smart.",
+              "I haven’t figured it out yet—but I will.",
+            ],
+          },
+          {
+            stepId: 3,
+            type: "question",
+            question:
+              "Which of these thoughts have you heard from your students or caught yourself saying?",
           },
         ],
-        inputType: "text",
-        inputPlaceholder: "Type your answer here",
         navigation: {
           prev: true,
           next: true,

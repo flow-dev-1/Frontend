@@ -1,27 +1,45 @@
-.week-4-label {
-    border-radius: 2em;
-    color: white;
-    font-weight: bold;
-    font-size: 32px;
-    text-align: center;
-    min-height: 60px;
-    min-width: 60px;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+.tot-text-instruction{
+    font-family: 'Montserrat', system-ui, -apple-system, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 2.3rem !important;
+}
+.tot-week-2-question-text{
+    font-family: 'Montserrat', system-ui, -apple-system, sans-serif !important;
+    font-size: 1.5rem;
+}
+.tot-drag-instruction h1{
+    font-family: 'Montserrat', system-ui, -apple-system, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 2rem;
+}
+.tot-question-text{
+    font-family: 'Montserrat', system-ui, -apple-system, sans-serif !important;
+    font-size: 1.8rem !important;
+    font-weight: 600 !important;
+}
+.tot-question-text h2{
+    font-family: 'Montserrat', system-ui, -apple-system, sans-serif !important;
+    font-size: 1.6rem !important;
 }
 
+
+@media (max-width: 1400px) {
+    .tot-drag-instruction h1{
+        font-family: 'Montserrat', system-ui, -apple-system, sans-serif !important;
+        font-weight: 600 !important;
+        font-size: 2rem;
+    }
+    
+}
 @media (max-width: 480px) {
-    .week-4-question-text-mobile{
-        font-size: 1.7rem;
+    .bucket-text{
+        margin: 0 2.8rem;
     }
-    .week-4-question-text {
-        margin-top: -1.5rem;
-        font-size: 1.5rem;
+    .bucket-text p{
+        text-align: center;
+        margin-left: -1.2rem;
     }
-
-    .week-4-label {
-        margin-top: -1.8rem;
-        padding: 0px 3rem !important;
-        font-size: 2rem !important;
-        min-height: 20px !important;
-    }
-
+    
 }
