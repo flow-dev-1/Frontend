@@ -1,113 +1,96 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import QuestionBox from "../../../components/QuestionBox";
-import Frame from "./components/Frame";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "../../../components/Button";
-import {
-  selectPageData,
-  selectCurrentStep,
-} from "../../../../../../../../redux/reducers/navigationSlice";
-import StepIndicator from "../../../components/StepIndicator";
+import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import Frame from "./components/Frame";
 
-function WeekFivePage6() {
-  const dispatch = useDispatch(); // Initialize dispatch
+function Page6() {
   const pageData = useSelector(selectPageData);
-  const currentStep = useSelector(selectCurrentStep);
-  const totalSteps = pageData?.steps?.length || 0;
-  const [answers, setAnswers] = useState([]); // State to hold answers
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
-  const step = pageData?.steps[currentStep - 1];
-  const userAnswers = useSelector(userAnswer);
+  const dispatch = useDispatch();
+  const [answers, setAnswers] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
   const adminDatas = useSelector(adminData);
-  // console.log(userAnswers)
+  const userAnswers = useSelector(userAnswer);
 
+  // Load user answers (normalize them to always use `id`)
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
-  }, [userAnswers]);
+
+    if (!Array.isArray(response?.answer)) {
+      setAnswers([]);
+      return;
+    }
+
+    // Normalize any legacy data that might use stepId instead of id
+    const normalized = response.answer.map((item) =>
+      item.id
+        ? item
+        : item.stepId
+        ? { ...item, id: item.stepId }
+        : { ...item, id: pageData.id }
+    );
+
+    setAnswers(normalized);
+  }, [userAnswers, pageData.id]);
 
   const saveUserInput = () => {
-    if (currentStep === 1) return true;
-    if (adminDatas.isAdmin) return true;
+    if (adminDatas?.isAdmin) return true;
 
-    const stepData = answers.find((item) => item.stepId === currentStep);
+    // Find answers for the current page
+    const stepData = answers.find((item) => item.id === pageData.id);
+
     if (!stepData) {
-      setErrorMessage("Oops! Please select a valid option.");
+      setErrorMessage("Oops! All inputs must be filled out.");
       return false;
     }
 
+    // Dynamically get all question types for this page
+    const requiredFields = Array.isArray(pageData.questions)
+      ? pageData.questions.map((q) => q.type)
+      : [];
 
-    setErrorMessage(""); // Clear error if input is valid
+    // Check if all required fields are filled
+    const missingFields = requiredFields.filter(
+      (field) => !stepData[field] || stepData[field].trim() === ""
+    );
 
+    if (missingFields.length > 0) {
+      setErrorMessage(
+        `Please fill out all inputs. Missing: ${missingFields.join(", ")}.`
+      );
+      return false;
+    }
+
+    setErrorMessage("");
     const activityData = {
       page: pageData.id,
       answer: answers,
     };
-    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
+    dispatch(saveActivity(activityData));
     return true;
-  };
-
-
-  // console.log(answers, "Answers")
-
-  const renderStep = () => {
-    // const step = pageData?.steps[currentStep - 1];
-    // console.log(currentStep, step, "step")
-    if (!step) return <div>Invalid Step</div>;
-
-    switch (step.type) {
-      case "instruction":
-        return (
-          <QuestionBox>
-            <div className="p-5">
-              <div className="text-center mb-5 mt-4 mt-md-0">
-                <h2 className="text-white bg-blue px-5 py-1 fs-1 rounded d-inline display-4 text-center">
-                  {step.title}
-                </h2>
-              </div>
-              <h2 className="text-gray display-5 text-center">{step.instructions[0]}</h2>
-              <h2 className="text-gray mt-5 text-center display-4">
-                <joe className="text-blue">{step.options}</joe>
-              </h2>
-            </div>
-
-          </QuestionBox>
-        );
-      case "dropdownScenario":
-        return (
-          <Frame
-            data={{
-              step: step.stepId,
-              question: step.question,
-              options: step.options,
-            }}
-            setErrorMessage={setErrorMessage}
-            answers={answers}
-            setAnswers={setAnswers}
-          />
-        );
-      default:
-        return <div>Unknown step type</div>;
-    }
   };
 
   return (
     <>
-      {renderStep()}
-      {currentStep !== 1 && errorMessage && (
-        <div className="text-danger">{errorMessage}</div>
-      )}{" "}
-      {/* Display error message */}
-      <StepIndicator totalSteps={totalSteps} />
+      <Frame
+        data={{
+          step: pageData.id,
+          questions: pageData.questions,
+        }}
+        setErrorMessage={setErrorMessage}
+        answers={answers}
+        setAnswers={setAnswers}
+      />
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
@@ -116,4 +99,4 @@ function WeekFivePage6() {
   );
 }
 
-export default WeekFivePage6;
+export default Page6;

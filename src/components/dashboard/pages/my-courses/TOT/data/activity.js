@@ -1975,6 +1975,40 @@ export const courseContent = {
       },
       {
         id: 6,
+        type: "question",
+        questions: [
+          {
+            type: "game",
+            question: "Name of Game:",
+          },
+          {
+            type: "instructions",
+            question: "Instructions:",
+          },
+          {
+            type: "connection",
+            question: "SEL Connection:",
+          },
+        ],
+        inputType: "text",
+        inputPlaceholder: "Type your answer here",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 7,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 8,
         type: "multiStep",
         steps: [
           {
@@ -1982,189 +2016,104 @@ export const courseContent = {
             type: "instruction",
             title: "Instruction",
             instructions: [
-              "Match a stressful situation to a coping skill you will use if you find yourself in such a situation.",
+              "The next activity helps you think about how to intentionally use storytelling to spark meaningful conversations in your classroom. \nSelect the appropriate SEL skills that matches the story.",
             ],
-            options: "",
+            options:
+              "Competence, Confidence, Coping, Control, Character, Connections, and Contribution.",
           },
-
           {
             stepId: 2,
             type: "dropdownScenario",
             question:
-              "You have a big test tomorrow, and you're feeling nervous and overwhelmed.",
+              "Tunde failed his first Spanish test. Instead of giving up, he asked for help and practiced every evening until he improved.",
             options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
+              {
+                id: "A",
+                text: "Self-awareness & Emotional Regulation",
+              },
+              {
+                id: "B",
+                text: "Resilience",
+              },
+              {
+                id: "C",
+                text: "Empathy",
+              },
+              {
+                id: "D",
+                text: "Collaboration & Social Awareness",
+              },
             ],
           },
           {
             stepId: 3,
             type: "dropdownScenario",
             question:
-              "Your best friend said something that hurt your feelings, and now you're feeling upset.",
+              "During a class discussion, a teacher repeats and validates a quiet student’s point, making sure their voice is heard.",
             options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
+              {
+                id: "A",
+                text: "Self-awareness & Emotional Regulation",
+              },
+              {
+                id: "B",
+                text: "Resilience",
+              },
+              {
+                id: "C",
+                text: "Empathy",
+              },
+              {
+                id: "D",
+                text: "Collaboration & Social Awareness",
+              },
             ],
           },
           {
             stepId: 4,
             type: "dropdownScenario",
-            question:
-              "You are struggling to understand a math problem in class, and it's making you feel frustrated.",
+            question: `Amina noticed her classmate was upset. She sat with her, listened to her problems, and comforted her by sharing a similar experience."`,
             options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
+              {
+                id: "A",
+                text: "Self-awareness & Emotional Regulation",
+              },
+              {
+                id: "B",
+                text: "Resilience",
+              },
+              {
+                id: "C",
+                text: "Empathy",
+              },
+              {
+                id: "D",
+                text: "Collaboration & Social Awareness",
+              },
             ],
           },
           {
             stepId: 5,
             type: "dropdownScenario",
             question:
-              "You didn’t make the sports team you really wanted to join, and you feel disappointed.",
+              "Chijioke always knew he could do math, but when a difficult problem came up, he froze. After speaking with his teacher and some reflection, he realized he needed to stay calm and keep trying.",
             options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
-            ],
-          },
-
-          {
-            stepId: 6,
-            type: "dropdownScenario",
-            question:
-              "A group project is due tomorrow, but your team hasn’t finished their parts, and you're stressed.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
-            ],
-          },
-          {
-            stepId: 7,
-            type: "dropdownScenario",
-            question:
-              "You're about to give a speech in front of the class, and you're feeling anxious.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
-            ],
-          },
-          {
-            stepId: 8,
-            type: "dropdownScenario",
-            question: "You lost your favorite item and feel sad about it.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
-            ],
-          },
-          {
-            stepId: 9,
-            type: "dropdownScenario",
-            question:
-              "You argued with your sibling this morning, and now you're still feeling angry.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
-            ],
-          },
-          {
-            stepId: 10,
-            type: "dropdownScenario",
-            question:
-              "You accidentally made a mistake on a school assignment and feel embarrassed.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
-            ],
-          },
-          {
-            stepId: 11,
-            type: "dropdownScenario",
-            question:
-              "A teacher called on you to answer a question, but you didn’t know the answer, and now you feel nervous.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
+              {
+                id: "A",
+                text: "Self-awareness & Emotional Regulation",
+              },
+              {
+                id: "B",
+                text: "Resilience",
+              },
+              {
+                id: "C",
+                text: "Empathy",
+              },
+              {
+                id: "D",
+                text: "Collaboration & Social Awareness",
+              },
             ],
           },
         ],
@@ -2174,7 +2123,7 @@ export const courseContent = {
         },
       },
       {
-        id: 7,
+        id: 9,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
