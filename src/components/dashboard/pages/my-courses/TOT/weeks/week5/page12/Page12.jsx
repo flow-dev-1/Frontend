@@ -9,7 +9,7 @@ import {
   selectCurrentWeek,
   showReviewPopup,
 } from "../../../../../../../../redux/reducers/navigationSlice";
-import { getWeekPreAssessment } from "../../../data";
+import { getWeekAssessment } from "../../../data";
 import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
@@ -22,12 +22,11 @@ import userService from "../../../../../../../../services/api/user";
 import { calculateResult } from "../../../utility";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
-function WeekFivePage2() {
+function WeekFourAssessment() {
   const dispatch = useDispatch();
   const currentStep = useSelector(selectCurrentStep);
   const currentWeek = useSelector(selectCurrentWeek);
-  const assessmentData = getWeekPreAssessment(currentWeek);
-
+  const assessmentData = getWeekAssessment(currentWeek);
   const totalSteps = assessmentData?.questions?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
@@ -54,15 +53,15 @@ function WeekFivePage2() {
         )}% in the quiz`
       );
       toast.success(data.message || "Answers saved successfully!"); // Show success toast
-      // dispatch(
-      //   updateData({
-      //     course: null,
-      //     courseEnrollmentId: null,
-      //     week: 1,
-      //     activities: [],
-      //     assessments: [],
-      //   })
-      // );
+      dispatch(
+        updateData({
+          course: null,
+          courseEnrollmentId: null,
+          week: 1,
+          activities: [],
+          assessments: [],
+        })
+      );
       dispatch(navigateNext());
     },
     onError: (error) => {
@@ -98,7 +97,6 @@ function WeekFivePage2() {
 
   const saveUserData = () => {
     if (adminDatas.isAdmin) return true;
-    return true;
     const stepData = answers.find((item) => item.id === currentStep);
     if (!stepData) {
       setErrorMessage("Oops! Please choose an option to proceed.");
@@ -111,10 +109,8 @@ function WeekFivePage2() {
     dispatch(saveAssessment(answers));
 
     if (isLastQuestion) {
-      console.log(userAnswers.activities, "userAnswers.activities");
-
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 5;
+        answers.length !== totalSteps || userAnswers.activities.length !== 6;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(
@@ -123,55 +119,51 @@ function WeekFivePage2() {
         return false;
       }
 
-      // For nested questions check that all answeres were provided. when page is refreshed data may be lost
+      // For nested questions check that all answeres were provided
 
-      // Page 4 has nested questions
+      // Page 2 has nested questions
       const selectedActivity = userAnswers.activities.find(
-        (activity) => activity.page === 4
+        (activity) => activity.page === 2
       );
-
-      const selectedActivityIsValid =
+      const isValidActivity =
         selectedActivity &&
         Array.isArray(selectedActivity.answer) &&
-        selectedActivity.answer.length === 5;
+        selectedActivity.answer.length === 3;
 
-      // Page 8 has nested questions
-      const selectedActivity1 = userAnswers.activities.find(
-        (activity) => activity.page === 8
-      );
-      const totalDroped =
-        selectedActivity1?.answer?.[0].value?.green?.length +
-        selectedActivity1?.answer?.[0].value?.red?.length;
-
-      const selectedActivity1IsValid = totalDroped === 4;
-
-      // Page 10 has nested questions
-      const selectedActivity2 = userAnswers.activities.find(
-        (activity) => activity.page === 10
-      );
-
-      const selectedActivity2isValid = selectedActivity2?.answer?.every(
-        (item) => item.stepId !== undefined && item.value
-      );
-
-      if (
-        selectedActivityIsValid &&
-        selectedActivity1IsValid &&
-        selectedActivity2isValid
-      ) {
+      if (isValidActivity) {
         const userScore = calculateResult(
           assessmentData.questions,
           answers,
           totalSteps
         );
 
-        console.log(userAnswers, userScore, "userScore");
+        console.log(userScore, "userScore");
 
         mutation.mutate({
           ...userAnswers,
           assessments: answers,
           rating: userScore.toString(),
         });
+
+        //*****************This will come in later wen the code begins to break or escape questions ******/
+
+        // const isValid = selectedActivity.answer.every(item =>
+        //   item.stepId !== undefined &&
+        //   item.value &&
+        //   Object.keys(item.value).length === 3
+        // );
+
+        // if (isValid) {
+        //   const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
+
+        //   console.log(userScore, "userScore")
+
+        //   // mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
+        // } else {
+
+        //   setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+        //   return false;
+        // }
       } else {
         setErrorMessage(
           "Oops! Some unanswered questions have been detected. Kindly go back and review!"
@@ -217,11 +209,16 @@ function WeekFivePage2() {
 
   return (
     <>
-      <div className="text-white px-3 py-1 mb-2 tot-assessment-header">
-        <h2 className="text-blue text-center">{assessmentData.title}</h2>
-        <p className="text-center text-blue">{assessmentData.subtitle}</p>
-      </div>
-      <QuestionBox extraStyle={"bg-blue"}>{renderStep()}</QuestionBox>
+      <QuestionBox>
+        <div className="text-white p-3 mb-3">
+          <h2 className="fs-1 text-blue text-center tot-week-2-question-text fw-bold ">
+            {assessmentData.title}
+          </h2>
+          <p className="text-center text-blue">{assessmentData.subtitle}</p>
+        </div>
+
+        {renderStep()}
+      </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
       {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
@@ -244,4 +241,4 @@ function WeekFivePage2() {
   );
 }
 
-export default WeekFivePage2;
+export default WeekFourAssessment;

@@ -961,136 +961,426 @@ export const assessments = {
     ],
   },
   week5: {
-    title: "Assessment",
+    title: "Post-Assessment",
     subtitle: "Let's test your knowledge",
     questions: [
       {
         id: 1,
-        question: "What are coping skills?",
+        question:
+          "What is the main goal of integrating SEL into teaching methods?",
         options: [
-          { id: "A", text: "Strategies to avoid stress." },
+          {
+            id: "A",
+            text: "To make lessons less academically rigorous by focusing mainly on emotional sharing.",
+          },
           {
             id: "B",
-            text: "Techniques that help deal with stress, anxiety, and challenges.",
+            text: "To manage student behavior more effectively by using SEL strategies as control tools.",
           },
-          { id: "C", text: "Ways to prevent problems from happening." },
-          { id: "D", text: "Methods to blame others for problems." },
+          {
+            id: "C",
+            text: "To weave social and emotional learning into daily instruction so that it supports both academic and personal growth.",
+          },
+          {
+            id: "D",
+            text: "To treat SEL as an additional subject that’s separate from the core curriculum.",
+          },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 2,
-        question:
-          "Which of the following is considered a healthy coping skill?",
+        question: "Which subject can SEL be integrated into?",
         options: [
-          { id: "A", text: "Avoiding problems." },
-          { id: "B", text: "Yelling." },
-          { id: "C", text: "Deep breathing." },
-          { id: "D", text: "Overeating." },
+          {
+            id: "A",
+            text: "Mainly literature, because it already explores characters’ emotions and relationships.",
+          },
+          {
+            id: "B",
+            text: "Primarily social studies, since it deals with communities and social issues.",
+          },
+          {
+            id: "C",
+            text: "Any subject area, as SEL skills can be developed through all learning experiences, even math and science.",
+          },
+          {
+            id: "D",
+            text: "Mostly creative classes like art and music, where self-expression is central.",
+          },
         ],
         correctOption: "C",
       },
       {
         id: 3,
-        question:
-          "Journaling your thoughts when you are anxious or troubled can help you become calm and more aware of your emotions.",
+        question: "What is one way to integrate SEL into an English class?",
         options: [
-          { id: "A", text: "False" },
-          { id: "B", text: "True" },
+          {
+            id: "A",
+            text: "Guiding students to connect personally with a text by examining characters’ decisions and emotions.",
+          },
+          {
+            id: "B",
+            text: "Emphasizing memorization of challenging vocabulary to build confidence in language skills.",
+          },
+          {
+            id: "C",
+            text: "Discussing literary techniques and grammar rules as a way to strengthen analytical thinking.",
+          },
+          {
+            id: "D",
+            text: "Asking students to write summaries that focus only on plot details to improve comprehension.",
+          },
         ],
-        correctOption: "B",
+        correctOption: "A",
       },
       {
         id: 4,
-        question:
-          "What is one example of a creative outlet that can help with stress?",
+        question: "What is an example of using SEL in a Math class?",
         options: [
-          { id: "A", text: "Watching TV." },
-          { id: "B", text: "Playing a musical instrument." },
-          { id: "C", text: "Scrolling through social media." },
-          { id: "D", text: "Sleeping." },
+          {
+            id: "A",
+            text: "Helping students practice perseverance and manage frustration while working through challenging, multi-step problems.",
+          },
+          {
+            id: "B",
+            text: "Reminding students to control their emotions by not showing frustration and continuing to work.",
+          },
+          {
+            id: "C",
+            text: "Assessing students mainly on how quickly they finish and whether their final answers are correct.",
+          },
+          {
+            id: "D",
+            text: "Using mistakes as a reason to push students harder with stricter expectations and consequences.",
+          },
         ],
-        correctOption: "B",
+        correctOption: "A",
       },
       {
         id: 5,
-        question: "What should you do if a coping skill doesn't work for you?",
+        question: "What is the benefit of gamification in SEL teaching?",
         options: [
-          { id: "A", text: "Give up and ignore the problem." },
+          { id: "A", text: "Builds competition, even if teamwork suffers." },
+          { id: "B", text: "Offers a fun break from regular lessons." },
           {
-            id: "B",
-            text: "Try a different coping skill that might work better.",
+            id: "C",
+            text: "Boosts engagement, collaboration, and motivation.",
           },
-          { id: "C", text: "Blame others for your stress." },
-          { id: "D", text: "Stop trying to cope with the problem." },
+          { id: "D", text: "Works best when games replace SEL content." },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 6,
-        question: "Why is grit important for success?",
+        question: "Which is a key feature of storytelling for SEL?",
         options: [
-          { id: "A", text: "It makes challenges disappear." },
+          {
+            id: "A",
+            text: "It helps students remember details through repetition.",
+          },
           {
             id: "B",
-            text: "It helps you stay focused and persistent, even when things are tough.",
+            text: "It develops emotional literacy by encouraging empathy and self-reflection.",
           },
-          { id: "C", text: "It allows you to avoid difficult situations." },
-          { id: "D", text: "It makes you smarter than everyone else." },
+          {
+            id: "C",
+            text: "Keeps stories fictional to avoid real-life emotions.",
+          },
+          {
+            id: "D",
+            text: "Reduces emotional involvement to keep lessons objective.",
+          },
         ],
         correctOption: "B",
       },
       {
         id: 7,
-        question: "Which of the following is an example of a resilient action?",
+        question:
+          "What is one indicator that SEL is successfully integrated into classroom teaching?",
         options: [
-          { id: "A", text: "Giving up after failing a test." },
+          {
+            id: "A",
+            text: "SEL is mentioned in lesson plans, even if not practiced consistently during lessons.",
+          },
           {
             id: "B",
-            text: "Asking for help and studying harder after a setback.",
+            text: "Students apply emotional and social skills during academic tasks and classroom routines.",
           },
-          { id: "C", text: "Blaming someone else for your failure." },
-          { id: "D", text: "Ignoring the problem and hoping it goes away." },
+          {
+            id: "C",
+            text: "Teachers schedule weekly SEL check-ins, separate from academic content.",
+          },
+          {
+            id: "D",
+            text: "SEL is addressed only when emotional issues or conflict arise.",
+          },
         ],
         correctOption: "B",
       },
       {
         id: 8,
-        question:
-          "How does the 'Power of Yet' mindset help you overcome challenges?",
+        question: "Which of the following is a SEL-aligned classroom routine?",
         options: [
           {
             id: "A",
-            text: "It makes you believe that challenges are impossible.",
+            text: "Weekly restorative circles to reflect, reconnect, and build community.",
           },
           {
             id: "B",
-            text: "It reminds you that even if you can’t do something now, you have the potential to achieve it with effort and time.",
+            text: "Pop quizzes to keep students alert and accountable.",
           },
           {
             id: "C",
-            text: "It encourages you to quit if something is too hard.",
+            text: "Rotational reading aloud to ensure participation.",
           },
-          { id: "D", text: "It teaches you to ignore failure." },
+          { id: "D", text: "Silent test review sessions to maintain order." },
+        ],
+        correctOption: "A",
+      },
+      {
+        id: 9,
+        question:
+          "Why is it important to integrate SEL into classroom routines and subjects?",
+        options: [
+          {
+            id: "A",
+            text: "It keeps lessons running smoothly by minimizing disruptions and improving compliance.",
+          },
+          {
+            id: "B",
+            text: "It shifts the focus away from academics to manage emotions when issues come up.",
+          },
+          {
+            id: "C",
+            text: "It builds engagement, emotional safety, and the foundation for long-term academic growth.",
+          },
+          {
+            id: "D",
+            text: "It brings occasional change to routines without deeply affecting teaching practices.",
+          },
+        ],
+        correctOption: "C",
+      },
+      {
+        id: 10,
+        question:
+          "All of the following are advantages of integrating SEL into teaching methods EXCEPT:",
+        options: [
+          {
+            id: "A",
+            text: "Strengthening classroom relationships and building trust among students.",
+          },
+          {
+            id: "B",
+            text: "Supporting both academic success and emotional well-being simultaneously.",
+          },
+          {
+            id: "C",
+            text: "Encouraging students to develop empathy, self-awareness, and responsible decision-making.",
+          },
+          {
+            id: "D",
+            text: "Reducing the need for intentional relationship-building by making students more independent.",
+          },
+        ],
+        correctOption: "D",
+      },
+    ],
+  },
+  week6: {
+    title: "Post-Assessment",
+    subtitle: "Let's test your knowledge",
+    questions: [
+      {
+        id: 1,
+        question:
+          "Which of the following is a key benefit of teaching Social and Emotional Learning and Positive Psychology in the classroom?",
+        options: [
+          {
+            id: "A",
+            text: "Helps students link emotional well-being to their overall learning and growth.",
+          },
+          {
+            id: "B",
+            text: "Raises test performance mainly by reducing academic rigor and pressure.",
+          },
+          {
+            id: "C",
+            text: "Encourages reliance on competition to motivate peer-to-peer achievement.",
+          },
+          {
+            id: "D",
+            text: "Decreases classroom time spent on building academic knowledge.",
+          },
+        ],
+        correctOption: "A",
+      },
+      {
+        id: 2,
+        question: "What does the SEL competency of self-awareness focus on?",
+        options: [
+          {
+            id: "A",
+            text: "Strengthening students’ ability to analyze and solve academic problems.",
+          },
+          {
+            id: "B",
+            text: "Supporting students in recognizing, understanding, and expressing their own emotions and values.",
+          },
+          {
+            id: "C",
+            text: "Building awareness of social issues and global perspectives.",
+          },
+          {
+            id: "D",
+            text: "Motivating students through healthy competition with peers.",
+          },
         ],
         correctOption: "B",
       },
       {
-        id: 9,
-        question: `What should you consider when building your personal "Coping Toolbox"?`,
+        id: 3,
+        question:
+          "Which SEL competency focuses on managing stress and staying motivated in the face of challenges?",
+        options: [
+          { id: "A", text: "Self-awareness." },
+          { id: "B", text: "Responsible decision-making." },
+          { id: "C", text: "Self-management." },
+          { id: "D", text: "Social awareness." },
+        ],
+        correctOption: "C",
+      },
+      {
+        id: 4,
+        question:
+          "How can educators help students build social awareness in the classroom?",
         options: [
           {
             id: "A",
-            text: "Only use coping skills that work for your friends.",
+            text: "By creating activities that highlight shared goals while valuing individual perspectives.",
           },
           {
             id: "B",
-            text: "Experiment with different coping strategies to find what works best for you and keep those strategies handy.",
+            text: "By focusing strictly on academic mastery to reduce distractions.",
           },
-          { id: "C", text: "Avoid trying new coping skills." },
+          {
+            id: "C",
+            text: "By fostering healthy competition as the main way students learn about each other.",
+          },
           {
             id: "D",
-            text: "Use coping strategies only when you have no other option.",
+            text: "By modeling how to interpret and respond respectfully to the feelings of others.",
+          },
+        ],
+        correctOption: "A",
+      },
+      {
+        id: 5,
+        question:
+          "Which of the following practices is an example of effective emotional regulation in students?",
+        options: [
+          {
+            id: "A",
+            text: "Allowing students to share their feelings openly, even if it sometimes disrupts the class.",
+          },
+          {
+            id: "B",
+            text: "Guiding students to notice their emotional state and use techniques to respond constructively.",
+          },
+          {
+            id: "C",
+            text: "Giving students time to cool off by stepping back and not addressing their emotions immediately.",
+          },
+          {
+            id: "D",
+            text: "Encouraging students to stay focused on tasks by setting emotions aside until later.",
+          },
+        ],
+        correctOption: "B",
+      },
+      {
+        id: 6,
+        question: "How does gamification support SEL development?",
+        options: [
+          {
+            id: "A",
+            text: "By motivating students to complete tasks exactly as directed.",
+          },
+          {
+            id: "B",
+            text: "By boosting engagement while giving students a safe space to build resilience, teamwork, and sustained motivation.",
+          },
+          {
+            id: "C",
+            text: "By recognizing individual academic accomplishments above collaborative efforts.",
+          },
+          {
+            id: "D",
+            text: "By reducing competition through activities that limit interaction among students.",
+          },
+        ],
+        correctOption: "B",
+      },
+      {
+        id: 7,
+        question:
+          "In which of the following scenarios would the SEL competency of relationship skills be most useful?",
+        options: [
+          { id: "A", text: "Solving complex algebraic problems in a group." },
+          { id: "B", text: "Understanding how to manage stress in isolation." },
+          {
+            id: "C",
+            text: "Navigating a group project where students must collaborate and communicate effectively.",
+          },
+          { id: "D", text: "Writing essays about personal experiences." },
+        ],
+        correctOption: "C",
+      },
+      {
+        id: 8,
+        question:
+          "What is the first step in integrating SEL into your classroom routines?",
+        options: [
+          {
+            id: "A",
+            text: "Start by strengthening your own emotional regulation strategies as a teacher.",
+          },
+          {
+            id: "B",
+            text: "Prioritize academic instruction first and address emotional needs if they arise later.",
+          },
+          {
+            id: "C",
+            text: "Build a safe, trusting classroom environment where social and emotional learning can naturally take root.",
+          },
+          {
+            id: "D",
+            text: "Introduce SEL topics only when students show curiosity about them.",
+          },
+        ],
+        correctOption: "C",
+      },
+      {
+        id: 9,
+        question:
+          "Which of the following is a key component of self-care for educators?",
+        options: [
+          {
+            id: "A",
+            text: "Pushing through stress by managing it quietly while maintaining all duties.",
+          },
+          {
+            id: "B",
+            text: "Setting clear boundaries and taking intentional time for emotional restoration.",
+          },
+          {
+            id: "C",
+            text: "Focusing entirely on students’ needs to keep the classroom running smoothly.",
+          },
+          {
+            id: "D",
+            text: "Staying constantly available to build deeper trust with students.",
           },
         ],
         correctOption: "B",
@@ -1098,17 +1388,26 @@ export const assessments = {
       {
         id: 10,
         question:
-          "What is an example of a positive coping strategy when you're feeling sad?",
+          "Why is it important for teachers to reflect on their own emotional triggers?",
         options: [
-          { id: "A", text: "Isolating yourself from everyone." },
+          {
+            id: "A",
+            text: "To reduce emotional discussions with students and keep lessons strictly academic.",
+          },
           {
             id: "B",
-            text: "Writing in a journal about your thoughts and feelings.",
+            text: "To better address challenging behavior without letting personal emotions interfere.",
           },
-          { id: "C", text: "Pretending nothing is wrong." },
-          { id: "D", text: "Keep talking." },
+          {
+            id: "C",
+            text: "To respond with composure and demonstrate healthy emotional regulation for students.",
+          },
+          {
+            id: "D",
+            text: "To prevent any outward emotional expression by keeping feelings completely hidden.",
+          },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
     ],
   },
