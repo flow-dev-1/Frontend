@@ -2454,7 +2454,7 @@ export const courseContent = {
         type: "question",
         questionType: "text",
         question:
-          "Document your current classroom routines. Make it simple, realistic, and something you do consistently.",
+          "What is one moment from your recent teaching experience that made you feel grateful?",
         hasImage: false,
         imageSrc: "mindset.png",
         inputType: "bigTextBox",
