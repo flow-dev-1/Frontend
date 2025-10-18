@@ -1853,6 +1853,56 @@ export const courseContent = {
           next: true,
         },
       },
+      {
+        id: 10,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Take this moment to pause, acknowledge your growth, and set intentions for the educator you want to be moving forward.",
+            ],
+          },
+
+          {
+            stepId: 2,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "What challenge in your teaching journey did you once think you couldn’t overcome, but did?",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "A student stands up for a friend being teased.",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "A student organizes their group’s project work.",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
     ],
   },
   week5: {
