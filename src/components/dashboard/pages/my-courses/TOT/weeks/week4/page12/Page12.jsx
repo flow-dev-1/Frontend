@@ -21,7 +21,6 @@ import { toast } from "react-toastify";
 import userService from "../../../../../../../../services/api/user";
 import { calculateResult } from "../../../utility";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-import { use } from "react";
 
 function WeekFourAssessment() {
   const dispatch = useDispatch();
@@ -98,7 +97,6 @@ function WeekFourAssessment() {
 
   const saveUserData = () => {
     if (adminDatas.isAdmin) return true;
-
     const stepData = answers.find((item) => item.id === currentStep);
     if (!stepData) {
       setErrorMessage("Oops! Please choose an option to proceed.");
@@ -112,7 +110,8 @@ function WeekFourAssessment() {
 
     if (isLastQuestion) {
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 3;
+        answers.length !== totalSteps || userAnswers.activities.length !== 6;
+
       if (hasUnansweredQuestions) {
         setErrorMessage(
           "Oops! Some unanswered questions have been detected. Kindly go back and review!"
@@ -120,45 +119,60 @@ function WeekFourAssessment() {
         return false;
       }
 
-      const userScore = calculateResult(
-        assessmentData.questions,
-        answers,
-        totalSteps
+      // For nested questions check that all answeres were provided
+
+      // Page 2 has nested questions
+      const selectedActivity = userAnswers.activities.find(
+        (activity) => activity.page === 2
       );
+      const isValidActivity =
+        selectedActivity &&
+        Array.isArray(selectedActivity.answer) &&
+        selectedActivity.answer.length === 3;
 
-      mutation.mutate({
-        ...userAnswers,
-        assessments: answers,
-        rating: userScore.toString(),
-      });
+      if (isValidActivity) {
+        const userScore = calculateResult(
+          assessmentData.questions,
+          answers,
+          totalSteps
+        );
 
-      //   const selectedActivity = userAnswers.activities.find(activity => activity.page === 6);
-      //   const isValidActivity = selectedActivity && Array.isArray(selectedActivity.answer) && selectedActivity.answer.length === 5;
+        console.log(userScore, "userScore");
 
-      //   if (isValidActivity) {
-      //     const isValid = selectedActivity.answer.every(item =>
-      //       item.stepId !== undefined &&
-      //       item.value &&
-      //       Object.keys(item.value).length === 3
-      //     );
+        mutation.mutate({
+          ...userAnswers,
+          assessments: answers,
+          rating: userScore.toString(),
+        });
 
-      //     if (isValid) {
-      //       const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
+        //*****************This will come in later wen the code begins to break or escape questions ******/
 
-      //       mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
-      //     } else {
+        // const isValid = selectedActivity.answer.every(item =>
+        //   item.stepId !== undefined &&
+        //   item.value &&
+        //   Object.keys(item.value).length === 3
+        // );
 
-      //       setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-      //       return false;
-      //     }
-      //   } else {
-      //     setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-      //     return false;
-      //   }
+        // if (isValid) {
+        //   const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
+
+        //   console.log(userScore, "userScore")
+
+        //   // mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
+        // } else {
+
+        //   setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+        //   return false;
+        // }
+      } else {
+        setErrorMessage(
+          "Oops! Some unanswered questions have been detected. Kindly go back and review!"
+        );
+        return false;
+      }
     } else {
       return true;
     }
-    // Dispatch the saveActivity action
   };
 
   const renderStep = () => {
@@ -180,6 +194,7 @@ function WeekFourAssessment() {
         currentStep={currentStep}
         selectedOption={answers[currentStep - 1]?.value || ""}
         onOptionSelect={handleOptionSelect}
+        isPreAssessment={true}
       />
     );
   };
@@ -195,11 +210,11 @@ function WeekFourAssessment() {
   return (
     <>
       <QuestionBox>
-        <div className="bg-blue text-white p-3 mb-3 assessment-header">
-          <h2 className="fs-1 text-white text-center">
+        <div className="text-white p-3 mb-3">
+          <h2 className="fs-1 text-blue text-center tot-week-2-question-text fw-bold ">
             {assessmentData.title}
           </h2>
-          <p className="text-center">{assessmentData.subtitle}</p>
+          <p className="text-center text-blue">{assessmentData.subtitle}</p>
         </div>
 
         {renderStep()}

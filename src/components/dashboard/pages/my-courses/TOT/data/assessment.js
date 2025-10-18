@@ -736,92 +736,225 @@ export const assessments = {
     ],
   },
   week4: {
-    title: "Assessment",
+    title: "Post-Assessment",
     subtitle: "Let's test your knowledge",
     questions: [
       {
         id: 1,
-        question: "What is a support system?",
+        question: "What is a core belief of a growth mindset?",
         options: [
           {
             id: "A",
-            text: "A group of people who always agree with everything you do.",
+            text: "Intelligence is mostly genetic and doesn't change much over time.",
           },
           {
             id: "B",
-            text: "The people who help you stay strong and bounce back during tough times.",
+            text: "Talent determines long-term success more than anything else.",
           },
-          { id: "C", text: "A system that prevents you from making mistakes." },
+          {
+            id: "C",
+            text: "Abilities can be developed through effort, strategy, and support.",
+          },
           {
             id: "D",
-            text: "A place where you can find advice on all life’s problems.",
+            text: "Failure proves someone lacks the natural ability to succeed.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 2,
-        question: "Why are support systems important for resilience?",
+        question: "Which of the following is a fixed mindset statement?",
         options: [
-          { id: "A", text: "They solve your problems for you." },
+          { id: "A", text: "I haven’t figured this out yet, but I will." },
           {
             id: "B",
-            text: "They give you the strength and encouragement to face challenges.",
+            text: "This is too hard; I’ll probably never be able to do it.",
           },
-          { id: "C", text: "They make decisions on your behalf." },
-          { id: "D", text: "They avoid making you feel stressed." },
+          { id: "C", text: "I learn more every time I make a mistake." },
+          { id: "D", text: "If I keep practicing, I’ll improve eventually." },
         ],
         correctOption: "B",
       },
       {
         id: 3,
         question:
-          "Which of the following is an effective way to build a strong support system?",
-        options: [
-          { id: "A", text: "Spending time with people who care about you." },
-          { id: "B", text: "Relying only on yourself to handle challenges." },
-          {
-            id: "C",
-            text: "Keeping your emotions to yourself to avoid burdening others.",
-          },
-          {
-            id: "D",
-            text: "Trying to handle everything alone without asking for help.",
-          },
-        ],
-        correctOption: "A",
-      },
-      {
-        id: 4,
-        question: "Why is asking for help a sign of strength?",
+          "What is the biggest difference between a fixed mindset and a growth mindset?",
         options: [
           {
             id: "A",
-            text: "It shows that you don’t know how to solve problems.",
+            text: "One focuses on academic success, the other focuses on behavior.",
           },
           {
             id: "B",
-            text: "It means you’re weak and can’t handle things on your own.",
+            text: "One believes failure is a sign of limits, the other sees failure as a learning opportunity.",
           },
           {
             id: "C",
-            text: "It demonstrates that you recognize your limits and are willing to grow with the help of others.",
+            text: "One is used in math, the other is better for creative subjects.",
           },
-          { id: "D", text: "It makes people do your work for you." },
+          {
+            id: "D",
+            text: "One helps students feel good, the other emphasizes hard work.",
+          },
+        ],
+        correctOption: "B",
+      },
+      {
+        id: 4,
+        question: "Which of the following best fosters grit in students?",
+        options: [
+          {
+            id: "A",
+            text: "Recognizing only students who consistently succeed.",
+          },
+          {
+            id: "B",
+            text: "Offering rewards each time a student completes an easy task.",
+          },
+          {
+            id: "C",
+            text: "Encouraging students to stick with challenges, even when progress is slow.",
+          },
+          {
+            id: "D",
+            text: "Allowing students to switch tasks if they’re struggling.",
+          },
         ],
         correctOption: "C",
       },
       {
         id: 5,
-        question: "What is a practical way to strengthen your support system?",
+        question: "What role does optimism play in building resilience?",
         options: [
-          { id: "A", text: "Keep all your struggles to yourself." },
-          { id: "B", text: "Offer support to others when they need it." },
+          {
+            id: "A",
+            text: "It allows us to avoid feeling discouraged altogether.",
+          },
+          {
+            id: "B",
+            text: "It shifts our focus to strengths and overlooks weaknesses.",
+          },
           {
             id: "C",
-            text: "Only seek help from others when you’re forced to.",
+            text: "It helps us believe setbacks are temporary and we can overcome them.",
           },
-          { id: "D", text: "Avoid joining any groups or clubs." },
+          {
+            id: "D",
+            text: "It makes it easier to ignore failure and move on quickly.",
+          },
+        ],
+        correctOption: "C",
+      },
+      {
+        id: 6,
+        question: "A growth mindset helps educators to:",
+        options: [
+          {
+            id: "A",
+            text: "Stick with tried-and-true methods to reduce classroom risk.",
+          },
+          {
+            id: "B",
+            text: "Embrace challenges in teaching and model learning from mistakes.",
+          },
+          {
+            id: "C",
+            text: "Avoid challenges so students don’t feel overwhelmed.",
+          },
+          {
+            id: "D",
+            text: "Focus on mastering curriculum delivery above all else.",
+          },
+        ],
+        correctOption: "B",
+      },
+      {
+        id: 7,
+        question: "Reflecting on past challenges helps educators to:",
+        options: [
+          {
+            id: "A",
+            text: "Avoid difficult situations in the future by planning better.",
+          },
+          { id: "B", text: "Revisit old failures and try to fix them." },
+          {
+            id: "C",
+            text: "Appreciate how far they’ve come and build confidence.",
+          },
+          {
+            id: "D",
+            text: "Confirm that teaching is inherently difficult and draining.",
+          },
+        ],
+        correctOption: "C",
+      },
+      {
+        id: 8,
+        question:
+          "What advice might you give your younger teaching self based on resilience reflection?",
+        options: [
+          {
+            id: "A",
+            text: "Make things as easy as possible to avoid burnout.",
+          },
+          {
+            id: "B",
+            text: "Stay safe—don’t take chances in your teaching style.",
+          },
+          {
+            id: "C",
+            text: "Each challenge you face is shaping you into a stronger educator.",
+          },
+          { id: "D", text: "Stick with what others are doing; it’s safer." },
+        ],
+        correctOption: "C",
+      },
+      {
+        id: 9,
+        question:
+          "Which of the following would NOT support a growth mindset in schools?",
+        options: [
+          {
+            id: "A",
+            text: "Focusing instruction mainly on exam techniques and high-stakes results.",
+          },
+          {
+            id: "B",
+            text: "Giving students feedback that highlights their progress.",
+          },
+          {
+            id: "C",
+            text: "Encouraging students to reflect on their learning strategies.",
+          },
+          {
+            id: "D",
+            text: "Allowing space for productive struggle and experimentation.",
+          },
+        ],
+        correctOption: "A",
+      },
+      {
+        id: 10,
+        question:
+          "Which teacher response best reflects grit when faced with consistently low student engagement and minimal support?",
+        options: [
+          {
+            id: "A",
+            text: "Recognizing that some students are not ready to learn and focusing energy on those who respond well.",
+          },
+          {
+            id: "B",
+            text: "Continuing to refine and test new approaches over time, driven by the belief that progress is possible.",
+          },
+          {
+            id: "C",
+            text: "Following the timetable strictly to meet administrative expectations, even if students aren't connecting.",
+          },
+          {
+            id: "D",
+            text: "Waiting for additional support or training before adjusting classroom practices.",
+          },
         ],
         correctOption: "B",
       },
