@@ -2146,6 +2146,16 @@ export const courseContent = {
           next: true,
         },
       },
+      {
+        id: 11,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
     ],
   },
 };
