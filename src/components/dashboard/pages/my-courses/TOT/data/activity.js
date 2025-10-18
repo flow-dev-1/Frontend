@@ -1773,6 +1773,86 @@ export const courseContent = {
           next: true,
         },
       },
+      {
+        id: 8,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "In this next activity, you'll practice shifting from fixed-mindset praise to growth-oriented feedback, so you can help your students stay motivated, especially when learning gets tough.",
+            ],
+          },
+
+          {
+            stepId: 2,
+            type: "example",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "A student works diligently on a task they find difficult, showing improvement over time.",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "You got it right on the first try.",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "This is too hard for you.",
+              },
+            ],
+          },
+          {
+            stepId: 5,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "You keep making the same mistake.",
+              },
+            ],
+          },
+          {
+            stepId: 6,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "Don’t worry, this just isn’t your strength.",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 9,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
     ],
   },
   week5: {
