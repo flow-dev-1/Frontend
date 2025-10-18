@@ -56,7 +56,7 @@ import WeekTwoPage10 from "./weeks/week2/page10/Page10.jsx";
 import WeekTwoPage11 from "./weeks/week2/page11/Page11.jsx";
 import WeekTwoPage12 from "./weeks/week2/page12/Page12.jsx";
 import WeekTwoPage13 from "./weeks/week2/page13/Page13.jsx";
-import WeekTwoAssessment from "./weeks/week2/page24/Page14.jsx";
+import WeekTwoAssessment from "./weeks/week2/page14/Page14.jsx";
 
 // Week 3
 import WeekThreePage1 from "./weeks/week3/page1/Page1";
@@ -83,6 +83,10 @@ import WeekFourPage5 from "./weeks/week4/page5/Page5";
 import WeekFourPage6 from "./weeks/week4/page6/Page6.jsx";
 import WeekFourPage7 from "./weeks/week4/page7/Page7.jsx";
 import WeekFourPage8 from "./weeks/week4/page8/Page8.jsx";
+import WeekFourPage9 from "./weeks/week4/page9/Page9";
+import WeekFourPage10 from "./weeks/week4/page10/Page10";
+import WeekFourPage11 from "./weeks/week4/page11/Page11";
+import WeekFourPage12 from "./weeks/week4/page12/Page12";
 
 // Week5
 import WeekFivePage1 from "./weeks/week5/page1/Page1.jsx";
@@ -106,7 +110,6 @@ import { adminData } from "../../../../../redux/reducers/adminReducer.js";
 import { setCourse } from "../../../../../redux/reducers/navigationSlice.js";
 import { logoutSuccess } from "../../../../../redux/reducers/userReducer.js";
 import { clearToken } from "../../../../../redux/reducers/jwtReducer.js";
-
 
 const WeekContent = () => {
   const dispatch = useDispatch();
@@ -343,6 +346,14 @@ const WeekContent = () => {
             return <WeekFourPage7 />;
           case 8:
             return <WeekFourPage8 />;
+          case 9:
+            return <WeekFourPage9 />;
+          case 10:
+            return <WeekFourPage10 />;
+          case 11:
+            return <WeekFourPage11 />;
+          case 12:
+            return <WeekFourPage12 />;
           default:
             return null;
         }

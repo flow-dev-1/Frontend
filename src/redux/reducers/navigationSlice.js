@@ -73,7 +73,7 @@ const navigationSlice = createSlice({
       const newCourse = getCourseFromURL();
       if (state.currentCourse !== newCourse) {
         state.currentCourse = newCourse;
-        state.currentWeek = 1;
+        state.currentWeek = 4;
         state.currentPage = 1;
         state.currentStep = 1;
         state.showReview = false;
