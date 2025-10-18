@@ -21,9 +21,10 @@ const InternalStepIndicator = ({ totalSteps, currentStep }) => {
       {[...Array(totalSteps)].map((_, index) => (
         <div
           key={index}
-          className={`${index + 2 <= currentStep ? "bg-step-active" : "bg-step"}`}
+          className={`${
+            index + 2 <= currentStep ? "bg-step-active" : "bg-step"
+          }`}
           style={{
-            // flexBasis: "35px",
             width: "35px",
             height: "17px",
             borderRadius: "8px",
@@ -35,18 +36,18 @@ const InternalStepIndicator = ({ totalSteps, currentStep }) => {
   );
 };
 
-function Page10() {
-  const dispatch = useDispatch(); // Initialize dispatch
+function WeekTwoPage10() {
+  const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
   const totalSteps = pageData?.steps?.length || 0;
-  const [answers, setAnswers] = useState([]); // State to hold answers
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const [answers, setAnswers] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
   const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
-  const [dragDropImageLength, setDragDropImageLength] = useState(4)
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [dragDropImageLength, setDragDropImageLength] = useState(4);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     if (!userAnswers) return;
@@ -65,31 +66,31 @@ function Page10() {
     const stepData = answers.find((item) => item.stepId === currentStep);
 
     if (!stepData) {
-      setErrorMessage("Oops! All Images must be placed in the buckects.");
+      setErrorMessage("Oops! All Images must be placed in the buckets.");
       return false;
     }
 
     // Check total images dropped
-    const totalDropped = (stepData.value.green?.length || 0) +
-      (stepData.value.red?.length || 0);
+    const totalDropped =
+      (stepData.value.green?.length || 0) + (stepData.value.red?.length || 0);
 
     if (totalDropped !== dragDropImageLength) {
-      setErrorMessage(`Please place all ${dragDropImageLength} images in the buckets.`);
+      setErrorMessage(
+        `Please place all ${dragDropImageLength} images in the buckets.`
+      );
       return false;
     }
 
-    setErrorMessage(""); // Clear error if input is valid
+    setErrorMessage("");
 
     const activityData = {
       page: pageData.id,
       answer: answers,
     };
-    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    dispatch(saveActivity(activityData));
 
     return true;
   };
-
-  // console.log(answers, "Answers")
 
   const renderStep = () => {
     if (!step) return <div>Invalid Step</div>;
@@ -106,10 +107,13 @@ function Page10() {
 
             <div className="text-center mb-5 mt-3 mt-md-0">
               <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
-                You will be shown some classroom scenarios with two  <br />
-                decisions. and two boxes labelled <span className="fw-bold">“SEL”</span> and <span className="fw-bold">“Not SEL”</span>.
+                You will be shown some classroom scenarios with two <br />
+                decisions and two boxes labelled{" "}
+                <span className="fw-bold">"SEL"</span> and{" "}
+                <span className="fw-bold">"Not SEL"</span>.
               </h2>
-              <br /><br />
+              <br />
+              <br />
               <h2 className="text-white px-5 d-inline-block text-start tot-week-2-question-text">
                 Drag and drop your decisions in the appropriate decision box.
               </h2>
@@ -120,7 +124,7 @@ function Page10() {
         return (
           <DragAndDropFrame
             info={{
-              images: step.images,
+              imagePairs: step.imagePairs,
               buckets: step.buckets,
               instruction: step.instruction,
             }}
@@ -140,16 +144,16 @@ function Page10() {
     <>
       {renderStep()}
       {currentStep !== 1 && errorMessage && (
-        <div className="text-danger">{errorMessage}</div>
-      )}{" "}
-      {/* Display error message */}
+        <div className="text-danger text-center mt-2 fw-bold">
+          {errorMessage}
+        </div>
+      )}
       <div className="d-flex justify-content-center align-items-center gap-2">
         <StepIndicator totalSteps={totalSteps} />
         <InternalStepIndicator
           totalSteps={dragDropImageLength}
           currentStep={currentImageIndex + 1}
         />
-
       </div>
 
       <div className="d-flex justify-content-center gap-96px mt-3 gap-4">
@@ -160,4 +164,4 @@ function Page10() {
   );
 }
 
-export default Page10;
+export default WeekTwoPage10;

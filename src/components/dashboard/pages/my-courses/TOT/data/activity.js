@@ -166,37 +166,73 @@ export const courseContent = {
       {
         id: 10,
         type: "multiStep",
-        title: "Write a letter to yourself.",
+        title: "Classroom Decision Making",
         steps: [
           {
             stepId: 1,
             type: "instruction",
-            challenge:
-              "Preparing for a big math test, and you don’t understand all the topics.",
-            statement:
-              "I don’t understand all the topics. yet., but I can keep studying and practicing until I do",
           },
           {
             stepId: 2,
             type: "imageDragAndDrop",
             instruction:
-              "Drag-and-drop the statements on the left into any of these bowls.",
-            steps: 4,
+              "Drag-and-drop the statements into the appropriate bowl.",
             buckets: [
               {
                 id: "green",
-                title: "Resilience",
+                title: "SEL",
               },
               {
                 id: "red",
-                title: "Grit",
+                title: "Not SEL",
               },
             ],
-            images: [
-              "Sam has been practicing the piano for months, even though learning new songs is really hard. He doesn’t give up, even when it takes a long time to get it right.",
-              "Chris is writing a book. It’s taking a really long time, but he’s excited to finish it, even though it’s hard to think of new ideas sometimes.",
-              "Emma’s science project didn’t go as planned. She felt frustrated, but after taking a deep breath, she decided to figure out how to fix it and finish her project.",
-              "After losing a big game, Lucy felt sad, but she reminded herself to keep her head up and practice for the next one.",
+            imagePairs: [
+              {
+                pairId: 1,
+                decisionText:
+                  "A student constantly interrupts your lesson, making it hard for others to focus.",
+                images: [
+                  {
+                    id: 0,
+                    text: "Call them out in front of the class.",
+                  },
+                  {
+                    id: 1,
+                    text: "Kindly caution the student in front of the class. After the lesson, pull them aside later and ask what’s going on.",
+                  },
+                ],
+              },
+              {
+                pairId: 2,
+                decisionText:
+                  "A shy student never speaks up, even though you know they have great ideas.",
+                images: [
+                  {
+                    id: 2,
+                    text: "Let them stay quiet.",
+                  },
+                  {
+                    id: 3,
+                    text: "Find creative ways to boost their confidence.",
+                  },
+                ],
+              },
+              {
+                pairId: 3,
+                decisionText:
+                  "A student fails their test and seems really discouraged.",
+                images: [
+                  {
+                    id: 4,
+                    text: "Remind them they need to work harder.",
+                  },
+                  {
+                    id: 5,
+                    text: "Help them see their progress and plan for improvement.",
+                  },
+                ],
+              },
             ],
           },
         ],
