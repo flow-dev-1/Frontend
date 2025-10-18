@@ -1944,10 +1944,18 @@ export const courseContent = {
       },
       {
         id: 4,
-        type: "listQuestion",
-        question:
-          "Can you mention some challenges you have encountered and bounced back from?",
-        inputCount: 5,
+        type: "question",
+        questions: [
+          {
+            type: "subject",
+            question: "What subject(s) do you teach?",
+          },
+          {
+            type: "skill",
+            question:
+              "Which SEL skill do you think is or can be embedded in it?",
+          },
+        ],
         inputType: "text",
         inputPlaceholder: "Type your answer here",
         navigation: {

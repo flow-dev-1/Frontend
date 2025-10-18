@@ -1,81 +1,103 @@
-import SmartTextBox from "../../../components/SmartTextBox";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import QuestionBox from "../../../components/QuestionBox";
-import coping from "../../../../../../../../assets/resilience-grit-images/coping.png";
-import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
-import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import MultiInput from "./components/MultiInputs";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import "./page4.css";
+import Frame from "./components/Frame";
 
-function WeekFivePage4() {
-  const dispatch = useDispatch();
+function Page4() {
   const pageData = useSelector(selectPageData);
-  const adminDatas = useSelector(adminData);
-  const userAnswers = useSelector(userAnswer);
+  const dispatch = useDispatch();
   const [answers, setAnswers] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const adminDatas = useSelector(adminData);
+  const userAnswers = useSelector(userAnswer);
 
+  // Load user answers (normalize them to always use `id`)
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
-    return () => { };
-  }, [userAnswers]);
+
+    if (!Array.isArray(response?.answer)) {
+      setAnswers([]);
+      return;
+    }
+
+    // Normalize any legacy data that might use stepId instead of id
+    const normalized = response.answer.map((item) =>
+      item.id
+        ? item
+        : item.stepId
+        ? { ...item, id: item.stepId }
+        : { ...item, id: pageData.id }
+    );
+
+    setAnswers(normalized);
+  }, [userAnswers, pageData.id]);
 
   const saveUserInput = () => {
-    if (adminDatas.isAdmin) return true;
-    if (answers.length < 5) {
-      setErrorMessage("At least 5 values are required!");
+    if (adminDatas?.isAdmin) return true;
+
+    // Find answers for the current page
+    const stepData = answers.find((item) => item.id === pageData.id);
+
+    if (!stepData) {
+      setErrorMessage("Oops! All inputs must be filled out.");
       return false;
     }
 
-    const emptyInputs = answers.filter((item) => item?.value?.trim() === "");
-    if (emptyInputs.length > 0) {
+    // Dynamically get all question types for this page 
+    const requiredFields = Array.isArray(pageData.questions)
+      ? pageData.questions.map((q) => q.type)
+      : [];
+
+    // Check if all required fields are filled
+    const missingFields = requiredFields.filter(
+      (field) => !stepData[field] || stepData[field].trim() === ""
+    );
+
+    if (missingFields.length > 0) {
       setErrorMessage(
-        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
+        `Please fill out all inputs. Missing: ${missingFields.join(", ")}.`
       );
       return false;
     }
 
-    setErrorMessage(""); // Clear error if input is valid
-
+    setErrorMessage("");
     const activityData = {
       page: pageData.id,
       answer: answers,
     };
-    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
+    dispatch(saveActivity(activityData));
     return true;
   };
 
-
-
   return (
     <>
-      <QuestionBox>
-        <MultiInput
-          pageData={pageData}
-          answers = {answers}
-          setAnswers={setAnswers}
-          setErrorMessage={setErrorMessage}
-        />
-      </QuestionBox>
+      <Frame
+        data={{
+          step: pageData.id,
+          questions: pageData.questions,
+        }}
+        setErrorMessage={setErrorMessage}
+        answers={answers}
+        setAnswers={setAnswers}
+      />
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
     </>
-
   );
 }
 
-export default WeekFivePage4;
+export default Page4;
