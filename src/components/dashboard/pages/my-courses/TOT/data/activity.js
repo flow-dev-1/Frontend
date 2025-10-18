@@ -2158,4 +2158,250 @@ export const courseContent = {
       },
     ],
   },
+  week6: {
+    title: "Coping Skills",
+    pages: [
+      {
+        id: 1,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_1.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 2,
+        type: "question",
+        questionType: "text",
+        question: "What do you understand by the word",
+        hasImage: true,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 3,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_2.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 4,
+        type: "question",
+        questions: [
+          {
+            type: "subject",
+            question: "What subject(s) do you teach?",
+          },
+          {
+            type: "skill",
+            question:
+              "Which SEL skill do you think is or can be embedded in it?",
+          },
+        ],
+        inputType: "text",
+        inputPlaceholder: "Type your answer here",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 5,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_3.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 6,
+        type: "question",
+        questions: [
+          {
+            type: "game",
+            question: "Name of Game:",
+          },
+          {
+            type: "instructions",
+            question: "Instructions:",
+          },
+          {
+            type: "connection",
+            question: "SEL Connection:",
+          },
+        ],
+        inputType: "text",
+        inputPlaceholder: "Type your answer here",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 7,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 8,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "The next activity helps you think about how to intentionally use storytelling to spark meaningful conversations in your classroom. \nSelect the appropriate SEL skills that matches the story.",
+            ],
+            options:
+              "Competence, Confidence, Coping, Control, Character, Connections, and Contribution.",
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question:
+              "Tunde failed his first Spanish test. Instead of giving up, he asked for help and practiced every evening until he improved.",
+            options: [
+              {
+                id: "A",
+                text: "Self-awareness & Emotional Regulation",
+              },
+              {
+                id: "B",
+                text: "Resilience",
+              },
+              {
+                id: "C",
+                text: "Empathy",
+              },
+              {
+                id: "D",
+                text: "Collaboration & Social Awareness",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question:
+              "During a class discussion, a teacher repeats and validates a quiet student’s point, making sure their voice is heard.",
+            options: [
+              {
+                id: "A",
+                text: "Self-awareness & Emotional Regulation",
+              },
+              {
+                id: "B",
+                text: "Resilience",
+              },
+              {
+                id: "C",
+                text: "Empathy",
+              },
+              {
+                id: "D",
+                text: "Collaboration & Social Awareness",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "dropdownScenario",
+            question: `Amina noticed her classmate was upset. She sat with her, listened to her problems, and comforted her by sharing a similar experience."`,
+            options: [
+              {
+                id: "A",
+                text: "Self-awareness & Emotional Regulation",
+              },
+              {
+                id: "B",
+                text: "Resilience",
+              },
+              {
+                id: "C",
+                text: "Empathy",
+              },
+              {
+                id: "D",
+                text: "Collaboration & Social Awareness",
+              },
+            ],
+          },
+          {
+            stepId: 5,
+            type: "dropdownScenario",
+            question:
+              "Chijioke always knew he could do math, but when a difficult problem came up, he froze. After speaking with his teacher and some reflection, he realized he needed to stay calm and keep trying.",
+            options: [
+              {
+                id: "A",
+                text: "Self-awareness & Emotional Regulation",
+              },
+              {
+                id: "B",
+                text: "Resilience",
+              },
+              {
+                id: "C",
+                text: "Empathy",
+              },
+              {
+                id: "D",
+                text: "Collaboration & Social Awareness",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 9,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 10,
+        type: "question",
+        questionType: "text",
+        question:
+          "Document your current classroom routines. Make it simple, realistic, and something you do consistently.",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 11,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+    ],
+  },
 };

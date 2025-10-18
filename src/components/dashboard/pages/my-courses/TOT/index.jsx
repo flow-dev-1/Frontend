@@ -102,6 +102,20 @@ import WeekFivePage10 from "./weeks/week5/page10/Page10";
 import WeekFivePage11 from "./weeks/week5/page11/Page11";
 import WeekFivePage12 from "./weeks/week5/page12/Page12";
 
+// Week 6
+import WeekSixPage1 from "./weeks/week6/page1/Page1";
+import WeekSixPage2 from "./weeks/week6/page2/Page2";
+import WeekSixPage3 from "./weeks/week6/page3/Page3";
+import WeekSixPage4 from "./weeks/week6/page4/Page4";
+import WeekSixPage5 from "./weeks/week6/page5/Page5";
+import WeekSixPage6 from "./weeks/week6/page6/Page6";
+import WeekSixPage7 from "./weeks/week6/page7/page7.jsx";
+import WeekSixPage8 from "./weeks/week6/page8/Page8";
+import WeekSixPage9 from "./weeks/week6/page9/Page9";
+import WeekSixPage10 from "./weeks/week6/page10/Page10";
+import WeekSixPage11 from "./weeks/week6/page11/Page11";
+import WeekSixPage12 from "./weeks/week6/page12/Page12";
+
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../services/api/user.js";
@@ -390,7 +404,35 @@ const WeekContent = () => {
           default:
             return null;
         }
-
+      case 6:
+        switch (currentPage) {
+          case 1:
+            return <WeekSixPage1 />;
+          case 2:
+            return <WeekSixPage2 />;
+          case 3:
+            return <WeekSixPage3 />;
+          case 4:
+            return <WeekSixPage4 />;
+          case 5:
+            return <WeekSixPage5 />;
+          case 6:
+            return <WeekSixPage6 />;
+          case 7:
+            return <WeekSixPage7 />;
+          case 8:
+            return <WeekSixPage8 />;
+          case 9:
+            return <WeekSixPage9 />;
+          case 10:
+            return <WeekSixPage10 />;
+          case 11:
+            return <WeekSixPage11 />;
+          case 12:
+            return <WeekSixPage12 />;
+          default:
+            return null;
+        }
       default:
         return null;
     }
