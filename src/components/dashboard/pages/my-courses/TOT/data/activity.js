@@ -1177,37 +1177,130 @@ export const courseContent = {
       {
         id: 10,
         type: "multiStep",
-        title: "Write a letter to yourself.",
         steps: [
           {
             stepId: 1,
             type: "instruction",
-            challenge:
-              "Preparing for a big math test, and you don’t understand all the topics.",
-            statement:
-              "I don’t understand all the topics. yet., but I can keep studying and practicing until I do",
+            title: "Instruction",
+            instructions: [
+              "Welcome to the SONAR staircase. You will be presented with a 5 step staircase labeled with the words STOP, OBSERVE, NAME, ASK and REGULATE. You will also be shown 3 scenarios. For each stressful classroom scenario, use the SONAR pathway to walk through your response. Reflect on each step by answering the prompts below.",
+            ],
           },
           {
             stepId: 2,
-            type: "imageDragAndDrop",
-            instruction:
-              "Drag-and-drop the statements on the left into any of these bowls.",
-            steps: 4,
-            buckets: [
+            type: "scenario",
+            scenarioNumber: 1,
+            scenarioType: "textOnly",
+            scenarioTitle:
+              "A student constantly asks to leave the classroom during lessons, disrupting your teaching.",
+            ladderImage: "",
+            subQuestions: [
               {
-                id: "green",
-                title: "Resilience",
+                id: 1,
+                question: "What would your default reaction be?",
+                type: "text",
               },
               {
-                id: "red",
-                title: "Grit",
+                id: 2,
+                question:
+                  "What emotions are you noticing in yourself and the student?",
+                type: "text",
+              },
+              {
+                id: 3,
+                question: "Why is naming emotions helpful before responding?",
+                type: "text",
+              },
+              {
+                id: 4,
+                question:
+                  "Why is this bothering me? What does the student need?",
+                type: "text",
+              },
+              {
+                id: 5,
+                question:
+                  "Address the student privately instead of reacting on the spot",
+                type: "text",
               },
             ],
-            images: [
-              "Sam has been practicing the piano for months, even though learning new songs is really hard. He doesn’t give up, even when it takes a long time to get it right.",
-              "Chris is writing a book. It’s taking a really long time, but he’s excited to finish it, even though it’s hard to think of new ideas sometimes.",
-              "Emma’s science project didn’t go as planned. She felt frustrated, but after taking a deep breath, she decided to figure out how to fix it and finish her project.",
-              "After losing a big game, Lucy felt sad, but she reminded herself to keep her head up and practice for the next one.",
+          },
+          {
+            stepId: 3,
+            type: "scenario",
+            scenarioNumber: 2,
+            scenarioType: "textOnly",
+            scenarioTitle:
+              "A parent approaches you after class, expressing dissatisfaction with how their child is being treated in your classroom.",
+            ladderImage: "",
+            subQuestions: [
+              {
+                id: 1,
+                question: "What would your default reaction be?",
+                type: "text",
+              },
+              {
+                id: 2,
+                question:
+                  "What emotions are you noticing in yourself and the student?",
+                type: "text",
+              },
+              {
+                id: 3,
+                question: "Why is naming emotions helpful before responding?",
+                type: "text",
+              },
+              {
+                id: 4,
+                question:
+                  "Why is this bothering me? What does the student need?",
+                type: "text",
+              },
+              {
+                id: 5,
+                question:
+                  "Address the student privately instead of reacting on the spot.",
+                type: "text",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "scenario",
+            scenarioNumber: 3,
+            scenarioType: "withInput",
+            scenarioTitle:
+              "Create your own scenario and apply the SONAR method for emotional regulation.",
+            ladderImage: "",
+            subQuestions: [
+              {
+                id: 1,
+                question: "What would your default reaction be?",
+                type: "text",
+              },
+              {
+                id: 2,
+                question:
+                  "What emotions are you noticing in yourself and the student?",
+                type: "text",
+              },
+              {
+                id: 3,
+                question: "Why is naming emotions helpful before responding?",
+                type: "text",
+              },
+              {
+                id: 4,
+                question:
+                  "Why is this bothering me? What does the student need?",
+                type: "text",
+              },
+              {
+                id: 5,
+                question:
+                  "Address the student privately instead of reacting on the spot.",
+                type: "text",
+              },
             ],
           },
         ],

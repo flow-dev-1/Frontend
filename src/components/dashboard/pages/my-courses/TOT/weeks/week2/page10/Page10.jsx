@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import DragAndDropFrame from "./components/DranAndDropFrame";
 import Button from "../../../components/Button";
-
 import {
   selectPageData,
   selectCurrentStep,
@@ -14,123 +12,200 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import ScenarioFrame from "./components/ScenarioFrame";
+import LadderFrame from "./components/LadderFrame";
+import QuestionFrame from "./components/QuestionFrame";
 
-const InternalStepIndicator = ({ totalSteps, currentStep }) => {
-  return (
-    <div className="d-flex justify-content-center mt-4" style={{ gap: "10px" }}>
-      {[...Array(totalSteps)].map((_, index) => (
-        <div
-          key={index}
-          className={`${index + 2 <= currentStep ? "bg-step-active" : "bg-step"}`}
-          style={{
-            // flexBasis: "35px",
-            width: "35px",
-            height: "17px",
-            borderRadius: "8px",
-            cursor: index <= currentStep ? "pointer" : "default",
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-
-function WeekTwoPage10() {
-  const dispatch = useDispatch(); // Initialize dispatch
+function Page10() {
+  const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
-  const totalSteps = pageData?.steps?.length || 0;
-  const [answers, setAnswers] = useState([]); // State to hold answers
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
-  const step = pageData?.steps[currentStep - 1];
+  const [answers, setAnswers] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
-  const [dragDropImageLength, setDragDropImageLength] = useState(4)
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
+  // Calculate total steps dynamically
+  // 1 instruction + (number of scenarios × 7 steps per scenario)
+  const totalSteps = pageData?.steps
+    ? 1 + pageData.steps.filter((s) => s.type === "scenario").length * 7
+    : 0;
 
   useEffect(() => {
     if (!userAnswers) return;
-
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
 
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
-  }, [userAnswers]);
+  }, [userAnswers, pageData?.id]);
+
+  // Helper function to get current scenario and sub-step info
+  const getCurrentStepInfo = () => {
+    if (currentStep === 1) {
+      return { type: "instruction", stepId: 1 };
+    }
+
+    const scenarioSteps =
+      pageData?.steps.filter((s) => s.type === "scenario") || [];
+    const stepIndex = currentStep - 2; // Subtract 1 for instruction step, then 0-index
+    const scenarioIndex = Math.floor(stepIndex / 7);
+    const subStepIndex = stepIndex % 7;
+
+    if (scenarioIndex >= scenarioSteps.length) {
+      return { type: "invalid" };
+    }
+
+    const scenario = scenarioSteps[scenarioIndex];
+    const subStepTypes = [
+      "scenario", 
+      "ladder", 
+      "question", 
+      "question", 
+      "question", 
+      "question", 
+      "question", 
+    ];
+
+    return {
+      type: subStepTypes[subStepIndex],
+      scenario,
+      subStepIndex,
+      questionNumber: subStepIndex >= 2 ? subStepIndex - 1 : null,
+      stepId: currentStep,
+    };
+  };
 
   const saveUserInput = () => {
+    const stepInfo = getCurrentStepInfo();
+
+    // Skip validation for instruction and ladder steps
+    if (stepInfo.type === "instruction" || stepInfo.type === "ladder") {
+      return true;
+    }
+
+    // Skip validation for admins
     if (adminDatas.isAdmin) return true;
-    if (currentStep === 1) return true;
 
-    const stepData = answers.find((item) => item.stepId === currentStep);
+    // For scenario steps
+    if (stepInfo.type === "scenario") {
+      // Only validate if it's a "withInput" scenario
+      if (stepInfo.scenario?.scenarioType === "withInput") {
+        const stepData = answers.find((item) => item.stepId === currentStep);
 
-    if (!stepData) {
-      setErrorMessage("Oops! All Images must be placed in the buckects.");
-      return false;
+        if (!stepData || !stepData.value || stepData.value.trim() === "") {
+          setErrorMessage("Please provide your response before proceeding.");
+          return false;
+        }
+      }
+      return true;
     }
 
-    // Check total images dropped
-    const totalDropped = (stepData.value.green?.length || 0) +
-      (stepData.value.red?.length || 0);
+    // For question steps - always require input
+    if (stepInfo.type === "question") {
+      const stepData = answers.find((item) => item.stepId === currentStep);
 
-    if (totalDropped !== dragDropImageLength) {
-      setErrorMessage(`Please place all ${dragDropImageLength} images in the buckets.`);
-      return false;
+      if (!stepData || !stepData.value || stepData.value.trim() === "") {
+        setErrorMessage("Please answer this question before proceeding.");
+        return false;
+      }
     }
 
-    setErrorMessage(""); // Clear error if input is valid
+    setErrorMessage("");
 
     const activityData = {
       page: pageData.id,
       answer: answers,
     };
-    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    dispatch(saveActivity(activityData));
 
     return true;
   };
 
-  // console.log(answers, "Answers")
-
   const renderStep = () => {
-    if (!step) return <div>Invalid Step</div>;
+    const stepInfo = getCurrentStepInfo();
 
-    switch (step.type) {
+    if (stepInfo.type === "invalid") {
+      return <div>Invalid Step</div>;
+    }
+
+    switch (stepInfo.type) {
       case "instruction":
+        // const instructionStep = pageData?.steps[0];
         return (
           <QuestionBox extraStyle="bg-blue">
             <div className="text-center mb-5 mt-5 mt-md-4">
-              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction">
+              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction mt-5">
                 Instruction
               </h1>
             </div>
 
-            <div className="text-center mb-5 mt-3 mt-md-0">
-              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
-                You will be shown some classroom scenarios with two  <br />
-                decisions. and two boxes labelled <span className="fw-bold">“SEL”</span> and <span className="fw-bold">“Not SEL”</span>.
+            <div className="mb-5 mt-3 mt-md-0">
+              <h2 className="text-white py-2 px-5 rounded text-start tot-week-2-question-text">
+                Welcome to the <span className="fw-bold">SONAR</span> staircase.
               </h2>
-              <br /><br />
-              <h2 className="text-white px-5 d-inline-block text-start tot-week-2-question-text">
-                Drag and drop your decisions in the appropriate decision box.
+              <h2 className="text-white py-2 px-5 rounded text-start tot-week-2-question-text">
+                You will be presented with a 5 step staircase labeled with{" "}
+                <br />
+                the words{" "}
+                <span className="fw-bold">STOP, OBSERVE, NAME, ASK </span> and
+                <span className="fw-bold"> REGULATE.</span>
+              </h2>
+              <h2 className="text-white py-2 px-5 rounded text-start tot-week-2-question-text">
+                You will also be shown 3 scenarios. For each stressful <br />
+                classroom scenario, use the{" "}
+                <span className="fw-bold">SONAR</span> pathway to walk <br />
+                through your response. Reflect on each step by answering <br />
+                the prompts below.
               </h2>
             </div>
           </QuestionBox>
         );
-      case "imageDragAndDrop":
+
+      case "scenario":
         return (
-          <DragAndDropFrame
-            info={{
-              images: step.images,
-              buckets: step.buckets,
-              instruction: step.instruction,
+          <ScenarioFrame
+            data={{
+              stepId: stepInfo.stepId,
+              scenarioNumber: stepInfo.scenario.scenarioNumber,
+              scenarioTitle: stepInfo.scenario.scenarioTitle,
+              scenarioType: stepInfo.scenario.scenarioType,
+              mainInputQuestion: stepInfo.scenario.mainInputQuestion,
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
             setAnswers={setAnswers}
-            setCurrentImageIndex1={setCurrentImageIndex}
-            setDragDropImageLength={setDragDropImageLength}
           />
         );
+
+      case "ladder":
+        return (
+          <LadderFrame
+            data={{
+              stepId: stepInfo.stepId,
+              scenarioNumber: stepInfo.scenario.scenarioNumber,
+              imagePath: stepInfo.scenario.ladderImage,
+            }}
+          />
+        );
+
+      case "question":
+        const questionData =
+          stepInfo.scenario.subQuestions[stepInfo.questionNumber - 1];
+        return (
+          <QuestionFrame
+            data={{
+              stepId: stepInfo.stepId,
+              scenarioNumber: stepInfo.scenario.scenarioNumber,
+              questionNumber: stepInfo.questionNumber,
+              question: questionData.question,
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        );
+
       default:
         return <div>Unknown step type</div>;
     }
@@ -140,19 +215,12 @@ function WeekTwoPage10() {
     <>
       {renderStep()}
       {currentStep !== 1 && errorMessage && (
-        <div className="text-danger">{errorMessage}</div>
-      )}{" "}
-      {/* Display error message */}
-      <div className="d-flex justify-content-center align-items-center gap-2">
-        <StepIndicator totalSteps={totalSteps} />
-        <InternalStepIndicator
-          totalSteps={dragDropImageLength}
-          currentStep={currentImageIndex + 1}
-        />
-
-      </div>
-
-      <div className="d-flex justify-content-center gap-96px mt-3 gap-4">
+        <div className="text-danger text-center mt-3 fw-bold fs-5">
+          {errorMessage}
+        </div>
+      )}
+      <StepIndicator totalSteps={totalSteps} />
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
@@ -160,4 +228,4 @@ function WeekTwoPage10() {
   );
 }
 
-export default WeekTwoPage10;
+export default Page10;
