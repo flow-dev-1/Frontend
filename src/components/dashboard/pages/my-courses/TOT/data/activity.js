@@ -1877,14 +1877,110 @@ export const courseContent = {
           {
             stepId: 1,
             type: "instruction",
-            title: "My Web of Relationship: ",
-            subTitle: "Map out your support system.",
+            title: "Instruction",
+            instructions: [
+              "Let us reflect on our own journey as educator, the highs and the lows and how we have developed resilience in our own experiences.",
+              "Click each box starting from number 1 to answer the guiding questions. Simply type in your reflections.",
+            ],
           },
           {
             stepId: 2,
-            type: "fiveFieldsAnswers",
-            question: "Write out what these people think about you.",
-            answers: 5,
+            type: "careerLadder",
+            boxes: [
+              {
+                id: 5,
+                text: "5. Current Focus",
+                color: "green",
+                bgColor: "#27AE60",
+                questions: [
+                  {
+                    id: 1,
+                    question:
+                      "What area in your teaching profession do you want to build resilience?",
+                    subQuestion:
+                      "“Right now, I want to grow stronger in the area of…”",
+                  },
+                  {
+                    id: 2,
+                    question: "What support or mindset shift could help?",
+                    subQuestion: `“One thing that could support me in this area is…”`,
+                  },
+                ],
+              },
+              {
+                id: 4,
+                text: "4. Recent Success",
+                color: "gray",
+                bgColor: "#848484",
+                questions: [
+                  {
+                    id: 1,
+                    question: "Think of a recent moment that made you proud.",
+                    subQuestion: `“One recent teaching moment that made me proud was…”`,
+                  },
+                  {
+                    id: 2,
+                    question: "What personal strengths contributed to it?",
+                    subQuestion: `“I believe that my ability to ______ helped me succeed in that moment.”`,
+                  },
+                ],
+              },
+              {
+                id: 3,
+                text: "3. Turning Point",
+                color: "brown",
+                bgColor: "#904D35",
+                questions: [
+                  {
+                    id: 1,
+                    question:
+                      "What experience helped you shift, grow, or bounce back?",
+                    subQuestion: `“A turning point for me as an educator was when…”`,
+                  },
+                  {
+                    id: 2,
+                    question: "What lessons did you learn?",
+                    subQuestion: `“That experience taught me that…”`,
+                  },
+                ],
+              },
+              {
+                id: 2,
+                text: "2. Early Challenge",
+                color: "yellow",
+                bgColor: "#FCAF17",
+                questions: [
+                  {
+                    id: 1,
+                    question: "Describe a difficult experience early on.",
+                    subQuestion: `“One challenge I faced early in my teaching career was…”`,
+                  },
+                  {
+                    id: 2,
+                    question: "How did you handle it at the time?",
+                    subQuestion: `“At the time, I responded by….”`,
+                  },
+                ],
+              },
+              {
+                id: 1,
+                text: "1. Start of Teaching Career",
+                color: "red",
+                bgColor: "#EE2447",
+                questions: [
+                  {
+                    id: 1,
+                    question: "What motivated you to become a teacher?",
+                    subQuestion: `“One reason I felt called to teaching was…”`,
+                  },
+                  {
+                    id: 2,
+                    question: "What were your hopes or fears when you started?",
+                    subQuestion: `“When I first started teaching, I hoped that… but I also worried that…”`,
+                  },
+                ],
+              },
+            ],
           },
         ],
         navigation: {

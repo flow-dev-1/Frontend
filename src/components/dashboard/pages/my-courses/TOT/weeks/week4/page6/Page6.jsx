@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import Frame from "./components/Frame";
 import Button from "../../../components/Button";
 import {
   selectPageData,
@@ -13,97 +12,110 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import CareerLadderFrame from "./components/CareerLadderFrame";
 
 function WeekFourPage6() {
-  const dispatch = useDispatch(); // Initialize dispatch
+  const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
   const totalSteps = pageData?.steps?.length || 0;
-  const [answers, setAnswers] = useState([]); // State to hold answers
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const [answers, setAnswers] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
   const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
-  // console.log(userAnswers)
 
   useEffect(() => {
     if (!userAnswers) return;
-    const response = userAnswers?.activities?.find(
+    const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
 
-    if (adminDatas.isAdmin) {
-      setAnswers([]);
-      return;
-    };
-    const answerCopy =   response?.answer  ? [...response?.answer] : [];
-    setAnswers(answerCopy);
-    return () => {};
-  }, [userAnswers]);
+    if (response?.answer) {
+      setAnswers(response.answer);
+    }
+  }, [userAnswers, pageData?.id]);
 
   const saveUserInput = () => {
+    // Skip validation for instruction step
+    if (currentStep === 1) return true;
     if (adminDatas.isAdmin) return true;
-    if(currentStep === 1) return true;
 
-    if (answers.length < 5) {
-      setErrorMessage("At least 5 values are required!");
-      return false;
+    // For career ladder step, validate all boxes are completed
+    if (step?.type === "careerLadder") {
+      const boxes = step.boxes || [];
+      const allCompleted = boxes.every((box) => {
+        const boxAnswers = answers[box.id];
+        if (!boxAnswers) return false;
+
+        // Check if both questions are answered
+        return box.questions.every((q) => {
+          const answer = boxAnswers[q.id];
+          return answer && answer.trim() !== "";
+        });
+      });
+
+      if (!allCompleted) {
+        setErrorMessage(
+          "Please complete all boxes in the career ladder before proceeding."
+        );
+        return false;
+      }
+
+      setErrorMessage("");
+
+      const activityData = {
+        page: pageData.id,
+        answer: answers,
+      };
+      dispatch(saveActivity(activityData));
+      return true;
     }
-
-    const emptyInputs = answers.filter((item) => item?.text?.trim() === "");
-    if (emptyInputs.length > 0) {
-      setErrorMessage(
-        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
-      );
-      return false;
-    }
-
-    setErrorMessage(""); // Clear error if input is valid
-
-    const activityData = {
-      page: pageData.id,
-      answer: answers,
-    };
-    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
     return true;
   };
-  // console.log(answers, "Answers")
 
   const renderStep = () => {
-    // const step = pageData?.steps[currentStep - 1];
-    // console.log(currentStep, step, "step")
     if (!step) return <div>Invalid Step</div>;
 
     switch (step.type) {
       case "instruction":
         return (
-          <QuestionBox>
-            <div className="p-5">
-              <div className="text-center mb-5 mt-4 mt-md-0">
-                <h2 className="text-white bg-blue px-3 py-2 fs-1 rounded d-inline display-4 text-center">
-                  {step.type}
-                </h2>
-              </div>
-              <h2 className="text-gray display-4 text-center">{step.title}</h2>
-              <h2 className="text-gray display-4 text-center">{step.subTitle}</h2>
+          <QuestionBox extraStyle="bg-blue">
+            <div className="text-center mb-5 mt-5 mt-md-4">
+              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction">
+                Instruction
+              </h1>
             </div>
 
+            <div className="text-center mb-5 mt-3 mt-md-0">
+              {step.instructions.map((instruction, index) => (
+                <React.Fragment key={index}>
+                  <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
+                    {instruction}
+                  </h2>
+                  {index < step.instructions.length - 1 && (
+                    <>
+                      <br />
+                      <br />
+                    </>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
           </QuestionBox>
         );
-      case "fiveFieldsAnswers":
+
+      case "careerLadder":
         return (
-          <Frame
-            data={{
-              step: step.stepId,
-              question: step.question,
-              expectedAnswers: step.answers,
-            }}
-            setErrorMessage={setErrorMessage}
+          <CareerLadderFrame
+            boxes={step.boxes}
             answers={answers}
             setAnswers={setAnswers}
+            setErrorMessage={setErrorMessage}
           />
         );
+
       default:
         return <div>Unknown step type</div>;
     }
@@ -112,10 +124,13 @@ function WeekFourPage6() {
   return (
     <>
       {renderStep()}
-      {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
-      {/* Display error message */}
+      {currentStep !== 1 && errorMessage && (
+        <div className="text-danger text-center mt-3 fw-bold fs-5">
+          {errorMessage}
+        </div>
+      )}
       <StepIndicator totalSteps={totalSteps} />
-      <div className="d-flex justify-content-center gap-96px mt-4 gap-4 z-300 position-relative">
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
