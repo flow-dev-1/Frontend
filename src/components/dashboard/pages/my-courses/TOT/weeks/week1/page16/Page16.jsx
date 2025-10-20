@@ -79,20 +79,28 @@ function Page16() {
 
   return (
     <>
-      <QuestionBox>
-        <div className="d-flex gap-3 flex-column flex-md-row">
-          <h2 className="text-blue week-2-question-text">Question:</h2>
-          <h2 className="text-gray week-2-question-text">{pageData.question}</h2>
+      <QuestionBox extraStyle="bg-custom-blue">
+        <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-start mt-4">
+          <h2 className="text-blue fs-1 mb-0 flex-shrink-0 tot-question-text">
+            Question:
+          </h2>
+
+          <div className="d-flex flex-column flex-grow-1 min-w-0 tot-question-text">
+            <h2 className="text-gray fs-1 mb-5">{pageData.question}</h2>
+          </div>
+          <h2 className="text-white bg-danger p-1 px-2 fs-1 mb-0 flex-shrink-0 tot-question-text">
+            20 s
+          </h2>
         </div>
 
-        <div className="input-container">
+        <div className="bg-white px-4 pt-3 pb-2">
           {[...Array(pageData.numberOfInputs || 5)].map((_, index) => (
             <div key={index}>
               <div className="d-flex gap-3 label-input-container">
                 <p className="input-label">{index + 1}.</p>
                 <input
                   type="text"
-                  className="resilience-input"
+                  className="resilience-input bg-white"
                   placeholder={
                     pageData.inputPlaceholder || "Type your answer here"
                   }

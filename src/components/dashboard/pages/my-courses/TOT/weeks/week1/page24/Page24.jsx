@@ -37,7 +37,7 @@ function WeekOneAssessment() {
   useEffect(() => {
     if (!userAnswers) return;
     setAnswers(userAnswers?.assessments || []);
-    return () => { };
+    return () => {};
   }, [userAnswers]);
 
   // Mutation for saving user data
@@ -53,15 +53,15 @@ function WeekOneAssessment() {
         )}% in the quiz`
       );
       toast.success(data.message || "Answers saved successfully!"); // Show success toast
-      // dispatch(
-      //   updateData({
-      //     course: null,
-      //     courseEnrollmentId: null,
-      //     week: 1,
-      //     activities: [],
-      //     assessments: [],
-      //   })
-      // );
+      dispatch(
+        updateData({
+          course: null,
+          courseEnrollmentId: null,
+          week: 1,
+          activities: [],
+          assessments: [],
+        })
+      );
       dispatch(navigateNext());
     },
     onError: (error) => {
@@ -109,11 +109,8 @@ function WeekOneAssessment() {
     dispatch(saveAssessment(answers));
 
     if (isLastQuestion) {
-
-      console.log(userAnswers.activities, "userAnswers.activities");
-
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 5;
+        answers.length !== totalSteps || userAnswers.activities.length !== 6;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(
@@ -122,42 +119,51 @@ function WeekOneAssessment() {
         return false;
       }
 
-      // For nested questions check that all answeres were provided. when page is refreshed data may be lost
+      // For nested questions check that all answeres were provided
 
-      // Page 4 has nested questions
+      // Page 2 has nested questions
       const selectedActivity = userAnswers.activities.find(
-        (activity) => activity.page === 4
+        (activity) => activity.page === 2
       );
-
-      const selectedActivityIsValid = (selectedActivity &&
+      const isValidActivity =
+        selectedActivity &&
         Array.isArray(selectedActivity.answer) &&
-        selectedActivity.answer.length === 5);
+        selectedActivity.answer.length === 3;
 
+      if (isValidActivity) {
+        const userScore = calculateResult(
+          assessmentData.questions,
+          answers,
+          totalSteps
+        );
 
-      // Page 8 has nested questions
-      const selectedActivity1 = userAnswers.activities.find(
-        (activity) => activity.page === 8
-      );
-      const totalDroped = selectedActivity1?.answer?.[0].value?.green?.length + selectedActivity1?.answer?.[0].value?.red?.length
+        console.log(userScore, "userScore");
 
-      const selectedActivity1IsValid = totalDroped === 4
+        mutation.mutate({
+          ...userAnswers,
+          assessments: answers,
+          rating: userScore.toString(),
+        });
 
-      // Page 10 has nested questions
-      const selectedActivity2 = userAnswers.activities.find(
-        (activity) => activity.page === 10
-      );
+        //*****************This will come in later wen the code begins to break or escape questions ******/
 
-      const selectedActivity2isValid = selectedActivity2?.answer?.every(item => item.stepId !== undefined &&
-        item.value)
+        // const isValid = selectedActivity.answer.every(item =>
+        //   item.stepId !== undefined &&
+        //   item.value &&
+        //   Object.keys(item.value).length === 3
+        // );
 
-      if (selectedActivityIsValid && selectedActivity1IsValid && selectedActivity2isValid) {
+        // if (isValid) {
+        //   const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
 
-          const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
+        //   console.log(userScore, "userScore")
 
-          console.log(userAnswers, userScore, "userScore")
+        //   // mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
+        // } else {
 
-          mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
-
+        //   setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+        //   return false;
+        // }
       } else {
         setErrorMessage(
           "Oops! Some unanswered questions have been detected. Kindly go back and review!"
@@ -188,6 +194,7 @@ function WeekOneAssessment() {
         currentStep={currentStep}
         selectedOption={answers[currentStep - 1]?.value || ""}
         onOptionSelect={handleOptionSelect}
+        isPreAssessment={true}
       />
     );
   };
@@ -202,14 +209,12 @@ function WeekOneAssessment() {
 
   return (
     <>
-      <QuestionBox
-        extraMobileStyle={"mobile-group-2"}
-      >
-        <div className="bg-blue text-white px-3 py-1 mb-2 assessment-header">
-          <h2 className="fs-1 text-white text-center">
+      <QuestionBox>
+        <div className="text-white p-3 mb-3">
+          <h2 className="fs-1 text-blue text-center tot-week-2-question-text fw-bold ">
             {assessmentData.title}
           </h2>
-          <p className="text-center">{assessmentData.subtitle}</p>
+          <p className="text-center text-blue">{assessmentData.subtitle}</p>
         </div>
 
         {renderStep()}

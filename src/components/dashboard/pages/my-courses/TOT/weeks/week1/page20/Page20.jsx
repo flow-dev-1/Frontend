@@ -9,7 +9,8 @@ import {
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import QuestionBox from "../../../components/QuestionBox";
 import ColoredTextField from "../../../components/ColoredTextField";
-import "./page20.css"
+import "./page20.css";
+import BigTextBox from "../../../components/BigTextBox";
 
 function Page20() {
   const pageData = useSelector(selectPageData);
@@ -20,21 +21,23 @@ function Page20() {
 
   const userAnswers = useSelector(userAnswer);
 
-
-
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    const answerCopy =  adminDatas.isAdmin ? [] : response?.answer ? [...response.answer] : [];
+    const answerCopy = adminDatas.isAdmin
+      ? []
+      : response?.answer
+      ? [...response.answer]
+      : [];
     setAnswers(answerCopy);
-    return () => { };
+    return () => {};
   }, [userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
-    return true
+    return true;
     if (answers.length < 3) {
       setErrorMessage("At least 3 values are required!");
       return false;
@@ -82,18 +85,20 @@ function Page20() {
     });
   };
 
-
   return (
     <>
-      <QuestionBox
-      extraMobileStyle={"mobile-group-2"}
-      >
+      <QuestionBox extraMobileStyle={""} extraStyle={"bg-custom-blue"}>
         <div className="container">
           <div className="row justify-content-between align-items-start g-4">
             {/* Question heading */}
-            <div className="d-flex gap-3 flex-column flex-md-row align-items-start mb-4">
-              <h2 className="text-blue week-2-question-text week-4-question-text-mobile">Question: </h2>
-              <h2 className="text-gray week-2-question-text week-4-question-text">{pageData.question}</h2>
+            <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-start mt-5">
+              <h2 className="text-blue fs-1 mb-0 flex-shrink-0 tot-question-text">
+                Question:
+              </h2>
+
+              <div className="d-flex flex-column flex-grow-1 min-w-0 tot-question-text">
+                <h2 className="text-gray fs-1 mb-3">{pageData.question}</h2>
+              </div>
             </div>
 
             {/* Fields stack on mobile, row on desktop */}
@@ -101,35 +106,45 @@ function Page20() {
               {pageData.fields.map((field, index) => (
                 <div
                   key={index}
-                  className="d-flex flex-column align-items-center flex-fill px-3"
-                  style={{ minWidth: { md: "150px" } }}
+                  className="px-3 bg-white"
+                  // style={{ minWidth: { md: "150px" } }}
                 >
                   {/* Label */}
-                  <h2
-                    className="d-flex justify-content-center align-items-center p-3 px-5 week-4-label"
-                    style={{
-                      backgroundColor: field.colorCode
-                    }}
-                  >
-                    {field.number}
+                  <h2 className="bg-gray text-white p-1 mt-1 d-inline-block fs-2 fst-normal rounded-1">
+                    {field.number}.
                   </h2>
 
+                  <BigTextBox
+                    value={
+                      answers.find((answer) => answer.index === index)?.value ||
+                      ""
+                    }
+                    handleChange={(e) =>
+                      handleInputChange(index, e.target.value)
+                    }
+                    // value={myAnswer}
+                  />
+
                   {/* Expanding Textarea */}
-                  <div className="w-100">
+                  {/* <div className="w-100">
                     <ColoredTextField
                       index={index}
                       color={field.textFieldColor}
-                      value={answers.find((answer) => answer.index === index)?.value || ""}
-                      handleChange={(e) => handleInputChange(index, e.target.value)}
+                      value={
+                        answers.find((answer) => answer.index === index)
+                          ?.value || ""
+                      }
+                      handleChange={(e) =>
+                        handleInputChange(index, e.target.value)
+                      }
                       extraMobileStyles={"week-4-textarea"}
                     />
-                  </div>
+                  </div> */}
                 </div>
               ))}
             </div>
           </div>
         </div>
-
       </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
@@ -137,8 +152,6 @@ function Page20() {
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
     </>
-
-
   );
 }
 

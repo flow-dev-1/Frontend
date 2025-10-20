@@ -1,49 +1,84 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import "./page4.css";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import QuestionBox from "../../../components/QuestionBox";
+import DragAndDropFrame from "./components/DranAndDropFrame";
 import Button from "../../../components/Button";
-import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+
+import {
+  selectPageData,
+  selectCurrentStep,
+} from "../../../../../../../../redux/reducers/navigationSlice";
+import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-import QuestionBox from "../../../components/QuestionBox";
-import ColoredTextField from "../../../components/ColoredTextField";
-import "./page4.css"
+import Frame from "./components/Frame";
+
+const InternalStepIndicator = ({ totalSteps, currentStep }) => {
+  return (
+    <div className="d-flex justify-content-center mt-4" style={{ gap: "10px" }}>
+      {[...Array(totalSteps)].map((_, index) => (
+        <div
+          key={index}
+          className={`${
+            index + 2 <= currentStep ? "bg-step-active" : "bg-step"
+          }`}
+          style={{
+            // flexBasis: "35px",
+            width: "35px",
+            height: "17px",
+            borderRadius: "8px",
+            cursor: index <= currentStep ? "pointer" : "default",
+          }}
+        />
+      ))}
+    </div>
+  );
+};
 
 function WeekFourPage4() {
+  const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
-  const dispatch = useDispatch();
+  const currentStep = useSelector(selectCurrentStep);
+  const totalSteps = pageData?.steps?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
-  const adminDatas = useSelector(adminData);
-
+  const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
-
-
+  const adminDatas = useSelector(adminData);
+  const [dragDropImageLength, setDragDropImageLength] = useState(4);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     if (!userAnswers) return;
+
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    const answerCopy =  adminDatas.isAdmin ? [] : response?.answer ? [...response.answer] : [];
-    setAnswers(answerCopy);
-    return () => { };
+
+    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
   }, [userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
-    if (answers.length < 3) {
-      setErrorMessage("At least 3 values are required!");
+    if (currentStep === 1) return true;
+
+    const stepData = answers.find((item) => item.stepId === currentStep);
+
+    if (!stepData) {
+      setErrorMessage("Oops! All Images must be placed in the buckects.");
       return false;
     }
 
-    const emptyInputs = answers.filter((item) => item?.value?.trim() === "");
-    if (emptyInputs.length > 0) {
+    // Check total images dropped
+    const totalDropped =
+      (stepData.value.green?.length || 0) + (stepData.value.red?.length || 0);
+
+    if (totalDropped !== dragDropImageLength) {
       setErrorMessage(
-        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
+        `Please place all ${dragDropImageLength} images in the buckets.`
       );
       return false;
     }
@@ -59,86 +94,83 @@ function WeekFourPage4() {
     return true;
   };
 
-  const handleInputChange = (index, value) => {
-    setErrorMessage("");
-    // Update answers state with the new value
-    setAnswers((prevAnswers) => {
-      // Check if the answer already exists
-      const existingAnswerIndex = prevAnswers.findIndex(
-        (answer) => answer.index === index
-      );
-      if (existingAnswerIndex > -1) {
-        // Update existing answer
-        const updatedAnswers = [...prevAnswers];
-        updatedAnswers[existingAnswerIndex] = {
-          ...updatedAnswers[existingAnswerIndex],
-          value,
-        };
-        return updatedAnswers;
-      } else {
-        // Add new answer
-        return [...prevAnswers, { index, value }];
-      }
-    });
-  };
+  // console.log(answers, "Answers")
 
+  const renderStep = () => {
+    if (!step) return <div>Invalid Step</div>;
+
+    switch (step.type) {
+      case "instruction":
+        return (
+          <QuestionBox extraStyle="bg-blue">
+            <div className="text-center mb-5 mt-5 mt-md-4">
+              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction">
+                Instruction
+              </h1>
+            </div>
+
+            <div className="text-center mb-5 mt-3 mt-md-0">
+              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
+                Drag the statements that show a fixed mindset into the fixed
+                mindset box and the statements that show a growth mindset to the
+                appropriate box. <br /> <br />
+                This activity will help you practice how to identify fixed and
+                growth mindset thinking patterns in everyday scenarios.
+              </h2>
+            </div>
+          </QuestionBox>
+        );
+      case "imageDragAndDrop":
+        return (
+          <DragAndDropFrame
+            info={{
+              images: step.images,
+              buckets: step.buckets,
+              instruction: step.instruction,
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+            setCurrentImageIndex1={setCurrentImageIndex}
+            setDragDropImageLength={setDragDropImageLength}
+          />
+        );
+      case "question":
+        return (
+          <Frame
+            data={{
+              step: step.stepId,
+              question: step.question,
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        );
+      default:
+        return <div>Unknown step type</div>;
+    }
+  };
 
   return (
     <>
-      <QuestionBox
-      extraMobileStyle={"mobile-group-2"}
-      >
-        <div className="container">
-          <div className="row justify-content-between align-items-start g-4">
-            {/* Question heading */}
-            <div className="d-flex gap-3 flex-column flex-md-row align-items-start mb-4">
-              <h2 className="text-blue week-2-question-text week-4-question-text-mobile">Question: </h2>
-              <h2 className="text-gray week-2-question-text week-4-question-text">{pageData.question}</h2>
-            </div>
-
-            {/* Fields stack on mobile, row on desktop */}
-            <div className="d-flex flex-column flex-md-row justify-content-between align-items-start w-100 gap-3">
-              {pageData.fields.map((field, index) => (
-                <div
-                  key={index}
-                  className="d-flex flex-column align-items-center flex-fill px-3"
-                  style={{ minWidth: { md: "150px" } }}
-                >
-                  {/* Label */}
-                  <h2
-                    className="d-flex justify-content-center align-items-center p-3 px-5 week-4-label"
-                    style={{
-                      backgroundColor: field.colorCode
-                    }}
-                  >
-                    {field.number}
-                  </h2>
-
-                  {/* Expanding Textarea */}
-                  <div className="w-100">
-                    <ColoredTextField
-                      index={index}
-                      color={field.textFieldColor}
-                      value={answers.find((answer) => answer.index === index)?.value || ""}
-                      handleChange={(e) => handleInputChange(index, e.target.value)}
-                      extraMobileStyles={"week-4-textarea"}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-      </QuestionBox>
-      {errorMessage && <div className="text-danger">{errorMessage}</div>}
-      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
+      {renderStep()}
+      {currentStep !== 1 && errorMessage && (
+        <div className="text-danger">{errorMessage}</div>
+      )}{" "}
+      {/* Display error message */}
+      <div className="d-flex justify-content-center align-items-center gap-2">
+        <StepIndicator totalSteps={totalSteps} />
+        <InternalStepIndicator
+          totalSteps={dragDropImageLength}
+          currentStep={currentImageIndex + 1}
+        />
+      </div>
+      <div className="d-flex justify-content-center gap-96px mt-3 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
     </>
-
-
   );
 }
 

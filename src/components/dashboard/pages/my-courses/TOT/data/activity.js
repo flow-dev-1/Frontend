@@ -5,7 +5,8 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_1.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_1.mp4",
         hasNextButton: true,
       },
       {
@@ -52,7 +53,8 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_2.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -61,7 +63,8 @@ export const courseContent = {
       {
         id: 4,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_2.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_2.mp4",
         type: "showFeelings",
         navigation: {
           prev: true,
@@ -71,7 +74,8 @@ export const courseContent = {
       {
         id: 5,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_3.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -85,8 +89,10 @@ export const courseContent = {
           {
             stepId: 1,
             type: "instruction",
-            challenge: "Preparing for a big math test, and you don’t understand all the topics.",
-            statement: "I don’t understand all the topics. yet., but I can keep studying and practicing until I do"
+            challenge:
+              "Preparing for a big math test, and you don’t understand all the topics.",
+            statement:
+              "I don’t understand all the topics. yet., but I can keep studying and practicing until I do",
           },
           {
             stepId: 2,
@@ -102,8 +108,7 @@ export const courseContent = {
               {
                 id: "red",
                 title: "No",
-              }
-
+              },
             ],
             images: [
               "Check in if you’ve ever felt frustrated because a student wasn’t listening.",
@@ -115,10 +120,8 @@ export const courseContent = {
               "Check in if you’ve ever felt overwhelmed by your responsibilities as a teacher.",
               "Check in if you’ve ever felt unappreciated as a teacher.",
               "Check in if you’ve ever wished you had better tools to support students emotionally.",
-              "Check in if you’ve ever doubted your impact on your students."
-
-            ]
-
+              "Check in if you’ve ever doubted your impact on your students.",
+            ],
           },
         ],
         navigation: {
@@ -129,7 +132,8 @@ export const courseContent = {
       {
         id: 7,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_4.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -139,7 +143,8 @@ export const courseContent = {
         id: 8,
         type: "question",
         questionType: "text",
-        question: "Imagine a world where emotions don’t matter in education. A world where we only focus on grades and tests. What would that look like?",
+        question:
+          "Imagine a world where emotions don’t matter in education. A world where we only focus on grades and tests. What would that look like?",
         hasImage: false,
         imageSrc: "mindset.png",
         inputType: "bigTextBox",
@@ -151,7 +156,8 @@ export const courseContent = {
       {
         id: 9,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_5.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_5.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -160,38 +166,74 @@ export const courseContent = {
       {
         id: 10,
         type: "multiStep",
-        title: "Write a letter to yourself.",
+        title: "Classroom Decision Making",
         steps: [
           {
             stepId: 1,
             type: "instruction",
-            challenge: "Preparing for a big math test, and you don’t understand all the topics.",
-            statement: "I don’t understand all the topics. yet., but I can keep studying and practicing until I do"
           },
           {
             stepId: 2,
             type: "imageDragAndDrop",
             instruction:
-              "Drag-and-drop the statements on the left into any of these bowls.",
-            steps: 4,
+              "Drag-and-drop the statements into the appropriate bowl.",
             buckets: [
               {
                 id: "green",
-                title: "Resilience",
+                title: "SEL",
               },
               {
                 id: "red",
-                title: "Grit",
-              }
-
+                title: "Not SEL",
+              },
             ],
-            images: [
-              "Sam has been practicing the piano for months, even though learning new songs is really hard. He doesn’t give up, even when it takes a long time to get it right.",
-              "Chris is writing a book. It’s taking a really long time, but he’s excited to finish it, even though it’s hard to think of new ideas sometimes.",
-              "Emma’s science project didn’t go as planned. She felt frustrated, but after taking a deep breath, she decided to figure out how to fix it and finish her project.",
-              "After losing a big game, Lucy felt sad, but she reminded herself to keep her head up and practice for the next one.",
-            ]
-
+            imagePairs: [
+              {
+                pairId: 1,
+                decisionText:
+                  "A student constantly interrupts your lesson, making it hard for others to focus.",
+                images: [
+                  {
+                    id: 0,
+                    text: "Call them out in front of the class.",
+                  },
+                  {
+                    id: 1,
+                    text: "Kindly caution the student in front of the class. After the lesson, pull them aside later and ask what’s going on.",
+                  },
+                ],
+              },
+              {
+                pairId: 2,
+                decisionText:
+                  "A shy student never speaks up, even though you know they have great ideas.",
+                images: [
+                  {
+                    id: 2,
+                    text: "Let them stay quiet.",
+                  },
+                  {
+                    id: 3,
+                    text: "Find creative ways to boost their confidence.",
+                  },
+                ],
+              },
+              {
+                pairId: 3,
+                decisionText:
+                  "A student fails their test and seems really discouraged.",
+                images: [
+                  {
+                    id: 4,
+                    text: "Remind them they need to work harder.",
+                  },
+                  {
+                    id: 5,
+                    text: "Help them see their progress and plan for improvement.",
+                  },
+                ],
+              },
+            ],
           },
         ],
         navigation: {
@@ -202,7 +244,8 @@ export const courseContent = {
       {
         id: 11,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -224,7 +267,8 @@ export const courseContent = {
       {
         id: 13,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -238,112 +282,340 @@ export const courseContent = {
             stepId: 1,
             type: "instruction",
             title: "Instruction",
-            instructions: [
-              "Match the right ‘C’ to their correct definition.",
-            ],
-            options: "Competence, Confidence, Coping, Control, Character, Connections, and Contribution."
+            instructions: ["Match the right ‘C’ to their correct definition."],
+            options:
+              "Competence, Confidence, Coping, Control, Character, Connections, and Contribution.",
           },
-
           {
             stepId: 2,
             type: "dropdownScenario",
-            question: "The belief in your own ability to handle situations, challenges, and tasks with confidence and success.",
+            question:
+              "A student realizes they feel anxious before tests and talks to their teacher about it.",
             options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
+              {
+                id: "A",
+                text: "Self Awareness",
+                subText: "(Recognizing emotions & strengths)",
+              },
+              {
+                id: "B",
+                text: "Self Management",
+                subText: "(Regulating emotions & stress)",
+              },
+              {
+                id: "C",
+                text: "Social Awareness",
+                subText: "(Empathy & understanding perspectives)",
+              },
+              {
+                id: "D",
+                text: "Relationship Skills",
+                subText: "(Building positive interactions)",
+              },
+              {
+                id: "E",
+                text: "Responsible Decision Making",
+                subText: "(Making ethical and safe choices)",
+              },
             ],
           },
           {
             stepId: 3,
             type: "dropdownScenario",
-            question: "The people in your life who support, guide, and help you through challenges.",
+            question:
+              "A teacher encourages students to start the day by identifying how they feel and why they feel that way.",
             options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
+              {
+                id: "A",
+                text: "Self Awareness",
+                subText: "(Recognizing emotions & strengths)",
+              },
+              {
+                id: "B",
+                text: "Self Management",
+                subText: "(Regulating emotions & stress)",
+              },
+              {
+                id: "C",
+                text: "Social Awareness",
+                subText: "(Empathy & understanding perspectives)",
+              },
+              {
+                id: "D",
+                text: "Relationship Skills",
+                subText: "(Building positive interactions)",
+              },
+              {
+                id: "E",
+                text: "Responsible Decision Making",
+                subText: "(Making ethical and safe choices)",
+              },
             ],
           },
           {
             stepId: 4,
             type: "dropdownScenario",
-            question: "Your values and sense of right and wrong that help guide your decisions and actions in difficult situations.",
+            question:
+              "A teacher notices they are getting overwhelmed and takes a break before responding to a disruptive student.",
             options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
+              {
+                id: "A",
+                text: "Self Awareness",
+                subText: "(Recognizing emotions & strengths)",
+              },
+              {
+                id: "B",
+                text: "Self Management",
+                subText: "(Regulating emotions & stress)",
+              },
+              {
+                id: "C",
+                text: "Social Awareness",
+                subText: "(Empathy & understanding perspectives)",
+              },
+              {
+                id: "D",
+                text: "Relationship Skills",
+                subText: "(Building positive interactions)",
+              },
+              {
+                id: "E",
+                text: "Responsible Decision Making",
+                subText: "(Making ethical and safe choices)",
+              },
             ],
           },
           {
             stepId: 5,
             type: "dropdownScenario",
-            question: "The skills and strategies you use to manage stress, challenges, and emotions in tough situations.",
+            question:
+              "A student is frustrated with a difficult math problem but takes deep breaths instead of giving up.",
             options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
+              {
+                id: "A",
+                text: "Self Awareness",
+                subText: "(Recognizing emotions & strengths)",
+              },
+              {
+                id: "B",
+                text: "Self Management",
+                subText: "(Regulating emotions & stress)",
+              },
+              {
+                id: "C",
+                text: "Social Awareness",
+                subText: "(Empathy & understanding perspectives)",
+              },
+              {
+                id: "D",
+                text: "Relationship Skills",
+                subText: "(Building positive interactions)",
+              },
+              {
+                id: "E",
+                text: "Responsible Decision Making",
+                subText: "(Making ethical and safe choices)",
+              },
             ],
           },
-
           {
             stepId: 6,
             type: "dropdownScenario",
-            question: "The understanding that you can contribute positively to the world around you, helping others and making a difference.",
+            question:
+              "A student sees a classmate sitting alone at lunch and invites them to join their group.",
             options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
+              {
+                id: "A",
+                text: "Self Awareness",
+                subText: "(Recognizing emotions & strengths)",
+              },
+              {
+                id: "B",
+                text: "Self Management",
+                subText: "(Regulating emotions & stress)",
+              },
+              {
+                id: "C",
+                text: "Social Awareness",
+                subText: "(Empathy & understanding perspectives)",
+              },
+              {
+                id: "D",
+                text: "Relationship Skills",
+                subText: "(Building positive interactions)",
+              },
+              {
+                id: "E",
+                text: "Responsible Decision Making",
+                subText: "(Making ethical and safe choices)",
+              },
             ],
           },
           {
             stepId: 7,
             type: "dropdownScenario",
-            question: "The ability to successfully perform tasks or overcome challenges by using your skills, knowledge, and abilities.",
+            question:
+              "A teacher acknowledges a student’s cultural background and adapts their teaching approach accordingly.",
             options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
+              {
+                id: "A",
+                text: "Self Awareness",
+                subText: "(Recognizing emotions & strengths)",
+              },
+              {
+                id: "B",
+                text: "Self Management",
+                subText: "(Regulating emotions & stress)",
+              },
+              {
+                id: "C",
+                text: "Social Awareness",
+                subText: "(Empathy & understanding perspectives)",
+              },
+              {
+                id: "D",
+                text: "Relationship Skills",
+                subText: "(Building positive interactions)",
+              },
+              {
+                id: "E",
+                text: "Responsible Decision Making",
+                subText: "(Making ethical and safe choices)",
+              },
             ],
           },
           {
             stepId: 8,
             type: "dropdownScenario",
-            question: "The feeling of being in charge of your own actions, responses, and decisions, even if you can’t control everything around you.",
+            question:
+              "Two students disagree in a group project but talk it out instead of arguing.",
             options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
+              {
+                id: "A",
+                text: "Self Awareness",
+                subText: "(Recognizing emotions & strengths)",
+              },
+              {
+                id: "B",
+                text: "Self Management",
+                subText: "(Regulating emotions & stress)",
+              },
+              {
+                id: "C",
+                text: "Social Awareness",
+                subText: "(Empathy & understanding perspectives)",
+              },
+              {
+                id: "D",
+                text: "Relationship Skills",
+                subText: "(Building positive interactions)",
+              },
+              {
+                id: "E",
+                text: "Responsible Decision Making",
+                subText: "(Making ethical and safe choices)",
+              },
             ],
           },
-
+          {
+            stepId: 9,
+            type: "dropdownScenario",
+            question:
+              "A teacher models active listening by giving students time to share their thoughts in class.",
+            options: [
+              {
+                id: "A",
+                text: "Self Awareness",
+                subText: "(Recognizing emotions & strengths)",
+              },
+              {
+                id: "B",
+                text: "Self Management",
+                subText: "(Regulating emotions & stress)",
+              },
+              {
+                id: "C",
+                text: "Social Awareness",
+                subText: "(Empathy & understanding perspectives)",
+              },
+              {
+                id: "D",
+                text: "Relationship Skills",
+                subText: "(Building positive interactions)",
+              },
+              {
+                id: "E",
+                text: "Responsible Decision Making",
+                subText: "(Making ethical and safe choices)",
+              },
+            ],
+          },
+          {
+            stepId: 10,
+            type: "dropdownScenario",
+            question:
+              "A teacher encourages students to think about long-term consequences before making choices.",
+            options: [
+              {
+                id: "A",
+                text: "Self Awareness",
+                subText: "(Recognizing emotions & strengths)",
+              },
+              {
+                id: "B",
+                text: "Self Management",
+                subText: "(Regulating emotions & stress)",
+              },
+              {
+                id: "C",
+                text: "Social Awareness",
+                subText: "(Empathy & understanding perspectives)",
+              },
+              {
+                id: "D",
+                text: "Relationship Skills",
+                subText: "(Building positive interactions)",
+              },
+              {
+                id: "E",
+                text: "Responsible Decision Making",
+                subText: "(Making ethical and safe choices)",
+              },
+            ],
+          },
+          {
+            stepId: 11,
+            type: "dropdownScenario",
+            question:
+              "A student goes for their intervention classes instead of going for their friendship group's hangout in the art room.",
+            options: [
+              {
+                id: "A",
+                text: "Self Awareness",
+                subText: "(Recognizing emotions & strengths)",
+              },
+              {
+                id: "B",
+                text: "Self Management",
+                subText: "(Regulating emotions & stress)",
+              },
+              {
+                id: "C",
+                text: "Social Awareness",
+                subText: "(Empathy & understanding perspectives)",
+              },
+              {
+                id: "D",
+                text: "Relationship Skills",
+                subText: "(Building positive interactions)",
+              },
+              {
+                id: "E",
+                text: "Responsible Decision Making",
+                subText: "(Making ethical and safe choices)",
+              },
+            ],
+          },
         ],
         navigation: {
           prev: true,
@@ -353,7 +625,8 @@ export const courseContent = {
       {
         id: 15,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -362,8 +635,7 @@ export const courseContent = {
       {
         id: 16,
         type: "listQuestion",
-        question:
-          "Can you mention some challenges you have encountered and bounced back from?",
+        question: `“What is Right with Me? (my Strengths)”.`,
         inputCount: 5,
         inputType: "text",
         inputPlaceholder: "Type your answer here",
@@ -375,7 +647,8 @@ export const courseContent = {
       {
         id: 17,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -390,111 +663,40 @@ export const courseContent = {
             type: "instruction",
             title: "Instruction",
             instructions: [
-              "Match the right ‘C’ to their correct definition.",
+              "For this next activity, you will be shown different scenarios. \n Type out the strength you feel is present in that scenario.",
             ],
-            options: "Competence, Confidence, Coping, Control, Character, Connections, and Contribution."
           },
 
           {
             stepId: 2,
-            type: "dropdownScenario",
-            question: "The belief in your own ability to handle situations, challenges, and tasks with confidence and success.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "A student helps a classmate solve a math problem.",
+              },
             ],
           },
           {
             stepId: 3,
-            type: "dropdownScenario",
-            question: "The people in your life who support, guide, and help you through challenges.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "A student stands up for a friend being teased.",
+              },
             ],
           },
           {
             stepId: 4,
-            type: "dropdownScenario",
-            question: "Your values and sense of right and wrong that help guide your decisions and actions in difficult situations.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "A student organizes their group’s project work.",
+              },
             ],
           },
-          {
-            stepId: 5,
-            type: "dropdownScenario",
-            question: "The skills and strategies you use to manage stress, challenges, and emotions in tough situations.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-
-          {
-            stepId: 6,
-            type: "dropdownScenario",
-            question: "The understanding that you can contribute positively to the world around you, helping others and making a difference.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-          {
-            stepId: 7,
-            type: "dropdownScenario",
-            question: "The ability to successfully perform tasks or overcome challenges by using your skills, knowledge, and abilities.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-          {
-            stepId: 8,
-            type: "dropdownScenario",
-            question: "The feeling of being in charge of your own actions, responses, and decisions, even if you can’t control everything around you.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-
         ],
         navigation: {
           prev: true,
@@ -504,7 +706,8 @@ export const courseContent = {
       {
         id: 19,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -513,8 +716,7 @@ export const courseContent = {
       {
         id: 20,
         type: "listQuestion",
-        question:
-          "Who are the three top people you go to when you need help with a situation?",
+        question: "List out two things you are grateful for.",
         inputCount: 3,
         fields: [
           {
@@ -527,7 +729,6 @@ export const courseContent = {
             textFieldColor: "orange",
             colorCode: "#FDD8B6",
           },
-
         ],
         inputType: "text",
         inputPlaceholder: "Type your answer here",
@@ -539,7 +740,8 @@ export const courseContent = {
       {
         id: 21,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -554,111 +756,32 @@ export const courseContent = {
             type: "instruction",
             title: "Instruction",
             instructions: [
-              "Match the right ‘C’ to their correct definition.",
+              "In the next activity, you will be asked to reframe a teacher’s statement to reflect a strength based feedback.",
             ],
-            options: "Competence, Confidence, Coping, Control, Character, Connections, and Contribution."
           },
 
           {
             stepId: 2,
-            type: "dropdownScenario",
-            question: "The belief in your own ability to handle situations, challenges, and tasks with confidence and success.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "I sometimes doubt whether I’m making a real difference in my students’ lives.",
+              },
             ],
           },
           {
             stepId: 3,
-            type: "dropdownScenario",
-            question: "The people in your life who support, guide, and help you through challenges.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "There’s never enough time to get everything done, and I feel overwhelmed",
+              },
             ],
           },
-          {
-            stepId: 4,
-            type: "dropdownScenario",
-            question: "Your values and sense of right and wrong that help guide your decisions and actions in difficult situations.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-          {
-            stepId: 5,
-            type: "dropdownScenario",
-            question: "The skills and strategies you use to manage stress, challenges, and emotions in tough situations.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-
-          {
-            stepId: 6,
-            type: "dropdownScenario",
-            question: "The understanding that you can contribute positively to the world around you, helping others and making a difference.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-          {
-            stepId: 7,
-            type: "dropdownScenario",
-            question: "The ability to successfully perform tasks or overcome challenges by using your skills, knowledge, and abilities.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-          {
-            stepId: 8,
-            type: "dropdownScenario",
-            question: "The feeling of being in charge of your own actions, responses, and decisions, even if you can’t control everything around you.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-
         ],
         navigation: {
           prev: true,
@@ -668,7 +791,8 @@ export const courseContent = {
       {
         id: 23,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -682,17 +806,18 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_1.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_1.mp4",
         hasNextButton: true,
       },
       {
         id: 2,
-        type: "radio",
-        question: "Just a quick question, have you ever seen or heard of a building that collapsed? ",
-        options: [
-          { id: "A", text: "YES" },
-          { id: "B", text: "NO" },
-        ],
+        type: "question",
+        questionType: "text",
+        question: "Do you remember what we discussed last week?",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
         navigation: {
           prev: true,
           next: true,
@@ -701,7 +826,8 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_2.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -709,118 +835,305 @@ export const courseContent = {
       },
       {
         id: 4,
+        title: "Pre Assessment",
+        subtitle: "Let's test your knowledge",
+        questions: [
+          {
+            id: 1,
+            question:
+              "Why is Social-Emotional Learning (SEL) considered a key part of student development in today's classrooms?",
+            options: [
+              {
+                id: "A",
+                text: "Because it focuses on replacing academic subjects with life skills that are more relevant to students' emotions.",
+              },
+              {
+                id: "B",
+                text: "Because it offers tools for students to navigate their emotions, build healthy relationships, and make thoughtful decisions.",
+              },
+              {
+                id: "C",
+                text: "Because it guarantees an end to conflict in school environments.",
+              },
+              {
+                id: "D",
+                text: "Because it directly boosts test scores by focusing solely on behavior management.",
+              },
+            ],
+            correctOption: "B",
+          },
+          {
+            id: 2,
+            question:
+              "Which of the following best illustrates an area that is outside the core focus of Social-Emotional Learning (SEL)?",
+            options: [
+              {
+                id: "A",
+                text: "Helping students identify their feelings and regulate their emotional responses.",
+              },
+              {
+                id: "B",
+                text: "Encouraging learners to form supportive peer connections and resolve conflicts peacefully.",
+              },
+              {
+                id: "C",
+                text: "Teaching students to recall and retain subject-specific information for exams.",
+              },
+              {
+                id: "D",
+                text: "Guiding learners to weigh consequences and make ethical, constructive choices.",
+              },
+            ],
+            correctOption: "C",
+          },
+          {
+            id: 3,
+            question:
+              "In what context does Social-Emotional Learning (SEL) have the greatest long-term impact on students?",
+            options: [
+              {
+                id: "A",
+                text: "When it's treated as a separate subject taught once a week.",
+              },
+              {
+                id: "B",
+                text: "When it's woven consistently into classroom routines, teaching methods, and teacher-student interactions.",
+              },
+              {
+                id: "C",
+                text: "When it's introduced as a response to challenging student behavior.",
+              },
+              {
+                id: "D",
+                text: "When it's offered as a support strategy only for students struggling socially or emotionally.",
+              },
+            ],
+            correctOption: "B",
+          },
+          {
+            id: 4,
+            question:
+              "Which of the following classroom practices best demonstrates an educator's self-awareness?",
+            options: [
+              {
+                id: "A",
+                text: "Changing instructional methods only when student performance declines.",
+              },
+              {
+                id: "B",
+                text: "Not showing personal emotions to maintain a professional image.",
+              },
+              {
+                id: "C",
+                text: "Noticing moments of personal frustration and intentionally responding in calm, constructive ways.",
+              },
+              {
+                id: "D",
+                text: "Responding to misbehavior primarily with firm rules and consequences.",
+              },
+            ],
+            correctOption: "C",
+          },
+          {
+            id: 5,
+            question:
+              "In what way does Positive Psychology meaningfully support the goals of Social-Emotional Learning (SEL)?",
+            options: [
+              {
+                id: "A",
+                text: "By identifying and correcting students' emotional and behavioral problems.",
+              },
+              {
+                id: "B",
+                text: "By prioritizing the repair of weaknesses before building other skills.",
+              },
+              {
+                id: "C",
+                text: "By encouraging a strengths-based approach that highlights gratitude, resilience, and overall well-being.",
+              },
+              {
+                id: "D",
+                text: "By minimizing the role of emotions in learning environments.",
+              },
+            ],
+            correctOption: "C",
+          },
+          {
+            id: 6,
+            question:
+              "Why might many people struggle to identify their personal strengths compared to their weaknesses?",
+            options: [
+              {
+                id: "A",
+                text: "Because they believe weaknesses are more important to acknowledge and correct.",
+              },
+              {
+                id: "B",
+                text: "Because they've had more practice noticing flaws than recognizing what they do well.",
+              },
+              {
+                id: "C",
+                text: "Because strengths are rarely discussed or valued in learning environments.",
+              },
+              {
+                id: "D",
+                text: "Because strengths don't play a meaningful role in personal or academic growth.",
+              },
+            ],
+            correctOption: "B",
+          },
+          {
+            id: 7,
+            question:
+              "Which of the following teaching practices best reflects a strengths-based approach in the classroom?",
+            options: [
+              {
+                id: "A",
+                text: "Focusing recognition on students with the highest academic scores.",
+              },
+              {
+                id: "B",
+                text: "Noticing and nurturing each student's unique qualities, efforts, and growth areas.",
+              },
+              {
+                id: "C",
+                text: "Giving the same praise to all students to keep the environment positive.",
+              },
+              {
+                id: "D",
+                text: "Minimizing corrective feedback to avoid hurting students' confidence.",
+              },
+            ],
+            correctOption: "B",
+          },
+          {
+            id: 8,
+            question:
+              "What is one meaningful way gratitude can shape student behavior and classroom engagement?",
+            options: [
+              {
+                id: "A",
+                text: "It helps reduce stress levels, strengthens peer relationships, and boosts emotional well-being.",
+              },
+              {
+                id: "B",
+                text: "It leads students to comply more strictly with classroom rules and authority figures.",
+              },
+              {
+                id: "C",
+                text: "It replaces the need for teaching conflict resolution or emotional regulation skills.",
+              },
+              {
+                id: "D",
+                text: "It tends to benefit students who are already performing well academically.",
+              },
+            ],
+            correctOption: "A",
+          },
+          {
+            id: 9,
+            question: `A student expresses frustration during a lesson, saying, "I just can't do this." Which of the following teacher responses best reflects the application of Social-Emotional Learning and Positive Psychology?`,
+            options: [
+              {
+                id: "A",
+                text: "Let's take a moment to remember something you've done well before, maybe we can use that as a starting point.",
+              },
+              {
+                id: "B",
+                text: "Try not to think too much about it. Just move on to the next activity.",
+              },
+              {
+                id: "C",
+                text: "Why don't you let your classmate handle this one so we can keep moving?.",
+              },
+              {
+                id: "D",
+                text: "We'll talk about this later,  let's focus on something else right now..",
+              },
+            ],
+            correctOption: "A",
+          },
+          {
+            id: 10,
+            question:
+              "Why is it important for educators to practice SEL in their own lives?",
+            options: [
+              {
+                id: "A",
+                text: "To avoid engaging emotionally with students and completely miss SEL's true purpose.",
+              },
+              {
+                id: "B",
+                text: "To fulfill mandated requirements for social-emotional learning within the curriculum.",
+              },
+              {
+                id: "C",
+                text: "To manage their own emotions and demonstrate healthy coping strategies to students.",
+              },
+              {
+                id: "D",
+                text: "To foster genuine relationships, model emotional skills, and support classroom culture.",
+              },
+            ],
+            correctOption: "D",
+          },
+        ],
+      },
+      {
+        id: 5,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_3.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 6,
         type: "multiStep",
+        title: "Write a letter to yourself.",
         steps: [
           {
             stepId: 1,
             type: "instruction",
-            title: "Instruction",
-            instructions: [
-              "Match the right ‘C’ to their correct definition.",
-            ],
-            options: "Competence, Confidence, Coping, Control, Character, Connections, and Contribution."
+            challenge:
+              "In this next activity, we are going to recognize different emotional triggers by grouping them into: ",
+            statement: "Mildly triggering, Frustrating and Highly triggering.",
           },
-
           {
             stepId: 2,
-            type: "dropdownScenario",
-            question: "The belief in your own ability to handle situations, challenges, and tasks with confidence and success.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
+            type: "imageDragAndDrop",
+            instruction:
+              "Drag-and-drop the statements on the left into any of these bowls.",
+            steps: 4,
+            buckets: [
+              {
+                id: "green",
+                title: "Mild",
+              },
+              {
+                id: "orange",
+                title: "Frustrate",
+              },
+              {
+                id: "red",
+                title: "High",
+              },
+            ],
+            images: [
+              "A student refuses to follow instructions during a lesson.",
+              "A colleague dismisses your idea in a staff meeting.",
+              "A student constantly interrupts you while you’re speaking.",
+              "A parent questions your teaching methods during a parents-teachers meeting.",
+              "A student makes a disrespectful comment about your appearance.",
+              "Your head of department gives you negative feedback on your performance unexpectedly.",
+              "A student rolls their eyes and mutters something rude during a lesson.",
+              "You receive a last-minute schedule change that disrupts your plans for the day.",
+              "A student deliberately tries to provoke other students during group work.",
+              "A colleague blames you for an issue that wasn't your fault.",
             ],
           },
-          {
-            stepId: 3,
-            type: "dropdownScenario",
-            question: "The people in your life who support, guide, and help you through challenges.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-          {
-            stepId: 4,
-            type: "dropdownScenario",
-            question: "Your values and sense of right and wrong that help guide your decisions and actions in difficult situations.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-          {
-            stepId: 5,
-            type: "dropdownScenario",
-            question: "The skills and strategies you use to manage stress, challenges, and emotions in tough situations.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-
-          {
-            stepId: 6,
-            type: "dropdownScenario",
-            question: "The understanding that you can contribute positively to the world around you, helping others and making a difference.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-          {
-            stepId: 7,
-            type: "dropdownScenario",
-            question: "The ability to successfully perform tasks or overcome challenges by using your skills, knowledge, and abilities.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-          {
-            stepId: 8,
-            type: "dropdownScenario",
-            question: "The feeling of being in charge of your own actions, responses, and decisions, even if you can’t control everything around you.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-
         ],
         navigation: {
           prev: true,
@@ -828,9 +1141,203 @@ export const courseContent = {
         },
       },
       {
-        id: 5,
+        id: 7,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_3.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 8,
+        type: "question",
+        questionType: "text",
+        question:
+          "Which triggers were common for you? Do you think teachers have the same triggers? Why do you think so?",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 9,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_5.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 10,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Welcome to the SONAR staircase. You will be presented with a 5 step staircase labeled with the words STOP, OBSERVE, NAME, ASK and REGULATE. You will also be shown 3 scenarios. For each stressful classroom scenario, use the SONAR pathway to walk through your response. Reflect on each step by answering the prompts below.",
+            ],
+          },
+          {
+            stepId: 2,
+            type: "scenario",
+            scenarioNumber: 1,
+            scenarioType: "textOnly",
+            scenarioTitle:
+              "A student constantly asks to leave the classroom during lessons, disrupting your teaching.",
+            ladderImage: "",
+            subQuestions: [
+              {
+                id: 1,
+                question: "What would your default reaction be?",
+                type: "text",
+              },
+              {
+                id: 2,
+                question:
+                  "What emotions are you noticing in yourself and the student?",
+                type: "text",
+              },
+              {
+                id: 3,
+                question: "Why is naming emotions helpful before responding?",
+                type: "text",
+              },
+              {
+                id: 4,
+                question:
+                  "Why is this bothering me? What does the student need?",
+                type: "text",
+              },
+              {
+                id: 5,
+                question:
+                  "Address the student privately instead of reacting on the spot",
+                type: "text",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "scenario",
+            scenarioNumber: 2,
+            scenarioType: "textOnly",
+            scenarioTitle:
+              "A parent approaches you after class, expressing dissatisfaction with how their child is being treated in your classroom.",
+            ladderImage: "",
+            subQuestions: [
+              {
+                id: 1,
+                question: "What would your default reaction be?",
+                type: "text",
+              },
+              {
+                id: 2,
+                question:
+                  "What emotions are you noticing in yourself and the student?",
+                type: "text",
+              },
+              {
+                id: 3,
+                question: "Why is naming emotions helpful before responding?",
+                type: "text",
+              },
+              {
+                id: 4,
+                question:
+                  "Why is this bothering me? What does the student need?",
+                type: "text",
+              },
+              {
+                id: 5,
+                question:
+                  "Address the student privately instead of reacting on the spot.",
+                type: "text",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "scenario",
+            scenarioNumber: 3,
+            scenarioType: "withInput",
+            scenarioTitle:
+              "Create your own scenario and apply the SONAR method for emotional regulation.",
+            ladderImage: "",
+            subQuestions: [
+              {
+                id: 1,
+                question: "What would your default reaction be?",
+                type: "text",
+              },
+              {
+                id: 2,
+                question:
+                  "What emotions are you noticing in yourself and the student?",
+                type: "text",
+              },
+              {
+                id: 3,
+                question: "Why is naming emotions helpful before responding?",
+                type: "text",
+              },
+              {
+                id: 4,
+                question:
+                  "Why is this bothering me? What does the student need?",
+                type: "text",
+              },
+              {
+                id: 5,
+                question:
+                  "Address the student privately instead of reacting on the spot.",
+                type: "text",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 11,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 12,
+        type: "question",
+        questionType: "text",
+        question:
+          "Which triggers were common for you? Do you think teachers have the same triggers? Why do you think so?",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 13,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -844,7 +1351,8 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_1.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_1.mp4",
         hasNextButton: true,
       },
       {
@@ -863,7 +1371,8 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_2.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -872,51 +1381,17 @@ export const courseContent = {
 
       {
         id: 4,
-        type: "imageDragAndDrop",
-        instruction:
-          "Drag-and-drop the statements on the left into any of these bowls",
-        images: [
-          "Ability to adjust to new situations, changes, or challenges.",
-          "Expecting everything to stay the same and being frustrated when it doesn’t.",
-          "Does not mean you have to like change all the time.",
-          "Sticking to just one way of doing things, even when it’s not working.",
-          "Staying calm, thinking through the situation, and coming up with a new plan.",
-          "Refusing to try new things because they seem too hard.",
-          "Being open to trying new things and not getting stuck when things don’t go according to plan.",
-          "Avoiding change or pretending it’s not happening.",
-          "Knowing how to handle change when it happens.",
-          "Panicking when something unexpected happens."
-        ],
-        buckets: [
-          {
-            id: "green",
-            label: "Adaptability",
-            count: 5,
-          },
-          {
-            id: "red",
-            label: "Not Adaptability",
-            count: 5,
-          },
-        ],
-        steps: 10,
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 5,
         type: "multiStep",
         steps: [
           {
             stepId: 1,
-            type: "instruction",
-            title: "Instruction",
-            instructions: [
-              "For each situation, explain how you will adapt in the given situation.",
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "What has your time in Primary school been like?",
+              },
             ],
-
           },
           {
             stepId: 2,
@@ -924,53 +1399,22 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "You’re feeling overwhelmed with schoolwork and aren’t sure how to manage all the assignments and exams coming up."
-              }
-            ]
+                question: "What will be your favorite memory as you leave?",
+              },
+            ],
           },
-          {
-            stepId: 3,
-            type: "scenario",
-            questions: [
-              {
-                type: "Question",
-                question: "Your friend is going through a tough time, and you decide to spend some time with them to listen and offer support."
-              }
-            ]
-          },
-          {
-            stepId: 4,
-            type: "scenario",
-            questions: [
-              {
-                type: "Question",
-                question: "You’ve recently learned how to play the guitar, and although it was tough in the beginning, you kept practicing and now feel proud of what you’ve achieved."
-              }
-            ]
-          },
-          {
-            stepId: 5,
-            type: "scenario",
-            questions: [
-              {
-                type: "Question",
-                question: "You’re in a situation where you don’t know the outcome, but you remind yourself to focus on what you can do and how you can handle your emotions."
-              }
-            ]
-          },
-          {
-            stepId: 6,
-            type: "scenario",
-            questions: [
-              {
-                type: "Question",
-                question: "You volunteered at a local charity event and helped organize a charity event. You felt great knowing that you made a positive impact"
-              }
-            ]
-          },
-        ]
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
 
-        ,
+      {
+        id: 5,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -978,12 +1422,355 @@ export const courseContent = {
       },
       {
         id: 6,
-        type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_3.mp4",
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Building connections with your students takes small but powerful activities and moments. In this next activity, you will be presented with different behaviors and scenarios. Select the appropriate behavior tha matches each scenario from the dropdown.",
+            ],
+            options:
+              "Competence, Confidence, Coping, Control, Character, Connections, and Contribution.",
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question:
+              "A student seems withdrawn after failing a test. The teacher sits with them privately, acknowledges their feelings, and helps them create a study plan.",
+            options: [
+              {
+                id: "A",
+                text: "Active Listening",
+              },
+              {
+                id: "B",
+                text: "Encouragement & Praise",
+              },
+              {
+                id: "C",
+                text: "Fairness & Consistency",
+              },
+              {
+                id: "D",
+                text: "Emotional Support",
+              },
+              {
+                id: "E",
+                text: "Showing Interest in Students' Lives",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question:
+              "During a class discussion, a teacher repeats and validates a quiet student’s point, making sure their voice is heard.",
+            options: [
+              {
+                id: "A",
+                text: "Active Listening",
+              },
+              {
+                id: "B",
+                text: "Encouragement & Praise",
+              },
+              {
+                id: "C",
+                text: "Fairness & Consistency",
+              },
+              {
+                id: "D",
+                text: "Emotional Support",
+              },
+              {
+                id: "E",
+                text: "Showing Interest in Students' Lives",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "dropdownScenario",
+            question: `A student struggles with a task but keeps trying. The teacher praises their persistence, saying, "I love how you’re not giving up!"`,
+            options: [
+              {
+                id: "A",
+                text: "Active Listening",
+              },
+              {
+                id: "B",
+                text: "Encouragement & Praise",
+              },
+              {
+                id: "C",
+                text: "Fairness & Consistency",
+              },
+              {
+                id: "D",
+                text: "Emotional Support",
+              },
+              {
+                id: "E",
+                text: "Showing Interest in Students' Lives",
+              },
+            ],
+          },
+          {
+            stepId: 5,
+            type: "dropdownScenario",
+            question:
+              "A teacher ensures that all students take turns answering questions, even the quieter ones, and applies the same classroom rules to everyone.",
+            options: [
+              {
+                id: "A",
+                text: "Active Listening",
+              },
+              {
+                id: "B",
+                text: "Encouragement & Praise",
+              },
+              {
+                id: "C",
+                text: "Fairness & Consistency",
+              },
+              {
+                id: "D",
+                text: "Emotional Support",
+              },
+              {
+                id: "E",
+                text: "Showing Interest in Students' Lives",
+              },
+            ],
+          },
+          {
+            stepId: 6,
+            type: "dropdownScenario",
+            question:
+              "Before class, a teacher casually asks a student about their weekend football match and remembers to check in later on how it went.",
+            options: [
+              {
+                id: "A",
+                text: "Active Listening",
+              },
+              {
+                id: "B",
+                text: "Encouragement & Praise",
+              },
+              {
+                id: "C",
+                text: "Fairness & Consistency",
+              },
+              {
+                id: "D",
+                text: "Emotional Support",
+              },
+              {
+                id: "E",
+                text: "Showing Interest in Students' Lives",
+              },
+            ],
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
         },
+      },
+      {
+        id: 7,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_1.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 8,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "What has your time in Primary school been like?",
+              },
+            ],
+          },
+          {
+            stepId: 2,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "What will be your favorite memory as you leave?",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 9,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_1.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 10,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Identify the strength being displayed and then write a short praise statement that reinforces this behavior. An example has been done for you.",
+            ],
+          },
+
+          {
+            stepId: 2,
+            type: "example",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "A student works diligently on a task they find difficult, showing improvement over time.",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "A student actively participates in group discussions, offering insightful comments and listening to others.",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "A student is kind to a peer who is feeling upset, offering comfort and support without being asked.",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 11,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_1.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 12,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Read the following scenario and write a response that encourages reflection (what was happening for you when you were talking out of turn?), responsibility (when you talk out of turn, it disrupts everyone’s learning), and repairing (what can we do to ensure everyone has a chance to speak during the lesson?) the relationship with the student. \nThink about how your response can guide the student toward understanding the impact of their actions, taking responsibility, and making amends.",
+            ],
+          },
+
+          {
+            stepId: 2,
+            type: "scenario",
+            questions: [
+              {
+                type: "scenario",
+                question:
+                  "A student has repeatedly been talking out of turn during your class, disrupting the flow of the class. Despite being cautioned several times, they continue to ignore your warnings. Your response should include three simple components:",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "question",
+            questions: [
+              {
+                type: "reflect",
+                question:
+                  "A question for the student to reflect on their behavior:",
+              },
+              {
+                type: "explain",
+                question:
+                  "A statement explaining how their actions affect others:",
+              },
+              {
+                type: "suggestion",
+                question:
+                  "A suggestion for how they can improve in the future:",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "scenario",
+            questions: [
+              {
+                type: "scenario",
+                question:
+                  "A group of students were asked to work as a group in science class.During this exercise, you noticed a student ran out of the classroom in tears. Further investigation revealed that another student in the group made a teasing comment, but the first student did not find it funny. The second student has refused to apologise because they believe they have done nothing wrong, claiming it was a joke.",
+              },
+            ],
+          },
+          {
+            stepId: 5,
+            type: "question",
+            questions: [
+              {
+                type: "reflect",
+                question:
+                  "A question for the student to reflect on their behavior:",
+              },
+              {
+                type: "explain",
+                question:
+                  "A statement explaining how their actions affect others:",
+              },
+              {
+                type: "suggestion",
+                question:
+                  "A suggestion for how they can improve in the future:",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 13,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_1.mp4",
+        hasNextButton: true,
       },
     ],
   },
@@ -993,15 +1780,15 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_1.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_1.mp4",
         hasNextButton: true,
       },
       {
         id: 2,
         type: "question",
         questionType: "text",
-        question:
-          "What do you understand by the word",
+        question: "What do you understand by the word",
         inputType: "mediumTextBox",
         hasImage: true,
         imageSrc: "values.png",
@@ -1013,7 +1800,8 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_2.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1021,30 +1809,52 @@ export const courseContent = {
       },
       {
         id: 4,
-        type: "listQuestion",
-        question:
-          "Who are the three top people you go to when you need help with a situation?",
-        inputCount: 3,
-        fields: [
+        type: "multiStep",
+        title: "Write a letter to yourself.",
+        steps: [
           {
-            number: "1",
-            textFieldColor: "green",
-            colorCode: "#4CB748",
-          },
-          {
-            number: "2",
-            textFieldColor: "orange",
-            colorCode: "#FDD8B6",
+            stepId: 1,
+            type: "instruction",
+            instruction:
+              "Drag the statements that show a fixed mindset into the fixed mindset box and the statements that show a growth mindset to the appropriate box. This activity will help you practice how to identify fixed and growth mindset thinking patterns in everyday scenarios.",
           },
 
           {
-            number: "3",
-            textFieldColor: "blue",
-            colorCode: "#01A7FF",
+            stepId: 2,
+            type: "imageDragAndDrop",
+            instruction:
+              "Drag-and-drop the statements on the left into any of these bowls.",
+            steps: 4,
+            buckets: [
+              {
+                id: "green",
+                title: "Yes",
+              },
+              {
+                id: "red",
+                title: "No",
+              },
+            ],
+            images: [
+              "I can’t do this.",
+              "I can learn this if I keep trying.",
+              "This is tough now, but I’ll get better over time.",
+              "This subject just isn't for me.",
+              "Mistakes help me grow.",
+              "This is for new age teachers, I am not one of them.",
+              "This may take time and effort.",
+              "I failed this time, so I’ll probably keep failing.",
+              "I hate making mistakes, it means I’m not smart.",
+              "I haven’t figured it out yet—but I will.",
+            ],
+          },
+          {
+            stepId: 3,
+            type: "question",
+            question:
+              "Which of these thoughts have you heard from your students or caught yourself saying?",
           },
         ],
-        inputType: "text",
-        inputPlaceholder: "Type your answer here",
         navigation: {
           prev: true,
           next: true,
@@ -1053,7 +1863,8 @@ export const courseContent = {
       {
         id: 5,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_3.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1063,22 +1874,114 @@ export const courseContent = {
         id: 6,
         type: "multiStep",
         steps: [
-
           {
             stepId: 1,
             type: "instruction",
-            title:
-              "My Web of Relationship: ",
-            subTitle: "Map out your support system.",
+            title: "Instruction",
+            instructions: [
+              "Let us reflect on our own journey as educator, the highs and the lows and how we have developed resilience in our own experiences.",
+              "Click each box starting from number 1 to answer the guiding questions. Simply type in your reflections.",
+            ],
           },
           {
             stepId: 2,
-            type: "fiveFieldsAnswers",
-            question:
-              "Write out what these people think about you.",
-            answers: 5
+            type: "careerLadder",
+            boxes: [
+              {
+                id: 5,
+                text: "5. Current Focus",
+                color: "green",
+                bgColor: "#27AE60",
+                questions: [
+                  {
+                    id: 1,
+                    question:
+                      "What area in your teaching profession do you want to build resilience?",
+                    subQuestion:
+                      "“Right now, I want to grow stronger in the area of…”",
+                  },
+                  {
+                    id: 2,
+                    question: "What support or mindset shift could help?",
+                    subQuestion: `“One thing that could support me in this area is…”`,
+                  },
+                ],
+              },
+              {
+                id: 4,
+                text: "4. Recent Success",
+                color: "gray",
+                bgColor: "#848484",
+                questions: [
+                  {
+                    id: 1,
+                    question: "Think of a recent moment that made you proud.",
+                    subQuestion: `“One recent teaching moment that made me proud was…”`,
+                  },
+                  {
+                    id: 2,
+                    question: "What personal strengths contributed to it?",
+                    subQuestion: `“I believe that my ability to ______ helped me succeed in that moment.”`,
+                  },
+                ],
+              },
+              {
+                id: 3,
+                text: "3. Turning Point",
+                color: "brown",
+                bgColor: "#904D35",
+                questions: [
+                  {
+                    id: 1,
+                    question:
+                      "What experience helped you shift, grow, or bounce back?",
+                    subQuestion: `“A turning point for me as an educator was when…”`,
+                  },
+                  {
+                    id: 2,
+                    question: "What lessons did you learn?",
+                    subQuestion: `“That experience taught me that…”`,
+                  },
+                ],
+              },
+              {
+                id: 2,
+                text: "2. Early Challenge",
+                color: "yellow",
+                bgColor: "#FCAF17",
+                questions: [
+                  {
+                    id: 1,
+                    question: "Describe a difficult experience early on.",
+                    subQuestion: `“One challenge I faced early in my teaching career was…”`,
+                  },
+                  {
+                    id: 2,
+                    question: "How did you handle it at the time?",
+                    subQuestion: `“At the time, I responded by….”`,
+                  },
+                ],
+              },
+              {
+                id: 1,
+                text: "1. Start of Teaching Career",
+                color: "red",
+                bgColor: "#EE2447",
+                questions: [
+                  {
+                    id: 1,
+                    question: "What motivated you to become a teacher?",
+                    subQuestion: `“One reason I felt called to teaching was…”`,
+                  },
+                  {
+                    id: 2,
+                    question: "What were your hopes or fears when you started?",
+                    subQuestion: `“When I first started teaching, I hoped that… but I also worried that…”`,
+                  },
+                ],
+              },
+            ],
           },
-
         ],
         navigation: {
           prev: true,
@@ -1088,11 +1991,149 @@ export const courseContent = {
       {
         id: 7,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_4.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_4.mp4",
         navigation: {
           prev: true,
           next: true,
         },
+      },
+      {
+        id: 8,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "In this next activity, you'll practice shifting from fixed-mindset praise to growth-oriented feedback, so you can help your students stay motivated, especially when learning gets tough.",
+            ],
+          },
+
+          {
+            stepId: 2,
+            type: "example",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "A student works diligently on a task they find difficult, showing improvement over time.",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "You got it right on the first try.",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "This is too hard for you.",
+              },
+            ],
+          },
+          {
+            stepId: 5,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "You keep making the same mistake.",
+              },
+            ],
+          },
+          {
+            stepId: 6,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "Don’t worry, this just isn’t your strength.",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 9,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 10,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Take this moment to pause, acknowledge your growth, and set intentions for the educator you want to be moving forward.",
+            ],
+          },
+
+          {
+            stepId: 2,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "What challenge in your teaching journey did you once think you couldn’t overcome, but did?",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "A student stands up for a friend being teased.",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "A student organizes their group’s project work.",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 11,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_1.mp4",
+        hasNextButton: true,
       },
     ],
   },
@@ -1102,7 +2143,8 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_1.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_1.mp4",
         hasNextButton: true,
       },
       {
@@ -1121,15 +2163,24 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_2.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_2.mp4",
         hasNextButton: true,
       },
       {
         id: 4,
-        type: "listQuestion",
-        question:
-          "Can you mention some challenges you have encountered and bounced back from?",
-        inputCount: 5,
+        type: "question",
+        questions: [
+          {
+            type: "subject",
+            question: "What subject(s) do you teach?",
+          },
+          {
+            type: "skill",
+            question:
+              "Which SEL skill do you think is or can be embedded in it?",
+          },
+        ],
         inputType: "text",
         inputPlaceholder: "Type your answer here",
         navigation: {
@@ -1140,7 +2191,8 @@ export const courseContent = {
       {
         id: 5,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_3.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1148,6 +2200,40 @@ export const courseContent = {
       },
       {
         id: 6,
+        type: "question",
+        questions: [
+          {
+            type: "game",
+            question: "Name of Game:",
+          },
+          {
+            type: "instructions",
+            question: "Instructions:",
+          },
+          {
+            type: "connection",
+            question: "SEL Connection:",
+          },
+        ],
+        inputType: "text",
+        inputPlaceholder: "Type your answer here",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 7,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 8,
         type: "multiStep",
         steps: [
           {
@@ -1155,180 +2241,104 @@ export const courseContent = {
             type: "instruction",
             title: "Instruction",
             instructions: [
-              "Match a stressful situation to a coping skill you will use if you find yourself in such a situation.",
+              "The next activity helps you think about how to intentionally use storytelling to spark meaningful conversations in your classroom. \nSelect the appropriate SEL skills that matches the story.",
             ],
-            options: ""
+            options:
+              "Competence, Confidence, Coping, Control, Character, Connections, and Contribution.",
           },
-
           {
             stepId: 2,
             type: "dropdownScenario",
-            question: "You have a big test tomorrow, and you're feeling nervous and overwhelmed.",
+            question:
+              "Tunde failed his first Spanish test. Instead of giving up, he asked for help and practiced every evening until he improved.",
             options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
+              {
+                id: "A",
+                text: "Self-awareness & Emotional Regulation",
+              },
+              {
+                id: "B",
+                text: "Resilience",
+              },
+              {
+                id: "C",
+                text: "Empathy",
+              },
+              {
+                id: "D",
+                text: "Collaboration & Social Awareness",
+              },
             ],
           },
           {
             stepId: 3,
             type: "dropdownScenario",
-            question: "Your best friend said something that hurt your feelings, and now you're feeling upset.",
+            question:
+              "During a class discussion, a teacher repeats and validates a quiet student’s point, making sure their voice is heard.",
             options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
+              {
+                id: "A",
+                text: "Self-awareness & Emotional Regulation",
+              },
+              {
+                id: "B",
+                text: "Resilience",
+              },
+              {
+                id: "C",
+                text: "Empathy",
+              },
+              {
+                id: "D",
+                text: "Collaboration & Social Awareness",
+              },
             ],
           },
           {
             stepId: 4,
             type: "dropdownScenario",
-            question: "You are struggling to understand a math problem in class, and it's making you feel frustrated.",
+            question: `Amina noticed her classmate was upset. She sat with her, listened to her problems, and comforted her by sharing a similar experience."`,
             options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
+              {
+                id: "A",
+                text: "Self-awareness & Emotional Regulation",
+              },
+              {
+                id: "B",
+                text: "Resilience",
+              },
+              {
+                id: "C",
+                text: "Empathy",
+              },
+              {
+                id: "D",
+                text: "Collaboration & Social Awareness",
+              },
             ],
           },
           {
             stepId: 5,
             type: "dropdownScenario",
-            question: "You didn’t make the sports team you really wanted to join, and you feel disappointed.",
+            question:
+              "Chijioke always knew he could do math, but when a difficult problem came up, he froze. After speaking with his teacher and some reflection, he realized he needed to stay calm and keep trying.",
             options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
-            ],
-          },
-
-          {
-            stepId: 6,
-            type: "dropdownScenario",
-            question: "A group project is due tomorrow, but your team hasn’t finished their parts, and you're stressed.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
-            ],
-          },
-          {
-            stepId: 7,
-            type: "dropdownScenario",
-            question: "You're about to give a speech in front of the class, and you're feeling anxious.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
-            ],
-          },
-          {
-            stepId: 8,
-            type: "dropdownScenario",
-            question: "You lost your favorite item and feel sad about it.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
-            ],
-          },
-          {
-            stepId: 9,
-            type: "dropdownScenario",
-            question: "You argued with your sibling this morning, and now you're still feeling angry.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
-            ],
-          },
-          {
-            stepId: 10,
-            type: "dropdownScenario",
-            question: "You accidentally made a mistake on a school assignment and feel embarrassed.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
-            ],
-          },
-          {
-            stepId: 11,
-            type: "dropdownScenario",
-            question: "A teacher called on you to answer a question, but you didn’t know the answer, and now you feel nervous.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
+              {
+                id: "A",
+                text: "Self-awareness & Emotional Regulation",
+              },
+              {
+                id: "B",
+                text: "Resilience",
+              },
+              {
+                id: "C",
+                text: "Empathy",
+              },
+              {
+                id: "D",
+                text: "Collaboration & Social Awareness",
+              },
             ],
           },
         ],
@@ -1338,14 +2348,356 @@ export const courseContent = {
         },
       },
       {
-        id: 7,
+        id: 9,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 10,
+        type: "question",
+        questionType: "text",
+        question:
+          "Document your current classroom routines. Make it simple, realistic, and something you do consistently.",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 11,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
         navigation: {
           prev: true,
           next: true,
         },
       },
     ],
-  }
+  },
+  week6: {
+    title: "Coping Skills",
+    pages: [
+      {
+        id: 1,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_1.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 2,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Below are six statements related to how you may have been feeling recently. For each one, choose the option that best reflects your experience:  Never, Occasionally, Frequently, Always.",
+            ],
+            options:
+              "Competence, Confidence, Coping, Control, Character, Connections, and Contribution.",
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question: "I often feel emotionally drained.",
+            options: [
+              {
+                id: "A",
+                text: "Never",
+              },
+              {
+                id: "B",
+                text: "Occasionally",
+              },
+              {
+                id: "C",
+                text: "Frequently",
+              },
+              {
+                id: "D",
+                text: "Always",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question: "I feel disconnected from my students.",
+            options: [
+              {
+                id: "A",
+                text: "Never",
+              },
+              {
+                id: "B",
+                text: "Occasionally",
+              },
+              {
+                id: "C",
+                text: "Frequently",
+              },
+              {
+                id: "D",
+                text: "Always",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "dropdownScenario",
+            question: `I find myself getting easily irritated by small things recently.`,
+            options: [
+              {
+                id: "A",
+                text: "Never",
+              },
+              {
+                id: "B",
+                text: "Occasionally",
+              },
+              {
+                id: "C",
+                text: "Frequently",
+              },
+              {
+                id: "D",
+                text: "Always",
+              },
+            ],
+          },
+          {
+            stepId: 5,
+            type: "dropdownScenario",
+            question:
+              "I struggle to fall asleep, stay asleep, or feel rested in the mornings.",
+            options: [
+              {
+                id: "A",
+                text: "Never",
+              },
+              {
+                id: "B",
+                text: "Occasionally",
+              },
+              {
+                id: "C",
+                text: "Frequently",
+              },
+              {
+                id: "D",
+                text: "Always",
+              },
+            ],
+          },
+          {
+            stepId: 6,
+            type: "dropdownScenario",
+            question:
+              "I feel like I’m constantly behind or drowning in responsibilities.",
+            options: [
+              {
+                id: "A",
+                text: "Never",
+              },
+              {
+                id: "B",
+                text: "Occasionally",
+              },
+              {
+                id: "C",
+                text: "Frequently",
+              },
+              {
+                id: "D",
+                text: "Always",
+              },
+            ],
+          },
+          {
+            stepId: 7,
+            type: "dropdownScenario",
+            question:
+              "I often experience headaches, body tension, or stomach issues during the workday.",
+            options: [
+              {
+                id: "A",
+                text: "Never",
+              },
+              {
+                id: "B",
+                text: "Occasionally",
+              },
+              {
+                id: "C",
+                text: "Frequently",
+              },
+              {
+                id: "D",
+                text: "Always",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 3,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_2.mp4",
+        hasNextButton: true,
+      },
+      {
+        id: 4,
+        type: "question",
+        questionType: "text",
+        question:
+          "Write down three ways you recharge whenever you feel burnout.",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 5,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_3.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 6,
+        type: "question",
+        questionType: "text",
+        question:
+          "What is one moment from your recent teaching experience that made you feel grateful?",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 7,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 8,
+        type: "multiStep",
+        title: "Write a letter to yourself.",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            challenge:
+              "Drag and drop each item into the circle where it best fits. \nFor example, close colleagues might belong in your Inner Circle, while a school wellness program could go in the Middle Circle. \nA potential partnership with a community organization would fit into the Outer Circle.",
+            statement: "Mildly triggering, Frustrating and Highly triggering.",
+          },
+          {
+            stepId: 2,
+            type: "imageDragAndDrop",
+            instruction:
+              "Drag-and-drop the statements on the left into any of these bowls.",
+            steps: 4,
+            buckets: [
+              {
+                id: "green",
+                title: "Inner Circle",
+              },
+              {
+                id: "orange",
+                title: "Middle Circle",
+              },
+              {
+                id: "red",
+                title: "Outer Circle",
+              },
+            ],
+            images: [
+              "Close colleagues or team members",
+              "Immediate family",
+              "A trusted friend",
+              "Daily self-care practices (e.g., mindfulness, exercise, watching favourite movie)",
+              "Classroom routines that bring calm (e.g., breaks)",
+              "Student support (e.g., positive relationships with students)",
+              "School counselor",
+              "Mentor or senior colleague",
+              "Online support groups or communities",
+              "Principal or school leadership team",
+              "School wellness programs",
+              "SEL and Positive Psychology workshops",
+              "Partnerships with parents or caregivers",
+              "Peer teacher groups or networks",
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 9,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 10,
+        type: "question",
+        questionType: "text",
+        question:
+          "What is one moment from your recent teaching experience that made you feel grateful?",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 11,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+    ],
+  },
 };

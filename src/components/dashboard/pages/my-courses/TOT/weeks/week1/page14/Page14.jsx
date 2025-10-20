@@ -45,8 +45,8 @@ function WeekTwoPage4() {
     }
 
     const values = Object.values(stepData.value);
-    if (values.length < 3) {
-      setErrorMessage("At least 3 values are required!");
+    if (values.length < 1) {
+      setErrorMessage("At least 1 value are required!");
       return false;
     }
 
@@ -69,28 +69,33 @@ function WeekTwoPage4() {
     return true;
   };
 
-  // console.log(answers, "Answers")
-
   const renderStep = () => {
-
     if (!step) return <div>Invalid Step</div>;
 
     switch (step.type) {
       case "instruction":
         return (
-          <QuestionBox>
-            <div className="p-5">
-              <div className="text-center mb-5 mt-4 mt-md-0">
-                <h2 className="text-white bg-blue p-3 fs-1 rounded d-inline week-2-question-text text-center">
-                  {step.title}
-                </h2>
-              </div>
-              <h2 className="text-gray display-5 text-center">{step.instructions[0]}</h2>
-              <h2 className="text-gray mt-5 text-center week-2-question-text">
-                <joe className="text-blue">{step.options}</joe>
-              </h2>
+          <QuestionBox extraStyle="bg-blue">
+            <div className="text-center mb-5 mt-5 mt-md-4">
+              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction">
+                Instruction
+              </h1>
             </div>
 
+            <div className="text-center mb-5 mt-3 mt-md-0">
+              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
+                You will be presented with Ten (10) different classroom <br />
+                activities.
+              </h2>
+              <br />
+              <br />
+              <br />
+              <h2 className="text-white px-5 d-inline-block text-start tot-week-2-question-text">
+                Match the appropriate classroom activity to the SEL
+                <br />
+                competency you think it matches.
+              </h2>
+            </div>
           </QuestionBox>
         );
       case "dropdownScenario":

@@ -10,44 +10,46 @@ import { courseContent as totCourseContent } from "../../components/dashboard/pa
 import { assessments as totAssessments } from "../../components/dashboard/pages/my-courses/TOT/data/assessment";
 
 const courseData = {
-  'compassion': {
+  compassion: {
     courseContent: compassionCourseContent,
-    assessments: compassionAssessments
+    assessments: compassionAssessments,
   },
-  'transition': {
+  transition: {
     courseContent: transitionCourseContent,
-    assessments: transitionAssessments
+    assessments: transitionAssessments,
   },
-  'resilience_grit': {
+  resilience_grit: {
     courseContent: resilienceCourseContent,
-    assessments: resilienceAssessments
+    assessments: resilienceAssessments,
   },
-  'tot': {
+  tot: {
     courseContent: totCourseContent,
-    assessments: totAssessments
-  }
+    assessments: totAssessments,
+  },
 };
 
 const getCourseFromURL = () => {
   // Add timeout to wait for route initialization
-  const path = window?.location?.pathname || '/';
+  const path = window?.location?.pathname || "/";
 
   // Handle initial / case
-  if (path === '/') {
-    return 'compassion'; // default course
+  if (path === "/") {
+    return "compassion"; // default course
   }
 
-  const segments = path.split('/').filter(Boolean);
+  const segments = path.split("/").filter(Boolean);
   const lastSegment = segments[segments.length - 1];
 
   // Validate course name
-  return ['compassion', 'transition', 'resilience_grit','tot'].includes(lastSegment?.toLowerCase())
+  return ["compassion", "transition", "resilience_grit", "tot"].includes(
+    lastSegment?.toLowerCase()
+  )
     ? lastSegment.toLowerCase()
-    : 'compassion';
+    : "compassion";
 };
 
 const initialState = {
-  currentCourse: 'compassion',
+  currentCourse: "compassion",
   currentWeek: 1,
   currentPage: 1,
   currentStep: 1,
@@ -62,9 +64,9 @@ const navigationSlice = createSlice({
     setCourse: (state, action) => {
       if (state.currentCourse !== action.payload) {
         state.currentCourse = action.payload;
-        state.currentWeek = 1;
-        state.currentPage = 1;
-        state.currentStep = 1;
+        state.currentWeek = 4;
+        state.currentPage = 6;
+        state.currentStep = 2;
       }
     },
     updateCourseFromURL: (state) => {
@@ -115,9 +117,15 @@ const navigationSlice = createSlice({
         const isLastQuestion = state.currentStep === totalQuestions;
 
         if (isLastQuestion) {
-          if (state.currentCourse === 'transition' && state.currentWeek === 10) {
+          if (
+            state.currentCourse === "transition" &&
+            state.currentWeek === 10
+          ) {
             state.showReview = true;
-          } else if (state.currentCourse !== 'transition' && (state.currentWeek === 5 || isFirstWeek)) {
+          } else if (
+            state.currentCourse !== "transition" &&
+            (state.currentWeek === 5 || isFirstWeek)
+          ) {
             state.showReview = true;
           } else {
             state.showHurray = true;
@@ -134,11 +142,26 @@ const navigationSlice = createSlice({
       );
       const isLastPage = state.currentPage === totalPages;
 
+      // Calculate total steps based on page type
       let totalSteps = 0;
       if (pageData?.type === "imageDragAndDrop") {
         totalSteps = pageData.steps;
       } else if (pageData?.type === "multiStep") {
-        totalSteps = pageData.steps?.length || 0;
+        // Check if it's the consolidated scenario structure
+        const hasConsolidatedScenarios = pageData.steps?.some(
+          (step) => step.type === "scenario" && step.subQuestions
+        );
+
+        if (hasConsolidatedScenarios) {
+          // Calculate: 1 instruction + (number of scenarios × 7 steps each)
+          const scenarioCount = pageData.steps.filter(
+            (step) => step.type === "scenario" && step.subQuestions
+          ).length;
+          totalSteps = 1 + scenarioCount * 7;
+        } else {
+          // Regular multiStep
+          totalSteps = pageData.steps?.length || 0;
+        }
       } else if (pageData?.type === "interactiveScenario") {
         totalSteps = pageData.steps?.length || 0;
       } else if (pageData?.type === "multiScenario") {
@@ -208,11 +231,26 @@ const navigationSlice = createSlice({
         (page) => page.id === state.currentPage
       );
 
+      // Calculate total steps based on page type
       let totalSteps = 0;
       if (pageData?.type === "imageDragAndDrop") {
         totalSteps = pageData.steps;
       } else if (pageData?.type === "multiStep") {
-        totalSteps = pageData.steps?.length || 0;
+        // Check if it's the consolidated scenario structure
+        const hasConsolidatedScenarios = pageData.steps?.some(
+          (step) => step.type === "scenario" && step.subQuestions
+        );
+
+        if (hasConsolidatedScenarios) {
+          // Calculate: 1 instruction + (number of scenarios × 7 steps each)
+          const scenarioCount = pageData.steps.filter(
+            (step) => step.type === "scenario" && step.subQuestions
+          ).length;
+          totalSteps = 1 + scenarioCount * 7;
+        } else {
+          // Regular multiStep
+          totalSteps = pageData.steps?.length || 0;
+        }
       } else if (pageData?.type === "interactiveScenario") {
         totalSteps = pageData.steps?.length || 0;
       } else if (pageData?.type === "multiScenario") {
@@ -280,6 +318,7 @@ export const {
   showReviewPopup,
   hideReviewPopup,
   hideHurray,
+  updateCourseFromURL,
 } = navigationSlice.actions;
 
 // Base selectors
@@ -329,8 +368,25 @@ export const selectNavigationState = createSelector(
       pageData = weekData?.pages.find(
         (page) => page.id === navigation.currentPage
       );
+
       if (pageData?.type === "imageDragAndDrop") {
         totalSteps = pageData.steps || 0;
+      } else if (pageData?.type === "multiStep") {
+        // Check if it's the consolidated scenario structure
+        const hasConsolidatedScenarios = pageData.steps?.some(
+          (step) => step.type === "scenario" && step.subQuestions
+        );
+
+        if (hasConsolidatedScenarios) {
+          // Calculate: 1 instruction + (number of scenarios × 7 steps each)
+          const scenarioCount = pageData.steps.filter(
+            (step) => step.type === "scenario" && step.subQuestions
+          ).length;
+          totalSteps = 1 + scenarioCount * 7;
+        } else {
+          // Regular multiStep
+          totalSteps = pageData.steps?.length || 0;
+        }
       } else if (pageData?.type === "multiScenario") {
         totalSteps = pageData.scenarios?.length || 0;
       } else if (pageData?.type === "video" || pageData?.type === "question") {

@@ -18,7 +18,7 @@ function AssessmentQuestion({
   };
 
   return (
-    <div className={`ms-3 ms-md-5 ${isPreAssessment && "text-white"} tot-assessment-question-container`}>
+    <div className={`ms-3 ms-md-5 ${isPreAssessment && "text-white bg-blue"} tot-assessment-question-container py-2 px-1 px-md-3`}>
       <form>
         <div className="d-flex gap-2">
           <h3 className="fs-1">{currentStep}.</h3>

@@ -11,7 +11,7 @@ import {
   setCurrentPage,
   setCurrentStep,
 } from "../../../../../redux/reducers/navigationSlice.js";
-import "./index.css"
+import "./index.css";
 // Import components
 import PopUp from "./components/ReviewPopUp";
 import Hurray from "./components/Hurray";
@@ -42,14 +42,21 @@ import Page22 from "./weeks/week1/page22/Page22.jsx";
 import Page23 from "./weeks/week1/page23/Page23.jsx";
 import Page24 from "./weeks/week1/page24/Page24.jsx";
 
-
 // Week 2
 import WeekTwoPage1 from "./weeks/week2/page1/Page1";
 import WeekTwoPage2 from "./weeks/week2/page2/Page2";
 import WeekTwoPage3 from "./weeks/week2/page3/Page3";
 import WeekTwoPage4 from "./weeks/week2/page4/Page4";
 import WeekTwoPage5 from "./weeks/week2/page5/Page5";
-import WeekTwoPage6 from "./weeks/week2/page6/Page6";
+import WeekTwoPage6 from "./weeks/week2/page6/Page6.jsx";
+import WeekTwoPage7 from "./weeks/week2/page7/Page7.jsx";
+import WeekTwoPage8 from "./weeks/week2/page8/Page8.jsx";
+import WeekTwoPage9 from "./weeks/week2/page9/Page9.jsx";
+import WeekTwoPage10 from "./weeks/week2/page10/Page10.jsx";
+import WeekTwoPage11 from "./weeks/week2/page11/Page11.jsx";
+import WeekTwoPage12 from "./weeks/week2/page12/Page12.jsx";
+import WeekTwoPage13 from "./weeks/week2/page13/Page13.jsx";
+import WeekTwoAssessment from "./weeks/week2/page14/Page14.jsx";
 
 // Week 3
 import WeekThreePage1 from "./weeks/week3/page1/Page1";
@@ -59,6 +66,13 @@ import WeekThreePage4 from "./weeks/week3/page4/Page4";
 import WeekThreePage5 from "./weeks/week3/page5/Page5";
 import WeekThreePage6 from "./weeks/week3/page6/Page6";
 import WeekThreePage7 from "./weeks/week3/page7/Page7";
+import WeekThreePage8 from "./weeks/week3/page8/Page8";
+import WeekThreePage9 from "./weeks/week3/page9/Page9";
+import WeekThreePage10 from "./weeks/week3/page10/Page10";
+import WeekThreePage11 from "./weeks/week3/page11/Page11";
+import WeekThreePage12 from "./weeks/week3/page12/Page12";
+import WeekThreePage13 from "./weeks/week3/page13/Page13";
+import WeekThreePage14 from "./weeks/week3/page14/Page14";
 
 // Week 4
 import WeekFourPage1 from "./weeks/week4/page1/Page1";
@@ -69,6 +83,10 @@ import WeekFourPage5 from "./weeks/week4/page5/Page5";
 import WeekFourPage6 from "./weeks/week4/page6/Page6.jsx";
 import WeekFourPage7 from "./weeks/week4/page7/Page7.jsx";
 import WeekFourPage8 from "./weeks/week4/page8/Page8.jsx";
+import WeekFourPage9 from "./weeks/week4/page9/Page9";
+import WeekFourPage10 from "./weeks/week4/page10/Page10";
+import WeekFourPage11 from "./weeks/week4/page11/Page11";
+import WeekFourPage12 from "./weeks/week4/page12/Page12";
 
 // Week5
 import WeekFivePage1 from "./weeks/week5/page1/Page1.jsx";
@@ -78,7 +96,25 @@ import WeekFivePage4 from "./weeks/week5/page4/Page4.jsx";
 import WeekFivePage5 from "./weeks/week5/page5/Page5.jsx";
 import WeekFivePage6 from "./weeks/week5/page6/Page6.jsx";
 import WeekFivePage7 from "./weeks/week5/page7/page7.jsx";
-import WeekFivePage8 from "./weeks/week5/page8/page8.jsx";
+import WeekFivePage8 from "./weeks/week5/page8/Page8.jsx";
+import WeekFivePage9 from "./weeks/week5/page9/Page9";
+import WeekFivePage10 from "./weeks/week5/page10/Page10";
+import WeekFivePage11 from "./weeks/week5/page11/Page11";
+import WeekFivePage12 from "./weeks/week5/page12/Page12";
+
+// Week 6
+import WeekSixPage1 from "./weeks/week6/page1/Page1";
+import WeekSixPage2 from "./weeks/week6/page2/Page2";
+import WeekSixPage3 from "./weeks/week6/page3/Page3";
+import WeekSixPage4 from "./weeks/week6/page4/Page4";
+import WeekSixPage5 from "./weeks/week6/page5/Page5";
+import WeekSixPage6 from "./weeks/week6/page6/Page6";
+import WeekSixPage7 from "./weeks/week6/page7/page7.jsx";
+import WeekSixPage8 from "./weeks/week6/page8/Page8";
+import WeekSixPage9 from "./weeks/week6/page9/Page9";
+import WeekSixPage10 from "./weeks/week6/page10/Page10";
+import WeekSixPage11 from "./weeks/week6/page11/Page11";
+import WeekSixPage12 from "./weeks/week6/page12/Page12";
 
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -128,7 +164,7 @@ const WeekContent = () => {
     dispatch(setCurrentPage(currentPage));
     dispatch(setCurrentStep(currentStep));
 
-    return () => { };
+    return () => {};
   }, [dispatch]); // Added dispatch to dependency array
 
   const currentWeek = useSelector(selectCurrentWeek);
@@ -179,7 +215,7 @@ const WeekContent = () => {
       );
     }
 
-    return () => { };
+    return () => {};
   }, [data]);
 
   // If showing hurray, render that instead
@@ -257,6 +293,22 @@ const WeekContent = () => {
             return <WeekTwoPage5 />;
           case 6:
             return <WeekTwoPage6 />;
+          case 7:
+            return <WeekTwoPage7 />;
+          case 8:
+            return <WeekTwoPage8 />;
+          case 9:
+            return <WeekTwoPage9 />;
+          case 10:
+            return <WeekTwoPage10 />;
+          case 11:
+            return <WeekTwoPage11 />;
+          case 12:
+            return <WeekTwoPage12 />;
+          case 13:
+            return <WeekTwoPage13 />;
+          case 14:
+            return <WeekTwoAssessment />;
           default:
             return null;
         }
@@ -276,6 +328,20 @@ const WeekContent = () => {
             return <WeekThreePage6 />;
           case 7:
             return <WeekThreePage7 />;
+          case 8:
+            return <WeekThreePage8 />;
+          case 9:
+            return <WeekThreePage9 />;
+          case 10:
+            return <WeekThreePage10 />;
+          case 11:
+            return <WeekThreePage11 />;
+          case 12:
+            return <WeekThreePage12 />;
+          case 13:
+            return <WeekThreePage13 />;
+          case 14:
+            return <WeekThreePage14 />;
 
           default:
             return null;
@@ -298,6 +364,14 @@ const WeekContent = () => {
             return <WeekFourPage7 />;
           case 8:
             return <WeekFourPage8 />;
+          case 9:
+            return <WeekFourPage9 />;
+          case 10:
+            return <WeekFourPage10 />;
+          case 11:
+            return <WeekFourPage11 />;
+          case 12:
+            return <WeekFourPage12 />;
           default:
             return null;
         }
@@ -319,10 +393,46 @@ const WeekContent = () => {
             return <WeekFivePage7 />;
           case 8:
             return <WeekFivePage8 />;
+          case 9:
+            return <WeekFivePage9 />;
+          case 10:
+            return <WeekFivePage10 />;
+          case 11:
+            return <WeekFivePage11 />;
+          case 12:
+            return <WeekFivePage12 />;
           default:
             return null;
         }
-
+      case 6:
+        switch (currentPage) {
+          case 1:
+            return <WeekSixPage1 />;
+          case 2:
+            return <WeekSixPage2 />;
+          case 3:
+            return <WeekSixPage3 />;
+          case 4:
+            return <WeekSixPage4 />;
+          case 5:
+            return <WeekSixPage5 />;
+          case 6:
+            return <WeekSixPage6 />;
+          case 7:
+            return <WeekSixPage7 />;
+          case 8:
+            return <WeekSixPage8 />;
+          case 9:
+            return <WeekSixPage9 />;
+          case 10:
+            return <WeekSixPage10 />;
+          case 11:
+            return <WeekSixPage11 />;
+          case 12:
+            return <WeekSixPage12 />;
+          default:
+            return null;
+        }
       default:
         return null;
     }
@@ -350,7 +460,7 @@ const CourseContent = () => {
     "Building Relationships & Creating a Safe Classroom",
     "Growth Mindset & Resilience for Educators",
     "Integrating SEL into Teaching Methods",
-    "Teacher Well-being & Sustainable SEL Practices"
+    "Teacher Well-being & Sustainable SEL Practices",
   ];
 
   useEffect(() => {
@@ -398,7 +508,7 @@ const CourseContent = () => {
           </button>
           <div
             className="navbar-logo d-none d-lg-block"
-            onClick={() => { }}
+            onClick={() => {}}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -474,9 +584,7 @@ const CourseContent = () => {
           </button>
 
           <div className="compassion-title">
-            <h2 className="fs-5 fs-md-3">
-              SEL for Educators:
-            </h2>
+            <h2 className="fs-5 fs-md-3">SEL for Educators:</h2>
             <h2 className="compassion fs-5">ToT Course 1</h2>
           </div>
 
@@ -492,9 +600,7 @@ const CourseContent = () => {
                     className="course-list-icon "
                   />
                 </div>
-                <span style={{ whiteSpace: "nowrap" }}>
-                  Week {index + 1}
-                </span>
+                <span style={{ whiteSpace: "nowrap" }}>Week {index + 1}</span>
                 <span className="">{item} </span>
               </li>
             ))}
@@ -534,4 +640,3 @@ const TOTCourse = () => {
 };
 
 export default TOTCourse;
-
