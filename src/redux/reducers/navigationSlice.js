@@ -48,6 +48,40 @@ const getCourseFromURL = () => {
     : "compassion";
 };
 
+// Helper function to calculate multiStep total steps
+const calculateMultiStepTotal = (pageData) => {
+  if (!pageData?.steps) return 0;
+
+  // Check for consolidated scenarios with subQuestions (old structure)
+  const hasConsolidatedScenarios = pageData.steps.some(
+    (step) => step.type === "scenario" && step.subQuestions
+  );
+
+  if (hasConsolidatedScenarios) {
+    // Calculate: 1 instruction + (number of scenarios × 7 steps each)
+    const scenarioCount = pageData.steps.filter(
+      (step) => step.type === "scenario" && step.subQuestions
+    ).length;
+    return 1 + scenarioCount * 7;
+  }
+
+  // Check for SONAR scenarios with sonarSteps (new structure)
+  const hasSonarScenarios = pageData.steps.some(
+    (step) => step.type === "scenario" && step.sonarSteps
+  );
+
+  if (hasSonarScenarios) {
+    // Calculate: 1 instruction + (number of scenarios × 2 steps each: scenario + sonar)
+    const scenarioCount = pageData.steps.filter(
+      (step) => step.type === "scenario" && step.sonarSteps
+    ).length;
+    return 1 + scenarioCount * 2;
+  }
+
+  // Regular multiStep - just count the steps
+  return pageData.steps.length;
+};
+
 const initialState = {
   currentCourse: "compassion",
   currentWeek: 1,
@@ -64,8 +98,8 @@ const navigationSlice = createSlice({
     setCourse: (state, action) => {
       if (state.currentCourse !== action.payload) {
         state.currentCourse = action.payload;
-        state.currentWeek = 4;
-        state.currentPage = 6;
+        state.currentWeek = 2;
+        state.currentPage = 10;
         state.currentStep = 1;
       }
     },
@@ -147,21 +181,7 @@ const navigationSlice = createSlice({
       if (pageData?.type === "imageDragAndDrop") {
         totalSteps = pageData.steps;
       } else if (pageData?.type === "multiStep") {
-        // Check if it's the consolidated scenario structure
-        const hasConsolidatedScenarios = pageData.steps?.some(
-          (step) => step.type === "scenario" && step.subQuestions
-        );
-
-        if (hasConsolidatedScenarios) {
-          // Calculate: 1 instruction + (number of scenarios × 7 steps each)
-          const scenarioCount = pageData.steps.filter(
-            (step) => step.type === "scenario" && step.subQuestions
-          ).length;
-          totalSteps = 1 + scenarioCount * 7;
-        } else {
-          // Regular multiStep
-          totalSteps = pageData.steps?.length || 0;
-        }
+        totalSteps = calculateMultiStepTotal(pageData);
       } else if (pageData?.type === "interactiveScenario") {
         totalSteps = pageData.steps?.length || 0;
       } else if (pageData?.type === "multiScenario") {
@@ -236,21 +256,7 @@ const navigationSlice = createSlice({
       if (pageData?.type === "imageDragAndDrop") {
         totalSteps = pageData.steps;
       } else if (pageData?.type === "multiStep") {
-        // Check if it's the consolidated scenario structure
-        const hasConsolidatedScenarios = pageData.steps?.some(
-          (step) => step.type === "scenario" && step.subQuestions
-        );
-
-        if (hasConsolidatedScenarios) {
-          // Calculate: 1 instruction + (number of scenarios × 7 steps each)
-          const scenarioCount = pageData.steps.filter(
-            (step) => step.type === "scenario" && step.subQuestions
-          ).length;
-          totalSteps = 1 + scenarioCount * 7;
-        } else {
-          // Regular multiStep
-          totalSteps = pageData.steps?.length || 0;
-        }
+        totalSteps = calculateMultiStepTotal(pageData);
       } else if (pageData?.type === "interactiveScenario") {
         totalSteps = pageData.steps?.length || 0;
       } else if (pageData?.type === "multiScenario") {
@@ -372,21 +378,7 @@ export const selectNavigationState = createSelector(
       if (pageData?.type === "imageDragAndDrop") {
         totalSteps = pageData.steps || 0;
       } else if (pageData?.type === "multiStep") {
-        // Check if it's the consolidated scenario structure
-        const hasConsolidatedScenarios = pageData.steps?.some(
-          (step) => step.type === "scenario" && step.subQuestions
-        );
-
-        if (hasConsolidatedScenarios) {
-          // Calculate: 1 instruction + (number of scenarios × 7 steps each)
-          const scenarioCount = pageData.steps.filter(
-            (step) => step.type === "scenario" && step.subQuestions
-          ).length;
-          totalSteps = 1 + scenarioCount * 7;
-        } else {
-          // Regular multiStep
-          totalSteps = pageData.steps?.length || 0;
-        }
+        totalSteps = calculateMultiStepTotal(pageData);
       } else if (pageData?.type === "multiScenario") {
         totalSteps = pageData.scenarios?.length || 0;
       } else if (pageData?.type === "video" || pageData?.type === "question") {

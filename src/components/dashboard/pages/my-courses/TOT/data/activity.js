@@ -1182,9 +1182,6 @@ export const courseContent = {
             stepId: 1,
             type: "instruction",
             title: "Instruction",
-            instructions: [
-              "Welcome to the SONAR staircase. You will be presented with a 5 step staircase labeled with the words STOP, OBSERVE, NAME, ASK and REGULATE. You will also be shown 3 scenarios. For each stressful classroom scenario, use the SONAR pathway to walk through your response. Reflect on each step by answering the prompts below.",
-            ],
           },
           {
             stepId: 2,
@@ -1193,35 +1190,55 @@ export const courseContent = {
             scenarioType: "textOnly",
             scenarioTitle:
               "A student constantly asks to leave the classroom during lessons, disrupting your teaching.",
-            ladderImage: "",
-            subQuestions: [
+            sonarSteps: [
               {
                 id: 1,
+                stepName: "STOP",
+                stepDescription: "Pause and take a breath.",
                 question: "What would your default reaction be?",
-                type: "text",
+                width: "100%",
+                stepBgColor: "#FFD8DE",
+                desBgColor: "#EE2447",
               },
               {
                 id: 2,
+                stepName: "OBSERVE",
+                stepDescription:
+                  "Identify what's happening internally and externally.",
                 question:
                   "What emotions are you noticing in yourself and the student?",
-                type: "text",
+                width: "90%",
+                stepBgColor: "#FFF7E7",
+                desBgColor: "#FCAF17",
               },
               {
                 id: 3,
+                stepName: "NAME",
+                stepDescription: "Label the emotion.",
                 question: "Why is naming emotions helpful before responding?",
-                type: "text",
+                width: "75%",
+                stepBgColor: "#FFCAB7",
+                desBgColor: "#904D35",
               },
               {
                 id: 4,
+                stepName: "ASK",
+                stepDescription: "Reflect on the situation.",
                 question:
                   "Why is this bothering me? What does the student need?",
-                type: "text",
+                width: "60%",
+                stepBgColor: "#FFFFFF",
+                desBgColor: "#848484",
               },
               {
                 id: 5,
+                stepName: "REGULATE",
+                stepDescription: "Choose a calm response",
                 question:
                   "Address the student privately instead of reacting on the spot",
-                type: "text",
+                width: "50%",
+                stepBgColor: "#BBFFD8",
+                desBgColor: "#27AE60",
               },
             ],
           },
@@ -1232,35 +1249,54 @@ export const courseContent = {
             scenarioType: "textOnly",
             scenarioTitle:
               "A parent approaches you after class, expressing dissatisfaction with how their child is being treated in your classroom.",
-            ladderImage: "",
-            subQuestions: [
+            sonarSteps: [
               {
                 id: 1,
+                stepName: "STOP",
+                stepDescription: "Pause and take a breath.",
                 question: "What would your default reaction be?",
-                type: "text",
+                width: "100%",
+                stepBgColor: "#FFD8DE",
+                desBgColor: "#EE2447",
               },
               {
                 id: 2,
+                stepName: "OBSERVE",
+                stepDescription:
+                  "Identify what's happening internally and externally.",
                 question:
-                  "What emotions are you noticing in yourself and the student?",
-                type: "text",
+                  "What emotions are you noticing in yourself and the parent?",
+                width: "90%",
+                stepBgColor: "#FFF7E7",
+                desBgColor: "#FCAF17",
               },
               {
                 id: 3,
+                stepName: "NAME",
+                stepDescription: "Label the emotion.",
                 question: "Why is naming emotions helpful before responding?",
-                type: "text",
+                width: "75%",
+                stepBgColor: "#FFCAB7",
+                desBgColor: "#904D35",
               },
               {
                 id: 4,
+                stepName: "ASK",
+                stepDescription: "Reflect on the situation.",
                 question:
-                  "Why is this bothering me? What does the student need?",
-                type: "text",
+                  "Why is this bothering me? What does the parent need?",
+                width: "60%",
+                stepBgColor: "#FFFFFF",
+                desBgColor: "#848484",
               },
               {
                 id: 5,
-                question:
-                  "Address the student privately instead of reacting on the spot.",
-                type: "text",
+                stepName: "REGULATE",
+                stepDescription: "Choose a calm response",
+                question: "Listen actively and schedule a follow-up meeting",
+                width: "50%",
+                stepBgColor: "#BBFFD8",
+                desBgColor: "#27AE60",
               },
             ],
           },
@@ -1271,35 +1307,55 @@ export const courseContent = {
             scenarioType: "withInput",
             scenarioTitle:
               "Create your own scenario and apply the SONAR method for emotional regulation.",
-            ladderImage: "",
-            subQuestions: [
+            sonarSteps: [
               {
                 id: 1,
+                stepName: "STOP",
+                stepDescription: "Pause and take a breath.",
                 question: "What would your default reaction be?",
-                type: "text",
+                width: "100%",
+                stepBgColor: "#FFD8DE",
+                desBgColor: "#EE2447",
               },
               {
                 id: 2,
+                stepName: "OBSERVE",
+                stepDescription:
+                  "Identify what's happening internally and externally.",
                 question:
-                  "What emotions are you noticing in yourself and the student?",
-                type: "text",
+                  "What emotions are you noticing in yourself and others?",
+                width: "90%",
+                stepBgColor: "#FFF7E7",
+                desBgColor: "#FCAF17",
               },
               {
                 id: 3,
+                stepName: "NAME",
+                stepDescription: "Label the emotion.",
                 question: "Why is naming emotions helpful before responding?",
-                type: "text",
+                width: "75%",
+                stepBgColor: "#FFCAB7",
+                desBgColor: "#904D35",
               },
+
               {
                 id: 4,
+                stepName: "ASK",
+                stepDescription: "Reflect on the situation.",
                 question:
-                  "Why is this bothering me? What does the student need?",
-                type: "text",
+                  "Why is this bothering me? What does the other person need?",
+                width: "60%",
+                stepBgColor: "#FFFFFF",
+                desBgColor: "#848484",
               },
               {
                 id: 5,
-                question:
-                  "Address the student privately instead of reacting on the spot.",
-                type: "text",
+                stepName: "REGULATE",
+                stepDescription: "Choose a calm response",
+                question: "What calm, thoughtful response could you choose?",
+                width: "50%",
+                stepBgColor: "#BBFFD8",
+                desBgColor: "#27AE60",
               },
             ],
           },

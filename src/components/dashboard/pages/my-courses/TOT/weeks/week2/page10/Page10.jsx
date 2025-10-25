@@ -13,22 +13,20 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import ScenarioFrame from "./components/ScenarioFrame";
-import LadderFrame from "./components/LadderFrame";
-import QuestionFrame from "./components/QuestionFrame";
+import SonarStaircase from "./components/SonarStaircase";
 
 function Page10() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
-  const [answers, setAnswers] = useState([]);
+  const [answers, setAnswers] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
 
-  // Calculate total steps dynamically
-  // 1 instruction + (number of scenarios × 7 steps per scenario)
+  // Calculate total steps: 1 instruction + scenarios (each has scenario page + sonar page)
   const totalSteps = pageData?.steps
-    ? 1 + pageData.steps.filter((s) => s.type === "scenario").length * 7
+    ? 1 + (pageData.steps.length - 1) * 2 // -1 for instruction, *2 for scenario + sonar
     : 0;
 
   useEffect(() => {
@@ -37,76 +35,73 @@ function Page10() {
       (item) => item.page === pageData.id
     );
 
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    if (response?.answer) {
+      setAnswers(response.answer);
+    }
   }, [userAnswers, pageData?.id]);
 
-  // Helper function to get current scenario and sub-step info
+  // Helper to determine current view
   const getCurrentStepInfo = () => {
     if (currentStep === 1) {
-      return { type: "instruction", stepId: 1 };
+      return { type: "instruction" };
     }
 
-    const scenarioSteps =
-      pageData?.steps.filter((s) => s.type === "scenario") || [];
-    const stepIndex = currentStep - 2; // Subtract 1 for instruction step, then 0-index
-    const scenarioIndex = Math.floor(stepIndex / 7);
-    const subStepIndex = stepIndex % 7;
+    const adjustedStep = currentStep - 2; // -1 for instruction, -1 for 0-indexing
+    const scenarioIndex = Math.floor(adjustedStep / 2);
+    const isScenarioPage = adjustedStep % 2 === 0;
 
-    if (scenarioIndex >= scenarioSteps.length) {
+    const scenarios =
+      pageData?.steps.filter((s) => s.type === "scenario") || [];
+
+    if (scenarioIndex >= scenarios.length) {
       return { type: "invalid" };
     }
 
-    const scenario = scenarioSteps[scenarioIndex];
-    const subStepTypes = [
-      "scenario", 
-      "ladder", 
-      "question", 
-      "question", 
-      "question", 
-      "question", 
-      "question", 
-    ];
-
     return {
-      type: subStepTypes[subStepIndex],
-      scenario,
-      subStepIndex,
-      questionNumber: subStepIndex >= 2 ? subStepIndex - 1 : null,
-      stepId: currentStep,
+      type: isScenarioPage ? "scenario" : "sonar",
+      scenario: scenarios[scenarioIndex],
+      scenarioNumber: scenarios[scenarioIndex].scenarioNumber,
     };
   };
 
   const saveUserInput = () => {
     const stepInfo = getCurrentStepInfo();
 
-    // Skip validation for instruction and ladder steps
-    if (stepInfo.type === "instruction" || stepInfo.type === "ladder") {
+    // Skip validation for instruction
+    if (stepInfo.type === "instruction") {
       return true;
     }
 
     // Skip validation for admins
     if (adminDatas.isAdmin) return true;
 
-    // For scenario steps
+    // For scenario page with input
     if (stepInfo.type === "scenario") {
-      // Only validate if it's a "withInput" scenario
       if (stepInfo.scenario?.scenarioType === "withInput") {
-        const stepData = answers.find((item) => item.stepId === currentStep);
+        const scenarioAnswer = answers[`scenario_${stepInfo.scenarioNumber}`];
 
-        if (!stepData || !stepData.value || stepData.value.trim() === "") {
-          setErrorMessage("Please provide your response before proceeding.");
+        if (!scenarioAnswer) {
+          setErrorMessage("Please describe your scenario before proceeding.");
           return false;
         }
       }
+      setErrorMessage("");
       return true;
     }
 
-    // For question steps - always require input
-    if (stepInfo.type === "question") {
-      const stepData = answers.find((item) => item.stepId === currentStep);
+    // For sonar staircase - check all steps are completed
+    if (stepInfo.type === "sonar") {
+      const sonarSteps = stepInfo.scenario?.sonarSteps || [];
+      const scenarioKey = `scenario_${stepInfo.scenarioNumber}`;
+      const sonarAnswers = answers[scenarioKey]?.sonar || {};
 
-      if (!stepData || !stepData.value || stepData.value.trim() === "") {
-        setErrorMessage("Please answer this question before proceeding.");
+      const allCompleted = sonarSteps.every((step) => {
+        const answer = sonarAnswers[step.id];
+        return answer && answer.trim() !== "";
+      });
+
+      if (!allCompleted) {
+        setErrorMessage("Please complete all SONAR steps before proceeding.");
         return false;
       }
     }
@@ -131,7 +126,6 @@ function Page10() {
 
     switch (stepInfo.type) {
       case "instruction":
-        // const instructionStep = pageData?.steps[0];
         return (
           <QuestionBox extraStyle="bg-blue">
             <div className="text-center mb-5 mt-5 mt-md-4">
@@ -165,44 +159,20 @@ function Page10() {
       case "scenario":
         return (
           <ScenarioFrame
-            data={{
-              stepId: stepInfo.stepId,
-              scenarioNumber: stepInfo.scenario.scenarioNumber,
-              scenarioTitle: stepInfo.scenario.scenarioTitle,
-              scenarioType: stepInfo.scenario.scenarioType,
-              mainInputQuestion: stepInfo.scenario.mainInputQuestion,
-            }}
-            setErrorMessage={setErrorMessage}
+            scenario={stepInfo.scenario}
             answers={answers}
             setAnswers={setAnswers}
+            setErrorMessage={setErrorMessage}
           />
         );
 
-      case "ladder":
+      case "sonar":
         return (
-          <LadderFrame
-            data={{
-              stepId: stepInfo.stepId,
-              scenarioNumber: stepInfo.scenario.scenarioNumber,
-              imagePath: stepInfo.scenario.ladderImage,
-            }}
-          />
-        );
-
-      case "question":
-        const questionData =
-          stepInfo.scenario.subQuestions[stepInfo.questionNumber - 1];
-        return (
-          <QuestionFrame
-            data={{
-              stepId: stepInfo.stepId,
-              scenarioNumber: stepInfo.scenario.scenarioNumber,
-              questionNumber: stepInfo.questionNumber,
-              question: questionData.question,
-            }}
-            setErrorMessage={setErrorMessage}
+          <SonarStaircase
+            scenario={stepInfo.scenario}
             answers={answers}
             setAnswers={setAnswers}
+            setErrorMessage={setErrorMessage}
           />
         );
 
