@@ -7,6 +7,23 @@ function CareerLadderFrame({ boxes, answers, setAnswers, setErrorMessage }) {
   const [selectedBox, setSelectedBox] = useState(null);
 
   const handleBoxClick = (box) => {
+    const currentId = box.id;
+
+    // Prevent user from skipping earlier boxes (based on ID)
+    const previousIncomplete = boxes.some(
+      (b) => b.id < currentId && !isBoxCompleted(b.id)
+    );
+
+    if (previousIncomplete) {
+      const lastIncomplete = Math.min(
+        ...boxes.filter((b) => !isBoxCompleted(b.id)).map((b) => b.id)
+      );
+      const requiredBox = boxes.find((b) => b.id === lastIncomplete);
+      setErrorMessage(`Please complete "${requiredBox.text}" first.`);
+      return;
+    }
+
+    setErrorMessage("");
     setSelectedBox(box);
   };
 
@@ -19,6 +36,8 @@ function CareerLadderFrame({ boxes, answers, setAnswers, setErrorMessage }) {
     if (!boxAnswers) return false;
 
     const box = boxes.find((b) => b.id === boxId);
+    if (!box) return false;
+
     return box.questions.every((q) => {
       const answer = boxAnswers[q.id];
       return answer && answer.trim() !== "";
@@ -57,9 +76,9 @@ function CareerLadderFrame({ boxes, answers, setAnswers, setErrorMessage }) {
                       <path
                         d="M15.042 21.672L13.684 16.6M13.684 16.6L11.174 18.825L11.743 9.355L16.97 17.272L13.684 16.6ZM12 2.25V4.5M17.834 4.666L16.243 6.257M20.25 10.5H18M7.757 14.743L6.167 16.333M6 10.5H3.75M7.757 6.257L6.167 4.667"
                         stroke="white"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       />
                     </svg>
                   </span>
