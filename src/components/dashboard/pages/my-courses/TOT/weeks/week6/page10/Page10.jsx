@@ -1,70 +1,173 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
-import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
-import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  selectPageData,
+  selectCurrentStep,
+} from "../../../../../../../../redux/reducers/navigationSlice";
+import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import adaptability from "../../../../../../../../assets/resilience-grit-images/adaptability.png";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import OnboardingFrame from "./components/OnboardingFrame";
+import SectionFrame from "./components/SectionFrame";
 
-function WeekFivePage10() {
+function WeekSixPage10() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
-  const adminDatas = useSelector(adminData);
-  const userAnswers = useSelector(userAnswer);
-  const [myAnswer, setMyAnswer] = useState(userAnswers);
+  const currentStep = useSelector(selectCurrentStep);
+  const totalSteps = pageData?.steps?.length || 0;
+  const [answers, setAnswers] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
+  const step = pageData?.steps[currentStep - 1];
+  const userAnswers = useSelector(userAnswer);
+  const adminDatas = useSelector(adminData);
 
   useEffect(() => {
     if (!userAnswers) return;
-    const response = userAnswers?.activities?.find(
+    const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setMyAnswer(response?.answer ? response.answer : "");
-    return () => {};
-  }, [userAnswers]);
+
+    if (response?.answer) {
+      setAnswers(response.answer);
+    }
+  }, [userAnswers, pageData?.id]);
 
   const saveUserInput = () => {
-    if (!adminDatas.isAdmin && !myAnswer) {
-      setErrorMessage("Oops! Please enter a valid input!");
-      return false;
+    // Skip validation for instruction and onboarding
+    if (step?.type === "instruction" || step?.type === "onboarding") {
+      return true;
     }
 
-    setErrorMessage(""); // Clear error if input is valid
-    // Allow flow admin to proceed without input but do not dispatch answer
+    // Skip validation for admins
     if (adminDatas.isAdmin) return true;
-    dispatch(
-      saveActivity({
-        page: pageData.id,
-        answer: myAnswer,
-      })
-    );
+
+    const stepKey = `step_${currentStep}`;
+    const stepData = answers[stepKey];
+
+    // Validate based on input type
+    if (step?.inputType === "bigTextBox") {
+      if (!stepData?.mainInput || stepData.mainInput.trim() === "") {
+        setErrorMessage("Please provide your answer before proceeding.");
+        return false;
+      }
+    }
+
+    if (step?.inputType === "checkboxWithOther") {
+      const hasSelection =
+        stepData?.checkboxes && Object.keys(stepData.checkboxes).length > 0;
+
+      if (!hasSelection) {
+        setErrorMessage("Please select at least one option.");
+        return false;
+      }
+
+      // Validate additional fields
+      if (step.additionalFields) {
+        for (let field of step.additionalFields) {
+          const fieldKey = field.label.toLowerCase().replace(/[^a-z0-9]/g, "_");
+          if (!stepData[fieldKey] || stepData[fieldKey].trim() === "") {
+            setErrorMessage(`Please fill out: ${field.label}`);
+            return false;
+          }
+        }
+      }
+    }
+
+    if (step?.inputType === "twoSmallInputs") {
+      if (!stepData?.input1 || stepData.input1.trim() === "") {
+        setErrorMessage("Please fill out the first action.");
+        return false;
+      }
+      if (!stepData?.input2 || stepData.input2.trim() === "") {
+        setErrorMessage("Please fill out the second action.");
+        return false;
+      }
+
+      // Validate collaboration field
+      if (step.additionalFields && step.additionalFields.length > 0) {
+        if (!stepData?.collaboration || stepData.collaboration.trim() === "") {
+          setErrorMessage("Please answer the collaboration question.");
+          return false;
+        }
+      }
+    }
+
+    setErrorMessage("");
+
+    const activityData = {
+      page: pageData.id,
+      answer: answers,
+    };
+    dispatch(saveActivity(activityData));
+
     return true;
   };
 
-  const handleInputChange = (e) => {
-    setErrorMessage("");
-    setMyAnswer(e.target.value);
+  const renderStep = () => {
+    if (!step) return <div>Invalid Step</div>;
+
+    switch (step.type) {
+      case "instruction":
+        return (
+          <QuestionBox extraStyle="bg-blue">
+            <div className="text-center mb-5 mt-5 mt-md-4">
+              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction">
+                Instruction
+              </h1>
+            </div>
+
+            <div className="text-center mb-5 mt-3 mt-md-0">
+              {step.instructions.map((instruction, index) => (
+                <React.Fragment key={index}>
+                  <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
+                    {instruction}
+                  </h2>
+                  {index < step.instructions.length - 1 && (
+                    <>
+                      <br />
+                      <br />
+                      <br />
+                    </>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          </QuestionBox>
+        );
+
+      case "onboarding":
+        return <OnboardingFrame step={step} />;
+
+      case "section":
+        return (
+          <SectionFrame
+            step={step}
+            currentStep={currentStep}
+            answers={answers}
+            setAnswers={setAnswers}
+            setErrorMessage={setErrorMessage}
+          />
+        );
+
+      default:
+        return <div>Unknown step type</div>;
+    }
   };
 
   return (
     <>
-      <QuestionBox extraStyle="bg-custom-blue">
-        <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-start mt-4">
-          <div className="d-flex flex-column flex-grow-1 min-w-0 tot-question-text">
-            <h2 className="text-gray fs-1 mb-2 fw-bolder">
-              {pageData.question}
-             
-            </h2>
-          </div>
+      {renderStep()}
+      {currentStep !== 1 && errorMessage && (
+        <div className="text-danger text-center mt-3 fw-bold fs-5">
+          {errorMessage}
         </div>
-        <BigTextBox handleChange={handleInputChange} value={myAnswer} />
-      </QuestionBox>
-      {errorMessage && <div className="text-danger">{errorMessage}</div>}
+      )}
+      <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
@@ -73,4 +176,4 @@ function WeekFivePage10() {
   );
 }
 
-export default WeekFivePage10;
+export default WeekSixPage10;

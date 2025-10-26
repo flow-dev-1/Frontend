@@ -2732,13 +2732,156 @@ export const courseContent = {
       },
       {
         id: 10,
-        type: "question",
-        questionType: "text",
-        question:
-          "What is one moment from your recent teaching experience that made you feel grateful?",
-        hasImage: false,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Now that you've reflected on your own well-being and support systems, it's time to create your own SEL and Positive Psychology Implementation Plan.",
+              "This plan will help you bring SEL to life in your classroom consistently and sustainably. It's not about perfection, it's about purpose!",
+            ],
+          },
+          {
+            stepId: 2,
+            type: "onboarding",
+            title: "SEL & Positive Psychology Implementation Plan Worksheet.",
+            subtitle:
+              "Your personal roadmap to building an emotionally intelligent and thriving classroom.",
+          },
+          {
+            stepId: 3,
+            type: "section",
+            sectionNumber: 1,
+            sectionTitle: "Section 1",
+            questionFocus: "My Why:",
+            question:
+              "Why does Social and Emotional Learning (SEL) matter to me as a teacher?",
+            cheatSheet:
+              "Reflect on your personal motivation for incorporating SEL and positive psychology into your teaching.",
+            inputType: "bigTextBox",
+          },
+          {
+            stepId: 4,
+            type: "section",
+            sectionNumber: 2,
+            sectionTitle: "Section 2",
+            questionFocus: " My Focus Areas:",
+            question:
+              "What are the top 3 SEL or Positive Psychology skills I want to focus on with my students this term?",
+            cheatSheet:
+              "(e.g., empathy, emotional regulation, gratitude, growth mindset, responsible decision-making)",
+            inputType: "bigTextBox",
+          },
+          {
+            stepId: 5,
+            type: "section",
+            sectionNumber: 3,
+            sectionTitle: "Section 3",
+            questionFocus: "Integration Into My Teaching:",
+            question:
+              "How will I integrate SEL and positive psychology into my subject or classroom routines?",
+            cheatSheet:
+              "Tick the methods you plan to use and describe briefly how you’ll do it.",
+            inputType: "checkboxWithOther",
+            checkboxOptions: [
+              { id: "morning-check-ins", label: "Morning check-ins" },
+              {
+                id: "emotional-vocabulary-in-lessons",
+                label: "Emotional vocabulary in lessons",
+              },
+              { id: "gratitude-journals", label: "Gratitude journals" },
+              { id: "relationship_skills", label: "Relationship Skills" },
+              {
+                id: "breathing_or_grounding_exercises",
+                label: "Breathing or grounding exercises",
+              },
+              { id: "weekly_class_meetings", label: "Weekly class meetings" },
+              {
+                id: "praise_for_effort,_not_just_results",
+                label: "Praise for effort, not just results",
+              },
+              {
+                id: "growth_mindset_reflections",
+                label: "Growth mindset reflections",
+              },
+              {
+                id: "cooperative_learning_tasks",
+                label: "Cooperative learning tasks",
+              },
+              {
+                id: "storytelling_or_character_analysis",
+                label: "Storytelling or character analysis",
+              },
+            ],
+            additionalFields: [
+              {
+                label: "Others:",
+                type: "bigTextBox",
+              },
+              {
+                label: "My integration plan (brief description):",
+                type: "bigTextBox",
+              },
+            ],
+          },
+          {
+            stepId: 6,
+            type: "section",
+            sectionNumber: 4,
+            sectionTitle: "Section 4",
+            questionFocus: "Modeling SEL and Positivity:",
+            question:
+              "How will I model these values and skills in my own behavior?",
+            cheatSheet:
+              "(e.g., practicing self-regulation, showing optimism, expressing appreciation)",
+            inputType: "bigTextBox",
+          },
+          {
+            stepId: 7,
+            type: "section",
+            sectionNumber: 5,
+            sectionTitle: "Section 5",
+            questionFocus: "My Support System:",
+            question:
+              "What support will I need to stay consistent and motivated?",
+            cheatSheet:
+              "(Who or what can help you keep going—colleagues, resources, routines?)",
+            inputType: "bigTextBox",
+          },
+          {
+            stepId: 8,
+            type: "section",
+            sectionNumber: 6,
+            sectionTitle: "Section 6",
+            questionFocus: "My First Steps:",
+            question:
+              "What are 2 small actions I will take in the next 2 weeks?",
+            cheatSheet: "Start simple. Focus on building momentum.",
+            inputType: "twoSmallInputs",
+            additionalFields: [
+              {
+                questionFocus: "Collaboration:",
+                question:
+                  "Would you like to share your plan with a peer or small group for feedback and encouragement?",
+                cheatSheet:
+                  "(This can be done through a discussion forum, breakout group, or collaborative session.)",
+                type: "bigTextBox",
+              },
+            ],
+          },
+          {
+            stepId: 9,
+            type: "section",
+            sectionNumber: 7,
+            sectionTitle: "Section 7",
+            questionFocus: "Final Note to Myself:",
+            question:
+              "What encouragement or reminder do I want to leave for myself today?",
+            inputType: "bigTextBox",
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
