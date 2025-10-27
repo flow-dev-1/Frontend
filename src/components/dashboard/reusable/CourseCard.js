@@ -48,6 +48,8 @@ const CourseCard = ({
       navigate(`/dashboard/feedback/self-awareness`, { state: { enrollmentData: isEnrolled } })
     }else if(course.title === "Resilience & Grit"){
       navigate(`/dashboard/resilience_grit/feedback`, { state: { enrollmentData: isEnrolled } })
+    }else if(course?.title === "TOT Course 1"){
+      navigate(`/dashboard/tot/feedback`, { state: { enrollmentData: isEnrolled } })
     }else{
       navigate(`/dashboard/${course?.title}/feedback`, { state: { enrollmentData: isEnrolled } })
     }
@@ -58,7 +60,8 @@ const CourseCard = ({
     if(course?.title === "Self Awareness"){
       navigate(`/dashboard/self-awareness-course`, { state: { enrollmentData: isEnrolled } })
     }else if(course.title === "Resilience & Grit") {
-      navigate(`/dashboard/resilience_grit`, { state: { enrollmentData: isEnrolled } })
+    }else if(course?.title === "TOT Course 1"){
+      navigate(`/dashboard/tot`, { state: { enrollmentData: isEnrolled } })
     }else {
       navigate(`/dashboard/${course?.title}`, { state: { enrollmentData: isEnrolled } })
     }

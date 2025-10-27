@@ -40,9 +40,19 @@ export default function IndividualOverview() {
   useEffect(() => {
     if (!data || !enrolledData) return;
 
-    if (user?.userType === "School") {
+    console.log(user, "User here o")
+
+    if (user?.isEducator) {
+      // Show all courses for educators
+      // Show only General courses
+      const educatorCourses = data.courses.filter(
+        (course) => course.grade === "Educator"
+      );
+      setDisplayCourses(educatorCourses);
+
+    } else if (user?.userType === "School") {
       const generalCourses = data.courses.filter(
-        (course) => course.access !== "School"
+        (course) => (course.access !== "School" && course.grade !== "Educator")
       );
       const enrolledDataArray =
         enrolledData?.courses?.map((item) => item.course) || [];
@@ -62,12 +72,12 @@ export default function IndividualOverview() {
     } else {
       // Show only General courses
       const generalCourses = data.courses.filter(
-        (course) => course.access !== "School"
+        (course) => (course.access !== "School" && course.grade !== "Educator")
       );
       setDisplayCourses(generalCourses);
     }
 
-    return () => {};
+    return () => { };
   }, [data, enrolledData]);
 
   // User Type Determines the courses to show

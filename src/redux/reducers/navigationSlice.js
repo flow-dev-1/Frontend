@@ -9,6 +9,9 @@ import { assessments as resilienceAssessments } from "../../components/dashboard
 import { courseContent as totCourseContent } from "../../components/dashboard/pages/my-courses/TOT/data/activity";
 import { assessments as totAssessments } from "../../components/dashboard/pages/my-courses/TOT/data/assessment";
 
+import { courseContent as emotionalRegulationCourseContent } from "../../components/dashboard/pages/my-courses/emotional-regulation/data/activity";
+import { assessments as emotionalRegulationAssessments } from "../../components/dashboard/pages/my-courses/emotional-regulation/data/assessment";
+
 const courseData = {
   compassion: {
     courseContent: compassionCourseContent,
@@ -26,6 +29,10 @@ const courseData = {
     courseContent: totCourseContent,
     assessments: totAssessments,
   },
+  emotional_regulation: {
+    courseContent: emotionalRegulationCourseContent,
+    assessments: emotionalRegulationAssessments,
+  },
 };
 
 const getCourseFromURL = () => {
@@ -41,7 +48,7 @@ const getCourseFromURL = () => {
   const lastSegment = segments[segments.length - 1];
 
   // Validate course name
-  return ["compassion", "transition", "resilience_grit", "tot"].includes(
+  return ["compassion", "transition", "resilience_grit", "tot", "emotional_regulation"].includes(
     lastSegment?.toLowerCase()
   )
     ? lastSegment.toLowerCase()
@@ -98,8 +105,8 @@ const navigationSlice = createSlice({
     setCourse: (state, action) => {
       if (state.currentCourse !== action.payload) {
         state.currentCourse = action.payload;
-        state.currentWeek = 6;
-        state.currentPage = 10;
+        state.currentWeek = 1;
+        state.currentPage = 1;
         state.currentStep = 1;
       }
     },
