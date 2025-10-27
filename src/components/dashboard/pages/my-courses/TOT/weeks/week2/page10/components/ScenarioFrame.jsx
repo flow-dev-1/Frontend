@@ -2,46 +2,25 @@ import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
 import BigTextBox from "../../../../components/BigTextBox";
 
-function ScenarioFrame({ data, answers, setAnswers, setErrorMessage }) {
-  const {
-    stepId,
-    scenarioNumber,
-    scenarioTitle,
-    scenarioType,
-    mainInputQuestion,
-  } = data;
+function ScenarioFrame({ scenario, answers, setAnswers, setErrorMessage }) {
+  const { scenarioNumber, scenarioTitle, scenarioType, mainInputQuestion } =
+    scenario;
 
   const handleInputChange = (value) => {
     setErrorMessage("");
 
-    setAnswers((prevAnswers) => {
-      const updatedAnswers = [...prevAnswers];
-      const stepIndex = updatedAnswers.findIndex(
-        (answer) => answer.stepId === stepId
-      );
-
-      if (stepIndex !== -1) {
-        updatedAnswers[stepIndex] = {
-          ...updatedAnswers[stepIndex],
-          stepId: stepId,
-          scenarioNumber,
-          type: "scenario",
-          value,
-        };
-      } else {
-        updatedAnswers.push({
-          stepId: stepId,
-          scenarioNumber,
-          type: "scenario",
-          value,
-        });
-      }
-
-      return updatedAnswers;
-    });
+    setAnswers((prev) => ({
+      ...prev,
+      [`scenario_${scenarioNumber}`]: {
+        ...prev[`scenario_${scenarioNumber}`],
+        scenarioText: value,
+      },
+    }));
   };
 
   const isWithInput = scenarioType === "withInput";
+  const scenarioKey = `scenario_${scenarioNumber}`;
+  const currentValue = answers[scenarioKey]?.scenarioText || "";
 
   return (
     <QuestionBox extraStyle="bg-custom-blue">
@@ -68,9 +47,7 @@ function ScenarioFrame({ data, answers, setAnswers, setErrorMessage }) {
               </div>
             )}
             <BigTextBox
-              value={
-                answers.find((answer) => answer.stepId === stepId)?.value || ""
-              }
+              value={currentValue}
               handleChange={(e) => handleInputChange(e.target.value)}
             />
           </>
