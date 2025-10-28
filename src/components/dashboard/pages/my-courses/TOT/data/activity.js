@@ -1389,7 +1389,6 @@ export const courseContent = {
               "Afterward, reflect on why you chose the responses you did.",
             ],
           },
-          // Scenario 1
           {
             stepId: 2,
             type: "scenario",
@@ -1414,13 +1413,12 @@ export const courseContent = {
               },
             ],
             rankingSlots: [
-              { rank: 4, label: "4 - Least Effective" },
+              { rank: 4, label: "4" },
               { rank: 3, label: "3" },
               { rank: 2, label: "2" },
-              { rank: 1, label: "1 - Most Effective" },
+              { rank: 1, label: "1" },
             ],
           },
-          // Scenario 2
           {
             stepId: 4,
             type: "scenario",
@@ -1444,13 +1442,12 @@ export const courseContent = {
               },
             ],
             rankingSlots: [
-              { rank: 4, label: "4 - Least Effective" },
+              { rank: 4, label: "4" },
               { rank: 3, label: "3" },
               { rank: 2, label: "2" },
-              { rank: 1, label: "1 - Most Effective" },
+              { rank: 1, label: "1" },
             ],
           },
-          // Scenario 3
           {
             stepId: 6,
             type: "scenario",
@@ -1475,13 +1472,12 @@ export const courseContent = {
               },
             ],
             rankingSlots: [
-              { rank: 4, label: "4 - Least Effective" },
+              { rank: 4, label: "4" },
               { rank: 3, label: "3" },
               { rank: 2, label: "2" },
-              { rank: 1, label: "1 - Most Effective" },
+              { rank: 1, label: "1" },
             ],
           },
-          // Scenario 4
           {
             stepId: 8,
             type: "scenario",
@@ -1506,13 +1502,12 @@ export const courseContent = {
               },
             ],
             rankingSlots: [
-              { rank: 4, label: "4 - Least Effective" },
+              { rank: 4, label: "4" },
               { rank: 3, label: "3" },
               { rank: 2, label: "2" },
-              { rank: 1, label: "1 - Most Effective" },
+              { rank: 1, label: "1" },
             ],
           },
-          // Reflection Questions
           {
             stepId: 10,
             type: "reflection",
