@@ -277,117 +277,126 @@ export const courseContent = {
         steps: [
           {
             stepId: 1,
-            type: "instruction",
-            title: "Instruction",
-            instructions: ["Match the right ‘C’ to their correct definition."],
-            options:
-              "Competence, Confidence, Coping, Control, Character, Connections, and Contribution.",
+            type: "dropdownScenario",
+            question: "Feeling calm and ready to learn",
+            options: [
+              {
+                id: "A",
+                text: "Blue",
+                bgColor: "#0093FF",
+                color: "white",
+              },
+              {
+                id: "B",
+                text: "Green",
+                bgColor: "#27AE60",
+                color: "white",
+              },
+              {
+                id: "C",
+                text: "Yellow",
+                bgColor: "#FCF85D",
+                color: "#5B616A",
+              },
+              {
+                id: "D",
+                text: "Red",
+                bgColor: "#EE2447",
+                color: "white",
+              },
+            ],
           },
-
           {
             stepId: 2,
             type: "dropdownScenario",
-            question:
-              "The belief in your own ability to handle situations, challenges, and tasks with confidence and success.",
+            question: "Low energy feeling like sadness or tiredness.",
             options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
+              {
+                id: "A",
+                text: "Blue",
+                bgColor: "#0093FF",
+                color: "white",
+              },
+              {
+                id: "B",
+                text: "Green",
+                bgColor: "#27AE60",
+                color: "white",
+              },
+              {
+                id: "C",
+                text: "Yellow",
+                bgColor: "#FCF85D",
+                color: "#5B616A",
+              },
+              {
+                id: "D",
+                text: "Red",
+                bgColor: "#EE2447",
+                color: "white",
+              },
             ],
           },
           {
             stepId: 3,
             type: "dropdownScenario",
-            question:
-              "The people in your life who support, guide, and help you through challenges.",
+            question: `Feeling a little out of control with excitement or worry.`,
             options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
+              {
+                id: "A",
+                text: "Blue",
+                bgColor: "#0093FF",
+                color: "white",
+              },
+              {
+                id: "B",
+                text: "Green",
+                bgColor: "#27AE60",
+                color: "white",
+              },
+              {
+                id: "C",
+                text: "Yellow",
+                bgColor: "#FCF85D",
+                color: "#5B616A",
+              },
+              {
+                id: "D",
+                text: "Red",
+                bgColor: "#EE2447",
+                color: "white",
+              },
             ],
           },
           {
             stepId: 4,
             type: "dropdownScenario",
-            question:
-              "Your values and sense of right and wrong that help guide your decisions and actions in difficult situations.",
+            question: "Very big emotions like anger or extreme frustration.",
             options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
-            ],
-          },
-          {
-            stepId: 5,
-            type: "dropdownScenario",
-            question:
-              "The skills and strategies you use to manage stress, challenges, and emotions in tough situations.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
-            ],
-          },
-
-          {
-            stepId: 6,
-            type: "dropdownScenario",
-            question:
-              "The understanding that you can contribute positively to the world around you, helping others and making a difference.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
-            ],
-          },
-          {
-            stepId: 7,
-            type: "dropdownScenario",
-            question:
-              "The ability to successfully perform tasks or overcome challenges by using your skills, knowledge, and abilities.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
-            ],
-          },
-          {
-            stepId: 8,
-            type: "dropdownScenario",
-            question:
-              "The feeling of being in charge of your own actions, responses, and decisions, even if you can’t control everything around you.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution",
+              {
+                id: "A",
+                text: "Blue",
+                bgColor: "#0093FF",
+                color: "white",
+              },
+              {
+                id: "B",
+                text: "Green",
+                bgColor: "#27AE60",
+                color: "white",
+              },
+              {
+                id: "C",
+                text: "Yellow",
+                bgColor: "#FCF85D",
+                color: "#5B616A",
+              },
+              {
+                id: "D",
+                text: "Red",
+                bgColor: "#EE2447",
+                color: "white",
+              },
             ],
           },
         ],
