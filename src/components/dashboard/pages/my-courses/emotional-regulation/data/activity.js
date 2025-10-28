@@ -249,13 +249,13 @@ export const courseContent = {
       },
       {
         id: 2,
-        type: "radio",
+        type: "question",
+        questionType: "text",
         question:
-          "Just a quick question, have you ever seen or heard of a building that collapsed? ",
-        options: [
-          { id: "A", text: "YES" },
-          { id: "B", text: "NO" },
-        ],
+          " What do you think about this zone? Do you think it’s a good zone and would you like to be there?",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
         navigation: {
           prev: true,
           next: true,
