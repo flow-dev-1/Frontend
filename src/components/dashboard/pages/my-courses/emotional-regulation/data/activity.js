@@ -73,12 +73,11 @@ export const courseContent = {
       },
       {
         id: 6,
-        type: "question",
-        questionType: "text",
-        question: "What do you understand by the word",
-        hasImage: true,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        type: "listQuestion",
+        question: "How many emotions can you name off the top of your head?",
+        inputCount: 5,
+        inputType: "text",
+        inputPlaceholder: "Type your answer here",
         navigation: {
           prev: true,
           next: true,
