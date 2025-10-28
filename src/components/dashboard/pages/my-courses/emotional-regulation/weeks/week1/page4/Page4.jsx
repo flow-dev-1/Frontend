@@ -1,115 +1,99 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import "./page4.css";
-import Button from "../../../components/Button";
 import QuestionBox from "../../../components/QuestionBox";
+import BigTextBox from "../../../components/BigTextBox";
+import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import emotionalRegulation from "../../../../../../../../assets/emotional-regulation-images/emotionalRegulation.png";
 
 function Page4() {
-  const pageData = useSelector(selectPageData);
   const dispatch = useDispatch();
-  const [answers, setAnswers] = useState([]); // State to hold answers
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
-
   const userAnswers = useSelector(userAnswer);
+  const [myAnswer, setMyAnswer] = useState(userAnswers);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (!userAnswers) return;
-    const response = userAnswers.activities?.find(
+    const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    setMyAnswer(response?.answer ? response.answer : "");
     return () => {};
   }, [userAnswers]);
 
   const saveUserInput = () => {
-    if (adminDatas.isAdmin) return true;
-    if (answers.length < 5) {
-      setErrorMessage("At least 5 values are required!");
-      return false;
-    }
-
-    const emptyInputs = answers.filter((item) => item?.value?.trim() === "");
-    if (emptyInputs.length > 0) {
-      setErrorMessage(
-        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
-      );
+    if (!adminDatas.isAdmin && !myAnswer) {
+      setErrorMessage("Oops! Please enter a valid input!");
       return false;
     }
 
     setErrorMessage(""); // Clear error if input is valid
-
-    const activityData = {
-      page: pageData.id,
-      answer: answers,
-    };
-    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
-
+    // Allow flow admin to proceed without input but do not dispatch answer
+    if (adminDatas.isAdmin) return true;
+    dispatch(
+      saveActivity({
+        page: pageData.id,
+        answer: myAnswer,
+      })
+    );
     return true;
   };
 
-  const handleInputChange = (index, value) => {
+  const handleInputChange = (e) => {
     setErrorMessage("");
-    // Update answers state with the new value
-    setAnswers((prevAnswers) => {
-      // Check if the answer already exists
-      const existingAnswerIndex = prevAnswers.findIndex(
-        (answer) => answer.index === index
-      );
-      if (existingAnswerIndex > -1) {
-        // Update existing answer
-        const updatedAnswers = [...prevAnswers];
-        updatedAnswers[existingAnswerIndex] = {
-          ...updatedAnswers[existingAnswerIndex],
-          value,
-        };
-        return updatedAnswers;
-      } else {
-        // Add new answer
-        return [...prevAnswers, { index, value }];
-      }
-    });
+    setMyAnswer(e.target.value);
   };
 
   return (
     <>
       <QuestionBox>
-        <div className="d-flex gap-3 flex-column flex-md-row">
-          <h2 className="text-blue week-2-question-text">Question:</h2>
-          <h2 className="text-gray week-2-question-text">{pageData.question}</h2>
-        </div>
+        <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-center">
+          <h2 className="text-blue fs-1 mb-0 flex-shrink-0 question-text">
+            Question:
+          </h2>
 
-        <div className="input-container">
-          {[...Array(pageData.numberOfInputs || 5)].map((_, index) => (
-            <div key={index}>
-              <div className="d-flex gap-3 label-input-container">
-                <p className="input-label">{index + 1}.</p>
-                <input
-                  type="text"
-                  className="resilience-input"
-                  placeholder={
-                    pageData.inputPlaceholder || "Type your answer here"
-                  }
-                  value={
-                    answers.find((answer) => answer.index === index)?.value ||
-                    ""
-                  }
-                  onChange={(e) => handleInputChange(index, e.target.value)}
-                />
-              </div>
-            </div>
-          ))}
+          <div className="d-flex align-items-center flex-grow-1 min-w-0">
+            <h2 className="text-gray fs-1 mb-0 flex-grow-1 md:text-truncate">
+              {pageData.question}
+              {pageData.hasImage && (
+                <>
+                  {/* Show inline on md and up */}
+                  <img
+                    src={emotionalRegulation}
+                    alt="Emotional Regulation"
+                    className="ms-2 d-none d-md-inline-block question-image resilience-question-image img-fluid"
+                  />
+                  <h2 className="ms-1 d-none d-md-inline-block text-gray fs-1 mb-0">
+                    {pageData.continuation}
+                  </h2>
+
+                  {/* Show inline (not block) on mobile with ? following immediately */}
+                  <span className="d-inline-block d-md-none">
+                    <img
+                      src={emotionalRegulation}
+                      alt="Emotional Regulation"
+                      className="ms-2 mt-2 align-middle question-image resilience-question-image img-fluid"
+                    />
+                    <span className="ms-1">{pageData.continuation}</span>
+                  </span>
+                </>
+              )}
+              {/* Keep the ? for non-mobile when no image is present */}
+              {!pageData.hasImage && <span className="ms-1">?</span>}
+            </h2>
+          </div>
         </div>
+        <BigTextBox handleChange={handleInputChange} value={myAnswer} />
       </QuestionBox>
-      {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
-      {/* Display error message */}
-      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}
+      <div className="d-flex justify-content-center gap-96px mt-3 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>

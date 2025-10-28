@@ -49,12 +49,13 @@ export const courseContent = {
       },
       {
         id: 4,
-        type: "listQuestion",
-        question:
-          "Can you mention some challenges you have encountered and bounced back from?",
-        inputCount: 5,
-        inputType: "text",
-        inputPlaceholder: "Type your answer here",
+        type: "question",
+        questionType: "text",
+        question: "What does",
+        continuation: "mean?",
+        hasImage: true,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
         navigation: {
           prev: true,
           next: true,
