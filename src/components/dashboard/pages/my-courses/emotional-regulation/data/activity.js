@@ -95,41 +95,15 @@ export const courseContent = {
       },
       {
         id: 8,
-        type: "multiStep",
-        title: "Write a letter to yourself.",
-        steps: [
-          {
-            stepId: 1,
-            type: "instruction",
-            challenge:
-              "Preparing for a big math test, and you don’t understand all the topics.",
-            statement:
-              "I don’t understand all the topics. yet., but I can keep studying and practicing until I do",
-          },
-          {
-            stepId: 2,
-            type: "imageDragAndDrop",
-            instruction:
-              "Drag-and-drop the statements on the left into any of these bowls.",
-            steps: 4,
-            buckets: [
-              {
-                id: "green",
-                title: "Resilience",
-              },
-              {
-                id: "red",
-                title: "Grit",
-              },
-            ],
-            images: [
-              "Sam has been practicing the piano for months, even though learning new songs is really hard. He doesn’t give up, even when it takes a long time to get it right.",
-              "Chris is writing a book. It’s taking a really long time, but he’s excited to finish it, even though it’s hard to think of new ideas sometimes.",
-              "Emma’s science project didn’t go as planned. She felt frustrated, but after taking a deep breath, she decided to figure out how to fix it and finish her project.",
-              "After losing a big game, Lucy felt sad, but she reminded herself to keep her head up and practice for the next one.",
-            ],
-          },
-        ],
+        type: "question",
+        questionType: "text",
+        question:
+          "What do you think about this zone? Do you think it’s a good zone and would you like to be there?",
+        zone: "Blue Zone",
+        zoneBgColor: "#0093FF",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
         navigation: {
           prev: true,
           next: true,
@@ -147,81 +121,103 @@ export const courseContent = {
       },
       {
         id: 10,
-        type: "multiStep",
-        steps: [
+        type: "question",
+        questionType: "text",
+        question:
+          "What do you think about this zone? Do you think it’s a good zone and would you like to be there?",
+        zone: "Green Zone",
+        zoneBgColor: "#27AE60",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 11,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 12,
+        type: "question",
+        questionType: "text",
+        question:
+          "What do you think about this zone? Do you think it’s a good zone and would you like to be there?",
+        zone: "Yellow Zone",
+        zoneBgColor: "#FCF85D",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 13,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 14,
+        type: "question",
+        questionType: "text",
+        question:
+          " What do you think about this zone? Do you think it’s a good zone and would you like to be there?",
+        zone: "Red Zone",
+        zoneBgColor: "#EE2447",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 15,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 16,
+        type: "radio",
+        question:
+          "So, let’s check in with how you’re feeling today. Which of these zones do you think you’re in?",
+        options: [
           {
-            stepId: 1,
-            type: "instruction",
-            title: "Instruction",
-            instructions: [
-              "Below are sentences with missing words related to communication and boundaries. Choose the best word from the list below to complete each sentence.",
-              "\n Missing words are: ",
-            ],
-            options: "Respect, Clarity, Comfort, Listen, Express",
+            id: "A",
+            text: "A. Blue Zone: Feeling low, tired, sad, or not very energetic.",
           },
           {
-            stepId: 2,
-            type: "multiColoredQuestionBoxes",
-            fields: [
-              {
-                number: "Challenge",
-                textFieldColor: "red",
-                colorCode: "#FD483D",
-              },
-              {
-                number: "Your YET Statement:",
-                textFieldColor: "green",
-                colorCode: "#4CB748",
-              },
-            ],
+            id: "B",
+            text: "B. Green Zone: Feeling calm, focused, happy, and ready to learn.",
           },
           {
-            stepId: 3,
-            type: "multiColoredQuestionBoxes",
-            fields: [
-              {
-                number: "Challenge",
-                textFieldColor: "red",
-                colorCode: "#FD483D",
-              },
-              {
-                number: "Your YET Statement:",
-                textFieldColor: "green",
-                colorCode: "#4CB748",
-              },
-            ],
+            id: "C",
+            text: "C. Yellow Zone: Feeling a little restless, frustrated, or worried, but still managing.",
           },
           {
-            stepId: 4,
-            type: "multiColoredQuestionBoxes",
-            fields: [
-              {
-                number: "Challenge",
-                textFieldColor: "red",
-                colorCode: "#FD483D",
-              },
-              {
-                number: "Your YET Statement:",
-                textFieldColor: "green",
-                colorCode: "#4CB748",
-              },
-            ],
-          },
-          {
-            stepId: 5,
-            type: "multiColoredQuestionBoxes",
-            fields: [
-              {
-                number: "Challenge",
-                textFieldColor: "red",
-                colorCode: "#FD483D",
-              },
-              {
-                number: "Your YET Statement:",
-                textFieldColor: "green",
-                colorCode: "#4CB748",
-              },
-            ],
+            id: "D",
+            text: "D. Red Zone: Feeling angry, overwhelmed, or out of control.",
           },
         ],
         navigation: {
@@ -230,7 +226,7 @@ export const courseContent = {
         },
       },
       {
-        id: 11,
+        id: 17,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",

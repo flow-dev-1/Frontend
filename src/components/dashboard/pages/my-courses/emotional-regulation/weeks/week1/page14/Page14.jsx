@@ -10,7 +10,7 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 
-function Page10() {
+function Page14() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
@@ -84,4 +84,4 @@ function Page10() {
   );
 }
 
-export default Page10;
+export default Page14;
