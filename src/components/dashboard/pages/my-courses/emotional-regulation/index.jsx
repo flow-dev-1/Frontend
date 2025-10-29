@@ -11,7 +11,7 @@ import {
   setCurrentPage,
   setCurrentStep,
 } from "../../../../../redux/reducers/navigationSlice.js";
-import "./index.css"
+import "./index.css";
 // Import components
 import PopUp from "./components/ReviewPopUp";
 import Hurray from "./components/Hurray";
@@ -28,8 +28,13 @@ import Page8 from "./weeks/week1/page8/Page8";
 import Page9 from "./weeks/week1/page9/Page9";
 import Page10 from "./weeks/week1/page10/Page10";
 import Page11 from "./weeks/week1/page11/Page11";
-import Page12 from "./weeks/week1/Page12/Page12.jsx";
-
+import Page12 from "./weeks/week1/Page12/Page12";
+import Page13 from "./weeks/week1/page13/Page13";
+import Page14 from "./weeks/week1/page14/Page14";
+import Page15 from "./weeks/week1/page15/Page15";
+import Page16 from "./weeks/week1/page16/Page16";
+import Page17 from "./weeks/week1/page17/Page17";
+import Page18 from "./weeks/week1/page18/Page18";
 
 // Week 2
 import WeekTwoPage1 from "./weeks/week2/page1/Page1";
@@ -116,7 +121,7 @@ const WeekContent = () => {
     dispatch(setCurrentPage(currentPage));
     dispatch(setCurrentStep(currentStep));
 
-    return () => { };
+    return () => {};
   }, [dispatch]); // Added dispatch to dependency array
 
   const currentWeek = useSelector(selectCurrentWeek);
@@ -167,7 +172,7 @@ const WeekContent = () => {
       );
     }
 
-    return () => { };
+    return () => {};
   }, [data]);
 
   // If showing hurray, render that instead
@@ -204,6 +209,18 @@ const WeekContent = () => {
             return <Page11 />;
           case 12:
             return <Page12 />;
+          case 13:
+            return <Page13 />;
+          case 14:
+            return <Page14 />;
+          case 15:
+            return <Page15 />;
+          case 16:
+            return <Page16 />;
+          case 17:
+            return <Page17 />;
+          case 18:
+            return <Page18 />;
           default:
             return null;
         }
@@ -321,7 +338,14 @@ const CourseContent = () => {
     const lastSegment = segments[segments.length - 1];
 
     // This is an important section that affects course rendering!
-    if (["compassion", "transition", "resilience_grit","emotional_regulation"].includes(lastSegment?.toLowerCase())) {
+    if (
+      [
+        "compassion",
+        "transition",
+        "resilience_grit",
+        "emotional_regulation",
+      ].includes(lastSegment?.toLowerCase())
+    ) {
       dispatch(setCourse(lastSegment.toLowerCase()));
     }
   }, [location.pathname, dispatch]);
@@ -361,7 +385,7 @@ const CourseContent = () => {
           </button>
           <div
             className="navbar-logo d-none d-lg-block"
-            onClick={() => { }}
+            onClick={() => {}}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -437,9 +461,7 @@ const CourseContent = () => {
           </button>
 
           <div className="compassion-title">
-            <h2 className="fs-5 fs-md-3">
-              Stay Strong, Keep Going!
-            </h2>
+            <h2 className="fs-5 fs-md-3">Stay Strong, Keep Going!</h2>
             <h2 className="compassion fs-5">Resilience & Grit</h2>
           </div>
 
@@ -455,9 +477,7 @@ const CourseContent = () => {
                     className="course-list-icon "
                   />
                 </div>
-                <span style={{ whiteSpace: "nowrap" }}>
-                  Week {index + 1}
-                </span>
+                <span style={{ whiteSpace: "nowrap" }}>Week {index + 1}</span>
                 <span className="">{item} </span>
               </li>
             ))}
@@ -497,4 +517,3 @@ const EmotionalRegulationCourse = () => {
 };
 
 export default EmotionalRegulationCourse;
-
