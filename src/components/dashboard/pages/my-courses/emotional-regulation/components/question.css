@@ -456,7 +456,7 @@
 }
 
 .resilience-question-box-container {
-  height: 65vh;
+  min-height: 65vh;
   padding: 1rem 2rem;
   /* width: max-content; */
 }
@@ -549,7 +549,7 @@ button {
   }
 
   .resilience-question-box-container {
-    min-height: 37vh;
+    /* min-height: 37vh; */
     max-height: 40vh;
     padding: 1rem .5rem;
     /* width: max-content; */

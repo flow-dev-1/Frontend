@@ -1,6 +1,6 @@
 import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
-import CustomDropDown from "../../../../components/CustomDropDown";
+import CustomDropDown from "./CustomDropDown";
 
 function Frame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, question, options } = data;
@@ -30,20 +30,23 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
   };
 
   return (
-    <QuestionBox>
-      <div className="p-5">
+    <QuestionBox extraStyle={"bg-step-active"}>
+      <div className="p-1 p-md-5">
         <div className="text-center mb-5 mt-4 mt-md-0">
-          <h2 className="text-white bg-blue py-2 px-4 fs-1 rounded-3 d-inline display-4 text-center">
-            Question {step - 1}
+          <h2 className="text-white bg-blue py-2 px-4 fs-2 font-bold rounded-3 d-inline display-4 text-center font-bold">
+            Match the mood to the right Zone
           </h2>
         </div>
-        <div className="d-flex gap-2 flex-column flex-md-row">
-          <h2 className="text-gray fs-1">{question}</h2>
-        </div>
+
+        <h2 className="text-gray fs-3 fs-md-1 font-bold text-center">
+          {question}
+        </h2>
 
         <div className="mt-2">
           <CustomDropDown
-            value={answers.find((answer) => answer.stepId === step)?.value || ""}
+            value={
+              answers.find((answer) => answer.stepId === step)?.value || ""
+            }
             onChange={handleInputChange}
             options={options} // Pass options here
           />

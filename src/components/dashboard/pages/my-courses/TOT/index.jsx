@@ -96,7 +96,7 @@ import WeekFivePage4 from "./weeks/week5/page4/Page4.jsx";
 import WeekFivePage5 from "./weeks/week5/page5/Page5.jsx";
 import WeekFivePage6 from "./weeks/week5/page6/Page6.jsx";
 import WeekFivePage7 from "./weeks/week5/page7/page7.jsx";
-import WeekFivePage8 from "./weeks/week5/page8/page8.jsx";
+import WeekFivePage8 from "./weeks/week5/page8/Page8.jsx";
 import WeekFivePage9 from "./weeks/week5/page9/Page9";
 import WeekFivePage10 from "./weeks/week5/page10/Page10";
 import WeekFivePage11 from "./weeks/week5/page11/Page11";

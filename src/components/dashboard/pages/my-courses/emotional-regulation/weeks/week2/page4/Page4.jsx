@@ -14,7 +14,7 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
-function WeekTwoPage4() {
+function Page6() {
   const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
@@ -45,8 +45,8 @@ function WeekTwoPage4() {
     }
 
     const values = Object.values(stepData.value);
-    if (values.length < 3) {
-      setErrorMessage("At least 3 values are required!");
+    if (values.length < 1) {
+      setErrorMessage("At least 1 value are required!");
       return false;
     }
 
@@ -69,30 +69,10 @@ function WeekTwoPage4() {
     return true;
   };
 
-  // console.log(answers, "Answers")
-
   const renderStep = () => {
-
     if (!step) return <div>Invalid Step</div>;
 
     switch (step.type) {
-      case "instruction":
-        return (
-          <QuestionBox>
-            <div className="p-5">
-              <div className="text-center mb-5 mt-4 mt-md-0">
-                <h2 className="text-white bg-blue p-3 fs-1 rounded d-inline week-2-question-text text-center">
-                  {step.title}
-                </h2>
-              </div>
-              <h2 className="text-gray display-5 text-center">{step.instructions[0]}</h2>
-              <h2 className="text-gray mt-5 text-center week-2-question-text">
-                <joe className="text-blue">{step.options}</joe>
-              </h2>
-            </div>
-
-          </QuestionBox>
-        );
       case "dropdownScenario":
         return (
           <Frame
@@ -127,4 +107,4 @@ function WeekTwoPage4() {
   );
 }
 
-export default WeekTwoPage4;
+export default Page6;

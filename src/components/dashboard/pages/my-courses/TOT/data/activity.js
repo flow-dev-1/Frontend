@@ -1377,13 +1377,148 @@ export const courseContent = {
       },
       {
         id: 12,
-        type: "question",
-        questionType: "text",
-        question:
-          "Which triggers were common for you? Do you think teachers have the same triggers? Why do you think so?",
-        hasImage: false,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        type: "multiStep",
+        title: "Teacher Response Ranking",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            instructions: [
+              "On the screen, you'll see Scenario Flashcards that describe classroom situations involving student emotions.",
+              "You will also see Response Flashcards, each presenting a possible teacher reaction. Drag the response cards to rank them from least to most effective.",
+              "Afterward, reflect on why you chose the responses you did.",
+            ],
+          },
+          {
+            stepId: 2,
+            type: "scenario",
+            scenarioNumber: 1,
+            scenarioText:
+              'A student rolls their eyes and mutters: "This is so boring".',
+          },
+          {
+            stepId: 3,
+            type: "dragAndDropRanking",
+            scenarioNumber: 1,
+            responses: [
+              { id: "response_1", text: "Ignore the behavior" },
+              { id: "response_2", text: "Call them out in front of the class" },
+              {
+                id: "response_3",
+                text: "Acknowledge their feelings and redirect focus",
+              },
+              {
+                id: "response_4",
+                text: "Tell them to see you after the class",
+              },
+            ],
+            rankingSlots: [
+              { rank: 4, label: "4" },
+              { rank: 3, label: "3" },
+              { rank: 2, label: "2" },
+              { rank: 1, label: "1" },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "scenario",
+            scenarioNumber: 2,
+            scenarioText: "A student starts crying in the middle of class.",
+          },
+          {
+            stepId: 5,
+            type: "dragAndDropRanking",
+            scenarioNumber: 2,
+            responses: [
+              { id: "response_1", text: "Ignore the behavior" },
+              { id: "response_2", text: "Call them out in front of the class" },
+              {
+                id: "response_3",
+                text: "Acknowledge their feelings and redirect focus",
+              },
+              {
+                id: "response_4",
+                text: "Tell them to see you after the class",
+              },
+            ],
+            rankingSlots: [
+              { rank: 4, label: "4" },
+              { rank: 3, label: "3" },
+              { rank: 2, label: "2" },
+              { rank: 1, label: "1" },
+            ],
+          },
+          {
+            stepId: 6,
+            type: "scenario",
+            scenarioNumber: 3,
+            scenarioText:
+              "A student becomes defensive and raises their voice when you ask them to stop talking during a group activity.",
+          },
+          {
+            stepId: 7,
+            type: "dragAndDropRanking",
+            scenarioNumber: 3,
+            responses: [
+              { id: "response_1", text: "Ignore the behavior" },
+              { id: "response_2", text: "Call them out in front of the class" },
+              {
+                id: "response_3",
+                text: "Acknowledge their feelings and redirect focus",
+              },
+              {
+                id: "response_4",
+                text: "Tell them to see you after the class",
+              },
+            ],
+            rankingSlots: [
+              { rank: 4, label: "4" },
+              { rank: 3, label: "3" },
+              { rank: 2, label: "2" },
+              { rank: 1, label: "1" },
+            ],
+          },
+          {
+            stepId: 8,
+            type: "scenario",
+            scenarioNumber: 4,
+            scenarioText:
+              "A student shuts down and refuses to participate after seeing a 40% in their project.",
+          },
+          {
+            stepId: 9,
+            type: "dragAndDropRanking",
+            scenarioNumber: 4,
+            responses: [
+              { id: "response_1", text: "Ignore the behavior" },
+              { id: "response_2", text: "Call them out in front of the class" },
+              {
+                id: "response_3",
+                text: "Acknowledge their feelings and redirect focus",
+              },
+              {
+                id: "response_4",
+                text: "Tell them to see you after the class",
+              },
+            ],
+            rankingSlots: [
+              { rank: 4, label: "4" },
+              { rank: 3, label: "3" },
+              { rank: 2, label: "2" },
+              { rank: 1, label: "1" },
+            ],
+          },
+          {
+            stepId: 10,
+            type: "reflection",
+            question: "Which response encourages self-regulation?",
+          },
+          {
+            stepId: 11,
+            type: "reflection",
+            question: "Which response might escalate the situation?",
+          },
+        ],
         navigation: {
           prev: true,
           next: true,

@@ -5,14 +5,54 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_1.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_1.mp4",
         hasNextButton: true,
       },
       {
         id: 2,
+        type: "radio",
+        question:
+          "First off though, what do you think regulation means? Pick from the options available.",
+        options: [
+          {
+            id: "A",
+            text: "A. Keeping all your emotions hidden so no one can see how you feel.",
+          },
+          {
+            id: "B",
+            text: "B. A type of game where you guess how other people are feeling.",
+          },
+          {
+            id: "C",
+            text: "C. Adjusting your emotions, actions, or body to match what’s happening around you.",
+          },
+          {
+            id: "D",
+            text: "D. A way to make sure everyone does the same thing at the same time.",
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 3,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 4,
         type: "question",
         questionType: "text",
-        question: "What do you understand by the word",
+        question: "What does",
+        continuation: "mean?",
         hasImage: true,
         imageSrc: "mindset.png",
         inputType: "bigTextBox",
@@ -22,19 +62,19 @@ export const courseContent = {
         },
       },
       {
-        id: 3,
+        id: 5,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_2.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_3.mp4",
         navigation: {
           prev: true,
           next: true,
         },
       },
       {
-        id: 4,
+        id: 6,
         type: "listQuestion",
-        question:
-          "Can you mention some challenges you have encountered and bounced back from?",
+        question: "How many emotions can you name off the top of your head?",
         inputCount: 5,
         inputType: "text",
         inputPlaceholder: "Type your answer here",
@@ -44,20 +84,24 @@ export const courseContent = {
         },
       },
       {
-        id: 5,
+        id: 7,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_3.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_4.mp4",
         navigation: {
           prev: true,
           next: true,
         },
       },
       {
-        id: 6,
+        id: 8,
         type: "question",
         questionType: "text",
-        question: "What do you understand by the word",
-        hasImage: true,
+        question:
+          "What do you think about this zone? Do you think it’s a good zone and would you like to be there?",
+        zone: "Blue Zone",
+        zoneBgColor: "#0093FF",
+        hasImage: false,
         imageSrc: "mindset.png",
         inputType: "bigTextBox",
         navigation: {
@@ -66,60 +110,10 @@ export const courseContent = {
         },
       },
       {
-        id: 7,
-        type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_4.mp4",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 8,
-        type: "multiStep",
-        title: "Write a letter to yourself.",
-        steps: [
-          {
-            stepId: 1,
-            type: "instruction",
-            challenge: "Preparing for a big math test, and you don’t understand all the topics.",
-            statement: "I don’t understand all the topics. yet., but I can keep studying and practicing until I do"
-          },
-          {
-            stepId: 2,
-            type: "imageDragAndDrop",
-            instruction:
-              "Drag-and-drop the statements on the left into any of these bowls.",
-            steps: 4,
-            buckets: [
-              {
-                id: "green",
-                title: "Resilience",
-              },
-              {
-                id: "red",
-                title: "Grit",
-              }
-
-            ],
-            images: [
-              "Sam has been practicing the piano for months, even though learning new songs is really hard. He doesn’t give up, even when it takes a long time to get it right.",
-              "Chris is writing a book. It’s taking a really long time, but he’s excited to finish it, even though it’s hard to think of new ideas sometimes.",
-              "Emma’s science project didn’t go as planned. She felt frustrated, but after taking a deep breath, she decided to figure out how to fix it and finish her project.",
-              "After losing a big game, Lucy felt sad, but she reminded herself to keep her head up and practice for the next one.",
-            ]
-
-          },
-        ],
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
         id: 9,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_5.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_5.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -127,84 +121,15 @@ export const courseContent = {
       },
       {
         id: 10,
-        type: "multiStep",
-        steps: [
-          {
-            stepId: 1,
-            type: "instruction",
-            title: "Instruction",
-            instructions: [
-              "Below are sentences with missing words related to communication and boundaries. Choose the best word from the list below to complete each sentence.",
-              "\n Missing words are: "
-            ],
-            options: "Respect, Clarity, Comfort, Listen, Express"
-          },
-          {
-            stepId: 2,
-            type: "multiColoredQuestionBoxes",
-            fields: [
-              {
-                number: "Challenge",
-                textFieldColor: "red",
-                colorCode: "#FD483D",
-              },
-              {
-                number: "Your YET Statement:",
-                textFieldColor: "green",
-                colorCode: "#4CB748",
-              },
-            ]
-          },
-          {
-            stepId: 3,
-            type: "multiColoredQuestionBoxes",
-            fields: [
-              {
-                number: "Challenge",
-                textFieldColor: "red",
-                colorCode: "#FD483D",
-              },
-              {
-                number: "Your YET Statement:",
-                textFieldColor: "green",
-                colorCode: "#4CB748",
-              },
-            ]
-          },
-          {
-            stepId: 4,
-            type: "multiColoredQuestionBoxes",
-            fields: [
-              {
-                number: "Challenge",
-                textFieldColor: "red",
-                colorCode: "#FD483D",
-              },
-              {
-                number: "Your YET Statement:",
-                textFieldColor: "green",
-                colorCode: "#4CB748",
-              },
-            ]
-          },
-          {
-            stepId: 5,
-            type: "multiColoredQuestionBoxes",
-            fields: [
-              {
-                number: "Challenge",
-                textFieldColor: "red",
-                colorCode: "#FD483D",
-              },
-              {
-                number: "Your YET Statement:",
-                textFieldColor: "green",
-                colorCode: "#4CB748",
-              },
-            ]
-          },
-
-        ],
+        type: "question",
+        questionType: "text",
+        question:
+          "What do you think about this zone? Do you think it’s a good zone and would you like to be there?",
+        zone: "Green Zone",
+        zoneBgColor: "#27AE60",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
         navigation: {
           prev: true,
           next: true,
@@ -213,7 +138,98 @@ export const courseContent = {
       {
         id: 11,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 12,
+        type: "question",
+        questionType: "text",
+        question:
+          "What do you think about this zone? Do you think it’s a good zone and would you like to be there?",
+        zone: "Yellow Zone",
+        zoneBgColor: "#FCF85D",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 13,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 14,
+        type: "question",
+        questionType: "text",
+        question:
+          " What do you think about this zone? Do you think it’s a good zone and would you like to be there?",
+        zone: "Red Zone",
+        zoneBgColor: "#EE2447",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 15,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 16,
+        type: "radio",
+        question:
+          "So, let’s check in with how you’re feeling today. Which of these zones do you think you’re in?",
+        options: [
+          {
+            id: "A",
+            text: "A. Blue Zone: Feeling low, tired, sad, or not very energetic.",
+          },
+          {
+            id: "B",
+            text: "B. Green Zone: Feeling calm, focused, happy, and ready to learn.",
+          },
+          {
+            id: "C",
+            text: "C. Yellow Zone: Feeling a little restless, frustrated, or worried, but still managing.",
+          },
+          {
+            id: "D",
+            text: "D. Red Zone: Feeling angry, overwhelmed, or out of control.",
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 17,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -227,17 +243,19 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_1.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_1.mp4",
         hasNextButton: true,
       },
       {
         id: 2,
-        type: "radio",
-        question: "Just a quick question, have you ever seen or heard of a building that collapsed? ",
-        options: [
-          { id: "A", text: "YES" },
-          { id: "B", text: "NO" },
-        ],
+        type: "question",
+        questionType: "text",
+        question:
+          " What do you think about this zone? Do you think it’s a good zone and would you like to be there?",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
         navigation: {
           prev: true,
           next: true,
@@ -246,7 +264,8 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_2.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -258,114 +277,128 @@ export const courseContent = {
         steps: [
           {
             stepId: 1,
-            type: "instruction",
-            title: "Instruction",
-            instructions: [
-              "Match the right ‘C’ to their correct definition.",
+            type: "dropdownScenario",
+            question: "Feeling calm and ready to learn",
+            options: [
+              {
+                id: "A",
+                text: "Blue",
+                bgColor: "#0093FF",
+                color: "white",
+              },
+              {
+                id: "B",
+                text: "Green",
+                bgColor: "#27AE60",
+                color: "white",
+              },
+              {
+                id: "C",
+                text: "Yellow",
+                bgColor: "#FCF85D",
+                color: "#5B616A",
+              },
+              {
+                id: "D",
+                text: "Red",
+                bgColor: "#EE2447",
+                color: "white",
+              },
             ],
-            options: "Competence, Confidence, Coping, Control, Character, Connections, and Contribution."
           },
-
           {
             stepId: 2,
             type: "dropdownScenario",
-            question: "The belief in your own ability to handle situations, challenges, and tasks with confidence and success.",
+            question: "Low energy feeling like sadness or tiredness.",
             options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
+              {
+                id: "A",
+                text: "Blue",
+                bgColor: "#0093FF",
+                color: "white",
+              },
+              {
+                id: "B",
+                text: "Green",
+                bgColor: "#27AE60",
+                color: "white",
+              },
+              {
+                id: "C",
+                text: "Yellow",
+                bgColor: "#FCF85D",
+                color: "#5B616A",
+              },
+              {
+                id: "D",
+                text: "Red",
+                bgColor: "#EE2447",
+                color: "white",
+              },
             ],
           },
           {
             stepId: 3,
             type: "dropdownScenario",
-            question: "The people in your life who support, guide, and help you through challenges.",
+            question: `Feeling a little out of control with excitement or worry.`,
             options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
+              {
+                id: "A",
+                text: "Blue",
+                bgColor: "#0093FF",
+                color: "white",
+              },
+              {
+                id: "B",
+                text: "Green",
+                bgColor: "#27AE60",
+                color: "white",
+              },
+              {
+                id: "C",
+                text: "Yellow",
+                bgColor: "#FCF85D",
+                color: "#5B616A",
+              },
+              {
+                id: "D",
+                text: "Red",
+                bgColor: "#EE2447",
+                color: "white",
+              },
             ],
           },
           {
             stepId: 4,
             type: "dropdownScenario",
-            question: "Your values and sense of right and wrong that help guide your decisions and actions in difficult situations.",
+            question: "Very big emotions like anger or extreme frustration.",
             options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
+              {
+                id: "A",
+                text: "Blue",
+                bgColor: "#0093FF",
+                color: "white",
+              },
+              {
+                id: "B",
+                text: "Green",
+                bgColor: "#27AE60",
+                color: "white",
+              },
+              {
+                id: "C",
+                text: "Yellow",
+                bgColor: "#FCF85D",
+                color: "#5B616A",
+              },
+              {
+                id: "D",
+                text: "Red",
+                bgColor: "#EE2447",
+                color: "white",
+              },
             ],
           },
-          {
-            stepId: 5,
-            type: "dropdownScenario",
-            question: "The skills and strategies you use to manage stress, challenges, and emotions in tough situations.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-
-          {
-            stepId: 6,
-            type: "dropdownScenario",
-            question: "The understanding that you can contribute positively to the world around you, helping others and making a difference.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-          {
-            stepId: 7,
-            type: "dropdownScenario",
-            question: "The ability to successfully perform tasks or overcome challenges by using your skills, knowledge, and abilities.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-          {
-            stepId: 8,
-            type: "dropdownScenario",
-            question: "The feeling of being in charge of your own actions, responses, and decisions, even if you can’t control everything around you.",
-            options: [
-              "Competence",
-              "Confidence",
-              "Coping",
-              "Control",
-              "Character",
-              "Connections",
-              "Contribution"
-            ],
-          },
-
         ],
         navigation: {
           prev: true,
@@ -375,7 +408,8 @@ export const courseContent = {
       {
         id: 5,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_3.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -389,7 +423,8 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_1.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_1.mp4",
         hasNextButton: true,
       },
       {
@@ -408,7 +443,8 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_2.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -430,7 +466,7 @@ export const courseContent = {
           "Being open to trying new things and not getting stuck when things don’t go according to plan.",
           "Avoiding change or pretending it’s not happening.",
           "Knowing how to handle change when it happens.",
-          "Panicking when something unexpected happens."
+          "Panicking when something unexpected happens.",
         ],
         buckets: [
           {
@@ -461,7 +497,6 @@ export const courseContent = {
             instructions: [
               "For each situation, explain how you will adapt in the given situation.",
             ],
-
           },
           {
             stepId: 2,
@@ -469,9 +504,10 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "You’re feeling overwhelmed with schoolwork and aren’t sure how to manage all the assignments and exams coming up."
-              }
-            ]
+                question:
+                  "You’re feeling overwhelmed with schoolwork and aren’t sure how to manage all the assignments and exams coming up.",
+              },
+            ],
           },
           {
             stepId: 3,
@@ -479,9 +515,10 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "Your friend is going through a tough time, and you decide to spend some time with them to listen and offer support."
-              }
-            ]
+                question:
+                  "Your friend is going through a tough time, and you decide to spend some time with them to listen and offer support.",
+              },
+            ],
           },
           {
             stepId: 4,
@@ -489,9 +526,10 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "You’ve recently learned how to play the guitar, and although it was tough in the beginning, you kept practicing and now feel proud of what you’ve achieved."
-              }
-            ]
+                question:
+                  "You’ve recently learned how to play the guitar, and although it was tough in the beginning, you kept practicing and now feel proud of what you’ve achieved.",
+              },
+            ],
           },
           {
             stepId: 5,
@@ -499,9 +537,10 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "You’re in a situation where you don’t know the outcome, but you remind yourself to focus on what you can do and how you can handle your emotions."
-              }
-            ]
+                question:
+                  "You’re in a situation where you don’t know the outcome, but you remind yourself to focus on what you can do and how you can handle your emotions.",
+              },
+            ],
           },
           {
             stepId: 6,
@@ -509,13 +548,13 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "You volunteered at a local charity event and helped organize a charity event. You felt great knowing that you made a positive impact"
-              }
-            ]
+                question:
+                  "You volunteered at a local charity event and helped organize a charity event. You felt great knowing that you made a positive impact",
+              },
+            ],
           },
-        ]
+        ],
 
-        ,
         navigation: {
           prev: true,
           next: true,
@@ -524,7 +563,8 @@ export const courseContent = {
       {
         id: 6,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_3.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -538,15 +578,15 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_1.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_1.mp4",
         hasNextButton: true,
       },
       {
         id: 2,
         type: "question",
         questionType: "text",
-        question:
-          "What do you understand by the word",
+        question: "What do you understand by the word",
         inputType: "mediumTextBox",
         hasImage: true,
         imageSrc: "values.png",
@@ -558,7 +598,8 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_2.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -598,7 +639,8 @@ export const courseContent = {
       {
         id: 5,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_3.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -608,22 +650,18 @@ export const courseContent = {
         id: 6,
         type: "multiStep",
         steps: [
-
           {
             stepId: 1,
             type: "instruction",
-            title:
-              "My Web of Relationship: ",
+            title: "My Web of Relationship: ",
             subTitle: "Map out your support system.",
           },
           {
             stepId: 2,
             type: "fiveFieldsAnswers",
-            question:
-              "Write out what these people think about you.",
-            answers: 5
+            question: "Write out what these people think about you.",
+            answers: 5,
           },
-
         ],
         navigation: {
           prev: true,
@@ -633,7 +671,8 @@ export const courseContent = {
       {
         id: 7,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_4.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -647,7 +686,8 @@ export const courseContent = {
       {
         id: 1,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_1.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_1.mp4",
         hasNextButton: true,
       },
       {
@@ -666,7 +706,8 @@ export const courseContent = {
       {
         id: 3,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_2.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_2.mp4",
         hasNextButton: true,
       },
       {
@@ -685,7 +726,8 @@ export const courseContent = {
       {
         id: 5,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_3.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -702,13 +744,14 @@ export const courseContent = {
             instructions: [
               "Match a stressful situation to a coping skill you will use if you find yourself in such a situation.",
             ],
-            options: ""
+            options: "",
           },
 
           {
             stepId: 2,
             type: "dropdownScenario",
-            question: "You have a big test tomorrow, and you're feeling nervous and overwhelmed.",
+            question:
+              "You have a big test tomorrow, and you're feeling nervous and overwhelmed.",
             options: [
               "Take deep breaths and count to ten.",
               "Write down how you feel in a journal.",
@@ -719,13 +762,14 @@ export const courseContent = {
               "Listen to calming music.",
               "Ask for help or guidance from a teacher or friend.",
               "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
+              "Do an activity like drawing or playing a game.",
             ],
           },
           {
             stepId: 3,
             type: "dropdownScenario",
-            question: "Your best friend said something that hurt your feelings, and now you're feeling upset.",
+            question:
+              "Your best friend said something that hurt your feelings, and now you're feeling upset.",
             options: [
               "Take deep breaths and count to ten.",
               "Write down how you feel in a journal.",
@@ -736,13 +780,14 @@ export const courseContent = {
               "Listen to calming music.",
               "Ask for help or guidance from a teacher or friend.",
               "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
+              "Do an activity like drawing or playing a game.",
             ],
           },
           {
             stepId: 4,
             type: "dropdownScenario",
-            question: "You are struggling to understand a math problem in class, and it's making you feel frustrated.",
+            question:
+              "You are struggling to understand a math problem in class, and it's making you feel frustrated.",
             options: [
               "Take deep breaths and count to ten.",
               "Write down how you feel in a journal.",
@@ -753,13 +798,14 @@ export const courseContent = {
               "Listen to calming music.",
               "Ask for help or guidance from a teacher or friend.",
               "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
+              "Do an activity like drawing or playing a game.",
             ],
           },
           {
             stepId: 5,
             type: "dropdownScenario",
-            question: "You didn’t make the sports team you really wanted to join, and you feel disappointed.",
+            question:
+              "You didn’t make the sports team you really wanted to join, and you feel disappointed.",
             options: [
               "Take deep breaths and count to ten.",
               "Write down how you feel in a journal.",
@@ -770,14 +816,15 @@ export const courseContent = {
               "Listen to calming music.",
               "Ask for help or guidance from a teacher or friend.",
               "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
+              "Do an activity like drawing or playing a game.",
             ],
           },
 
           {
             stepId: 6,
             type: "dropdownScenario",
-            question: "A group project is due tomorrow, but your team hasn’t finished their parts, and you're stressed.",
+            question:
+              "A group project is due tomorrow, but your team hasn’t finished their parts, and you're stressed.",
             options: [
               "Take deep breaths and count to ten.",
               "Write down how you feel in a journal.",
@@ -788,13 +835,14 @@ export const courseContent = {
               "Listen to calming music.",
               "Ask for help or guidance from a teacher or friend.",
               "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
+              "Do an activity like drawing or playing a game.",
             ],
           },
           {
             stepId: 7,
             type: "dropdownScenario",
-            question: "You're about to give a speech in front of the class, and you're feeling anxious.",
+            question:
+              "You're about to give a speech in front of the class, and you're feeling anxious.",
             options: [
               "Take deep breaths and count to ten.",
               "Write down how you feel in a journal.",
@@ -805,7 +853,7 @@ export const courseContent = {
               "Listen to calming music.",
               "Ask for help or guidance from a teacher or friend.",
               "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
+              "Do an activity like drawing or playing a game.",
             ],
           },
           {
@@ -822,13 +870,14 @@ export const courseContent = {
               "Listen to calming music.",
               "Ask for help or guidance from a teacher or friend.",
               "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
+              "Do an activity like drawing or playing a game.",
             ],
           },
           {
             stepId: 9,
             type: "dropdownScenario",
-            question: "You argued with your sibling this morning, and now you're still feeling angry.",
+            question:
+              "You argued with your sibling this morning, and now you're still feeling angry.",
             options: [
               "Take deep breaths and count to ten.",
               "Write down how you feel in a journal.",
@@ -839,13 +888,14 @@ export const courseContent = {
               "Listen to calming music.",
               "Ask for help or guidance from a teacher or friend.",
               "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
+              "Do an activity like drawing or playing a game.",
             ],
           },
           {
             stepId: 10,
             type: "dropdownScenario",
-            question: "You accidentally made a mistake on a school assignment and feel embarrassed.",
+            question:
+              "You accidentally made a mistake on a school assignment and feel embarrassed.",
             options: [
               "Take deep breaths and count to ten.",
               "Write down how you feel in a journal.",
@@ -856,13 +906,14 @@ export const courseContent = {
               "Listen to calming music.",
               "Ask for help or guidance from a teacher or friend.",
               "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
+              "Do an activity like drawing or playing a game.",
             ],
           },
           {
             stepId: 11,
             type: "dropdownScenario",
-            question: "A teacher called on you to answer a question, but you didn’t know the answer, and now you feel nervous.",
+            question:
+              "A teacher called on you to answer a question, but you didn’t know the answer, and now you feel nervous.",
             options: [
               "Take deep breaths and count to ten.",
               "Write down how you feel in a journal.",
@@ -873,7 +924,7 @@ export const courseContent = {
               "Listen to calming music.",
               "Ask for help or guidance from a teacher or friend.",
               "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game."
+              "Do an activity like drawing or playing a game.",
             ],
           },
         ],
@@ -885,12 +936,13 @@ export const courseContent = {
       {
         id: 7,
         type: "video",
-        videoSrc: "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
         navigation: {
           prev: true,
           next: true,
         },
       },
     ],
-  }
+  },
 };
