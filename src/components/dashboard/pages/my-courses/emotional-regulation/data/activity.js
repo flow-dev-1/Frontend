@@ -422,7 +422,8 @@ export const courseContent = {
           {
             stepId: 1,
             type: "dropdownScenario",
-            question: "If you see someone stomping their feet, yelling loudly, and feeling really, really upset, what do you think their energy level would be? Now, what zone is the person in?",
+            question:
+              "If you see someone stomping their feet, yelling loudly, and feeling really, really upset, what do you think their energy level would be? Now, what zone is the person in?",
             options: [
               {
                 id: "A",
@@ -453,7 +454,8 @@ export const courseContent = {
           {
             stepId: 2,
             type: "dropdownScenario",
-            question: "If you see someone giggling a lot, fidgeting in their seat, and feeling a little too silly, what do you think their energy level would be? . Now, what zone is the person in?",
+            question:
+              "If you see someone giggling a lot, fidgeting in their seat, and feeling a little too silly, what do you think their energy level would be? . Now, what zone is the person in?",
             options: [
               {
                 id: "A",
@@ -482,6 +484,42 @@ export const courseContent = {
             ],
           },
         ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 7,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 8,
+        type: "question",
+        questionType: "text",
+        question:
+          "What do you think about this zone? Do you think it’s a good zone and would you like to be there?",
+        zone: "Blue Zone",
+        zoneBgColor: "#0093FF",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 9,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_5.mp4",
         navigation: {
           prev: true,
           next: true,
