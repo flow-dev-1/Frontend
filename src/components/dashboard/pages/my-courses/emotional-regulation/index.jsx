@@ -52,10 +52,6 @@ import WeekTwoPage10 from "./weeks/week2/page10/Page10";
 import WeekThreePage1 from "./weeks/week3/page1/Page1";
 import WeekThreePage2 from "./weeks/week3/page2/Page2";
 import WeekThreePage3 from "./weeks/week3/page3/Page3";
-import WeekThreePage4 from "./weeks/week3/page4/Page4";
-import WeekThreePage5 from "./weeks/week3/page5/Page5";
-import WeekThreePage6 from "./weeks/week3/page6/Page6";
-import WeekThreePage7 from "./weeks/week3/page7/Page7";
 
 // Week 4
 import WeekFourPage1 from "./weeks/week4/page1/Page1";
@@ -261,15 +257,6 @@ const WeekContent = () => {
             return <WeekThreePage2 />;
           case 3:
             return <WeekThreePage3 />;
-          case 4:
-            return <WeekThreePage4 />;
-          case 5:
-            return <WeekThreePage5 />;
-          case 6:
-            return <WeekThreePage6 />;
-          case 7:
-            return <WeekThreePage7 />;
-
           default:
             return null;
         }
