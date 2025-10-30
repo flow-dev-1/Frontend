@@ -588,30 +588,27 @@ export const courseContent = {
       },
       {
         id: 4,
-        type: "listQuestion",
-        question:
-          "Who are the three top people you go to when you need help with a situation?",
-        inputCount: 3,
-        fields: [
+        type: "multiStep",
+        steps: [
           {
-            number: "1",
-            textFieldColor: "green",
-            colorCode: "#4CB748",
+            stepId: 1,
+            type: "instruction",
+            instructionText:
+              "Remember a time when you felt the different emotions mentioned below and identify what you did to feel better. After that, classify that behavior as healthy or unhealthy. For instance, if you yelled to feel better, you might have felt better, however it doesn't qualify as a healthy coping skill because it stressed you and others around you. If you listened to music though to feel better, it can be classified as a healthy coping skill because it helped you feel better and did not bring further stress to you or those around you.",
           },
           {
-            number: "2",
-            textFieldColor: "orange",
-            colorCode: "#FDD8B6",
-          },
-
-          {
-            number: "3",
-            textFieldColor: "blue",
-            colorCode: "#01A7FF",
+            stepId: 2,
+            type: "emotionTable",
+            emotions: [
+              "Sad",
+              "Excited",
+              "Frustrated",
+              "Bored",
+              "Angry",
+              "Overwhelmed",
+            ],
           },
         ],
-        inputType: "text",
-        inputPlaceholder: "Type your answer here",
         navigation: {
           prev: true,
           next: true,
