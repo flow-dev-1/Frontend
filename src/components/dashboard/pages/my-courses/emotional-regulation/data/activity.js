@@ -566,10 +566,11 @@ export const courseContent = {
         id: 2,
         type: "question",
         questionType: "text",
-        question: "What do you understand by the word",
-        inputType: "mediumTextBox",
-        hasImage: true,
-        imageSrc: "values.png",
+        question:
+          "Before we proceed, we’d love to find out if you remember what we treated last week.",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
         navigation: {
           prev: true,
           next: true,
