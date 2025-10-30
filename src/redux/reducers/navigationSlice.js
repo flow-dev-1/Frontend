@@ -107,7 +107,7 @@ const navigationSlice = createSlice({
         state.currentCourse = action.payload;
         state.currentWeek = 4;
         state.currentPage = 4;
-        state.currentStep = 1;
+        state.currentStep = 2;
       }
     },
     updateCourseFromURL: (state) => {
