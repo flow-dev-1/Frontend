@@ -415,6 +415,78 @@ export const courseContent = {
           next: true,
         },
       },
+      {
+        id: 6,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "dropdownScenario",
+            question: "If you see someone stomping their feet, yelling loudly, and feeling really, really upset, what do you think their energy level would be? Now, what zone is the person in?",
+            options: [
+              {
+                id: "A",
+                text: "Blue",
+                bgColor: "#0093FF",
+                color: "white",
+              },
+              {
+                id: "B",
+                text: "Green",
+                bgColor: "#27AE60",
+                color: "white",
+              },
+              {
+                id: "C",
+                text: "Yellow",
+                bgColor: "#FCF85D",
+                color: "#5B616A",
+              },
+              {
+                id: "D",
+                text: "Red",
+                bgColor: "#EE2447",
+                color: "white",
+              },
+            ],
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question: "If you see someone giggling a lot, fidgeting in their seat, and feeling a little too silly, what do you think their energy level would be? . Now, what zone is the person in?",
+            options: [
+              {
+                id: "A",
+                text: "Blue",
+                bgColor: "#0093FF",
+                color: "white",
+              },
+              {
+                id: "B",
+                text: "Green",
+                bgColor: "#27AE60",
+                color: "white",
+              },
+              {
+                id: "C",
+                text: "Yellow",
+                bgColor: "#FCF85D",
+                color: "#5B616A",
+              },
+              {
+                id: "D",
+                text: "Red",
+                bgColor: "#EE2447",
+                color: "white",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
     ],
   },
   week3: {
