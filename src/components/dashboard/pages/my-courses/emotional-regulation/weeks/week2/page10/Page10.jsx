@@ -21,9 +21,8 @@ import { toast } from "react-toastify";
 import userService from "../../../../../../../../services/api/user";
 import { calculateResult } from "../../../utility";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-import { use } from "react";
 
-function WeekThreeAssessment() {
+function WeekTwoAssessment() {
   const dispatch = useDispatch();
   const currentStep = useSelector(selectCurrentStep);
   const currentWeek = useSelector(selectCurrentWeek);
@@ -54,15 +53,15 @@ function WeekThreeAssessment() {
         )}% in the quiz`
       );
       toast.success(data.message || "Answers saved successfully!"); // Show success toast
-      dispatch(
-        updateData({
-          course: null,
-          courseEnrollmentId: null,
-          week: 1,
-          activities: [],
-          assessments: [],
-        })
-      );
+      // dispatch(
+      //   updateData({
+      //     course: null,
+      //     courseEnrollmentId: null,
+      //     week: 1,
+      //     activities: [],
+      //     assessments: [],
+      //   })
+      // );
       dispatch(navigateNext());
     },
     onError: (error) => {
@@ -98,7 +97,6 @@ function WeekThreeAssessment() {
 
   const saveUserData = () => {
     if (adminDatas.isAdmin) return true;
-
     const stepData = answers.find((item) => item.id === currentStep);
     if (!stepData) {
       setErrorMessage("Oops! Please choose an option to proceed.");
@@ -111,8 +109,11 @@ function WeekThreeAssessment() {
     dispatch(saveAssessment(answers));
 
     if (isLastQuestion) {
+      console.log(userAnswers.activities, "userAnswers.activities");
+
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 3;
+        answers.length !== totalSteps || userAnswers.activities.length !== 5;
+
       if (hasUnansweredQuestions) {
         setErrorMessage(
           "Oops! Some unanswered questions have been detected. Kindly go back and review!"
@@ -120,45 +121,64 @@ function WeekThreeAssessment() {
         return false;
       }
 
-      const userScore = calculateResult(
-        assessmentData.questions,
-        answers,
-        totalSteps
+      // For nested questions check that all answeres were provided. when page is refreshed data may be lost
+
+      // Page 4 has nested questions
+      const selectedActivity = userAnswers.activities.find(
+        (activity) => activity.page === 4
       );
 
-      mutation.mutate({
-        ...userAnswers,
-        assessments: answers,
-        rating: userScore.toString(),
-      });
+      const selectedActivityIsValid =
+        selectedActivity &&
+        Array.isArray(selectedActivity.answer) &&
+        selectedActivity.answer.length === 5;
 
-      //   const selectedActivity = userAnswers.activities.find(activity => activity.page === 6);
-      //   const isValidActivity = selectedActivity && Array.isArray(selectedActivity.answer) && selectedActivity.answer.length === 5;
+      // Page 8 has nested questions
+      const selectedActivity1 = userAnswers.activities.find(
+        (activity) => activity.page === 8
+      );
+      const totalDroped =
+        selectedActivity1?.answer?.[0].value?.green?.length +
+        selectedActivity1?.answer?.[0].value?.red?.length;
 
-      //   if (isValidActivity) {
-      //     const isValid = selectedActivity.answer.every(item =>
-      //       item.stepId !== undefined &&
-      //       item.value &&
-      //       Object.keys(item.value).length === 3
-      //     );
+      const selectedActivity1IsValid = totalDroped === 4;
 
-      //     if (isValid) {
-      //       const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
+      // Page 10 has nested questions
+      const selectedActivity2 = userAnswers.activities.find(
+        (activity) => activity.page === 10
+      );
 
-      //       mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
-      //     } else {
+      const selectedActivity2isValid = selectedActivity2?.answer?.every(
+        (item) => item.stepId !== undefined && item.value
+      );
 
-      //       setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-      //       return false;
-      //     }
-      //   } else {
-      //     setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-      //     return false;
-      //   }
+      if (
+        selectedActivityIsValid &&
+        selectedActivity1IsValid &&
+        selectedActivity2isValid
+      ) {
+        const userScore = calculateResult(
+          assessmentData.questions,
+          answers,
+          totalSteps
+        );
+
+        console.log(userAnswers, userScore, "userScore");
+
+        mutation.mutate({
+          ...userAnswers,
+          assessments: answers,
+          rating: userScore.toString(),
+        });
+      } else {
+        setErrorMessage(
+          "Oops! Some unanswered questions have been detected. Kindly go back and review!"
+        );
+        return false;
+      }
     } else {
       return true;
     }
-    // Dispatch the saveActivity action
   };
 
   const renderStep = () => {
@@ -194,8 +214,8 @@ function WeekThreeAssessment() {
 
   return (
     <>
-      <QuestionBox>
-        <div className="bg-blue text-white p-3 mb-3 assessment-header">
+      <QuestionBox extraMobileStyle={"mobile-group-2"}>
+        <div className="bg-blue text-white px-3 py-1 mb-2 assessment-header">
           <h2 className="fs-1 text-white text-center">
             {assessmentData.title}
           </h2>
@@ -226,4 +246,4 @@ function WeekThreeAssessment() {
   );
 }
 
-export default WeekThreeAssessment;
+export default WeekTwoAssessment;

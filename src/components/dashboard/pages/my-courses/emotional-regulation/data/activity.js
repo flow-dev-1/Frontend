@@ -415,6 +415,116 @@ export const courseContent = {
           next: true,
         },
       },
+      {
+        id: 6,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "dropdownScenario",
+            question:
+              "If you see someone stomping their feet, yelling loudly, and feeling really, really upset, what do you think their energy level would be? Now, what zone is the person in?",
+            options: [
+              {
+                id: "A",
+                text: "Blue",
+                bgColor: "#0093FF",
+                color: "white",
+              },
+              {
+                id: "B",
+                text: "Green",
+                bgColor: "#27AE60",
+                color: "white",
+              },
+              {
+                id: "C",
+                text: "Yellow",
+                bgColor: "#FCF85D",
+                color: "#5B616A",
+              },
+              {
+                id: "D",
+                text: "Red",
+                bgColor: "#EE2447",
+                color: "white",
+              },
+            ],
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question:
+              "If you see someone giggling a lot, fidgeting in their seat, and feeling a little too silly, what do you think their energy level would be? . Now, what zone is the person in?",
+            options: [
+              {
+                id: "A",
+                text: "Blue",
+                bgColor: "#0093FF",
+                color: "white",
+              },
+              {
+                id: "B",
+                text: "Green",
+                bgColor: "#27AE60",
+                color: "white",
+              },
+              {
+                id: "C",
+                text: "Yellow",
+                bgColor: "#FCF85D",
+                color: "#5B616A",
+              },
+              {
+                id: "D",
+                text: "Red",
+                bgColor: "#EE2447",
+                color: "white",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 7,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 8,
+        type: "question",
+        questionType: "text",
+        question:
+          "What do you think about this zone? Do you think it’s a good zone and would you like to be there?",
+        zone: "Blue Zone",
+        zoneBgColor: "#0093FF",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 9,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_5.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
     ],
   },
   week3: {
@@ -440,136 +550,6 @@ export const courseContent = {
           next: true,
         },
       },
-      {
-        id: 3,
-        type: "video",
-        videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_2.mp4",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-
-      {
-        id: 4,
-        type: "imageDragAndDrop",
-        instruction:
-          "Drag-and-drop the statements on the left into any of these bowls",
-        images: [
-          "Ability to adjust to new situations, changes, or challenges.",
-          "Expecting everything to stay the same and being frustrated when it doesn’t.",
-          "Does not mean you have to like change all the time.",
-          "Sticking to just one way of doing things, even when it’s not working.",
-          "Staying calm, thinking through the situation, and coming up with a new plan.",
-          "Refusing to try new things because they seem too hard.",
-          "Being open to trying new things and not getting stuck when things don’t go according to plan.",
-          "Avoiding change or pretending it’s not happening.",
-          "Knowing how to handle change when it happens.",
-          "Panicking when something unexpected happens.",
-        ],
-        buckets: [
-          {
-            id: "green",
-            label: "Adaptability",
-            count: 5,
-          },
-          {
-            id: "red",
-            label: "Not Adaptability",
-            count: 5,
-          },
-        ],
-        steps: 10,
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 5,
-        type: "multiStep",
-        steps: [
-          {
-            stepId: 1,
-            type: "instruction",
-            title: "Instruction",
-            instructions: [
-              "For each situation, explain how you will adapt in the given situation.",
-            ],
-          },
-          {
-            stepId: 2,
-            type: "scenario",
-            questions: [
-              {
-                type: "Question",
-                question:
-                  "You’re feeling overwhelmed with schoolwork and aren’t sure how to manage all the assignments and exams coming up.",
-              },
-            ],
-          },
-          {
-            stepId: 3,
-            type: "scenario",
-            questions: [
-              {
-                type: "Question",
-                question:
-                  "Your friend is going through a tough time, and you decide to spend some time with them to listen and offer support.",
-              },
-            ],
-          },
-          {
-            stepId: 4,
-            type: "scenario",
-            questions: [
-              {
-                type: "Question",
-                question:
-                  "You’ve recently learned how to play the guitar, and although it was tough in the beginning, you kept practicing and now feel proud of what you’ve achieved.",
-              },
-            ],
-          },
-          {
-            stepId: 5,
-            type: "scenario",
-            questions: [
-              {
-                type: "Question",
-                question:
-                  "You’re in a situation where you don’t know the outcome, but you remind yourself to focus on what you can do and how you can handle your emotions.",
-              },
-            ],
-          },
-          {
-            stepId: 6,
-            type: "scenario",
-            questions: [
-              {
-                type: "Question",
-                question:
-                  "You volunteered at a local charity event and helped organize a charity event. You felt great knowing that you made a positive impact",
-              },
-            ],
-          },
-        ],
-
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 6,
-        type: "video",
-        videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_3.mp4",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
     ],
   },
   week4: {
@@ -586,10 +566,11 @@ export const courseContent = {
         id: 2,
         type: "question",
         questionType: "text",
-        question: "What do you understand by the word",
-        inputType: "mediumTextBox",
-        hasImage: true,
-        imageSrc: "values.png",
+        question:
+          "Before we proceed, we’d love to find out if you remember what we treated last week.",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
         navigation: {
           prev: true,
           next: true,
@@ -607,30 +588,27 @@ export const courseContent = {
       },
       {
         id: 4,
-        type: "listQuestion",
-        question:
-          "Who are the three top people you go to when you need help with a situation?",
-        inputCount: 3,
-        fields: [
+        type: "multiStep",
+        steps: [
           {
-            number: "1",
-            textFieldColor: "green",
-            colorCode: "#4CB748",
+            stepId: 1,
+            type: "instruction",
+            instructionText:
+              "Remember a time when you felt the different emotions mentioned below and identify what you did to feel better. After that, classify that behavior as healthy or unhealthy. For instance, if you yelled to feel better, you might have felt better, however it doesn't qualify as a healthy coping skill because it stressed you and others around you. If you listened to music though to feel better, it can be classified as a healthy coping skill because it helped you feel better and did not bring further stress to you or those around you.",
           },
           {
-            number: "2",
-            textFieldColor: "orange",
-            colorCode: "#FDD8B6",
-          },
-
-          {
-            number: "3",
-            textFieldColor: "blue",
-            colorCode: "#01A7FF",
+            stepId: 2,
+            type: "emotionTable",
+            emotions: [
+              "Sad",
+              "Excited",
+              "Frustrated",
+              "Bored",
+              "Angry",
+              "Overwhelmed",
+            ],
           },
         ],
-        inputType: "text",
-        inputPlaceholder: "Type your answer here",
         navigation: {
           prev: true,
           next: true,
@@ -641,38 +619,6 @@ export const courseContent = {
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_3.mp4",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 6,
-        type: "multiStep",
-        steps: [
-          {
-            stepId: 1,
-            type: "instruction",
-            title: "My Web of Relationship: ",
-            subTitle: "Map out your support system.",
-          },
-          {
-            stepId: 2,
-            type: "fiveFieldsAnswers",
-            question: "Write out what these people think about you.",
-            answers: 5,
-          },
-        ],
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 7,
-        type: "video",
-        videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -709,239 +655,6 @@ export const courseContent = {
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_2.mp4",
         hasNextButton: true,
-      },
-      {
-        id: 4,
-        type: "listQuestion",
-        question:
-          "Can you mention some challenges you have encountered and bounced back from?",
-        inputCount: 5,
-        inputType: "text",
-        inputPlaceholder: "Type your answer here",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 5,
-        type: "video",
-        videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_3.mp4",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 6,
-        type: "multiStep",
-        steps: [
-          {
-            stepId: 1,
-            type: "instruction",
-            title: "Instruction",
-            instructions: [
-              "Match a stressful situation to a coping skill you will use if you find yourself in such a situation.",
-            ],
-            options: "",
-          },
-
-          {
-            stepId: 2,
-            type: "dropdownScenario",
-            question:
-              "You have a big test tomorrow, and you're feeling nervous and overwhelmed.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
-            ],
-          },
-          {
-            stepId: 3,
-            type: "dropdownScenario",
-            question:
-              "Your best friend said something that hurt your feelings, and now you're feeling upset.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
-            ],
-          },
-          {
-            stepId: 4,
-            type: "dropdownScenario",
-            question:
-              "You are struggling to understand a math problem in class, and it's making you feel frustrated.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
-            ],
-          },
-          {
-            stepId: 5,
-            type: "dropdownScenario",
-            question:
-              "You didn’t make the sports team you really wanted to join, and you feel disappointed.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
-            ],
-          },
-
-          {
-            stepId: 6,
-            type: "dropdownScenario",
-            question:
-              "A group project is due tomorrow, but your team hasn’t finished their parts, and you're stressed.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
-            ],
-          },
-          {
-            stepId: 7,
-            type: "dropdownScenario",
-            question:
-              "You're about to give a speech in front of the class, and you're feeling anxious.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
-            ],
-          },
-          {
-            stepId: 8,
-            type: "dropdownScenario",
-            question: "You lost your favorite item and feel sad about it.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
-            ],
-          },
-          {
-            stepId: 9,
-            type: "dropdownScenario",
-            question:
-              "You argued with your sibling this morning, and now you're still feeling angry.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
-            ],
-          },
-          {
-            stepId: 10,
-            type: "dropdownScenario",
-            question:
-              "You accidentally made a mistake on a school assignment and feel embarrassed.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
-            ],
-          },
-          {
-            stepId: 11,
-            type: "dropdownScenario",
-            question:
-              "A teacher called on you to answer a question, but you didn’t know the answer, and now you feel nervous.",
-            options: [
-              "Take deep breaths and count to ten.",
-              "Write down how you feel in a journal.",
-              "Take a short walk or move to a quiet space to cool down.",
-              "Practice positive self-talk, like 'I can handle this'",
-              "Talk to someone you trust.",
-              "Break the problem into smaller steps and focus on one at a time.",
-              "Listen to calming music.",
-              "Ask for help or guidance from a teacher or friend.",
-              "Visualize yourself doing well and succeeding.",
-              "Do an activity like drawing or playing a game.",
-            ],
-          },
-        ],
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 7,
-        type: "video",
-        videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
-        navigation: {
-          prev: true,
-          next: true,
-        },
       },
     ],
   },

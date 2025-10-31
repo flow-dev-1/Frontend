@@ -10,7 +10,7 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 
-function Page2() {
+function Page8() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
@@ -53,7 +53,15 @@ function Page2() {
   return (
     <>
       <QuestionBox>
-        <div className="mb-4"></div>
+        <div className="d-flex justify-content-center">
+          <h2
+            className="text-white rounded text-center px-5 py-1 d-inline mt-4 mb-2"
+            style={{ background: pageData.zoneBgColor }}
+          >
+            {pageData.zone}
+          </h2>
+        </div>
+
         <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-center">
           <h2 className="text-blue fs-1 mb-0 flex-shrink-0 question-text">
             Question:
@@ -76,4 +84,4 @@ function Page2() {
   );
 }
 
-export default Page2;
+export default Page8;
