@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import support from "../../../../../../../../assets/resilience-grit-images/support.png";
 import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
@@ -54,41 +53,22 @@ function WeekFourPage2() {
   return (
     <>
       <QuestionBox>
-      <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-center">
-          <h2 className="text-blue fs-1 mb-0 flex-shrink-0 question-text">Question:</h2>
+        <div className="mb-4"></div>
+        <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-center">
+          <h2 className="text-blue fs-1 mb-0 flex-shrink-0 question-text">
+            Question:
+          </h2>
 
           <div className="d-flex align-items-center flex-grow-1 min-w-0">
             <h2 className="text-gray fs-1 mb-0 flex-grow-1 md:text-truncate">
               {pageData.question}
-              {pageData.hasImage && (
-                <>
-                  {/* Show inline on md and up */}
-                  <img
-                    src={support}
-                    alt="self-compassion"
-                    className="ms-2 d-none d-md-inline-block question-image resilience-question-image img-fluid"
-                  />
-
-                  {/* Show inline (not block) on mobile with ? following immediately */}
-                  <span className="d-inline-block d-md-none">
-                    <img
-                      src={support}
-                      alt="self-compassion"
-                      className="ms-2 mt-2 align-middle question-image resilience-question-image img-fluid"
-                    />
-                    <span className="ms-1">?</span>
-                  </span>
-                </>
-              )}
-              {/* Keep the ? for non-mobile when no image is present */}
-              {!pageData.hasImage && <span className="ms-1">?</span>}
             </h2>
           </div>
         </div>
         <BigTextBox handleChange={handleInputChange} value={myAnswer} />
       </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
-      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
+      <div className="d-flex justify-content-center gap-96px mt-3 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>

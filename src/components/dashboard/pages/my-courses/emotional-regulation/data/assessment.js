@@ -75,70 +75,80 @@ export const assessments = {
     questions: [
       {
         id: 1,
-        question: "What does Competence refer to in the 7 C’s of Resilience?",
+        question: "What does self-compassion mean?",
         options: [
-          { id: "A", text: "Believing in yourself and your abilities." },
-          { id: "B", text: "Building skills and solving problems." },
-          { id: "C", text: "Managing stressful situations." },
-          { id: "D", text: "Contributing to your community." },
+          { id: "A", text: "Do nothing." },
+          {
+            id: "B",
+            text: "Being kind and understanding towards yourself when things go wrong.",
+          },
+          { id: "C", text: "Comparing yourself to others." },
+          { id: "D", text: "Being perfect in everything you do." },
         ],
         correctOption: "B",
       },
       {
         id: 2,
-        question:
-          "Which of the following best describes the “Control” component of resilience?",
+        question: "Which of the following is an example of self-compassion?",
         options: [
-          { id: "A", text: "Having confidence in your abilities." },
-          { id: "B", text: "Being able to control everything around you." },
-          { id: "C", text: "Understanding what you can and can’t change." },
-          { id: "D", text: "Taking responsibility for others’ emotions." },
+          { id: "A", text: "Criticizing yourself for every mistake." },
+          { id: "B", text: "Pretending that your feelings don’t exist." },
+          { id: "C", text: "Speaking to yourself kindly when you fail." },
+          { id: "D", text: "Blaming others for your problems." },
         ],
         correctOption: "C",
       },
       {
         id: 3,
-        question:
-          "If you’re feeling nervous before a test and decide to take a few deep breaths to calm down, which of the 7 C’s are you using?",
+        question: "Which of these is NOT a way to practice self-compassion?",
         options: [
-          { id: "A", text: "Coping." },
-          { id: "B", text: "Character." },
-          { id: "C", text: "Contribution." },
-          { id: "D", text: "Connections." },
+          { id: "A", text: "Setting boundaries and saying no when needed." },
+          {
+            id: "B",
+            text: "Engaging in positive self-talk when you make mistakes.",
+          },
+          {
+            id: "C",
+            text: "Ignoring your feelings and pretending everything is okay.",
+          },
+          {
+            id: "D",
+            text: "Practicing mindfulness by paying attention to your emotions.",
+          },
         ],
-        correctOption: "A",
+        correctOption: "C",
       },
       {
         id: 4,
-        question: "Why is “Connections” important for resilience?",
+        question:
+          "What should you do when you find yourself being overly critical after making a mistake?",
         options: [
+          { id: "A", text: "Keep criticizing yourself to improve." },
+          { id: "B", text: "Continue thinking about the mistake." },
           {
-            id: "A",
-            text: "It helps you handle stress by avoiding other people.",
+            id: "C",
+            text: "Treat yourself kindly, as you would treat a friend in the same situation.",
           },
-          {
-            id: "B",
-            text: "It reminds you that you’re not alone and can rely on support.",
-          },
-          { id: "C", text: "It teaches you to manage everything on your own." },
-          {
-            id: "D",
-            text: "It gives you control over other people’s emotions.",
-          },
+          { id: "D", text: "Ask others to tell you what you did wrong." },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 5,
-        question:
-          "Which “C” involves understanding your values and using them to guide your decisions, even in tough times?",
+        question: "Why is self-compassion important?",
         options: [
-          { id: "A", text: "Competence." },
-          { id: "B", text: "Coping." },
-          { id: "C", text: "Character." },
-          { id: "D", text: "Confidence." },
+          { id: "A", text: "It helps us avoid all mistakes." },
+          {
+            id: "B",
+            text: "It makes us feel better and helps us bounce back from challenges.",
+          },
+          { id: "C", text: "It allows us to be kind to others." },
+          {
+            id: "D",
+            text: "It allows us to criticize ourselves in order to avoid further mistakes.",
+          },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
     ],
   },
@@ -148,95 +158,74 @@ export const assessments = {
     questions: [
       {
         id: 1,
-        question: "Tolu is described as adaptable. This means she?",
+        question:
+          "Can you identify the 3 key steps we learned about showing compassion for others as discussed in the lesson 'This will help you apply them in your daily life'?",
         options: [
-          {
-            id: "A",
-            text: "Is able to change who you are when challenges arise.",
-          },
-          { id: "B", text: "Resists changes to maintain stability." },
-          {
-            id: "C",
-            text: "Adjusts to new situations or challenges while staying true to herself.",
-          },
-          { id: "D", text: "Ignores problems and hope they go away." },
+          { id: "A", text: "Seeing, Ignoring, and Criticizing" },
+          { id: "B", text: "Seeing, Caring, and Doing" },
+          { id: "C", text: "Helping, Judging, and Complaining" },
+          { id: "D", text: "Listening, Arguing, and Avoiding" },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 2,
-        question: "Which of the following is an example of adaptability?",
+        question:
+          "Which of the following is NOT a way of showing compassion to others?",
         options: [
+          { id: "A", text: "Listening to a friend who is upset." },
+          { id: "B", text: "Laughing at someone who made a mistake." },
           {
-            id: "A",
-            text: "Sticking to your original plan even if things go wrong.",
+            id: "C",
+            text: "Offering help to a classmate struggling with a project.",
           },
-          {
-            id: "B",
-            text: "Trying a new study method when your usual one isn’t working.",
-          },
-          { id: "C", text: "Getting frustrated when plans change." },
-          { id: "D", text: "Avoiding new experiences to stay comfortable." },
+          { id: "D", text: "Giving a compliment to cheer someone up." },
         ],
         correctOption: "B",
       },
       {
         id: 3,
-        question: "Why is adaptability important for resilience?",
+        question:
+          "When practicing compassion for others, what is the first thing you should do?",
         options: [
-          { id: "A", text: "It helps you avoid change altogether." },
-          { id: "B", text: "It teaches you to be less emotional." },
-          {
-            id: "C",
-            text: "It allows you to handle unexpected changes and grow from them.",
-          },
-          {
-            id: "D",
-            text: "It ensures that everything goes according to plan.",
-          },
+          { id: "A", text: "Tell them what they did wrong." },
+          { id: "B", text: "Notice when someone needs help." },
+          { id: "C", text: "Ignore the situation and hope it improves." },
+          { id: "D", text: "Immediately fix their problem." },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 4,
-        question:
-          "What should you do when you face a sudden, unexpected challenge?",
+        question: "Why is listening considered an act of compassion?",
         options: [
-          { id: "A", text: "Panic and immediately give up." },
+          { id: "A", text: "It makes you look good in front of others." },
           {
             id: "B",
-            text: "Take a deep breath, assess the situation, and find a solution.",
+            text: "It allows the person to feel heard and supported.",
           },
-          { id: "C", text: "Blame others for the problem." },
+          { id: "C", text: "It distracts you from your own problems." },
           {
             id: "D",
-            text: "Stick to your usual way of doing things without considering new ideas.",
+            text: "It helps you get more information about someone’s issues.",
           },
         ],
         correctOption: "B",
       },
       {
         id: 5,
-        question: "How can you practice adaptability in your daily life?",
+        question:
+          "Which of the following is a compassionate response when a friend fails a test?",
         options: [
-          {
-            id: "A",
-            text: "By avoiding new experiences to prevent discomfort.",
-          },
+          { id: "A", text: "It’s your fault for not studying enough." },
           {
             id: "B",
-            text: "By staying rigid in your mindset to maintain control.",
+            text: "Everyone fails sometimes; it’s okay. You’ll do better next time.",
           },
-          {
-            id: "C",
-            text: "By trying new hobbies or handling changes in plans calmly.",
-          },
-          {
-            id: "D",
-            text: "By only focusing on tasks you already know how to do.",
-          },
+          { id: "C", text: "This test wasn’t even hard; how could you fail?" },
+          { id: "D", text: "Let’s just forget about it; it doesn’t matter." },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
     ],
   },
@@ -246,87 +235,68 @@ export const assessments = {
     questions: [
       {
         id: 1,
-        question: "What is a support system?",
+        question: "What is the Circle of Concern?",
         options: [
-          {
-            id: "A",
-            text: "A group of people who always agree with everything you do.",
-          },
+          { id: "A", text: "A way to decide which people to ignore." },
           {
             id: "B",
-            text: "The people who help you stay strong and bounce back during tough times.",
+            text: "A concept that helps identify who is in your inner and outer circles.",
           },
-          { id: "C", text: "A system that prevents you from making mistakes." },
+          { id: "C", text: "A rule about how to be strict with strangers." },
           {
             id: "D",
-            text: "A place where you can find advice on all life’s problems.",
+            text: "A list of tasks to do for your friends and family.",
           },
         ],
         correctOption: "B",
       },
       {
         id: 2,
-        question: "Why are support systems important for resilience?",
+        question: "Who would be considered part of your inner circle?",
         options: [
-          { id: "A", text: "They solve your problems for you." },
           {
-            id: "B",
-            text: "They give you the strength and encouragement to face challenges.",
+            id: "A",
+            text: "A stranger you see every day on your way to school.",
           },
-          { id: "C", text: "They make decisions on your behalf." },
-          { id: "D", text: "They avoid making you feel stressed." },
+          { id: "B", text: "Your best friend." },
+          { id: "C", text: "Your classmate whom you rarely talk to." },
+          { id: "D", text: "A neighbor." },
         ],
         correctOption: "B",
       },
       {
         id: 3,
         question:
-          "Which of the following is an effective way to build a strong support system?",
+          "Which of the following actions would be more appropriate for your inner circle rather than your outer circle?",
         options: [
-          { id: "A", text: "Spending time with people who care about you." },
-          { id: "B", text: "Relying only on yourself to handle challenges." },
-          {
-            id: "C",
-            text: "Keeping your emotions to yourself to avoid burdening others.",
-          },
-          {
-            id: "D",
-            text: "Trying to handle everything alone without asking for help.",
-          },
+          { id: "A", text: "Smiling at someone you pass on the street." },
+          { id: "B", text: "Listening to someone’s personal problems." },
+          { id: "C", text: "Greeting a classmate in the hallway." },
+          { id: "D", text: "Offering to help a stranger carry groceries." },
         ],
-        correctOption: "A",
+        correctOption: "B",
       },
       {
         id: 4,
-        question: "Why is asking for help a sign of strength?",
+        question:
+          "What should you consider when showing compassion to people in your outer circle?",
         options: [
-          {
-            id: "A",
-            text: "It shows that you don’t know how to solve problems.",
-          },
-          {
-            id: "B",
-            text: "It means you’re weak and can’t handle things on your own.",
-          },
-          {
-            id: "C",
-            text: "It demonstrates that you recognize your limits and are willing to grow with the help of others.",
-          },
-          { id: "D", text: "It makes people do your work for you." },
+          { id: "A", text: "Ignoring their needs." },
+          { id: "B", text: "Being kind but keeping safe boundaries." },
+          { id: "C", text: "Treating them the same as your family." },
+          { id: "D", text: "Offering them everything you have." },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 5,
-        question: "What is a practical way to strengthen your support system?",
+        question:
+          "Which of the following is an action that can be appropriate for both inner and outer circles?",
         options: [
-          { id: "A", text: "Keep all your struggles to yourself." },
-          { id: "B", text: "Offer support to others when they need it." },
-          {
-            id: "C",
-            text: "Only seek help from others when you’re forced to.",
-          },
-          { id: "D", text: "Avoid joining any groups or clubs." },
+          { id: "A", text: "Sharing your personal secrets." },
+          { id: "B", text: "Offering a smile or a compliment." },
+          { id: "C", text: "Loaning money to a stranger." },
+          { id: "D", text: "Inviting them into your home." },
         ],
         correctOption: "B",
       },
@@ -338,147 +308,159 @@ export const assessments = {
     questions: [
       {
         id: 1,
-        question: "What are coping skills?",
+        question:
+          "Which of the following best represents the Compassionate Communication theory?",
         options: [
-          { id: "A", text: "Strategies to avoid stress." },
-          {
-            id: "B",
-            text: "Techniques that help deal with stress, anxiety, and challenges.",
-          },
-          { id: "C", text: "Ways to prevent problems from happening." },
-          { id: "D", text: "Methods to blame others for problems." },
+          { id: "A", text: "Observations, Criticism, Punishment, Demands." },
+          { id: "B", text: "Observations, Feelings, Needs, Requests." },
+          { id: "C", text: "Feelings, Demands, Arguments, Solutions." },
+          { id: "D", text: "Feelings, Judgments, Needs, Expectations." },
         ],
         correctOption: "B",
       },
       {
         id: 2,
         question:
-          "Which of the following is considered a healthy coping skill?",
+          "Why is it important to respect boundaries when showing compassion to people in your outer circle?",
         options: [
-          { id: "A", text: "Avoiding problems." },
-          { id: "B", text: "Yelling." },
-          { id: "C", text: "Deep breathing." },
-          { id: "D", text: "Overeating." },
+          { id: "A", text: "To avoid helping people at all." },
+          { id: "B", text: "To keep yourself safe while still being kind." },
+          {
+            id: "C",
+            text: "To prevent others from knowing how compassionate you are.",
+          },
+          { id: "D", text: "To avoid any communication with strangers." },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 3,
         question:
-          "Journaling your thoughts when you are anxious or troubled can help you become calm and more aware of your emotions.",
+          "Scenario: Your friend failed a test while you scored the highest. How can you show compassion?",
         options: [
-          { id: "A", text: "False" },
-          { id: "B", text: "True" },
+          {
+            id: "A",
+            text: "Brag about your high score and tell them they should have studied harder.",
+          },
+          {
+            id: "B",
+            text: "Encourage them by reminding them that one test doesn’t define their abilities and offer to help them study.",
+          },
+          {
+            id: "C",
+            text: "Ignore their feelings and celebrate your own success.",
+          },
+          { id: "D", text: "Tell them they should give up on the subject." },
         ],
         correctOption: "B",
       },
       {
         id: 4,
-        question:
-          "What is one example of a creative outlet that can help with stress?",
+        question: "Which statement best describes the ‘Circle of Concern’?",
         options: [
-          { id: "A", text: "Watching TV." },
-          { id: "B", text: "Playing a musical instrument." },
-          { id: "C", text: "Scrolling through social media." },
-          { id: "D", text: "Sleeping." },
+          { id: "A", text: "It’s a strategy for deciding who to be rude to." },
+          {
+            id: "B",
+            text: "It’s a method to identify who is in your inner and outer circles and how to act compassionately.",
+          },
+          {
+            id: "C",
+            text: "It’s a way to organize your friends based on how much you like them.",
+          },
+          { id: "D", text: "It’s a tool to exclude people from your life." },
         ],
         correctOption: "B",
       },
       {
         id: 5,
-        question: "What should you do if a coping skill doesn't work for you?",
+        question:
+          "What is the most compassionate way to react when you notice someone being excluded or feeling left out?",
         options: [
-          { id: "A", text: "Give up and ignore the problem." },
+          { id: "A", text: "Pretend you didn’t see anything." },
           {
             id: "B",
-            text: "Try a different coping skill that might work better.",
+            text: "Offer a kind gesture, like inviting them to join you.",
           },
-          { id: "C", text: "Blame others for your stress." },
-          { id: "D", text: "Stop trying to cope with the problem." },
+          { id: "C", text: "Make a joke about the situation." },
+          {
+            id: "D",
+            text: "Continue with what you’re doing without paying attention.",
+          },
         ],
         correctOption: "B",
       },
       {
         id: 6,
-        question: "Why is grit important for success?",
+        question:
+          "What is the first step when practicing compassionate communication?",
         options: [
-          { id: "A", text: "It makes challenges disappear." },
-          {
-            id: "B",
-            text: "It helps you stay focused and persistent, even when things are tough.",
-          },
-          { id: "C", text: "It allows you to avoid difficult situations." },
-          { id: "D", text: "It makes you smarter than everyone else." },
+          { id: "A", text: "Make a demand." },
+          { id: "B", text: "Identify the feelings involved." },
+          { id: "C", text: "Observe the situation without judgment." },
+          { id: "D", text: "Offer a solution immediately." },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 7,
-        question: "Which of the following is an example of a resilient action?",
+        question:
+          "Why is it important to set boundaries when showing compassion?",
         options: [
-          { id: "A", text: "Giving up after failing a test." },
+          { id: "A", text: "To avoid showing compassion altogether." },
+          { id: "B", text: "To protect yourself while still being kind." },
           {
-            id: "B",
-            text: "Asking for help and studying harder after a setback.",
+            id: "C",
+            text: "To keep people at a distance so they don’t bother you.",
           },
-          { id: "C", text: "Blaming someone else for your failure." },
-          { id: "D", text: "Ignoring the problem and hoping it goes away." },
+          { id: "D", text: "To make others earn your compassion." },
         ],
         correctOption: "B",
       },
       {
         id: 8,
         question:
-          "How does the 'Power of Yet' mindset help you overcome challenges?",
+          "When someone in your outer circle asks for help, what should you consider first?",
         options: [
-          {
-            id: "A",
-            text: "It makes you believe that challenges are impossible.",
-          },
-          {
-            id: "B",
-            text: "It reminds you that even if you can’t do something now, you have the potential to achieve it with effort and time.",
-          },
-          {
-            id: "C",
-            text: "It encourages you to quit if something is too hard.",
-          },
-          { id: "D", text: "It teaches you to ignore failure." },
+          { id: "A", text: "Whether they can do something for you in return." },
+          { id: "B", text: "Your own boundaries and comfort level." },
+          { id: "C", text: "How you can ignore them without them noticing." },
+          { id: "D", text: "Whether others will think you are kind." },
         ],
         correctOption: "B",
       },
       {
         id: 9,
-        question: `What should you consider when building your personal "Coping Toolbox"?`,
+        question:
+          "What should you do if a friend shares something personal and emotional with you?",
         options: [
-          {
-            id: "A",
-            text: "Only use coping skills that work for your friends.",
-          },
+          { id: "A", text: "Spread the information because it’s interesting." },
           {
             id: "B",
-            text: "Experiment with different coping strategies to find what works best for you and keep those strategies handy.",
+            text: "Listen attentively and offer support without judgment.",
           },
-          { id: "C", text: "Avoid trying new coping skills." },
-          {
-            id: "D",
-            text: "Use coping strategies only when you have no other option.",
-          },
+          { id: "C", text: "Change the subject to something more positive." },
+          { id: "D", text: "Criticize them for feeling that way." },
         ],
         correctOption: "B",
       },
       {
         id: 10,
         question:
-          "What is an example of a positive coping strategy when you're feeling sad?",
+          "Which behavior best reflects maintaining compassion while respecting your boundaries?",
         options: [
-          { id: "A", text: "Isolating yourself from everyone." },
+          {
+            id: "A",
+            text: "Offering help even if it makes you uncomfortable.",
+          },
           {
             id: "B",
-            text: "Writing in a journal about your thoughts and feelings.",
+            text: "Being kind and supportive without overextending yourself.",
           },
-          { id: "C", text: "Pretending nothing is wrong." },
-          { id: "D", text: "Keep talking." },
+          {
+            id: "C",
+            text: "Saying yes to everyone’s requests, no matter how you feel.",
+          },
+          { id: "D", text: "Avoiding all interactions to protect yourself." },
         ],
         correctOption: "B",
       },
