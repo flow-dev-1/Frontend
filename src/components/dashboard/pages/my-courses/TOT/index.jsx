@@ -143,9 +143,9 @@ const WeekContent = () => {
 
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
-    // if (!enrolmentData && !isAdmin) return navigate("/sign-in");
-    // setEnrollmentId(enrolmentData?._id);
-    // setCourse(enrolmentData?.course?._id);
+    if (!enrolmentData && !isAdmin) return navigate("/sign-in");
+    setEnrollmentId(enrolmentData?._id);
+    setCourse(enrolmentData?.course?._id);
   }, []);
 
   useEffect(() => {

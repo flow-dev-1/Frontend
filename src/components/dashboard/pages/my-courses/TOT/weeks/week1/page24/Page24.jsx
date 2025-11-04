@@ -37,7 +37,7 @@ function WeekOneAssessment() {
   useEffect(() => {
     if (!userAnswers) return;
     setAnswers(userAnswers?.assessments || []);
-    return () => {};
+    return () => { };
   }, [userAnswers]);
 
   // Mutation for saving user data
@@ -53,15 +53,15 @@ function WeekOneAssessment() {
         )}% in the quiz`
       );
       toast.success(data.message || "Answers saved successfully!"); // Show success toast
-      dispatch(
-        updateData({
-          course: null,
-          courseEnrollmentId: null,
-          week: 1,
-          activities: [],
-          assessments: [],
-        })
-      );
+      // dispatch(
+      //   updateData({
+      //     course: null,
+      //     courseEnrollmentId: null,
+      //     week: 1,
+      //     activities: [],
+      //     assessments: [],
+      //   })
+      // );
       dispatch(navigateNext());
     },
     onError: (error) => {
@@ -110,7 +110,7 @@ function WeekOneAssessment() {
 
     if (isLastQuestion) {
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 6;
+        answers.length !== totalSteps || userAnswers.activities.length !== 11;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(
@@ -119,57 +119,71 @@ function WeekOneAssessment() {
         return false;
       }
 
+
+      const userScore = calculateResult(
+        assessmentData.questions,
+        answers,
+        totalSteps
+      );
+
+      mutation.mutate({
+        ...userAnswers,
+        assessments: answers,
+        rating: userScore.toString(),
+      });
+
       // For nested questions check that all answeres were provided
 
       // Page 2 has nested questions
-      const selectedActivity = userAnswers.activities.find(
-        (activity) => activity.page === 2
-      );
-      const isValidActivity =
-        selectedActivity &&
-        Array.isArray(selectedActivity.answer) &&
-        selectedActivity.answer.length === 3;
+      // const selectedActivity = userAnswers.activities.find(
+      //   (activity) => activity.page === 2
+      // );
 
-      if (isValidActivity) {
-        const userScore = calculateResult(
-          assessmentData.questions,
-          answers,
-          totalSteps
-        );
+      // const isValidActivity =
+      //   selectedActivity &&
+      //   Array.isArray(selectedActivity.answer) &&
+      //   selectedActivity.answer.length === 3;
 
-        console.log(userScore, "userScore");
+      // if (isValidActivity) {
+      //   const userScore = calculateResult(
+      //     assessmentData.questions,
+      //     answers,
+      //     totalSteps
+      //   );
 
-        mutation.mutate({
-          ...userAnswers,
-          assessments: answers,
-          rating: userScore.toString(),
-        });
+      //   console.log(userScore, "userScore");
 
-        //*****************This will come in later wen the code begins to break or escape questions ******/
+      //   mutation.mutate({
+      //     ...userAnswers,
+      //     assessments: answers,
+      //     rating: userScore.toString(),
+      //   });
 
-        // const isValid = selectedActivity.answer.every(item =>
-        //   item.stepId !== undefined &&
-        //   item.value &&
-        //   Object.keys(item.value).length === 3
-        // );
+      //   //*****************This will come in later wen the code begins to break or escape questions ******/
 
-        // if (isValid) {
-        //   const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
+      //   // const isValid = selectedActivity.answer.every(item =>
+      //   //   item.stepId !== undefined &&
+      //   //   item.value &&
+      //   //   Object.keys(item.value).length === 3
+      //   // );
 
-        //   console.log(userScore, "userScore")
+      //   // if (isValid) {
+      //   //   const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
 
-        //   // mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
-        // } else {
+      //   //   console.log(userScore, "userScore")
 
-        //   setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-        //   return false;
-        // }
-      } else {
-        setErrorMessage(
-          "Oops! Some unanswered questions have been detected. Kindly go back and review!"
-        );
-        return false;
-      }
+      //   //   // mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
+      //   // } else {
+
+      //   //   setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+      //   //   return false;
+      //   // }
+      // } else {
+      //   setErrorMessage(
+      //     "Oops! Some unanswered questions have been detected. Kindly go back and review!"
+      //   );
+      //   return false;
+      // }
     } else {
       return true;
     }

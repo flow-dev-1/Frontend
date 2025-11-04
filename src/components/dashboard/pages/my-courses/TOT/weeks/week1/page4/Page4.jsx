@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./page4.css";
 import Button from "../../../components/Button";
-import QuestionBox from "../../../components/QuestionBox";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import {
   userAnswer,
@@ -34,17 +33,11 @@ function Page4() {
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
-    return true
-    if (answers.length < 5) {
-      setErrorMessage("At least 5 values are required!");
-      return false;
-    }
 
-    const emptyInputs = answers.filter((item) => item?.value?.trim() === "");
-    if (emptyInputs.length > 0) {
-      setErrorMessage(
-        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
-      );
+    // Check if feeling is selected
+    const feelingAnswer = answers.find(a => a.name === 'feeling');
+    if (!feelingAnswer) {
+      setErrorMessage("Please select how you're feeling today");
       return false;
     }
 
@@ -59,33 +52,12 @@ function Page4() {
     return true;
   };
 
-  const handleInputChange = (index, value) => {
-    setErrorMessage("");
-    // Update answers state with the new value
-    setAnswers((prevAnswers) => {
-      // Check if the answer already exists
-      const existingAnswerIndex = prevAnswers.findIndex(
-        (answer) => answer.index === index
-      );
-      if (existingAnswerIndex > -1) {
-        // Update existing answer
-        const updatedAnswers = [...prevAnswers];
-        updatedAnswers[existingAnswerIndex] = {
-          ...updatedAnswers[existingAnswerIndex],
-          value,
-        };
-        return updatedAnswers;
-      } else {
-        // Add new answer
-        return [...prevAnswers, { index, value }];
-      }
-    });
-  };
 
   return (
     <>
       <VideoComponent videoSrc={pageData.videoSrc} />
-      <Feeling />
+      {/* pass answers and setAnswers so Feeling can read/update selection */}
+      <Feeling answers={answers} setAnswers={setAnswers} />
       {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
       {/* Display error message */}
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
