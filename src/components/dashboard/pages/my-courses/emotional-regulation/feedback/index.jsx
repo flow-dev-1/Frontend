@@ -61,7 +61,7 @@ function ResilienceFeedback() {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
+    // if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
       const courseEnrollmentId = sessionStorage.getItem(
@@ -70,25 +70,25 @@ function ResilienceFeedback() {
       if (!courseEnrollmentId) return;
       setEnrollmentId(courseEnrollmentId);
     } else {
-      setEnrollmentId(enrolmentData._id);
+      setEnrollmentId(enrolmentData?._id);
     }
   }, []);
 
   const weekContents = [
     {
-      topic:  "Introduction to Resilience and Grit",
+      topic: "Introduction to Emotional Regulation",
       component: (
         <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} />
       ),
     },
     {
-      topic:  "Developing Resilience",
+      topic: "Developing Resilience",
       component: (
         <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} />
       ),
     },
     {
-      topic:  "Understanding the Concept of Adaptability and Its Application",
+      topic: "Understanding the Concept of Adaptability and Its Application",
       component: (
         <Week3
           enrollmentId={enrollmentId}
@@ -97,13 +97,13 @@ function ResilienceFeedback() {
       ),
     },
     {
-      topic:  "The Role of Support Systems",
+      topic: "The Role of Support Systems",
       component: (
         <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} />
       ),
     },
     {
-      topic:    "Coping Skills",
+      topic: "Coping Skills",
       component: (
         <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} />
       ),
