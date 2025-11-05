@@ -165,7 +165,7 @@ const navigationSlice = createSlice({
             state.showReview = true;
           } else if (
             state.currentCourse === "tot" &&
-            state.currentWeek === 6
+            (state.currentWeek === 6 || isFirstWeek)
           ) {
             state.showReview = true;
           } else if (

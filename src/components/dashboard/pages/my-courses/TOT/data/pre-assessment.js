@@ -304,19 +304,19 @@ export const pre_assessments = {
         options: [
           {
             id: "A",
-            text: "A 'stop' – slowing down to break the cycle of reaction.",
+            text: "'stop' – slowing down to break the cycle of reaction.",
           },
           {
             id: "B",
-            text: "B 'observe' – watching the student closely for further signs.",
+            text: "'observe' – watching the student closely for further signs.",
           },
           {
             id: "C",
-            text: "C 'clarify' – clarifying the student’s intent before responding.",
+            text: "'clarify' – clarifying the student’s intent before responding.",
           },
           {
             id: "D",
-            text: "D 'regulate' – modifying your tone and body language in the moment.",
+            text: "'regulate' – modifying your tone and body language in the moment.",
           },
         ],
         correctOption: "A",
@@ -472,19 +472,19 @@ export const pre_assessments = {
         options: [
           {
             id: "A",
-            text: "A push through the lesson without acknowledging the emotion so you don’t lose control.",
+            text: "Push through the lesson without acknowledging the emotion so you don’t lose control.",
           },
           {
             id: "B",
-            text: "B pause briefly to take a deep breath and apply a calming strategy to reset your focus.",
+            text: "Pause briefly to take a deep breath and apply a calming strategy to reset your focus.",
           },
           {
             id: "C",
-            text: "C direct students to settle down immediately so you can regain control of the class.",
+            text: "Direct students to settle down immediately so you can regain control of the class.",
           },
           {
             id: "D",
-            text: "D suppress the feeling until the end of the lesson and deal with it privately later.",
+            text: "Suppress the feeling until the end of the lesson and deal with it privately later.",
           },
         ],
         correctOption: "B",
