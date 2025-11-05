@@ -22,6 +22,8 @@ export default function PopUp() {
       return 
       // window.close();
     } 
+
+    console.log(userAnswers,"User Answers here")
     if (!userAnswers.course || !value) {
       toast.error("Something went wrong!")
 

@@ -105,16 +105,16 @@ const navigationSlice = createSlice({
     setCourse: (state, action) => {
       if (state.currentCourse !== action.payload) {
         state.currentCourse = action.payload;
-        state.currentWeek = 4;
-        state.currentPage = 4;
-        state.currentStep = 2;
+        state.currentWeek = 1;
+        state.currentPage = 1;
+        state.currentStep = 1;
       }
     },
     updateCourseFromURL: (state) => {
       const newCourse = getCourseFromURL();
       if (state.currentCourse !== newCourse) {
         state.currentCourse = newCourse;
-        state.currentWeek = 1;
+        state.currentWeek = 3;
         state.currentPage = 1;
         state.currentStep = 1;
         state.showReview = false;
@@ -164,7 +164,12 @@ const navigationSlice = createSlice({
           ) {
             state.showReview = true;
           } else if (
-            state.currentCourse !== "transition" &&
+            state.currentCourse === "tot" &&
+            (state.currentWeek === 6 || isFirstWeek)
+          ) {
+            state.showReview = true;
+          } else if (
+            (state.currentCourse !== "transition" && state.currentCourse !== "tot") &&
             (state.currentWeek === 5 || isFirstWeek)
           ) {
             state.showReview = true;

@@ -15,21 +15,106 @@ function Page16() {
   const dispatch = useDispatch();
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const [timeLeft, setTimeLeft] = useState(20); // 20 seconds timer
+  const [isTimerActive, setIsTimerActive] = useState(false);
+  const [isTimeUp, setIsTimeUp] = useState(false);
+  const [savedOnTimeout, setSavedOnTimeout] = useState(false);
+
   const adminDatas = useSelector(adminData);
 
   const userAnswers = useSelector(userAnswer);
+
+  // quick boolean: do we already have saved answers for this page?
+  const hasExistingAnswers = Boolean(
+    userAnswers?.activities?.find((item) => item.page === pageData.id)
+  );
 
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
+
+
+    console.log(response,"response here!")
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
     return () => {};
   }, [userAnswers]);
 
+  // Start timer on first load if no previous answers
+  useEffect(() => {
+    const hasExistingAnswers = userAnswers?.activities?.find(
+      (item) => item.page === pageData.id
+    );
+
+    // Set timer as complete if we have existing answers
+    if (hasExistingAnswers) {
+      setTimeLeft(0);
+      setIsTimeUp(true);
+      setIsTimerActive(false);
+    } 
+    // Only start timer if no previous answers and timer hasn't been started
+    else if (!isTimerActive && timeLeft === 20) {
+      setIsTimerActive(true);
+    }
+  }, [userAnswers, pageData.id]);
+
+  // Timer countdown effect
+  useEffect(() => {
+    let timer;
+    if (isTimerActive && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }, 1000);
+    } else if (timeLeft === 0) {
+      // Only handle automatic fill/save if there were NO existing saved answers
+      if (!hasExistingAnswers && !savedOnTimeout) {
+        setIsTimeUp(true);
+        setIsTimerActive(false);
+
+        const numberOfInputs = pageData.numberOfInputs || 5;
+        // Use functional update so we operate on latest prevAnswers
+        setAnswers((prevAnswers) => {
+          const newAnswers = [...prevAnswers];
+
+          // Fill in empty fields only (don't overwrite existing values)
+          for (let i = 0; i < numberOfInputs; i++) {
+            const existingAnswer = newAnswers.find((ans) => ans.index === i);
+            if (!existingAnswer) {
+              newAnswers.push({ index: i, value: "" });
+            }
+          }
+
+          // sort by index so saved payload is consistent
+          newAnswers.sort((a, b) => a.index - b.index);
+
+          // dispatch save immediately with final answers
+          if (!adminDatas.isAdmin) {
+            const activityData = {
+              page: pageData.id,
+              answer: newAnswers,
+            };
+            dispatch(saveActivity(activityData));
+            setSavedOnTimeout(true);
+          }
+
+          return newAnswers;
+        });
+      } else {
+        // If we already had answers saved, still mark time up and stop timer
+        setIsTimeUp(true);
+        setIsTimerActive(false);
+      }
+    }
+
+    return () => clearInterval(timer);
+  }, [isTimerActive, timeLeft, pageData.numberOfInputs, hasExistingAnswers, savedOnTimeout, adminDatas.isAdmin, dispatch, pageData.id]);
+
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
+    // If time is up we've already saved on timeout; allow proceed.
+    if (isTimeUp) return true; // Allow proceeding if time is up
+
     if (answers.length < 5) {
       setErrorMessage("At least 5 values are required!");
       return false;
@@ -54,7 +139,10 @@ function Page16() {
     return true;
   };
 
+  // Modified handleInputChange to check timer
   const handleInputChange = (index, value) => {
+    if (isTimeUp) return; // Prevent input if time is up
+
     setErrorMessage("");
     // Update answers state with the new value
     setAnswers((prevAnswers) => {
@@ -88,8 +176,12 @@ function Page16() {
           <div className="d-flex flex-column flex-grow-1 min-w-0 tot-question-text">
             <h2 className="text-gray fs-1 mb-5">{pageData.question}</h2>
           </div>
-          <h2 className="text-white bg-danger p-1 px-2 fs-1 mb-0 flex-shrink-0 tot-question-text">
-            20 s
+          <h2
+            className={`text-white p-1 px-2 fs-1 mb-0 flex-shrink-0 tot-question-text ${
+              timeLeft <= 5 ? "bg-danger" : "bg-primary"
+            }`}
+          >
+            {timeLeft} s
           </h2>
         </div>
 
@@ -102,21 +194,28 @@ function Page16() {
                   type="text"
                   className="resilience-input bg-white"
                   placeholder={
-                    pageData.inputPlaceholder || "Type your answer here"
+                    isTimeUp
+                      ? "Time's up!"
+                      : pageData.inputPlaceholder || "Type your answer here"
                   }
                   value={
                     answers.find((answer) => answer.index === index)?.value ||
                     ""
                   }
                   onChange={(e) => handleInputChange(index, e.target.value)}
+                  disabled={isTimeUp}
                 />
               </div>
             </div>
           ))}
         </div>
       </QuestionBox>
-      {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
-      {/* Display error message */}
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}
+      {isTimeUp && (
+        <div className="text-danger mt-2">
+          Time's up! You can no longer modify your answers.
+        </div>
+      )}
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />

@@ -46,19 +46,6 @@ function Page18() {
       return false;
     }
 
-    const values = Object.values(stepData.value);
-    if (values.length < 3) {
-      setErrorMessage("At least 3 values are required!");
-      return false;
-    }
-
-    const emptyInputs = values.filter((value) => value.trim() === "");
-    if (emptyInputs.length > 0) {
-      setErrorMessage(
-        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
-      );
-      return false;
-    }
 
     setErrorMessage(""); // Clear error if input is valid
 

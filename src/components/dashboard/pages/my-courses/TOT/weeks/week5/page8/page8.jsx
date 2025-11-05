@@ -14,7 +14,7 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
-function WeekFivePage8() {
+function Page8() {
   const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
@@ -133,4 +133,4 @@ function WeekFivePage8() {
   );
 }
 
-export default WeekFivePage8;
+export default Page8;

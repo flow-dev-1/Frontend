@@ -6,7 +6,7 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_1.mp4",
         hasNextButton: true,
       },
       {
@@ -54,7 +54,7 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -64,7 +64,7 @@ export const courseContent = {
         id: 4,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_2.mp4",
         type: "showFeelings",
         navigation: {
           prev: true,
@@ -75,7 +75,7 @@ export const courseContent = {
         id: 5,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -133,7 +133,7 @@ export const courseContent = {
         id: 7,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -157,7 +157,7 @@ export const courseContent = {
         id: 9,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_5.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_5.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -245,7 +245,7 @@ export const courseContent = {
         id: 11,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -268,7 +268,7 @@ export const courseContent = {
         id: 13,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_7.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -626,7 +626,7 @@ export const courseContent = {
         id: 15,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_8.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -648,7 +648,7 @@ export const courseContent = {
         id: 17,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_9.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -707,7 +707,7 @@ export const courseContent = {
         id: 19,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_10.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -741,7 +741,7 @@ export const courseContent = {
         id: 21,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_11.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -792,7 +792,7 @@ export const courseContent = {
         id: 23,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_12.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -807,7 +807,7 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_1.mp4",
         hasNextButton: true,
       },
       {
@@ -827,7 +827,7 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -835,255 +835,49 @@ export const courseContent = {
       },
       {
         id: 4,
-        title: "Pre Assessment",
-        subtitle: "Let's test your knowledge",
-        questions: [
+        type: "multiStep",
+        steps: [
           {
-            id: 1,
-            question:
-              "Why is Social-Emotional Learning (SEL) considered a key part of student development in today's classrooms?",
-            options: [
-              {
-                id: "A",
-                text: "Because it focuses on replacing academic subjects with life skills that are more relevant to students' emotions.",
-              },
-              {
-                id: "B",
-                text: "Because it offers tools for students to navigate their emotions, build healthy relationships, and make thoughtful decisions.",
-              },
-              {
-                id: "C",
-                text: "Because it guarantees an end to conflict in school environments.",
-              },
-              {
-                id: "D",
-                text: "Because it directly boosts test scores by focusing solely on behavior management.",
-              },
-            ],
-            correctOption: "B",
+            stepId: 1,
           },
           {
-            id: 2,
-            question:
-              "Which of the following best illustrates an area that is outside the core focus of Social-Emotional Learning (SEL)?",
-            options: [
-              {
-                id: "A",
-                text: "Helping students identify their feelings and regulate their emotional responses.",
-              },
-              {
-                id: "B",
-                text: "Encouraging learners to form supportive peer connections and resolve conflicts peacefully.",
-              },
-              {
-                id: "C",
-                text: "Teaching students to recall and retain subject-specific information for exams.",
-              },
-              {
-                id: "D",
-                text: "Guiding learners to weigh consequences and make ethical, constructive choices.",
-              },
-            ],
-            correctOption: "C",
+            stepId: 2,
           },
           {
-            id: 3,
-            question:
-              "In what context does Social-Emotional Learning (SEL) have the greatest long-term impact on students?",
-            options: [
-              {
-                id: "A",
-                text: "When it's treated as a separate subject taught once a week.",
-              },
-              {
-                id: "B",
-                text: "When it's woven consistently into classroom routines, teaching methods, and teacher-student interactions.",
-              },
-              {
-                id: "C",
-                text: "When it's introduced as a response to challenging student behavior.",
-              },
-              {
-                id: "D",
-                text: "When it's offered as a support strategy only for students struggling socially or emotionally.",
-              },
-            ],
-            correctOption: "B",
+            stepId: 3,
           },
           {
-            id: 4,
-            question:
-              "Which of the following classroom practices best demonstrates an educator's self-awareness?",
-            options: [
-              {
-                id: "A",
-                text: "Changing instructional methods only when student performance declines.",
-              },
-              {
-                id: "B",
-                text: "Not showing personal emotions to maintain a professional image.",
-              },
-              {
-                id: "C",
-                text: "Noticing moments of personal frustration and intentionally responding in calm, constructive ways.",
-              },
-              {
-                id: "D",
-                text: "Responding to misbehavior primarily with firm rules and consequences.",
-              },
-            ],
-            correctOption: "C",
+            stepId: 4,
           },
           {
-            id: 5,
-            question:
-              "In what way does Positive Psychology meaningfully support the goals of Social-Emotional Learning (SEL)?",
-            options: [
-              {
-                id: "A",
-                text: "By identifying and correcting students' emotional and behavioral problems.",
-              },
-              {
-                id: "B",
-                text: "By prioritizing the repair of weaknesses before building other skills.",
-              },
-              {
-                id: "C",
-                text: "By encouraging a strengths-based approach that highlights gratitude, resilience, and overall well-being.",
-              },
-              {
-                id: "D",
-                text: "By minimizing the role of emotions in learning environments.",
-              },
-            ],
-            correctOption: "C",
+            stepId: 5,
           },
           {
-            id: 6,
-            question:
-              "Why might many people struggle to identify their personal strengths compared to their weaknesses?",
-            options: [
-              {
-                id: "A",
-                text: "Because they believe weaknesses are more important to acknowledge and correct.",
-              },
-              {
-                id: "B",
-                text: "Because they've had more practice noticing flaws than recognizing what they do well.",
-              },
-              {
-                id: "C",
-                text: "Because strengths are rarely discussed or valued in learning environments.",
-              },
-              {
-                id: "D",
-                text: "Because strengths don't play a meaningful role in personal or academic growth.",
-              },
-            ],
-            correctOption: "B",
+            stepId: 6,
           },
           {
-            id: 7,
-            question:
-              "Which of the following teaching practices best reflects a strengths-based approach in the classroom?",
-            options: [
-              {
-                id: "A",
-                text: "Focusing recognition on students with the highest academic scores.",
-              },
-              {
-                id: "B",
-                text: "Noticing and nurturing each student's unique qualities, efforts, and growth areas.",
-              },
-              {
-                id: "C",
-                text: "Giving the same praise to all students to keep the environment positive.",
-              },
-              {
-                id: "D",
-                text: "Minimizing corrective feedback to avoid hurting students' confidence.",
-              },
-            ],
-            correctOption: "B",
+            stepId: 7,
           },
           {
-            id: 8,
-            question:
-              "What is one meaningful way gratitude can shape student behavior and classroom engagement?",
-            options: [
-              {
-                id: "A",
-                text: "It helps reduce stress levels, strengthens peer relationships, and boosts emotional well-being.",
-              },
-              {
-                id: "B",
-                text: "It leads students to comply more strictly with classroom rules and authority figures.",
-              },
-              {
-                id: "C",
-                text: "It replaces the need for teaching conflict resolution or emotional regulation skills.",
-              },
-              {
-                id: "D",
-                text: "It tends to benefit students who are already performing well academically.",
-              },
-            ],
-            correctOption: "A",
+            stepId: 8,
           },
           {
-            id: 9,
-            question: `A student expresses frustration during a lesson, saying, "I just can't do this." Which of the following teacher responses best reflects the application of Social-Emotional Learning and Positive Psychology?`,
-            options: [
-              {
-                id: "A",
-                text: "Let's take a moment to remember something you've done well before, maybe we can use that as a starting point.",
-              },
-              {
-                id: "B",
-                text: "Try not to think too much about it. Just move on to the next activity.",
-              },
-              {
-                id: "C",
-                text: "Why don't you let your classmate handle this one so we can keep moving?.",
-              },
-              {
-                id: "D",
-                text: "We'll talk about this later,  let's focus on something else right now..",
-              },
-            ],
-            correctOption: "A",
+            stepId: 9,
           },
           {
-            id: 10,
-            question:
-              "Why is it important for educators to practice SEL in their own lives?",
-            options: [
-              {
-                id: "A",
-                text: "To avoid engaging emotionally with students and completely miss SEL's true purpose.",
-              },
-              {
-                id: "B",
-                text: "To fulfill mandated requirements for social-emotional learning within the curriculum.",
-              },
-              {
-                id: "C",
-                text: "To manage their own emotions and demonstrate healthy coping strategies to students.",
-              },
-              {
-                id: "D",
-                text: "To foster genuine relationships, model emotional skills, and support classroom culture.",
-              },
-            ],
-            correctOption: "D",
+            stepId: 10,
           },
         ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
       },
       {
         id: 5,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1144,7 +938,7 @@ export const courseContent = {
         id: 7,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1168,7 +962,7 @@ export const courseContent = {
         id: 9,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_5.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_5.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1369,7 +1163,7 @@ export const courseContent = {
         id: 11,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1528,7 +1322,7 @@ export const courseContent = {
         id: 13,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_7.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1543,17 +1337,45 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_1.mp4",
         hasNextButton: true,
       },
       {
         id: 2,
-        type: "question",
-        questionType: "text",
-        question: "What do you understand by the word",
-        hasImage: true,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        type: "multiStep",
+        title: "Write a letter to yourself.",
+        steps: [
+          {
+            stepId: 1,
+          },
+          {
+            stepId: 2,
+          },
+          {
+            stepId: 3,
+          },
+          {
+            stepId: 4,
+          },
+          {
+            stepId: 5,
+          },
+          {
+            stepId: 6,
+          },
+          {
+            stepId: 7,
+          },
+          {
+            stepId: 8,
+          },
+          {
+            stepId: 9,
+          },
+          {
+            stepId: 10,
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
@@ -1563,7 +1385,7 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1580,7 +1402,7 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "What has your time in Primary school been like?",
+                question: "Think of a student you found difficult to connect with. What got in the way?",
               },
             ],
           },
@@ -1590,7 +1412,7 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "What will be your favorite memory as you leave?",
+                question: "What helped you build a better relationship with them over time?",
               },
             ],
           },
@@ -1605,7 +1427,7 @@ export const courseContent = {
         id: 5,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1774,7 +1596,7 @@ export const courseContent = {
         id: 7,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_4.mp4",
         hasNextButton: true,
       },
       {
@@ -1787,7 +1609,7 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "What has your time in Primary school been like?",
+                question: "How do you think the student feels?",
               },
             ],
           },
@@ -1797,7 +1619,7 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "What will be your favorite memory as you leave?",
+                question: "How do you think the student feels?",
               },
             ],
           },
@@ -1811,7 +1633,7 @@ export const courseContent = {
         id: 9,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_5.mp4",
         hasNextButton: true,
       },
       {
@@ -1870,7 +1692,7 @@ export const courseContent = {
         id: 11,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_6.mp4",
         hasNextButton: true,
       },
       {
@@ -1960,7 +1782,7 @@ export const courseContent = {
         id: 13,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_7.mp4",
         hasNextButton: true,
       },
     ],
@@ -1972,17 +1794,45 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_1.mp4",
         hasNextButton: true,
       },
       {
         id: 2,
-        type: "question",
-        questionType: "text",
-        question: "What do you understand by the word",
-        inputType: "mediumTextBox",
-        hasImage: true,
-        imageSrc: "values.png",
+        type: "multiStep",
+        title: "Write a letter to yourself.",
+        steps: [
+          {
+            stepId: 1,
+          },
+          {
+            stepId: 2,
+          },
+          {
+            stepId: 3,
+          },
+          {
+            stepId: 4,
+          },
+          {
+            stepId: 5,
+          },
+          {
+            stepId: 6,
+          },
+          {
+            stepId: 7,
+          },
+          {
+            stepId: 8,
+          },
+          {
+            stepId: 9,
+          },
+          {
+            stepId: 10,
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
@@ -1992,7 +1842,7 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -2055,7 +1905,7 @@ export const courseContent = {
         id: 5,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -2183,7 +2033,7 @@ export const courseContent = {
         id: 7,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -2263,7 +2113,7 @@ export const courseContent = {
         id: 9,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_5.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -2323,7 +2173,7 @@ export const courseContent = {
         id: 11,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_6.mp4",
         hasNextButton: true,
       },
     ],
@@ -2335,17 +2185,45 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+5/Week+5_1.mp4",
         hasNextButton: true,
       },
       {
         id: 2,
-        type: "question",
-        questionType: "text",
-        question: "What do you understand by the word",
-        hasImage: true,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        type: "multiStep",
+        title: "Write a letter to yourself.",
+        steps: [
+          {
+            stepId: 1,
+          },
+          {
+            stepId: 2,
+          },
+          {
+            stepId: 3,
+          },
+          {
+            stepId: 4,
+          },
+          {
+            stepId: 5,
+          },
+          {
+            stepId: 6,
+          },
+          {
+            stepId: 7,
+          },
+          {
+            stepId: 8,
+          },
+          {
+            stepId: 9,
+          },
+          {
+            stepId: 10,
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
@@ -2355,7 +2233,7 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+5/Week+5_2.mp4",
         hasNextButton: true,
       },
       {
@@ -2383,7 +2261,7 @@ export const courseContent = {
         id: 5,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+5/Week+5_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -2417,7 +2295,7 @@ export const courseContent = {
         id: 7,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+5/Week+5_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -2542,7 +2420,7 @@ export const courseContent = {
         id: 9,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+5/Week+5_5.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -2566,7 +2444,7 @@ export const courseContent = {
         id: 11,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+5/Week+5_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -2581,7 +2459,7 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_1.mp4",
         hasNextButton: true,
       },
       {
@@ -2749,7 +2627,7 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_2.mp4",
         hasNextButton: true,
       },
       {
@@ -2770,7 +2648,7 @@ export const courseContent = {
         id: 5,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -2794,7 +2672,7 @@ export const courseContent = {
         id: 7,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -2859,7 +2737,7 @@ export const courseContent = {
         id: 9,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_5.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -3026,7 +2904,7 @@ export const courseContent = {
         id: 11,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_6.mp4",
         navigation: {
           prev: true,
           next: true,

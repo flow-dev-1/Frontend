@@ -37,9 +37,10 @@ function Page20() {
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
-    return true;
-    if (answers.length < 3) {
-      setErrorMessage("At least 3 values are required!");
+    
+
+    if (answers.length < 2) {
+      setErrorMessage("At least 2 values are required!");
       return false;
     }
 

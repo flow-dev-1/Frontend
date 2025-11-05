@@ -46,17 +46,10 @@ function WeekThreePage10() {
       return false;
     }
 
-    const values = Object.values(stepData.value);
-    if (values.length < 3) {
-      setErrorMessage("At least 3 values are required!");
-      return false;
-    }
 
-    const emptyInputs = values.filter((value) => value.trim() === "");
-    if (emptyInputs.length > 0) {
-      setErrorMessage(
-        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
-      );
+    const values = Object.values(stepData);
+    if (values.length < 3) {
+      setErrorMessage("At least 2 values are required!");
       return false;
     }
 
@@ -69,11 +62,6 @@ function WeekThreePage10() {
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
     return true;
-  };
-
-  const handleInputChange = (e) => {
-    setErrorMessage("");
-    setAnswers(e.target.value);
   };
 
   const renderStep = () => {

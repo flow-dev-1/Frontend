@@ -110,7 +110,7 @@ function WeekFiveAssessment() {
 
     if (isLastQuestion) {
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 6;
+        answers.length !== totalSteps || userAnswers.activities.length !== 5;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(
@@ -119,57 +119,70 @@ function WeekFiveAssessment() {
         return false;
       }
 
+
+      const userScore = calculateResult(
+        assessmentData.questions,
+        answers,
+        totalSteps
+      );
+
+      mutation.mutate({
+        ...userAnswers,
+        assessments: answers,
+        rating: userScore.toString(),
+      });
+
       // For nested questions check that all answeres were provided
 
       // Page 2 has nested questions
-      const selectedActivity = userAnswers.activities.find(
-        (activity) => activity.page === 2
-      );
-      const isValidActivity =
-        selectedActivity &&
-        Array.isArray(selectedActivity.answer) &&
-        selectedActivity.answer.length === 3;
+      // const selectedActivity = userAnswers.activities.find(
+      //   (activity) => activity.page === 2
+      // );
+      // const isValidActivity =
+      //   selectedActivity &&
+      //   Array.isArray(selectedActivity.answer) &&
+      //   selectedActivity.answer.length === 3;
 
-      if (isValidActivity) {
-        const userScore = calculateResult(
-          assessmentData.questions,
-          answers,
-          totalSteps
-        );
+      // if (isValidActivity) {
+      //   const userScore = calculateResult(
+      //     assessmentData.questions,
+      //     answers,
+      //     totalSteps
+      //   );
 
-        console.log(userScore, "userScore");
+      //   console.log(userScore, "userScore");
 
-        mutation.mutate({
-          ...userAnswers,
-          assessments: answers,
-          rating: userScore.toString(),
-        });
+      //   mutation.mutate({
+      //     ...userAnswers,
+      //     assessments: answers,
+      //     rating: userScore.toString(),
+      //   });
 
-        //*****************This will come in later wen the code begins to break or escape questions ******/
+      //   //*****************This will come in later wen the code begins to break or escape questions ******/
 
-        // const isValid = selectedActivity.answer.every(item =>
-        //   item.stepId !== undefined &&
-        //   item.value &&
-        //   Object.keys(item.value).length === 3
-        // );
+      //   // const isValid = selectedActivity.answer.every(item =>
+      //   //   item.stepId !== undefined &&
+      //   //   item.value &&
+      //   //   Object.keys(item.value).length === 3
+      //   // );
 
-        // if (isValid) {
-        //   const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
+      //   // if (isValid) {
+      //   //   const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
 
-        //   console.log(userScore, "userScore")
+      //   //   console.log(userScore, "userScore")
 
-        //   // mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
-        // } else {
+      //   //   // mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
+      //   // } else {
 
-        //   setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-        //   return false;
-        // }
-      } else {
-        setErrorMessage(
-          "Oops! Some unanswered questions have been detected. Kindly go back and review!"
-        );
-        return false;
-      }
+      //   //   setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
+      //   //   return false;
+      //   // }
+      // } else {
+      //   setErrorMessage(
+      //     "Oops! Some unanswered questions have been detected. Kindly go back and review!"
+      //   );
+      //   return false;
+      // }
     } else {
       return true;
     }
