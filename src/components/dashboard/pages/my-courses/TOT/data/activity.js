@@ -1342,12 +1342,40 @@ export const courseContent = {
       },
       {
         id: 2,
-        type: "question",
-        questionType: "text",
-        question: "What do you understand by the word",
-        hasImage: true,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        type: "multiStep",
+        title: "Write a letter to yourself.",
+        steps: [
+          {
+            stepId: 1,
+          },
+          {
+            stepId: 2,
+          },
+          {
+            stepId: 3,
+          },
+          {
+            stepId: 4,
+          },
+          {
+            stepId: 5,
+          },
+          {
+            stepId: 6,
+          },
+          {
+            stepId: 7,
+          },
+          {
+            stepId: 8,
+          },
+          {
+            stepId: 9,
+          },
+          {
+            stepId: 10,
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
@@ -1374,7 +1402,7 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "What has your time in Primary school been like?",
+                question: "Think of a student you found difficult to connect with. What got in the way?",
               },
             ],
           },
@@ -1384,7 +1412,7 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "What will be your favorite memory as you leave?",
+                question: "What helped you build a better relationship with them over time?",
               },
             ],
           },
@@ -1581,7 +1609,7 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "What has your time in Primary school been like?",
+                question: "How do you think the student feels?",
               },
             ],
           },
@@ -1591,7 +1619,7 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "What will be your favorite memory as you leave?",
+                question: "How do you think the student feels?",
               },
             ],
           },
@@ -1771,12 +1799,40 @@ export const courseContent = {
       },
       {
         id: 2,
-        type: "question",
-        questionType: "text",
-        question: "What do you understand by the word",
-        inputType: "mediumTextBox",
-        hasImage: true,
-        imageSrc: "values.png",
+        type: "multiStep",
+        title: "Write a letter to yourself.",
+        steps: [
+          {
+            stepId: 1,
+          },
+          {
+            stepId: 2,
+          },
+          {
+            stepId: 3,
+          },
+          {
+            stepId: 4,
+          },
+          {
+            stepId: 5,
+          },
+          {
+            stepId: 6,
+          },
+          {
+            stepId: 7,
+          },
+          {
+            stepId: 8,
+          },
+          {
+            stepId: 9,
+          },
+          {
+            stepId: 10,
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
@@ -2134,12 +2190,40 @@ export const courseContent = {
       },
       {
         id: 2,
-        type: "question",
-        questionType: "text",
-        question: "What do you understand by the word",
-        hasImage: true,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        type: "multiStep",
+        title: "Write a letter to yourself.",
+        steps: [
+          {
+            stepId: 1,
+          },
+          {
+            stepId: 2,
+          },
+          {
+            stepId: 3,
+          },
+          {
+            stepId: 4,
+          },
+          {
+            stepId: 5,
+          },
+          {
+            stepId: 6,
+          },
+          {
+            stepId: 7,
+          },
+          {
+            stepId: 8,
+          },
+          {
+            stepId: 9,
+          },
+          {
+            stepId: 10,
+          },
+        ],
         navigation: {
           prev: true,
           next: true,

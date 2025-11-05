@@ -1078,19 +1078,19 @@ export const pre_assessments = {
         options: [
           {
             id: "A",
-            text: "A. It helps students remember details through repetition.",
+            text: "It helps students remember details through repetition.",
           },
           {
             id: "B",
-            text: "B. It develops emotional literacy by encouraging empathy and self-reflection.",
+            text: "It develops emotional literacy by encouraging empathy and self-reflection.",
           },
           {
             id: "C",
-            text: "C. Keeps stories fictional to avoid real-life emotions.",
+            text: "Keeps stories fictional to avoid real-life emotions.",
           },
           {
             id: "D",
-            text: "D. Reduces emotional involvement to keep lessons objective.",
+            text: "Reduces emotional involvement to keep lessons objective.",
           },
         ],
         correctOption: "B",
@@ -1102,19 +1102,19 @@ export const pre_assessments = {
         options: [
           {
             id: "A",
-            text: "A. SEL is mentioned in lesson plans, even if not practiced consistently during lessons.",
+            text: "SEL is mentioned in lesson plans, even if not practiced consistently during lessons.",
           },
           {
             id: "B",
-            text: "B. Students apply emotional and social skills during academic tasks and classroom routines.",
+            text: "Students apply emotional and social skills during academic tasks and classroom routines.",
           },
           {
             id: "C",
-            text: "C. Teachers schedule weekly SEL check-ins, separate from academic content.",
+            text: "Teachers schedule weekly SEL check-ins, separate from academic content.",
           },
           {
             id: "D",
-            text: "D. SEL is addressed only when emotional issues or conflict arise.",
+            text: "SEL is addressed only when emotional issues or conflict arise.",
           },
         ],
         correctOption: "B",
@@ -1125,19 +1125,19 @@ export const pre_assessments = {
         options: [
           {
             id: "A",
-            text: "A. Weekly restorative circles to reflect, reconnect, and build community.",
+            text: "Weekly restorative circles to reflect, reconnect, and build community.",
           },
           {
             id: "B",
-            text: "B. Pop quizzes to keep students alert and accountable.",
+            text: "Pop quizzes to keep students alert and accountable.",
           },
           {
             id: "C",
-            text: "C. Rotational reading aloud to ensure participation.",
+            text: "Rotational reading aloud to ensure participation.",
           },
           {
             id: "D",
-            text: "D. Silent test review sessions to maintain order.",
+            text: "Silent test review sessions to maintain order.",
           },
         ],
         correctOption: "A",
@@ -1149,19 +1149,19 @@ export const pre_assessments = {
         options: [
           {
             id: "A",
-            text: "A. It keeps lessons running smoothly by minimizing disruptions and improving compliance.",
+            text: "It keeps lessons running smoothly by minimizing disruptions and improving compliance.",
           },
           {
             id: "B",
-            text: "B. It shifts the focus away from academics to manage emotions when issues come up.",
+            text: "It shifts the focus away from academics to manage emotions when issues come up.",
           },
           {
             id: "C",
-            text: "C. It builds engagement, emotional safety, and the foundation for long-term academic growth.",
+            text: "It builds engagement, emotional safety, and the foundation for long-term academic growth.",
           },
           {
             id: "D",
-            text: "D. It brings occasional change to routines without deeply affecting teaching practices.",
+            text: "It brings occasional change to routines without deeply affecting teaching practices.",
           },
         ],
         correctOption: "C",
@@ -1173,19 +1173,19 @@ export const pre_assessments = {
         options: [
           {
             id: "A",
-            text: "A. Strengthening classroom relationships and building trust among students.",
+            text: "Strengthening classroom relationships and building trust among students.",
           },
           {
             id: "B",
-            text: "B. Supporting both academic success and emotional well-being simultaneously.",
+            text: "Supporting both academic success and emotional well-being simultaneously.",
           },
           {
             id: "C",
-            text: "C. Encouraging students to develop empathy, self-awareness, and responsible decision-making.",
+            text: "Encouraging students to develop empathy, self-awareness, and responsible decision-making.",
           },
           {
             id: "D",
-            text: "D. Reducing the need for intentional relationship-building by making students more independent.",
+            text: "Reducing the need for intentional relationship-building by making students more independent.",
           },
         ],
         correctOption: "D",

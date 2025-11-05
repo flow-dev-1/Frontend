@@ -71,9 +71,11 @@ function Page8() {
       return false;
     }
 
+    console.log(stepData.value, "stepData.value");
+
     // Check total images dropped
     const totalDropped =
-      (stepData.value.green?.length || 0) + (stepData.value.red?.length || 0);
+      (stepData.value.green?.length || 0) + (stepData.value.red?.length || 0) + (stepData.value.orange?.length || 0);
 
     if (totalDropped !== dragDropImageLength) {
       setErrorMessage(

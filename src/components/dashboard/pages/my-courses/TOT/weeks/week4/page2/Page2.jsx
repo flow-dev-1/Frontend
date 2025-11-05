@@ -1,28 +1,24 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import AssessmentQuestion from "../../../components/AssessmentQuestion";
 import Button from "../../../components/Button";
 import {
-  navigateNext,
   selectCurrentStep,
   selectCurrentWeek,
-  showReviewPopup,
 } from "../../../../../../../../redux/reducers/navigationSlice";
 import { getWeekPreAssessment } from "../../../data";
 import StepIndicator from "../../../components/StepIndicator";
+import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+
 import {
   userAnswer,
-  updateData,
-  saveAssessment,
+  saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-toastify";
-import userService from "../../../../../../../../services/api/user";
-import { calculateResult } from "../../../utility";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
 function WeekFourPage2() {
+  const pageData = useSelector(selectPageData);
   const dispatch = useDispatch();
   const currentStep = useSelector(selectCurrentStep);
   const currentWeek = useSelector(selectCurrentWeek);
@@ -32,45 +28,17 @@ function WeekFourPage2() {
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const userAnswers = useSelector(userAnswer);
-  const isLastQuestion = currentStep === assessmentData.totalQuestions;
   const adminDatas = useSelector(adminData);
 
   useEffect(() => {
     if (!userAnswers) return;
-    setAnswers(userAnswers?.assessments || []);
-    return () => {};
+    const response = userAnswers.activities?.find(
+      (item) => item.page === pageData.id
+    );
+    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    return () => { };
   }, [userAnswers]);
 
-  // Mutation for saving user data
-  const mutation = useMutation({
-    mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
-    onSuccess: (data) => {
-      toast.dismiss();
-      toast.success(
-        `You scored ${calculateResult(
-          assessmentData.questions,
-          answers,
-          totalSteps
-        )}% in the quiz`
-      );
-      toast.success(data.message || "Answers saved successfully!"); // Show success toast
-      // dispatch(
-      //   updateData({
-      //     course: null,
-      //     courseEnrollmentId: null,
-      //     week: 1,
-      //     activities: [],
-      //     assessments: [],
-      //   })
-      // );
-      dispatch(navigateNext());
-    },
-    onError: (error) => {
-      console.log(error, "errorrrr");
-      toast.dismiss();
-      toast.error(error?.message || error?.error || "Error saving answers"); // Show error toast
-    },
-  });
 
   const handleOptionSelect = (optionKey) => {
     setErrorMessage("");
@@ -96,9 +64,9 @@ function WeekFourPage2() {
     });
   };
 
-  const saveUserData = () => {
+  const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
-    return true;
+
     const stepData = answers.find((item) => item.id === currentStep);
     if (!stepData) {
       setErrorMessage("Oops! Please choose an option to proceed.");
@@ -106,81 +74,12 @@ function WeekFourPage2() {
     }
 
     setErrorMessage(""); // Clear error if input is valid
-
-    // If its the last question submit else update answer
-    dispatch(saveAssessment(answers));
-
-    if (isLastQuestion) {
-      console.log(userAnswers.activities, "userAnswers.activities");
-
-      const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 5;
-
-      if (hasUnansweredQuestions) {
-        setErrorMessage(
-          "Oops! Some unanswered questions have been detected. Kindly go back and review!"
-        );
-        return false;
-      }
-
-      // For nested questions check that all answeres were provided. when page is refreshed data may be lost
-
-      // Page 4 has nested questions
-      const selectedActivity = userAnswers.activities.find(
-        (activity) => activity.page === 4
-      );
-
-      const selectedActivityIsValid =
-        selectedActivity &&
-        Array.isArray(selectedActivity.answer) &&
-        selectedActivity.answer.length === 5;
-
-      // Page 8 has nested questions
-      const selectedActivity1 = userAnswers.activities.find(
-        (activity) => activity.page === 8
-      );
-      const totalDroped =
-        selectedActivity1?.answer?.[0].value?.green?.length +
-        selectedActivity1?.answer?.[0].value?.red?.length;
-
-      const selectedActivity1IsValid = totalDroped === 4;
-
-      // Page 10 has nested questions
-      const selectedActivity2 = userAnswers.activities.find(
-        (activity) => activity.page === 10
-      );
-
-      const selectedActivity2isValid = selectedActivity2?.answer?.every(
-        (item) => item.stepId !== undefined && item.value
-      );
-
-      if (
-        selectedActivityIsValid &&
-        selectedActivity1IsValid &&
-        selectedActivity2isValid
-      ) {
-        const userScore = calculateResult(
-          assessmentData.questions,
-          answers,
-          totalSteps
-        );
-
-        console.log(userAnswers, userScore, "userScore");
-
-        mutation.mutate({
-          ...userAnswers,
-          assessments: answers,
-          rating: userScore.toString(),
-        });
-      } else {
-        setErrorMessage(
-          "Oops! Some unanswered questions have been detected. Kindly go back and review!"
-        );
-        return false;
-      }
-    } else {
-      return true;
-    }
+    const activityData = {
+      page: pageData.id,
+      answer: answers,
+    };
+    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    return true;
   };
 
   const renderStep = () => {
@@ -213,32 +112,27 @@ function WeekFourPage2() {
   // show the review popup instead of the next button
 
   const hasCurrentSelection = !!answers[currentStep];
-  const shouldShowReviewButton = isLastQuestion && hasCurrentSelection;
 
   return (
     <>
+
       <div className="text-white px-3 py-1 mb-2 tot-assessment-header">
-        <h2 className="text-blue text-center">{assessmentData.title}</h2>
+        <h2 className="text-blue text-center">
+          {assessmentData.title}
+        </h2>
         <p className="text-center text-blue">{assessmentData.subtitle}</p>
       </div>
-      <QuestionBox extraStyle={"bg-blue"}>{renderStep()}</QuestionBox>
+      <QuestionBox
+        extraStyle={"bg-blue"}
+      >
+        {renderStep()}
+      </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
       {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
-        <Button text="Prev" loading={mutation.isPending} />
-        {shouldShowReviewButton ? (
-          <Button
-            text="Review"
-            customOnClick={() => dispatch(showReviewPopup())}
-          />
-        ) : (
-          <Button
-            text="Next"
-            customOnClick={saveUserData}
-            loading={mutation.isPending}
-          />
-        )}
+        <Button text="Prev" />
+        <Button text="Next" customOnClick={saveUserInput} />
       </div>
     </>
   );

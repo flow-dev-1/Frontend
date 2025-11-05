@@ -22,9 +22,8 @@ const InternalStepIndicator = ({ totalSteps, currentStep }) => {
       {[...Array(totalSteps)].map((_, index) => (
         <div
           key={index}
-          className={`${
-            index + 2 <= currentStep ? "bg-step-active" : "bg-step"
-          }`}
+          className={`${index + 2 <= currentStep ? "bg-step-active" : "bg-step"
+            }`}
           style={{
             // flexBasis: "35px",
             width: "35px",
@@ -67,20 +66,22 @@ function WeekFourPage4() {
 
     const stepData = answers.find((item) => item.stepId === currentStep);
 
-    if (!stepData) {
-      setErrorMessage("Oops! All Images must be placed in the buckects.");
-      return false;
-    }
+    if (currentStep === 3) {
+      if (!stepData) {
+        setErrorMessage("Oops! Please fill the input field.");
+        return false;
+      }
+    } else {
+      // Check total images dropped
+      const totalDropped =
+        (stepData.value.green?.length || 0) + (stepData.value.red?.length || 0);
 
-    // Check total images dropped
-    const totalDropped =
-      (stepData.value.green?.length || 0) + (stepData.value.red?.length || 0);
-
-    if (totalDropped !== dragDropImageLength) {
-      setErrorMessage(
-        `Please place all ${dragDropImageLength} images in the buckets.`
-      );
-      return false;
+      if (totalDropped !== dragDropImageLength) {
+        setErrorMessage(
+          `Please place all ${dragDropImageLength} images in the buckets.`
+        );
+        return false;
+      }
     }
 
     setErrorMessage(""); // Clear error if input is valid
@@ -160,9 +161,9 @@ function WeekFourPage4() {
       )}{" "}
       {/* Display error message */}
       <div className="d-flex justify-content-center align-items-center gap-2">
-        <StepIndicator totalSteps={totalSteps} />
+        <StepIndicator totalSteps={totalSteps - 1} />
         <InternalStepIndicator
-          totalSteps={dragDropImageLength}
+          totalSteps={dragDropImageLength + 1}
           currentStep={currentImageIndex + 1}
         />
       </div>

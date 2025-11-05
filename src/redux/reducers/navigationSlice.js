@@ -114,7 +114,7 @@ const navigationSlice = createSlice({
       const newCourse = getCourseFromURL();
       if (state.currentCourse !== newCourse) {
         state.currentCourse = newCourse;
-        state.currentWeek = 1;
+        state.currentWeek = 3;
         state.currentPage = 1;
         state.currentStep = 1;
         state.showReview = false;
@@ -164,7 +164,12 @@ const navigationSlice = createSlice({
           ) {
             state.showReview = true;
           } else if (
-            state.currentCourse !== "transition" &&
+            state.currentCourse === "tot" &&
+            state.currentWeek === 6
+          ) {
+            state.showReview = true;
+          } else if (
+            (state.currentCourse !== "transition" && state.currentCourse !== "tot") &&
             (state.currentWeek === 5 || isFirstWeek)
           ) {
             state.showReview = true;
