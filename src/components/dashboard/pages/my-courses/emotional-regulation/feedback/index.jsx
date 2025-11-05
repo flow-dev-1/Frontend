@@ -82,13 +82,13 @@ function ResilienceFeedback() {
       ),
     },
     {
-      topic: "Developing Resilience",
+      topic: "Identifying Energy Levels",
       component: (
         <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} />
       ),
     },
     {
-      topic: "Understanding the Concept of Adaptability and Its Application",
+      topic: "The SONAR of Emotional Regulation",
       component: (
         <Week3
           enrollmentId={enrollmentId}
@@ -97,13 +97,13 @@ function ResilienceFeedback() {
       ),
     },
     {
-      topic: "The Role of Support Systems",
+      topic: "Introduction to Coping Skills",
       component: (
         <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} />
       ),
     },
     {
-      topic: "Coping Skills",
+      topic: "Wrapping Up!",
       component: (
         <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} />
       ),

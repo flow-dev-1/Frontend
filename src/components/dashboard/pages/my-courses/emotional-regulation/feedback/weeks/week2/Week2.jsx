@@ -8,7 +8,7 @@ import wrong from "../../../../../../../../assets/wrong.png";
 import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
-} from "../../../../resilience-grit/data/index.js";
+} from "../../../data/index.js";
 import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
 import adminService from "../../../../../../../../services/api/admin.js";
@@ -21,7 +21,7 @@ import { useSelector } from "react-redux";
 function Week2({ enrollmentId, setWeekTwoData }) {
   const { pages } = getWeekContentExcludingVideos(2);
 
-  const [activity1, activity2] = pages;
+  const [activity1, activity2,activity3] = pages;
   // const [q1, q2, q3, q4] = activity3.prompts;
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([]);
@@ -145,7 +145,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     // });
   }
 
-  if (isPending) {
+  if (!isPending) {
     return <div>Loading...</div>;
   }
 

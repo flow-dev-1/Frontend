@@ -58,6 +58,7 @@ import TransitionFeedback from "./components/dashboard/pages/my-courses/transiti
 import ResilienceCourse from "./components/dashboard/pages/my-courses/resilience-grit/index.jsx";
 import ResilienceFeedback from "./components/dashboard/pages/my-courses/resilience-grit/feedback/index.jsx";
 import TOTCourse from "./components/dashboard/pages/my-courses/TOT/index.jsx";
+import TOTFeedback from "./components/dashboard/pages/my-courses/TOT/feedback/index.jsx";
 import EmotionalRegulationCourse from "./components/dashboard/pages/my-courses/emotional-regulation/index.jsx";
 import EmotionalRegulationFeedback from "./components/dashboard/pages/my-courses/emotional-regulation/feedback/index.jsx";
 function App() {
@@ -184,7 +185,7 @@ function App() {
             path="/dashboard/tot/feedback"
             element={
               <ProtectedRoute>
-                <ResilienceFeedback />
+                <TOTFeedback />
               </ProtectedRoute>
             }
           />
