@@ -61,7 +61,7 @@ function ResilienceFeedback() {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
+    // if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
       const courseEnrollmentId = sessionStorage.getItem(
@@ -70,7 +70,7 @@ function ResilienceFeedback() {
       if (!courseEnrollmentId) return;
       setEnrollmentId(courseEnrollmentId);
     } else {
-      setEnrollmentId(enrolmentData._id);
+      setEnrollmentId(enrolmentData?._id);
     }
   }, []);
 
