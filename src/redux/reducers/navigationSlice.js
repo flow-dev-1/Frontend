@@ -48,9 +48,13 @@ const getCourseFromURL = () => {
   const lastSegment = segments[segments.length - 1];
 
   // Validate course name
-  return ["compassion", "transition", "resilience_grit", "tot", "emotional_regulation"].includes(
-    lastSegment?.toLowerCase()
-  )
+  return [
+    "compassion",
+    "transition",
+    "resilience_grit",
+    "tot",
+    "emotional_regulation",
+  ].includes(lastSegment?.toLowerCase())
     ? lastSegment.toLowerCase()
     : "compassion";
 };
@@ -91,7 +95,7 @@ const calculateMultiStepTotal = (pageData) => {
 
 const initialState = {
   currentCourse: "compassion",
-  currentWeek: 1,
+  currentWeek: 3,
   currentPage: 1,
   currentStep: 1,
   showReview: false,
@@ -114,7 +118,7 @@ const navigationSlice = createSlice({
       const newCourse = getCourseFromURL();
       if (state.currentCourse !== newCourse) {
         state.currentCourse = newCourse;
-        state.currentWeek = 3;
+        state.currentWeek = 1;
         state.currentPage = 1;
         state.currentStep = 1;
         state.showReview = false;
@@ -169,7 +173,8 @@ const navigationSlice = createSlice({
           ) {
             state.showReview = true;
           } else if (
-            (state.currentCourse !== "transition" && state.currentCourse !== "tot") &&
+            state.currentCourse !== "transition" &&
+            state.currentCourse !== "tot" &&
             (state.currentWeek === 5 || isFirstWeek)
           ) {
             state.showReview = true;
