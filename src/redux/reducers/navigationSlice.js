@@ -95,7 +95,7 @@ const calculateMultiStepTotal = (pageData) => {
 
 const initialState = {
   currentCourse: "compassion",
-  currentWeek: 3,
+  currentWeek: 1,
   currentPage: 1,
   currentStep: 1,
   showReview: false,

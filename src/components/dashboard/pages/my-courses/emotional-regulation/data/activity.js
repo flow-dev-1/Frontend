@@ -681,12 +681,66 @@ export const courseContent = {
       },
       {
         id: 2,
-        type: "question",
-        questionType: "text",
-        question: "What do you understand by the word",
-        hasImage: true,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        type: "multiStep",
+        title: "Coping Skills Regulation Zones",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            challenge:
+              "Below are several coping skills. Your task is to pick and drop each skill activity to the zone it can help regulate.",
+          },
+          {
+            stepId: 2,
+            type: "copingSkillsDragDrop",
+            instruction:
+              "Drag and drop each coping skill into the appropriate zone.",
+            zones: [
+              {
+                id: "blue",
+                title: "Blue Zone",
+                color: "#4A90E2",
+              },
+              {
+                id: "green",
+                title: "Green Zone",
+                color: "#50C878",
+              },
+              {
+                id: "yellow",
+                title: "Yellow Zone",
+                color: "#F4C430",
+              },
+              {
+                id: "red",
+                title: "Red Zone",
+                color: "#E74C3C",
+              },
+            ],
+            skills: [
+              "Taking a break",
+              "Listening to upbeat music",
+              "Deep breathing",
+              "Counting to 10",
+              "Practicing gratitude",
+              "Walking outside",
+              "Talking to a trusted adult",
+              "Playing football",
+              "Drawing",
+              "Doing a quick stretch",
+              "Writing in a journal",
+              "Drinking water",
+              "Hugging a stuffed animal or pillow",
+              "Doing jumping jacks",
+              "Watching a favorite show or video",
+              "Singing your favorite song",
+              "Playing with a pet",
+              "Visualizing a calm place",
+              "Meditating for a few minutes",
+              "Organizing your desk or room",
+            ],
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
