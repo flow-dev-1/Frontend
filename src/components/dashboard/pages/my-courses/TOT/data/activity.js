@@ -977,6 +977,8 @@ export const courseContent = {
             stepId: 1,
             type: "instruction",
             title: "Instruction",
+            instruction:
+              "Welcome to the SONAR staircase. You will be presented with a 5 step staircase labeled with the words STOP, OBSERVE, NAME, ASK and REGULATE. You will also be shown 3 scenarios. For each stressful classroom scenario, use the SONAR pathway to walk through your response. Reflect on each step by answering the prompts below.",
           },
           {
             stepId: 2,
