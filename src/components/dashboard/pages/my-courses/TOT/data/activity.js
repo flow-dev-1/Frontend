@@ -255,7 +255,8 @@ export const courseContent = {
         id: 12,
         type: "question",
         questionType: "text",
-        question: "What do you understand by the word",
+        question:
+          "From this activity, how do SEL-based responses impact a student's confidence and engagement?",
         hasImage: true,
         imageSrc: "mindset.png",
         inputType: "bigTextBox",
@@ -1402,7 +1403,8 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "Think of a student you found difficult to connect with. What got in the way?",
+                question:
+                  "Think of a student you found difficult to connect with. What got in the way?",
               },
             ],
           },
@@ -1412,7 +1414,8 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
-                question: "What helped you build a better relationship with them over time?",
+                question:
+                  "What helped you build a better relationship with them over time?",
               },
             ],
           },
