@@ -1,93 +1,197 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
-import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
-import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import StepIndicator from "../../../components/StepIndicator";
+import BigTextBox from "../../../components/BigTextBox";
+import {
+  selectPageData,
+  selectCurrentStep,
+} from "../../../../../../../../redux/reducers/navigationSlice";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import adaptability from "../../../../../../../../assets/resilience-grit-images/adaptability.png";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import SONARFrame from "./components/SONARFrame";
 
 function WeekThreePage2() {
   const dispatch = useDispatch();
-  const pageData = useSelector(selectPageData);
-  const adminDatas = useSelector(adminData);
-  const userAnswers = useSelector(userAnswer);
-  const [myAnswer, setMyAnswer] = useState(userAnswers);
+  const pageData = useSelector(selectPageData); 
+  // const pageData = {
+  //   id: 4,
+  //   type: "multiStep",
+  //   steps: [
+  //     {
+  //       stepId: 1,
+  //       type: "instruction",
+  //       title: "Instruction",
+  //       instructions: [
+  //         "Read the scenarios provided and write down what you would do for each step of SONAR (Stop, Observe, Name, Accept, Regulate).",
+  //         "Click each letter starting from S to answer the guiding question. Complete S before proceeding to O, and so on.",
+  //       ],
+  //     },
+  //     {
+  //       stepId: 2,
+  //       type: "sonar",
+  //       title: "SONAR Scenario",
+  //       // letters are ordered; key is single-letter identifier used in state
+  //       letters: [
+  //         {
+  //           key: "S",
+  //           label: "S",
+  //           labelFull: "STOP",
+  //           question: "What would you do first to stop the immediate reaction?",
+  //         },
+  //         {
+  //           key: "O",
+  //           label: "O",
+  //           labelFull: "OBSERVE",
+  //           question:
+  //             "What are you noticing in your body, thoughts, and surroundings?",
+  //         },
+  //         {
+  //           key: "N",
+  //           label: "N",
+  //           labelFull: "NAME",
+  //           question: "How would you name the emotion(s) you are feeling?",
+  //         },
+  //         {
+  //           key: "A",
+  //           label: "A",
+  //           labelFull: "ACCEPT",
+  //           question: "What would acceptance look like in this moment?",
+  //         },
+  //         {
+  //           key: "R",
+  //           label: "R",
+  //           labelFull: "REGULATE",
+  //           question: "What strategy will you use to regulate your response?",
+  //         },
+  //       ],
+  //       // scenario text(s) - consumed by SONARFrame if you want to render dynamic text
+  //       scenario: {
+  //         heading: "Scenario 1",
+  //         text: "you feel really mad because someone cut in line at lunch",
+  //       },
+  //     },
+  //   ],
+  //   navigation: { prev: true, next: true },
+  // };
+
+  const currentStep = useSelector(selectCurrentStep);
+  const totalSteps = pageData?.steps?.length || 0;
+  const [answers, setAnswers] = useState({}); 
   const [errorMessage, setErrorMessage] = useState("");
+  const step = pageData?.steps[currentStep - 1];
+  const userAnswers = useSelector(userAnswer);
+  const adminDatas = useSelector(adminData);
 
   useEffect(() => {
     if (!userAnswers) return;
-    const response = userAnswers?.activities?.find(
+    const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setMyAnswer(response?.answer ? response.answer : "");
-    return () => { };
-  }, [userAnswers]);
+    if (response?.answer) {
+      setAnswers(response.answer);
+    }
+  }, [userAnswers, pageData?.id]);
 
   const saveUserInput = () => {
-    if (!adminDatas.isAdmin && !myAnswer) {
-      setErrorMessage("Oops! Please enter a valid input!");
-      return false;
+    // skip validation for instruction step
+    if (currentStep === 1) return true;
+    if (adminDatas.isAdmin) return true;
+
+    if (step?.type === "sonar") {
+      const letters = step.letters || [];
+      // ensure each letter completed sequentially and non-empty
+      for (let i = 0; i < letters.length; i++) {
+        const letter = letters[i].key;
+        // require previous letters filled (sequential)
+        if (i > 0) {
+          const prevKey = letters[i - 1].key;
+          if (!answers[prevKey] || !answers[prevKey].trim()) {
+            setErrorMessage(
+              `Please complete "${letters[i - 1].label}" before proceeding.`
+            );
+            return false;
+          }
+        }
+        // ensure current letter not empty
+        if (!answers[letter] || !answers[letter].trim()) {
+          setErrorMessage(
+            `Please complete "${letters[i].label}" before proceeding.`
+          );
+          return false;
+        }
+      }
+
+      setErrorMessage("");
+      const activityData = {
+        page: pageData.id,
+        answer: answers,
+      };
+      dispatch(saveActivity(activityData));
+      return true;
     }
 
-    setErrorMessage(""); // Clear error if input is valid
-    // Allow flow admin to proceed without input but do not dispatch answer
-    if (adminDatas.isAdmin) return true;
-    dispatch(
-      saveActivity({
-        page: pageData.id,
-        answer: myAnswer,
-      })
-    );
     return true;
   };
 
-  const handleInputChange = (e) => {
-    setErrorMessage("");
-    setMyAnswer(e.target.value);
+  const renderStep = () => {
+    if (!step) return <div>Invalid Step</div>;
+    switch (step.type) {
+      case "instruction":
+        return (
+          <QuestionBox >
+            <div className="text-center mb-5 mt-5 mt-md-4">
+              <h1 className="text-white bg-blue py-2 px-5 rounded d-inline  ">
+                Instruction
+              </h1>
+            </div>
+
+            <div className="text-center mb-5 mt-3 mt-md-0">
+              {step.instructions.map((instruction, index) => (
+                <React.Fragment key={index}>
+                  <h2 className="text-gray py-2 px-5 rounded d-inline-block text-start ">
+                    {instruction}
+                  </h2>
+                  {index < step.instructions.length - 1 && (
+                    <>
+                      <br />
+                      <br />
+                    </>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          </QuestionBox>
+        );
+
+      case "sonar":
+        return (
+          <SONARFrame
+            letters={step.letters}
+            answers={answers}
+            setAnswers={setAnswers}
+            setErrorMessage={setErrorMessage}
+          />
+        );
+
+      default:
+        return <div>Unknown step type</div>;
+    }
   };
 
   return (
     <>
-      <QuestionBox>
-      <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-center">
-          <h2 className="text-blue fs-1 mb-0 flex-shrink-0 question-text">Question:</h2>
-
-          <div className="d-flex align-items-center flex-grow-1 min-w-0">
-            <h2 className="text-gray fs-1 mb-0 flex-grow-1 md:text-truncate">
-              {pageData.question}
-              {pageData.hasImage && (
-                <>
-                  {/* Show inline on md and up */}
-                  <img
-                    src={adaptability}
-                    alt="self-compassion"
-                    className="ms-2 d-none d-md-inline-block question-image resilience-question-image img-fluid"
-                  />
-
-                  {/* Show inline (not block) on mobile with ? following immediately */}
-                  <span className="d-inline-block d-md-none">
-                    <img
-                      src={adaptability}
-                      alt="self-compassion"
-                      className="ms-2 mt-2 align-middle question-image resilience-question-image img-fluid"
-                    />
-                    <span className="ms-1">?</span>
-                  </span>
-                </>
-              )}
-              {/* Keep the ? for non-mobile when no image is present */}
-              {!pageData.hasImage && <span className="ms-1">?</span>}
-            </h2>
-          </div>
+      {renderStep()}
+      {currentStep !== 1 && errorMessage && (
+        <div className="text-danger text-center mt-3 fw-bold fs-5">
+          {errorMessage}
         </div>
-        <BigTextBox handleChange={handleInputChange} value={myAnswer} />
-      </QuestionBox>
-      {errorMessage && <div className="text-danger">{errorMessage}</div>}
+      )}
+      <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />

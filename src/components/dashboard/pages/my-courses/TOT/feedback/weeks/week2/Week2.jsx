@@ -8,7 +8,8 @@ import wrong from "../../../../../../../../assets/wrong.png";
 import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
-} from "../../../../resilience-grit/data/index.js";
+  getWeekPreAssessment,
+} from "../../../data/index.js";
 import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
 import adminService from "../../../../../../../../services/api/admin.js";
@@ -21,10 +22,12 @@ import { useSelector } from "react-redux";
 function Week2({ enrollmentId, setWeekTwoData }) {
   const { pages } = getWeekContentExcludingVideos(2);
 
-  const [activity1, activity2] = pages;
+  const [activity1, activity2, activity3, activity4, activity5, activity6] =
+    pages;
   // const [q1, q2, q3, q4] = activity3.prompts;
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([]);
+  const { questions: preAssessments } = getWeekPreAssessment(2);
 
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState("");
@@ -86,7 +89,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     setAssessmentData(data.assessment?.assessments);
     setWeekTwoData(true);
 
-    return () => { };
+    return () => {};
   }, [data]);
 
   function getActivityAnswer(activityId, itemId) {
@@ -128,10 +131,12 @@ function Week2({ enrollmentId, setWeekTwoData }) {
 
     const data =
       type === "question"
-        ? activity2.steps.filter(item => item.type === "dropdownScenario").map(item => item.question)
-        : activityData[1].answer.map(item => item.value);
+        ? activity2.steps
+            .filter((item) => item.type === "dropdownScenario")
+            .map((item) => item.question)
+        : activityData[1].answer.map((item) => item.value);
 
-    return data
+    return data;
 
     // const items = indices?.map((index) => activity2?.images[index]) || [];
 
@@ -151,6 +156,21 @@ function Week2({ enrollmentId, setWeekTwoData }) {
 
   if (data?.status === "failed" || isError) {
     return <div>{data?.message}</div>;
+  }
+
+  function drag1(type) {
+    console.log(activityData, "Activity Data");
+    if (!activityData || !activityData[3] || !activityData[3].answer) return [];
+
+    const indices =
+      type === "growth"
+        ? activityData[3]?.answer?.[0]?.value?.green
+        : activityData[3]?.answer?.[0]?.value?.red;
+
+    // console.log(indices, "Indices")
+
+    // console.log(activity2,"Activity 2")
+    return indices?.map((index) => activity4?.steps?.[1].images[index]) || [];
   }
 
   const score =
@@ -183,17 +203,33 @@ function Week2({ enrollmentId, setWeekTwoData }) {
   return (
     <>
       {/* Activity 1 */}
-      <p className="bg-yellow py-md-3 px-md-5 py-1 px-2 text-gray d-inline-block rounded-5 fs-md-4">
+      <p className="bg-blue py-md-3 px-md-5 py-1 px-2 text-white d-inline-block rounded-5 fs-md-4">
         Activity 1
       </p>
       <hr />
       <div className="d-flex gap-3">
-        <h2 className="text-blue fs-md-1">Questions:</h2>
-        <p className="text-blue fs-md-4">{activity1.question}</p>
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Questions:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity1.question}
+        </p>
       </div>
       <div className="d-flex gap-3">
-        <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity1.id) === "A" ? "Yes" : "No"}</p>
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity1.id)
             ?.feedback && (
@@ -235,52 +271,247 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         )
       }
       <hr />
+      {/* PreAssesment 1 */}
+      <p className="bg-blue py-1 px-1 py-md-3 px-md-2 text-white d-inline-block rounded-5 fs-md-4">
+        Pre-Assessment
+      </p>
+      <hr />
+      {preAssessments.map(({ id, question, options, correctOption }, i) => {
+        // todo:  fetch preassesment data from backend and switch
+        const selectedAnswer = assessmentData?.find(
+          (answer) => answer.id === id
+        )?.value;
+        return (
+          <>
+            <div className="d-flex gap-3" key={i}>
+              <p
+                className="text-blue fs-md-1 text-nowrap week-2-question-text fw-bold"
+                style={{ fontSize: 1 + "em" }}
+              >
+                Questions {i + 1}:
+              </p>
+              <p
+                className="text-blue fs-md-4 week-2-question-text"
+                style={{ fontSize: 1 + "em" }}
+              >
+                {question}
+              </p>
+            </div>
+            {options.map((option, index) => {
+              const optionKey = Object.keys(option)[0];
+              const optionText = option[optionKey];
+              const isCorrectOption = correctOption === optionText;
+              const isAnswer = selectedAnswer === optionText;
+              // console.log(assessmentData,"AssessmentData")
 
-      {/* Activity 2  */}
-      <p className="bg-yellow py-md-3 px-md-5 py-1 px-2 text-gray d-inline-block rounded-5 fs-md-4">
+              return (
+                <div
+                  key={index}
+                  className="d-flex gap-md-2 p-0 p-md-1 mb-3 justify-content-between"
+                >
+                  <div className="d-flex gap-md-2 p-1">
+                    <img
+                      src={isAnswer ? checkedImage : checkedImage}
+                      alt={`Option ${optionKey}`}
+                      style={{ width: 20, height: 20 }}
+                    />
+                    <div
+                      className="week-2-question-text text-gray"
+                      style={{ fontSize: 1 + "em" }}
+                    >{`${optionText}. ${option.text}`}</div>
+                  </div>
+                  {isCorrectOption ? (
+                    <p className="d-flex gap-1">
+                      {" "}
+                      <img
+                        src={correct}
+                        alt=""
+                        style={{ width: 20, height: 20 }}
+                      />{" "}
+                      Correct
+                    </p>
+                  ) : (
+                    <p className="d-flex gap-1">
+                      {" "}
+                      <img
+                        src={wrong}
+                        alt=""
+                        style={{ width: 20, height: 20 }}
+                      />
+                      Wrong
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+          </>
+        );
+      })}
+      <hr />
+      {/* Activity 2 */}
+      <p className="bg-blue py-md-3 px-md-5 py-1 px-2 text-white d-inline-block rounded-5 fs-md-4">
         Activity 2
+      </p>
+      <p
+        className="text-gray fs-md-4 week-2-question-text"
+        accordion
+        style={{ fontSize: 1 + "em" }}
+      >
+        {activity3.steps[0].challenge} <br />
+        <span className="fw-bold text-gray">
+          {activity3.steps[0].statement}
+        </span>
       </p>
       <hr />
       <div className="d-flex gap-3">
-        <h2 className="text-blue fs-md-1">Questions:</h2>
-        <p className="text-blue fs-md-4">Match the right ‘C’ to their correct definition.</p>
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Questions:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity3.steps[1].instruction}
+        </p>
       </div>
       <div className="d-flex gap-3">
-        <h2 className="text-gray fs-md-1">Answers:</h2>
-
-        <div className="d-flex flex-column flex-grow-1">
-          {/* Headers row */}
-          <div className="d-flex">
-            <h2 className="col-6 text-center bg-green text-white py-md-3 py-1 fs-md-1">
-              Definitions
-            </h2>
-            <h2 className="col-6 text-center bg-red text-white py-md-3 py-1 fs-md-1">
-              The "C"
-            </h2>
-          </div>
-
-          {/* Items rows */}
-          {Array.from({ length: 7 }).map((_, idx) => (
-            <div key={idx} className="d-flex">
-              <div className="col-6 px-md-5 px-2 py-md-3 py-1">
-                <p className="fs-md-4 mb-0">
-                  {idx + 1}. {def("question")?.[idx]}
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <div className="flex-grow-1 d-flex">
+          <div className="flex-grow-1">
+            <p
+              className="text-center bg-green text-white py-md-3 py-1 fs-md-1 week-2-question-text"
+              style={{ fontSize: 1 + "em" }}
+            >
+              MILD
+            </p>
+            <div className="px-2 py-1 px-md-5 py-md-3">
+              {drag1("mild")?.map((item, idx) => (
+                <p className="fs-md-4">
+                  {idx + 1}. {item}
                 </p>
-              </div>
-              <div className="col-6 px-md-5 px-2 py-md-3 py-1">
-                <p className="fs-md-4 mb-0">
-                  {idx + 1}. {def("fixed")?.[idx]}
-                </p>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
+          <div className="flex-grow-1">
+            <p
+              className="text-center bg-orange text-white py-md-3 py-1 fs-md-1 week-2-question-text"
+              style={{ fontSize: 1 + "em" }}
+            >
+              FRUSTRATE
+            </p>
+            <div className="px-2 py-1 px-md-5 py-md-3">
+              {drag1("frustrate")?.map((item, idx) => (
+                <p className="fs-md-4">
+                  {idx + 1}. {item}
+                </p>
+              ))}
+            </div>
+          </div>
+          <div className="flex-grow-1">
+            <p
+              className="bg-red text-center text-white py-md-3 py-1 fs-md-1 week-2-question-text"
+              style={{ fontSize: 1 + "em" }}
+            >
+              HIGH
+            </p>
+            <div className="px-2 py-1 px-md-5 py-md-3">
+              {drag1("high")?.map((item, idx) => (
+                <p className="fs-md-4">
+                  {idx + 1}. {item}
+                </p>
+              ))}
+            </div>
+          </div>
         </div>
 
+        {
+          //This is only Visible for Flow Admins
+          isAdmin &&
+            !activityData?.find((activity) => activity.page === activity3.id)
+              ?.feedback && (
+              <Icon
+                onClick={() => {
+                  setActivityFeedbackId({ activityId: activity3.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#D6D6D6" }}
+                width={35}
+                icon="tabler:message-2"
+              />
+            )
+        }
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity3.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-1 p-md-2 rounded">
+              {getActivityFeedback(activity3.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity3.id));
+                  setActivityFeedbackId({ activityId: activity3.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+
+      {/* Activity 3 */}
+      <p className="bg-blue py-md-3 px-md-5 py-1 px-2 text-white d-inline-block rounded-5 fs-md-4">
+        Activity 3
+      </p>
+      <hr />
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Questions:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity4.question}
+        </p>
+      </div>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity4.id)}</p>
         {isAdmin &&
-          !activityData?.find((a) => a.page === activity2.id)?.feedback && (
+          !activityData?.find((activity) => activity.page === activity4.id)
+            ?.feedback && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity2.id });
+                setActivityFeedbackId({ activityId: activity4.id });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -289,24 +520,1359 @@ function Week2({ enrollmentId, setWeekTwoData }) {
             />
           )}
       </div>
-
-
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity2.id)
+        activityData?.find((activity) => activity.page === activity4.id)
           ?.feedback && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity2.id)}
+              {getActivityFeedback(activity4.id)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity2.id));
-                  setActivityFeedbackId({ activityId: activity2.id });
+                  setModalData(getActivityFeedback(activity4.id));
+                  setActivityFeedbackId({ activityId: activity4.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+
+      {/* Activity 4 */}
+      <p className="bg-blue py-md-3 px-md-5 py-1 px-2 text-white d-inline-block rounded-5 fs-md-4">
+        Activity 4
+      </p>
+      <p
+        className="text-gray fs-md-4 week-2-question-text"
+        accordion
+        style={{ fontSize: 1 + "em" }}
+      >
+        {activity5.steps[0].instruction}
+      </p>
+      <hr />
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Scenario 1:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity5.steps[1].scenarioTitle}
+        </p>
+      </div>
+      <p
+        className="text-white rounded-3 px-2"
+        style={{ background: activity5.steps[1].sonarSteps[0].desBgColor }}
+      >
+        {activity5.steps[1].sonarSteps[0].stepName}{" "}
+        {activity5.steps[1].sonarSteps[0].stepDescription}:{" "}
+        {activity5.steps[1].sonarSteps[0].question}
+      </p>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity5.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity5.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity5.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity5.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity5.id));
+                  setActivityFeedbackId({ activityId: activity5.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <p
+        className="text-white rounded-3 px-2"
+        style={{ background: activity5.steps[1].sonarSteps[1].desBgColor }}
+      >
+        {activity5.steps[1].sonarSteps[1].stepName}{" "}
+        {activity5.steps[1].sonarSteps[1].stepDescription}:{" "}
+        {activity5.steps[1].sonarSteps[1].question}
+      </p>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity5.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity5.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity5.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity5.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity5.id));
+                  setActivityFeedbackId({ activityId: activity5.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <p
+        className="text-white rounded-3 px-2"
+        style={{ background: activity5.steps[1].sonarSteps[2].desBgColor }}
+      >
+        {activity5.steps[1].sonarSteps[2].stepName}{" "}
+        {activity5.steps[1].sonarSteps[2].stepDescription}:{" "}
+        {activity5.steps[1].sonarSteps[2].question}
+      </p>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity5.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity5.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity5.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity5.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity5.id));
+                  setActivityFeedbackId({ activityId: activity5.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <p
+        className="text-white rounded-3 px-2"
+        style={{ background: activity5.steps[1].sonarSteps[3].desBgColor }}
+      >
+        {activity5.steps[1].sonarSteps[3].stepName}{" "}
+        {activity5.steps[1].sonarSteps[3].stepDescription}:{" "}
+        {activity5.steps[1].sonarSteps[3].question}
+      </p>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity5.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity5.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity5.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity5.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity5.id));
+                  setActivityFeedbackId({ activityId: activity5.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <p
+        className="text-white rounded-3 px-2"
+        style={{ background: activity5.steps[1].sonarSteps[4].desBgColor }}
+      >
+        {activity5.steps[1].sonarSteps[4].stepName}{" "}
+        {activity5.steps[1].sonarSteps[4].stepDescription}:{" "}
+        {activity5.steps[1].sonarSteps[4].question}
+      </p>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity5.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity5.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity5.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity5.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity5.id));
+                  setActivityFeedbackId({ activityId: activity5.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Scenario 2:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity5.steps[2].scenarioTitle}
+        </p>
+      </div>
+      <p
+        className="text-white rounded-3 px-2"
+        style={{ background: activity5.steps[2].sonarSteps[0].desBgColor }}
+      >
+        {activity5.steps[2].sonarSteps[0].stepName}{" "}
+        {activity5.steps[2].sonarSteps[0].stepDescription}:{" "}
+        {activity5.steps[2].sonarSteps[0].question}
+      </p>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity5.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity5.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity5.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity5.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity5.id));
+                  setActivityFeedbackId({ activityId: activity5.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <p
+        className="text-white rounded-3 px-2"
+        style={{ background: activity5.steps[2].sonarSteps[1].desBgColor }}
+      >
+        {activity5.steps[2].sonarSteps[1].stepName}{" "}
+        {activity5.steps[2].sonarSteps[1].stepDescription}:{" "}
+        {activity5.steps[2].sonarSteps[1].question}
+      </p>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity5.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity5.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity5.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity5.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity5.id));
+                  setActivityFeedbackId({ activityId: activity5.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <p
+        className="text-white rounded-3 px-2"
+        style={{ background: activity5.steps[2].sonarSteps[2].desBgColor }}
+      >
+        {activity5.steps[2].sonarSteps[2].stepName}{" "}
+        {activity5.steps[2].sonarSteps[2].stepDescription}:{" "}
+        {activity5.steps[2].sonarSteps[2].question}
+      </p>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity5.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity5.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity5.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity5.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity5.id));
+                  setActivityFeedbackId({ activityId: activity5.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <p
+        className="text-white rounded-3 px-2"
+        style={{ background: activity5.steps[2].sonarSteps[3].desBgColor }}
+      >
+        {activity5.steps[2].sonarSteps[3].stepName}{" "}
+        {activity5.steps[2].sonarSteps[3].stepDescription}:{" "}
+        {activity5.steps[2].sonarSteps[3].question}
+      </p>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity5.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity5.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity5.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity5.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity5.id));
+                  setActivityFeedbackId({ activityId: activity5.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <p
+        className="text-white rounded-3 px-2"
+        style={{ background: activity5.steps[2].sonarSteps[4].desBgColor }}
+      >
+        {activity5.steps[2].sonarSteps[4].stepName}{" "}
+        {activity5.steps[2].sonarSteps[4].stepDescription}:{" "}
+        {activity5.steps[2].sonarSteps[4].question}
+      </p>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity5.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity5.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity5.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity5.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity5.id));
+                  setActivityFeedbackId({ activityId: activity5.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Scenario 3:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Text Entered by Teacher...
+          {activity5.steps[3].scenarioTitle}
+        </p>
+      </div>
+      <p
+        className="text-white rounded-3 px-2"
+        style={{ background: activity5.steps[3].sonarSteps[0].desBgColor }}
+      >
+        {activity5.steps[3].sonarSteps[0].stepName}{" "}
+        {activity5.steps[3].sonarSteps[0].stepDescription}:{" "}
+        {activity5.steps[3].sonarSteps[0].question}
+      </p>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity5.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity5.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity5.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity5.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity5.id));
+                  setActivityFeedbackId({ activityId: activity5.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <p
+        className="text-white rounded-3 px-2"
+        style={{ background: activity5.steps[3].sonarSteps[1].desBgColor }}
+      >
+        {activity5.steps[3].sonarSteps[1].stepName}{" "}
+        {activity5.steps[3].sonarSteps[1].stepDescription}:{" "}
+        {activity5.steps[3].sonarSteps[1].question}
+      </p>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity5.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity5.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity5.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity5.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity5.id));
+                  setActivityFeedbackId({ activityId: activity5.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <p
+        className="text-white rounded-3 px-2"
+        style={{ background: activity5.steps[3].sonarSteps[2].desBgColor }}
+      >
+        {activity5.steps[3].sonarSteps[2].stepName}{" "}
+        {activity5.steps[3].sonarSteps[2].stepDescription}:{" "}
+        {activity5.steps[3].sonarSteps[2].question}
+      </p>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity5.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity5.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity5.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity5.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity5.id));
+                  setActivityFeedbackId({ activityId: activity5.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <p
+        className="text-white rounded-3 px-2"
+        style={{ background: activity5.steps[3].sonarSteps[3].desBgColor }}
+      >
+        {activity5.steps[3].sonarSteps[3].stepName}{" "}
+        {activity5.steps[3].sonarSteps[3].stepDescription}:{" "}
+        {activity5.steps[3].sonarSteps[3].question}
+      </p>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity5.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity5.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity5.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity5.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity5.id));
+                  setActivityFeedbackId({ activityId: activity5.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <p
+        className="text-white rounded-3 px-2"
+        style={{ background: activity5.steps[3].sonarSteps[4].desBgColor }}
+      >
+        {activity5.steps[3].sonarSteps[4].stepName}{" "}
+        {activity5.steps[3].sonarSteps[4].stepDescription}:{" "}
+        {activity5.steps[3].sonarSteps[4].question}
+      </p>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity5.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity5.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity5.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity5.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity5.id));
+                  setActivityFeedbackId({ activityId: activity5.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+
+      {/* Activity 5 */}
+      <p className="bg-blue py-md-3 px-md-5 py-1 px-2 text-white d-inline-block rounded-5 fs-md-4">
+        Activity 5
+      </p>
+      <p
+        className="text-gray fs-md-4 week-2-question-text"
+        accordion
+        style={{ fontSize: 1 + "em" }}
+      >
+        {activity6.steps[0].instructions.map((text) => (
+          <>
+            <span>{text}</span>
+            <br />
+          </>
+        ))}
+      </p>
+      <hr />
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Scenario 1:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity6.steps[1].scenarioText}
+        </p>
+      </div>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity6.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity6.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity6.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity6.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity6.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity6.id));
+                  setActivityFeedbackId({ activityId: activity6.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Scenario 2:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity6.steps[3].scenarioText}
+        </p>
+      </div>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity6.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity6.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity6.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity6.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity6.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity6.id));
+                  setActivityFeedbackId({ activityId: activity6.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Scenario 3:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity6.steps[5].scenarioText}
+        </p>
+      </div>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity6.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity6.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity6.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity6.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity6.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity6.id));
+                  setActivityFeedbackId({ activityId: activity6.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Scenario 4:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity6.steps[7].scenarioText}
+        </p>
+      </div>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity6.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity6.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity6.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity6.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity6.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity6.id));
+                  setActivityFeedbackId({ activityId: activity6.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Question 1:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity6.steps[9].question}
+        </p>
+      </div>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity6.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity6.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity6.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity6.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity6.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity6.id));
+                  setActivityFeedbackId({ activityId: activity6.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Question 2:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity6.steps[10].question}
+        </p>
+      </div>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity6.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity6.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity6.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity6.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity6.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity6.id));
+                  setActivityFeedbackId({ activityId: activity6.id });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -320,8 +1886,8 @@ function Week2({ enrollmentId, setWeekTwoData }) {
       <hr />
 
       {/* Assesment 1 */}
-      <p className="bg-yellow py-md-3 px-md-5 py-1 px-2 text-gray d-inline-block rounded-5 fs-md-4">
-        Assessment 1
+      <p className="bg-blue py-1 px-1 py-md-3 px-md-2 text-white d-inline-block rounded-5 fs-md-4">
+        Post-Assessment
       </p>
       <hr />
       {assessments.map(({ id, question, options, correctOption }, i) => {
@@ -331,29 +1897,41 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         return (
           <>
             <div className="d-flex gap-3" key={i}>
-              <h2 className="text-blue fs-md-1 text-nowrap">
+              <p
+                className="text-blue fs-md-1 text-nowrap week-2-question-text fw-bold"
+                style={{ fontSize: 1 + "em" }}
+              >
                 Questions {i + 1}:
-              </h2>
-              <p className="text-blue fs-md-4">{question}</p>
+              </p>
+              <p
+                className="text-blue fs-md-4 week-2-question-text"
+                style={{ fontSize: 1 + "em" }}
+              >
+                {question}
+              </p>
             </div>
             {options.map((option, index) => {
               const optionKey = Object.keys(option)[0];
               const optionText = option[optionKey];
               const isCorrectOption = correctOption === optionText;
               const isAnswer = selectedAnswer === optionText;
+              // console.log(assessmentData,"AssessmentData")
 
               return (
                 <div
                   key={index}
-                  className="d-flex gap-md-2 p-1 mb-3 justify-content-between"
+                  className="d-flex gap-md-2 p-0 p-md-1 mb-3 justify-content-between"
                 >
                   <div className="d-flex gap-md-2 p-1">
                     <img
-                      src={isAnswer ? checkedImage : unCheckedImage}
+                      src={isAnswer ? checkedImage : checkedImage}
                       alt={`Option ${optionKey}`}
                       style={{ width: 20, height: 20 }}
                     />
-                    <div>{`${optionText}. ${option.text}`}</div>
+                    <div
+                      className="week-2-question-text text-gray"
+                      style={{ fontSize: 1 + "em" }}
+                    >{`${optionText}. ${option.text}`}</div>
                   </div>
                   {isCorrectOption ? (
                     <p className="d-flex gap-1">
@@ -394,14 +1972,14 @@ function Week2({ enrollmentId, setWeekTwoData }) {
             {score < 40
               ? "Well done on starting your journey into understanding resilience! You’ve gained a basic understanding of the words, ‘Resilience’ and ‘Grit’. However, you need to revisit the course again and listen more attentively to the lessons. You can reach out to your teachers or classmates for help if you still find yourself struggling. Reaching out for help shows that you are a smart person."
               : score < 60
-                ? "Good job! You’ve shown a good understanding of resilience and grits. You’re beginning to grasp concepts like the 7 C’s and the role of support systems in building resilience. To deepen your understanding, try practicing adaptability in real-life scenarios and applying the coping skills you have learned. Work on applying these principles when facing challenges, no matter how little or insignificant the challenge might seem; with consistent effort, you’ll strengthen your resilient bones."
-                : score < 80
-                  ? "Great work! You’ve developed a solid understanding of resilience and grit. To take it a step further, focus on building stronger connections with your support network and practicing coping skills in real-life situations. Apply these principles consistently, even in small challenges, to strengthen your resilience and ability to bounce back. Keep up the good work—you’re on the right track!"
-                  : score < 95
-                    ? "Excellent job! You’ve shown a strong understanding of resilience and how to build it into your life. You have learned to effectively use strategies like the 7 C’s, practicing adaptability, and relying on your support systems when needed. To continue growing, focus on maintaining these habits and applying them in different areas of your life, whether it’s personal goals or overcoming unexpected challenges. Remember, resilience is a skill that gets stronger with use, and your dedication is truly inspiring. Keep pushing forward—you’re doing amazing!"
-                    : score <= 100
-                      ? "Outstanding achievement! You’ve demonstrated exceptional mastery of resilience and grit. Your understanding of the 7 C’s, adaptability, and the role of support systems will help you greatly as you handle challenges. You’ve not only learned to bounce back but to thrive and grow stronger in the process. Keep building on this incredible foundation and inspiring others with your example. Your hard work and perseverance are commendable—your resilience is a skill that will serve you for a lifetime!"
-                      : ""}
+              ? "Good job! You’ve shown a good understanding of resilience and grits. You’re beginning to grasp concepts like the 7 C’s and the role of support systems in building resilience. To deepen your understanding, try practicing adaptability in real-life scenarios and applying the coping skills you have learned. Work on applying these principles when facing challenges, no matter how little or insignificant the challenge might seem; with consistent effort, you’ll strengthen your resilient bones."
+              : score < 80
+              ? "Great work! You’ve developed a solid understanding of resilience and grit. To take it a step further, focus on building stronger connections with your support network and practicing coping skills in real-life situations. Apply these principles consistently, even in small challenges, to strengthen your resilience and ability to bounce back. Keep up the good work—you’re on the right track!"
+              : score < 95
+              ? "Excellent job! You’ve shown a strong understanding of resilience and how to build it into your life. You have learned to effectively use strategies like the 7 C’s, practicing adaptability, and relying on your support systems when needed. To continue growing, focus on maintaining these habits and applying them in different areas of your life, whether it’s personal goals or overcoming unexpected challenges. Remember, resilience is a skill that gets stronger with use, and your dedication is truly inspiring. Keep pushing forward—you’re doing amazing!"
+              : score <= 100
+              ? "Outstanding achievement! You’ve demonstrated exceptional mastery of resilience and grit. Your understanding of the 7 C’s, adaptability, and the role of support systems will help you greatly as you handle challenges. You’ve not only learned to bounce back but to thrive and grow stronger in the process. Keep building on this incredible foundation and inspiring others with your example. Your hard work and perseverance are commendable—your resilience is a skill that will serve you for a lifetime!"
+              : ""}
           </p>
         </div>
         <Modal
