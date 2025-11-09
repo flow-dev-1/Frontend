@@ -1148,7 +1148,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         )
       }
       <hr />
-      {/* Activity 4*/}
+      {/* Activity 5*/}
       <p className="bg-blue py-md-3 px-md-5 py-1 px-2 text-white d-inline-block rounded-5 fs-md-4">
         Activity 5
       </p>
@@ -1170,7 +1170,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           className="text-blue fs-md-1 week-2-question-text fw-bold"
           style={{ fontSize: 1 + "em" }}
         >
-          Scenario 2:
+          Scenario 1:
         </p>
         <p
           className="text-blue fs-md-4 week-2-question-text"

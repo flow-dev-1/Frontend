@@ -2136,7 +2136,6 @@ export const courseContent = {
               "Take this moment to pause, acknowledge your growth, and set intentions for the educator you want to be moving forward.",
             ],
           },
-
           {
             stepId: 2,
             type: "scenario",
