@@ -38,6 +38,8 @@ const MyCourseCard = ({ course }) => {
       navigate(`/dashboard/feedback/self-awareness`, { state: { enrollmentData: course } })
     } else if(course?.course.title === "Resilience & Grit") {
       navigate(`/dashboard/resilience_grit/feedback`, { state: { enrollmentData: course } })
+    }else if(course?.course.title === "Emotional Regulation") {
+      navigate(`/dashboard/emotional_regulation/feedback`, { state: { enrollmentData: course } })
     }else if(course?.course.title === "TOT Course 1") {
       navigate(`/dashboard/tot/feedback`, { state: { enrollmentData: course } })
     } else {
@@ -62,6 +64,11 @@ const MyCourseCard = ({ course }) => {
       localStorage.setItem(`${course._id}-can-see`, true)
     } else if(course?.course.title === "Resilience & Grit") {
       navigate(`/dashboard/resilience_grit`, {
+        state: { enrollmentData: course },
+      })
+
+    }else if(course?.course.title === "Emotional Regulation") {
+      navigate(`/dashboard/emotional_regulation`, {
         state: { enrollmentData: course },
       })
 

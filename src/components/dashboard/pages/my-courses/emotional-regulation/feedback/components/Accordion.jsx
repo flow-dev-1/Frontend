@@ -79,7 +79,7 @@ function Accordion({
       )}
       <div className="accordion" ref={contentRef}>
         <h2 className="accordion-header p-lg-2 p-md-4 bg-blue text-center text-white">
-          Feedback for Resilience & Grit
+          Feedback for Emotional Regulation
         </h2>
 
         {items.map((item, index) => (

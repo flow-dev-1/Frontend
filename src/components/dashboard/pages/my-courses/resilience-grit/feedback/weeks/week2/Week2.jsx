@@ -36,7 +36,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/resilience-feedback-2", enrollmentId, 2],
+    queryKey: ["dashboard/emotional-regulation-feedback-2", enrollmentId, 2],
     queryFn: () =>
       isAdmin
         ? adminService.getUserCourseData(enrollmentId, 2, code)
@@ -46,6 +46,10 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     refetchOnWindowFocus: true,
     keepPreviousData: false,
   });
+
+  console.log(
+    data, "Heres data"
+  )
 
   const mutation = useMutation({
     mutationFn: () =>
