@@ -88,8 +88,6 @@ function Week2({ enrollmentId, setWeekTwoData }) {
   useEffect(() => {
     if (!data) return;
 
-    console.log(data);
-
     setActivityData(data.activity?.activities);
     setAssessmentData(data.assessment?.assessments);
     setPreAssessmentData(
