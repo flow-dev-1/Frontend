@@ -93,21 +93,21 @@ function Accordion({
             >
               <div className="d-flex align-items-center gap-3 flex-grow-1">
                 {index < 6 ? (
-                  <h2
-                    className="text-gray text-nowrap"
+                  <p
+                    className="text-gray text-nowrap fw-bold"
                     onClick={() => handleToggle(index)}
                     style={{ cursor: "pointer" }}
                   >
                     Week {index + 1}:
-                  </h2>
+                  </p>
                 ) : (
-                  <h2
-                    className="text-gray"
+                  <p
+                    className="text-gray fw-bold"
                     onClick={() => handleToggle(index)}
                     style={{ cursor: "pointer" }}
                   >
                     Final Report:
-                  </h2>
+                  </p>
                 )}
                 <div
                   className="text-gray "
