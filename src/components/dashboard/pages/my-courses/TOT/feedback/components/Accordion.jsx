@@ -86,13 +86,13 @@ function Accordion({
           <div key={index} className="accordion-item">
             <div
               className={
-                index > 4
+                index > 5
                   ? "bg-blue-feedback  py-4 px-5 d-flex gap-3 align-items-center justify-space-between"
                   : "py-4 px-5 d-flex gap-3 align-items-center justify-space-between"
               }
             >
               <div className="d-flex align-items-center gap-3 flex-grow-1">
-                {index < 5 ? (
+                {index < 6 ? (
                   <h2
                     className="text-gray text-nowrap"
                     onClick={() => handleToggle(index)}
@@ -116,7 +116,7 @@ function Accordion({
                 >
                   {item.title}
                 </div>
-                {index === 5 && (
+                {index === 6 && (
                   <p
                     className="text-blue"
                     style={{ zIndex: 100, cursor: "pointer" }}
