@@ -20,9 +20,6 @@ import { useSelector } from "react-redux";
 
 function Week2({ enrollmentId, setWeekTwoData }) {
   const { pages } = getWeekContentExcludingVideos(2);
-
-  const [activity1, activity2,activity3] = pages;
-  // const [q1, q2, q3, q4] = activity3.prompts;
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([]);
 
@@ -34,9 +31,24 @@ function Week2({ enrollmentId, setWeekTwoData }) {
 
   const { questions: assessments } = getWeekAssessment(2);
 
+
+
+  const [activity1, activity2, activity3, activity4] = pages;
+  const [q1, q2] = activity3.steps;
+
+  const answers = activityData?.[2]?.answer || [];
+  const [a1, a2] = answers;
+
+  // const [Q1, Q2] = activity4.steps;
+
+  // const answers1 = activityData?.[2]?.answer || [];
+  // const [A1, A2] = answers;
+
+  console.log(activityData,"Activity4");
+
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/resilience-feedback-2", enrollmentId, 2],
+    queryKey: ["dashboard/emotional-regulation-feedback-2", enrollmentId, 2],
     queryFn: () =>
       isAdmin
         ? adminService.getUserCourseData(enrollmentId, 2, code)
@@ -46,6 +58,10 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     refetchOnWindowFocus: true,
     keepPreviousData: false,
   });
+
+
+
+
 
   const mutation = useMutation({
     mutationFn: () =>
@@ -145,7 +161,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     // });
   }
 
-  if (!isPending) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
@@ -180,6 +196,113 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     }
   };
 
+  // Color mapping configuration
+  const COLOR_MAP = {
+    'A': { bg: '#0d6efd', text: '#ffffff', label: 'Blue' },
+    'B': { bg: '#198754', text: '#ffffff', label: 'Green' },
+    'C': { bg: '#ffc107', text: '#000000', label: 'Yellow' },
+    'D': { bg: '#dc3545', text: '#ffffff', label: 'Red' }
+  };
+
+  // Helper function to get color configuration
+  const getColorConfig = (value) => {
+    return COLOR_MAP[value] || { bg: 'transparent', text: '#000000', label: value };
+  };
+
+  // Helper function to render colored answer
+  const renderColoredAnswer = (value) => {
+    const colors = getColorConfig(value || '');
+
+    return (
+      <h2
+        style={{
+          backgroundColor: colors.bg,
+          color: colors.text,
+          padding: '0px 16px',
+          display: 'inline-block',
+          width: '120px',
+          textAlign: 'center'
+        }}
+        className="fs-3"
+      >
+        {colors.label}
+      </h2>
+    );
+  };
+
+  // Helper function to get feedback for activity
+  const hasActivityFeedback = (activityData, activityId) => {
+    return activityData?.find((activity) => activity.page === activityId)?.feedback;
+  };
+
+  // Helper function to render question section
+  const renderQuestionSection = (question, answer, activityId, props, sn) => {
+    const { activityData, isAdmin, setActivityFeedbackId, handleModalOpen, setModalData, getActivityFeedback } = props;
+    const feedback = hasActivityFeedback(activityData, activityId);
+
+    return (
+      <>
+        <div className="d-flex gap-3">
+          <h2 className="text-blue fs-md-1">Questions{sn}:</h2>
+          <p className="text-blue fs-md-4">{question}</p>
+        </div>
+
+        <div className="d-flex gap-3">
+          <h2 className="text-gray fs-md-1">Answers:</h2>
+          <p className="fs-md-5 flex-grow-1">
+            {renderColoredAnswer(answer?.value)}
+          </p>
+
+          {isAdmin && !feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+        </div>
+
+        {feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activityId)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activityId));
+                  setActivityFeedbackId({ activityId });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )}
+
+        <hr />
+      </>
+    );
+  };
+
+  const helperProps = {
+    activityData,
+    isAdmin,
+    setActivityFeedbackId,
+    handleModalOpen,
+    setModalData,
+    getActivityFeedback
+  };
+
   return (
     <>
       {/* Activity 1 */}
@@ -193,7 +316,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity1.id) === "A" ? "Yes" : "No"}</p>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity1.id)
             ?.feedback && (
@@ -243,37 +366,42 @@ function Week2({ enrollmentId, setWeekTwoData }) {
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-md-1">Questions:</h2>
-        <p className="text-blue fs-md-4">Match the right ‘C’ to their correct definition.</p>
+        <p className="text-blue fs-md-4">Match the mood to the right Zone</p>
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1">Answers:</h2>
 
         <div className="d-flex flex-column flex-grow-1">
-          {/* Headers row */}
-          <div className="d-flex">
-            <h2 className="col-6 text-center bg-green text-white py-md-3 py-1 fs-md-1">
-              Definitions
-            </h2>
-            <h2 className="col-6 text-center bg-red text-white py-md-3 py-1 fs-md-1">
-              The "C"
-            </h2>
-          </div>
 
           {/* Items rows */}
-          {Array.from({ length: 7 }).map((_, idx) => (
-            <div key={idx} className="d-flex">
-              <div className="col-6 px-md-5 px-2 py-md-3 py-1">
-                <p className="fs-md-4 mb-0">
-                  {idx + 1}. {def("question")?.[idx]}
-                </p>
+          {Array.from({ length: 4 }).map((_, idx) => {
+            const fixedValue = def("fixed")?.[idx];
+
+            // Define color mappings
+            const colorMap = {
+              'A': { bg: 'bg-primary', text: 'text-white', label: 'Blue' },
+              'B': { bg: 'bg-success', text: 'text-white', label: 'Green' },
+              'C': { bg: 'bg-warning', text: 'text-dark', label: 'Yellow' },
+              'D': { bg: 'bg-danger', text: 'text-white', label: 'Red' }
+            };
+
+            const colors = colorMap[fixedValue] || { bg: '', text: '', label: fixedValue };
+
+            return (
+              <div key={idx} className="d-flex">
+                <div className="col-6 px-md-5 px-2 py-md-3 py-1">
+                  <p className="fs-md-4 mb-0">
+                    {idx + 1}. {def("question")?.[idx]}
+                  </p>
+                </div>
+                <h2 className="col-6 px-md-5 px-2 py-md-3 py-1 fs-3">
+                  <h2 className={`${colors.bg} ${colors.text} px-3 d-inline-block fs-3 text-center`} style={{ width: "120px" }}>
+                    {colors.label}
+                  </h2>
+                </h2>
               </div>
-              <div className="col-6 px-md-5 px-2 py-md-3 py-1">
-                <p className="fs-md-4 mb-0">
-                  {idx + 1}. {def("fixed")?.[idx]}
-                </p>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {isAdmin &&
@@ -291,7 +419,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
       </div>
 
 
-      {
+      {/* {
         // Show this only id theres a feedback
         activityData?.find((activity) => activity.page === activity2.id)
           ?.feedback && (
@@ -316,7 +444,25 @@ function Week2({ enrollmentId, setWeekTwoData }) {
             )}
           </div>
         )
-      }
+      } */}
+      <hr />
+
+      {/* Activity 3  */}
+      <p className="bg-yellow py-md-3 px-md-5 py-1 px-2 text-gray d-inline-block rounded-5 fs-md-4">
+        Activity 3
+      </p>
+      <hr />
+      {renderQuestionSection(q1.question, a1, activity1.id, helperProps, 1)}
+      {renderQuestionSection(q2.question, a2, activity1.id, helperProps, 2)}
+      <hr />
+
+      {/* Activity 3  */}
+      <p className="bg-yellow py-md-3 px-md-5 py-1 px-2 text-gray d-inline-block rounded-5 fs-md-4">
+        Activity 4
+      </p>
+      <hr />
+      {renderQuestionSection(q1.question, a1, activity1.id, helperProps)}
+      {renderQuestionSection(q2.question, a2, activity1.id, helperProps)}
       <hr />
 
       {/* Assesment 1 */}
@@ -392,15 +538,15 @@ function Week2({ enrollmentId, setWeekTwoData }) {
           </h2>
           <p className="text-white">
             {score < 40
-              ? "Well done on starting your journey into understanding resilience! You’ve gained a basic understanding of the words, ‘Resilience’ and ‘Grit’. However, you need to revisit the course again and listen more attentively to the lessons. You can reach out to your teachers or classmates for help if you still find yourself struggling. Reaching out for help shows that you are a smart person."
+              ? "Well done on starting your journey into Emotional Regulation! You’ve begun to explore the basics, including understanding emotions and identifying energy levels, but there’s plenty of room to grow. Spend more time revisiting key concepts, such as understanding the SONAR method for managing emotions. Practice small coping techniques and try applying them to simple daily challenges. Remember, emotional regulation is a skill that develops over time, so keep learning and practicing."
               : score < 60
-                ? "Good job! You’ve shown a good understanding of resilience and grits. You’re beginning to grasp concepts like the 7 C’s and the role of support systems in building resilience. To deepen your understanding, try practicing adaptability in real-life scenarios and applying the coping skills you have learned. Work on applying these principles when facing challenges, no matter how little or insignificant the challenge might seem; with consistent effort, you’ll strengthen your resilient bones."
+                ? "Good job! You’ve shown a foundational understanding of emotional regulation. To build on this, focus on strengthening your ability to identify emotions as they arise and using the SONAR method to deal with them effectively. Practice coping skills like physical or creative activities to handle difficult moments. With consistent effort, you’ll see more confidence in managing emotions across different situations."
                 : score < 80
-                  ? "Great work! You’ve developed a solid understanding of resilience and grit. To take it a step further, focus on building stronger connections with your support network and practicing coping skills in real-life situations. Apply these principles consistently, even in small challenges, to strengthen your resilience and ability to bounce back. Keep up the good work—you’re on the right track!"
+                  ? "Great work! You’ve developed a solid understanding of emotional regulation. Over the course of these weeks, you’ve learned how to recognize energy levels, understand the SONAR method, and use basic coping skills. To take your skills further, focus on applying what you’ve learned to help you deal with high-energy or low-energy states and practice applying these skills in more complex situations. Keep practicing these techniques daily, and you’ll continue to see significant improvement in your emotional balance."
                   : score < 95
-                    ? "Excellent job! You’ve shown a strong understanding of resilience and how to build it into your life. You have learned to effectively use strategies like the 7 C’s, practicing adaptability, and relying on your support systems when needed. To continue growing, focus on maintaining these habits and applying them in different areas of your life, whether it’s personal goals or overcoming unexpected challenges. Remember, resilience is a skill that gets stronger with use, and your dedication is truly inspiring. Keep pushing forward—you’re doing amazing!"
+                    ? "Excellent work! You’ve demonstrated a strong understanding of emotional regulation concepts, from recognizing your energy levels to using the SONAR method and applying coping skills effectively. To keep growing, focus on applying these skills in a variety of scenarios, such as managing stress, improving relationships, or achieving personal goals. Your dedication to mastering emotional regulation is commendable—keep up the great work!"
                     : score <= 100
-                      ? "Outstanding achievement! You’ve demonstrated exceptional mastery of resilience and grit. Your understanding of the 7 C’s, adaptability, and the role of support systems will help you greatly as you handle challenges. You’ve not only learned to bounce back but to thrive and grow stronger in the process. Keep building on this incredible foundation and inspiring others with your example. Your hard work and perseverance are commendable—your resilience is a skill that will serve you for a lifetime!"
+                      ? "Outstanding achievement! You’ve shown an exceptional understanding of emotional regulation and its application in your daily life. Your ability to recognize and manage emotions, balance energy levels, and use the SONAR framework effectively is truly impressive, and will set you up for great success and impact in life. Keep inspiring others with your emotional intelligence, and continue refining these skills as you grow. Your mastery of emotional regulation will serve you well in every aspect of life!"
                       : ""}
           </p>
         </div>

@@ -193,17 +193,17 @@ function App() {
           <Route
             path="/dashboard/emotional_regulation"
             element={
-              // <ProtectedRoute>
-              <EmotionalRegulationCourse />
-              // </ProtectedRoute>
+              <ProtectedRoute>
+                <EmotionalRegulationCourse />
+              </ProtectedRoute>
             }
           />
           <Route
             path="/dashboard/emotional_regulation/feedback"
             element={
-              // <ProtectedRoute>
-              <EmotionalRegulationFeedback />
-              // </ProtectedRoute>
+              <ProtectedRoute>
+                <EmotionalRegulationFeedback />
+              </ProtectedRoute>
             }
           />
         </Route>

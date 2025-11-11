@@ -35,7 +35,7 @@ function Page6() {
   }, [userAnswers]);
 
   const saveUserInput = () => {
-    if (currentStep === 1) return true;
+    // if (currentStep === 1) return true;
     if (adminDatas.isAdmin) return true;
 
     const stepData = answers.find((item) => item.stepId === currentStep);
@@ -94,7 +94,7 @@ function Page6() {
   return (
     <>
       {renderStep()}
-      {currentStep !== 1 && errorMessage && (
+      {errorMessage && (
         <div className="text-danger">{errorMessage}</div>
       )}{" "}
       {/* Display error message */}

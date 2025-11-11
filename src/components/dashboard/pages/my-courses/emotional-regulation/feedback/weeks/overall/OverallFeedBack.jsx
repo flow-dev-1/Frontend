@@ -32,13 +32,15 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
   function getFeedBackMessage(percentile) {
     switch (true) {
       case percentile >= 10 && percentile <= 39:
-        return "Well done on starting your journey into understanding resilience! You’ve gained a basic understanding of the words, ‘Resilience’ and ‘Grit’. However, you need to revisit the course again and listen more attentively to the lessons. You can reach out to your teachers or classmates for help if you still find yourself struggling. Reaching out for help shows that you are a smart person.";
+        return "Well done on starting your journey into Emotional Regulation! You’ve begun to explore the basics, including understanding emotions and identifying energy levels, but there’s plenty of room to grow. Spend more time revisiting key concepts, such as understanding the SONAR method for managing emotions. Practice small coping techniques and try applying them to simple daily challenges. Remember, emotional regulation is a skill that develops over time, so keep learning and practicing."
       case percentile >= 40 && percentile <= 59:
-        return "Good job! You’ve shown a good understanding of resilience and grits. You’re beginning to grasp concepts like the 7 C’s and the role of support systems in building resilience. To deepen your understanding, try practicing adaptability in real-life scenarios and applying the coping skills you have learned. Work on applying these principles when facing challenges, no matter how little or insignificant the challenge might seem; with consistent effort, you’ll strengthen your resilient bones."
+        return "Good job! You’ve shown a foundational understanding of emotional regulation. To build on this, focus on strengthening your ability to identify emotions as they arise and using the SONAR method to deal with them effectively. Practice coping skills like physical or creative activities to handle difficult moments. With consistent effort, you’ll see more confidence in managing emotions across different situations."
+      case percentile >= 60 && percentile <= 79:
+        return "Great work! You’ve developed a solid understanding of emotional regulation. Over the course of these weeks, you’ve learned how to recognize energy levels, understand the SONAR method, and use basic coping skills. To take your skills further, focus on applying what you’ve learned to help you deal with high-energy or low-energy states and practice applying these skills in more complex situations. Keep practicing these techniques daily, and you’ll continue to see significant improvement in your emotional balance."
       case percentile >= 80 && percentile <= 94:
-        return "Excellent job! You’ve shown a strong understanding of resilience and how to build it into your life. You have learned to effectively use strategies like the 7 C’s, practicing adaptability, and relying on your support systems when needed. To continue growing, focus on maintaining these habits and applying them in different areas of your life, whether it’s personal goals or overcoming unexpected challenges. Remember, resilience is a skill that gets stronger with use, and your dedication is truly inspiring. Keep pushing forward—you’re doing amazing!";
+        return "Excellent work! You’ve demonstrated a strong understanding of emotional regulation concepts, from recognizing your energy levels to using the SONAR method and applying coping skills effectively. To keep growing, focus on applying these skills in a variety of scenarios, such as managing stress, improving relationships, or achieving personal goals. Your dedication to mastering emotional regulation is commendable—keep up the great work!"
       case percentile >= 95 && percentile <= 100:
-        return "Outstanding achievement! You’ve demonstrated exceptional mastery of resilience and grit. Your understanding of the 7 C’s, adaptability, and the role of support systems will help you greatly as you handle challenges. You’ve not only learned to bounce back but to thrive and grow stronger in the process. Keep building on this incredible foundation and inspiring others with your example. Your hard work and perseverance are commendable—your resilience is a skill that will serve you for a lifetime!";
+        return "Outstanding achievement! You’ve shown an exceptional understanding of emotional regulation and its application in your daily life. Your ability to recognize and manage emotions, balance energy levels, and use the SONAR framework effectively is truly impressive, and will set you up for great success and impact in life. Keep inspiring others with your emotional intelligence, and continue refining these skills as you grow. Your mastery of emotional regulation will serve you well in every aspect of life!";
       default:
         return "";
     }
@@ -58,7 +60,7 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
 
   return (
     <>
-      <div className="bg-compassion--feedback custom-border-20 question-box-container d-flex justify-content-center align-items-center flex-column gap-3">
+      <div className="bg-compassion--feedback question-box-container d-flex justify-content-center align-items-center flex-column gap-3">
         <img src={celebrate} alt="celebrate" className="text-center" />
         <h1 className="text-green" style={{ fontSize: "100px" }}>
           Hurray!
@@ -68,18 +70,18 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
         Congratulations on completing the Transition Curriculum!
       </p> */}
       <p className="fs-md-3 text-gray mt-3">
-        Congratulations on completing the Resilience and Grit Curriculum!
-        Over the past weeks, you’ve learned what it means to be resilient,
-        learned strategies for adaptability, and discovered the value of a strong support system.
-        You’ve also gained practical coping skills to help you manage life’s ups and downs.
+        Congratulations on completing the Emotional Regulation Curriculum! Over the past weeks,
+        you’ve learned what it means to regulate your emotions, explored your energy levels,
+        and discovered the powerful SONAR method for managing big emotions.
+        You’ve also built a toolbox of effective coping skills to support your emotional well-being.
       </p>
       <p className="fs-md-3 text-gray my-3">
-        Resilience and grit are skills you’ll continue to develop throughout your life.
-        Use what you’ve learned to approach challenges with courage, adapt to change with confidence,
-        and persevere toward your goals. Remember, every setback is an opportunity to grow, and every challenge is a step toward becoming stronger.
+        Remember, emotional regulation is a lifelong skill.
+        The tools and techniques you’ve gained in this course will serve you in countless ways,
+        helping you navigate challenges, build meaningful relationships, and stay true to yourself.
       </p>
       <p className="fs-md-3 text-gray">
-        Keep pushing forward, and never give up! You’ve got this!
+        Keep practicing, reflecting, and growing—you’ve got this!
       </p>
 
       <div className="bg-blue p-1 p-md-3 mt-2 rounded rounded-md-4">

@@ -7,7 +7,7 @@ import wrong from "../../../../../../../../assets/wrong.png";
 import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
-} from "../../../../resilience-grit/data/index.js";
+} from "../../../data/index.js";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
 import adminService from "../../../../../../../../services/api/admin.js";
@@ -18,7 +18,7 @@ import Modal from "../../components/Modal.jsx";
 
 function Week3({ enrollmentId, setWeekThreeData }) {
   const { pages } = getWeekContentExcludingVideos(3);
-  const [activity1, activity2, activity3] = pages;
+  const [activity1] = pages;
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -26,18 +26,13 @@ function Week3({ enrollmentId, setWeekThreeData }) {
   const [activityFeedbackId, setActivityFeedbackId] = useState(null);
   const { isAdmin, code } = useSelector(adminData);
 
-
-  const [_, q1, q2, q3, q4, q5] = activity3.steps;
-  const [a1, a2, a3, a4, a5] =
-    activityData?.[2]?.answer?.map((a) => a.value) || [];
-  const [f1, f2, f3, f4, f5] =
-    activityData?.[2]?.feedback?.map((a) => a.value) || [];
+  const [_, q1] = activity1.steps;
 
   const { questions: assessments } = getWeekAssessment(3);
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/resilience-feedback-3", enrollmentId, 3],
+    queryKey: ["dashboard/emotional-regulation-feedback-3", enrollmentId, 3],
     queryFn: () =>
       isAdmin
         ? adminService.getUserCourseData(enrollmentId, 3, code)
@@ -58,16 +53,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
     return () => { };
   }, [data]);
 
-  // const [q1, q2, q3, q4, q5] = activity3.steps;
-  // const [a1, a2, a3, a4, a5] =
-  //   activityData?.[2]?.answer?.map((a) => a.value) || [];
-  // const [f1, f2, f3, f4, f5] =
-  //   activityData?.[2]?.feedback?.map((a) => a.value) || [];
 
-  function getActivityAnswer(activityId) {
-    return activityData?.find((activity) => activity.page === activityId)
-      ?.answer;
-  }
 
   function getActivityFeedback(activityId, itemId, index) {
     if (!itemId) {
@@ -151,18 +137,36 @@ function Week3({ enrollmentId, setWeekThreeData }) {
     }
   };
 
-  function drag1(type) {
-    if (!activityData || !activityData[1] || !activityData[1].answer) return [];
-
-    const indices =
-      type === "growth"
-        ? activityData[1]?.answer?.green
-        : activityData[1]?.answer?.red
-
-    // console.log(indices, "Indices")
-
-    // console.log(activity2,"Activity 2")
-    return indices?.map((index) => activity2?.images[index]) || [];
+  function renderQuestions(activityId, questions, stepId) {
+    return questions.map((question, index) => {
+      // Get answer from activityData
+      const answer = activityData[stepId]?.answer?.[question.key] || '';
+      
+      return (
+        <div key={index}>
+          <p className="d-inline-block bg-blue text-white rounded-4 px-2 px-md-3">
+            {`${question.key}: ${question.question}`}
+          </p>
+          <div className="d-flex gap-3">
+            <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
+            <p className="fs-md-5 flex-grow-1">
+              {answer}
+            </p>
+            {isAdmin && !getActivityFeedback(activityId, stepId, index) && (
+              <Icon
+                onClick={() => {
+                  setActivityFeedbackId({ activityId, itemId: stepId, index });
+                  handleModalOpen();
+                }}
+                style={{ color: "#D6D6D6" }}
+                width={35}
+                icon="tabler:message-2"
+              />
+            )}
+          </div>
+        </div>
+      );
+    });
   }
 
   if (isPending) {
@@ -176,276 +180,27 @@ function Week3({ enrollmentId, setWeekThreeData }) {
   const score =
     calculateResult(assessments, assessmentData, assessments?.length) || 0;
 
-  const renderActivity3 = (question, answer, feedback, activityId, index) => {
-    return (
-      <div key={index}>
-        <div className="d-flex gap-3 align-items-center">
-          <h2 className="text-blue fs-md-1 text-nowrap">
-            Questions {index + 1}:
-          </h2>
-          <p className="text-blue fs-md-4 mb-0">{question.title}</p>
-        </div>
 
-        <div>
-          <span className="bg-green rounded-3 text-white px-1 px-md-3 py-1">
-            Within your control:
-          </span>
-        </div>
-
-        <div className="d-flex gap-3 align-items-center">
-          <h2 className="text-gray fs-md-1 mb-0">Answer:</h2>
-          <p className="fs-md-5 flex-grow-1 mb-0">{answer?.[0]}</p>
-          {isAdmin && !feedback && (
-            <Icon
-              onClick={() => {
-                setActivityFeedbackId({ activityId, itemId: index + 1 });
-                handleModalOpen();
-              }}
-              style={{ color: "#D6D6D6" }}
-              width={35}
-              icon="tabler:message-2"
-            />
-          )}
-        </div>
-
-        <div>
-          <span className="bg-orange rounded-3 text-muted px-1 px-md-3 py-1">
-            Outside your control:
-          </span>
-        </div>
-
-        <div className="d-flex gap-3 align-items-center">
-          <h2 className="text-gray fs-md-1 mb-0">Answer:</h2>
-          <p className="fs-md-5 flex-grow-1 mb-0">{answer?.[1]}</p>
-        </div>
-
-        {feedback && (
-          <div className="d-flex gap-3">
-            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start mb-0">
-              Feedback
-            </p>
-            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-1 p-md-2 rounded mb-0">
-              {feedback}
-            </p>
-            {isAdmin && (
-              <Icon
-                onClick={() => {
-                  setModalData(feedback);
-                  setActivityFeedbackId({ activityId, itemId: index + 1 });
-                  handleModalOpen();
-                }}
-                style={{ color: "#275DAD" }}
-                width={35}
-                icon="lucide:edit"
-              />
-            )}
-          </div>
-        )}
-      </div>
-    );
-  };
 
   return (
     <>
-      {/* Activity 1 */}
-      <p className="bg-yellow py-md-3 px-md-5 py-1 px-2 text-gray d-inline-block rounded-5 fs-md-4">
+      {/* Activity 2 */}
+      <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
         Activity 1
       </p>
       <hr />
       <div className="d-flex gap-3">
-        <h2 className="text-blue fs-md-1">Questions:</h2>
-        <p className="text-blue fs-md-4">{activity1.question} "Adaptability"?</p>
+        <h2 className="text-blue fs-md-1">Scenario 1:</h2>
+        <p className="text-blue fs-md-4">You feel really mad because someone cut in line at lunch.</p>
       </div>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
-        {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity1.id)
-            ?.feedback && (
-            <Icon
-              onClick={() => {
-                setActivityFeedbackId({ activityId: activity1.id });
-                handleModalOpen();
-              }}
-              style={{ color: "#D6D6D6" }}
-              width={35}
-              icon="tabler:message-2"
-            />
-          )}
-      </div>
-      {
-        // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity1.id)
-          ?.feedback && (
-          <div className="d-flex gap-3">
-            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
-              Feedback
-            </p>
-            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity1.id)}
-            </p>
-            {isAdmin && (
-              <Icon
-                onClick={() => {
-                  setModalData(getActivityFeedback(activity1.id));
-                  setActivityFeedbackId({ activityId: activity1.id });
-                  handleModalOpen();
-                }}
-                style={{ color: "#275DAD" }}
-                width={35}
-                icon="lucide:edit"
-              />
-            )}
-          </div>
-        )
-      }
-      <hr />
-
-      {/* Activity 2  */}
-      <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
-        Activity 2
-      </p>
+      {renderQuestions(activity1.id, q1.letters, 0)}
       <hr />
       <div className="d-flex gap-3">
-        <h2 className="text-blue fs-md-1">Questions:</h2>
-        <p className="text-blue fs-md-4">Drag-and-drop the statements on the left into any of these bowls.</p>
+        <h2 className="text-blue fs-md-1">Scenario 2:</h2>
+        <p className="text-blue fs-md-4">You feel super excited and can’t sit still during a fun class project.</p>
       </div>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <div className="flex-grow-1 d-flex">
-          <div className="flex-grow-1">
-            <h2 className="text-center bg-green text-white py-md-3 py-1 fs-md-1">
-              Adaptability
-            </h2>
-            <div className="px-2 py-1 px-md-5 py-md-3">
-              {drag1("growth")?.map((item, idx) => (
-                <p className="fs-md-4">
-                  {idx + 1}. {item}
-                </p>
-              ))}
-            </div>
-          </div>
-          <div className="flex-grow-1">
-            <h2 className="bg-red text-center text-white py-md-3 py-1 fs-md-1">
-              Not Adaptabilty
-            </h2>
-            <div className="px-2 py-1 px-md-5 py-md-3">
-              {drag1("fixed")?.map((item, idx) => (
-                <p className="fs-md-4">
-                  {idx + 1}. {item}
-                </p>
-              ))}
-            </div>
-          </div>
-        </div>
-        {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity2.id)
-            ?.feedback && (
-            <Icon
-              onClick={() => {
-                setActivityFeedbackId({ activityId: activity2.id });
-                handleModalOpen();
-              }}
-              style={{ color: "#D6D6D6" }}
-              width={35}
-              icon="tabler:message-2"
-            />
-          )}
-      </div>
-      {
-        // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity2.id)
-          ?.feedback && (
-          <div className="d-flex gap-3">
-            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
-              Feedback
-            </p>
-            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-1 p-md-2 rounded">
-              {getActivityFeedback(activity2.id)}
-            </p>
-            {isAdmin && (
-              <Icon
-                onClick={() => {
-                  setModalData(getActivityFeedback(activity2.id));
-                  setActivityFeedbackId({ activityId: activity2.id });
-                  handleModalOpen();
-                }}
-                style={{ color: "#275DAD" }}
-                width={35}
-                icon="lucide:edit"
-              />
-            )}
-          </div>
-        )
-      }
+      {renderQuestions(activity1.id, q1.letters, 1)}
       <hr />
-
-      {/* Activity 3*/}
-      <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
-        Activity 3
-      </p>
-      <hr />
-      {[
-        [q1, a1, f1],
-        [q2, a2, f2],
-        [q3, a3, f3],
-        [q4, a4, f4],
-        [q5, a5, f5],
-      ].map(([question, answer, feedback], index) => (
-        <React.Fragment key={index}>
-          <div className="d-flex gap-3">
-            <h2 className="text-blue fs-md-1 text-nowrap">Question {index + 1}:</h2>
-            <p className="text-blue fs-md-4">
-              {question?.questions?.[0]?.question}
-            </p>
-          </div>
-          <div className="d-flex gap-3">
-            <h2 className="text-gray fs-md-1 text-gray">Answer:</h2>
-            <p className="fs-md-5 flex-grow-1">{answer}</p>
-
-            {isAdmin && !feedback && (
-              <Icon
-                onClick={() => {
-                  setActivityFeedbackId({
-                    activityId: activity3.id,
-                    itemId: index + 1,
-                  });
-                  handleModalOpen();
-                }}
-                style={{ color: "#D6D6D6" }}
-                width={35}
-                icon="tabler:message-2"
-              />
-            )}
-          </div>
-          {feedback && (
-            <div className="d-flex gap-3">
-              <p className="text-bg-secondary rounded-4 px-2 px-md-3 fs-md-5 align-self-start">
-                Feedback
-              </p>
-              <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-1 p-md-2 rounded">
-                {feedback}
-              </p>
-              {isAdmin && (
-                <Icon
-                  onClick={() => {
-                    setModalData(feedback);
-                    setActivityFeedbackId({
-                      activityId: activity3.id,
-                      itemId: index + 1,
-                    });
-                    handleModalOpen();
-                  }}
-                  style={{ color: "#275DAD" }}
-                  width={35}
-                  icon="lucide:edit"
-                />
-              )}
-            </div>
-          )}
-          <hr />
-        </React.Fragment>
-      ))}
 
       {/* Assesment 1 */}
       <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
@@ -520,15 +275,15 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           </h2>
           <p className="text-white">
             {score < 40
-              ? "Well done on starting your journey into understanding resilience! You’ve gained a basic understanding of the words, ‘Resilience’ and ‘Grit’. However, you need to revisit the course again and listen more attentively to the lessons. You can reach out to your teachers or classmates for help if you still find yourself struggling. Reaching out for help shows that you are a smart person."
+              ? "Well done on starting your journey into Emotional Regulation! You’ve begun to explore the basics, including understanding emotions and identifying energy levels, but there’s plenty of room to grow. Spend more time revisiting key concepts, such as understanding the SONAR method for managing emotions. Practice small coping techniques and try applying them to simple daily challenges. Remember, emotional regulation is a skill that develops over time, so keep learning and practicing."
               : score < 60
-                ? "Good job! You’ve shown a good understanding of resilience and grits. You’re beginning to grasp concepts like the 7 C’s and the role of support systems in building resilience. To deepen your understanding, try practicing adaptability in real-life scenarios and applying the coping skills you have learned. Work on applying these principles when facing challenges, no matter how little or insignificant the challenge might seem; with consistent effort, you’ll strengthen your resilient bones."
+                ? "Good job! You’ve shown a foundational understanding of emotional regulation. To build on this, focus on strengthening your ability to identify emotions as they arise and using the SONAR method to deal with them effectively. Practice coping skills like physical or creative activities to handle difficult moments. With consistent effort, you’ll see more confidence in managing emotions across different situations."
                 : score < 80
-                  ? "Great work! You’ve developed a solid understanding of resilience and grit. To take it a step further, focus on building stronger connections with your support network and practicing coping skills in real-life situations. Apply these principles consistently, even in small challenges, to strengthen your resilience and ability to bounce back. Keep up the good work—you’re on the right track!"
+                  ? "Great work! You’ve developed a solid understanding of emotional regulation. Over the course of these weeks, you’ve learned how to recognize energy levels, understand the SONAR method, and use basic coping skills. To take your skills further, focus on applying what you’ve learned to help you deal with high-energy or low-energy states and practice applying these skills in more complex situations. Keep practicing these techniques daily, and you’ll continue to see significant improvement in your emotional balance."
                   : score < 95
-                    ? "Excellent job! You’ve shown a strong understanding of resilience and how to build it into your life. You have learned to effectively use strategies like the 7 C’s, practicing adaptability, and relying on your support systems when needed. To continue growing, focus on maintaining these habits and applying them in different areas of your life, whether it’s personal goals or overcoming unexpected challenges. Remember, resilience is a skill that gets stronger with use, and your dedication is truly inspiring. Keep pushing forward—you’re doing amazing!"
+                    ? "Excellent work! You’ve demonstrated a strong understanding of emotional regulation concepts, from recognizing your energy levels to using the SONAR method and applying coping skills effectively. To keep growing, focus on applying these skills in a variety of scenarios, such as managing stress, improving relationships, or achieving personal goals. Your dedication to mastering emotional regulation is commendable—keep up the great work!"
                     : score <= 100
-                      ? "Outstanding achievement! You’ve demonstrated exceptional mastery of resilience and grit. Your understanding of the 7 C’s, adaptability, and the role of support systems will help you greatly as you handle challenges. You’ve not only learned to bounce back but to thrive and grow stronger in the process. Keep building on this incredible foundation and inspiring others with your example. Your hard work and perseverance are commendable—your resilience is a skill that will serve you for a lifetime!"
+                      ? "Outstanding achievement! You’ve shown an exceptional understanding of emotional regulation and its application in your daily life. Your ability to recognize and manage emotions, balance energy levels, and use the SONAR framework effectively is truly impressive, and will set you up for great success and impact in life. Keep inspiring others with your emotional intelligence, and continue refining these skills as you grow. Your mastery of emotional regulation will serve you well in every aspect of life!"
                       : ""}
           </p>
         </div>

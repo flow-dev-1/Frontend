@@ -110,7 +110,7 @@ function ResilienceFeedback() {
     },
 
     {
-      topic: "Summary of your journey through Resilience & Grit",
+      topic: "Summary of your journey through Emotional Regulation",
       component: (
         <OverallFeedBack
           enrollmentId={enrollmentId}
@@ -163,7 +163,7 @@ function ResilienceFeedback() {
           <h2 className="fs-5 fs-md-3">
               Stay Strong, Keep Going!
             </h2>
-          <h2 className="compassion fs-5">Resilience & Grit</h2>
+          <h2 className="compassion fs-5">Emotional Regulation</h2>
           </div>
 
           <ul className="compassion-list">

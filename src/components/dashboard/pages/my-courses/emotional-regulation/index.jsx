@@ -94,7 +94,7 @@ const WeekContent = () => {
 
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
-    // if (!enrolmentData && !isAdmin) return navigate("/sign-in");
+    if (!enrolmentData && !isAdmin) return navigate("/sign-in");
     setEnrollmentId(enrolmentData?._id);
     setCourse(enrolmentData?.course?._id);
   }, []);
@@ -307,11 +307,11 @@ const CourseContent = () => {
   const [menuVisible, setMenuVisible] = useState(false);
 
   const weeksTopic = [
-    "Introduction to Resilience and Grit",
-    "Developing Resilience",
-    "Understanding the Concept of Adaptability and Its Application",
-    "The Role of Support Systems",
-    "Coping Skills",
+    "Introduction to Emotional Regulation",
+    "Identifying Energy Levels",
+    "The SONAR of Emotional Regulation",
+    "Introduction to Coping Skills",
+    "Wrapping Up!",
   ];
 
   useEffect(() => {
@@ -443,7 +443,7 @@ const CourseContent = () => {
 
           <div className="compassion-title">
             <h2 className="fs-5 fs-md-3">Stay Strong, Keep Going!</h2>
-            <h2 className="compassion fs-5">Resilience & Grit</h2>
+            <h2 className="compassion fs-5">Emotional Regulation</h2>
           </div>
 
           <ul className="compassion-list">

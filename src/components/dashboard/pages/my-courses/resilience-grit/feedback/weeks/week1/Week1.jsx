@@ -37,7 +37,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
   const { questions: assessments } = getWeekAssessment(1);
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/resilience-feedback-1", enrollmentId, 1],
+    queryKey: ["dashboard/emotional-regulation-feedback-1", enrollmentId, 1],
     queryFn: () =>
       isAdmin
         ? adminService.getUserCourseData(enrollmentId, 1, code)
@@ -126,7 +126,6 @@ function Week1({ enrollmentId, setWeekOneData }) {
   }
 
   function drag1(type) {
-    console.log(activityData, "Activity Data")
     if (!activityData || !activityData[3] || !activityData[3].answer) return [];
 
     const indices =

@@ -110,10 +110,8 @@ function WeekOneAssessment() {
 
     if (isLastQuestion) {
 
-      console.log(userAnswers.activities, "userAnswers.activities");
-
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 5;
+        answers.length !== totalSteps || userAnswers.activities.length !== 8;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(
@@ -122,48 +120,25 @@ function WeekOneAssessment() {
         return false;
       }
 
+      const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
+
+      console.log(userAnswers, userScore, "userScore")
+
+      mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
+
       // For nested questions check that all answeres were provided. when page is refreshed data may be lost
 
-      // Page 4 has nested questions
-      const selectedActivity = userAnswers.activities.find(
-        (activity) => activity.page === 4
-      );
 
-      const selectedActivityIsValid = (selectedActivity &&
-        Array.isArray(selectedActivity.answer) &&
-        selectedActivity.answer.length === 5);
+      // if (selectedActivityIsValid && selectedActivity1IsValid && selectedActivity2isValid) {
 
 
-      // Page 8 has nested questions
-      const selectedActivity1 = userAnswers.activities.find(
-        (activity) => activity.page === 8
-      );
-      const totalDroped = selectedActivity1?.answer?.[0].value?.green?.length + selectedActivity1?.answer?.[0].value?.red?.length
 
-      const selectedActivity1IsValid = totalDroped === 4
-
-      // Page 10 has nested questions
-      const selectedActivity2 = userAnswers.activities.find(
-        (activity) => activity.page === 10
-      );
-
-      const selectedActivity2isValid = selectedActivity2?.answer?.every(item => item.stepId !== undefined &&
-        item.value)
-
-      if (selectedActivityIsValid && selectedActivity1IsValid && selectedActivity2isValid) {
-
-          const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
-
-          console.log(userAnswers, userScore, "userScore")
-
-          mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
-
-      } else {
-        setErrorMessage(
-          "Oops! Some unanswered questions have been detected. Kindly go back and review!"
-        );
-        return false;
-      }
+      // } else {
+      //   setErrorMessage(
+      //     "Oops! Some unanswered questions have been detected. Kindly go back and review!"
+      //   );
+      //   return false;
+      // }
     } else {
       return true;
     }

@@ -6,7 +6,7 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_1.mp4",
         hasNextButton: true,
       },
       {
@@ -41,7 +41,7 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -65,7 +65,7 @@ export const courseContent = {
         id: 5,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -87,7 +87,7 @@ export const courseContent = {
         id: 7,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -113,7 +113,7 @@ export const courseContent = {
         id: 9,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_5.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_5.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -139,7 +139,7 @@ export const courseContent = {
         id: 11,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -165,7 +165,7 @@ export const courseContent = {
         id: 13,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -191,7 +191,7 @@ export const courseContent = {
         id: 15,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -229,7 +229,7 @@ export const courseContent = {
         id: 17,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -244,7 +244,7 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_1.mp4",
         hasNextButton: true,
       },
       {
@@ -252,7 +252,7 @@ export const courseContent = {
         type: "question",
         questionType: "text",
         question:
-          " What do you think about this zone? Do you think it’s a good zone and would you like to be there?",
+          "Do you remember what we talked about last week?",
         hasImage: false,
         imageSrc: "mindset.png",
         inputType: "bigTextBox",
@@ -265,7 +265,7 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -409,7 +409,7 @@ export const courseContent = {
         id: 5,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+2/Week+2_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -493,7 +493,7 @@ export const courseContent = {
         id: 7,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -519,7 +519,7 @@ export const courseContent = {
         id: 9,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+1/Week+1_5.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_5.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -534,7 +534,7 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+3/Week+3_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+3/Week+3_1.mp4",
         hasNextButton: true,
       },
       {
@@ -602,7 +602,7 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_1.mp4",
         hasNextButton: true,
       },
       {
@@ -623,7 +623,7 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -661,7 +661,7 @@ export const courseContent = {
         id: 5,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+4/Week+4_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -676,7 +676,7 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+5/Week+5_1.mp4",
         hasNextButton: true,
       },
       {
@@ -750,7 +750,7 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/resilience_grit_videos/Week+5/Week+5_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+5/Week+5_2.mp4",
         hasNextButton: true,
       },
     ],
