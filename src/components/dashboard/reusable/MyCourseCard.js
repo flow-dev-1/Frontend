@@ -1,81 +1,86 @@
-import React, { useState } from 'react'
-import { Icon } from '@iconify/react'
-import './reusable.css'
-import Modal from 'react-modal'
-import ReviewCourseInfoModal from '../../modals-pages/dashboard-modals/ReviewCourseInfoModal'
-import { useNavigate } from 'react-router-dom'
-import { encryptURI } from '../../../utils/encryption'
-import { toast } from 'react-toastify'
+import React, { useState } from "react";
+import { Icon } from "@iconify/react";
+import "./reusable.css";
+import Modal from "react-modal";
+import ReviewCourseInfoModal from "../../modals-pages/dashboard-modals/ReviewCourseInfoModal";
+import { useNavigate } from "react-router-dom";
+import { encryptURI } from "../../../utils/encryption";
+import { toast } from "react-toastify";
 
 const MyCourseCard = ({ course }) => {
-  const navigate = useNavigate()
-  const [modalIsOpen, setIsOpen] = useState(false)
-  const [modalType, setModalType] = useState('')
+  const navigate = useNavigate();
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [modalType, setModalType] = useState("");
 
   const openModal = (modalType) => {
-    setIsOpen(true)
-    setModalType(modalType)
-  }
+    setIsOpen(true);
+    setModalType(modalType);
+  };
 
   function closeModal() {
-    setIsOpen(false)
+    setIsOpen(false);
   }
 
   const likesPercent = (likes, courseEnrollment) => {
-    if (likes === 0) return 0.0
-    return ((likes / courseEnrollment) * 100).toFixed(1)
-  }
+    if (likes === 0) return 0.0;
+    return ((likes / courseEnrollment) * 100).toFixed(1);
+  };
 
   const truncateText = (text, maxLength) => {
     if (text?.length > maxLength) {
-      return text.slice(0, maxLength) + '...'
+      return text.slice(0, maxLength) + "...";
     }
-    return text
-  }
+    return text;
+  };
 
   const handleFeedbackNavigation = (course) => {
     if (course?.course.title === "Self Awareness") {
-      navigate(`/dashboard/feedback/self-awareness`, { state: { enrollmentData: course } })
-    } else if(course?.course.title === "Resilience & Grit") {
-      navigate(`/dashboard/resilience_grit/feedback`, { state: { enrollmentData: course } })
-    }else if(course?.course.title === "TOT Course 1") {
-      navigate(`/dashboard/tot/feedback`, { state: { enrollmentData: course } })
+      navigate(`/dashboard/feedback/self-awareness`, {
+        state: { enrollmentData: course },
+      });
+    } else if (course?.course.title === "Resilience & Grit") {
+      navigate(`/dashboard/resilience_grit/feedback`, {
+        state: { enrollmentData: course },
+      });
+    } else if (course?.course.title === "TOT Course 1") {
+      navigate(`/dashboard/tot/feedback`, {
+        state: { enrollmentData: course },
+      });
     } else {
-      navigate(`/dashboard/${course?.course.title}/feedback`, { state: { enrollmentData: course } })
+      navigate(`/dashboard/${course?.course.title}/feedback`, {
+        state: { enrollmentData: course },
+      });
     }
+  };
 
-  }
-  
   const handleButtonClick = () => {
-
-
     if (course?.progress === 100) {
-      openModal('feedback')
+      openModal("feedback");
     } else if (course?.schoolCourseEnrollment?.status === "Deactivated") {
-      return toast.info("Course Deavtivated! Please contact admin for support.")
+      return toast.info(
+        "Course Deavtivated! Please contact admin for support."
+      );
     }
 
-    if (course?.course.title === 'Self Awareness') {
+    if (course?.course.title === "Self Awareness") {
       navigate(`/dashboard/self-awareness-course`, {
         state: { enrollmentData: course },
-      })
-      localStorage.setItem(`${course._id}-can-see`, true)
-    } else if(course?.course.title === "Resilience & Grit") {
+      });
+      localStorage.setItem(`${course._id}-can-see`, true);
+    } else if (course?.course.title === "Resilience & Grit") {
       navigate(`/dashboard/resilience_grit`, {
         state: { enrollmentData: course },
-      })
-
-    }else if(course?.course.title === "TOT Course 1") {
+      });
+    } else if (course?.course.title === "TOT Course 1") {
       navigate(`/dashboard/tot`, {
         state: { enrollmentData: course },
-      })
-
+      });
     } else {
       navigate(`/dashboard/${course?.course?.title}`, {
-        state: { enrollmentData: course }
-      })
+        state: { enrollmentData: course },
+      });
     }
-  }
+  };
 
   return (
     <div style={{ backgroundColor: "#fff" }} className="reusable-course-card">
@@ -87,7 +92,7 @@ const MyCourseCard = ({ course }) => {
                 display: "block",
                 width: "100%",
                 height: "100%",
-                objectFit: "cover"
+                objectFit: "cover",
               }}
               src={course?.course.image}
               alt=""
@@ -131,7 +136,7 @@ const MyCourseCard = ({ course }) => {
         </div>
         <div className="course-card-btn d-flex">
           {/* Review/Feedback Button */}
-          {course.progress === 100 ? (
+          {course.progress >= 100 ? (
             <button
               style={{
                 backgroundColor: "#fff",
@@ -140,7 +145,7 @@ const MyCourseCard = ({ course }) => {
                 justifyContent: "center",
                 gap: ".4rem",
                 padding: ".5rem 8px",
-                border: "1px solid #329bd6"
+                border: "1px solid #329bd6",
               }}
               className="btn card-btn feedback"
               onClick={() => handleFeedbackNavigation(course)}
@@ -157,7 +162,7 @@ const MyCourseCard = ({ course }) => {
                 justifyContent: "center",
                 gap: ".4rem",
                 width: "120px",
-                padding: ".5rem 8px"
+                padding: ".5rem 8px",
               }}
               className="btn card-btn preview"
               onClick={() => openModal("review")}
@@ -175,7 +180,7 @@ const MyCourseCard = ({ course }) => {
               justifyContent: "center",
               gap: ".4rem",
               width: "120px",
-              padding: ".5rem 8px"
+              padding: ".5rem 8px",
             }}
             className="btn card-btn start-resume"
             onClick={handleButtonClick}
@@ -188,8 +193,8 @@ const MyCourseCard = ({ course }) => {
             {course?.progress === 100
               ? "Completed"
               : course.progress === 0
-                ? "Start"
-                : "Resume"}
+              ? "Start"
+              : "Resume"}
           </button>
           {course?.progress > 0 && course?.progress < 100 && (
             <Icon
@@ -223,6 +228,6 @@ const MyCourseCard = ({ course }) => {
       </Modal>
     </div>
   );
-}
+};
 
-export default MyCourseCard
+export default MyCourseCard;
