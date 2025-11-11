@@ -7,7 +7,6 @@ import wrong from "../../../../../../../../assets/wrong.png";
 import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
-  getWeekPreAssessment,
 } from "../../../data/index.js";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
@@ -17,7 +16,7 @@ import { useSelector } from "react-redux";
 import adminService from "../../../../../../../../services/api/admin.js";
 import Modal from "../../components/Modal.jsx";
 
-function Week6({ enrollmentId, setWeekFiveData }) {
+function Week6({ enrollmentId, setWeekSixData }) {
   const { pages } = getWeekContentExcludingVideos(6);
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState("");
@@ -30,15 +29,14 @@ function Week6({ enrollmentId, setWeekFiveData }) {
   const { isAdmin, code } = useSelector(adminData);
 
   const { questions: assessments } = getWeekAssessment(6);
-  const { questions: preAssessments } = getWeekPreAssessment(6);
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/resilience-feedback-5", enrollmentId, 5],
+    queryKey: ["dashboard/tot-feedback-6", enrollmentId, 6],
     queryFn: () =>
       isAdmin
-        ? adminService.getUserCourseData(enrollmentId, 5, code)
-        : userService.getUserCourseData(enrollmentId, 5),
+        ? adminService.getUserCourseData(enrollmentId, 6, code)
+        : userService.getUserCourseData(enrollmentId, 6),
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -68,7 +66,7 @@ function Week6({ enrollmentId, setWeekFiveData }) {
 
     setActivityData(data.activity?.activities);
     setAssessmentData(data.assessment?.assessments);
-    setWeekFiveData(true);
+    setWeekSixData(true);
 
     return () => {};
   }, [data]);
@@ -103,28 +101,28 @@ function Week6({ enrollmentId, setWeekFiveData }) {
     setActivityFeedbackId(null);
     setShowModal(false);
   };
-  function def(type) {
-    if (!activityData || !activityData[2] || !activityData[2].answer) return [];
 
-    const data =
-      type === "question"
-        ? activity3.steps
-            .filter((item) => item.type === "dropdownScenario")
-            .map((item) => item.question)
-        : activityData[2].answer.map((item) => item.value);
+  function getOptionDetails(option) {
+    const options = [
+      {
+        id: "A",
+        text: "Never",
+      },
+      {
+        id: "B",
+        text: "Occasionally",
+      },
+      {
+        id: "C",
+        text: "Frequently",
+      },
+      {
+        id: "D",
+        text: "Always",
+      },
+    ];
 
-    return data;
-
-    // const items = indices?.map((index) => activity2?.images[index]) || [];
-
-    // // Sort with featured names first
-    // return items.sort((a, b) => {
-    //   const aFeatured = featuredNames.includes(a);
-    //   const bFeatured = featuredNames.includes(b);
-    //   if (aFeatured && !bFeatured) return -1;
-    //   if (!aFeatured && bFeatured) return 1;
-    //   return 0;
-    // });
+    return options.find((item) => item.id === option) || null;
   }
 
   function drag1(type) {
@@ -132,15 +130,50 @@ function Week6({ enrollmentId, setWeekFiveData }) {
     if (!activityData || !activityData[3] || !activityData[3].answer) return [];
 
     const indices =
-      type === "growth"
+      type === "inner"
         ? activityData[3]?.answer?.[0]?.value?.green
+        : type === "middle"
+        ? activityData[3]?.answer?.[0]?.value?.orange
         : activityData[3]?.answer?.[0]?.value?.red;
-
-    // console.log(indices, "Indices")
-
-    // console.log(activity2,"Activity 2")
     return indices?.map((index) => activity4?.steps?.[1].images[index]) || [];
   }
+
+  function mapSelectedOptions(selectedObj = {}) {
+    const masterOptions = [
+      { id: "morning-check-ins", label: "Morning check-ins" },
+      {
+        id: "emotional-vocabulary-in-lessons",
+        label: "Emotional vocabulary in lessons",
+      },
+      { id: "gratitude-journals", label: "Gratitude journals" },
+      { id: "relationship_skills", label: "Relationship Skills" },
+      {
+        id: "breathing_or_grounding_exercises",
+        label: "Breathing or grounding exercises",
+      },
+      { id: "weekly_class_meetings", label: "Weekly class meetings" },
+      {
+        id: "praise_for_effort,_not_just_results",
+        label: "Praise for effort, not just results",
+      },
+      {
+        id: "growth_mindset_reflections",
+        label: "Growth mindset reflections",
+      },
+      {
+        id: "cooperative_learning_tasks",
+        label: "Cooperative learning tasks",
+      },
+      {
+        id: "storytelling_or_character_analysis",
+        label: "Storytelling or character analysis",
+      },
+    ];
+    if (!selectedObj || typeof selectedObj !== "object") return [];
+
+    return masterOptions.filter((option) => selectedObj[option.id]);
+  }
+
   if (isPending) {
     return <div>Loading...</div>;
   }
@@ -190,83 +223,6 @@ function Week6({ enrollmentId, setWeekFiveData }) {
 
   return (
     <>
-      {/* PreAssesment 1 */}
-      <p className="bg-blue py-1 px-1 py-md-3 px-md-2 text-white d-inline-block rounded-5 fs-md-4">
-        Pre-Assessment
-      </p>
-      <hr />
-      {preAssessments.map(({ id, question, options, correctOption }, i) => {
-        // todo:  fetch preassesment data from backend and switch
-        const selectedAnswer = assessmentData?.find(
-          (answer) => answer.id === id
-        )?.value;
-        return (
-          <>
-            <div className="d-flex gap-3" key={i}>
-              <p
-                className="text-blue fs-md-1 text-nowrap week-2-question-text fw-bold"
-                style={{ fontSize: 1 + "em" }}
-              >
-                Questions {i + 1}:
-              </p>
-              <p
-                className="text-blue fs-md-4 week-2-question-text"
-                style={{ fontSize: 1 + "em" }}
-              >
-                {question}
-              </p>
-            </div>
-            {options.map((option, index) => {
-              const optionKey = Object.keys(option)[0];
-              const optionText = option[optionKey];
-              const isCorrectOption = correctOption === optionText;
-              const isAnswer = selectedAnswer === optionText;
-              // console.log(assessmentData,"AssessmentData")
-
-              return (
-                <div
-                  key={index}
-                  className="d-flex gap-md-2 p-0 p-md-1 mb-3 justify-content-between"
-                >
-                  <div className="d-flex gap-md-2 p-1">
-                    <img
-                      src={isAnswer ? checkedImage : checkedImage}
-                      alt={`Option ${optionKey}`}
-                      style={{ width: 20, height: 20 }}
-                    />
-                    <div
-                      className="week-2-question-text text-gray"
-                      style={{ fontSize: 1 + "em" }}
-                    >{`${optionText}. ${option.text}`}</div>
-                  </div>
-                  {isCorrectOption ? (
-                    <p className="d-flex gap-1">
-                      {" "}
-                      <img
-                        src={correct}
-                        alt=""
-                        style={{ width: 20, height: 20 }}
-                      />{" "}
-                      Correct
-                    </p>
-                  ) : (
-                    <p className="d-flex gap-1">
-                      {" "}
-                      <img
-                        src={wrong}
-                        alt=""
-                        style={{ width: 20, height: 20 }}
-                      />
-                      Wrong
-                    </p>
-                  )}
-                </div>
-              );
-            })}
-          </>
-        );
-      })}
-      <hr />
       {/* Activity 1 */}
       <p className="bg-blue py-md-3 px-md-5 py-1 px-2 text-white d-inline-block rounded-5 fs-md-4">
         Activity 1
@@ -307,7 +263,28 @@ function Week6({ enrollmentId, setWeekFiveData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
+        {(() => {
+          const answers = getActivityAnswer(activity1.id);
+          if (!Array.isArray(answers))
+            return <p className="text-gray">Loading...</p>;
+
+          const step = answers.find(
+            (a) => a.stepId === activity1.steps[1].stepId
+          );
+          if (!step || !step.value)
+            return <p className="text-gray">Loading...</p>;
+
+          const details = getOptionDetails(step.value);
+          if (!details) return <p className="text-gray">Loading...</p>;
+
+          return (
+            <>
+              <p className="text-gray">
+                {details.id}. {details.text}
+              </p>
+            </>
+          );
+        })()}
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity1.id)
             ?.feedback && (
@@ -372,7 +349,28 @@ function Week6({ enrollmentId, setWeekFiveData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
+        {(() => {
+          const answers = getActivityAnswer(activity1.id);
+          if (!Array.isArray(answers))
+            return <p className="text-gray">Loading...</p>;
+
+          const step = answers.find(
+            (a) => a.stepId === activity1.steps[2].stepId
+          );
+          if (!step || !step.value)
+            return <p className="text-gray">Loading...</p>;
+
+          const details = getOptionDetails(step.value);
+          if (!details) return <p className="text-gray">Loading...</p>;
+
+          return (
+            <>
+              <p className="text-gray">
+                {details.id}. {details.text}
+              </p>
+            </>
+          );
+        })()}
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity1.id)
             ?.feedback && (
@@ -437,7 +435,28 @@ function Week6({ enrollmentId, setWeekFiveData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
+        {(() => {
+          const answers = getActivityAnswer(activity1.id);
+          if (!Array.isArray(answers))
+            return <p className="text-gray">Loading...</p>;
+
+          const step = answers.find(
+            (a) => a.stepId === activity1.steps[3].stepId
+          );
+          if (!step || !step.value)
+            return <p className="text-gray">Loading...</p>;
+
+          const details = getOptionDetails(step.value);
+          if (!details) return <p className="text-gray">Loading...</p>;
+
+          return (
+            <>
+              <p className="text-gray">
+                {details.id}. {details.text}
+              </p>
+            </>
+          );
+        })()}
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity1.id)
             ?.feedback && (
@@ -502,7 +521,28 @@ function Week6({ enrollmentId, setWeekFiveData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
+        {(() => {
+          const answers = getActivityAnswer(activity1.id);
+          if (!Array.isArray(answers))
+            return <p className="text-gray">Loading...</p>;
+
+          const step = answers.find(
+            (a) => a.stepId === activity1.steps[4].stepId
+          );
+          if (!step || !step.value)
+            return <p className="text-gray">Loading...</p>;
+
+          const details = getOptionDetails(step.value);
+          if (!details) return <p className="text-gray">Loading...</p>;
+
+          return (
+            <>
+              <p className="text-gray">
+                {details.id}. {details.text}
+              </p>
+            </>
+          );
+        })()}
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity1.id)
             ?.feedback && (
@@ -567,7 +607,28 @@ function Week6({ enrollmentId, setWeekFiveData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
+        {(() => {
+          const answers = getActivityAnswer(activity1.id);
+          if (!Array.isArray(answers))
+            return <p className="text-gray">Loading...</p>;
+
+          const step = answers.find(
+            (a) => a.stepId === activity1.steps[5].stepId
+          );
+          if (!step || !step.value)
+            return <p className="text-gray">Loading...</p>;
+
+          const details = getOptionDetails(step.value);
+          if (!details) return <p className="text-gray">Loading...</p>;
+
+          return (
+            <>
+              <p className="text-gray">
+                {details.id}. {details.text}
+              </p>
+            </>
+          );
+        })()}
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity1.id)
             ?.feedback && (
@@ -632,7 +693,28 @@ function Week6({ enrollmentId, setWeekFiveData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
+        {(() => {
+          const answers = getActivityAnswer(activity1.id);
+          if (!Array.isArray(answers))
+            return <p className="text-gray">Loading...</p>;
+
+          const step = answers.find(
+            (a) => a.stepId === activity1.steps[6].stepId
+          );
+          if (!step || !step.value)
+            return <p className="text-gray">Loading...</p>;
+
+          const details = getOptionDetails(step.value);
+          if (!details) return <p className="text-gray">Loading...</p>;
+
+          return (
+            <>
+              <p className="text-gray">
+                {details.id}. {details.text}
+              </p>
+            </>
+          );
+        })()}
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity1.id)
             ?.feedback && (
@@ -1012,7 +1094,15 @@ function Week6({ enrollmentId, setWeekFiveData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.step_3 || !activity.step_3.mainInput)
+              return "";
+            return activity.step_3.mainInput;
+          })()}
+        </p>
+
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -1084,7 +1174,15 @@ function Week6({ enrollmentId, setWeekFiveData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.step_4 || !activity.step_4.mainInput)
+              return "";
+            return activity.step_4.mainInput;
+          })()}
+        </p>
+
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -1149,15 +1247,43 @@ function Week6({ enrollmentId, setWeekFiveData }) {
         {activity5.steps[4].cheatSheet}
       </p>
       {/* Chekboxes comes in here */}
+      {(() => {
+        const selected = getActivityAnswer(activity5.id)?.step_5?.checkboxes;
+        const mapped = selected ? mapSelectedOptions(selected) : [];
+
+        console.log(mapped, "jhvm n");
+
+        return mapped.map((item, idx) => (
+          <div className="d-flex gap-1 gap-md-2 p-1" key={idx}>
+            <img
+              src={checkedImage}
+              alt={item}
+              style={{ width: 20, height: 20 }}
+            />
+            <div
+              className="week-2-question-text text-gray"
+              style={{ fontSize: 1 + "em" }}
+            >{`${item.label}`}</div>
+          </div>
+        ));
+      })()}
+
       <div className="d-flex gap-3">
         <p
-          className="text-gray fs-md-1 text-gray week-2-question-text fw-bolder"
+          className="px-2 text-gray fs-md-1 text-gray week-2-question-text fw-bolder"
           accordion
           style={{ fontSize: 1 + "em" }}
         >
           Others:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.step_5 || !activity.step_5.others_)
+              return "";
+            return activity.step_5.others_;
+          })()}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -1179,8 +1305,19 @@ function Week6({ enrollmentId, setWeekFiveData }) {
       >
         My integration plan (brief description):
       </p>
-      <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>{" "}
-      {/* asnwer for integration plan above*/}
+      <p className="fs-md-5 flex-grow-1">
+        {(() => {
+          const activity = getActivityAnswer(activity5.id);
+          if (
+            !activity ||
+            !activity.step_5 ||
+            !activity.step_5.my_integration_plan__brief_description__
+          )
+            return "";
+          return activity.step_5.my_integration_plan__brief_description__;
+        })()}
+      </p>
+
       {
         // Show this only id theres a feedback
         activityData?.find((activity) => activity.page === activity5.id)
@@ -1238,7 +1375,15 @@ function Week6({ enrollmentId, setWeekFiveData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.step_6 || !activity.step_6.mainInput)
+              return "";
+            return activity.step_6.mainInput;
+          })()}
+        </p>
+
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -1310,7 +1455,15 @@ function Week6({ enrollmentId, setWeekFiveData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.step_7 || !activity.step_7.mainInput)
+              return "";
+            return activity.step_7.mainInput;
+          })()}
+        </p>
+
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -1382,7 +1535,27 @@ function Week6({ enrollmentId, setWeekFiveData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        <div>
+          <p className="fs-md-5 flex-grow-1">
+            1.{" "}
+            {(() => {
+              const activity = getActivityAnswer(activity5.id);
+              if (!activity || !activity.step_8 || !activity.step_8.input1)
+                return "";
+              return activity.step_8.input1;
+            })()}
+          </p>
+          <p className="fs-md-5 flex-grow-1">
+            2.{" "}
+            {(() => {
+              const activity = getActivityAnswer(activity5.id);
+              if (!activity || !activity.step_8 || !activity.step_8.input2)
+                return "";
+              return activity.step_8.input2;
+            })()}
+          </p>
+        </div>
+
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -1454,7 +1627,15 @@ function Week6({ enrollmentId, setWeekFiveData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.step_8 || !activity.step_8.collaboration)
+              return "";
+            return activity.step_8.collaboration;
+          })()}
+        </p>
+
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -1526,7 +1707,15 @@ function Week6({ enrollmentId, setWeekFiveData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.step_9 || !activity.step_9.mainInput)
+              return "";
+            return activity.step_9.mainInput;
+          })()}
+        </p>
+
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -1567,6 +1756,7 @@ function Week6({ enrollmentId, setWeekFiveData }) {
           </div>
         )
       }
+      <hr />
       {/* Assesment 1 */}
       <p className="bg-blue py-1 px-1 py-md-3 px-md-2 text-white d-inline-block rounded-5 fs-md-4">
         Post-Assessment
@@ -1606,7 +1796,7 @@ function Week6({ enrollmentId, setWeekFiveData }) {
                 >
                   <div className="d-flex gap-md-2 p-1">
                     <img
-                      src={isAnswer ? checkedImage : checkedImage}
+                      src={isAnswer ? checkedImage : unCheckedImage}
                       alt={`Option ${optionKey}`}
                       style={{ width: 20, height: 20 }}
                     />
