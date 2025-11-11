@@ -614,8 +614,14 @@ function Week2({ enrollmentId, setWeekTwoData }) {
           Answers:
         </p>
         <p className="fs-md-5 flex-grow-1">
-          {getActivityAnswer(activity5.id).scenario_1.sonar["1"]}
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.scenario_1 || !activity.scenario_1.sonar)
+              return "";
+            return activity.scenario_1.sonar["1"] || "";
+          })()}
         </p>
+
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -674,8 +680,14 @@ function Week2({ enrollmentId, setWeekTwoData }) {
           Answers:
         </p>
         <p className="fs-md-5 flex-grow-1">
-          {getActivityAnswer(activity5.id).scenario_1.sonar["2"]}
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.scenario_1 || !activity.scenario_1.sonar)
+              return "";
+            return activity.scenario_1.sonar["2"] || "";
+          })()}
         </p>
+
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -734,8 +746,14 @@ function Week2({ enrollmentId, setWeekTwoData }) {
           Answers:
         </p>
         <p className="fs-md-5 flex-grow-1">
-          {getActivityAnswer(activity5.id).scenario_1.sonar["3"]}
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.scenario_1 || !activity.scenario_1.sonar)
+              return "";
+            return activity.scenario_1.sonar["3"] || "";
+          })()}
         </p>
+
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -794,7 +812,12 @@ function Week2({ enrollmentId, setWeekTwoData }) {
           Answers:
         </p>
         <p className="fs-md-5 flex-grow-1">
-          {getActivityAnswer(activity5.id).scenario_1.sonar["4"]}
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.scenario_1 || !activity.scenario_1.sonar)
+              return "";
+            return activity.scenario_1.sonar["4"] || "";
+          })()}
         </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
@@ -854,7 +877,12 @@ function Week2({ enrollmentId, setWeekTwoData }) {
           Answers:
         </p>
         <p className="fs-md-5 flex-grow-1">
-          {getActivityAnswer(activity5.id).scenario_1.sonar["5"]}
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.scenario_1 || !activity.scenario_1.sonar)
+              return "";
+            return activity.scenario_1.sonar["5"] || "";
+          })()}
         </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
@@ -929,8 +957,14 @@ function Week2({ enrollmentId, setWeekTwoData }) {
           Answers:
         </p>
         <p className="fs-md-5 flex-grow-1">
-          {getActivityAnswer(activity5.id).scenario_2.sonar["1"]}
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.scenario_2 || !activity.scenario_2.sonar)
+              return "";
+            return activity.scenario_2.sonar["1"] || "";
+          })()}
         </p>
+
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -988,7 +1022,14 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         >
           Answers:
         </p>
-        {getActivityAnswer(activity5.id).scenario_2.sonar["2"]}
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.scenario_2 || !activity.scenario_2.sonar)
+              return "";
+            return activity.scenario_2.sonar["2"] || "";
+          })()}
+        </p>
 
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
@@ -1047,7 +1088,14 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         >
           Answers:
         </p>
-        {getActivityAnswer(activity5.id).scenario_2.sonar["3"]}
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.scenario_2 || !activity.scenario_2.sonar)
+              return "";
+            return activity.scenario_2.sonar["3"] || "";
+          })()}
+        </p>
 
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
@@ -1106,7 +1154,14 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         >
           Answers:
         </p>
-        {getActivityAnswer(activity5.id).scenario_2.sonar["4"]}
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.scenario_2 || !activity.scenario_2.sonar)
+              return "";
+            return activity.scenario_2.sonar["4"] || "";
+          })()}
+        </p>
 
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
@@ -1165,7 +1220,14 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         >
           Answers:
         </p>
-        {getActivityAnswer(activity5.id).scenario_2.sonar["5"]}
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.scenario_2 || !activity.scenario_2.sonar)
+              return "";
+            return activity.scenario_2.sonar["5"] || "";
+          })()}
+        </p>
 
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
@@ -1240,8 +1302,14 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         >
           Answers:
         </p>
-        {getActivityAnswer(activity5.id).scenario_3.sonar["1"]}
-
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.scenario_3 || !activity.scenario_3.sonar)
+              return "";
+            return activity.scenario_3.sonar["1"] || "";
+          })()}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -1299,8 +1367,14 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         >
           Answers:
         </p>
-        {getActivityAnswer(activity5.id).scenario_3.sonar["2"]}
-
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.scenario_3 || !activity.scenario_3.sonar)
+              return "";
+            return activity.scenario_3.sonar["2"] || "";
+          })()}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -1358,7 +1432,14 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         >
           Answers:
         </p>
-        {getActivityAnswer(activity5.id).scenario_3.sonar["3"]}
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.scenario_3 || !activity.scenario_3.sonar)
+              return "";
+            return activity.scenario_3.sonar["3"] || "";
+          })()}
+        </p>
 
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
@@ -1417,8 +1498,14 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         >
           Answers:
         </p>
-        {getActivityAnswer(activity5.id).scenario_3.sonar["4"]}
-
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.scenario_3 || !activity.scenario_3.sonar)
+              return "";
+            return activity.scenario_3.sonar["4"] || "";
+          })()}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -1476,7 +1563,14 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         >
           Answers:
         </p>
-        {getActivityAnswer(activity5.id).scenario_3.sonar["5"]}
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const activity = getActivityAnswer(activity5.id);
+            if (!activity || !activity.scenario_3 || !activity.scenario_3.sonar)
+              return "";
+            return activity.scenario_3.sonar["5"] || "";
+          })()}
+        </p>
 
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
