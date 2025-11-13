@@ -3,7 +3,13 @@ import QuestionBox from "../../../../components/QuestionBox";
 import LetterModal from "./LetterModal";
 import "../page2.css";
 
-function SONARFrame({ letters, answers, setAnswers, setErrorMessage }) {
+function SONARFrame({
+  scenario,
+  letters,
+  answers,
+  setAnswers,
+  setErrorMessage,
+}) {
   const [selectedLetter, setSelectedLetter] = useState(null);
 
   const isLetterCompleted = (key) => {
@@ -12,19 +18,16 @@ function SONARFrame({ letters, answers, setAnswers, setErrorMessage }) {
   };
 
   const handleLetterClick = (letter, index) => {
-    // Enforce sequential completion
     if (index > 0) {
       const prev = letters[index - 1];
       if (!isLetterCompleted(prev.key)) {
-        setErrorMessage(`Please complete "${prev.label}" first.`);
+        setErrorMessage(`Please complete "${prev.labelFull}" first.`);
         return;
       }
     }
     setErrorMessage("");
     setSelectedLetter(letter);
   };
-
-  const handleClose = () => setSelectedLetter(null);
 
   const handleSave = (key, value) => {
     setAnswers((prev) => ({
@@ -38,22 +41,19 @@ function SONARFrame({ letters, answers, setAnswers, setErrorMessage }) {
   return (
     <>
       <QuestionBox extraStyle="bg-custom-blue">
-        <div className="text-center mb-5 mt-5 mt-md-4">
-          <h1 className="text-white bg-blue py-2 px-5 rounded d-inline  ">
-            Scenario 1
+        <div className="text-center mb-4">
+          <h1 className="text-white bg-blue py-2 px-5 rounded d-inline">
+            {scenario.heading}
           </h1>
         </div>
 
         <div className="text-center mt-3">
-          <h2 className="text-center text-gray">
-            you feel really mad because
-            <br />
-            someone cut in line at lunch
-          </h2>
+          <h2 className="text-gray text-center">{scenario.text}</h2>
         </div>
-        <div className="text-center mb-5 mt-5 mt-md-4">
+
+        <div className="text-center mb-5 mt-5">
           <h2 className="hint-box text-center mt-3 px-5">
-            click on the letters below to input your answers
+            Click on the letters below to input your answers
           </h2>
         </div>
 
@@ -68,7 +68,7 @@ function SONARFrame({ letters, answers, setAnswers, setErrorMessage }) {
               }`}
               onClick={() => handleLetterClick(letter, idx)}
             >
-              {letter.key}
+              {letter.label}
             </h2>
           ))}
         </div>
@@ -79,7 +79,7 @@ function SONARFrame({ letters, answers, setAnswers, setErrorMessage }) {
           letter={selectedLetter}
           pageQuestion={selectedLetter.question}
           existingAnswer={answers[selectedLetter.key] || ""}
-          onClose={handleClose}
+          onClose={() => setSelectedLetter(null)}
           onSave={handleSave}
         />
       )}

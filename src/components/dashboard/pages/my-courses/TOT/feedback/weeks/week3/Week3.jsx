@@ -19,27 +19,22 @@ import Modal from "../../components/Modal.jsx";
 
 function Week3({ enrollmentId, setWeekThreeData }) {
   const { pages } = getWeekContentExcludingVideos(3);
-  const [activity1, activity2, activity3, activity4, activity5, activity6] =
-    pages;
+  const [_, activity2, activity3, activity4, activity5, activity6] = pages;
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([]);
+  const [preAssessmentData, setPreAssessmentData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState("");
   const [activityFeedbackId, setActivityFeedbackId] = useState(null);
   const { isAdmin, code } = useSelector(adminData);
-
-  const [_, q1, q2, q3, q4, q5] = activity3.steps;
-  const [a1, a2, a3, a4, a5] =
-    activityData?.[2]?.answer?.map((a) => a.value) || [];
-  const [f1, f2, f3, f4, f5] =
-    activityData?.[2]?.feedback?.map((a) => a.value) || [];
 
   const { questions: assessments } = getWeekAssessment(3);
   const { questions: preAssessments } = getWeekPreAssessment(3);
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/resilience-feedback-3", enrollmentId, 3],
+    queryKey: ["dashboard/tot-feedback-3", enrollmentId, 3],
+
     queryFn: () =>
       isAdmin
         ? adminService.getUserCourseData(enrollmentId, 3, code)
@@ -55,16 +50,13 @@ function Week3({ enrollmentId, setWeekThreeData }) {
 
     setActivityData(data.activity?.activities);
     setAssessmentData(data.assessment?.assessments);
+    setPreAssessmentData(
+      data.activity?.activities.find((p) => p.page == 2).answer
+    );
     setWeekThreeData(true);
 
     return () => {};
   }, [data]);
-
-  // const [q1, q2, q3, q4, q5] = activity3.steps;
-  // const [a1, a2, a3, a4, a5] =
-  //   activityData?.[2]?.answer?.map((a) => a.value) || [];
-  // const [f1, f2, f3, f4, f5] =
-  //   activityData?.[2]?.feedback?.map((a) => a.value) || [];
 
   function getActivityAnswer(activityId) {
     return activityData?.find((activity) => activity.page === activityId)
@@ -153,18 +145,31 @@ function Week3({ enrollmentId, setWeekThreeData }) {
     }
   };
 
-  function drag1(type) {
-    if (!activityData || !activityData[1] || !activityData[1].answer) return [];
+  function getOptionDetails(option) {
+    const options = [
+      {
+        id: "A",
+        text: "Active Listening",
+      },
+      {
+        id: "B",
+        text: "Encouragement & Praise",
+      },
+      {
+        id: "C",
+        text: "Fairness & Consistency",
+      },
+      {
+        id: "D",
+        text: "Emotional Support",
+      },
+      {
+        id: "E",
+        text: "Showing Interest in Students' Lives",
+      },
+    ];
 
-    const indices =
-      type === "growth"
-        ? activityData[1]?.answer?.green
-        : activityData[1]?.answer?.red;
-
-    // console.log(indices, "Indices")
-
-    // console.log(activity2,"Activity 2")
-    return indices?.map((index) => activity2?.images[index]) || [];
+    return options.find((item) => item.id === option) || null;
   }
 
   if (isPending) {
@@ -256,9 +261,9 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       <hr />
       {preAssessments.map(({ id, question, options, correctOption }, i) => {
         // todo:  fetch preassesment data from backend and switch
-        const selectedAnswer = assessmentData?.find(
-          (answer) => answer.id === id
-        )?.value;
+        const selectedAnswer = Array.isArray(preAssessmentData)
+          ? preAssessmentData.find((answer) => answer.id === id)?.value
+          : undefined;
         return (
           <>
             <div className="d-flex gap-3" key={i}>
@@ -289,7 +294,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
                 >
                   <div className="d-flex gap-md-2 p-1">
                     <img
-                      src={isAnswer ? checkedImage : checkedImage}
+                      src={isAnswer ? checkedImage : unCheckedImage}
                       alt={`Option ${optionKey}`}
                       style={{ width: 20, height: 20 }}
                     />
@@ -354,7 +359,15 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity2.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const answers = getActivityAnswer(activity2.id);
+            if (!Array.isArray(answers) || !answers[0] || !answers[0].value)
+              return "";
+            return answers[0].value;
+          })()}
+        </p>
+
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity2.id)
             ?.feedback && (
@@ -419,7 +432,15 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity2.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const answers = getActivityAnswer(activity2.id);
+            if (!Array.isArray(answers) || !answers[1] || !answers[1].value)
+              return "";
+            return answers[1].value;
+          })()}
+        </p>
+
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity2.id)
             ?.feedback && (
@@ -502,7 +523,28 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        {(() => {
+          const answers = getActivityAnswer(activity3.id);
+          if (!Array.isArray(answers))
+            return <p className="text-gray">Loading...</p>;
+
+          const step = answers.find(
+            (a) => a.stepId === activity3.steps[1].stepId
+          );
+          if (!step || !step.value)
+            return <p className="text-gray">Loading...</p>;
+
+          const details = getOptionDetails(step.value);
+          if (!details) return <p className="text-gray">Loading...</p>;
+
+          return (
+            <>
+              <p className="text-gray">
+                {details.id}. {details.text}
+              </p>
+            </>
+          );
+        })()}
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -567,7 +609,28 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        {(() => {
+          const answers = getActivityAnswer(activity3.id);
+          if (!Array.isArray(answers))
+            return <p className="text-gray">Loading...</p>;
+
+          const step = answers.find(
+            (a) => a.stepId === activity3.steps[2].stepId
+          );
+          if (!step || !step.value)
+            return <p className="text-gray">Loading...</p>;
+
+          const details = getOptionDetails(step.value);
+          if (!details) return <p className="text-gray">Loading...</p>;
+
+          return (
+            <>
+              <p className="text-gray">
+                {details.id}. {details.text}
+              </p>
+            </>
+          );
+        })()}
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -632,7 +695,28 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        {(() => {
+          const answers = getActivityAnswer(activity3.id);
+          if (!Array.isArray(answers))
+            return <p className="text-gray">Loading...</p>;
+
+          const step = answers.find(
+            (a) => a.stepId === activity3.steps[3].stepId
+          );
+          if (!step || !step.value)
+            return <p className="text-gray">Loading...</p>;
+
+          const details = getOptionDetails(step.value);
+          if (!details) return <p className="text-gray">Loading...</p>;
+
+          return (
+            <>
+              <p className="text-gray">
+                {details.id}. {details.text}
+              </p>
+            </>
+          );
+        })()}
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -697,7 +781,28 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        {(() => {
+          const answers = getActivityAnswer(activity3.id);
+          if (!Array.isArray(answers))
+            return <p className="text-gray">Loading...</p>;
+
+          const step = answers.find(
+            (a) => a.stepId === activity3.steps[4].stepId
+          );
+          if (!step || !step.value)
+            return <p className="text-gray">Loading...</p>;
+
+          const details = getOptionDetails(step.value);
+          if (!details) return <p className="text-gray">Loading...</p>;
+
+          return (
+            <>
+              <p className="text-gray">
+                {details.id}. {details.text}
+              </p>
+            </>
+          );
+        })()}
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -762,7 +867,28 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        {(() => {
+          const answers = getActivityAnswer(activity3.id);
+          if (!Array.isArray(answers))
+            return <p className="text-gray">Loading...</p>;
+
+          const step = answers.find(
+            (a) => a.stepId === activity3.steps[5].stepId
+          );
+          if (!step || !step.value)
+            return <p className="text-gray">Loading...</p>;
+
+          const details = getOptionDetails(step.value);
+          if (!details) return <p className="text-gray">Loading...</p>;
+
+          return (
+            <>
+              <p className="text-gray">
+                {details.id}. {details.text}
+              </p>
+            </>
+          );
+        })()}
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -833,7 +959,14 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity4.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const answers = getActivityAnswer(activity4.id);
+            if (!Array.isArray(answers) || !answers[0] || !answers[0].value)
+              return "";
+            return answers[0].value;
+          })()}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity4.id)
             ?.feedback && (
@@ -898,7 +1031,14 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity4.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {(() => {
+            const answers = getActivityAnswer(activity4.id);
+            if (!Array.isArray(answers) || !answers[1] || !answers[1].value)
+              return "";
+            return answers[1].value;
+          })()}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity4.id)
             ?.feedback && (
@@ -982,7 +1122,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Strength
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        <p className="fs-md-5 flex-grow-1 text-gray">Perseverance</p>
       </div>
       <div className="d-flex gap-3">
         <p
@@ -992,7 +1132,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Praise
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        <p className="fs-md-5 flex-grow-1 text-gray">
+          I really admire the persistence you’ve shown in tackling this task.
+          Your effort is inspiring, and it’s paying off
+        </p>
       </div>
       <hr />
       <div className="d-flex gap-3">
@@ -1019,7 +1162,14 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Strength
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        <p className="fs-md-5 flex-grow-1 text-gray">
+          {(() => {
+            const answers = getActivityAnswer(activity5.id);
+            if (!Array.isArray(answers) || !answers[0] || !answers[0].strength)
+              return "";
+            return answers[0].strength;
+          })()}
+        </p>
       </div>
       <div className="d-flex gap-3">
         <p
@@ -1029,7 +1179,18 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Praise
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        <p className="fs-md-5 flex-grow-1 text-gray">
+          {(() => {
+            const answers = getActivityAnswer(activity5.id);
+            if (
+              !Array.isArray(answers) ||
+              !answers[0] ||
+              !answers[0].praiseExample
+            )
+              return "";
+            return answers[0].praiseExample;
+          })()}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -1070,7 +1231,6 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           </div>
         )
       }
-      <hr />
       <hr />
       <div className="d-flex gap-3">
         <p
@@ -1096,7 +1256,14 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Strength
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        <p className="fs-md-5 flex-grow-1 text-gray">
+          {(() => {
+            const answers = getActivityAnswer(activity5.id);
+            if (!Array.isArray(answers) || !answers[1] || !answers[1].strength)
+              return "";
+            return answers[1].strength;
+          })()}
+        </p>
       </div>
       <div className="d-flex gap-3">
         <p
@@ -1106,7 +1273,18 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Praise
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        <p className="fs-md-5 flex-grow-1 text-gray">
+          {(() => {
+            const answers = getActivityAnswer(activity5.id);
+            if (
+              !Array.isArray(answers) ||
+              !answers[1] ||
+              !answers[1].praiseExample
+            )
+              return "";
+            return answers[1].praiseExample;
+          })()}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -1148,7 +1326,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         )
       }
       <hr />
-      {/* Activity 4*/}
+      {/* Activity 5*/}
       <p className="bg-blue py-md-3 px-md-5 py-1 px-2 text-white d-inline-block rounded-5 fs-md-4">
         Activity 5
       </p>
@@ -1170,7 +1348,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           className="text-blue fs-md-1 week-2-question-text fw-bold"
           style={{ fontSize: 1 + "em" }}
         >
-          Scenario 2:
+          Scenario 1:
         </p>
         <p
           className="text-blue fs-md-4 week-2-question-text"
@@ -1196,7 +1374,14 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity6.id)}</p>
+        <p className="fs-md-5 flex-grow-1 text-gray">
+          {(() => {
+            const answers = getActivityAnswer(activity6.id);
+            if (!Array.isArray(answers) || !answers[0] || !answers[0].reflect)
+              return "";
+            return answers[0].reflect;
+          })()}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity6.id)
             ?.feedback && (
@@ -1253,7 +1438,14 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity6.id)}</p>
+        <p className="fs-md-5 flex-grow-1 text-gray">
+          {(() => {
+            const answers = getActivityAnswer(activity6.id);
+            if (!Array.isArray(answers) || !answers[0] || !answers[0].explain)
+              return "";
+            return answers[0].explain;
+          })()}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity6.id)
             ?.feedback && (
@@ -1310,7 +1502,18 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity6.id)}</p>
+        <p className="fs-md-5 flex-grow-1 text-gray">
+          {(() => {
+            const answers = getActivityAnswer(activity6.id);
+            if (
+              !Array.isArray(answers) ||
+              !answers[0] ||
+              !answers[0].suggestion
+            )
+              return "";
+            return answers[0].suggestion;
+          })()}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity6.id)
             ?.feedback && (
@@ -1351,7 +1554,6 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           </div>
         )
       }
-      <hr />
       <hr />
       <div className="d-flex gap-3">
         <p
@@ -1384,7 +1586,14 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity6.id)}</p>
+        <p className="fs-md-5 flex-grow-1 text-gray">
+          {(() => {
+            const answers = getActivityAnswer(activity6.id);
+            if (!Array.isArray(answers) || !answers[1] || !answers[1].reflect)
+              return "";
+            return answers[1].reflect;
+          })()}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity6.id)
             ?.feedback && (
@@ -1441,7 +1650,14 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity6.id)}</p>
+        <p className="fs-md-5 flex-grow-1 text-gray">
+          {(() => {
+            const answers = getActivityAnswer(activity6.id);
+            if (!Array.isArray(answers) || !answers[1] || !answers[1].explain)
+              return "";
+            return answers[1].explain;
+          })()}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity6.id)
             ?.feedback && (
@@ -1498,7 +1714,18 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity6.id)}</p>
+        <p className="fs-md-5 flex-grow-1 text-gray">
+          {(() => {
+            const answers = getActivityAnswer(activity6.id);
+            if (
+              !Array.isArray(answers) ||
+              !answers[1] ||
+              !answers[1].suggestion
+            )
+              return "";
+            return answers[1].suggestion;
+          })()}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity6.id)
             ?.feedback && (
@@ -1580,7 +1807,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
                 >
                   <div className="d-flex gap-md-2 p-1">
                     <img
-                      src={isAnswer ? checkedImage : checkedImage}
+                      src={isAnswer ? checkedImage : unCheckedImage}
                       alt={`Option ${optionKey}`}
                       style={{ width: 20, height: 20 }}
                     />

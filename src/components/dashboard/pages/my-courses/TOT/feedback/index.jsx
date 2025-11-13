@@ -7,12 +7,13 @@ import Week2 from "./weeks/week2/Week2";
 import Week3 from "./weeks/week3/Week3";
 import Week4 from "./weeks/week4/Week4";
 import Week5 from "./weeks/week5/Week5";
+import Week6 from "./weeks/week6/Week6";
 import OverallFeedBack from "./weeks/overall/OverallFeedBack";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
 
-function ResilienceFeedback() {
+function TOTFeedback() {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
@@ -43,7 +44,8 @@ function ResilienceFeedback() {
         isWeekTwoLoaded &&
         isWeekThreeLoaded &&
         isWeekFourLoaded &&
-        isWeekFiveLoaded 
+        isWeekFiveLoaded &&
+        isWeekSixLoaded
     );
   }, [
     isWeekOneLoaded,
@@ -51,6 +53,7 @@ function ResilienceFeedback() {
     isWeekThreeLoaded,
     isWeekFourLoaded,
     isWeekFiveLoaded,
+    isWeekSixLoaded,
   ]);
 
   const currentWeek = activeIndex + 1;
@@ -76,19 +79,19 @@ function ResilienceFeedback() {
 
   const weekContents = [
     {
-      topic:  "Introduction to Resilience and Grit",
+      topic: "Understanding SEL & Positive Psychology",
       component: (
         <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} />
       ),
     },
     {
-      topic:  "Developing Resilience",
+      topic: "Self-Awareness & Emotional Regulation",
       component: (
         <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} />
       ),
     },
     {
-      topic:  "Understanding the Concept of Adaptability and Its Application",
+      topic: "Building Relationships & Creating a Safe Classroom",
       component: (
         <Week3
           enrollmentId={enrollmentId}
@@ -97,20 +100,25 @@ function ResilienceFeedback() {
       ),
     },
     {
-      topic:  "The Role of Support Systems",
+      topic: "Growth Mindset & Resilience for Educators",
       component: (
         <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} />
       ),
     },
     {
-      topic:    "Coping Skills",
+      topic: "Integrating SEL into Teaching Methods",
       component: (
         <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} />
       ),
     },
-
     {
-      topic: "Summary of your journey through Resilience & Grit",
+      topic: "Teacher Well-being & Sustainable SEL Practices",
+      component: (
+        <Week6 enrollmentId={enrollmentId} setWeekSixData={setWeekSixData} />
+      ),
+    },
+    {
+      topic: "Summary of your journey through ToT Course 1",
       component: (
         <OverallFeedBack
           enrollmentId={enrollmentId}
@@ -160,10 +168,8 @@ function ResilienceFeedback() {
             Back to My Courses
           </button>
           <div className="compassion-title">
-          <h2 className="fs-5 fs-md-3">
-              Stay Strong, Keep Going!
-            </h2>
-          <h2 className="compassion fs-5">Resilience & Grit</h2>
+            <h2 className="fs-5 fs-md-3">Stay Strong, Keep Going!</h2>
+            <h2 className="compassion fs-5">Resilience & Grit</h2>
           </div>
 
           <ul className="compassion-list">
@@ -217,6 +223,6 @@ function ResilienceFeedback() {
   );
 }
 
-export default ResilienceFeedback;
+export default TOTFeedback;
 
 // week 4, all drag and drop

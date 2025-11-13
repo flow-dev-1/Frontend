@@ -1,82 +1,97 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import BigTextBox from "../../../components/BigTextBox";
+import Frame from "./components/Frame";
 import Button from "../../../components/Button";
-import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
-import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import StepIndicator from "../../../components/StepIndicator";
+import {
+  selectPageData,
+  selectCurrentStep,
+} from "../../../../../../../../redux/reducers/navigationSlice";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
-function Page8() {
+function WeekTwoPage8() {
   const dispatch = useDispatch();
-  const pageData = useSelector(selectPageData);
+  const currentStep = useSelector(selectCurrentStep);
   const adminDatas = useSelector(adminData);
   const userAnswers = useSelector(userAnswer);
-  const [myAnswer, setMyAnswer] = useState(userAnswers);
+
+  const pageData = useSelector(selectPageData);
+  const totalSteps = pageData?.steps?.length || 0;
+  const step = pageData?.steps[currentStep - 1];
+
+  const [answers, setAnswers] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (!userAnswers) return;
-    const response = userAnswers?.activities?.find(
+    const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setMyAnswer(response?.answer ? response.answer : "");
-    return () => {};
+    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
   }, [userAnswers]);
 
   const saveUserInput = () => {
-    if (!adminDatas.isAdmin && !myAnswer) {
-      setErrorMessage("Oops! Please enter a valid input!");
+    if (adminDatas.isAdmin) return true;
+
+    const stepData = answers.find((item) => item.stepId === currentStep);
+    if (!stepData) {
+      setErrorMessage(
+        "Please select both Energy Level and Zone of Regulation."
+      );
       return false;
     }
 
-    setErrorMessage(""); // Clear error if input is valid
-    // Allow flow admin to proceed without input but do not dispatch answer
-    if (adminDatas.isAdmin) return true;
-    dispatch(
-      saveActivity({
-        page: pageData.id,
-        answer: myAnswer,
-      })
-    );
+    const { energyLevel, zone } = stepData.value;
+    if (!energyLevel || !zone) {
+      setErrorMessage("Please complete both dropdowns before proceeding.");
+      return false;
+    }
+
+    setErrorMessage("");
+    const activityData = { page: pageData.id, answer: answers };
+    dispatch(saveActivity(activityData));
+
     return true;
   };
 
-  const handleInputChange = (e) => {
-    setErrorMessage("");
-    setMyAnswer(e.target.value);
+  const renderStep = () => {
+    if (!step) return <div>Invalid Step</div>;
+    switch (step.type) {
+      case "dualDropdownScenario":
+        return (
+          <Frame
+            data={{
+              step: step.stepId,
+              question: step.question,
+              dropdownOptions: pageData.dropdownOptions,
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        );
+      default:
+        return <div>Unknown step type</div>;
+    }
   };
 
   return (
     <>
-      <QuestionBox>
-        <div className="d-flex justify-content-center">
-          <h2
-            className="text-white rounded text-center px-5 py-1 d-inline mt-4 mb-2"
-            style={{ background: pageData.zoneBgColor }}
-          >
-            {pageData.zone}
-          </h2>
-        </div>
+      {renderStep()}
 
-        <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-center">
-          <h2 className="text-blue fs-1 mb-0 flex-shrink-0 question-text">
-            Question:
-          </h2>
-
-          <div className="d-flex align-items-center flex-grow-1 min-w-0">
-            <h2 className="text-gray fs-1 mb-0 flex-grow-1 md:text-truncate">
-              {pageData.question}
-            </h2>
-          </div>
+      {errorMessage && (
+        <div className="text-danger text-center mt-3 fw-bold fs-5">
+          {errorMessage}
         </div>
-        <BigTextBox handleChange={handleInputChange} value={myAnswer} />
-      </QuestionBox>
-      {errorMessage && <div className="text-danger">{errorMessage}</div>}
-      <div className="d-flex justify-content-center gap-96px mt-3 gap-4">
+      )}
+
+      <StepIndicator totalSteps={totalSteps} />
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
@@ -84,4 +99,4 @@ function Page8() {
   );
 }
 
-export default Page8;
+export default WeekTwoPage8;
