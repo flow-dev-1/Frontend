@@ -251,8 +251,7 @@ export const courseContent = {
         id: 2,
         type: "question",
         questionType: "text",
-        question:
-          "Do you remember what we talked about last week?",
+        question: "Do you remember what we talked about last week?",
         hasImage: false,
         imageSrc: "mindset.png",
         inputType: "bigTextBox",
@@ -546,49 +545,93 @@ export const courseContent = {
             type: "instruction",
             title: "Instruction",
             instructions: [
-              "Read the scenarios provided and write down what you would do for each step of SONAR (Stop, Observe, Name, Accept, Regulate).",
+              "Read the two scenarios below carefully.",
+              "For each scenario, write what you would do for each step of SONAR (Stop, Observe, Name, Accept, Regulate).",
             ],
           },
           {
             stepId: 2,
             type: "sonar",
-            title: "SONAR Scenario",
-            letters: [
-              {
-                key: "S",
-                label: "S",
-                labelFull: "STOP",
-                question: "Stop when you notice the overwhelming emotions.",
-              },
-              {
-                key: "O",
-                label: "O",
-                labelFull: "OBSERVE",
-                question: "Observe the feelings in your body.",
-              },
-              {
-                key: "N",
-                label: "N",
-                labelFull: "NAME",
-                question: "Name your emotion",
-              },
-              {
-                key: "A",
-                label: "A",
-                labelFull: "ACCEPT",
-                question: "Accept what you are feeling",
-              },
-              {
-                key: "R",
-                label: "R",
-                labelFull: "REGULATE",
-                question: "Regulate your emotions",
-              },
-            ],
+            title: "Scenario 1",
             scenario: {
               heading: "Scenario 1",
-              text: "you feel really mad because someone cut in line at lunch",
+              text: "You feel really nervous because you have to give a presentation in class.",
             },
+            letters: [
+              {
+                key: "S1",
+                label: "S",
+                labelFull: "STOP",
+                question:
+                  "What could you do to stop and pause when you feel nervous?",
+              },
+              {
+                key: "O1",
+                label: "O",
+                labelFull: "OBSERVE",
+                question: "What are you noticing in your body right now?",
+              },
+              {
+                key: "N1",
+                label: "N",
+                labelFull: "NAME",
+                question: "What emotion are you feeling?",
+              },
+              {
+                key: "A1",
+                label: "A",
+                labelFull: "ACCEPT",
+                question: "How can you accept that feeling without judgment?",
+              },
+              {
+                key: "R1",
+                label: "R",
+                labelFull: "REGULATE",
+                question: "What could you do to calm yourself?",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "sonar",
+            title: "Scenario 2",
+            scenario: {
+              heading: "Scenario 2",
+              text: "You feel super excited and can't sit still during a fun class project.",
+            },
+            letters: [
+              {
+                key: "S2",
+                label: "S",
+                labelFull: "STOP",
+                question:
+                  "What could you do to stop and pause when you feel left out?",
+              },
+              {
+                key: "O2",
+                label: "O",
+                labelFull: "OBSERVE",
+                question: "What are you noticing in your body right now?",
+              },
+              {
+                key: "N2",
+                label: "N",
+                labelFull: "NAME",
+                question: "What emotion are you feeling?",
+              },
+              {
+                key: "A2",
+                label: "A",
+                labelFull: "ACCEPT",
+                question: "How can you accept that feeling without judgment?",
+              },
+              {
+                key: "R2",
+                label: "R",
+                labelFull: "REGULATE",
+                question: "What could you do to calm yourself?",
+              },
+            ],
           },
         ],
         navigation: { prev: true, next: true },

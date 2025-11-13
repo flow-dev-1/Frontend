@@ -193,9 +193,9 @@ function App() {
           <Route
             path="/dashboard/emotional_regulation"
             element={
-              <ProtectedRoute>
-                <EmotionalRegulationCourse />
-              </ProtectedRoute>
+              // <ProtectedRoute>
+              <EmotionalRegulationCourse />
+              // </ProtectedRoute>
             }
           />
           <Route
