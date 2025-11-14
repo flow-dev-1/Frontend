@@ -39,12 +39,11 @@ function Week2({ enrollmentId, setWeekTwoData }) {
   const answers = activityData?.[2]?.answer || [];
   const [a1, a2] = answers;
 
-  // const [Q1, Q2] = activity4.steps;
+  const [Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8] = activity4.steps;
 
-  // const answers1 = activityData?.[2]?.answer || [];
-  // const [A1, A2] = answers;
+  const answers1 = activityData?.[3]?.answer || [];
+  const [A1, A2, A3, A4, A5, A6, A7, A8] = answers1;
 
-  console.log(activityData,"Activity4");
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
@@ -294,6 +293,77 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     );
   };
 
+  // Helper function to render question section
+  const renderActivity4QuestionSection = (question, answer, activityId, props, sn) => {
+    const { activityData, isAdmin, setActivityFeedbackId, handleModalOpen, setModalData, getActivityFeedback } = props;
+    const feedback = hasActivityFeedback(activityData, activityId);
+
+    return (
+      <>
+        <div className="d-flex gap-3">
+          <h2 className="text-blue fs-md-1">Questions{sn}:</h2>
+          <p className="text-blue fs-md-4">{question}</p>
+        </div>
+
+        <div className="d-flex gap-3 my-2">
+          <div className="d-flex flex-column flex-grow-1">
+            <div className="d-flex">
+              <h2 className="text-gray fs-md-1">Energy Level: </h2>
+              <p className="fs-md-5 flex-grow-1 mx-3">
+                {renderColoredAnswer(answer?.value?.energyLevel)}
+              </p>
+            </div>
+
+            <div className="d-flex">
+              <h2 className="text-gray fs-md-1">Zone of Regulation: </h2>
+              <p className="fs-md-5 flex-grow-1 mx-3">
+                {renderColoredAnswer(answer?.value?.zone)}
+              </p>
+            </div>
+          </div>
+
+
+          {isAdmin && !feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+        </div>
+
+        {feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activityId)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activityId));
+                  setActivityFeedbackId({ activityId });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )}
+
+        <hr />
+      </>
+    );
+  };
+
   const helperProps = {
     activityData,
     isAdmin,
@@ -454,16 +524,21 @@ function Week2({ enrollmentId, setWeekTwoData }) {
       <hr />
       {renderQuestionSection(q1.question, a1, activity1.id, helperProps, 1)}
       {renderQuestionSection(q2.question, a2, activity1.id, helperProps, 2)}
-      <hr />
+
 
       {/* Activity 3  */}
       <p className="bg-yellow py-md-3 px-md-5 py-1 px-2 text-gray d-inline-block rounded-5 fs-md-4">
         Activity 4
       </p>
       <hr />
-      {renderQuestionSection(q1.question, a1, activity1.id, helperProps)}
-      {renderQuestionSection(q2.question, a2, activity1.id, helperProps)}
-      <hr />
+      {renderActivity4QuestionSection(Q1.question, A1, activity1.id, helperProps)}
+      {renderActivity4QuestionSection(Q2.question, A2, activity1.id, helperProps)}
+      {renderActivity4QuestionSection(Q3.question, A3, activity1.id, helperProps)}
+      {renderActivity4QuestionSection(Q4.question, A4, activity1.id, helperProps)}
+      {renderActivity4QuestionSection(Q5.question, A5, activity1.id, helperProps)}
+      {renderActivity4QuestionSection(Q6.question, A6, activity1.id, helperProps)}
+      {renderActivity4QuestionSection(Q7.question, A7, activity1.id, helperProps)}
+      {renderActivity4QuestionSection(Q8.question, A8, activity1.id, helperProps)}
 
       {/* Assesment 1 */}
       <p className="bg-yellow py-md-3 px-md-5 py-1 px-2 text-gray d-inline-block rounded-5 fs-md-4">

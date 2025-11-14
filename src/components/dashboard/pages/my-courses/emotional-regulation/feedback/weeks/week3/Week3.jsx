@@ -26,7 +26,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
   const [activityFeedbackId, setActivityFeedbackId] = useState(null);
   const { isAdmin, code } = useSelector(adminData);
 
-  const [_, q1] = activity1.steps;
+  const [_, q1,q2] = activity1.steps;
 
   const { questions: assessments } = getWeekAssessment(3);
 
@@ -138,10 +138,12 @@ function Week3({ enrollmentId, setWeekThreeData }) {
   };
 
   function renderQuestions(activityId, questions, stepId) {
+
     return questions.map((question, index) => {
+
       // Get answer from activityData
       const answer = activityData[stepId]?.answer?.[question.key] || '';
-      
+
       return (
         <div key={index}>
           <p className="d-inline-block bg-blue text-white rounded-4 px-2 px-md-3">
@@ -199,7 +201,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         <h2 className="text-blue fs-md-1">Scenario 2:</h2>
         <p className="text-blue fs-md-4">You feel super excited and can’t sit still during a fun class project.</p>
       </div>
-      {renderQuestions(activity1.id, q1.letters, 1)}
+      {renderQuestions(activity1.id, q2.letters, 0)}
       <hr />
 
       {/* Assesment 1 */}
