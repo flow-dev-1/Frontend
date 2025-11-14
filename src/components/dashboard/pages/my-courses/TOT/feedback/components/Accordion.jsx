@@ -16,6 +16,7 @@ function Accordion({
   const contentRef = useRef();
   const [pdfLoading, setPdfLoading] = useState(false);
   const [startDownload, setStartDownload] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleToggle = (index) => {
     window.scroll(0, 0);
@@ -24,8 +25,24 @@ function Accordion({
 
   useEffect(() => {
     if (!startDownload) return;
+
+    if (currentIndex === 6) {
+      console.log("====================================");
+      console.log("prinitng Worksheet pdf");
+      console.log("====================================");
+
+      return;
+    }
+    if (currentIndex === 7) {
+      console.log("====================================");
+      console.log("prinitng course pdf");
+      console.log("====================================");
+
+      return;
+    }
+    // download pdf, based on index, we will just check if the index is the one we want to downlaod, and serve the pdf we want, then return
     generatePDF();
-  }, [hasPercentile, allDataLoaded]);
+  }, [hasPercentile, allDataLoaded, startDownload, currentIndex]);
 
   const generatePDF = async () => {
     const originalState = activeIndex;
@@ -85,11 +102,10 @@ function Accordion({
         {items.map((item, index) => (
           <div key={index} className="accordion-item">
             <div
-              className={
-                index > 5
-                  ? "bg-blue-feedback  py-4 px-5 d-flex gap-3 align-items-center justify-space-between"
-                  : "py-4 px-5 d-flex gap-3 align-items-center justify-space-between"
-              }
+              className={`py-4 px-5 d-flex gap-3 align-items-center justify-space-between
+py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
+                index > 7 ? "bg-blue-feedback" : ""
+              }`}
             >
               <div className="d-flex align-items-center gap-3 flex-grow-1">
                 {index < 6 ? (
@@ -99,6 +115,14 @@ function Accordion({
                     style={{ cursor: "pointer" }}
                   >
                     Week {index + 1}:
+                  </p>
+                ) : index >= 6 && index < 7 ? (
+                  <p
+                    className="text-gray text-nowrap fw-bold"
+                    onClick={() => handleToggle(index)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Summary
                   </p>
                 ) : (
                   <p
@@ -116,12 +140,13 @@ function Accordion({
                 >
                   {item.title}
                 </div>
-                {index === 6 && (
+                {index >= 6 && (
                   <p
                     className="text-blue"
                     style={{ zIndex: 100, cursor: "pointer" }}
                     onClick={() => {
                       handleToggle(index);
+                      setCurrentIndex(index);
                       setStartDownload(true);
                     }}
                   >
