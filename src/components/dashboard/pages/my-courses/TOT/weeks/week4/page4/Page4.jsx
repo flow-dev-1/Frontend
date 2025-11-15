@@ -18,12 +18,16 @@ import Frame from "./components/Frame";
 
 const InternalStepIndicator = ({ totalSteps, currentStep }) => {
   return (
-    <div className="d-flex justify-content-center mt-4" style={{ gap: "10px" }}>
+    <div
+      className="d-flex justify-content-center mt-4 flex-wrap"
+      style={{ gap: "10px" }}
+    >
       {[...Array(totalSteps)].map((_, index) => (
         <div
           key={index}
-          className={`${index + 2 <= currentStep ? "bg-step-active" : "bg-step"
-            }`}
+          className={`${
+            index + 2 <= currentStep ? "bg-step-active" : "bg-step"
+          }`}
           style={{
             // flexBasis: "35px",
             width: "35px",
@@ -160,7 +164,7 @@ function WeekFourPage4() {
         <div className="text-danger">{errorMessage}</div>
       )}{" "}
       {/* Display error message */}
-      <div className="d-flex justify-content-center align-items-center gap-2">
+      <div className="d-flex justify-content-center align-items-cente gap-2">
         <StepIndicator totalSteps={totalSteps - 1} />
         <InternalStepIndicator
           totalSteps={dragDropImageLength + 1}
