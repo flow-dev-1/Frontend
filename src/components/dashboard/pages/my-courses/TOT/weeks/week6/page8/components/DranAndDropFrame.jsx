@@ -202,7 +202,7 @@ const DragAndDropFrame = ({
               />
             </div>
 
-            <div className="d-flex justify-content-around align-items-center flex-wrap">
+            <div className="d-flex justify-content-around align-items-centers gap-3 flex-wrap">
               {buckets &&
                 buckets.map((bucket) => (
                   <Droppable key={bucket.title} droppableId={bucket.id}>
@@ -237,9 +237,7 @@ const DragAndDropFrame = ({
                               : "both-bowl bucket-text"
                           }
                         >
-                          <p className="text-center">
-                          {bucket.title}
-                          </p>
+                          <p className="text-center">{bucket.title}</p>
                         </div>
                         {provided.placeholder}
                       </div>

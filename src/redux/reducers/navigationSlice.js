@@ -109,7 +109,7 @@ const navigationSlice = createSlice({
     setCourse: (state, action) => {
       if (state.currentCourse !== action.payload) {
         state.currentCourse = action.payload;
-        state.currentWeek = 4;
+        state.currentWeek = 1;
         state.currentPage = 1;
         state.currentStep = 1;
       }
