@@ -17,7 +17,10 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
 const InternalStepIndicator = ({ totalSteps, currentStep }) => {
   return (
-    <div className="d-flex justify-content-center mt-4 flex-wrap" style={{ gap: "10px" }}>
+    <div
+      className="d-flex justify-content-center mt-4 flex-wrap"
+      style={{ gap: "10px" }}
+    >
       {[...Array(totalSteps)].map((_, index) => (
         <div
           key={index}
@@ -75,7 +78,9 @@ function Page8() {
 
     // Check total images dropped
     const totalDropped =
-      (stepData.value.green?.length || 0) + (stepData.value.red?.length || 0) + (stepData.value.orange?.length || 0);
+      (stepData.value.green?.length || 0) +
+      (stepData.value.red?.length || 0) +
+      (stepData.value.orange?.length || 0);
 
     if (totalDropped !== dragDropImageLength) {
       setErrorMessage(
@@ -117,7 +122,9 @@ function Page8() {
               </h2>
               <br />
               <br />
-              <h2 className="text-white d-inline-block text-start tot-week-2-question-text">
+            </div>
+            <div className="text-center mb-5 mt-3 mt-md-0">
+              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
                 <span className="fw-bold">Mildly triggering, Frustrating </span>{" "}
                 and
                 <span className="fw-bold">Highly triggering. </span>
@@ -152,7 +159,7 @@ function Page8() {
         <div className="text-danger">{errorMessage}</div>
       )}{" "}
       {/* Display error message */}
-      <div className="d-flex justify-content-center align-items-center gap-2">
+      <div className="d-flex justify-content-center align-items-cente gap-2">
         <StepIndicator totalSteps={totalSteps} />
         <InternalStepIndicator
           totalSteps={dragDropImageLength}

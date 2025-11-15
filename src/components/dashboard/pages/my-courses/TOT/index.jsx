@@ -186,8 +186,6 @@ const WeekContent = () => {
     keepPreviousData: false,
   });
 
-  // console.log(data,"Course data here")
-
   useEffect(() => {
     if (!data) return;
 

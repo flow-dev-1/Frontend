@@ -34,7 +34,6 @@ function TOTFeedback() {
   const [isWeekSevenLoaded, setWeekSevenData] = useState(false);
   const [isWeekEightLoaded, setWeekEightData] = useState(false);
   const [isWeekNineLoaded, setWeekNineData] = useState(false);
-  const [isWeekTenLoaded, setWeekTenData] = useState(false);
 
   const [allDataLoaded, setAllDataLoaded] = useState(false);
 
@@ -118,6 +117,14 @@ function TOTFeedback() {
       ),
     },
     {
+      topic: "SEL & Positive Psychology Implementation Plan Worksheet.",
+      component: "",
+    },
+    {
+      topic: "Summary of your journey through ToT Course 1",
+      component: "",
+    },
+    {
       topic: "Summary of your journey through ToT Course 1",
       component: (
         <OverallFeedBack
@@ -129,7 +136,7 @@ function TOTFeedback() {
     },
   ];
 
-  const weeksTopic = weekContents.map((week) => week.topic);
+  const weeksTopic = weekContents.slice(0, 6).map((week) => week.topic);
   const items = weekContents.map((week) => ({
     title: week.topic,
     content: week.component,
@@ -179,7 +186,7 @@ function TOTFeedback() {
                 className={
                   index + 1 <= currentWeek
                     ? "active-week"
-                    : index === 5
+                    : index >= 6
                     ? "d-none"
                     : ""
                 }
@@ -190,7 +197,7 @@ function TOTFeedback() {
                     className="course-list-icon"
                   />
                 </div>
-                <span className={index === 5 ? "d-none" : ""}>
+                <span className={index >= 6 ? "d-none" : ""}>
                   Week
                   {index + 1}
                 </span>
@@ -216,6 +223,7 @@ function TOTFeedback() {
             hasPercentile={hasPercentile}
             allDataLoaded={allDataLoaded}
             setHasPercentile={setHasPercentile}
+            enrollmentId={enrollmentId}
           />
         </section>
       </div>

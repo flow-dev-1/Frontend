@@ -16,6 +16,42 @@ import { useSelector } from "react-redux";
 import adminService from "../../../../../../../../services/api/admin.js";
 import Modal from "../../components/Modal.jsx";
 
+export function mapSelectedOptions(selectedObj = {}) {
+  const masterOptions = [
+    { id: "morning-check-ins", label: "Morning check-ins" },
+    {
+      id: "emotional-vocabulary-in-lessons",
+      label: "Emotional vocabulary in lessons",
+    },
+    { id: "gratitude-journals", label: "Gratitude journals" },
+    { id: "relationship_skills", label: "Relationship Skills" },
+    {
+      id: "breathing_or_grounding_exercises",
+      label: "Breathing or grounding exercises",
+    },
+    { id: "weekly_class_meetings", label: "Weekly class meetings" },
+    {
+      id: "praise_for_effort,_not_just_results",
+      label: "Praise for effort, not just results",
+    },
+    {
+      id: "growth_mindset_reflections",
+      label: "Growth mindset reflections",
+    },
+    {
+      id: "cooperative_learning_tasks",
+      label: "Cooperative learning tasks",
+    },
+    {
+      id: "storytelling_or_character_analysis",
+      label: "Storytelling or character analysis",
+    },
+  ];
+  if (!selectedObj || typeof selectedObj !== "object") return [];
+
+  return masterOptions.filter((option) => selectedObj[option.id]);
+}
+
 function Week6({ enrollmentId, setWeekSixData }) {
   const { pages } = getWeekContentExcludingVideos(6);
   const [showModal, setShowModal] = useState(false);
@@ -48,7 +84,7 @@ function Week6({ enrollmentId, setWeekSixData }) {
       adminService.submitAdminFeedback(
         activityData,
         enrollmentId,
-        5,
+        6,
         data?.activity?.user,
         code
       ),
@@ -137,43 +173,6 @@ function Week6({ enrollmentId, setWeekSixData }) {
         : activityData[3]?.answer?.[0]?.value?.red;
     return indices?.map((index) => activity4?.steps?.[1].images[index]) || [];
   }
-
-  function mapSelectedOptions(selectedObj = {}) {
-    const masterOptions = [
-      { id: "morning-check-ins", label: "Morning check-ins" },
-      {
-        id: "emotional-vocabulary-in-lessons",
-        label: "Emotional vocabulary in lessons",
-      },
-      { id: "gratitude-journals", label: "Gratitude journals" },
-      { id: "relationship_skills", label: "Relationship Skills" },
-      {
-        id: "breathing_or_grounding_exercises",
-        label: "Breathing or grounding exercises",
-      },
-      { id: "weekly_class_meetings", label: "Weekly class meetings" },
-      {
-        id: "praise_for_effort,_not_just_results",
-        label: "Praise for effort, not just results",
-      },
-      {
-        id: "growth_mindset_reflections",
-        label: "Growth mindset reflections",
-      },
-      {
-        id: "cooperative_learning_tasks",
-        label: "Cooperative learning tasks",
-      },
-      {
-        id: "storytelling_or_character_analysis",
-        label: "Storytelling or character analysis",
-      },
-    ];
-    if (!selectedObj || typeof selectedObj !== "object") return [];
-
-    return masterOptions.filter((option) => selectedObj[option.id]);
-  }
-
   if (isPending) {
     return <div>Loading...</div>;
   }

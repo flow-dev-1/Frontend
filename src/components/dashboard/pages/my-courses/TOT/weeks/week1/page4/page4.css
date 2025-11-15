@@ -1,19 +1,51 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
 .tot-text h1 {
-  font-family: 'Montserrat', system-ui, -apple-system, sans-serif !important;
+  font-family: "Montserrat", system-ui, -apple-system, sans-serif !important;
   font-weight: 700 !important;
 }
 .feeling-modal {
-  max-width: 620px;
-  width: 90%;
+  position: fixed; /* the only way i could think of*/
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  z-index: 999999;
   background-color: white;
   border-radius: 1rem;
-  top: 5rem;
-  left: 5rem;
+  padding: 1rem;
+
+  max-width: 620px;
+  width: 90%;
 }
 
-/* ...existing code... */
+/* Tablet */
+@media (max-width: 768px) {
+  .feeling-modal {
+    width: 95%;
+    padding: 1rem;
+  }
+  .btn.sad img {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .feeling-modal {
+    width: 95%;
+    padding: 0.8rem;
+  }
+  .review-buttons {
+    flex-wrap: wrap;
+    gap: 10px !important;
+  }
+  .btn.sad img {
+    width: 40px;
+    height: 40px;
+  }
+}
 
 .btn.sad {
   background: white;
