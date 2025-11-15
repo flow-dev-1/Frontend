@@ -143,7 +143,7 @@ const WeekContent = () => {
 
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
-    if (!enrolmentData && !isAdmin) return navigate("/sign-in");
+    // if (!enrolmentData && !isAdmin) return navigate("/sign-in");
     setEnrollmentId(enrolmentData?._id);
     setCourse(enrolmentData?.course?._id);
   }, []);
@@ -163,6 +163,8 @@ const WeekContent = () => {
     dispatch(setCurrentWeek(currentWeek));
     dispatch(setCurrentPage(currentPage));
     dispatch(setCurrentStep(currentStep));
+
+    console.log(currentPage);
 
     return () => {};
   }, [dispatch]); // Added dispatch to dependency array

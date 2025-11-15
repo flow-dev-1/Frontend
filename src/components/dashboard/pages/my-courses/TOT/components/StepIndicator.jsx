@@ -10,7 +10,9 @@ const StepIndicator = ({ totalSteps }) => {
       {[...Array(totalSteps)].map((_, index) => (
         <div
           key={index}
-          className={`${index + 1 <= currentStep ? "bg-step-active" : "bg-step"}`}
+          className={`${
+            index + 1 <= currentStep ? "bg-step-active" : "bg-step"
+          }`}
           style={{
             // flexBasis: "35px",
             width: "35px",

@@ -17,11 +17,16 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
 const InternalStepIndicator = ({ totalSteps, currentStep }) => {
   return (
-    <div className="d-flex justify-content-center mt-4" style={{ gap: "10px" }}>
+    <div
+      className="d-flex justify-content-center mt-4 flex-wrap"
+      style={{ gap: "10px" }}
+    >
       {[...Array(totalSteps)].map((_, index) => (
         <div
           key={index}
-          className={`${index + 2 <= currentStep ? "bg-step-active" : "bg-step"}`}
+          className={`${
+            index + 2 <= currentStep ? "bg-step-active" : "bg-step"
+          }`}
           style={{
             // flexBasis: "35px",
             width: "35px",
@@ -45,8 +50,8 @@ function Page6() {
   const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
-  const [dragDropImageLength, setDragDropImageLength] = useState(4)
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [dragDropImageLength, setDragDropImageLength] = useState(4);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     if (!userAnswers) return;
@@ -70,11 +75,13 @@ function Page6() {
     }
 
     // Check total images dropped
-    const totalDropped = (stepData.value.green?.length || 0) +
-      (stepData.value.red?.length || 0);
+    const totalDropped =
+      (stepData.value.green?.length || 0) + (stepData.value.red?.length || 0);
 
     if (totalDropped !== dragDropImageLength) {
-      setErrorMessage(`Please place all ${dragDropImageLength} images in the buckets.`);
+      setErrorMessage(
+        `Please place all ${dragDropImageLength} images in the buckets.`
+      );
       return false;
     }
 
@@ -107,17 +114,19 @@ function Page6() {
             <div className="text-center mb-5 mt-3 mt-md-0">
               <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
                 A number of scenarios would be shown and two boxes of <br />
-                <span className="fw-bold">“Yes”</span> and <span className="fw-bold">“No”</span>.
+                <span className="fw-bold">“Yes”</span> and{" "}
+                <span className="fw-bold">“No”</span>.
               </h2>
-              <br /><br />
+              <br />
+              <br />
               <h2 className="text-white d-inline-block text-start tot-week-2-question-text">
-                Drag and drop each scenario into the <span className="fw-bold">Yes Box</span> if you have <br />
-                experienced it or <span className="fw-bold">No Box</span> if you have not experienced it.
+                Drag and drop each scenario into the{" "}
+                <span className="fw-bold">Yes Box</span> if you have <br />
+                experienced it or <span className="fw-bold">No Box</span> if you
+                have not experienced it.
               </h2>
             </div>
           </QuestionBox>
-
-
         );
       case "imageDragAndDrop":
         return (
@@ -146,15 +155,13 @@ function Page6() {
         <div className="text-danger">{errorMessage}</div>
       )}{" "}
       {/* Display error message */}
-      <div className="d-flex justify-content-center align-items-center gap-2">
+      <div className="d-flex justify-content-center align-items-cente gap-2 ">
         <StepIndicator totalSteps={totalSteps} />
         <InternalStepIndicator
           totalSteps={dragDropImageLength}
           currentStep={currentImageIndex + 1}
         />
-
       </div>
-
       <div className="d-flex justify-content-center gap-96px mt-3 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />

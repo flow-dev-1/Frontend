@@ -11,7 +11,6 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import VideoComponent from "../../../components/Video";
 import Feeling from "./components/feeling";
 
-
 function Page4() {
   const pageData = useSelector(selectPageData);
   const dispatch = useDispatch();
@@ -35,7 +34,7 @@ function Page4() {
     if (adminDatas.isAdmin) return true;
 
     // Check if feeling is selected
-    const feelingAnswer = answers.find(a => a.name === 'feeling');
+    const feelingAnswer = answers.find((a) => a.name === "feeling");
     if (!feelingAnswer) {
       setErrorMessage("Please select how you're feeling today");
       return false;
@@ -51,7 +50,6 @@ function Page4() {
 
     return true;
   };
-
 
   return (
     <>

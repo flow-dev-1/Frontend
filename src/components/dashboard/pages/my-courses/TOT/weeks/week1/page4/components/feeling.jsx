@@ -18,10 +18,12 @@ export default function Feeling({ answers = [], setAnswers }) {
   };
 
   return (
-    <div className="modal-content position-absolute p-4 feeling-modal">
+    <div className="modal-content  p-1 p-md-4 feeling-modal">
       <div className="tot-text">
-        <div className="px-5 text-center">
-          <h1 className="text-blue mb-4">How are you feeling today?</h1>
+        <div className="px-1 px-md-5 text-center">
+          <h1 className="text-blue mb-4" style={{ fontSize: 1 + "em" }}>
+            How are you feeling today?
+          </h1>
         </div>
 
         <div className="d-flex justify-content-center review-buttons gap-3">
