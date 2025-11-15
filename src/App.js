@@ -176,9 +176,9 @@ function App() {
           <Route
             path="/dashboard/tot"
             element={
-              // <ProtectedRoute>
-              <TOTCourse />
-              // </ProtectedRoute>
+              <ProtectedRoute>
+                <TOTCourse />
+              </ProtectedRoute>
             }
           />
           <Route
