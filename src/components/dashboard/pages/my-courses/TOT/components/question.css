@@ -4,7 +4,7 @@
 .tot-question-box-container {
   padding: 1rem 2rem;
   min-height: 50vh;
- /* height: 50vh; */
+  /* height: 50vh; */
 }
 .tot-assessment-header h2 {
   font-family: "Montserrat", system-ui, -apple-system, sans-serif !important;
@@ -550,6 +550,9 @@ button {
 }
 
 @media (max-width: 480px) {
+  .tot-question-box-container {
+    padding: 1rem 0rem;
+  }
   .resilience-question-box-container {
     min-height: min-content !important;
     max-height: 100vh;
