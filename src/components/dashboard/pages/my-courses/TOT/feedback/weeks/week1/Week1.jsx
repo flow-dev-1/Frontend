@@ -159,21 +159,21 @@ function Week1({ enrollmentId, setWeekOneData }) {
   }
   function drag1(type) {
     console.log(activityData, "Activity Data");
-    if (!activityData || !activityData[3] || !activityData[3].answer) return [];
+    if (!activityData || !activityData[2] || !activityData[2].answer) return [];
 
     const indices =
       type === "yes"
-        ? activityData[3]?.answer?.[0]?.value?.green
-        : activityData[3]?.answer?.[0]?.value?.red;
+        ? activityData[2]?.answer?.[0]?.value?.green
+        : activityData[2]?.answer?.[0]?.value?.red;
 
     return indices?.map((index) => activity2?.steps?.[1].images[index]) || [];
   }
 
   function drag2(type, pairId) {
     console.log(activityData, "Activity Data");
-    if (!activityData || !activityData[5] || !activityData[5].answer) return [];
+    if (!activityData || !activityData[4] || !activityData[4].answer) return [];
 
-    const values = activityData[5]?.answer?.[0]?.value;
+    const values = activityData[4]?.answer?.[0]?.value;
     if (!values) return [];
 
     // Get indices array based on type ("sel" → green, otherwise red)

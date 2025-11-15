@@ -4,6 +4,16 @@ import { Icon } from "@iconify/react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { ClimbingBoxLoader } from "react-spinners";
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { saveAs } from "file-saver";
+import { mapSelectedOptions } from "../weeks/week6/Week6";
+import pdfTemplate from "../../../../../../../assets/tot-images/pdf/template.pdf";
+import checkedBoxImage from "../../../../../../../assets/checkedbox.png";
+import { useQuery } from "@tanstack/react-query";
+import userService from "../../../../../../../services/api/user.js";
+import adminService from "../../../../../../../services/api/admin.js";
+import { adminData } from "../../../../../../../redux/reducers/adminReducer.js";
+import { useSelector } from "react-redux";
 
 function Accordion({
   activeIndex,
@@ -12,37 +22,269 @@ function Accordion({
   allDataLoaded,
   hasPercentile,
   setHasPercentile,
+  enrollmentId,
 }) {
   const contentRef = useRef();
   const [pdfLoading, setPdfLoading] = useState(false);
   const [startDownload, setStartDownload] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { isAdmin, code } = useSelector(adminData);
 
+  const [answers, setAnswers] = useState({});
+
+  useEffect(() => {
+    if (!startDownload) return;
+
+    // download pdf, based on index, we will just check if the index is the one we want to downlaod, and serve the pdf we want, then return
+
+    // Worksheet
+    if (currentIndex === 6) {
+      console.log("downloading Worksheet pdf");
+      generateWorkSheetPDF(answers);
+
+      return;
+    }
+
+    // Final course PDF (index 7)
+    if (currentIndex === 7) {
+      console.log("downloading course pdf");
+
+      const link = document.createElement("a");
+      link.href = "/Teacher Resources.pdf";
+      link.download = "Teacher Resources.pdf";
+      link.click();
+
+      setStartDownload(false);
+      return;
+    }
+    generatePDF();
+  }, [hasPercentile, allDataLoaded, startDownload, currentIndex]);
+  // toDo: Fetch User assessment and Activity Data
+  const { data, isPending, status, isError } = useQuery({
+    queryKey: ["dashboard/tot-feedback-6", enrollmentId, 6],
+    queryFn: () =>
+      isAdmin
+        ? adminService.getUserCourseData(enrollmentId, 6, code)
+        : userService.getUserCourseData(enrollmentId, 6),
+    enabled: !!enrollmentId,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false,
+  });
   const handleToggle = (index) => {
     window.scroll(0, 0);
     setActiveIndex(activeIndex === index ? "" : index);
   };
 
   useEffect(() => {
-    if (!startDownload) return;
+    if (!data) return;
 
-    if (currentIndex === 6) {
-      console.log("====================================");
-      console.log("prinitng Worksheet pdf");
-      console.log("====================================");
+    setAnswers(data.activity?.activities[4].answer);
 
-      return;
+    return () => {};
+  }, [data]);
+
+  if (isPending) {
+    // setWorksheetComponent("<div>Loading...</div>");
+  }
+  if (data?.status === "failed" || isError) {
+    alert(`${data?.message} || "Internal server error!"`);
+  }
+  const FIELD_COORDINATES = {
+    page2: { x: 40, y: 501, page: 3 },
+    page3: { x: 40, y: 502, page: 4 },
+    page4checkbox: { x: 41, y: 563, page: 5 },
+    page4Others: { x: 40, y: 259, page: 5 },
+    page4integrationplan: { x: 40, y: 115, page: 5 },
+    page5: { x: 40, y: 501, page: 6 },
+    page6: { x: 40, y: 501, page: 7 },
+    page7input1: { x: 58, y: 477, page: 8 },
+    page7input2: { x: 58, y: 456, page: 8 },
+    page7collboaration: { x: 40, y: 167, page: 8 },
+    page8: { x: 40, y: 500, page: 9 },
+  };
+
+  const pageField = {
+    step_3: {
+      coords: FIELD_COORDINATES.page2,
+      textFields: [{ key: "mainInput" }],
+    },
+    step_4: {
+      coords: FIELD_COORDINATES.page3,
+      textFields: [{ key: "mainInput" }],
+    },
+    step_5: {
+      coordsOthers: FIELD_COORDINATES.page4Others,
+      coordsPlan: FIELD_COORDINATES.page4integrationplan,
+      coordsCheckbox: FIELD_COORDINATES.page4checkbox,
+      textFields: [
+        { key: "others_", coordKey: "coordsOthers" },
+        {
+          key: "my_integration_plan__brief_description__",
+          coordKey: "coordsPlan",
+        },
+      ],
+    },
+    step_6: {
+      coords: FIELD_COORDINATES.page5,
+      textFields: [{ key: "mainInput" }],
+    },
+    step_7: {
+      coords: FIELD_COORDINATES.page6,
+      textFields: [{ key: "mainInput" }],
+    },
+    step_8: {
+      coords1: FIELD_COORDINATES.page7input1,
+      coords2: FIELD_COORDINATES.page7input2,
+      coords3: FIELD_COORDINATES.page7collboaration,
+      textFields: [
+        { key: "input1", coordKey: "coords1" },
+        { key: "input2", coordKey: "coords2" },
+        { key: "collaboration", coordKey: "coords3" },
+      ],
+    },
+    step_9: {
+      coords: FIELD_COORDINATES.page8,
+      textFields: [{ key: "mainInput" }],
+    },
+  };
+
+  // Helper function to wrap text into multiple lines
+  function wrapText(text, font, fontSize, maxWidth) {
+    const words = text.split(" ");
+    const lines = [];
+    let currentLine = "";
+
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+      const testLine = currentLine ? `${currentLine} ${word}` : word;
+      const width = font.widthOfTextAtSize(testLine, fontSize);
+
+      if (width > maxWidth && currentLine) {
+        lines.push(currentLine);
+        currentLine = word;
+      } else {
+        currentLine = testLine;
+      }
     }
-    if (currentIndex === 7) {
-      console.log("====================================");
-      console.log("prinitng course pdf");
-      console.log("====================================");
 
-      return;
+    if (currentLine) {
+      lines.push(currentLine);
     }
-    // download pdf, based on index, we will just check if the index is the one we want to downlaod, and serve the pdf we want, then return
-    generatePDF();
-  }, [hasPercentile, allDataLoaded, startDownload, currentIndex]);
+
+    return lines.length > 0 ? lines : [""];
+  }
+
+  async function generateWorkSheetPDF(answers) {
+    try {
+      setPdfLoading(true);
+      const existingPdfBytes = await fetch(pdfTemplate).then((r) => {
+        if (!r.ok) {
+          throw new Error(`Failed to fetch PDF template: ${r.statusText}`);
+        }
+        return r.arrayBuffer();
+      });
+      const pdfDoc = await PDFDocument.load(existingPdfBytes);
+      const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+      const maxTextWidth = 520;
+      const fontSize = 16;
+      const lineHeight = fontSize * 1.2; // Line spacing
+
+      for (const stepKey in pageField) {
+        const step = pageField[stepKey];
+
+        // **************** TEXT FIELDS ****************
+        if (step.textFields) {
+          for (const field of step.textFields) {
+            const text = answers[stepKey]?.[field.key] || "";
+            const coord = field.coordKey ? step[field.coordKey] : step.coords;
+            const page = pdfDoc.getPage(coord.page - 1);
+
+            // Wrap text into multiple lines
+            const lines = wrapText(text, font, fontSize, maxTextWidth);
+
+            // Draw each line
+            lines.forEach((line, index) => {
+              page.drawText(line, {
+                x: coord.x,
+                y: coord.y - index * lineHeight,
+                size: fontSize,
+                font,
+                color: rgb(0, 0, 0),
+                opacity: 0.4,
+              });
+            });
+          }
+        }
+
+        // **************** CHECKBOXES  ****************
+        if (step.coordsCheckbox && answers[stepKey]?.checkboxes) {
+          const c = step.coordsCheckbox;
+          const page = pdfDoc.getPage(c.page - 1);
+
+          const selected = mapSelectedOptions(answers[stepKey].checkboxes);
+
+          const checkboxImgBytes = await fetch(checkedBoxImage).then((r) => {
+            if (!r.ok) {
+              throw new Error(
+                `Failed to fetch checkbox image: ${r.statusText}`
+              );
+            }
+            return r.arrayBuffer();
+          });
+          const checkboxImg = await pdfDoc.embedPng(checkboxImgBytes);
+          const fontSize = 16;
+          const imageSize = fontSize; // Match image size to font size
+
+          const col1X = c.x;
+          const col2X = 295;
+          const gapY = 18;
+
+          let y1 = c.y;
+          let y2 = c.y;
+
+          selected.forEach((opt, index) => {
+            const secondCol = index >= 5;
+            const x = secondCol ? col2X : col1X;
+            const y = secondCol ? y2 : y1;
+
+            page.drawImage(checkboxImg, {
+              x,
+              y,
+              width: imageSize,
+              height: imageSize,
+            });
+
+            page.drawText(opt.label, {
+              x: x + imageSize + 5,
+              y,
+              size: fontSize,
+              font,
+              color: rgb(0, 0, 0),
+              opacity: 0.4,
+            });
+
+            if (secondCol) y2 -= gapY;
+            else y1 -= gapY;
+          });
+        }
+      }
+
+      const pdfBytes = await pdfDoc.save();
+      saveAs(
+        new Blob([pdfBytes], { type: "application/pdf" }),
+        "SEL Worksheet.pdf"
+      );
+      setStartDownload(false);
+      setPdfLoading(false);
+    } catch (error) {
+      console.error("Error generating worksheet PDF:", error);
+      setPdfLoading(false);
+      setStartDownload(false);
+      alert("Failed to generate PDF. Please try again.");
+    }
+  }
 
   const generatePDF = async () => {
     const originalState = activeIndex;

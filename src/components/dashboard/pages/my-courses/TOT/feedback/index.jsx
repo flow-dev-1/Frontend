@@ -34,7 +34,6 @@ function TOTFeedback() {
   const [isWeekSevenLoaded, setWeekSevenData] = useState(false);
   const [isWeekEightLoaded, setWeekEightData] = useState(false);
   const [isWeekNineLoaded, setWeekNineData] = useState(false);
-  const [isWeekTenLoaded, setWeekTenData] = useState(false);
 
   const [allDataLoaded, setAllDataLoaded] = useState(false);
 
@@ -224,6 +223,7 @@ function TOTFeedback() {
             hasPercentile={hasPercentile}
             allDataLoaded={allDataLoaded}
             setHasPercentile={setHasPercentile}
+            enrollmentId={enrollmentId}
           />
         </section>
       </div>
