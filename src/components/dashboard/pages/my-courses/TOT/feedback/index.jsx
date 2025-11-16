@@ -63,7 +63,7 @@ function TOTFeedback() {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    // if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
+    if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
       const courseEnrollmentId = sessionStorage.getItem(

@@ -30,7 +30,7 @@ function Accordion({
   const [currentIndex, setCurrentIndex] = useState(0);
   const { isAdmin, code } = useSelector(adminData);
 
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState(null);
 
   useEffect(() => {
     if (!startDownload) return;
@@ -47,6 +47,15 @@ function Accordion({
 
     // Final course PDF (index 7)
     if (currentIndex === 7) {
+      const originalState = activeIndex;
+      setPdfLoading(true);
+      setActiveIndex(null);
+
+      if (!hasPercentile) {
+        setActiveIndex(originalState);
+        setPdfLoading(false);
+        return;
+      }
       console.log("downloading course pdf");
 
       const link = document.createElement("a");
@@ -55,6 +64,10 @@ function Accordion({
       link.click();
 
       setStartDownload(false);
+      setActiveIndex("");
+      setHasPercentile(false);
+      setPdfLoading(false);
+
       return;
     }
     generatePDF();
@@ -77,9 +90,16 @@ function Accordion({
   };
 
   useEffect(() => {
-    if (!data) return;
-
-    setAnswers(data.activity?.activities[4].answer);
+    if (
+      data &&
+      data.activity &&
+      Array.isArray(data.activity.activities) &&
+      data.activity.activities[4] &&
+      data.activity.activities[4].answer !== undefined &&
+      data.activity.activities[4].answer !== null
+    ) {
+      setAnswers(data.activity.activities[4].answer);
+    }
 
     return () => {};
   }, [data]);
@@ -176,8 +196,9 @@ function Accordion({
   }
 
   async function generateWorkSheetPDF(answers) {
+    if (!answers) return;
+
     try {
-      setPdfLoading(true);
       const existingPdfBytes = await fetch(pdfTemplate).then((r) => {
         if (!r.ok) {
           throw new Error(`Failed to fetch PDF template: ${r.statusText}`);
@@ -280,7 +301,6 @@ function Accordion({
       setPdfLoading(false);
     } catch (error) {
       console.error("Error generating worksheet PDF:", error);
-      setPdfLoading(false);
       setStartDownload(false);
       alert("Failed to generate PDF. Please try again.");
     }
