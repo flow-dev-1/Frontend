@@ -88,8 +88,36 @@ function RankingDragDrop({
       return;
     }
 
-    // Dragging from one ranking slot to another
-    if (source.droppableId.startsWith("rank_")) {
+    // Dragging from ranking slot back to responses (remove from ranking)
+    if (
+      source.droppableId.startsWith("rank_") &&
+      destination.droppableId === "responses"
+    ) {
+      const sourceRank = parseInt(source.droppableId.replace("rank_", ""));
+      const responseId = rankings[sourceRank];
+      const response = step.responses.find((r) => r.id === responseId);
+
+      console.log("response brought back", response);
+
+      // Remove from rankings
+      const newRankings = { ...rankings };
+      delete newRankings[sourceRank];
+      setRankings(newRankings);
+
+      // Add back to available responses
+      setAvailableResponses((prev) => [...prev, response]);
+
+      // Save to answers
+      setAnswers((prev) => ({
+        ...prev,
+        [stepKey]: {
+          rankings: newRankings,
+        },
+      }));
+    }
+
+    //  Dragging from one ranking slot to another
+    else if (source.droppableId.startsWith("rank_")) {
       const sourceRank = parseInt(source.droppableId.replace("rank_", ""));
       const targetRank = parseInt(destination.droppableId.replace("rank_", ""));
 
@@ -111,32 +139,6 @@ function RankingDragDrop({
       }
 
       setRankings(newRankings);
-
-      // Save to answers
-      setAnswers((prev) => ({
-        ...prev,
-        [stepKey]: {
-          rankings: newRankings,
-        },
-      }));
-    }
-
-    // Dragging from ranking slot back to responses (remove from ranking)
-    else if (
-      source.droppableId.startsWith("rank_") &&
-      destination.droppableId === "responses"
-    ) {
-      const sourceRank = parseInt(source.droppableId.replace("rank_", ""));
-      const responseId = rankings[sourceRank];
-      const response = step.responses.find((r) => r.id === responseId);
-
-      // Remove from rankings
-      const newRankings = { ...rankings };
-      delete newRankings[sourceRank];
-      setRankings(newRankings);
-
-      // Add back to available responses
-      setAvailableResponses((prev) => [...prev, response]);
 
       // Save to answers
       setAnswers((prev) => ({
@@ -187,6 +189,7 @@ function RankingDragDrop({
                           ...provided.draggableProps.style,
                           cursor: snapshot.isDragging ? "grabbing" : "grab",
                           opacity: snapshot.isDragging ? 0.8 : 1,
+                          // width: snapshot.isDragging ? "150px" : "100%",
                           transform: snapshot.isDragging
                             ? `${provided.draggableProps.style?.transform} scale(0.95)`
                             : provided.draggableProps.style?.transform,
