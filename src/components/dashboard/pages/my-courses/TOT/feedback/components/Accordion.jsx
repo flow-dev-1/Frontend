@@ -108,7 +108,7 @@ function Accordion({
     // setWorksheetComponent("<div>Loading...</div>");
   }
   if (data?.status === "failed" || isError) {
-    alert(`${data?.message} || "Internal server error!"`);
+    // alert(`${data?.message} || "Internal server error!"`);
   }
   const FIELD_COORDINATES = {
     page2: { x: 40, y: 501, page: 3 },
@@ -196,6 +196,9 @@ function Accordion({
   }
 
   async function generateWorkSheetPDF(answers) {
+    if (data?.status === "failed" || isError) {
+      alert(`${data?.message} || "Internal server error!"`);
+    }
     if (!answers) return;
 
     try {
