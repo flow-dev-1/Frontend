@@ -121,7 +121,7 @@ function TOTFeedback() {
       component: "",
     },
     {
-      topic: "Summary of your journey through ToT Course 1",
+      topic: "Teacher Resources for ToT Course 1",
       component: "",
     },
     {
@@ -175,8 +175,8 @@ function TOTFeedback() {
             Back to My Courses
           </button>
           <div className="compassion-title">
-            <h2 className="fs-5 fs-md-3">Stay Strong, Keep Going!</h2>
-            <h2 className="compassion fs-5">Resilience & Grit</h2>
+            <h2 className="fs-5 fs-md-3 tot-nav-text">SEL for Educators:</h2>
+            <h2 className="compassion fs-5 tot-nav-text">ToT Course 1</h2>
           </div>
 
           <ul className="compassion-list">

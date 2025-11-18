@@ -340,7 +340,7 @@ function Accordion({
             heightLeft -= pageHeight;
           }
 
-          pdf.save("CompassionFeedback.pdf");
+          pdf.save("ToT_1_Feedback.pdf");
           setActiveIndex("");
           setPdfLoading(false);
           setHasPercentile(false);
@@ -358,7 +358,7 @@ function Accordion({
       )}
       <div className="accordion" ref={contentRef}>
         <h2 className="accordion-header p-lg-2 p-md-4 bg-blue text-center text-white">
-          Feedback for Resilience & Grit
+          Feedback for ToT Course 1
         </h2>
 
         {items.map((item, index) => (
