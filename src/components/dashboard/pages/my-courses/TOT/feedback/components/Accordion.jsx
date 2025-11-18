@@ -8,7 +8,6 @@ import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import { saveAs } from "file-saver";
 import { mapSelectedOptions } from "../weeks/week6/Week6";
 import pdfTemplate from "../../../../../../../assets/tot-images/pdf/template.pdf";
-import checkedBoxImage from "../../../../../../../assets/checkedbox.png";
 import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../../../services/api/user.js";
 import adminService from "../../../../../../../services/api/admin.js";
@@ -122,6 +121,19 @@ function Accordion({
     page7input2: { x: 58, y: 456, page: 8 },
     page7collboaration: { x: 40, y: 167, page: 8 },
     page8: { x: 40, y: 500, page: 9 },
+  };
+
+  const CHECKBOX_COORDINATES = {
+    "morning-check-ins": { page: 5, x: 41, y: 552, size: 16 },
+    "emotional-vocabulary-in-lessons": { page: 5, x: 41, y: 524, size: 16 },
+    "gratitude-journals": { page: 5, x: 41, y: 496, size: 16 },
+    relationship_skills: { page: 5, x: 252, y: 453, size: 16 },
+    breathing_or_grounding_exercises: { page: 5, x: 41, y: 449, size: 16 },
+    weekly_class_meetings: { page: 5, x: 41, y: 421, size: 16 },
+    "praise_for_effort,_not_just_results": { page: 5, x: 41, y: 393, size: 16 },
+    growth_mindset_reflections: { page: 5, x: 254, y: 552, size: 16 },
+    cooperative_learning_tasks: { page: 5, x: 254, y: 523, size: 16 },
+    "storytelling_or-character_analysis": { page: 5, x: 252, y: 496, size: 16 },
   };
 
   const pageField = {
@@ -244,53 +256,29 @@ function Accordion({
 
         // **************** CHECKBOXES  ****************
         if (step.coordsCheckbox && answers[stepKey]?.checkboxes) {
-          const c = step.coordsCheckbox;
-          const page = pdfDoc.getPage(c.page - 1);
+          const allOptions = mapSelectedOptions(answers[stepKey].checkboxes);
 
-          const selected = mapSelectedOptions(answers[stepKey].checkboxes);
-
-          const checkboxImgBytes = await fetch(checkedBoxImage).then((r) => {
-            if (!r.ok) {
-              throw new Error(
-                `Failed to fetch checkbox image: ${r.statusText}`
-              );
+          allOptions.forEach((option) => {
+            if (option.selected) {
+              return;
             }
-            return r.arrayBuffer();
-          });
-          const checkboxImg = await pdfDoc.embedPng(checkboxImgBytes);
-          const fontSize = 16;
-          const imageSize = fontSize; // Match image size to font size
 
-          const col1X = c.x;
-          const col2X = 295;
-          const gapY = 18;
+            const coords = CHECKBOX_COORDINATES[option.id];
+            if (!coords) {
+              console.warn(`Missing coordinates for checkbox ${option.id}`);
+              return;
+            }
 
-          let y1 = c.y;
-          let y2 = c.y;
+            const page = pdfDoc.getPage(coords.page - 1);
+            const size = 14;
 
-          selected.forEach((opt, index) => {
-            const secondCol = index >= 5;
-            const x = secondCol ? col2X : col1X;
-            const y = secondCol ? y2 : y1;
-
-            page.drawImage(checkboxImg, {
-              x,
-              y,
-              width: imageSize,
-              height: imageSize,
+            page.drawRectangle({
+              x: coords.x,
+              y: coords.y,
+              width: size,
+              height: size,
+              color: rgb(1, 1, 1),
             });
-
-            page.drawText(opt.label, {
-              x: x + imageSize + 5,
-              y,
-              size: fontSize,
-              font,
-              color: rgb(0, 0, 0),
-              opacity: 0.4,
-            });
-
-            if (secondCol) y2 -= gapY;
-            else y1 -= gapY;
           });
         }
       }
