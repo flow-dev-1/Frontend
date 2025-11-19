@@ -231,7 +231,9 @@ const DragAndDropFrame = ({
             <div className="d-flex align-items-start mb-2">
               <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
               <div className="text-center text-white pt-1 flex-grow-1 resilience-drag-instruction">
-                <h1 className="tot-week-2-question-text fw-bold">{instruction}</h1>
+                <h1 className="tot-week-2-question-text fw-bold">
+                  {instruction}
+                </h1>
               </div>
               <img
                 src={ArrowTrail}
@@ -257,9 +259,7 @@ const DragAndDropFrame = ({
                       >
                         <h2
                           className={
-                            bucket.id === "green"
-                              ? "inner-count"
-                              : "both-count"
+                            bucket.id === "green" ? "inner-count" : "both-count"
                           }
                         >
                           {bucketResults[bucket.id]?.length || 0}
@@ -267,8 +267,8 @@ const DragAndDropFrame = ({
                         <div
                           className={
                             bucket.id === "green"
-                              ? "inner-box bucket-text"
-                              : "outer-box bucket-text"
+                              ? "inner-box-sel bucket-text"
+                              : "outer-box-not-sel bucket-text"
                           }
                         >
                           {/* <p className="text-center">{bucket.title}</p> */}

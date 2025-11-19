@@ -47,9 +47,13 @@ export function mapSelectedOptions(selectedObj = {}) {
       label: "Storytelling or character analysis",
     },
   ];
-  if (!selectedObj || typeof selectedObj !== "object") return [];
+  const normalizedSelected =
+    selectedObj && typeof selectedObj === "object" ? selectedObj : {};
 
-  return masterOptions.filter((option) => selectedObj[option.id]);
+  return masterOptions.map((option) => ({
+    ...option,
+    selected: !!normalizedSelected[option.id],
+  }));
 }
 
 function Week6({ enrollmentId, setWeekSixData }) {
@@ -1247,22 +1251,23 @@ function Week6({ enrollmentId, setWeekSixData }) {
       </p>
       {/* Chekboxes comes in here */}
       {(() => {
-        const selected = getActivityAnswer(activity5.id)?.step_5?.checkboxes;
-        const mapped = selected ? mapSelectedOptions(selected) : [];
+        const selected =
+          getActivityAnswer(activity5.id)?.step_5?.checkboxes || {};
+        const mapped = mapSelectedOptions(selected);
 
-        console.log(mapped, "jhvm n");
-
-        return mapped.map((item, idx) => (
-          <div className="d-flex gap-1 gap-md-2 p-1" key={idx}>
+        return mapped.map((item) => (
+          <div className="d-flex gap-1 gap-md-2 p-1" key={item.id}>
             <img
-              src={checkedImage}
-              alt={item}
+              src={item.selected ? checkedImage : unCheckedImage}
+              alt={item.label}
               style={{ width: 20, height: 20 }}
             />
             <div
               className="week-2-question-text text-gray"
               style={{ fontSize: 1 + "em" }}
-            >{`${item.label}`}</div>
+            >
+              {item.label}
+            </div>
           </div>
         ));
       })()}
