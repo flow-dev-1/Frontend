@@ -42,7 +42,7 @@ const MyCourseCard = ({ course }) => {
       navigate(`/dashboard/resilience_grit/feedback`, {
         state: { enrollmentData: course },
       });
-    }else if(course?.course.title === "Emotional Regulation") {
+    } else if (course?.course.title === "Emotional Regulation") {
       navigate(`/dashboard/emotional_regulation/feedback`, { state: { enrollmentData: course } })
     } else if (course?.course.title === "TOT Course 1") {
       navigate(`/dashboard/tot/feedback`, {
@@ -73,9 +73,9 @@ const MyCourseCard = ({ course }) => {
       navigate(`/dashboard/resilience_grit`, {
         state: { enrollmentData: course },
       });
-    } else if(course?.course.title === "Emotional Regulation") {
+    } else if (course?.course.title === "Emotional Regulation") {
       navigate(`/dashboard/emotional_regulation`, { state: { enrollmentData: course } })
-    }else if (course?.course.title === "TOT Course 1") {
+    } else if (course?.course.title === "TOT Course 1") {
       navigate(`/dashboard/tot`, {
         state: { enrollmentData: course },
       });
@@ -197,8 +197,8 @@ const MyCourseCard = ({ course }) => {
             {course?.progress === 100
               ? "Completed"
               : course.progress === 0
-              ? "Start"
-              : "Resume"}
+                ? "Start"
+                : "Resume"}
           </button>
           {course?.progress > 0 && course?.progress < 100 && (
             <Icon
@@ -220,7 +220,7 @@ const MyCourseCard = ({ course }) => {
         shouldCloseOnOverlayClick={true}
       >
         {modalType === "review" && (
-          <ReviewCourseInfoModal course={course} onClose={closeModal} />
+          <ReviewCourseInfoModal course={course?.course} onClose={closeModal} />
         )}
         {modalType === "feedback" && (
           <div>

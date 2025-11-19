@@ -40,8 +40,6 @@ export default function IndividualOverview() {
   useEffect(() => {
     if (!data || !enrolledData) return;
 
-    console.log(user, "User here o")
-
     if (user?.isEducator) {
       // Show all courses for educators
       // Show only General courses

@@ -4,6 +4,8 @@ import course_image from '../../../assets/course-image.png'
 import dot from '../../../assets/radix-icons--dot-filled.svg'
 
 export default function ReviewCourseInfoModal({ course, onClose }) {
+
+  console.log(course,"Course here fa")
   const [modalIsOpen, setIsOpen] = useState(false)
 
   function openModal() {
@@ -16,11 +18,170 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
 
   return (
     <div className='course-info-modal overflow-y-modal '>
+
+      {course?.title === "Emotional Regulation" && (
+        <div>
+          <div
+            className="py-2 px-4 course-objectives"
+            style={{ maxHeight: "500px", overflowY: "auto", marginBottom: "1.5rem" }}
+          >
+            {/* Header */}
+            <div
+              className="course-info-modal-header"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between"
+              }}
+            >
+              <h2 className="mb-0" style={{ fontSize: "36px" }}>
+                {course?.title}
+              </h2>
+              <button
+                className="close-btn"
+                onClick={closeModal}
+                style={{ border: "none", background: "none", cursor: "pointer" }}
+              >
+                <Icon width={24} icon="mingcute:close-fill" />
+              </button>
+            </div>
+
+            <hr className="w-100 h-auto mb-2 " />
+
+            {/* Banner */}
+            <div>
+              <img
+                style={{ width: "100%", height: "160px", objectFit: "cover" }}
+                alt=""
+                src={course.banner}
+              />
+            </div>
+
+            {/* Body */}
+            <div className="course-info-modal-body">
+              <p style={{ fontSize: "20px", color: "#275DAD" }}>Course Overview</p>
+              <p style={{ paddingLeft: ".5rem" }}>
+                Welcome to the Emotional Regulation Curriculum! Over the next several weeks,
+                we’ll explore what it means to understand and manage your emotions effectively.
+                This journey will help you recognize your feelings, respond to them in healthy ways,
+                and navigate life’s challenges with greater control.
+              </p>
+
+              <p style={{ paddingLeft: ".5rem", marginTop: "1rem" }}>
+                Here’s what you can look forward to:
+              </p>
+
+              <div className="mt-4">
+                <p style={{ fontSize: "20px", color: "#275DAD" }}>Course Objectives</p>
+                <ul>
+                  {/* Week 1 */}
+                  <li>
+                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem", paddingTop: ".5rem" }}>
+                      <img src={dot} />
+                      <p style={{ fontSize: "15px", color: "#275DAD" }}>
+                        Week 1: Introduction to Emotional Regulation
+                      </p>
+                    </div>
+                    <p style={{ paddingLeft: ".5rem" }}>
+                      What We’ll Do: We’ll start by defining emotional regulation and explaining why it’s essential for personal and social success.
+                      You’ll learn how emotions influence your thoughts, decisions, and actions, and why it’s important to manage them effectively.
+                      You will also be introduced to the 4 different regulation zones, and how to identify your zone.
+                    </p>
+                    <p style={{ paddingLeft: ".5rem", paddingTop: ".5rem" }}>
+                      Why It Matters: Emotional regulation is a key skill for handling stress,
+                      improving relationships, and maintaining a balanced perspective.
+                      It helps you stay in control and respond thoughtfully rather than reacting
+                      impulsively.
+                    </p>
+                  </li>
+
+                  {/* Week 2 */}
+                  <li>
+                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem", paddingTop: ".5rem" }}>
+                      <img src={dot} />
+                      <p style={{ fontSize: "15px", color: "#275DAD" }}>
+                        Week 2: Identifying Energy Levels
+                      </p>
+                    </div>
+                    <p style={{ paddingLeft: ".5rem" }}>
+                      What We’ll Do: This week, we’ll focus on recognizing and understanding your energy levels.
+                      You’ll explore the Zones of Regulation—Blue, Green, Yellow, and Red,
+                      and learn how these zones correspond to your energy level.
+                    </p>
+                    <p style={{ paddingLeft: ".5rem", paddingTop: ".5rem" }}>
+                      Why It Matters: Identifying your energy levels helps you understand how you’re feeling and why.
+                      This awareness is the first step toward managing your emotions effectively and staying balanced.
+                    </p>
+                  </li>
+
+                  {/* Week 3 */}
+                  <li>
+                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem", paddingTop: ".5rem" }}>
+                      <img src={dot} />
+                      <p style={{ fontSize: "15px", color: "#275DAD" }}>
+                        Week 3: The SONAR of Emotional Regulation
+                      </p>
+                    </div>
+                    <p style={{ paddingLeft: ".5rem" }}>
+                      What We’ll Do: We’ll introduce the SONAR method, a step-by-step approach to managing emotions.
+                      SONAR stands for Stop, Observe, Name, Accept, and Regulate.
+                      You’ll practice using this method to navigate big emotions and stay balanced.
+                    </p>
+                    <p style={{ paddingLeft: ".5rem", paddingTop: ".5rem" }}>
+                      Why It Matters: The SONAR method equips you with practical tools to handle challenging situations.
+                      It encourages mindfulness and helps you make thoughtful choices, even in moments of emotional intensity.
+                    </p>
+                  </li>
+
+                  {/* Week 4 */}
+                  <li>
+                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem", paddingTop: ".5rem" }}>
+                      <img src={dot} />
+                      <p style={{ fontSize: "15px", color: "#275DAD" }}>
+                        Week 4: Introduction to Coping Skills
+                      </p>
+                    </div>
+                    <p style={{ paddingLeft: ".5rem" }}>
+                      What We’ll Do: This week, we’ll explore a variety of coping skills that can help you manage emotions
+                      effectively. From physical activities to creative outlets,
+                      journaling, you’ll learn techniques that work best for you.
+                    </p>
+                    <p style={{ paddingLeft: ".5rem", paddingTop: ".5rem" }}>
+                      Why It Matters: Coping skills are essential tools for maintaining emotional balance.
+                      They help you handle stress, recover from setbacks, and approach life with a calm and confident mindset.
+                    </p>
+                  </li>
+
+                  {/* Week 5 */}
+                  <li>
+                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem", paddingTop: ".5rem" }}>
+                      <img src={dot} />
+                      <p style={{ fontSize: "15px", color: "#275DAD" }}>
+                        Week 5: Wrapping Up!
+                      </p>
+                    </div>
+                    <p style={{ paddingLeft: ".5rem" }}>
+                      What We’ll Do: In our final week, we’ll review everything you’ve learned about emotional regulation.
+                      Through activities and discussions, you’ll reflect on your growth,
+                      identify your go-to coping strategies, and plan how to apply these skills in your daily life.
+                    </p>
+                    <p style={{ paddingLeft: ".5rem", paddingTop: ".5rem" }}>
+                      Why It Matters: Wrapping up reinforces your learning and prepares you to use your emotional regulation skills independently.
+                      This week ensures you feel confident in managing your emotions and maintaining a balanced perspective moving forward.
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {course?.title === "Resilience & Grit" && (
         <div>
           <div
             className="py-2 px-4 course-objectives"
-            style={{ maxHeight: "500px", overflowY: "auto" }}
+            style={{ maxHeight: "500px", overflowY: "auto", marginBottom: "1.5rem" }}
           >
             {/* Header */}
             <div
@@ -74,7 +235,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
                 <ul>
                   {/* Week 1 */}
                   <li>
-                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem", paddingTop: ".5rem" }}>
                       <img src={dot} />
                       <p style={{ fontSize: "15px", color: "#275DAD" }}>
                         Week 1: Introduction to Resilience and Grit
@@ -86,7 +247,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
                       your goals. Through engaging activities, you’ll reflect on how you’ve already
                       demonstrated resilience in your life.
                     </p>
-                    <p>
+                    <p style={{ paddingLeft: ".5rem", paddingTop: ".5rem" }}>
                       Why It Matters: Resilience and grit empower you to bounce back
                       from setbacks and pursue your goals with determination.
                     </p>
@@ -94,7 +255,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
 
                   {/* Week 2 */}
                   <li>
-                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem", paddingTop: ".5rem" }}>
                       <img src={dot} />
                       <p style={{ fontSize: "15px", color: "#275DAD" }}>
                         Week 2: Developing Resilience
@@ -105,7 +266,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
                       learn the foundations of resilience, referred to as the 7 C’s,
                       and recognize which you have and which you are yet to develop.
                     </p>
-                    <p>
+                    <p style={{ paddingLeft: ".5rem", paddingTop: ".5rem" }}>
                       Why It Matters: Developing resilience equips you with the tools
                       to stay steady during tough times and maintain emotional balance.
                     </p>
@@ -113,7 +274,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
 
                   {/* Week 3 */}
                   <li>
-                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem", paddingTop: ".5rem" }}>
                       <img src={dot} />
                       <p style={{ fontSize: "15px", color: "#275DAD" }}>
                         Week 3: Understanding the Concept of Adaptability
@@ -125,7 +286,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
                       perspectives and staying flexible in the face of change, with
                       real-life examples of animals to reinforce these concepts.
                     </p>
-                    <p>
+                    <p style={{ paddingLeft: ".5rem", paddingTop: ".5rem" }}>
                       Why It Matters: Adaptability is a key part of resilience. By
                       learning to embrace change, you’ll be better prepared to thrive
                       in a constantly evolving world.
@@ -134,7 +295,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
 
                   {/* Week 4 */}
                   <li>
-                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem", paddingTop: ".5rem" }}>
                       <img src={dot} />
                       <p style={{ fontSize: "15px", color: "#275DAD" }}>
                         Week 4: The Role of Support Systems
@@ -146,7 +307,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
                       who uplift and encourage you, and recognize the value of both
                       giving and receiving support.
                     </p>
-                    <p>
+                    <p style={{ paddingLeft: ".5rem", paddingTop: ".5rem" }}>
                       Why It Matters: Support systems remind you that you’re not alone
                       and help you navigate challenges with confidence.
                     </p>
@@ -154,7 +315,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
 
                   {/* Week 5 */}
                   <li>
-                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: ".5rem", paddingTop: ".5rem" }}>
                       <img src={dot} />
                       <p style={{ fontSize: "15px", color: "#275DAD" }}>
                         Week 5: Coping Skills
@@ -165,7 +326,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
                       manage stress and maintain emotional well-being, such as creative
                       outlets and physical activities.
                     </p>
-                    <p>
+                    <p style={{ paddingLeft: ".5rem", paddingTop: ".5rem" }}>
                       Why It Matters: Coping skills help you regulate emotions and
                       respond to challenges in healthy ways, setting you up for success
                       in both your personal and academic life.
@@ -182,7 +343,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
         <div>
           <div
             className="py-2 px-4 course-objectives"
-            style={{ maxHeight: "500px", overflowY: "auto" }}
+            style={{ maxHeight: "500px", overflowY: "auto", marginBottom: "1.5rem" }}
           >
             {/* Header */}
             <div
@@ -350,7 +511,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
         <div>
           <div
             className="py-2 px-4 course-objectives"
-            style={{ maxHeight: "500px", overflowY: "auto" }}
+            style={{ maxHeight: "500px", overflowY: "auto", marginBottom: "1.5rem" }}
           >
             {/* Header */}
             <div
@@ -627,13 +788,14 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
       )}
 
       {
-        course?.title === "Self-Awareness" && (
+        course?.title === "Self Awareness" && (
           <div>
             <div
               className="py-2 px-4 course-objectives"
               style={{
                 maxHeight: "500px",
-                overflowY: "auto"
+                overflowY: "auto",
+                marginBottom: "1.5rem"
               }}
             >
               <div
@@ -814,7 +976,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
 
         <div
           className="py-2 px-4 course-objectives"
-          style={{ maxHeight: "500px", overflowY: "auto" }}
+          style={{ maxHeight: "500px", overflowY: "auto", marginBottom: "1.5rem" }}
         >
           {/* Header */}
           <div
@@ -895,8 +1057,55 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
                 By the end of this course, participants will be able to:
               </p>
 
-              
+              <ol style={{ paddingLeft: "1rem", fontSize: "5rem" }}>
+                <li>
+                  <p>1. Define Social-Emotional Learning (SEL) and Positive Psychology, and explain their relevance to teaching, learning, and teacher well-being.</p>
+                </li>
 
+                <li className='mt-3'>
+                  <p>2. Identify and apply the 5 core SEL competencies (Self-Awareness, Self-Management, Social Awareness, Relationship Skills, and Responsible Decision-Making) in classroom practice.</p>
+                </li>
+
+                <li className='mt-3'>
+                  <p> 3. Develop self-awareness and emotional regulation skills through mindfulness, reflection, and recognition of emotional triggers, and apply these skills to manage stress and prevent burnout.</p>
+                </li>
+
+                <li className='mt-2'>
+                  <p>4. Foster strong teacher-student relationships by modeling empathy, active listening, and positive reinforcement, while using restorative practices to address conflict.</p>
+                </li>
+
+                <li className='mt-3'>
+                  <p>  5. Cultivate a growth mindset and resilience in themselves and their students by promoting optimism, perseverance, and a positive attitude toward challenges and setbacks.</p>
+                </li>
+
+                <li className='mt-3'>
+                  <p> 6. Integrate SEL strategies into everyday teaching methods, including lesson planning, storytelling, gamification, and classroom routines that support emotional and social development.</p>
+                </li>
+
+                <li className='mt-3'>
+                  <p> 7. Demonstrate sustainable practices for teacher well-being, including self-care, gratitude, and building a supportive professional community.</p>
+                </li>
+
+                <li className='mt-3'>
+                  <p> 8. Design and present an SEL Implementation Plan tailored to their classroom context, showing how they will embed SEL principles into their teaching long-term.</p>
+                </li>
+              </ol>
+
+              <p style={{ paddingLeft: ".5rem" }}>
+                The SEL and Positive Psychology Course Guide provides a comprehensive framework for trainers
+                to deliver engaging and impactful lessons on improving teaching practices.
+                Through a combination of theoretical concepts, practical applications, and reflective exercises,
+                teachers will develop the knowledge, skills, and mindset necessary to navigate the journey of
+                teaching with confidence and competence.
+              </p>
+              <br />
+
+              <p style={{ paddingLeft: ".5rem", marginBottom: "1rem" }}>
+                For each session, please ensure that all materials listed in the agenda are readily available.
+                Also, familiarize yourself with the agenda and discussion points to effectively guide training
+                activities. Furthermore, create a welcoming and inclusive environment for open discussion and
+                participation among teachers.
+              </p>
             </div>
 
 
