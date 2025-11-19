@@ -101,7 +101,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
     );
     setWeekOneData(true);
 
-    return () => {};
+    return () => { };
   }, [data]);
 
   function getActivityAnswer(activityId, itemId) {
@@ -502,18 +502,18 @@ function Week1({ enrollmentId, setWeekOneData }) {
         {
           //This is only Visible for Flow Admins
           isAdmin &&
-            !activityData?.find((activity) => activity.page === activity2.id)
-              ?.feedback && (
-              <Icon
-                onClick={() => {
-                  setActivityFeedbackId({ activityId: activity2.id });
-                  handleModalOpen();
-                }}
-                style={{ color: "#D6D6D6" }}
-                width={35}
-                icon="tabler:message-2"
-              />
-            )
+          !activityData?.find((activity) => activity.page === activity2.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity2.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )
         }
       </div>
       {
@@ -746,18 +746,18 @@ function Week1({ enrollmentId, setWeekOneData }) {
         {
           //This is only Visible for Flow Admins
           isAdmin &&
-            !activityData?.find((activity) => activity.page === activity4.id)
-              ?.feedback && (
-              <Icon
-                onClick={() => {
-                  setActivityFeedbackId({ activityId: activity4.id });
-                  handleModalOpen();
-                }}
-                style={{ color: "#D6D6D6" }}
-                width={35}
-                icon="tabler:message-2"
-              />
-            )
+          !activityData?.find((activity) => activity.page === activity4.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity4.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )
         }
       </div>
       {
@@ -844,18 +844,18 @@ function Week1({ enrollmentId, setWeekOneData }) {
         {
           //This is only Visible for Flow Admins
           isAdmin &&
-            !activityData?.find((activity) => activity.page === activity4.id)
-              ?.feedback && (
-              <Icon
-                onClick={() => {
-                  setActivityFeedbackId({ activityId: activity4.id });
-                  handleModalOpen();
-                }}
-                style={{ color: "#D6D6D6" }}
-                width={35}
-                icon="tabler:message-2"
-              />
-            )
+          !activityData?.find((activity) => activity.page === activity4.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity4.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )
         }
       </div>
       {
@@ -942,18 +942,18 @@ function Week1({ enrollmentId, setWeekOneData }) {
         {
           //This is only Visible for Flow Admins
           isAdmin &&
-            !activityData?.find((activity) => activity.page === activity4.id)
-              ?.feedback && (
-              <Icon
-                onClick={() => {
-                  setActivityFeedbackId({ activityId: activity4.id });
-                  handleModalOpen();
-                }}
-                style={{ color: "#D6D6D6" }}
-                width={35}
-                icon="tabler:message-2"
-              />
-            )
+          !activityData?.find((activity) => activity.page === activity4.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity4.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )
         }
       </div>
       {
@@ -2551,16 +2551,16 @@ function Week1({ enrollmentId, setWeekOneData }) {
           </h2>
           <p className="text-white">
             {score < 40
-              ? "Well done on starting your journey into understanding resilience! You’ve gained a basic understanding of the words, ‘Resilience’ and ‘Grit’. However, you need to revisit the course again and listen more attentively to the lessons. You can reach out to your teachers or classmates for help if you still find yourself struggling. Reaching out for help shows that you are a smart person."
+              ? "You’ve taken an important first step in exploring Social and Emotional Learning and Positive Psychology. You’ve started to understand the value of emotional awareness, relationship skills, and teacher wellbeing. However, it seems you may still be building a full grasp of how SEL connects to classroom practice. Revisit the lessons and take time to reflect on how self-awareness and self-management can shape your approach to teaching. Don’t hesitate to ask questions or discuss ideas with your peers; collaboration is one of the best ways to deepen understanding. Every teacher starts somewhere, and your willingness to learn is already a sign of growth"
               : score < 60
-              ? "Good job! You’ve shown a good understanding of resilience and grits. You’re beginning to grasp concepts like the 7 C’s and the role of support systems in building resilience. To deepen your understanding, try practicing adaptability in real-life scenarios and applying the coping skills you have learned. Work on applying these principles when facing challenges, no matter how little or insignificant the challenge might seem; with consistent effort, you’ll strengthen your resilient bones."
-              : score < 80
-              ? "Great work! You’ve developed a solid understanding of resilience and grit. To take it a step further, focus on building stronger connections with your support network and practicing coping skills in real-life situations. Apply these principles consistently, even in small challenges, to strengthen your resilience and ability to bounce back. Keep up the good work—you’re on the right track!"
-              : score < 95
-              ? "Excellent job! You’ve shown a strong understanding of resilience and how to build it into your life. You have learned to effectively use strategies like the 7 C’s, practicing adaptability, and relying on your support systems when needed. To continue growing, focus on maintaining these habits and applying them in different areas of your life, whether it’s personal goals or overcoming unexpected challenges. Remember, resilience is a skill that gets stronger with use, and your dedication is truly inspiring. Keep pushing forward—you’re doing amazing!"
-              : score <= 100
-              ? "Outstanding achievement! You’ve demonstrated exceptional mastery of resilience and grit. Your understanding of the 7 C’s, adaptability, and the role of support systems will help you greatly as you handle challenges. You’ve not only learned to bounce back but to thrive and grow stronger in the process. Keep building on this incredible foundation and inspiring others with your example. Your hard work and perseverance are commendable—your resilience is a skill that will serve you for a lifetime!"
-              : ""}
+                ? "Good effort! You’re beginning to grasp key SEL and Positive Psychology principles such as self-awareness, empathy, and the importance of wellbeing in the classroom. You have a fair understanding of how emotional intelligence supports both teachers and students, but there’s room to strengthen your practical application. Try focusing on mindfulness and emotional regulation strategies in your daily teaching routine. Reflect after each class, ‘How did your emotional state affect your students' responses?’ The more intentional you are, the more confident and balanced you’ll become in integrating SEL principles effectively."
+                : score < 80
+                  ? "Well done! You’ve shown a strong understanding of SEL and Positive Psychology concepts and are starting to connect them meaningfully to your classroom practice. You recognize how empathy, relationship-building, and emotional regulation influence learning outcomes. To keep improving, aim to apply SEL more consistently, model calm responses to challenges, and build structured moments for reflection or gratitude in your lessons. You’re well on your way to creating a classroom culture rooted in care, connection, and emotional growth."
+                  : score < 95
+                    ? "Excellent work! You’ve demonstrated a clear understanding of SEL and Positive Psychology competencies and how its principles can transform both teaching and learning. You’ve likely developed effective strategies for fostering empathy, self-regulation, and resilience in your students, and you understand the importance of teacher wellbeing in sustaining those practices. Keep refining your skills by mentoring peers or sharing SEL practices in team meetings. Continue to model emotional intelligence in every interaction, and you will build the kind of classroom where students feel safe, motivated, and valued."
+                    : score <= 100
+                      ? "Outstanding achievement! You’ve shown exceptional mastery of Social and Emotional Learning. You not only understand the theory but also demonstrate how to live it out in your teaching, balancing self-awareness, empathy, and resilience with skill. Your approach likely fosters deep trust, engagement, and growth in your students. Continue to inspire others by leading discussions on SEL implementation and supporting colleagues who are just beginning their journey. Your dedication to nurturing emotional wellbeing in education sets a powerful example. Keep shining, the ripple effect of your work will last far beyond the classroom."
+                      : ""}
           </p>
         </div>
         <Modal

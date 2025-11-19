@@ -16,7 +16,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
 
   return (
     <div className='course-info-modal overflow-y-modal '>
-          {course?.title === "Resilience & Grit" && (
+      {course?.title === "Resilience & Grit" && (
         <div>
           <div
             className="py-2 px-4 course-objectives"
@@ -810,6 +810,100 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
         )
       }
 
+      {course?.title === "TOT Course 1" && (
+
+        <div
+          className="py-2 px-4 course-objectives"
+          style={{ maxHeight: "500px", overflowY: "auto" }}
+        >
+          {/* Header */}
+          <div
+            className="course-info-modal-header"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between"
+            }}
+          >
+            <h2 className="mb-0" style={{ fontSize: "36px" }}>
+              {course?.title}
+            </h2>
+            <button
+              className="close-btn"
+              onClick={closeModal}
+              style={{ border: "none", background: "none", cursor: "pointer" }}
+            >
+              <Icon width={24} icon="mingcute:close-fill" />
+            </button>
+          </div>
+
+          <hr className="w-100 h-auto mb-2 " />
+
+          {/* Banner */}
+          <div>
+            <img
+              style={{ width: "100%", height: "160px", objectFit: "cover" }}
+              alt=""
+              src={course.banner}
+            />
+          </div>
+
+          {/* Body */}
+          <div className="course-info-modal-body">
+            <p style={{ fontSize: "20px", color: "#275DAD" }}>Course Overview</p>
+            <p style={{ paddingLeft: ".5rem" }}>
+              The Training of Teachers (TOT) curriculum is a training program designed to equip educators with the right tools,
+              skills and knowledge to improve their teaching practice, strengthen classroom relationships,
+              build emotional resilience and promote teacher wellbeing. The TOT is divided into 4 courses
+              and course one is titled Social and Emotional Learning and Positive Psychology.
+            </p>
+            <p style={{ paddingLeft: ".5rem", marginTop: "1rem" }}>
+              This course is designed to strengthen the emotional and psychological skill set of teachers.
+              Grounded in the principles of Social and Emotional Learning (SEL) and Positive Psychology,
+              this course aims to enhance teachers' capacity to model, integrate,
+              and sustain wellbeing practices in their classrooms and personal lives.
+            </p>
+
+            <p style={{ paddingLeft: ".5rem", marginTop: "1rem" }}>
+              This training is a proactive step towards cultivating emotionally intelligent educators who can create nurturing,
+              resilient, and thriving learning environments for students.
+              Teachers are not just facilitators of knowledge, they are emotional anchors for their students.
+              By equipping them with evidence-based strategies for self-awareness, emotional regulation,
+              relationship-building, and strength-based practices, the program fosters both professional and personal growth.
+            </p>
+
+            <p style={{ paddingLeft: ".5rem", marginTop: "1rem" }}>
+              Teachers face numerous challenges in addressing the social and emotional needs of students,
+              adapting to evolving teaching methods, and managing classroom dynamics.
+              Providing training in Social and Emotional Learning (SEL) and Positive Psychology
+              equips teachers with the necessary tools to navigate these challenges, fostering a
+              more supportive and effective learning environment.
+            </p>
+
+            <p style={{ paddingLeft: ".5rem", marginTop: "1rem" }}>
+              Throughout the course, teachers will learn to recognize their own emotional patterns, build resilience,
+              and embrace their strengths, thereby becoming more effective in supporting the holistic
+              development of their students. By enhancing their emotional awareness and wellbeing,
+              teachers can experience greater confidence and satisfaction in their roles,
+              which positively influences student outcomes.
+            </p>
+
+            <div className="mt-4">
+              <p style={{ fontSize: "20px", color: "#275DAD" }}>Course Objectives</p>
+
+              <p style={{ paddingLeft: ".5rem" }}>
+                By the end of this course, participants will be able to:
+              </p>
+
+              
+
+            </div>
+
+
+          </div>
+
+        </div>
+      )}
     </div>
   )
 }
