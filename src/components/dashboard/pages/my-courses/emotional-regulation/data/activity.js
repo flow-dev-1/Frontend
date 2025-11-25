@@ -49,13 +49,24 @@ export const courseContent = {
       },
       {
         id: 4,
-        type: "question",
-        questionType: "text",
-        question: "What does",
-        continuation: "mean?",
-        hasImage: true,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "textInput",
+            question: "What does",
+            continuation: "mean?",
+            hasImage: true,
+            imageSrc: "mindset.png",
+            inputType: "bigTextBox",
+          },
+          {
+            stepId: 2,
+            type: "answerPreview",
+            value:
+              "Emotional regulation means controlling your emotions. In simple terms, regulating your emotions means being able to control your emotions",
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
