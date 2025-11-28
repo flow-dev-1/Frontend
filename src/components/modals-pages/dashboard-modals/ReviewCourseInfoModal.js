@@ -5,7 +5,6 @@ import dot from '../../../assets/radix-icons--dot-filled.svg'
 
 export default function ReviewCourseInfoModal({ course, onClose }) {
 
-  console.log(course,"Course here fa")
   const [modalIsOpen, setIsOpen] = useState(false)
 
   function openModal() {

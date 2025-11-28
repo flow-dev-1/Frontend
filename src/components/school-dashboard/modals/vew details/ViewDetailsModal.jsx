@@ -131,7 +131,7 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
                   data.courses.map((group, index) => (
                     <tr key={index}>
                       <td>{index + 1}</td>
-                      <td>{group.stdClass}</td>
+                      <td>{group.stdClass} {group?.classTag}</td>
                       <td>{group.studentEnrollments?.length || 0}</td>{" "}
                       {/* Ensure studentEnrollments is defined */}
                       <td>

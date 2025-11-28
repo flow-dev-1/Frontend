@@ -201,7 +201,7 @@ const SchoolCourseCard = ({
             }}
           />
           <div className="course-card-category">
-            {course.grade !== "Educators" ? "Students" : "Educators"}
+            {course.grade !== "Educator" ? "Students" : "Educators"}
           </div>
         </div>
         <div className="course-card-title" style={{ marginBottom: "0" }}>

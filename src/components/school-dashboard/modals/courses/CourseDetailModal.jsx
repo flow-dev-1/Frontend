@@ -29,8 +29,6 @@ const CourseDetailModal = ({ course, enrolled, closeModal }) => {
 
   if (!course) return null;
 
-  console.log(course);
-
   const daysOfWeek = [
     "Monday",
     "Tuesday",
