@@ -435,7 +435,7 @@
 }
 
 .resilience-question-box-container {
-  height: 65vh;
+  min-height: 65vh;
   padding: 1rem 2rem;
   /* width: max-content; */
 }

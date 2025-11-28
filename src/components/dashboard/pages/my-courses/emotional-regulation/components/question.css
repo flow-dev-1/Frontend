@@ -245,32 +245,38 @@
 }
 
 .orange-colored-input-label {
-  background: url("../../../../../../assets/resilience-grit-images/yetOrange.png") no-repeat;
+  background: url("../../../../../../assets/resilience-grit-images/yetOrange.png")
+    no-repeat;
   background-size: 100% 100%;
 }
 
 .green-colored-input-label {
-  background: url("../../../../../../assets/resilience-grit-images/yetGreen.png") no-repeat;
+  background: url("../../../../../../assets/resilience-grit-images/yetGreen.png")
+    no-repeat;
   background-size: 100% 100%;
 }
 
 .red-colored-input-label {
-  background: url("../../../../../../assets/resilience-grit-images/yetRed.png") no-repeat;
+  background: url("../../../../../../assets/resilience-grit-images/yetRed.png")
+    no-repeat;
   background-size: 100% 100%;
 }
 
 .green-rectangle-colored-small-input-label {
-  background: url("../../../../../../assets/resilience-grit-images/yetGreen.png") no-repeat;
+  background: url("../../../../../../assets/resilience-grit-images/yetGreen.png")
+    no-repeat;
   background-size: 100% 100%;
 }
 
 .blue-rectangle-colored-small-input-label {
-  background: url("../../../../../../assets/resilience-grit-images/yetblue.png") no-repeat;
+  background: url("../../../../../../assets/resilience-grit-images/yetblue.png")
+    no-repeat;
   background-size: 100% 100%;
 }
 
 .orange-rectangle-colored-small-input-label {
-  background: url("../../../../../../assets/resilience-grit-images/yetOrange.png") no-repeat;
+  background: url("../../../../../../assets/resilience-grit-images/yetOrange.png")
+    no-repeat;
   background-size: 100% 100%;
 }
 
@@ -528,7 +534,6 @@ button {
   min-height: 100px;
 } */
 @media (max-width: 1400px) {
-
   .question-box-container {
     margin-right: 1rem;
     /* width: max-content; */
@@ -537,7 +542,6 @@ button {
   .resilience-small-input {
     padding: 2rem 2rem;
   }
-
 }
 
 @media (max-width: 769px) {
@@ -551,13 +555,12 @@ button {
   .resilience-question-box-container {
     /* min-height: 37vh; */
     max-height: 40vh;
-    padding: 1rem .5rem;
+    padding: 1rem 0.5rem;
     /* width: max-content; */
   }
 
   .resilience-question-image {
     max-width: 10rem;
-
   }
 
   .arrow-head {
@@ -577,7 +580,7 @@ button {
   .resilience-question-box-container {
     min-height: min-content !important;
     max-height: 100vh;
-    padding: 1rem .5rem;
+    padding: 1rem 0.5rem;
     /* width: max-content; */
   }
 
@@ -649,16 +652,19 @@ button {
   }
 
   .red-colored-input-label {
-    background: url("../../../../../../assets/resilience-grit-images/yetRed.png") no-repeat;
+    background: url("../../../../../../assets/resilience-grit-images/yetRed.png")
+      no-repeat;
     background-size: 100% 80%;
   }
   .blue-rectangle-colored-small-input-label {
-    background: url("../../../../../../assets/resilience-grit-images/yetblue.png") no-repeat;
+    background: url("../../../../../../assets/resilience-grit-images/yetblue.png")
+      no-repeat;
     background-size: 100% 80%;
   }
-  
+
   .orange-rectangle-colored-small-input-label {
-    background: url("../../../../../../assets/resilience-grit-images/yetOrange.png") no-repeat;
+    background: url("../../../../../../assets/resilience-grit-images/yetOrange.png")
+      no-repeat;
     background-size: 100% 80%;
   }
   .week-4-textarea {
