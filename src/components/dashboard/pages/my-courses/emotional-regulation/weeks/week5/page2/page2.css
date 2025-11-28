@@ -95,9 +95,3 @@
     font-size: 1rem;
   }
 }
-
-/* Custom Border (from your existing styles) */
-.custom-border-20 {
-  border-radius: 20px;
-  /* overflow: hidden; */
-}
