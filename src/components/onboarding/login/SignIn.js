@@ -59,7 +59,8 @@ export default function SignIn() {
       dispatch(loginSuccess(data?.user));
       dispatch(loginData(data));
       localStorage.setItem("Flow-Auth-Token", data?.token);
-      if (data.accountType === "School") {
+ 
+      if (data.accountType === "School" || (data?.accountType === "Educator" && data?.user?.isSchoolAdmin)) {
         navigate("/school-dashboard", { replace: true });
       } else {
         navigate("/dashboard", { replace: true });

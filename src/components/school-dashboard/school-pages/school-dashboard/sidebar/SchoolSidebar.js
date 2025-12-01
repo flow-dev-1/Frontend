@@ -3,15 +3,23 @@ import { Link, useLocation } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import './sidebar.css'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux';
 
 function SchoolSidebar() {
   const location = useLocation()
   const [isCoursesOpen, setIsCoursesOpen] = useState(false)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const navigate = useNavigate()
+  const { user } = useSelector((state) => state.user);
 
   const toggleCourses = () => {
-    navigate('/school-dashboard/courses/all')
+
+    if (user?.isSchool) {
+      navigate('/school-dashboard/courses/all')
+    } else {
+      navigate('/school-dashboard/courses/enrolled')
+    }
+
     setIsCoursesOpen(!isCoursesOpen)
     setIsSettingsOpen(false)
   }
@@ -47,9 +55,8 @@ function SchoolSidebar() {
           <li>
             <Link
               to='/school-dashboard'
-              className={`link ${
-                isActiveLink('/school-dashboard') ? 'active' : ''
-              }`}
+              className={`link ${isActiveLink('/school-dashboard') ? 'active' : ''
+                }`}
             >
               <Icon icon='ion:grid-outline' className='sidebar-icon' />
               Overview
@@ -70,26 +77,28 @@ function SchoolSidebar() {
             </div>
             {isCoursesOpen && (
               <ul className='nested-menu'>
-                <li>
-                  <Link
-                    to='/school-dashboard/courses/all'
-                    className={`link ${
-                      isActiveLink('/school-dashboard/courses/all')
+                {
+                  (user?.isSchool || user?.schoolAdminPermission === "Admin") &&
+                  <li>
+                    <Link
+                      to='/school-dashboard/courses/all'
+                      className={`link ${isActiveLink('/school-dashboard/courses/all')
                         ? 'active-inner'
                         : 'inner'
-                    }`}
-                  >
-                    All
-                  </Link>
-                </li>
+                        }`}
+                    >
+                      All
+                    </Link>
+                  </li>
+                }
+
                 <li>
                   <Link
                     to='/school-dashboard/courses/enrolled'
-                    className={`link ${
-                      isActiveLink('/school-dashboard/courses/enrolled')
-                        ? 'active-inner'
-                        : 'inner'
-                    }`}
+                    className={`link ${isActiveLink('/school-dashboard/courses/enrolled')
+                      ? 'active-inner'
+                      : 'inner'
+                      }`}
                   >
                     Enrolled
                   </Link>
@@ -101,9 +110,8 @@ function SchoolSidebar() {
           <li>
             <Link
               to='/school-dashboard/support'
-              className={`link ${
-                isActiveLink('/school-dashboard/support') ? 'active' : ''
-              }`}
+              className={`link ${isActiveLink('/school-dashboard/support') ? 'active' : ''
+                }`}
             >
               <Icon icon='ph:users-light' className='sidebar-icon' />
               Support
@@ -113,11 +121,10 @@ function SchoolSidebar() {
           <li>
             <Link
               to='/school-dashboard/payment-history'
-              className={`link ${
-                isActiveLink('/school-dashboard/payment-history')
-                  ? 'active'
-                  : ''
-              }`}
+              className={`link ${isActiveLink('/school-dashboard/payment-history')
+                ? 'active'
+                : ''
+                }`}
             >
               <Icon
                 width={26}
@@ -145,11 +152,10 @@ function SchoolSidebar() {
                 <li>
                   <Link
                     to='/school-dashboard/settings/profile'
-                    className={`link ${
-                      isActiveLink('/school-dashboard/settings/profile')
-                        ? 'active-inner'
-                        : 'inner'
-                    }`}
+                    className={`link ${isActiveLink('/school-dashboard/settings/profile')
+                      ? 'active-inner'
+                      : 'inner'
+                      }`}
                   >
                     Profile
                   </Link>
@@ -157,55 +163,60 @@ function SchoolSidebar() {
                 <li>
                   <Link
                     to='/school-dashboard/settings/teams'
-                    className={`link ${
-                      isActiveLink('/school-dashboard/settings/teams')
-                        ? 'active-inner'
-                        : 'inner'
-                    }`}
+                    className={`link ${isActiveLink('/school-dashboard/settings/teams')
+                      ? 'active-inner'
+                      : 'inner'
+                      }`}
                   >
                     Teams
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    to='/school-dashboard/settings/change-password'
-                    className={`link ${
-                      isActiveLink('/school-dashboard/settings/change-password')
+
+                {
+                  user?.isSchool &&
+                  <li>
+                    <Link
+                      to='/school-dashboard/settings/change-password'
+                      className={`link ${isActiveLink('/school-dashboard/settings/change-password')
                         ? 'active-inner'
                         : 'inner'
-                    }`}
-                  >
-                    Change Password
-                  </Link>
-                </li>
+                        }`}
+                    >
+                      Change Password
+                    </Link>
+                  </li>
+                }
+
                 <li>
                   <Link
                     to='/school-dashboard/settings/email-notifications'
-                    className={`link ${
-                      isActiveLink(
-                        '/school-dashboard/settings/email-notifications'
-                      )
-                        ? 'active-inner'
-                        : 'inner'
-                    }`}
+                    className={`link ${isActiveLink(
+                      '/school-dashboard/settings/email-notifications'
+                    )
+                      ? 'active-inner'
+                      : 'inner'
+                      }`}
                   >
                     Email Notifications
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    to='/school-dashboard/settings/deactivate-account'
-                    className={`link ${
-                      isActiveLink(
+                {
+                  user?.isSchool &&
+                  <li>
+                    <Link
+                      to='/school-dashboard/settings/deactivate-account'
+                      className={`link ${isActiveLink(
                         '/school-dashboard/settings/deactivate-account'
                       )
                         ? 'active-inner'
                         : 'inner'
-                    }`}
-                  >
-                    Deactivate Account
-                  </Link>
-                </li>
+                        }`}
+                    >
+                      Deactivate Account
+                    </Link>
+                  </li>
+                }
+
               </ul>
             )}
           </li>

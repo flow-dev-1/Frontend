@@ -44,6 +44,7 @@ const SchoolEnrolledStudents = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [classlist, setClasslist] = useState(false);
+  const [classTag, setClassTag] = useState("");
 
 
   const [deleteUserCredentials, setDeleteUser] = useState({
@@ -85,7 +86,9 @@ const SchoolEnrolledStudents = () => {
   useEffect(() => {
     if (!data) return;
     setData(data?.course);
+    console.log(data?.course, "Student data here!")
     setClasslist(data?.course?.stdClass)
+    setClassTag(data?.course?.classTag)
     return () => { };
   }, [data]);
 
@@ -235,13 +238,14 @@ const SchoolEnrolledStudents = () => {
   }
 
 
+
   return (
     <div className="enrolled-course-student">
       <div className="header">
         <button className="back-button" onClick={() => navigate(-1)}>
           <Icon icon="mingcute:arrow-left-line" width={20} /> Back
         </button>
-        <p>Self Awareness</p>
+        <p>{data?.course?.course?.title}</p>
         <button className="add-student-button" onClick={handleCreateClick}>
           + Add New Student
         </button>
@@ -257,7 +261,7 @@ const SchoolEnrolledStudents = () => {
       <div className="info-bar">
         <div className="info-item">
           <p className="info-p">Class Enrolled:</p>
-          <p>{enrollmentData.stdClass}</p>
+          <p>{enrollmentData.stdClass} {enrollmentData?.classTag}</p>
         </div>
         <div className="info-item">
           <p className="info-p">Enrollment Date:</p>
@@ -429,6 +433,7 @@ const SchoolEnrolledStudents = () => {
       >
         <AddStudentModal
           classOfficial={classlist}
+          classTag={classTag}
           onRequestClose={closeModals}
         />
       </Modal>

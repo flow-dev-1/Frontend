@@ -37,6 +37,29 @@ class SchoolOBJ {
     }
   }
 
+  //Get Admins
+  getEnrolledClasses = async (params) => {
+    try {
+      // Check if data is not empty
+      const response = await api.get(`api/schools/${params}/enrolled-classes`)
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+
+  assignClassToTeamMember = async (params, params1, data) => {
+
+    try {
+      // Check if data is not empty
+      const response = await api.put(`api/schools/${params}/assign-course/${params1}`, data)
+      return response.data
+    } catch (err) {
+      throw err?.response?.data || err.message
+    }
+  }
+
+
   changeToggle = async (params, fomrData) => {
     try {
       // Check if data is not empty
@@ -44,7 +67,7 @@ class SchoolOBJ {
         `api/schools/course-togle/${params}`,
         fomrData
       )
-      console.log(response.data)
+
       return response.data
     } catch (err) {
       console.log(err?.response?.data || err.message)
@@ -57,7 +80,7 @@ class SchoolOBJ {
     try {
       // Check if data is not empty
       const response = await api.get(`api/schools/${params}/email-list`)
-      console.log(response)
+
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
@@ -248,7 +271,7 @@ class SchoolOBJ {
     try {
       // Check if data is not empty
       const response = await api.get(`api/schools/student/${params}`)
-      console.log(response.data)
+
       return response.data
     } catch (err) {
       throw err?.response?.data || err.message
@@ -259,7 +282,7 @@ class SchoolOBJ {
     try {
       // Check if data is not empty
       const response = await api.get(`api/schools/educator/${params}`)
-      console.log(response.data)
+
       return response.data
     } catch (err) {
       console.log(err?.response?.data || err.message)

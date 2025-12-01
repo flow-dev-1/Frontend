@@ -185,6 +185,14 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
       onRequestClose={onRequestClose}
       className="custom-modal-otp-three"
       overlayClassName="custom-overlay"
+      style={{
+        content: {
+          zIndex: 9999
+        },
+        overlay: {
+          zIndex: 9998
+        }
+      }}
     >
       <div>
         <h2

@@ -14,7 +14,7 @@ import schoolService from '../../../../../../services/api/school'
 import { RotatingLines } from 'react-loader-spinner'
 import { decryptId } from '../../../../../../utils/encryption'
 
-const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
+const AddStudentModal = ({ isOpen, onRequestClose, classOfficial, classTag}) => {
   const queryClient = useQueryClient()
   const [fileError, setFileError] = useState('')
   const [isFileUploaded, setIsFileUploaded] = useState(false)
@@ -107,6 +107,7 @@ const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
   })
 
   const onSubmit = (data) => {
+  
     if (
       !window.confirm(
         'Are you sure you want to enroll the students for this course?'
@@ -114,11 +115,19 @@ const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
     )
       return
 
+    const submissionData = {
+      ...data,
+      classTag: classTag, // Add classTag here
+    };
+
     if (isFileUploaded) {
-      data.students = parsedStudents
+      submissionData.students = parsedStudents.map(student => ({
+        ...student,
+        classTag: classTag // Add classTag to each student
+      }))
     }
- 
-    mutation.mutate(data)
+
+    mutation.mutate(submissionData)
   }
 
   const handleExcelDownload = () => {
@@ -229,7 +238,7 @@ const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
 
             {classOptions.map((className, index) => (
               <option key={index} value={className}>
-                {className}
+                {className} {classTag}
               </option>
             ))}
           </select>

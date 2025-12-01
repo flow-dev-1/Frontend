@@ -24,7 +24,10 @@ const SchoolEnrolledCourseStudents = () => {
   // ToDO: Do a check if its a school or a user
   if (user?.isSchool) {
     schoolId = user?._id
+  }else {
+    schoolId = user?.school
   }
+
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['school-enrolled-courses'],

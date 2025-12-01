@@ -8,7 +8,6 @@ import { useQuery } from "@tanstack/react-query";
 import schoolService from "../../../../services/api/school";
 import { useSelector } from "react-redux";
 import Loading from "../../../loader/Loader";
-import ViewDetailsModal from "../../modals/vew details/ViewDetailsModal";
 
 Modal.setAppElement("#root"); // This is to avoid screen readers issues with React Modal
 
@@ -26,6 +25,8 @@ const SchoolAllCourses = () => {
   // ToDO: Do a check if its a school or a user
   if (user?.isSchool) {
     schoolId = user?._id;
+  }else{
+    schoolId = user?.school;
   }
 
 
@@ -211,10 +212,10 @@ const SchoolAllCourses = () => {
         className="custom-modal-otp-variant"
         overlayClassName="custom-overlay"
       >
-        <ViewDetailsModal
+        {/* <ViewDetailsModal
           closeModal={closeViewDetailsModal}
           // courseid={course?._id}
-        />
+        /> */}
       </Modal>
     </div>
   );

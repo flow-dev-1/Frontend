@@ -4,6 +4,7 @@ import "./course-detail-modal.css";
 import EnrollmentModal from "../Enrollment/EnrollmentModal";
 import AddEducator from "../../school-pages/school-courses/school-course-card/AddEducator";
 import self_awareness_image from "../../../../assets/selfawareness-images/self-awareness modal.png";
+import CourseReviewModalInfo from "../../../modals-pages/dashboard-modals/CourseReviewModalInfo";
 
 const CourseDetailModal = ({ course, enrolled, closeModal }) => {
   const [openEnrollModal, setOpenEnrollModal] = useState(false);
@@ -46,47 +47,10 @@ const CourseDetailModal = ({ course, enrolled, closeModal }) => {
   return (
     <div style={{ width: "100%" }}>
       <div style={{ padding: "20px 50px" }}>
-        <div>
-          <div className="course-info-modal-header">
-            <h2
-              className="mb-0"
-              style={{ fontFamily: "Caveat, cursive", fontSize: "24px" }}
-            >
-              {course.title}
-            </h2>
-            <button
-              onClick={closeModal}
-              className="close-btn"
-              style={{ border: "none", background: "none", cursor: "pointer" }}
-            >
-              <Icon icon="material-symbols-light:close" width={22} />
-            </button>
-          </div>
-          <hr className="w-100 h-auto mb-2" />
-          <div>
-            <img
-              src={course.image || self_awareness_image}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                // display: 'block',
-              }}
-              alt=""
-            />
-          </div>
-          <div className="course-info-modal-body">
-            <p style={{ fontSize: "20px", color: "#275DAD" }}>
-              Course Overview
-            </p>
-            <p style={{ paddingLeft: ".5rem" }}>{course.description}</p>
-            <div className="mt-4">
-              <p style={{ fontSize: "20px", color: "#275DAD" }}>
-                Course Objectives
-              </p>
-            </div>
-          </div>
-        </div>
+        <CourseReviewModalInfo
+          course={course}
+          closeModal={closeModal}
+        />
 
         <EnrollmentModal
           isOpen={openEnrollModal}

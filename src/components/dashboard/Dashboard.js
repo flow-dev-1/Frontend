@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import "./dashboard.css";
 import Sidebar from "./sidebar/SideBar";
@@ -10,7 +11,7 @@ import { clearToken } from "../../redux/reducers/jwtReducer";
 import SelfAwarenessCourse from "./pages/my-courses/self-awareness-course/SelfAwarenessCourse";
 import { updateData } from "../../redux/reducers/userAnswersReducer";
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { useSelector } from 'react-redux';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -18,16 +19,20 @@ export default function Dashboard() {
   const location = useLocation();
   const [menuVisible, setMenuVisible] = useState(false);
   const [sideBarVisible, setSideBarVisible] = useState(false);
+  const { user } = useSelector((state) => state.user);
 
-  // Get the JWT token from local storage
-  // const auth_token =
-  //     localStorage.getItem('FLOW') ||
-  //     (localStorage.getItem('persist:root') &&
-  //         JSON.parse(JSON.parse(localStorage.getItem('persist:root')).auth)?.token);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
-  // localStorage.removeItem('N');
+  useEffect(() => {
+    if(!user) return
 
-  // You might want to render a loading indicator here
+    if(user?.isSchool) return navigate('/sign-in', { replace: true })
+  
+    return () => {    }
+  }, [user])
+  
+
 
   const logOut = () => {
     // localStorage.removeItem('Flow-Auth-Token');
@@ -57,6 +62,27 @@ export default function Dashboard() {
     e.stopPropagation();
     setSideBarVisible(!sideBarVisible);
   };
+
+  const switchToSchoolDashboard = () => {
+    navigate("/school-dashboard");
+    setIsDropdownOpen(false);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const showDropdown = user?.isEducator && user?.isSchoolAdmin;
 
   return (
     // <div className="dashboard">
@@ -91,9 +117,8 @@ export default function Dashboard() {
                     <li>
                       <Link
                         to="/dashboard"
-                        className={`link ${
-                          isActiveLink("/dashboard") ? "active" : ""
-                        }`}
+                        className={`link ${isActiveLink("/dashboard") ? "active" : ""
+                          }`}
                         onClick={toggleSideBar}
                       >
                         <Icon
@@ -107,9 +132,8 @@ export default function Dashboard() {
                     <li>
                       <Link
                         to="/dashboard/profile"
-                        className={`link ${
-                          isActiveLink("/dashboard/profile") ? "active" : ""
-                        }`}
+                        className={`link ${isActiveLink("/dashboard/profile") ? "active" : ""
+                          }`}
                         onClick={toggleSideBar}
                       >
                         <Icon icon="uiw:user-add" className="sidebar-icon" />
@@ -119,9 +143,8 @@ export default function Dashboard() {
                     <li>
                       <Link
                         to="/dashboard/my-courses"
-                        className={`link ${
-                          isActiveLink("/dashboard/my-courses") ? "active" : ""
-                        }`}
+                        className={`link ${isActiveLink("/dashboard/my-courses") ? "active" : ""
+                          }`}
                         onClick={toggleSideBar}
                       >
                         <Icon icon="bi:book" className="sidebar-icon" />
@@ -132,9 +155,8 @@ export default function Dashboard() {
                     <li>
                       <Link
                         to="/dashboard/support"
-                        className={`link ${
-                          isActiveLink("/dashboard/support") ? "active" : ""
-                        }`}
+                        className={`link ${isActiveLink("/dashboard/support") ? "active" : ""
+                          }`}
                         onClick={toggleSideBar}
                       >
                         <Icon icon="ph:users-light" className="sidebar-icon" />
@@ -145,11 +167,10 @@ export default function Dashboard() {
                     <li>
                       <Link
                         to="/dashboard/payment-history"
-                        className={`link ${
-                          isActiveLink("/dashboard/payment-history")
-                            ? "active"
-                            : ""
-                        }`}
+                        className={`link ${isActiveLink("/dashboard/payment-history")
+                          ? "active"
+                          : ""
+                          }`}
                         onClick={toggleSideBar}
                       >
                         <Icon
@@ -168,13 +189,49 @@ export default function Dashboard() {
           <Link to="/dashboard" className="navbar-logo">
             <img src={logo} alt="" />
           </Link>
-          <div
+          {/* <div
             className="navbar-logo d-none d-lg-block"
             onClick={logOut}
             style={{ cursor: "pointer" }}
           >
             Logout
-          </div>
+          </div> */}
+
+          {showDropdown ? (
+            <div className="navbar-dropdown-wrapper" ref={dropdownRef}>
+              <div
+                className="navbar-logo"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                style={{ cursor: "pointer" }}
+              >
+                Account ▼
+              </div>
+              {isDropdownOpen && (
+                <div className="navbar-dropdown-menu">
+                  <div
+                    className="navbar-dropdown-item"
+                    onClick={switchToSchoolDashboard}
+                  >
+                    Switch Dashboard
+                  </div>
+                  <div
+                    className="navbar-dropdown-item"
+                    onClick={logOut}
+                  >
+                    Logout
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div
+              className="navbar-logo"
+              onClick={logOut}
+              style={{ cursor: "pointer" }}
+            >
+              Logout
+            </div>
+          )}
           <div className="d-block d-lg-none position-relative">
             <Icon
               icon="mdi:menu"
@@ -240,94 +297,89 @@ export default function Dashboard() {
       {location.pathname.startsWith("/dashboard/my-courses/") ? (
         <SingleCoursePage />
       ) : // <SelfAwarenessCourse />
-      location.pathname.startsWith("/dashboard/self-awareness-course") ? (
-        <SelfAwarenessCourse />
-      ) : (
-        <div className="dashboard ">
-          <Sidebar className="sidebar-content" />
-          <div
-            className="bg-light sidebar-user-tablet-icons vh-100"
-            onClick={(e) => e.stopPropagation()}
+        location.pathname.startsWith("/dashboard/self-awareness-course") ? (
+          <SelfAwarenessCourse />
+        ) : (
+          <div className="dashboard ">
+            <Sidebar className="sidebar-content" />
+            <div
+              className="bg-light sidebar-user-tablet-icons vh-100"
+              onClick={(e) => e.stopPropagation()}
             // style={{ width: "0px" }}
-          >
-            <ul
-              className="sidebar-user-menu h-100 px-1 w-"
-              style={{
-                background: "#00bcc3",
-                margin: 0,
-                width: "fit-content",
-                paddingTop: "70px",
-              }}
             >
-              <li style={{ width: "fit-content" }}>
-                <Link
-                  to="/dashboard"
-                  className={`link ${
-                    isActiveLink("/dashboard") ? "active" : ""
-                  }`}
-                  onClick={toggleSideBar}
-                >
-                  <Icon icon="ion:grid-outline" className="sidebar-icon" />
-                </Link>
-              </li>
+              <ul
+                className="sidebar-user-menu h-100 px-1 w-"
+                style={{
+                  background: "#00bcc3",
+                  margin: 0,
+                  width: "fit-content",
+                  paddingTop: "70px",
+                }}
+              >
+                <li style={{ width: "fit-content" }}>
+                  <Link
+                    to="/dashboard"
+                    className={`link ${isActiveLink("/dashboard") ? "active" : ""
+                      }`}
+                    onClick={toggleSideBar}
+                  >
+                    <Icon icon="ion:grid-outline" className="sidebar-icon" />
+                  </Link>
+                </li>
 
-              <li style={{ width: "fit-content" }}>
-                <Link
-                  to="/dashboard/profile"
-                  className={`link ${
-                    isActiveLink("/dashboard/profile") ? "active" : ""
-                  }`}
-                  onClick={toggleSideBar}
-                >
-                  <Icon icon="uiw:user-add" className="sidebar-icon" />
-                </Link>
-              </li>
-              <li style={{ width: "fit-content" }}>
-                <Link
-                  to="/dashboard/my-courses"
-                  className={`link ${
-                    isActiveLink("/dashboard/my-courses") ? "active" : ""
-                  }`}
-                  onClick={toggleSideBar}
-                >
-                  <Icon icon="bi:book" className="sidebar-icon" />
-                </Link>
-              </li>
+                <li style={{ width: "fit-content" }}>
+                  <Link
+                    to="/dashboard/profile"
+                    className={`link ${isActiveLink("/dashboard/profile") ? "active" : ""
+                      }`}
+                    onClick={toggleSideBar}
+                  >
+                    <Icon icon="uiw:user-add" className="sidebar-icon" />
+                  </Link>
+                </li>
+                <li style={{ width: "fit-content" }}>
+                  <Link
+                    to="/dashboard/my-courses"
+                    className={`link ${isActiveLink("/dashboard/my-courses") ? "active" : ""
+                      }`}
+                    onClick={toggleSideBar}
+                  >
+                    <Icon icon="bi:book" className="sidebar-icon" />
+                  </Link>
+                </li>
 
-              <li style={{ width: "fit-content" }}>
-                <Link
-                  to="/dashboard/support"
-                  className={`link ${
-                    isActiveLink("/dashboard/support") ? "active" : ""
-                  }`}
-                  onClick={toggleSideBar}
-                >
-                  <Icon icon="ph:users-light" className="sidebar-icon" />
-                </Link>
-              </li>
+                <li style={{ width: "fit-content" }}>
+                  <Link
+                    to="/dashboard/support"
+                    className={`link ${isActiveLink("/dashboard/support") ? "active" : ""
+                      }`}
+                    onClick={toggleSideBar}
+                  >
+                    <Icon icon="ph:users-light" className="sidebar-icon" />
+                  </Link>
+                </li>
 
-              <li style={{ width: "fit-content" }}>
-                <Link
-                  to="/dashboard/payment-history"
-                  className={`link ${
-                    isActiveLink("/dashboard/payment-history") ? "active" : ""
-                  }`}
-                  onClick={toggleSideBar}
-                >
-                  <Icon
-                    width={26}
-                    icon="solar:dollar-outline"
-                    className="sidebar-icon"
-                  />
-                </Link>
-              </li>
-            </ul>
+                <li style={{ width: "fit-content" }}>
+                  <Link
+                    to="/dashboard/payment-history"
+                    className={`link ${isActiveLink("/dashboard/payment-history") ? "active" : ""
+                      }`}
+                    onClick={toggleSideBar}
+                  >
+                    <Icon
+                      width={26}
+                      icon="solar:dollar-outline"
+                      className="sidebar-icon"
+                    />
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div className="dashboard-content">
+              <Outlet />
+            </div>
           </div>
-          <div className="dashboard-content">
-            <Outlet />
-          </div>
-        </div>
-      )}
+        )}
 
       {/* <div className="dashboard">
                 <Sidebar className="sidebar-content" />

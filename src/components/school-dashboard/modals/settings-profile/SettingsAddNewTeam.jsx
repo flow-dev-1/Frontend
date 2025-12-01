@@ -68,7 +68,6 @@ const SettingsAddNewTeam = ({ closeModal, openSuccessModal }) => {
 
       mutation.mutate(payload)
 
-      console.log(payload) // Logging the payload instead of the original data
     }
   }
 
@@ -80,7 +79,7 @@ const SettingsAddNewTeam = ({ closeModal, openSuccessModal }) => {
             className='team-heading'
             style={{ color: '#18181B', fontSize: '20px' }}
           >
-            Add New Team
+            Add New Team Member
           </p>
         </div>
 
@@ -140,7 +139,7 @@ const SettingsAddNewTeam = ({ closeModal, openSuccessModal }) => {
                 onChange={(e) => setValue('position', e.target.value)}
               >
                 <option value=''>Select...</option>
-                {['Super-admin', 'Children', 'Teachers'].map((role, i) => (
+                {['Admin', 'Students', 'Teachers'].map((role, i) => (
                   <option key={i} value={role}>
                     {role}
                   </option>

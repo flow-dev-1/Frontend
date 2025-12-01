@@ -115,42 +115,23 @@ const SchoolCourseCard = ({
     reviewBtnClass = 'enrolled'
     detailsBtnClass = 'enrolled'
   } else {
-    // Handle the case for non-enrolled courses
-    // You can uncomment the logic below if necessary
-    // reviewBtnColor =
-    //   course.category.toLowerCase() == 'students' ? darkTertiary : darkEducator
-    // detailsBtnColor =
-    //   course.category.toLowerCase() == 'students'
-    //     ? lightTertiary
-    //     : lightEducator
-    // reviewBtnClass =
-    //   course.category.toLowerCase() == 'students' ? 'not-enrolled' : 'educator'
-    // detailsBtnClass =
-    //   course.category.toLowerCase() == 'students' ? 'not-enrolled' : 'educator'
+
   }
-  const [coursedarta, setCourseDarta] = useState("")
+  const [coursedarta, setCourseData] = useState("")
 
   const courseIndex = coursesArray?.courses.findIndex(
     (c) => c._id === course._id
   )
-  console.log(courseIndex)
+
   const handleDetailsClick = () => {
     // Find the index of the current course in the coursesArray
     const courseIndex = coursesArray?.courses.findIndex(
       (c) => c._id === course._id
     )
-
     // Use this index to get the corresponding enrolledData course
-    if (isEnrolled && enrolledData?.courses[courseIndex]) {
+    if (isEnrolled) {
       setOpenViewModal(true);
-      setCourseDarta(enrolledData?.courses[courseIndex]._id);
-      //  console.log(enrolledData?.courses[courseIndex]._id);
-      // navigate(
-      //   `/school-dashboard/courses/enrolled/${encryptURI(
-      //     enrolledData.courses[courseIndex]._id
-      //   )}`
-      // )
-      //  openEnrollementModal();
+
     } else {
       openEnrollementModal()
     }
@@ -368,6 +349,7 @@ const SchoolCourseCard = ({
           onClose={() => setOpenViewModal(false)}
         />
       )}
+
       <EnrollmentModal
         isOpen={openEnrollModal}
         onRequestClose={closeEnrollementModal}
@@ -375,6 +357,7 @@ const SchoolCourseCard = ({
         timeOptions={timeOptions}
         course={course}
       />
+
       <AddEducator
         isOpen={openEnrollModalEducator}
         course={course}
