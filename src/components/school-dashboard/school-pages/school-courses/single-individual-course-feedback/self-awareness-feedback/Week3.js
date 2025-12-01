@@ -347,7 +347,6 @@ const Week3 = () => {
         // Ensure that assessmentForChecked is valid before slicing
         if (assessmentForChecked && assessmentForChecked.length >= 5) {
           const valuesToCheck = assessmentForChecked
-          console.log(valuesToCheck)
 
           questionsQuiz = questionsQuiz.map((question, index) => {
             return {

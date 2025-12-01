@@ -19,8 +19,6 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState('')
   const { id } = useParams()
 
-  console.log(id, 'Id o')
-
   const dispatch = useDispatch()
   const location = useLocation()
   const navigate = useNavigate()

@@ -206,7 +206,7 @@ const SchoolSettingsTeams = () => {
         </div>
 
         {
-          user?.isSchool || user?.schoolAdminPermission === "Admin" &&
+          (user?.isSchool || user?.schoolAdminPermission === "Admin") &&
           <button className="edit-btn" onClick={() => setModalIsOpen(true)}>
             Add New Team{" "}
             <span>

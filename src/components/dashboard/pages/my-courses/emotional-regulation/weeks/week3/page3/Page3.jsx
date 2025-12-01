@@ -109,7 +109,6 @@ function WeekThreeAssessment() {
     dispatch(saveAssessment(answers));
 
     if (isLastQuestion) {
-      console.log(userAnswers.activities, "userAnswers.activities");
 
       const hasUnansweredQuestions =
         answers.length !== totalSteps || userAnswers.activities.length !== 1;
