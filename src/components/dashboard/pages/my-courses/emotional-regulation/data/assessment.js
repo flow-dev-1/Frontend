@@ -5,69 +5,62 @@ export const assessments = {
     questions: [
       {
         id: 1,
-        question:
-          "When working on a group project, how do you typically contribute?",
+        question: `What does the term "regulation" mean?`,
         options: [
-          { id: "A", text: "Observing without acting." },
-          { id: "B", text: "Understanding feelings and providing help." },
-          { id: "C", text: "Judging others based on their actions." },
-          { id: "D", text: "Ignoring others' needs." },
+          { id: "A", text: "Following the rules in a game." },
+          { id: "B", text: "Controlling or managing your emotions and behavior." },
+          { id: "C", text: "Ignoring your feelings." },
+          { id: "D", text: "Always being happy." },
         ],
         correctOption: "B",
       },
       {
         id: 2,
-        question:
-          "Which of the following best describes Compassionate Communication (NVC)?",
+        question: "Which of the following emotions would belong to the Blue Zone?",
         options: [
-          { id: "A", text: "A way to win arguments." },
-          { id: "B", text: "A theory that explains evolution." },
-          {
-            id: "C",
-            text: "A method to connect with others through compassionate expression.",
-          },
-          { id: "D", text: "A strategy to avoid communication." },
+          { id: "A", text: "Joy." },
+          { id: "B", text: "Sadness." },
+          { id: "C", text: "Excitement." },
+          { id: "D", text: "Anger." },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 3,
-        question: "Which component of NVC involves expressing how you feel?",
+        question: "What is the Green Zone known for?",
         options: [
-          { id: "A", text: "Observations." },
-          { id: "B", text: "Feelings." },
-          { id: "C", text: "Needs." },
-          { id: "D", text: "Request." },
+          { id: "A", text: "Feeling tired and bored." },
+          { id: "B", text: "Being calm, happy, and ready to learn." },
+          { id: "C", text: "Feeling silly or anxious." },
+          { id: "D", text: "Experiencing big, uncontrollable emotions." },
         ],
         correctOption: "B",
       },
       {
         id: 4,
-        question: "Why is it important to practice compassion?",
-        options: [
-          { id: "A", text: "It helps us win friends." },
-          {
-            id: "B",
-            text: "It creates stronger relationships and makes us feel valued.",
-          },
-          { id: "C", text: "It helps us avoid conflicts." },
-          { id: "D", text: "It makes us appear more popular." },
-        ],
-        correctOption: "B",
-      },
-      {
-        id: 5,
         question:
-          "In the school scenario explained in the video, which step of NVC did the student use when they said, 'I need some quiet time to complete my assignments'?",
+          "If someone is feeling excited or a little nervous, which zone are they likely in?",
         options: [
-          { id: "A", text: "Observation." },
-          { id: "B", text: "Feeling." },
-          { id: "C", text: "Need." },
-          { id: "D", text: "Request." },
+          { id: "A", text: "Blue Zone." },
+          { id: "B", text: "Green Zone." },
+          { id: "C", text: "Yellow Zone." },
+          { id: "D", text: "Red Zone." },
         ],
         correctOption: "C",
       },
-    ],
+      {
+        id: 5,
+        question: "What is the main characteristic of the Red Zone?",
+        options: [
+          { id: "A", text: "Being calm and focused." },
+          { id: "B", text: "Experiencing small emotions." },
+          { id: "C", text: "Having very big and strong emotions." },
+          { id: "D", text: "Feeling balanced and happy." },
+        ],
+        correctOption: "C",
+      },
+    ]
+
   },
   week2: {
     title: "Assessment",
@@ -75,82 +68,64 @@ export const assessments = {
     questions: [
       {
         id: 1,
-        question: "What does self-compassion mean?",
+        question: "How many energy levels are represented by the Zones of Regulation?",
         options: [
-          { id: "A", text: "Do nothing." },
-          {
-            id: "B",
-            text: "Being kind and understanding towards yourself when things go wrong.",
-          },
-          { id: "C", text: "Comparing yourself to others." },
-          { id: "D", text: "Being perfect in everything you do." },
+          { id: "A", text: "Two." },
+          { id: "B", text: "Three." },
+          { id: "C", text: "Four." },
+          { id: "D", text: "Five." },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 2,
-        question: "Which of the following is an example of self-compassion?",
+        question:
+          "Which zone represents low energy levels, like feeling tired or sad?",
         options: [
-          { id: "A", text: "Criticizing yourself for every mistake." },
-          { id: "B", text: "Pretending that your feelings don’t exist." },
-          { id: "C", text: "Speaking to yourself kindly when you fail." },
-          { id: "D", text: "Blaming others for your problems." },
+          { id: "A", text: "Yellow Zone." },
+          { id: "B", text: "Red Zone." },
+          { id: "C", text: "Blue Zone." },
+          { id: "D", text: "Green Zone." },
         ],
         correctOption: "C",
       },
       {
         id: 3,
-        question: "Which of these is NOT a way to practice self-compassion?",
+        question:
+          "Which zone represents balanced energy, where you feel calm and ready to learn?",
         options: [
-          { id: "A", text: "Setting boundaries and saying no when needed." },
-          {
-            id: "B",
-            text: "Engaging in positive self-talk when you make mistakes.",
-          },
-          {
-            id: "C",
-            text: "Ignoring your feelings and pretending everything is okay.",
-          },
-          {
-            id: "D",
-            text: "Practicing mindfulness by paying attention to your emotions.",
-          },
+          { id: "A", text: "Blue Zone." },
+          { id: "B", text: "Green Zone." },
+          { id: "C", text: "Yellow Zone." },
+          { id: "D", text: "Red Zone." },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 4,
         question:
-          "What should you do when you find yourself being overly critical after making a mistake?",
+          "Which zone represents higher energy levels where you might feel excited but still in control?",
         options: [
-          { id: "A", text: "Keep criticizing yourself to improve." },
-          { id: "B", text: "Continue thinking about the mistake." },
-          {
-            id: "C",
-            text: "Treat yourself kindly, as you would treat a friend in the same situation.",
-          },
-          { id: "D", text: "Ask others to tell you what you did wrong." },
-        ],
-        correctOption: "C",
-      },
-      {
-        id: 5,
-        question: "Why is self-compassion important?",
-        options: [
-          { id: "A", text: "It helps us avoid all mistakes." },
-          {
-            id: "B",
-            text: "It makes us feel better and helps us bounce back from challenges.",
-          },
-          { id: "C", text: "It allows us to be kind to others." },
-          {
-            id: "D",
-            text: "It allows us to criticize ourselves in order to avoid further mistakes.",
-          },
+          { id: "A", text: "Blue Zone." },
+          { id: "B", text: "Yellow Zone." },
+          { id: "C", text: "Green Zone." },
+          { id: "D", text: "Red Zone." },
         ],
         correctOption: "B",
       },
-    ],
+      {
+        id: 5,
+        question:
+          "Which zone represents the highest energy levels, where you might feel overwhelmed or out of control?",
+        options: [
+          { id: "A", text: "Yellow Zone." },
+          { id: "B", text: "Green Zone." },
+          { id: "C", text: "Red Zone." },
+          { id: "D", text: "Blue Zone." },
+        ],
+        correctOption: "C",
+      },
+    ]
   },
   week3: {
     title: "Assessment",
@@ -158,76 +133,64 @@ export const assessments = {
     questions: [
       {
         id: 1,
-        question:
-          "Can you identify the 3 key steps we learned about showing compassion for others as discussed in the lesson 'This will help you apply them in your daily life'?",
+        question: "What does the 'S' in the SONAR method stand for?",
         options: [
-          { id: "A", text: "Seeing, Ignoring, and Criticizing" },
-          { id: "B", text: "Seeing, Caring, and Doing" },
-          { id: "C", text: "Helping, Judging, and Complaining" },
-          { id: "D", text: "Listening, Arguing, and Avoiding" },
+          { id: "A", text: "Start talking." },
+          { id: "B", text: "Stop when you notice big emotions." },
+          { id: "C", text: "Stay calm." },
+          { id: "D", text: "Smile through your feelings." },
         ],
         correctOption: "B",
       },
       {
         id: 2,
         question:
-          "Which of the following is NOT a way of showing compassion to others?",
+          "Which step of the SONAR method encourages you to give a name to what you are feeling?",
         options: [
-          { id: "A", text: "Listening to a friend who is upset." },
-          { id: "B", text: "Laughing at someone who made a mistake." },
-          {
-            id: "C",
-            text: "Offering help to a classmate struggling with a project.",
-          },
-          { id: "D", text: "Giving a compliment to cheer someone up." },
+          { id: "A", text: "Observe." },
+          { id: "B", text: "Name it." },
+          { id: "C", text: "Accept." },
+          { id: "D", text: "Regulate." },
         ],
         correctOption: "B",
       },
       {
         id: 3,
-        question:
-          "When practicing compassion for others, what is the first thing you should do?",
+        question: "What is the purpose of the 'A' in the SONAR method?",
         options: [
-          { id: "A", text: "Tell them what they did wrong." },
-          { id: "B", text: "Notice when someone needs help." },
-          { id: "C", text: "Ignore the situation and hope it improves." },
-          { id: "D", text: "Immediately fix their problem." },
+          { id: "A", text: "Avoid your emotions." },
+          { id: "B", text: "Act on your feelings." },
+          { id: "C", text: "Accept what you are feeling." },
+          { id: "D", text: "Analyze the situation." },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 4,
-        question: "Why is listening considered an act of compassion?",
+        question: "Which of the following is NOT a part of the SONAR method?",
         options: [
-          { id: "A", text: "It makes you look good in front of others." },
-          {
-            id: "B",
-            text: "It allows the person to feel heard and supported.",
-          },
-          { id: "C", text: "It distracts you from your own problems." },
-          {
-            id: "D",
-            text: "It helps you get more information about someone’s issues.",
-          },
+          { id: "A", text: "Observe." },
+          { id: "B", text: "Name." },
+          { id: "C", text: "Analyze." },
+          { id: "D", text: "Regulate." },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 5,
-        question:
-          "Which of the following is a compassionate response when a friend fails a test?",
+        question: "Why is the SONAR method important?",
         options: [
-          { id: "A", text: "It’s your fault for not studying enough." },
+          { id: "A", text: "It helps us ignore our emotions." },
           {
             id: "B",
-            text: "Everyone fails sometimes; it’s okay. You’ll do better next time.",
+            text: "It teaches us to control and understand our emotions better.",
           },
-          { id: "C", text: "This test wasn’t even hard; how could you fail?" },
-          { id: "D", text: "Let’s just forget about it; it doesn’t matter." },
+          { id: "C", text: "It stops us from feeling emotions." },
+          { id: "D", text: "It makes our emotions disappear completely." },
         ],
         correctOption: "B",
       },
-    ],
+    ]
   },
   week4: {
     title: "Assessment",
@@ -235,72 +198,61 @@ export const assessments = {
     questions: [
       {
         id: 1,
-        question: "What is the Circle of Concern?",
+        question: "What are coping skills?",
         options: [
-          { id: "A", text: "A way to decide which people to ignore." },
-          {
-            id: "B",
-            text: "A concept that helps identify who is in your inner and outer circles.",
-          },
-          { id: "C", text: "A rule about how to be strict with strangers." },
-          {
-            id: "D",
-            text: "A list of tasks to do for your friends and family.",
-          },
+          { id: "A", text: "Strategies to avoid emotions." },
+          { id: "B", text: "Tools to help manage emotions and challenges." },
+          { id: "C", text: "Rules for controlling others’ feelings." },
+          { id: "D", text: "Exercises to increase physical strength." },
         ],
         correctOption: "B",
       },
       {
         id: 2,
-        question: "Who would be considered part of your inner circle?",
+        question: "Which of these is an example of a physical coping skill?",
         options: [
-          {
-            id: "A",
-            text: "A stranger you see every day on your way to school.",
-          },
-          { id: "B", text: "Your best friend." },
-          { id: "C", text: "Your classmate whom you rarely talk to." },
-          { id: "D", text: "A neighbor." },
+          { id: "A", text: "Writing in a journal." },
+          { id: "B", text: "Taking a deep breath." },
+          { id: "C", text: "Talking to a friend." },
+          { id: "D", text: "Listening to music." },
         ],
         correctOption: "B",
       },
       {
         id: 3,
         question:
-          "Which of the following actions would be more appropriate for your inner circle rather than your outer circle?",
+          "What type of coping skill involves expressing yourself through creativity?",
         options: [
-          { id: "A", text: "Smiling at someone you pass on the street." },
-          { id: "B", text: "Listening to someone’s personal problems." },
-          { id: "C", text: "Greeting a classmate in the hallway." },
-          { id: "D", text: "Offering to help a stranger carry groceries." },
+          { id: "A", text: "Physical coping skill." },
+          { id: "B", text: "Emotional coping skill." },
+          { id: "C", text: "Creative coping skill." },
+          { id: "D", text: "Relaxation coping skill." },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 4,
-        question:
-          "What should you consider when showing compassion to people in your outer circle?",
+        question: "Why is it important to have different types of coping skills?",
         options: [
-          { id: "A", text: "Ignoring their needs." },
-          { id: "B", text: "Being kind but keeping safe boundaries." },
-          { id: "C", text: "Treating them the same as your family." },
-          { id: "D", text: "Offering them everything you have." },
+          { id: "A", text: "So you can teach them to others." },
+          { id: "B", text: "Because what works for one person may not work for another." },
+          { id: "C", text: "To help you avoid all emotions." },
+          { id: "D", text: "To make sure you are always happy." },
         ],
         correctOption: "B",
       },
       {
         id: 5,
-        question:
-          "Which of the following is an action that can be appropriate for both inner and outer circles?",
+        question: "Which of the following is NOT a healthy coping skill?",
         options: [
-          { id: "A", text: "Sharing your personal secrets." },
-          { id: "B", text: "Offering a smile or a compliment." },
-          { id: "C", text: "Loaning money to a stranger." },
-          { id: "D", text: "Inviting them into your home." },
+          { id: "A", text: "Yelling at someone when you’re upset." },
+          { id: "B", text: "Drawing to express your feelings." },
+          { id: "C", text: "Taking a walk to calm down." },
+          { id: "D", text: "Talking to someone you trust." },
         ],
-        correctOption: "B",
+        correctOption: "A",
       },
-    ],
+    ]
   },
   week5: {
     title: "Assessment",
@@ -309,161 +261,123 @@ export const assessments = {
       {
         id: 1,
         question:
-          "Which of the following best represents the Compassionate Communication theory?",
+          "You just failed a test that you studied really hard for, and now you feel like giving up. What is the best way to handle this situation?",
         options: [
-          { id: "A", text: "Observations, Criticism, Punishment, Demands." },
-          { id: "B", text: "Observations, Feelings, Needs, Requests." },
-          { id: "C", text: "Feelings, Demands, Arguments, Solutions." },
-          { id: "D", text: "Feelings, Judgments, Needs, Expectations." },
+          { id: "A", text: "Ignore how you feel and move on." },
+          { id: "B", text: "Control and manage your emotions." },
+          { id: "C", text: "Hide your emotions from others." },
+          { id: "D", text: "Let your emotions control you." },
         ],
         correctOption: "B",
       },
       {
         id: 2,
         question:
-          "Why is it important to respect boundaries when showing compassion to people in your outer circle?",
+          "During class, you feel calm and focused on the lesson. Which zone of regulation are you in?",
         options: [
-          { id: "A", text: "To avoid helping people at all." },
-          { id: "B", text: "To keep yourself safe while still being kind." },
-          {
-            id: "C",
-            text: "To prevent others from knowing how compassionate you are.",
-          },
-          { id: "D", text: "To avoid any communication with strangers." },
+          { id: "A", text: "Red Zone." },
+          { id: "B", text: "Yellow Zone." },
+          { id: "C", text: "Green Zone." },
+          { id: "D", text: "Blue Zone." },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 3,
         question:
-          "Scenario: Your friend failed a test while you scored the highest. How can you show compassion?",
+          "You’re really angry after a disagreement with your friend, and you feel like yelling. What is the first step in the SONAR method to help you calm down?",
         options: [
-          {
-            id: "A",
-            text: "Brag about your high score and tell them they should have studied harder.",
-          },
-          {
-            id: "B",
-            text: "Encourage them by reminding them that one test doesn’t define their abilities and offer to help them study.",
-          },
-          {
-            id: "C",
-            text: "Ignore their feelings and celebrate your own success.",
-          },
-          { id: "D", text: "Tell them they should give up on the subject." },
+          { id: "A", text: "Accept what you are feeling." },
+          { id: "B", text: "Stop when you notice the big emotions." },
+          { id: "C", text: "Name your emotion." },
+          { id: "D", text: "Observe the feelings in your body." },
         ],
         correctOption: "B",
       },
       {
         id: 4,
-        question: "Which statement best describes the ‘Circle of Concern’?",
+        question:
+          "Your team just lost an important game, and you feel sad and frustrated. What can coping skills help you do?",
         options: [
-          { id: "A", text: "It’s a strategy for deciding who to be rude to." },
-          {
-            id: "B",
-            text: "It’s a method to identify who is in your inner and outer circles and how to act compassionately.",
-          },
-          {
-            id: "C",
-            text: "It’s a way to organize your friends based on how much you like them.",
-          },
-          { id: "D", text: "It’s a tool to exclude people from your life." },
+          { id: "A", text: "Ignore your emotions." },
+          { id: "B", text: "Regulate your emotions effectively." },
+          { id: "C", text: "Always feel happy." },
+          { id: "D", text: "Avoid dealing with your feelings." },
         ],
         correctOption: "B",
       },
       {
         id: 5,
         question:
-          "What is the most compassionate way to react when you notice someone being excluded or feeling left out?",
+          "You’re so upset that you want to throw your backpack across the room. Which of these is a better way to handle your emotions?",
         options: [
-          { id: "A", text: "Pretend you didn’t see anything." },
-          {
-            id: "B",
-            text: "Offer a kind gesture, like inviting them to join you.",
-          },
-          { id: "C", text: "Make a joke about the situation." },
-          {
-            id: "D",
-            text: "Continue with what you’re doing without paying attention.",
-          },
+          { id: "A", text: "Taking a break." },
+          { id: "B", text: "Throwing things." },
+          { id: "C", text: "Deep breathing." },
+          { id: "D", text: "Talking to a trusted adult." },
         ],
-        correctOption: "B",
+        correctOption: "A",
       },
       {
         id: 6,
         question:
-          "What is the first step when practicing compassionate communication?",
+          "You are so excited about winning a competition that you can’t sit still in class. Which zone of regulation are you in?",
         options: [
-          { id: "A", text: "Make a demand." },
-          { id: "B", text: "Identify the feelings involved." },
-          { id: "C", text: "Observe the situation without judgment." },
-          { id: "D", text: "Offer a solution immediately." },
-        ],
-        correctOption: "C",
-      },
-      {
-        id: 7,
-        question:
-          "Why is it important to set boundaries when showing compassion?",
-        options: [
-          { id: "A", text: "To avoid showing compassion altogether." },
-          { id: "B", text: "To protect yourself while still being kind." },
-          {
-            id: "C",
-            text: "To keep people at a distance so they don’t bother you.",
-          },
-          { id: "D", text: "To make others earn your compassion." },
+          { id: "A", text: "Red Zone." },
+          { id: "B", text: "Yellow Zone." },
+          { id: "C", text: "Blue Zone." },
+          { id: "D", text: "Green Zone." },
         ],
         correctOption: "B",
       },
       {
+        id: 7,
+        question:
+          "Your heart is racing, and your hands are sweaty before giving a big presentation. What is the purpose of naming your emotions in the SONAR method?",
+        options: [
+          { id: "A", text: "To distract yourself." },
+          { id: "B", text: "To blame others for how you feel." },
+          { id: "C", text: "To understand what you are feeling." },
+          { id: "D", text: "To ignore the emotion." },
+        ],
+        correctOption: "C",
+      },
+      {
         id: 8,
         question:
-          "When someone in your outer circle asks for help, what should you consider first?",
+          "You’re feeling tired and unmotivated after staying up late playing video games. Which zone are you in, and how might you feel?",
         options: [
-          { id: "A", text: "Whether they can do something for you in return." },
-          { id: "B", text: "Your own boundaries and comfort level." },
-          { id: "C", text: "How you can ignore them without them noticing." },
-          { id: "D", text: "Whether others will think you are kind." },
+          { id: "A", text: "Green Zone, calm and happy." },
+          { id: "B", text: "Blue Zone, sad and low energy." },
+          { id: "C", text: "Red Zone, angry and out of control." },
+          { id: "D", text: "Yellow Zone, frustrated and silly." },
         ],
         correctOption: "B",
       },
       {
         id: 9,
         question:
-          "What should you do if a friend shares something personal and emotional with you?",
+          "You’re starting to lose focus while doing homework, but you don’t want to get distracted. Which coping skill might help you stay on task?",
         options: [
-          { id: "A", text: "Spread the information because it’s interesting." },
-          {
-            id: "B",
-            text: "Listen attentively and offer support without judgment.",
-          },
-          { id: "C", text: "Change the subject to something more positive." },
-          { id: "D", text: "Criticize them for feeling that way." },
+          { id: "A", text: "Listening to loud music." },
+          { id: "B", text: "Writing in a journal." },
+          { id: "C", text: "Doing a quick stretch." },
+          { id: "D", text: "Counting to 10." },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 10,
         question:
-          "Which behavior best reflects maintaining compassion while respecting your boundaries?",
+          'Before an exam, you feel a knot in your stomach and your breathing quickens. What does "observe the feelings in your body" mean in the SONAR method?',
         options: [
-          {
-            id: "A",
-            text: "Offering help even if it makes you uncomfortable.",
-          },
-          {
-            id: "B",
-            text: "Being kind and supportive without overextending yourself.",
-          },
-          {
-            id: "C",
-            text: "Saying yes to everyone’s requests, no matter how you feel.",
-          },
-          { id: "D", text: "Avoiding all interactions to protect yourself." },
+          { id: "A", text: "Pay attention to how your body reacts to emotions." },
+          { id: "B", text: "Ignore physical sensations and focus on your thoughts." },
+          { id: "C", text: "Blame your body for how you feel." },
+          { id: "D", text: "Control all physical movements." },
         ],
-        correctOption: "B",
+        correctOption: "A",
       },
-    ],
+    ] 
   },
 };
