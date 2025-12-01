@@ -271,7 +271,7 @@ class UserOBJ {
 
         formData
       )
-      console.log(response.data)
+
       return response.data
     } catch (err) {
       return err?.response?.data || err.message;
@@ -367,7 +367,6 @@ class UserOBJ {
         `api/users/course-enrollment/${params1}/get-assesment/${week}`
       )
 
-      console.log(response,"Yeajjjjjj")
       return response.data
     } catch (err) {
       console.log(err?.response?.data || err.message)

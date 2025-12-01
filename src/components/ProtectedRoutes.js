@@ -35,7 +35,6 @@ const ProtectedRoute = ({ children }) => {
         try {
           const adminData = await adminService.getMyProfile(token);
 
-          console.log(adminData,"Admin Data")
           if (adminData.admin) {
             dispatch(setCode(token));
             if (courseEnrollmentId) {

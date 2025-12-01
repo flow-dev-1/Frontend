@@ -122,8 +122,6 @@ function WeekOneAssessment() {
 
       const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
 
-      console.log(userAnswers, userScore, "userScore")
-
       mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
 
       // For nested questions check that all answeres were provided. when page is refreshed data may be lost

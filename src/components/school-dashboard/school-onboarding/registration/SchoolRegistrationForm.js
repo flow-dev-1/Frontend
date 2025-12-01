@@ -137,7 +137,6 @@ export default function SchoolRegistrationForm() {
     onSuccess: (data) => {
       dispatch(setToken(data?.token));
       localStorage.setItem("Flow-Auth-Token", data?.token);
-      console.log("Registration successful:", data);
       toast.success(data.message);
       openModal();
     },
@@ -187,7 +186,7 @@ export default function SchoolRegistrationForm() {
   }, [isNigeria, selectedState]);
 
   const [fileName, setFileName] = useState("");
-  console.log(fileName);
+
   const [selectedFile, setSelectedFile] = useState(null);
 
   return (

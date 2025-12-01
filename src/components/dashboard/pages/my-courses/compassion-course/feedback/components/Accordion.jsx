@@ -28,7 +28,6 @@ function Accordion({
   }, [hasPercentile, allDataLoaded]);
 
   const generatePDF = async () => {
-    console.log(hasPercentile, "Has Percentile");
     const originalState = activeIndex;
     setPdfLoading(true);
     setActiveIndex(null);
@@ -41,7 +40,6 @@ function Accordion({
 
     if (allDataLoaded) {
       setTimeout(() => {
-        console.log(allDataLoaded, "All data loaded");
         const input = contentRef.current;
 
         html2canvas(input).then((canvas) => {

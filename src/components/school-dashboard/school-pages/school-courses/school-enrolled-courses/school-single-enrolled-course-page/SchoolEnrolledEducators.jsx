@@ -186,7 +186,6 @@ const SchoolEnrolledEducators = () => {
         deleteUserCredentials.enrollId
       ),
     onSuccess: (data) => {
-      console.log('Mutation success:', data)
       toast.success('User UnEnrolled successfully!')
       queryClient.invalidateQueries(['school-single-courses'])
       reset()

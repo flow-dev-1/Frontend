@@ -27,7 +27,6 @@ function WeekTwoPage4() {
     setMyAnswer(answerCopy);
     return () => {};
   }, [userAnswers]);
-  console.log("my answer", userAnswers);
 
   const saveUserInput = () => {
     if (!adminDatas.isAdmin && !myAnswer) {
