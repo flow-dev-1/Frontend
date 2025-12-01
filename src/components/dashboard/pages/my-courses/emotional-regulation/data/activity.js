@@ -176,7 +176,7 @@ export const courseContent = {
         id: 13,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_7.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -202,7 +202,7 @@ export const courseContent = {
         id: 15,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_8.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -240,7 +240,7 @@ export const courseContent = {
         id: 17,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_9.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -503,7 +503,7 @@ export const courseContent = {
         id: 7,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -580,7 +580,7 @@ export const courseContent = {
         id: 9,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_5.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_5.mp4",
         navigation: {
           prev: true,
           next: true,
