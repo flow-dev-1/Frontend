@@ -139,9 +139,9 @@ const SettingsAddNewTeam = ({ closeModal, openSuccessModal }) => {
                 onChange={(e) => setValue('position', e.target.value)}
               >
                 <option value=''>Select...</option>
-                {['Admin', 'Students', 'Teachers'].map((role, i) => (
+                {['Admin', 'Students'].map((role, i) => (
                   <option key={i} value={role}>
-                    {role}
+                    {role === 'Students' ? 'Class Teacher' : role}
                   </option>
                 ))}
               </select>

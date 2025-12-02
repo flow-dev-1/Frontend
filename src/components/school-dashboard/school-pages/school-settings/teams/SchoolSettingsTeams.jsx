@@ -239,7 +239,9 @@ const SchoolSettingsTeams = () => {
                 <td>{`${admin.fullName}`}</td>
                 <td>{admin.email}</td>
                 <td>
-                  {admin?.schoolAdminPermission || admin?.newInvite?.schoolAdminPermission}
+                  {(admin?.schoolAdminPermission || admin?.newInvite?.schoolAdminPermission) === 'Students'
+                    ? 'Class Teacher'
+                    : (admin?.schoolAdminPermission || admin?.newInvite?.schoolAdminPermission)}
                 </td>
                 <td>
                   {admin?.classAssigned && admin.classAssigned.length > 0 ? (
