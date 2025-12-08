@@ -301,7 +301,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     return (
       <>
         <div className="d-flex gap-3">
-          <h2 className="text-blue fs-md-1">Questions{sn}:</h2>
+          <h2 className="text-blue fs-md-1" style={{ whiteSpace: 'nowrap' }}>Questions {sn}:</h2>
           <p className="text-blue fs-md-4">{question}</p>
         </div>
 
@@ -522,8 +522,8 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         Activity 3
       </p>
       <hr />
-      {renderQuestionSection(q1.question, a1, activity1.id, helperProps, 1)}
-      {renderQuestionSection(q2.question, a2, activity1.id, helperProps, 2)}
+      {renderActivity4QuestionSection(q1.question, a1, activity1.id, helperProps, 1)}
+      {renderActivity4QuestionSection(q2.question, a2, activity1.id, helperProps, 2)}
 
 
       {/* Activity 3  */}
@@ -531,14 +531,14 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         Activity 4
       </p>
       <hr />
-      {renderActivity4QuestionSection(Q1.question, A1, activity1.id, helperProps)}
-      {renderActivity4QuestionSection(Q2.question, A2, activity1.id, helperProps)}
-      {renderActivity4QuestionSection(Q3.question, A3, activity1.id, helperProps)}
-      {renderActivity4QuestionSection(Q4.question, A4, activity1.id, helperProps)}
-      {renderActivity4QuestionSection(Q5.question, A5, activity1.id, helperProps)}
-      {renderActivity4QuestionSection(Q6.question, A6, activity1.id, helperProps)}
-      {renderActivity4QuestionSection(Q7.question, A7, activity1.id, helperProps)}
-      {renderActivity4QuestionSection(Q8.question, A8, activity1.id, helperProps)}
+      {renderActivity4QuestionSection(Q1.question, A1, activity1.id, helperProps, 1)}
+      {renderActivity4QuestionSection(Q2.question, A2, activity1.id, helperProps, 2)}
+      {renderActivity4QuestionSection(Q3.question, A3, activity1.id, helperProps, 3)}
+      {renderActivity4QuestionSection(Q4.question, A4, activity1.id, helperProps, 4)}
+      {renderActivity4QuestionSection(Q5.question, A5, activity1.id, helperProps, 5)}
+      {renderActivity4QuestionSection(Q6.question, A6, activity1.id, helperProps, 6)}
+      {renderActivity4QuestionSection(Q7.question, A7, activity1.id, helperProps, 7)}
+      {renderActivity4QuestionSection(Q8.question, A8, activity1.id, helperProps, 8)}
 
       {/* Assesment 1 */}
       <p className="bg-yellow py-md-3 px-md-5 py-1 px-2 text-gray d-inline-block rounded-5 fs-md-4">

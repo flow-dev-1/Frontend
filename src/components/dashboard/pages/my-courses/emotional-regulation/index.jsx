@@ -32,9 +32,8 @@ import Page12 from "./weeks/week1/Page12/Page12";
 import Page13 from "./weeks/week1/page13/Page13";
 import Page14 from "./weeks/week1/page14/Page14";
 import Page15 from "./weeks/week1/page15/Page15";
-import Page16 from "./weeks/week1/page16/Page16";
-import Page17 from "./weeks/week1/page17/Page17";
-import Page18 from "./weeks/week1/page18/Page18";
+import Page16 from "./weeks/week1/page16/Page16.jsx";
+import Page17 from "./weeks/week1/page17/Page17.jsx";
 
 // Week 2
 import WeekTwoPage1 from "./weeks/week2/page1/Page1";
@@ -45,8 +44,7 @@ import WeekTwoPage5 from "./weeks/week2/page5/Page5";
 import WeekTwoPage6 from "./weeks/week2/page6/Page6";
 import WeekTwoPage7 from "./weeks/week2/page7/Page7";
 import WeekTwoPage8 from "./weeks/week2/page8/Page8";
-import WeekTwoPage9 from "./weeks/week2/page9/Page9";
-import WeekTwoPage10 from "./weeks/week2/page10/Page10";
+import WeekTwoPage9 from "./weeks/week2/page9/Page9.jsx";
 
 // Week 3
 import WeekThreePage1 from "./weeks/week3/page1/Page1";
@@ -73,6 +71,7 @@ import userService from "../../../../../services/api/user.js";
 import {
   updateData,
   userAnswer,
+  clearData,
 } from "../../../../../redux/reducers/userAnswersReducer.js";
 import { adminData } from "../../../../../redux/reducers/adminReducer.js";
 
@@ -91,8 +90,6 @@ const WeekContent = () => {
 
   // Access data from location.state
   const enrolmentData = location.state?.enrollmentData; // Assuming enrollData is passed in state
-
-  console.log(enrolmentData,"Whats the eenrollment data")
 
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
@@ -214,8 +211,7 @@ const WeekContent = () => {
             return <Page16 />;
           case 17:
             return <Page17 />;
-          case 18:
-            return <Page18 />;
+
           default:
             return null;
         }
@@ -239,8 +235,6 @@ const WeekContent = () => {
             return <WeekTwoPage8 />;
           case 9:
             return <WeekTwoPage9 />;
-          case 10:
-            return <WeekTwoPage10 />;
           default:
             return null;
         }
@@ -355,10 +349,13 @@ const CourseContent = () => {
   const handleWeekClick = (weekNumber) => {
     // Only allow navigation to completed weeks or the current week in progress
     if (weekNumber <= maxAccessibleWeek) {
+      // Clear previous week data before switching
+      dispatch(clearData());
+
       dispatch(setCurrentWeek(weekNumber));
       dispatch(setCurrentPage(1));
       dispatch(setCurrentStep(1));
-      
+
       // Update session storage
       sessionStorage.setItem("flow-currentWeek", weekNumber.toString());
       sessionStorage.setItem("flow-currentPage", "1");

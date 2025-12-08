@@ -35,36 +35,25 @@ function Page6() {
   }, [userAnswers]);
 
   const saveUserInput = () => {
-    // if (currentStep === 1) return true;
     if (adminDatas.isAdmin) return true;
 
     const stepData = answers.find((item) => item.stepId === currentStep);
     if (!stepData) {
-      setErrorMessage("Oops! All inputs must be filled out.");
-      return false;
-    }
-
-    const values = Object.values(stepData.value);
-    if (values.length < 1) {
-      setErrorMessage("At least 1 value are required!");
-      return false;
-    }
-
-    const emptyInputs = values.filter((value) => value.trim() === "");
-    if (emptyInputs.length > 0) {
       setErrorMessage(
-        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
+        "Please select both Energy Level and Zone of Regulation."
       );
       return false;
     }
 
-    setErrorMessage(""); // Clear error if input is valid
+    const { energyLevel, zone } = stepData.value;
+    if (!energyLevel || !zone) {
+      setErrorMessage("Please complete both dropdowns before proceeding.");
+      return false;
+    }
 
-    const activityData = {
-      page: pageData.id,
-      answer: answers,
-    };
-    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    setErrorMessage("");
+    const activityData = { page: pageData.id, answer: answers };
+    dispatch(saveActivity(activityData));
 
     return true;
   };
@@ -73,13 +62,13 @@ function Page6() {
     if (!step) return <div>Invalid Step</div>;
 
     switch (step.type) {
-      case "dropdownScenario":
+      case "dualDropdownScenario":
         return (
           <Frame
             data={{
               step: step.stepId,
               question: step.question,
-              options: step.options,
+              dropdownOptions: pageData.dropdownOptions,
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}

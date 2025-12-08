@@ -200,16 +200,6 @@ export const courseContent = {
       },
       {
         id: 15,
-        type: "video",
-        videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_8.mp4",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 16,
         type: "radio",
         question:
           "So, let’s check in with how you’re feeling today. Which of these zones do you think you’re in?",
@@ -237,10 +227,10 @@ export const courseContent = {
         },
       },
       {
-        id: 17,
+        id: 16,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_9.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_8.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -431,69 +421,29 @@ export const courseContent = {
         steps: [
           {
             stepId: 1,
-            type: "dropdownScenario",
+            type: "dualDropdownScenario",
             question:
               "If you see someone stomping their feet, yelling loudly, and feeling really, really upset, what do you think their energy level would be? Now, what zone is the person in?",
-            options: [
-              {
-                id: "A",
-                text: "Blue",
-                bgColor: "#0093FF",
-                color: "white",
-              },
-              {
-                id: "B",
-                text: "Green",
-                bgColor: "#27AE60",
-                color: "white",
-              },
-              {
-                id: "C",
-                text: "Yellow",
-                bgColor: "#FCF85D",
-                color: "#5B616A",
-              },
-              {
-                id: "D",
-                text: "Red",
-                bgColor: "#EE2447",
-                color: "white",
-              },
-            ],
           },
           {
             stepId: 2,
-            type: "dropdownScenario",
+            type: "dualDropdownScenario",
             question:
               "If you see someone giggling a lot, fidgeting in their seat, and feeling a little too silly, what do you think their energy level would be? . Now, what zone is the person in?",
-            options: [
-              {
-                id: "A",
-                text: "Blue",
-                bgColor: "#0093FF",
-                color: "white",
-              },
-              {
-                id: "B",
-                text: "Green",
-                bgColor: "#27AE60",
-                color: "white",
-              },
-              {
-                id: "C",
-                text: "Yellow",
-                bgColor: "#FCF85D",
-                color: "#5B616A",
-              },
-              {
-                id: "D",
-                text: "Red",
-                bgColor: "#EE2447",
-                color: "white",
-              },
-            ],
           },
         ],
+        dropdownOptions: {
+          energyLevel: [
+            { id: "A", text: "High", bgColor: "#27AE60", color: "white" },
+            { id: "B", text: "Low", bgColor: "#EE2447", color: "white" },
+          ],
+          zoneOfRegulation: [
+            { id: "A", text: "Blue", bgColor: "#0093FF", color: "white" },
+            { id: "B", text: "Green", bgColor: "#27AE60", color: "white" },
+            { id: "C", text: "Yellow", bgColor: "#FCF85D", color: "#5B616A" },
+            { id: "D", text: "Red", bgColor: "#EE2447", color: "white" },
+          ],
+        },
         navigation: {
           prev: true,
           next: true,
@@ -576,16 +526,16 @@ export const courseContent = {
         },
         navigation: { prev: true, next: true },
       },
-      {
-        id: 9,
-        type: "video",
-        videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_5.mp4",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
+      // {
+      //   id: 9,
+      //   type: "video",
+      //   videoSrc:
+      //     "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_5.mp4",
+      //   navigation: {
+      //     prev: true,
+      //     next: true,
+      //   },
+      // },
     ],
   },
   week3: {

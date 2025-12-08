@@ -194,6 +194,12 @@ const DragAndDropFrame = ({
                         backgroundColor: snapshot.isDraggingOver
                           ? "rgba(255, 255, 255, 0.2)"
                           : "transparent",
+                        boxShadow: snapshot.isDraggingOver
+                          ? "0 0 0 3px rgba(255, 255, 255, 0.5)"
+                          : "none",
+                        transform: snapshot.isDraggingOver
+                          ? "scale(1.06)"
+                          : "scale(1)",
                       }}
                     >
                       <h2 className="zone-count" style={{ color: zone.color }}>
@@ -204,7 +210,7 @@ const DragAndDropFrame = ({
                           {zone.title}
                         </h2>
                       </div>
-                      {provided.placeholder}
+                      <div style={{ display: 'none' }}>{provided.placeholder}</div>
                     </div>
                   )}
                 </Droppable>

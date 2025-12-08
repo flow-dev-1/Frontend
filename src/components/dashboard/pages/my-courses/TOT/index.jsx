@@ -122,6 +122,7 @@ import userService from "../../../../../services/api/user.js";
 import {
   updateData,
   userAnswer,
+  clearData,
 } from "../../../../../redux/reducers/userAnswersReducer.js";
 import { adminData } from "../../../../../redux/reducers/adminReducer.js";
 
@@ -495,10 +496,13 @@ const CourseContent = () => {
   const handleWeekClick = (weekNumber) => {
     // Only allow navigation to completed weeks or the current week in progress
     if (weekNumber <= maxAccessibleWeek) {
+      // Clear previous week data before switching
+      dispatch(clearData());
+
       dispatch(setCurrentWeek(weekNumber));
       dispatch(setCurrentPage(1));
       dispatch(setCurrentStep(1));
-      
+
       // Update session storage
       sessionStorage.setItem("flow-currentWeek", weekNumber.toString());
       sessionStorage.setItem("flow-currentPage", "1");

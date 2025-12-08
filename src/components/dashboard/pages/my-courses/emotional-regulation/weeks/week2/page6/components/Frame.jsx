@@ -3,31 +3,34 @@ import QuestionBox from "../../../../components/QuestionBox";
 import CustomDropDown from "./CustomDropDown";
 
 function Frame({ data, answers, setAnswers, setErrorMessage }) {
-  const { step, question, options } = data;
+  const { step, question, dropdownOptions } = data;
 
-  const handleInputChange = (value) => {
+  const handleInputChange = (field, value) => {
     setErrorMessage("");
     setAnswers((prevAnswers) => {
-      const updatedAnswers = [...prevAnswers];
-      const stepIndex = updatedAnswers.findIndex(
-        (answer) => answer.stepId === step
-      );
+      const updated = [...prevAnswers];
+      const index = updated.findIndex((item) => item.stepId === step);
 
-      if (stepIndex !== -1) {
-        updatedAnswers[stepIndex] = {
-          ...updatedAnswers[stepIndex],
-          value: value, // Store single value directly
+      if (index !== -1) {
+        updated[index] = {
+          ...updated[index],
+          value: {
+            ...updated[index].value,
+            [field]: value,
+          },
         };
       } else {
-        updatedAnswers.push({
+        updated.push({
           stepId: step,
-          value: value,
+          value: { [field]: value },
         });
       }
 
-      return updatedAnswers;
+      return updated;
     });
   };
+
+  const stepData = answers.find((a) => a.stepId === step)?.value || {};
 
   return (
     <QuestionBox extraStyle={"bg-step-active"}>
@@ -42,14 +45,24 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
           {question}
         </h2>
 
-        <div className="mt-2">
-          <CustomDropDown
-            value={
-              answers.find((answer) => answer.stepId === step)?.value || ""
-            }
-            onChange={handleInputChange}
-            options={options} // Pass options here
-          />
+        <div className="d-flex gap-2 flex-column flex-md-row justify-content-between">
+          <div className="mt-4 w-50">
+            <h3 className="text-center text-blue mb-2">Energy Level</h3>
+            <CustomDropDown
+              value={stepData.energyLevel || ""}
+              onChange={(val) => handleInputChange("energyLevel", val)}
+              options={dropdownOptions.energyLevel}
+            />
+          </div>
+
+          <div className="mt-4 w-50">
+            <h3 className="text-center text-blue mb-2">Zone of Regulation</h3>
+            <CustomDropDown
+              value={stepData.zone || ""}
+              onChange={(val) => handleInputChange("zone", val)}
+              options={dropdownOptions.zoneOfRegulation}
+            />
+          </div>
         </div>
       </div>
     </QuestionBox>
