@@ -692,7 +692,7 @@ export const courseContent = {
             stepId: 1,
             type: "instruction",
             instructionText:
-              "Remember a time when you felt the different emotions mentioned below and identify what you did to feel better. After that, classify that behavior as healthy or unhealthy. For instance, if you yelled to feel better, you might have felt better, however it doesn't qualify as a healthy coping skill because it stressed you and others around you. If you listened to music though to feel better, it can be classified as a healthy coping skill because it helped you feel better and did not bring further stress to you or those around you.",
+              `For the emotions listed below, recall a time you experienced them and identify the action you took to cope. Classify that action as a "healthy" or "unhealthy" skill based on whether it caused further stress to yourself or others.`,
           },
           {
             stepId: 2,
