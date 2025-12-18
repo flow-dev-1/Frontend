@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
+import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
-import checkedImage from "../../../../../../../../assets/checkedbox.png";
-import uncheckedImage from "../../../../../../../../assets/uncheckedBox.png";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import adaptability from "../../../../../../../../assets/resilience-grit-images/adaptability.png";
 
 function Page2() {
   const dispatch = useDispatch();
@@ -18,136 +18,53 @@ function Page2() {
   const userAnswers = useSelector(userAnswer);
   const [myAnswer, setMyAnswer] = useState(userAnswers);
   const [errorMessage, setErrorMessage] = useState("");
-  const [selectedOption, setSelectedOption] = useState(null);
+
+  console.log(pageData);
 
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    const savedAnswer = response?.answer ? response.answer : "";
-    setMyAnswer(savedAnswer);
-    setSelectedOption(savedAnswer); // Also set the selected option
+    setMyAnswer(response?.answer ? response.answer : "");
+    return () => {};
   }, [userAnswers]);
 
-  const handleOptionChange = (e) => {
-    setErrorMessage("");
-    const value = e.target.value;
-    setSelectedOption(value);
-    setMyAnswer(value); // Set myAnswer when option changes
-  };
-
   const saveUserInput = () => {
-    if (!adminDatas.isAdmin && !selectedOption) {
-      setErrorMessage("Please select an option to continue!");
+    if (!adminDatas.isAdmin && !myAnswer) {
+      setErrorMessage("Oops! Please enter a valid input!");
       return false;
     }
 
-    setErrorMessage("");
+    setErrorMessage(""); // Clear error if input is valid
+    // Allow flow admin to proceed without input but do not dispatch answer
+    if (adminDatas.isAdmin) return true;
     dispatch(
       saveActivity({
         page: pageData.id,
-        answer: selectedOption,
+        answer: myAnswer,
       })
     );
     return true;
   };
 
+  const handleInputChange = (e) => {
+    setErrorMessage("");
+    setMyAnswer(e.target.value);
+  };
+
   return (
     <>
-      <QuestionBox>
-        <div className="d-flex gap-2 mt-5 ms-5 align-center-lg-custom">
-          <div>
-            <form className="d-flex gap-3 flex-column align-items-cente w-100">
-              {/* Question text */}
-              <div className="d-flex flex-column flex-md-row align-items-start mb-4">
-                <h2 className="text-blue me-3 week-2-question-text week-2-question-text-mobile">
-                  Question:
-                </h2>
-                <h2 className="text-gray week-2-question-text week-2-question-text-mobile">
-                  {pageData.question}
-                </h2>
-              </div>
+      <QuestionBox extraStyle="bg-custom-blue">
+        <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-start mt-5 text-center">
+          <h2 className="text-blue fs-1 mb-0 flex-shrink-0">Question:</h2>
 
-              {/* Options evenly spaced */}
-              {/* <div className="d-flex flex-column justify-content-evenly align-items-center w-70 w-md-50 options-text"> */}
-                {/* {pageData.options.map((option, index) => {
-                  const optionKey = Object.keys(option);
-                  const optionID = option[optionKey[0]];
-                  const optionText = option[optionKey[1]];
-                  const isChecked = selectedOption === optionID;
-
-                  return (
-                    <div
-                      key={index}
-                      className="d-flex gap-3 align-items-center "
-                    >
-                      <input
-                        type="radio"
-                        id={optionID}
-                        name="optionID"
-                        value={optionID}
-                        checked={isChecked}
-                        onChange={handleOptionChange}
-                        style={{ display: "none" }}
-                      />
-                      <img
-                        src={isChecked ? checkedImage : uncheckedImage}
-                        alt={optionKey}
-                        style={{ width: 60, height: 60, cursor: "pointer" }}
-                        onClick={() => {
-                          setErrorMessage("");
-                          setSelectedOption(optionID);
-                        }}
-                      />
-                      <label htmlFor={optionID} className="fs-1">
-                        {optionText}
-                      </label>
-                    </div>
-                  );
-                })} */}
-                {pageData.options.map((option, index) => {
-                  const optionKey = Object.keys(option);
-                  const optionID = option[optionKey[0]];
-                  const optionText = option[optionKey[1]];
-                  const isChecked = selectedOption === optionID;
-
-                  return (
-                    <div
-                      key={index}
-                      className="d-flex gap-2 mb-2 align-md-items-cente align-content-start"
-                      onClick={() => {
-                        setErrorMessage("");
-                        setSelectedOption(optionID);
-                      }}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <input
-                        type="radio"
-                        name="optionID"
-                        id={optionID}
-                        value={optionID}
-                        onChange={handleOptionChange}
-                        checked={isChecked}
-                        style={{ display: "none" }}
-                      />
-                      <img
-                        src={isChecked ? checkedImage : uncheckedImage}
-                        alt={`Option ${optionKey}`}
-                        style={{ width: 20, height: 20 }}
-                      />
-                      <label htmlFor={optionID} style={{ cursor: "pointer" }}>
-                        {optionText}
-                      </label>
-                    </div>
-                  );
-                })}
-              {/* </div> */}
-            </form>
+          <div className="d-flex flex-column flex-grow-1 min-w-0 mb-5">
+            <h2 className="text-gray fs-1 mb-2 ">{pageData.question}</h2>
           </div>
         </div>
+        <BigTextBox handleChange={handleInputChange} value={myAnswer} />
       </QuestionBox>
-
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />

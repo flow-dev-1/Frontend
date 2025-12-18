@@ -1,66 +1,76 @@
 export const assessments = {
   week1: {
     title: "Assessment",
-    subtitle: "Let's test your knowledge on Compassionate Communication",
+    subtitle:
+      "Let's test your knowledge on Your “Why” and Motivation for University",
     questions: [
       {
         id: 1,
-        question: `What does the term "regulation" mean?`,
+        question: `What does your “Why” represent in the journey to university?`,
         options: [
-          { id: "A", text: "Following the rules in a game." },
-          { id: "B", text: "Controlling or managing your emotions and behavior." },
-          { id: "C", text: "Ignoring your feelings." },
-          { id: "D", text: "Always being happy." },
+          { id: "A", text: "The subjects you enjoy the most." },
+          { id: "B", text: "The reason you want to go to university." },
+          { id: "C", text: "The degree you plan to earn." },
+          { id: "D", text: "The university you want to attend." },
         ],
         correctOption: "B",
       },
       {
         id: 2,
-        question: "Which of the following emotions would belong to the Blue Zone?",
+        question:
+          "Why is it important to have a clear “Why” before starting university?",
         options: [
-          { id: "A", text: "Joy." },
-          { id: "B", text: "Sadness." },
-          { id: "C", text: "Excitement." },
-          { id: "D", text: "Anger." },
+          {
+            id: "A",
+            text: "It helps you choose your favorite extracurriculars.",
+          },
+          { id: "B", text: "It helps you impress your lecturers." },
+          { id: "C", text: "It keeps you motivated when challenges arise." },
+          { id: "D", text: "It guarantees you’ll get top grades." },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 3,
-        question: "What is the Green Zone known for?",
+        question: "Which of the following is NOT an example of a strong “Why”?",
         options: [
-          { id: "A", text: "Feeling tired and bored." },
-          { id: "B", text: "Being calm, happy, and ready to learn." },
-          { id: "C", text: "Feeling silly or anxious." },
-          { id: "D", text: "Experiencing big, uncontrollable emotions." },
+          { id: "A", text: "To build a future career." },
+          { id: "B", text: "To discover who I am." },
+          { id: "C", text: "Because it’s expected of me." },
+          { id: "D", text: "To make a difference in my community." },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 4,
         question:
-          "If someone is feeling excited or a little nervous, which zone are they likely in?",
+          "What should you do if your “Why” doesn’t feel strong enough after facing a challenge?",
         options: [
-          { id: "A", text: "Blue Zone." },
-          { id: "B", text: "Green Zone." },
-          { id: "C", text: "Yellow Zone." },
-          { id: "D", text: "Red Zone." },
+          { id: "A", text: "Ignore it and move on." },
+          { id: "B", text: "Drop out and try again later." },
+          {
+            id: "C",
+            text: "Review and strengthen your reason for choosing this path.",
+          },
+          { id: "D", text: "Ask someone else to give you a new “Why”." },
         ],
         correctOption: "C",
       },
       {
         id: 5,
-        question: "What is the main characteristic of the Red Zone?",
+        question: "What happens when your “Why” is clear and strong?",
         options: [
-          { id: "A", text: "Being calm and focused." },
-          { id: "B", text: "Experiencing small emotions." },
-          { id: "C", text: "Having very big and strong emotions." },
-          { id: "D", text: "Feeling balanced and happy." },
+          { id: "A", text: "You never face any challenges." },
+          { id: "B", text: "You always get perfect grades." },
+          {
+            id: "C",
+            text: "You stay focused and motivated through difficulties.",
+          },
+          { id: "D", text: "You no longer need help or support." },
         ],
         correctOption: "C",
       },
-    ]
-
+    ],
   },
   week2: {
     title: "Assessment",
@@ -68,7 +78,8 @@ export const assessments = {
     questions: [
       {
         id: 1,
-        question: "How many energy levels are represented by the Zones of Regulation?",
+        question:
+          "How many energy levels are represented by the Zones of Regulation?",
         options: [
           { id: "A", text: "Two." },
           { id: "B", text: "Three." },
@@ -125,7 +136,7 @@ export const assessments = {
         ],
         correctOption: "C",
       },
-    ]
+    ],
   },
   week3: {
     title: "Assessment",
@@ -190,7 +201,7 @@ export const assessments = {
         ],
         correctOption: "B",
       },
-    ]
+    ],
   },
   week4: {
     title: "Assessment",
@@ -232,10 +243,14 @@ export const assessments = {
       },
       {
         id: 4,
-        question: "Why is it important to have different types of coping skills?",
+        question:
+          "Why is it important to have different types of coping skills?",
         options: [
           { id: "A", text: "So you can teach them to others." },
-          { id: "B", text: "Because what works for one person may not work for another." },
+          {
+            id: "B",
+            text: "Because what works for one person may not work for another.",
+          },
           { id: "C", text: "To help you avoid all emotions." },
           { id: "D", text: "To make sure you are always happy." },
         ],
@@ -252,7 +267,7 @@ export const assessments = {
         ],
         correctOption: "A",
       },
-    ]
+    ],
   },
   week5: {
     title: "Assessment",
@@ -371,13 +386,19 @@ export const assessments = {
         question:
           'Before an exam, you feel a knot in your stomach and your breathing quickens. What does "observe the feelings in your body" mean in the SONAR method?',
         options: [
-          { id: "A", text: "Pay attention to how your body reacts to emotions." },
-          { id: "B", text: "Ignore physical sensations and focus on your thoughts." },
+          {
+            id: "A",
+            text: "Pay attention to how your body reacts to emotions.",
+          },
+          {
+            id: "B",
+            text: "Ignore physical sensations and focus on your thoughts.",
+          },
           { id: "C", text: "Blame your body for how you feel." },
           { id: "D", text: "Control all physical movements." },
         ],
         correctOption: "A",
       },
-    ] 
+    ],
   },
 };

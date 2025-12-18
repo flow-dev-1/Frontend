@@ -12,8 +12,8 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import StepIndicator from "../../../components/StepIndicator";
 import Button from "../../../components/Button";
 
-import FrameTextBox from "./components/FrameTextBox";
-import FrameAnswerPreview from "./components/FrameAnswerPreview";
+import CheckboxFrame from "./components/CheckboxFrame";
+import TextInputFrame from "./components/TextInputFrame";
 
 function Page4() {
   const dispatch = useDispatch();
@@ -25,7 +25,8 @@ function Page4() {
   const totalSteps = pageData?.steps?.length || 0;
   const step = pageData?.steps[currentStep - 1];
 
-  const [answer, setAnswer] = useState("");
+  const [checkboxAnswers, setCheckboxAnswers] = useState({});
+  const [textAnswer, setTextAnswer] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -33,15 +34,31 @@ function Page4() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setAnswer(response?.answer ?? "");
-  }, [userAnswers]);
+
+    if (response?.answer) {
+      setCheckboxAnswers(response.answer.checkboxAnswers || {});
+      setTextAnswer(response.answer.textAnswer || "");
+    }
+  }, [userAnswers, pageData.id]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
 
-    if (currentStep === 1 && !answer.trim()) {
-      setErrorMessage("Oops! Please enter a valid input!");
-      return false;
+    // Validation for step 1 (checkbox)
+    if (currentStep === 1) {
+      const hasSelection = Object.values(checkboxAnswers).some((val) => val);
+      if (!hasSelection) {
+        setErrorMessage("Oops! Please select at least one option!");
+        return false;
+      }
+    }
+
+    // Validation for step 2 (text input) - only if "Others" was selected
+    if (currentStep === 2) {
+      if (!textAnswer.trim()) {
+        setErrorMessage("Oops! Please enter a valid input!");
+        return false;
+      }
     }
 
     setErrorMessage("");
@@ -49,30 +66,48 @@ function Page4() {
     dispatch(
       saveActivity({
         page: pageData.id,
-        answer,
+        answer: {
+          checkboxAnswers,
+          textAnswer,
+        },
       })
     );
 
     return true;
   };
 
+  // Check if "Others" option is selected
+  // const isOthersSelected = () => {
+  //   if (currentStep !== 1) return false;
+  //   const othersIndex = step?.options?.findIndex(
+  //     (option) => option.toLowerCase() === "others"
+  //   );
+  //   return othersIndex !== -1 && checkboxAnswers[othersIndex];
+  // };
+
   const renderStep = () => {
     if (!step) return <div>Invalid Step</div>;
 
     switch (step.type) {
-      case "textInput":
+      case "checkbox":
         return (
-          <FrameTextBox
+          <CheckboxFrame
             step={step}
-            answer={answer}
-            setAnswer={setAnswer}
+            checkboxAnswers={checkboxAnswers}
+            setCheckboxAnswers={setCheckboxAnswers}
             setErrorMessage={setErrorMessage}
-            errorMessage={errorMessage}
           />
         );
 
-      case "answerPreview":
-        return <FrameAnswerPreview answer={step.value} />;
+      case "question":
+        return (
+          <TextInputFrame
+            step={step}
+            textAnswer={textAnswer}
+            setTextAnswer={setTextAnswer}
+            setErrorMessage={setErrorMessage}
+          />
+        );
 
       default:
         return <div>Unknown step type</div>;
@@ -82,7 +117,7 @@ function Page4() {
   return (
     <>
       {renderStep()}
-      {errorMessage && <div className="text-danger">{errorMessage}</div>}
+      {errorMessage && <div className="text-danger mt-3">{errorMessage}</div>}
 
       <StepIndicator totalSteps={totalSteps} />
 

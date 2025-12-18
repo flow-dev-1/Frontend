@@ -11,27 +11,12 @@ export const courseContent = {
       },
       {
         id: 2,
-        type: "radio",
-        question:
-          "First off though, what do you think regulation means? Pick from the options available.",
-        options: [
-          {
-            id: "A",
-            text: "A. Keeping all your emotions hidden so no one can see how you feel.",
-          },
-          {
-            id: "B",
-            text: "B. A type of game where you guess how other people are feeling.",
-          },
-          {
-            id: "C",
-            text: "C. Adjusting your emotions, actions, or body to match what’s happening around you.",
-          },
-          {
-            id: "D",
-            text: "D. A way to make sure everyone does the same thing at the same time.",
-          },
-        ],
+        type: "question",
+        questionType: "text",
+        question: "What's next for you after year 12?",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
         navigation: {
           prev: true,
           next: true,
@@ -53,18 +38,27 @@ export const courseContent = {
         steps: [
           {
             stepId: 1,
-            type: "textInput",
-            question: "What does",
-            continuation: "mean?",
-            hasImage: true,
-            imageSrc: "mindset.png",
-            inputType: "bigTextBox",
+            type: "checkbox",
+            question: "Why do you want to go to the University/College?",
+            options: [
+              "Because it's expected of me",
+              "To build a future career",
+              "To discover who I am",
+              "To gain independence",
+              "Others",
+            ],
           },
           {
             stepId: 2,
-            type: "answerPreview",
-            value:
-              "Emotional regulation means controlling your emotions. In simple terms, regulating your emotions means being able to control your emotions",
+            type: "question",
+            questionType: "text",
+            question: "Type the other things here.",
+            inputType: "bigTextBox",
+            conditionalOn: {
+              stepId: 1,
+              optionText: "Others",
+              mustBeSelected: true,
+            },
           },
         ],
         navigation: {
@@ -84,11 +78,37 @@ export const courseContent = {
       },
       {
         id: 6,
-        type: "listQuestion",
-        question: "How many emotions can you name off the top of your head?",
-        inputCount: 5,
-        inputType: "text",
-        inputPlaceholder: "Type your answer here",
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "checkbox",
+            question: "Choose 3–4 that best describe your future self.",
+            options: [
+              "Confident",
+              "Independent",
+              "Discplined",
+              "Social",
+              "Curious",
+              "Resilent",
+              "Creative",
+              "Leader",
+            ],
+          },
+          {
+            stepId: 2,
+            type: "question",
+            questionType: "text",
+            question:
+              "Now, in a structured sentence, I want you to write your reason for your next step after secondary school. Why are you making that particular decision? ",
+            inputType: "bigTextBox",
+            conditionalOn: {
+              stepId: 1,
+              optionText: "Others",
+              mustBeSelected: true,
+            },
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
@@ -106,15 +126,28 @@ export const courseContent = {
       },
       {
         id: 8,
-        type: "question",
-        questionType: "text",
-        question:
-          "What do you think about this zone? Do you think it’s a good zone and would you like to be there?",
-        zone: "Blue Zone",
-        zoneBgColor: "#0093FF",
-        hasImage: false,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "scenario",
+            scenarioText:
+              "You got admission into university to study a particular course ,maybe Computer Science, History, or Medicine. You knew it would be challenging, but the first required course turns out to be dull and painfully technical. You dread every lecture, struggle to stay focused, and your grades start to drop. You realise a big part of your first two years will be filled with similar courses.",
+          },
+          {
+            stepId: 2,
+            type: "question",
+            questionType: "text",
+            question:
+              "Does your why give you enough motivation to push through these tough and boring classes so you can graduate with a good result?",
+            inputType: "bigTextBox",
+            conditionalOn: {
+              stepId: 1,
+              optionText: "Others",
+              mustBeSelected: true,
+            },
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
@@ -132,15 +165,28 @@ export const courseContent = {
       },
       {
         id: 10,
-        type: "question",
-        questionType: "text",
-        question:
-          "What do you think about this zone? Do you think it’s a good zone and would you like to be there?",
-        zone: "Green Zone",
-        zoneBgColor: "#27AE60",
-        hasImage: false,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "scenario",
+            scenarioText:
+              "A few months into your first semester, you receive a once-in-a-lifetime offer ,a fully paid, year-long volunteer or travel opportunity abroad. But it means taking a full year off school. Your friends and family encourage you to go, saying, “School will always be there.”",
+          },
+          {
+            stepId: 2,
+            type: "question",
+            questionType: "text",
+            question:
+              "Is your why for going to university strong enough to keep you focused on your long-term goal, or would this exciting opportunity pull you away?",
+            inputType: "bigTextBox",
+            conditionalOn: {
+              stepId: 1,
+              optionText: "Others",
+              mustBeSelected: true,
+            },
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
@@ -158,15 +204,28 @@ export const courseContent = {
       },
       {
         id: 12,
-        type: "question",
-        questionType: "text",
-        question:
-          "What do you think about this zone? Do you think it’s a good zone and would you like to be there?",
-        zone: "Yellow Zone",
-        zoneBgColor: "#FCF85D",
-        hasImage: false,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "scenario",
+            scenarioText:
+              "You meet a well-respected lecturer who reviews your work and bluntly tells you that you don’t have what it takes to succeed in your chosen field. They even suggest switching majors or leaving the program.",
+          },
+          {
+            stepId: 2,
+            type: "question",
+            questionType: "text",
+            question:
+              "Is your why strong enough to help you rise above criticism and prove your abilities, or does this discouragement make you question your entire purpose?",
+            inputType: "bigTextBox",
+            conditionalOn: {
+              stepId: 1,
+              optionText: "Others",
+              mustBeSelected: true,
+            },
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
@@ -184,41 +243,26 @@ export const courseContent = {
       },
       {
         id: 14,
-        type: "question",
-        questionType: "text",
-        question:
-          " What do you think about this zone? Do you think it’s a good zone and would you like to be there?",
-        zone: "Red Zone",
-        zoneBgColor: "#EE2447",
-        hasImage: false,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 15,
-        type: "radio",
-        question:
-          "So, let’s check in with how you’re feeling today. Which of these zones do you think you’re in?",
-        options: [
+        type: "multiStep",
+        steps: [
           {
-            id: "A",
-            text: "A. Blue Zone: Feeling low, tired, sad, or not very energetic.",
+            stepId: 1,
+            type: "scenario",
+            scenarioText:
+              "Your best friend gets admitted into a different school, and they try to convince you to transfer or move closer. They say your choice of university is hurting your friendship.",
           },
           {
-            id: "B",
-            text: "B. Green Zone: Feeling calm, focused, happy, and ready to learn.",
-          },
-          {
-            id: "C",
-            text: "C. Yellow Zone: Feeling a little restless, frustrated, or worried, but still managing.",
-          },
-          {
-            id: "D",
-            text: "D. Red Zone: Feeling angry, overwhelmed, or out of control.",
+            stepId: 2,
+            type: "question",
+            questionType: "text",
+            question:
+              "Does your why for attending this university and pursuing your goals matter more than the short-term comfort of staying close to your friend?",
+            inputType: "bigTextBox",
+            conditionalOn: {
+              stepId: 1,
+              optionText: "Others",
+              mustBeSelected: true,
+            },
           },
         ],
         navigation: {
@@ -227,7 +271,7 @@ export const courseContent = {
         },
       },
       {
-        id: 16,
+        id: 15,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_8.mp4",
@@ -691,8 +735,7 @@ export const courseContent = {
           {
             stepId: 1,
             type: "instruction",
-            instructionText:
-              `For the emotions listed below, recall a time you experienced them and identify the action you took to cope. Classify that action as a "healthy" or "unhealthy" skill based on whether it caused further stress to yourself or others.`,
+            instructionText: `For the emotions listed below, recall a time you experienced them and identify the action you took to cope. Classify that action as a "healthy" or "unhealthy" skill based on whether it caused further stress to yourself or others.`,
           },
           {
             stepId: 2,

@@ -418,6 +418,7 @@ const CourseContent = () => {
         "transition",
         "resilience_grit",
         "emotional_regulation",
+        "transition_2",
       ].includes(lastSegment?.toLowerCase())
     ) {
       dispatch(setCourse(lastSegment.toLowerCase()));

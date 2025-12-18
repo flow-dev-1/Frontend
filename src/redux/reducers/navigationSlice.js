@@ -11,6 +11,8 @@ import { assessments as totAssessments } from "../../components/dashboard/pages/
 
 import { courseContent as emotionalRegulationCourseContent } from "../../components/dashboard/pages/my-courses/emotional-regulation/data/activity";
 import { assessments as emotionalRegulationAssessments } from "../../components/dashboard/pages/my-courses/emotional-regulation/data/assessment";
+import { courseContent as transition2CourseContent } from "../../components/dashboard/pages/my-courses/transition-2/data/activity";
+import { assessments as transition2Assessments } from "../../components/dashboard/pages/my-courses/transition-2/data/assessment";
 
 const courseData = {
   compassion: {
@@ -20,6 +22,10 @@ const courseData = {
   transition: {
     courseContent: transitionCourseContent,
     assessments: transitionAssessments,
+  },
+  transition_2: {
+    courseContent: transition2CourseContent,
+    assessments: transition2Assessments,
   },
   resilience_grit: {
     courseContent: resilienceCourseContent,
@@ -54,6 +60,7 @@ const getCourseFromURL = () => {
     "resilience_grit",
     "tot",
     "emotional_regulation",
+    "transition_2",
   ].includes(lastSegment?.toLowerCase())
     ? lastSegment.toLowerCase()
     : "compassion";
