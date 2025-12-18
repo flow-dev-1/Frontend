@@ -61,6 +61,8 @@ import TOTCourse from "./components/dashboard/pages/my-courses/TOT/index.jsx";
 import TOTFeedback from "./components/dashboard/pages/my-courses/TOT/feedback/index.jsx";
 import EmotionalRegulationCourse from "./components/dashboard/pages/my-courses/emotional-regulation/index.jsx";
 import EmotionalRegulationFeedback from "./components/dashboard/pages/my-courses/emotional-regulation/feedback/index.jsx";
+import Transition2Course from "./components/dashboard/pages/my-courses/transition-2/index.jsx";
+import Transition2Feedback from "./components/dashboard/pages/my-courses/transition-2/feedback/index.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -152,6 +154,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <TransitionFeedback />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/transition-2"
+            element={
+              // <ProtectedRoute>
+              <Transition2Course />
+              // </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/transition-2/feedback"
+            element={
+              <ProtectedRoute>
+                <Transition2Feedback />
               </ProtectedRoute>
             }
           />
