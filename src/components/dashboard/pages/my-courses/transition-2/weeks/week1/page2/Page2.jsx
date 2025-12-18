@@ -19,8 +19,6 @@ function Page2() {
   const [myAnswer, setMyAnswer] = useState(userAnswers);
   const [errorMessage, setErrorMessage] = useState("");
 
-  console.log(pageData);
-
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers?.activities?.find(

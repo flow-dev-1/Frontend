@@ -296,7 +296,7 @@ export const courseContent = {
         id: 2,
         type: "question",
         questionType: "text",
-        question: "Do you remember what we talked about last week?",
+        question: "What’s your definition of Mindset and Values?",
         hasImage: false,
         imageSrc: "mindset.png",
         inputType: "bigTextBox",
@@ -317,133 +317,13 @@ export const courseContent = {
       },
       {
         id: 4,
-        type: "multiStep",
-        steps: [
-          {
-            stepId: 1,
-            type: "dropdownScenario",
-            question: "Feeling calm and ready to learn",
-            options: [
-              {
-                id: "A",
-                text: "Blue",
-                bgColor: "#0093FF",
-                color: "white",
-              },
-              {
-                id: "B",
-                text: "Green",
-                bgColor: "#27AE60",
-                color: "white",
-              },
-              {
-                id: "C",
-                text: "Yellow",
-                bgColor: "#FCF85D",
-                color: "#5B616A",
-              },
-              {
-                id: "D",
-                text: "Red",
-                bgColor: "#EE2447",
-                color: "white",
-              },
-            ],
-          },
-          {
-            stepId: 2,
-            type: "dropdownScenario",
-            question: "Low energy feeling like sadness or tiredness.",
-            options: [
-              {
-                id: "A",
-                text: "Blue",
-                bgColor: "#0093FF",
-                color: "white",
-              },
-              {
-                id: "B",
-                text: "Green",
-                bgColor: "#27AE60",
-                color: "white",
-              },
-              {
-                id: "C",
-                text: "Yellow",
-                bgColor: "#FCF85D",
-                color: "#5B616A",
-              },
-              {
-                id: "D",
-                text: "Red",
-                bgColor: "#EE2447",
-                color: "white",
-              },
-            ],
-          },
-          {
-            stepId: 3,
-            type: "dropdownScenario",
-            question: `Feeling a little out of control with excitement or worry.`,
-            options: [
-              {
-                id: "A",
-                text: "Blue",
-                bgColor: "#0093FF",
-                color: "white",
-              },
-              {
-                id: "B",
-                text: "Green",
-                bgColor: "#27AE60",
-                color: "white",
-              },
-              {
-                id: "C",
-                text: "Yellow",
-                bgColor: "#FCF85D",
-                color: "#5B616A",
-              },
-              {
-                id: "D",
-                text: "Red",
-                bgColor: "#EE2447",
-                color: "white",
-              },
-            ],
-          },
-          {
-            stepId: 4,
-            type: "dropdownScenario",
-            question: "Very big emotions like anger or extreme frustration.",
-            options: [
-              {
-                id: "A",
-                text: "Blue",
-                bgColor: "#0093FF",
-                color: "white",
-              },
-              {
-                id: "B",
-                text: "Green",
-                bgColor: "#27AE60",
-                color: "white",
-              },
-              {
-                id: "C",
-                text: "Yellow",
-                bgColor: "#FCF85D",
-                color: "#5B616A",
-              },
-              {
-                id: "D",
-                text: "Red",
-                bgColor: "#EE2447",
-                color: "white",
-              },
-            ],
-          },
-        ],
+        type: "question",
+        questionType: "text",
+        question:
+          "Imagine you just failed your first university quiz. What’s your honest first reaction? What’s the first thought that comes to your mind?",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
         navigation: {
           prev: true,
           next: true,
@@ -461,33 +341,11 @@ export const courseContent = {
       },
       {
         id: 6,
-        type: "multiStep",
-        steps: [
-          {
-            stepId: 1,
-            type: "dualDropdownScenario",
-            question:
-              "If you see someone stomping their feet, yelling loudly, and feeling really, really upset, what do you think their energy level would be? Now, what zone is the person in?",
-          },
-          {
-            stepId: 2,
-            type: "dualDropdownScenario",
-            question:
-              "If you see someone giggling a lot, fidgeting in their seat, and feeling a little too silly, what do you think their energy level would be? . Now, what zone is the person in?",
-          },
-        ],
-        dropdownOptions: {
-          energyLevel: [
-            { id: "A", text: "High", bgColor: "#27AE60", color: "white" },
-            { id: "B", text: "Low", bgColor: "#EE2447", color: "white" },
-          ],
-          zoneOfRegulation: [
-            { id: "A", text: "Blue", bgColor: "#0093FF", color: "white" },
-            { id: "B", text: "Green", bgColor: "#27AE60", color: "white" },
-            { id: "C", text: "Yellow", bgColor: "#FCF85D", color: "#5B616A" },
-            { id: "D", text: "Red", bgColor: "#EE2447", color: "white" },
-          ],
-        },
+        type: "listQuestion",
+        question: "List 3 values you think are important.",
+        inputCount: 3,
+        inputType: "text",
+        inputPlaceholder: "Type your answer here",
         navigation: {
           prev: true,
           next: true,
@@ -505,71 +363,52 @@ export const courseContent = {
       },
       {
         id: 8,
-        type: "multiStep",
-        steps: [
-          {
-            stepId: 1,
-            type: "dualDropdownScenario",
-            question:
-              "Elena just finished a long day at school and didn't get much sleep the night before. She feels sluggish and wants to lie down on the couch. What is Elena's enengy level, and which zone of regulation is she in?",
-          },
-          {
-            stepId: 2,
-            type: "dualDropdownScenario",
-            question:
-              "Jayden's soccer team just won a big match, and he's jumping up and down, cheering loudly. He can't stop smiling. What is Jayden's energy level, and which zone of regulation is he in?",
-          },
-          {
-            stepId: 3,
-            type: "dualDropdownScenario",
-            question:
-              "Kendra's little brother broke her favorite toy. She feels frustrated and starts yelling at him.What is Kendra's energy level, and which zone of regulation is she in?",
-          },
-          {
-            stepId: 4,
-            type: "dualDropdownScenario",
-            question:
-              "Liam is sitting quietly at his desk, working on his homework. He feels focused and calm. What is Liam's energy level, and which zone of regulation is he in?",
-          },
-          {
-            stepId: 5,
-            type: "dualDropdownScenario",
-            question:
-              "Priya's best friend moved to another city, and she misses her a lot. She doesn't feel like playing with her other friends today. What is Priya's energy level, and which zone of regulation is she in?",
-          },
-          {
-            stepId: 6,
-            type: "dualDropdownScenario",
-            question:
-              "Daniel is about to go on stage for his school play.He feels a bit nervous, his heart is racing, and his hands are sweaty. What is Daniel's energy level, and which zone of regulation is he in?",
-          },
-          {
-            stepId: 7,
-            type: "dualDropdownScenario",
-            question:
-              "Bella is playing outside with her friends, running around and laughing. She feels happy and full of energy. What is Bella's energy level, and which zone of regulation is she in?",
-          },
-          {
-            stepId: 8,
-            type: "dualDropdownScenario",
-            question:
-              "Carlos just found out that he didn't do well on his math test. He feels upset and frustrated, and he stants tearing up his test paper. What is Carlos' energy level, and which zone of regulation is he in?",
-          },
-        ],
-        dropdownOptions: {
-          energyLevel: [
-            { id: "A", text: "High", bgColor: "#27AE60", color: "white" },
-            { id: "B", text: "Low", bgColor: "#EE2447", color: "white" },
-          ],
-          zoneOfRegulation: [
-            { id: "A", text: "Blue", bgColor: "#0093FF", color: "white" },
-            { id: "B", text: "Green", bgColor: "#27AE60", color: "white" },
-            { id: "C", text: "Yellow", bgColor: "#FCF85D", color: "#5B616A" },
-            { id: "D", text: "Red", bgColor: "#EE2447", color: "white" },
-          ],
+        type: "question",
+        questionType: "text",
+        question: "What's next for you after year 12?",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
         },
-        navigation: { prev: true, next: true },
       },
+      {
+        id: 9,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 10,
+        type: "question",
+        questionType: "text",
+        question:
+          "How would your value of responsibility influence your decision?",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 11,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+
       // {
       //   id: 9,
       //   type: "video",

@@ -116,7 +116,7 @@ const navigationSlice = createSlice({
     setCourse: (state, action) => {
       if (state.currentCourse !== action.payload) {
         state.currentCourse = action.payload;
-        state.currentWeek = 1;
+        state.currentWeek = 2;
         state.currentPage = 1;
         state.currentStep = 1;
       }
@@ -125,13 +125,13 @@ const navigationSlice = createSlice({
       const newCourse = getCourseFromURL();
       if (state.currentCourse !== newCourse) {
         state.currentCourse = newCourse;
-        state.currentWeek = 1;
+        state.currentWeek = 2;
         state.currentPage = 1;
         state.currentStep = 1;
         state.showReview = false;
         state.showHurray = false;
 
-        sessionStorage.setItem("flow-currentWeek", "1");
+        sessionStorage.setItem("flow-currentWeek", "2");
         sessionStorage.setItem("flow-currentPage", "1");
         sessionStorage.setItem("flow-currentStep", "1");
       }

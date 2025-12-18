@@ -74,65 +74,76 @@ export const assessments = {
   },
   week2: {
     title: "Assessment",
-    subtitle: "Let's test your knowledge",
+    subtitle: "Let's test your knowledge on Mindset and Values",
     questions: [
       {
         id: 1,
-        question:
-          "How many energy levels are represented by the Zones of Regulation?",
+        question: `What does your mindset refer to?`,
         options: [
-          { id: "A", text: "Two." },
-          { id: "B", text: "Three." },
-          { id: "C", text: "Four." },
-          { id: "D", text: "Five." },
+          { id: "A", text: "The way you dress and behave." },
+          { id: "B", text: "The way you think and respond to challenges." },
+          { id: "C", text: "The kind of people you make friends with." },
+          { id: "D", text: "The grades you get in school." },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 2,
-        question:
-          "Which zone represents low energy levels, like feeling tired or sad?",
+        question: "Which of the following best describes a fixed mindset?",
         options: [
-          { id: "A", text: "Yellow Zone." },
-          { id: "B", text: "Red Zone." },
-          { id: "C", text: "Blue Zone." },
-          { id: "D", text: "Green Zone." },
+          {
+            id: "A",
+            text: "Believing that abilities can be developed with effort.",
+          },
+          { id: "B", text: "Seeing failure as a learning opportunity." },
+          {
+            id: "C",
+            text: "Believing that intelligence and talent cannot change.",
+          },
+          { id: "D", text: "Being open to feedback and improvement." },
         ],
         correctOption: "C",
       },
       {
         id: 3,
         question:
-          "Which zone represents balanced energy, where you feel calm and ready to learn?",
+          "What happens when you face challenges and choose to try again instead of giving up?",
         options: [
-          { id: "A", text: "Blue Zone." },
-          { id: "B", text: "Green Zone." },
-          { id: "C", text: "Yellow Zone." },
-          { id: "D", text: "Red Zone." },
+          { id: "A", text: "Your brain gets tired." },
+          {
+            id: "B",
+            text: "Your brain grows stronger and learns to think differently.",
+          },
+          { id: "C", text: "You become more afraid of failure." },
+          { id: "D", text: "You lose motivation." },
         ],
         correctOption: "B",
       },
       {
         id: 4,
-        question:
-          "Which zone represents higher energy levels where you might feel excited but still in control?",
+        question: "What are values?",
         options: [
-          { id: "A", text: "Blue Zone." },
-          { id: "B", text: "Yellow Zone." },
-          { id: "C", text: "Green Zone." },
-          { id: "D", text: "Red Zone." },
+          { id: "A", text: "Things you enjoy doing for fun." },
+          {
+            id: "B",
+            text: "The principles that guide your decisions and actions.",
+          },
+          { id: "C", text: "Rules made by your parents and teachers." },
+          { id: "D", text: "Your achievements and grades in school." },
         ],
         correctOption: "B",
       },
       {
         id: 5,
-        question:
-          "Which zone represents the highest energy levels, where you might feel overwhelmed or out of control?",
+        question: "What happens when your mindset and values work together?",
         options: [
-          { id: "A", text: "Yellow Zone." },
-          { id: "B", text: "Green Zone." },
-          { id: "C", text: "Red Zone." },
-          { id: "D", text: "Blue Zone." },
+          { id: "A", text: "You become confused about your goals." },
+          { id: "B", text: "You lose focus on what’s important." },
+          {
+            id: "C",
+            text: "They help you make better decisions and handle challenges wisely.",
+          },
+          { id: "D", text: "You depend more on others for advice." },
         ],
         correctOption: "C",
       },
