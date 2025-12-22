@@ -11,6 +11,7 @@ import OverallFeedBack from "./weeks/overall/OverallFeedBack";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
+import VisionBoard from "./VisionBoard";
 
 function Transition2Feedback() {
   const navigate = useNavigate();
@@ -208,6 +209,8 @@ function Transition2Feedback() {
             setHasPercentile={setHasPercentile}
             enrollmentId={enrollmentId}
           />
+
+          {/* <VisionBoard /> */}
         </section>
       </div>
     </>

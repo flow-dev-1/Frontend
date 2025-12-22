@@ -48,7 +48,7 @@ function CheckboxFrame({
       </div>
 
       <div className="container">
-        <div className="row row-cols-1 row-cols-md-4 g-4">
+        <div className="row row-cols-1 row-cols-md-4 g-0">
           {step.options?.map((option, index) => (
             <div
               key={index}
@@ -57,7 +57,7 @@ function CheckboxFrame({
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 borderRadius: "10px",
-                // padding: "20px",
+                padding: "5px",
                 // minHeight: "140px",
               }}
             >
