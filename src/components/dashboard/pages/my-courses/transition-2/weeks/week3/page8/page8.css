@@ -1,0 +1,11 @@
+.bg-gray-rectangle {
+  background: url("../../../../../../../../assets/bg-gray-rectangle.png")
+    no-repeat;
+  background-size: 100% 100%;
+}
+
+.green-star-background {
+  background: url("../../../../../../../../assets/green-star-background.png")
+    no-repeat;
+  background-size: 100% 100%;
+}

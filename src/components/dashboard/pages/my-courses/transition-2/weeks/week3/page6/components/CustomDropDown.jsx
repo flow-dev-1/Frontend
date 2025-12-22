@@ -26,7 +26,7 @@ function CustomDropDown({ value, onChange, options = [] }) {
 
   return (
     <div className="position-relative mx-auto" ref={dropdownRef}>
-      <label className="dropdown-small-input py-1 border-0 dropdown-input-label px-2 w-100 d-block mx-auto">
+      <label className="py-1 border-0  px-2 w-100 d-block mx-auto small-input-label">
         <div
           className="border-0 bg-transparent border-outline-0 form-control dropdown-small-input d-flex align-items-center justify-content-between cursor-pointer"
           style={{ maxWidth: "100%", fontSize: "1.25rem", cursor: "pointer" }}
@@ -34,7 +34,7 @@ function CustomDropDown({ value, onChange, options = [] }) {
         >
           {selectedOption ? (
             <div>
-              <div className="text-gray text-nowrap">
+              <div className="text-gray">
                 {selectedOption.id}. {selectedOption.text}
               </div>
               {selectedOption.subText && (
@@ -44,19 +44,19 @@ function CustomDropDown({ value, onChange, options = [] }) {
               )}
             </div>
           ) : (
-            <span className="text-muted">Select an option</span>
+            <span className="text-muted">Choose an answer</span>
           )}
         </div>
       </label>
 
       {isOpen && (
         <div
-          className="position-absolute bg-white border rounded shadow-lg d-flex flex-column"
+          className="position-absolute w-100 bg-white border rounded shadow-lg"
           style={{
             top: "100%",
             left: 0,
             zIndex: 1000,
-            // maxHeight: "300px",
+            maxHeight: "300px",
             overflowY: "auto",
           }}
         >
@@ -65,37 +65,39 @@ function CustomDropDown({ value, onChange, options = [] }) {
             onClick={() => handleOptionClick("")}
             style={{
               cursor: "pointer",
-              borderBottom: "1px dotted #eee",
+              borderBottom: "1px solid #eee",
             }}
           >
-            <span className="text-muted">Select an option</span>
+            <span className="text-muted">Choose an answer</span>
           </div>
           {options.map((option, index) => (
             <div
               key={index}
-              className="cursor-pointer"
+              className="p-3 cursor-pointer"
               onClick={() => handleOptionClick(option.id)}
               style={{
                 cursor: "pointer",
-                backgroundColor: "transparent",
+                borderBottom:
+                  index < options.length - 1 ? "1px solid #eee" : "none",
               }}
               onMouseEnter={(e) => {
-                // e.target.style.backgroundColor = "#f8f9fa";
+                e.target.style.backgroundColor = "#f8f9fa";
               }}
               onMouseLeave={(e) => {
-                // e.target.style.backgroundColor = "transparent";
+                e.target.style.backgroundColor = "transparent";
               }}
             >
-              <h2
-                className="text-gray text-center px-5 py-2 m-0"
-                style={{
-                  fontWeight: "500",
-                  background: option.bgColor,
-                  color: option.color,
-                }}
-              >
-                {option.id}. {option.text}
-              </h2>
+              <div className="text-gray" style={{ fontWeight: "500" }}>
+                {option.text}
+              </div>
+              {option.subText && (
+                <div
+                  className="text-primary mt-1"
+                  style={{ fontSize: "0.9rem" }}
+                >
+                  {option.subText}
+                </div>
+              )}
             </div>
           ))}
         </div>

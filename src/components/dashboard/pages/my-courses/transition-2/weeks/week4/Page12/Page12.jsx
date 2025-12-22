@@ -9,8 +9,9 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import adaptability from "../../../../../../../../assets/resilience-grit-images/adaptability.png";
 
-function Page12() {
+function WeekFourPage12() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
@@ -52,31 +53,18 @@ function Page12() {
 
   return (
     <>
-      <QuestionBox>
-        <div className="d-flex justify-content-center">
-          <h2
-            className="text-white rounded text-center px-5 py-1 d-inline mt-4 mb-2"
-            style={{ background: pageData.zoneBgColor }}
-          >
-            {pageData.zone}
-          </h2>
-        </div>
+      <QuestionBox extraStyle="bg-custom-blue">
+        <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-start mt-5 text-center">
+          <h2 className="text-blue fs-1 mb-0 flex-shrink-0">Question:</h2>
 
-        <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-center">
-          <h2 className="text-blue fs-1 mb-0 flex-shrink-0 question-text">
-            Question:
-          </h2>
-
-          <div className="d-flex align-items-center flex-grow-1 min-w-0">
-            <h2 className="text-gray fs-1 mb-0 flex-grow-1 md:text-truncate">
-              {pageData.question}
-            </h2>
+          <div className="d-flex flex-column flex-grow-1 min-w-0 mb-5">
+            <h2 className="text-gray fs-1 mb-2 ">{pageData.question}</h2>
           </div>
         </div>
         <BigTextBox handleChange={handleInputChange} value={myAnswer} />
       </QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
-      <div className="d-flex justify-content-center gap-96px mt-3 gap-4">
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
@@ -84,4 +72,4 @@ function Page12() {
   );
 }
 
-export default Page12;
+export default WeekFourPage12;

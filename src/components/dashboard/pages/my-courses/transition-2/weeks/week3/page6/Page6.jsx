@@ -36,24 +36,33 @@ function Page6() {
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
-
     const stepData = answers.find((item) => item.stepId === currentStep);
     if (!stepData) {
+      setErrorMessage("Oops! All inputs must be filled out.");
+      return false;
+    }
+
+    const values = Object.values(stepData.value);
+    if (values.length < 1) {
+      setErrorMessage("At least 1 value are required!");
+      return false;
+    }
+
+    const emptyInputs = values.filter((value) => value.trim() === "");
+    if (emptyInputs.length > 0) {
       setErrorMessage(
-        "Please select both Energy Level and Zone of Regulation."
+        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
       );
       return false;
     }
 
-    const { energyLevel, zone } = stepData.value;
-    if (!energyLevel || !zone) {
-      setErrorMessage("Please complete both dropdowns before proceeding.");
-      return false;
-    }
+    setErrorMessage(""); // Clear error if input is valid
 
-    setErrorMessage("");
-    const activityData = { page: pageData.id, answer: answers };
-    dispatch(saveActivity(activityData));
+    const activityData = {
+      page: pageData.id,
+      answer: answers,
+    };
+    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
     return true;
   };
@@ -62,13 +71,13 @@ function Page6() {
     if (!step) return <div>Invalid Step</div>;
 
     switch (step.type) {
-      case "dualDropdownScenario":
+      case "dropdownScenario":
         return (
           <Frame
             data={{
               step: step.stepId,
               question: step.question,
-              dropdownOptions: pageData.dropdownOptions,
+              options: step.options,
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
@@ -83,7 +92,7 @@ function Page6() {
   return (
     <>
       {renderStep()}
-      {errorMessage && (
+      {currentStep !== 1 && errorMessage && (
         <div className="text-danger">{errorMessage}</div>
       )}{" "}
       {/* Display error message */}

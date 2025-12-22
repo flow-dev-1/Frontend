@@ -554,7 +554,7 @@ button {
 
   .resilience-question-box-container {
     /* min-height: 37vh; */
-    max-height: 40vh;
+    /* max-height: 40vh; */
     padding: 1rem 0.5rem;
     /* width: max-content; */
   }

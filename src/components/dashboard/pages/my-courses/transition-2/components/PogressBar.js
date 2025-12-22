@@ -16,7 +16,9 @@ function ProgressBar({ value, handleChange }) {
                         width: 100%;
                         height: 16px;
                         border-radius: 8px;
-                        background: linear-gradient(to right, #2563eb 0%, #2563eb ${value}%, #d1d5db ${value}%, #d1d5db 100%);
+                        background: linear-gradient(to right, #2563eb 0%, #2563eb ${
+                          value * 10
+                        }%, #d1d5db ${value * 10}%, #d1d5db 100%);
                     }
                     
                     input[type=range]::-webkit-slider-thumb {
@@ -45,26 +47,26 @@ function ProgressBar({ value, handleChange }) {
       <input
         type="range"
         min="0"
-        max="100"
+        max="10"
         value={value}
         onChange={handleChange}
-        step={10}
+        step={1}
         className="custom-range"
         style={{
-          "--range-progress": `${value}%`,
+          "--range-progress": `${value * 10}%`,
         }}
       />
 
       <div className="d-flex justify-content-between gap-0 ms-2 align-left-lg-custom w-100">
         <h2 className="text-gray fs-1">0</h2>
-        <h2 className="text-gray fs-1">50</h2>
-        <h2 className="text-gray fs-1">100</h2>
+        <h2 className="text-gray fs-1">5</h2>
+        <h2 className="text-gray fs-1">10</h2>
       </div>
-      <div className="d-flex justify-content-between gap-0 ms-2 align-left-lg-custom w-100">
+      {/* <div className="d-flex justify-content-between gap-0 ms-2 align-left-lg-custom w-100">
         <h2 className="text-black fs-1">Poor</h2>
         <h2 className="text-gray fs-1"></h2>
         <h2 className="text-black fs-1">Great</h2>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -155,60 +155,85 @@ export const assessments = {
     questions: [
       {
         id: 1,
-        question: "What does the 'S' in the SONAR method stand for?",
+        question:
+          "You’ve just met a group of new students in your hostel. They’re fun to be around, but they often skip lectures and mock those who study. You enjoy their company, but you’re worried about your grades. What’s the smartest decision to make?",
         options: [
-          { id: "A", text: "Start talking." },
-          { id: "B", text: "Stop when you notice big emotions." },
-          { id: "C", text: "Stay calm." },
-          { id: "D", text: "Smile through your feelings." },
+          {
+            id: "A",
+            text: "Keep hanging out with them since you can always study later..",
+          },
+          { id: "B", text: "Stop talking to them completely and stay alone." },
+          {
+            id: "C",
+            text: "Limit your time with them and find friends who share your academic goals.",
+          },
+          {
+            id: "D",
+            text: "Skip lectures too, one or two absences won’t matter.",
+          },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 2,
         question:
-          "Which step of the SONAR method encourages you to give a name to what you are feeling?",
+          "You and your roommate disagree on how to keep your shared space tidy. He keeps leaving his things around, and it’s bothering you. What should you do?",
         options: [
-          { id: "A", text: "Observe." },
-          { id: "B", text: "Name it." },
-          { id: "C", text: "Accept." },
-          { id: "D", text: "Regulate." },
+          { id: "A", text: "Shout at him so he understands you’re serious." },
+          { id: "B", text: "Complain about him to other roommates." },
+          {
+            id: "C",
+            text: "Have a calm conversation and agree on clear rules for your space.",
+          },
+          { id: "D", text: "Ignore it completely; he’ll change eventually." },
+        ],
+        correctOption: "C",
+      },
+      {
+        id: 3,
+        question:
+          "A classmate always borrows your notes and never shares hers. You’re starting to feel used. What’s the best way to handle it?",
+        options: [
+          { id: "A", text: "Keep lending her your notes so she likes you." },
+          {
+            id: "B",
+            text: "Set boundaries and politely tell her you’d like a fair exchange next time.",
+          },
+          { id: "C", text: "Gossip about her to your friends." },
+          { id: "D", text: "Stop talking to her altogether." },
         ],
         correctOption: "B",
       },
       {
-        id: 3,
-        question: "What is the purpose of the 'A' in the SONAR method?",
-        options: [
-          { id: "A", text: "Avoid your emotions." },
-          { id: "B", text: "Act on your feelings." },
-          { id: "C", text: "Accept what you are feeling." },
-          { id: "D", text: "Analyze the situation." },
-        ],
-        correctOption: "C",
-      },
-      {
         id: 4,
-        question: "Which of the following is NOT a part of the SONAR method?",
+        question:
+          "Your friend always calls you “boring” because you’d rather study than go out. You’re beginning to feel bad about yourself. What should you do?",
         options: [
-          { id: "A", text: "Observe." },
-          { id: "B", text: "Name." },
-          { id: "C", text: "Analyze." },
-          { id: "D", text: "Regulate." },
+          { id: "A", text: "Go out to prove you’re fun." },
+          {
+            id: "B",
+            text: "Remember your priorities and stick to what’s best for you.",
+          },
+          { id: "C", text: "Stop being friends with anyone who studies." },
+          { id: "D", text: "Apologize for focusing on school." },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 5,
-        question: "Why is the SONAR method important?",
+        question:
+          "Your coursemate invites you to an outing that will cost most of your month’s allowance. You’d love to go, but you also need to buy a textbook for your course. What’s the best choice?",
         options: [
-          { id: "A", text: "It helps us ignore our emotions." },
+          {
+            id: "A",
+            text: "Go for the outing; experiences are more important than books.",
+          },
           {
             id: "B",
-            text: "It teaches us to control and understand our emotions better.",
+            text: "Buy the textbook first and plan outings that fit your budget later.",
           },
-          { id: "C", text: "It stops us from feeling emotions." },
-          { id: "D", text: "It makes our emotions disappear completely." },
+          { id: "C", text: "Ask your parents for more money." },
+          { id: "D", text: "Skip both, it’s too stressful to decide." },
         ],
         correctOption: "B",
       },
@@ -220,63 +245,81 @@ export const assessments = {
     questions: [
       {
         id: 1,
-        question: "What are coping skills?",
+        question:
+          "Tola just got into university and is thrilled to finally make her own choices. She spends most nights hanging out with friends and skips early morning lectures because “no one is checking.” What’s the best advice for her?",
         options: [
-          { id: "A", text: "Strategies to avoid emotions." },
-          { id: "B", text: "Tools to help manage emotions and challenges." },
-          { id: "C", text: "Rules for controlling others’ feelings." },
-          { id: "D", text: "Exercises to increase physical strength." },
+          {
+            id: "A",
+            text: "Enjoy your freedom, you can always catch up later.",
+          },
+          {
+            id: "B",
+            text: "Freedom is great, but showing up for classes is part of being responsible.",
+          },
+          { id: "C", text: "Focus on fun; grades don’t define success." },
+          { id: "D", text: "Sleep in, health matters more than classes." },
         ],
         correctOption: "B",
       },
       {
         id: 2,
-        question: "Which of these is an example of a physical coping skill?",
+        question:
+          "David decides to join three student clubs, a football team, and a campus fellowship, all while juggling classes. He’s constantly tired and missing deadlines. What should he do?",
         options: [
-          { id: "A", text: "Writing in a journal." },
-          { id: "B", text: "Taking a deep breath." },
-          { id: "C", text: "Talking to a friend." },
-          { id: "D", text: "Listening to music." },
+          { id: "A", text: "Quit everything and focus only on academics." },
+          {
+            id: "B",
+            text: "Reassess his schedule and set priorities for better balance.",
+          },
+          {
+            id: "C",
+            text: "Keep pushing himself, university is supposed to be hectic.",
+          },
+          { id: "D", text: "Drop out of school temporarily." },
         ],
         correctOption: "B",
       },
       {
         id: 3,
         question:
-          "What type of coping skill involves expressing yourself through creativity?",
+          "Amara’s roommates invite her to a big weekend party, but she has an exam on Monday. She really wants to go, but knows she isn’t prepared yet. What should she do?",
         options: [
-          { id: "A", text: "Physical coping skill." },
-          { id: "B", text: "Emotional coping skill." },
-          { id: "C", text: "Creative coping skill." },
-          { id: "D", text: "Relaxation coping skill." },
+          { id: "A", text: "Go anyway, she deserves a break." },
+          { id: "B", text: "Study a little and then party all night." },
+          {
+            id: "C",
+            text: "Prioritize studying first and plan to celebrate after the exam.",
+          },
+          { id: "D", text: "Avoid both, just sleep through the weekend." },
         ],
         correctOption: "C",
       },
       {
         id: 4,
         question:
-          "Why is it important to have different types of coping skills?",
+          "Lara’s friends constantly pressure her to stay out late, even when she’s tired. She doesn’t want to lose them, so she always agrees. What skill does Lara need to practice more?",
         options: [
-          { id: "A", text: "So you can teach them to others." },
-          {
-            id: "B",
-            text: "Because what works for one person may not work for another.",
-          },
-          { id: "C", text: "To help you avoid all emotions." },
-          { id: "D", text: "To make sure you are always happy." },
+          { id: "A", text: "Time management." },
+          { id: "B", text: "Setting healthy boundaries." },
+          { id: "C", text: "Financial budgeting." },
+          { id: "D", text: "Conflict resolution." },
         ],
         correctOption: "B",
       },
       {
         id: 5,
-        question: "Which of the following is NOT a healthy coping skill?",
+        question:
+          "Michael has the freedom to choose how to study. He prefers to wait until the night before exams to cram everything. He passes sometimes, but feels burnt out. What’s a better way to handle his academic freedom?",
         options: [
-          { id: "A", text: "Yelling at someone when you’re upset." },
-          { id: "B", text: "Drawing to express your feelings." },
-          { id: "C", text: "Taking a walk to calm down." },
-          { id: "D", text: "Talking to someone you trust." },
+          { id: "A", text: "Keep doing what works, he’s still passing." },
+          {
+            id: "B",
+            text: "Build consistent study habits to manage freedom effectively.",
+          },
+          { id: "C", text: "Study only when he feels like it." },
+          { id: "D", text: "Rely on friends’ summaries." },
         ],
-        correctOption: "A",
+        correctOption: "B",
       },
     ],
   },
@@ -287,128 +330,141 @@ export const assessments = {
       {
         id: 1,
         question:
-          "You just failed a test that you studied really hard for, and now you feel like giving up. What is the best way to handle this situation?",
+          "Tola moved into the university hostel and misses her family badly. She spends hours crying and refuses to make new friends. What’s the best resilient response?",
         options: [
-          { id: "A", text: "Ignore how you feel and move on." },
-          { id: "B", text: "Control and manage your emotions." },
-          { id: "C", text: "Hide your emotions from others." },
-          { id: "D", text: "Let your emotions control you." },
+          { id: "A", text: "Keep to herself until she feels better." },
+          {
+            id: "B",
+            text: "Stay connected with family while building new friendships to adjust.",
+          },
+          { id: "C", text: "Go home every weekend to avoid loneliness." },
+          {
+            id: "D",
+            text: "Ignore her feelings and pretend everything is fine.",
+          },
         ],
         correctOption: "B",
       },
       {
         id: 2,
         question:
-          "During class, you feel calm and focused on the lesson. Which zone of regulation are you in?",
+          "John failed his first university test and feels like giving up. What should he do to show resilience?",
         options: [
-          { id: "A", text: "Red Zone." },
-          { id: "B", text: "Yellow Zone." },
-          { id: "C", text: "Green Zone." },
-          { id: "D", text: "Blue Zone." },
+          { id: "A", text: "Blame the lecturer for being too strict." },
+          {
+            id: "B",
+            text: "Review what went wrong, ask for help, and try a new study plan.",
+          },
+          { id: "C", text: "Stop attending the class completely." },
+          { id: "D", text: "Compare his score to others." },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 3,
         question:
-          "You’re really angry after a disagreement with your friend, and you feel like yelling. What is the first step in the SONAR method to help you calm down?",
+          "Amaka joined a new department but feels like she doesn’t belong because everyone already knows each other. What’s the best thing to do?",
         options: [
-          { id: "A", text: "Accept what you are feeling." },
-          { id: "B", text: "Stop when you notice the big emotions." },
-          { id: "C", text: "Name your emotion." },
-          { id: "D", text: "Observe the feelings in your body." },
+          { id: "A", text: "Avoid everyone until someone approaches her." },
+          {
+            id: "B",
+            text: "Join a study group or club to meet people with similar interests.",
+          },
+          { id: "C", text: "Drop the course and switch departments." },
+          {
+            id: "D",
+            text: "Only hang out with her old friends from secondary school.",
+          },
         ],
         correctOption: "B",
       },
       {
         id: 4,
         question:
-          "Your team just lost an important game, and you feel sad and frustrated. What can coping skills help you do?",
+          "Sarah says, “I want to do better next semester.” What’s wrong with this goal?",
         options: [
-          { id: "A", text: "Ignore your emotions." },
-          { id: "B", text: "Regulate your emotions effectively." },
-          { id: "C", text: "Always feel happy." },
-          { id: "D", text: "Avoid dealing with your feelings." },
+          { id: "A", text: "It’s not big enough." },
+          { id: "B", text: "It’s not SMART." },
+          { id: "C", text: "It’s too difficult." },
+          { id: "D", text: "It’s too time-bound." },
         ],
         correctOption: "B",
       },
       {
         id: 5,
         question:
-          "You’re so upset that you want to throw your backpack across the room. Which of these is a better way to handle your emotions?",
+          "Chika sets a goal to “become a millionaire this semester.” What makes this goal unrealistic?",
         options: [
-          { id: "A", text: "Taking a break." },
-          { id: "B", text: "Throwing things." },
-          { id: "C", text: "Deep breathing." },
-          { id: "D", text: "Talking to a trusted adult." },
+          { id: "A", text: "It’s not time-bound." },
+          { id: "B", text: "It’s not achievable given her current resources." },
+          { id: "C", text: "It’s not measurable." },
+          { id: "D", text: "It’s not relevant." },
         ],
-        correctOption: "A",
+        correctOption: "B",
       },
       {
         id: 6,
         question:
-          "You are so excited about winning a competition that you can’t sit still in class. Which zone of regulation are you in?",
+          "After failing a course, Blessing says, “I’m not good enough for this department.” What mindset is she displaying?",
         options: [
-          { id: "A", text: "Red Zone." },
-          { id: "B", text: "Yellow Zone." },
-          { id: "C", text: "Blue Zone." },
-          { id: "D", text: "Green Zone." },
+          { id: "A", text: "Growth mindset." },
+          { id: "B", text: "Fixed mindset." },
+          { id: "C", text: "Responsible mindset." },
+          { id: "D", text: "Positive mindset." },
         ],
         correctOption: "B",
       },
       {
         id: 7,
-        question:
-          "Your heart is racing, and your hands are sweaty before giving a big presentation. What is the purpose of naming your emotions in the SONAR method?",
+        question: "When challenges arise, resilient students usually:",
         options: [
-          { id: "A", text: "To distract yourself." },
-          { id: "B", text: "To blame others for how you feel." },
-          { id: "C", text: "To understand what you are feeling." },
-          { id: "D", text: "To ignore the emotion." },
-        ],
-        correctOption: "C",
-      },
-      {
-        id: 8,
-        question:
-          "You’re feeling tired and unmotivated after staying up late playing video games. Which zone are you in, and how might you feel?",
-        options: [
-          { id: "A", text: "Green Zone, calm and happy." },
-          { id: "B", text: "Blue Zone, sad and low energy." },
-          { id: "C", text: "Red Zone, angry and out of control." },
-          { id: "D", text: "Yellow Zone, frustrated and silly." },
+          { id: "A", text: "Avoid the situation completely." },
+          { id: "B", text: "Learn from setbacks and keep trying." },
+          { id: "C", text: "Blame others for their problems." },
+          { id: "D", text: "Pretend nothing happened." },
         ],
         correctOption: "B",
       },
       {
+        id: 8,
+        question:
+          "Ada sets a goal to “join a study group to improve her grades before the end of the semester.” What type of goal is this?",
+        options: [
+          { id: "A", text: "Short-term goal." },
+          { id: "B", text: "Long-term goal." },
+          { id: "C", text: "Impossible goal." },
+          { id: "D", text: "Non-academic goal." },
+        ],
+        correctOption: "A",
+      },
+      {
         id: 9,
         question:
-          "You’re starting to lose focus while doing homework, but you don’t want to get distracted. Which coping skill might help you stay on task?",
+          "If Chioma wants to overcome her fear of public speaking, which goal is SMART?",
         options: [
-          { id: "A", text: "Listening to loud music." },
-          { id: "B", text: "Writing in a journal." },
-          { id: "C", text: "Doing a quick stretch." },
-          { id: "D", text: "Counting to 10." },
+          { id: "A", text: "I’ll try to be more confident." },
+          {
+            id: "B",
+            text: "I’ll practice speaking for 5 minutes every week for two months.",
+          },
+          { id: "C", text: "I’ll stop being afraid." },
         ],
-        correctOption: "C",
+        correctOption: "B",
       },
       {
         id: 10,
         question:
-          'Before an exam, you feel a knot in your stomach and your breathing quickens. What does "observe the feelings in your body" mean in the SONAR method?',
+          "Emmanuel values honesty but lies to his lecturer about missing an assignment. What does this show?",
         options: [
-          {
-            id: "A",
-            text: "Pay attention to how your body reacts to emotions.",
-          },
+          { id: "A", text: "His values are not important." },
           {
             id: "B",
-            text: "Ignore physical sensations and focus on your thoughts.",
+            text: "His actions are not aligned with his stated values.",
           },
-          { id: "C", text: "Blame your body for how you feel." },
-          { id: "D", text: "Control all physical movements." },
+          { id: "C", text: "He values responsibility more." },
+          { id: "D", text: "His lecturer is too strict." },
         ],
-        correctOption: "A",
+        correctOption: "B",
       },
     ],
   },

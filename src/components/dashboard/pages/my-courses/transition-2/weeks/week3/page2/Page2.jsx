@@ -1,137 +1,69 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
+import ProgressBar from "../../../components/PogressBar";
 import Button from "../../../components/Button";
-import StepIndicator from "../../../components/StepIndicator";
-import {
-  selectPageData,
-  selectCurrentStep,
-} from "../../../../../../../../redux/reducers/navigationSlice";
+import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-import SONARFrame from "./components/SONARFrame";
 
 function WeekThreePage2() {
   const dispatch = useDispatch();
-  const currentStep = useSelector(selectCurrentStep);
+  const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
   const userAnswers = useSelector(userAnswer);
-  const pageData = useSelector(selectPageData);
-
-  const totalSteps = pageData?.steps?.length || 0;
-  const step = pageData?.steps[currentStep - 1];
-
-  const [answers, setAnswers] = useState({});
+  const [myAnswer, setMyAnswer] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (!userAnswers) return;
-    const response = userAnswers.activities?.find(
+    const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    if (response?.answer) {
-      setAnswers(response.answer);
-    }
+    setMyAnswer(response?.answer ? response.answer : 0);
+    return () => {};
   }, [userAnswers]);
 
   const saveUserInput = () => {
-    if (currentStep === 1 || adminDatas.isAdmin) return true;
-
-    if (step?.type === "sonar") {
-      const letters = step.letters || [];
-      for (let i = 0; i < letters.length; i++) {
-        const letter = letters[i].key;
-        if (i > 0) {
-          const prevKey = letters[i - 1].key;
-          if (!answers[prevKey] || !answers[prevKey].trim()) {
-            setErrorMessage(
-              `Please complete "${letters[i - 1].labelFull}" before proceeding.`
-            );
-            return false;
-          }
-        }
-        if (!answers[letter] || !answers[letter].trim()) {
-          setErrorMessage(
-            `Please complete "${letters[i].labelFull}" before proceeding.`
-          );
-          return false;
-        }
-      }
-
-      setErrorMessage("");
-      const activityData = {
-        page: pageData.id,
-        answer: answers,
-      };
-      dispatch(saveActivity(activityData));
-      return true;
+    if (
+      !adminDatas.isAdmin &&
+      (!myAnswer || myAnswer === "0" || myAnswer === 0)
+    ) {
+      setErrorMessage("Oops! Please enter a valid input!");
+      return false;
     }
 
+    setErrorMessage(""); // Clear error if input is valid
+    // Allow flow admin to proceed without input but do not dispatch answer
+    // if (adminDatas.isAdmin) return true
+    dispatch(
+      saveActivity({
+        page: pageData.id,
+        answer: myAnswer,
+      })
+    );
     return true;
   };
 
-  const renderStep = () => {
-    if (!step) return <div>Invalid Step</div>;
-
-    switch (step.type) {
-      case "instruction":
-        return (
-          <QuestionBox>
-            <div className="text-center mb-5 mt-5">
-              <h1 className="text-white bg-blue py-2 px-5 rounded d-inline">
-                Instruction
-              </h1>
-            </div>
-            <div className="text-center mt-4">
-              {step.instructions.map((instruction, i) => (
-                <React.Fragment key={i}>
-                  <h2 className="text-gray py-2 px-5 d-inline-block text-start">
-                    {instruction}
-                  </h2>
-                  {i < step.instructions.length - 1 && (
-                    <>
-                      <br />
-                      <br />
-                    </>
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
-          </QuestionBox>
-        );
-
-      case "sonar":
-        return (
-          <SONARFrame
-            scenario={step.scenario}
-            letters={step.letters}
-            answers={answers}
-            setAnswers={setAnswers}
-            setErrorMessage={setErrorMessage}
-          />
-        );
-
-      default:
-        return <div>Unknown step type</div>;
-    }
+  const handleInputChange = (e) => {
+    setErrorMessage("");
+    setMyAnswer(e.target.value);
   };
 
   return (
     <>
-      {renderStep()}
-
-      {currentStep !== 1 && errorMessage && (
-        <div className="text-danger text-center mt-3 fw-bold fs-5">
-          {errorMessage}
+      <QuestionBox>
+        <div className="d-flex gap-3 align-center-lg-custom flex-column flex-md-row">
+          <h2 className="text-blue fs-1">Question: </h2>
+          <h2 className="text-gray fs-1">{pageData.question} </h2>
         </div>
-      )}
-
-      <StepIndicator totalSteps={totalSteps} />
-
-      <div className="d-flex justify-content-center gap-4 mt-4">
+        <ProgressBar handleChange={handleInputChange} value={myAnswer} />
+      </QuestionBox>
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>

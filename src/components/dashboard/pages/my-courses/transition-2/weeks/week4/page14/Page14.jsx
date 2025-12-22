@@ -1,82 +1,127 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import QuestionBox from "../../../components/QuestionBox";
-import BigTextBox from "../../../components/BigTextBox";
-import Button from "../../../components/Button";
-import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
-import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  selectPageData,
+  selectCurrentStep,
+} from "../../../../../../../../redux/reducers/navigationSlice";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import StepIndicator from "../../../components/StepIndicator";
+import Button from "../../../components/Button";
+
+import CheckboxFrame from "./components/CheckboxFrame";
+import TextInputFrame from "./components/TextInputFrame";
 
 function Page14() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
-  const adminDatas = useSelector(adminData);
+  const currentStep = useSelector(selectCurrentStep);
   const userAnswers = useSelector(userAnswer);
-  const [myAnswer, setMyAnswer] = useState(userAnswers);
+  const adminDatas = useSelector(adminData);
+
+  const totalSteps = pageData?.steps?.length || 0;
+  const step = pageData?.steps[currentStep - 1];
+
+  const [checkboxAnswers, setCheckboxAnswers] = useState({});
+  const [textAnswer, setTextAnswer] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (!userAnswers) return;
-    const response = userAnswers?.activities?.find(
+    const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setMyAnswer(response?.answer ? response.answer : "");
-    return () => {};
-  }, [userAnswers]);
+
+    if (response?.answer) {
+      setCheckboxAnswers(response.answer.checkboxAnswers || {});
+      setTextAnswer(response.answer.textAnswer || "");
+    }
+  }, [userAnswers, pageData.id]);
 
   const saveUserInput = () => {
-    if (!adminDatas.isAdmin && !myAnswer) {
-      setErrorMessage("Oops! Please enter a valid input!");
-      return false;
+    if (adminDatas.isAdmin) return true;
+
+    // Validation for step 2 (checkbox)
+    if (currentStep === 2) {
+      const hasSelection = Object.values(checkboxAnswers).some((val) => val);
+      if (!hasSelection) {
+        setErrorMessage("Oops! Please select at least one option!");
+        return false;
+      }
     }
 
-    setErrorMessage(""); // Clear error if input is valid
-    // Allow flow admin to proceed without input but do not dispatch answer
-    if (adminDatas.isAdmin) return true;
+    // Validation for step 1 (text input)
+    if (currentStep === 1 || currentStep === 3) {
+      if (!textAnswer.trim()) {
+        setErrorMessage("Oops! Please enter a valid input!");
+        return false;
+      }
+    }
+
+    setErrorMessage("");
+
     dispatch(
       saveActivity({
         page: pageData.id,
-        answer: myAnswer,
+        answer: {
+          checkboxAnswers,
+          textAnswer,
+        },
       })
     );
+
     return true;
   };
 
-  const handleInputChange = (e) => {
-    setErrorMessage("");
-    setMyAnswer(e.target.value);
+  // Check if "Others" option is selected
+  // const isOthersSelected = () => {
+  //   if (currentStep !== 1) return false;
+  //   const othersIndex = step?.options?.findIndex(
+  //     (option) => option.toLowerCase() === "others"
+  //   );
+  //   return othersIndex !== -1 && checkboxAnswers[othersIndex];
+  // };
+
+  const renderStep = () => {
+    if (!step) return <div>Invalid Step</div>;
+
+    switch (step.type) {
+      case "checkbox":
+        return (
+          <CheckboxFrame
+            step={step}
+            checkboxAnswers={checkboxAnswers}
+            setCheckboxAnswers={setCheckboxAnswers}
+            setErrorMessage={setErrorMessage}
+          />
+        );
+
+      case "question":
+        return (
+          <TextInputFrame
+            step={step}
+            textAnswer={textAnswer}
+            setTextAnswer={setTextAnswer}
+            setErrorMessage={setErrorMessage}
+          />
+        );
+
+      default:
+        return <div>Unknown step type</div>;
+    }
   };
 
   return (
     <>
-      <QuestionBox>
-        <div className="d-flex justify-content-center">
-          <h2
-            className="text-white rounded text-center px-5 py-1 d-inline mt-4 mb-2"
-            style={{ background: pageData.zoneBgColor }}
-          >
-            {pageData.zone}
-          </h2>
-        </div>
+      {renderStep()}
+      {errorMessage && <div className="text-danger mt-3">{errorMessage}</div>}
 
-        <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-center">
-          <h2 className="text-blue fs-1 mb-0 flex-shrink-0 question-text">
-            Question:
-          </h2>
+      <StepIndicator totalSteps={totalSteps} />
 
-          <div className="d-flex align-items-center flex-grow-1 min-w-0">
-            <h2 className="text-gray fs-1 mb-0 flex-grow-1 md:text-truncate">
-              {pageData.question}
-            </h2>
-          </div>
-        </div>
-        <BigTextBox handleChange={handleInputChange} value={myAnswer} />
-      </QuestionBox>
-      {errorMessage && <div className="text-danger">{errorMessage}</div>}
-      <div className="d-flex justify-content-center gap-96px mt-3 gap-4">
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
