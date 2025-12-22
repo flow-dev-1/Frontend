@@ -31,19 +31,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
 
   const { questions: assessments } = getWeekAssessment(2);
 
-
-
-  const [activity1, activity2, activity3, activity4] = pages;
-  const [q1, q2] = activity3.steps;
-
-  const answers = activityData?.[2]?.answer || [];
-  const [a1, a2] = answers;
-
-  const [Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8] = activity4.steps;
-
-  const answers1 = activityData?.[3]?.answer || [];
-  const [A1, A2, A3, A4, A5, A6, A7, A8] = answers1;
-
+  const [activity1, activity2, activity3, activity4, activity5] = pages;
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
@@ -57,10 +45,6 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     refetchOnWindowFocus: true,
     keepPreviousData: false,
   });
-
-
-
-
 
   const mutation = useMutation({
     mutationFn: () =>
@@ -101,7 +85,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     setAssessmentData(data.assessment?.assessments);
     setWeekTwoData(true);
 
-    return () => { };
+    return () => {};
   }, [data]);
 
   function getActivityAnswer(activityId, itemId) {
@@ -143,10 +127,12 @@ function Week2({ enrollmentId, setWeekTwoData }) {
 
     const data =
       type === "question"
-        ? activity2.steps.filter(item => item.type === "dropdownScenario").map(item => item.question)
-        : activityData[1].answer.map(item => item.value);
+        ? activity2.steps
+            .filter((item) => item.type === "dropdownScenario")
+            .map((item) => item.question)
+        : activityData[1].answer.map((item) => item.value);
 
-    return data
+    return data;
 
     // const items = indices?.map((index) => activity2?.images[index]) || [];
 
@@ -160,7 +146,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     // });
   }
 
-  if (isPending) {
+  if (!isPending) {
     return <div>Loading...</div>;
   }
 
@@ -197,30 +183,32 @@ function Week2({ enrollmentId, setWeekTwoData }) {
 
   // Color mapping configuration
   const COLOR_MAP = {
-    'A': { bg: '#0d6efd', text: '#ffffff', label: 'Blue' },
-    'B': { bg: '#198754', text: '#ffffff', label: 'Green' },
-    'C': { bg: '#ffc107', text: '#000000', label: 'Yellow' },
-    'D': { bg: '#dc3545', text: '#ffffff', label: 'Red' }
+    A: { bg: "#0d6efd", text: "#ffffff", label: "Blue" },
+    B: { bg: "#198754", text: "#ffffff", label: "Green" },
+    C: { bg: "#ffc107", text: "#000000", label: "Yellow" },
+    D: { bg: "#dc3545", text: "#ffffff", label: "Red" },
   };
 
   // Helper function to get color configuration
   const getColorConfig = (value) => {
-    return COLOR_MAP[value] || { bg: 'transparent', text: '#000000', label: value };
+    return (
+      COLOR_MAP[value] || { bg: "transparent", text: "#000000", label: value }
+    );
   };
 
   // Helper function to render colored answer
   const renderColoredAnswer = (value) => {
-    const colors = getColorConfig(value || '');
+    const colors = getColorConfig(value || "");
 
     return (
       <h2
         style={{
           backgroundColor: colors.bg,
           color: colors.text,
-          padding: '0px 16px',
-          display: 'inline-block',
-          width: '120px',
-          textAlign: 'center'
+          padding: "0px 16px",
+          display: "inline-block",
+          width: "120px",
+          textAlign: "center",
         }}
         className="fs-3"
       >
@@ -231,12 +219,20 @@ function Week2({ enrollmentId, setWeekTwoData }) {
 
   // Helper function to get feedback for activity
   const hasActivityFeedback = (activityData, activityId) => {
-    return activityData?.find((activity) => activity.page === activityId)?.feedback;
+    return activityData?.find((activity) => activity.page === activityId)
+      ?.feedback;
   };
 
   // Helper function to render question section
   const renderQuestionSection = (question, answer, activityId, props, sn) => {
-    const { activityData, isAdmin, setActivityFeedbackId, handleModalOpen, setModalData, getActivityFeedback } = props;
+    const {
+      activityData,
+      isAdmin,
+      setActivityFeedbackId,
+      handleModalOpen,
+      setModalData,
+      getActivityFeedback,
+    } = props;
     const feedback = hasActivityFeedback(activityData, activityId);
 
     return (
@@ -294,14 +290,29 @@ function Week2({ enrollmentId, setWeekTwoData }) {
   };
 
   // Helper function to render question section
-  const renderActivity4QuestionSection = (question, answer, activityId, props, sn) => {
-    const { activityData, isAdmin, setActivityFeedbackId, handleModalOpen, setModalData, getActivityFeedback } = props;
+  const renderActivity4QuestionSection = (
+    question,
+    answer,
+    activityId,
+    props,
+    sn
+  ) => {
+    const {
+      activityData,
+      isAdmin,
+      setActivityFeedbackId,
+      handleModalOpen,
+      setModalData,
+      getActivityFeedback,
+    } = props;
     const feedback = hasActivityFeedback(activityData, activityId);
 
     return (
       <>
         <div className="d-flex gap-3">
-          <h2 className="text-blue fs-md-1" style={{ whiteSpace: 'nowrap' }}>Questions {sn}:</h2>
+          <h2 className="text-blue fs-md-1" style={{ whiteSpace: "nowrap" }}>
+            Questions {sn}:
+          </h2>
           <p className="text-blue fs-md-4">{question}</p>
         </div>
 
@@ -321,7 +332,6 @@ function Week2({ enrollmentId, setWeekTwoData }) {
               </p>
             </div>
           </div>
-
 
           {isAdmin && !feedback && (
             <Icon
@@ -370,7 +380,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     setActivityFeedbackId,
     handleModalOpen,
     setModalData,
-    getActivityFeedback
+    getActivityFeedback,
   };
 
   return (
@@ -428,54 +438,21 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         )
       }
       <hr />
-
-      {/* Activity 2  */}
+      {/* Activity 2 */}
       <p className="bg-yellow py-md-3 px-md-5 py-1 px-2 text-gray d-inline-block rounded-5 fs-md-4">
         Activity 2
       </p>
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-md-1">Questions:</h2>
-        <p className="text-blue fs-md-4">Match the mood to the right Zone</p>
+        <p className="text-blue fs-md-4">{activity2.question}</p>
       </div>
       <div className="d-flex gap-3">
-        <h2 className="text-gray fs-md-1">Answers:</h2>
-
-        <div className="d-flex flex-column flex-grow-1">
-
-          {/* Items rows */}
-          {Array.from({ length: 4 }).map((_, idx) => {
-            const fixedValue = def("fixed")?.[idx];
-
-            // Define color mappings
-            const colorMap = {
-              'A': { bg: 'bg-primary', text: 'text-white', label: 'Blue' },
-              'B': { bg: 'bg-success', text: 'text-white', label: 'Green' },
-              'C': { bg: 'bg-warning', text: 'text-dark', label: 'Yellow' },
-              'D': { bg: 'bg-danger', text: 'text-white', label: 'Red' }
-            };
-
-            const colors = colorMap[fixedValue] || { bg: '', text: '', label: fixedValue };
-
-            return (
-              <div key={idx} className="d-flex">
-                <div className="col-6 px-md-5 px-2 py-md-3 py-1">
-                  <p className="fs-md-4 mb-0">
-                    {idx + 1}. {def("question")?.[idx]}
-                  </p>
-                </div>
-                <h2 className="col-6 px-md-5 px-2 py-md-3 py-1 fs-3">
-                  <h2 className={`${colors.bg} ${colors.text} px-3 d-inline-block fs-3 text-center`} style={{ width: "120px" }}>
-                    {colors.label}
-                  </h2>
-                </h2>
-              </div>
-            );
-          })}
-        </div>
-
+        <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity2.id)}</p>
         {isAdmin &&
-          !activityData?.find((a) => a.page === activity2.id)?.feedback && (
+          !activityData?.find((activity) => activity.page === activity2.id)
+            ?.feedback && (
             <Icon
               onClick={() => {
                 setActivityFeedbackId({ activityId: activity2.id });
@@ -487,9 +464,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
             />
           )}
       </div>
-
-
-      {/* {
+      {
         // Show this only id theres a feedback
         activityData?.find((activity) => activity.page === activity2.id)
           ?.feedback && (
@@ -514,31 +489,167 @@ function Week2({ enrollmentId, setWeekTwoData }) {
             )}
           </div>
         )
-      } */}
+      }
       <hr />
-
-      {/* Activity 3  */}
+      {/* Activity 3 */}
       <p className="bg-yellow py-md-3 px-md-5 py-1 px-2 text-gray d-inline-block rounded-5 fs-md-4">
         Activity 3
       </p>
       <hr />
-      {renderActivity4QuestionSection(q1.question, a1, activity1.id, helperProps, 1)}
-      {renderActivity4QuestionSection(q2.question, a2, activity1.id, helperProps, 2)}
-
-
-      {/* Activity 3  */}
+      <div className="d-flex gap-3">
+        <h2 className="text-blue fs-md-1">Questions:</h2>
+        <p className="text-blue fs-md-4">{activity3.question}</p>
+      </div>
+      <div className="d-flex gap-3">
+        <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity3.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity3.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity3.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity3.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity3.id));
+                  setActivityFeedbackId({ activityId: activity3.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      {/* Activity 4 */}
       <p className="bg-yellow py-md-3 px-md-5 py-1 px-2 text-gray d-inline-block rounded-5 fs-md-4">
         Activity 4
       </p>
       <hr />
-      {renderActivity4QuestionSection(Q1.question, A1, activity1.id, helperProps, 1)}
-      {renderActivity4QuestionSection(Q2.question, A2, activity1.id, helperProps, 2)}
-      {renderActivity4QuestionSection(Q3.question, A3, activity1.id, helperProps, 3)}
-      {renderActivity4QuestionSection(Q4.question, A4, activity1.id, helperProps, 4)}
-      {renderActivity4QuestionSection(Q5.question, A5, activity1.id, helperProps, 5)}
-      {renderActivity4QuestionSection(Q6.question, A6, activity1.id, helperProps, 6)}
-      {renderActivity4QuestionSection(Q7.question, A7, activity1.id, helperProps, 7)}
-      {renderActivity4QuestionSection(Q8.question, A8, activity1.id, helperProps, 8)}
+      <div className="d-flex gap-3">
+        <h2 className="text-blue fs-md-1">Questions:</h2>
+        <p className="text-blue fs-md-4">{activity4.instruction}</p>
+      </div>
+      <div className="d-flex gap-3">
+        <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity4.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity4.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity4.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity4.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity4.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity4.id));
+                  setActivityFeedbackId({ activityId: activity4.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      {/* Activity 5 */}
+      <p className="bg-yellow py-md-3 px-md-5 py-1 px-2 text-gray d-inline-block rounded-5 fs-md-4">
+        Activity 5
+      </p>
+      <hr />
+      <div className="d-flex gap-3">
+        <h2 className="text-blue fs-md-1">Questions:</h2>
+        <p className="text-blue fs-md-4">{activity5.question}</p>
+      </div>
+      <div className="d-flex gap-3">
+        <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity5.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity5.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity5.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity5.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity5.id));
+                  setActivityFeedbackId({ activityId: activity5.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
 
       {/* Assesment 1 */}
       <p className="bg-yellow py-md-3 px-md-5 py-1 px-2 text-gray d-inline-block rounded-5 fs-md-4">
@@ -615,14 +726,14 @@ function Week2({ enrollmentId, setWeekTwoData }) {
             {score < 40
               ? "Well done on starting your journey into Emotional Regulation! You’ve begun to explore the basics, including understanding emotions and identifying energy levels, but there’s plenty of room to grow. Spend more time revisiting key concepts, such as understanding the SONAR method for managing emotions. Practice small coping techniques and try applying them to simple daily challenges. Remember, emotional regulation is a skill that develops over time, so keep learning and practicing."
               : score < 60
-                ? "Good job! You’ve shown a foundational understanding of emotional regulation. To build on this, focus on strengthening your ability to identify emotions as they arise and using the SONAR method to deal with them effectively. Practice coping skills like physical or creative activities to handle difficult moments. With consistent effort, you’ll see more confidence in managing emotions across different situations."
-                : score < 80
-                  ? "Great work! You’ve developed a solid understanding of emotional regulation. Over the course of these weeks, you’ve learned how to recognize energy levels, understand the SONAR method, and use basic coping skills. To take your skills further, focus on applying what you’ve learned to help you deal with high-energy or low-energy states and practice applying these skills in more complex situations. Keep practicing these techniques daily, and you’ll continue to see significant improvement in your emotional balance."
-                  : score < 95
-                    ? "Excellent work! You’ve demonstrated a strong understanding of emotional regulation concepts, from recognizing your energy levels to using the SONAR method and applying coping skills effectively. To keep growing, focus on applying these skills in a variety of scenarios, such as managing stress, improving relationships, or achieving personal goals. Your dedication to mastering emotional regulation is commendable—keep up the great work!"
-                    : score <= 100
-                      ? "Outstanding achievement! You’ve shown an exceptional understanding of emotional regulation and its application in your daily life. Your ability to recognize and manage emotions, balance energy levels, and use the SONAR framework effectively is truly impressive, and will set you up for great success and impact in life. Keep inspiring others with your emotional intelligence, and continue refining these skills as you grow. Your mastery of emotional regulation will serve you well in every aspect of life!"
-                      : ""}
+              ? "Good job! You’ve shown a foundational understanding of emotional regulation. To build on this, focus on strengthening your ability to identify emotions as they arise and using the SONAR method to deal with them effectively. Practice coping skills like physical or creative activities to handle difficult moments. With consistent effort, you’ll see more confidence in managing emotions across different situations."
+              : score < 80
+              ? "Great work! You’ve developed a solid understanding of emotional regulation. Over the course of these weeks, you’ve learned how to recognize energy levels, understand the SONAR method, and use basic coping skills. To take your skills further, focus on applying what you’ve learned to help you deal with high-energy or low-energy states and practice applying these skills in more complex situations. Keep practicing these techniques daily, and you’ll continue to see significant improvement in your emotional balance."
+              : score < 95
+              ? "Excellent work! You’ve demonstrated a strong understanding of emotional regulation concepts, from recognizing your energy levels to using the SONAR method and applying coping skills effectively. To keep growing, focus on applying these skills in a variety of scenarios, such as managing stress, improving relationships, or achieving personal goals. Your dedication to mastering emotional regulation is commendable—keep up the great work!"
+              : score <= 100
+              ? "Outstanding achievement! You’ve shown an exceptional understanding of emotional regulation and its application in your daily life. Your ability to recognize and manage emotions, balance energy levels, and use the SONAR framework effectively is truly impressive, and will set you up for great success and impact in life. Keep inspiring others with your emotional intelligence, and continue refining these skills as you grow. Your mastery of emotional regulation will serve you well in every aspect of life!"
+              : ""}
           </p>
         </div>
         <Modal

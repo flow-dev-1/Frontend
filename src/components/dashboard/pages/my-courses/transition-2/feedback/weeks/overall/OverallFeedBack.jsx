@@ -11,7 +11,7 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
   const { isAdmin, code } = useSelector(adminData);
 
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/resilience-feedback-overall", enrollmentId, 1],
+    queryKey: ["dashboard/tot-feedback-overall", enrollmentId, 1],
     queryFn: () =>
       isAdmin
         ? adminService.getUserCourseData(enrollmentId, 1, code)
@@ -32,15 +32,15 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
   function getFeedBackMessage(percentile) {
     switch (true) {
       case percentile >= 10 && percentile <= 39:
-        return "Well done on starting your journey into Emotional Regulation! You’ve begun to explore the basics, including understanding emotions and identifying energy levels, but there’s plenty of room to grow. Spend more time revisiting key concepts, such as understanding the SONAR method for managing emotions. Practice small coping techniques and try applying them to simple daily challenges. Remember, emotional regulation is a skill that develops over time, so keep learning and practicing."
+        return "You’ve taken an important first step in exploring Social and Emotional Learning and Positive Psychology. You’ve started to understand the value of emotional awareness, relationship skills, and teacher wellbeing. However, it seems you may still be building a full grasp of how SEL connects to classroom practice. Revisit the lessons and take time to reflect on how self-awareness and self-management can shape your approach to teaching. Don’t hesitate to ask questions or discuss ideas with your peers; collaboration is one of the best ways to deepen understanding. Every teacher starts somewhere, and your willingness to learn is already a sign of growth.";
       case percentile >= 40 && percentile <= 59:
-        return "Good job! You’ve shown a foundational understanding of emotional regulation. To build on this, focus on strengthening your ability to identify emotions as they arise and using the SONAR method to deal with them effectively. Practice coping skills like physical or creative activities to handle difficult moments. With consistent effort, you’ll see more confidence in managing emotions across different situations."
+        return "Good effort! You’re beginning to grasp key SEL and Positive Psychology principles such as self-awareness, empathy, and the importance of wellbeing in the classroom. You have a fair understanding of how emotional intelligence supports both teachers and students, but there’s room to strengthen your practical application. Try focusing on mindfulness and emotional regulation strategies in your daily teaching routine. Reflect after each class, ‘How did your emotional state affect your students' responses?’ The more intentional you are, the more confident and balanced you’ll become in integrating SEL principles effectively.";
       case percentile >= 60 && percentile <= 79:
-        return "Great work! You’ve developed a solid understanding of emotional regulation. Over the course of these weeks, you’ve learned how to recognize energy levels, understand the SONAR method, and use basic coping skills. To take your skills further, focus on applying what you’ve learned to help you deal with high-energy or low-energy states and practice applying these skills in more complex situations. Keep practicing these techniques daily, and you’ll continue to see significant improvement in your emotional balance."
+        return "Well done! You’ve shown a strong understanding of SEL and Positive Psychology concepts and are starting to connect them meaningfully to your classroom practice. You recognize how empathy, relationship-building, and emotional regulation influence learning outcomes. To keep improving, aim to apply SEL more consistently, model calm responses to challenges, and build structured moments for reflection or gratitude in your lessons. You’re well on your way to creating a classroom culture rooted in care, connection, and emotional growth.";
       case percentile >= 80 && percentile <= 94:
-        return "Excellent work! You’ve demonstrated a strong understanding of emotional regulation concepts, from recognizing your energy levels to using the SONAR method and applying coping skills effectively. To keep growing, focus on applying these skills in a variety of scenarios, such as managing stress, improving relationships, or achieving personal goals. Your dedication to mastering emotional regulation is commendable—keep up the great work!"
-      case percentile >= 95 && percentile <= 100:
-        return "Outstanding achievement! You’ve shown an exceptional understanding of emotional regulation and its application in your daily life. Your ability to recognize and manage emotions, balance energy levels, and use the SONAR framework effectively is truly impressive, and will set you up for great success and impact in life. Keep inspiring others with your emotional intelligence, and continue refining these skills as you grow. Your mastery of emotional regulation will serve you well in every aspect of life!";
+        return "Excellent work! You’ve demonstrated a clear understanding of SEL and Positive Psychology competencies and how its principles can transform both teaching and learning. You’ve likely developed effective strategies for fostering empathy, self-regulation, and resilience in your students, and you understand the importance of teacher wellbeing in sustaining those practices. Keep refining your skills by mentoring peers or sharing SEL practices in team meetings. Continue to model emotional intelligence in every interaction, and you will build the kind of classroom where students feel safe, motivated, and valued.";
+         case percentile >= 95:
+        return "Outstanding achievement! You’ve shown exceptional mastery of Social and Emotional Learning. You not only understand the theory but also demonstrate how to live it out in your teaching, balancing self-awareness, empathy, and resilience with skill. Your approach likely fosters deep trust, engagement, and growth in your students. Continue to inspire others by leading discussions on SEL implementation and supporting colleagues who are just beginning their journey. Your dedication to nurturing emotional wellbeing in education sets a powerful example. Keep shining, the ripple effect of your work will last far beyond the classroom.";
       default:
         return "";
     }
@@ -60,7 +60,7 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
 
   return (
     <>
-      <div className="bg-compassion--feedback question-box-container d-flex justify-content-center align-items-center flex-column gap-3">
+      <div className="bg-compassion--feedback custom-border-20 question-box-container d-flex justify-content-center align-items-center flex-column gap-3">
         <img src={celebrate} alt="celebrate" className="text-center" />
         <h1 className="text-green" style={{ fontSize: "100px" }}>
           Hurray!
@@ -70,18 +70,20 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
         Congratulations on completing the Transition Curriculum!
       </p> */}
       <p className="fs-md-3 text-gray mt-3">
-        Congratulations on completing the Emotional Regulation Curriculum! Over the past weeks,
-        you’ve learned what it means to regulate your emotions, explored your energy levels,
-        and discovered the powerful SONAR method for managing big emotions.
-        You’ve also built a toolbox of effective coping skills to support your emotional well-being.
+        Congratulations on completing the Social and Emotional Learning and Positive Psychology course!
+        Over the past weeks, you’ve learned what it truly means to teach with emotional intelligence,
+        self-awareness, and compassion. You’ve learned how SEL can strengthen not only your students’
+        growth but also your own wellbeing as an educator.
       </p>
       <p className="fs-md-3 text-gray my-3">
-        Remember, emotional regulation is a lifelong skill.
-        The tools and techniques you’ve gained in this course will serve you in countless ways,
-        helping you navigate challenges, build meaningful relationships, and stay true to yourself.
+        You now have practical strategies to manage stress, build meaningful relationships,
+        and foster a supportive, thriving classroom environment. Remember,
+        every interaction with a student is an opportunity to model empathy, resilience, and positivity.
       </p>
       <p className="fs-md-3 text-gray">
-        Keep practicing, reflecting, and growing—you’ve got this!
+        Keep practicing what you’ve learned, reflect often, stay mindful,
+        and continue nurturing both your emotional health and that of your students.
+        Teaching with heart transforms classrooms into communities where everyone grows together.
       </p>
 
       <div className="bg-blue p-1 p-md-3 mt-2 rounded rounded-md-4">

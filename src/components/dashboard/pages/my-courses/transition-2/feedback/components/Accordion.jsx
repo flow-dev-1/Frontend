@@ -4,6 +4,14 @@ import { Icon } from "@iconify/react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { ClimbingBoxLoader } from "react-spinners";
+import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { saveAs } from "file-saver";
+import pdfTemplate from "../../../../../../../assets/tot-images/pdf/template.pdf";
+import { useQuery } from "@tanstack/react-query";
+import userService from "../../../../../../../services/api/user.js";
+import adminService from "../../../../../../../services/api/admin.js";
+import { adminData } from "../../../../../../../redux/reducers/adminReducer.js";
+import { useSelector } from "react-redux";
 
 function Accordion({
   activeIndex,
@@ -12,63 +20,92 @@ function Accordion({
   allDataLoaded,
   hasPercentile,
   setHasPercentile,
+  enrollmentId,
 }) {
   const contentRef = useRef();
   const [pdfLoading, setPdfLoading] = useState(false);
   const [startDownload, setStartDownload] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const { isAdmin, code } = useSelector(adminData);
 
+  const [answers, setAnswers] = useState(null);
+
+  useEffect(() => {
+    if (!startDownload) return;
+
+    // download pdf, based on index, we will just check if the index is the one we want to downlaod, and serve the pdf we want, then return
+
+    // Worksheet
+    if (currentIndex === 6) {
+      console.log("downloading Worksheet pdf");
+
+      return;
+    }
+
+    // Final course PDF (index 7)
+    if (currentIndex === 7) {
+      const originalState = activeIndex;
+      setPdfLoading(true);
+      setActiveIndex(null);
+
+      if (!hasPercentile) {
+        setActiveIndex(originalState);
+        setPdfLoading(false);
+        return;
+      }
+      console.log("downloading course pdf");
+
+      const link = document.createElement("a");
+      link.href = "/Teacher Resources.pdf";
+      link.download = "Teacher Resources.pdf";
+      link.click();
+
+      setStartDownload(false);
+      setActiveIndex("");
+      setHasPercentile(false);
+      setPdfLoading(false);
+
+      return;
+    }
+  }, [hasPercentile, allDataLoaded, startDownload, currentIndex]);
+  // toDo: Fetch User assessment and Activity Data
+  const { data, isPending, status, isError } = useQuery({
+    queryKey: ["dashboard/tot-feedback-6", enrollmentId, 6],
+    queryFn: () =>
+      isAdmin
+        ? adminService.getUserCourseData(enrollmentId, 6, code)
+        : userService.getUserCourseData(enrollmentId, 6),
+    enabled: !!enrollmentId,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false,
+  });
   const handleToggle = (index) => {
     window.scroll(0, 0);
     setActiveIndex(activeIndex === index ? "" : index);
   };
 
   useEffect(() => {
-    if (!startDownload) return;
-    generatePDF();
-  }, [hasPercentile, allDataLoaded]);
-
-  const generatePDF = async () => {
-    const originalState = activeIndex;
-    setPdfLoading(true);
-    setActiveIndex(null);
-
-    if (!hasPercentile) {
-      setActiveIndex(originalState);
-      setPdfLoading(false);
-      return;
+    if (
+      data &&
+      data.activity &&
+      Array.isArray(data.activity.activities) &&
+      data.activity.activities[4] &&
+      data.activity.activities[4].answer !== undefined &&
+      data.activity.activities[4].answer !== null
+    ) {
+      setAnswers(data.activity.activities[4].answer);
     }
 
-    if (allDataLoaded) {
-      setTimeout(() => {
-        const input = contentRef.current;
+    return () => {};
+  }, [data]);
 
-        html2canvas(input).then((canvas) => {
-          const imgData = canvas.toDataURL("image/png");
-          const pdf = new jsPDF("p", "mm", "a4");
-          const imgWidth = 210;
-          const pageHeight = 295;
-          const imgHeight = (canvas.height * imgWidth) / canvas.width;
-          let heightLeft = imgHeight;
-          let position = 0;
-
-          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-          heightLeft -= pageHeight;
-
-          while (heightLeft >= 0) {
-            position = heightLeft - imgHeight;
-            pdf.addPage();
-            pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-          }
-
-          pdf.save("CompassionFeedback.pdf");
-          setActiveIndex("");
-          setPdfLoading(false);
-          setHasPercentile(false);
-        });
-      }, 1000);
-    }
-  };
+  if (isPending) {
+    // setWorksheetComponent("<div>Loading...</div>");
+  }
+  if (data?.status === "failed" || isError) {
+    // alert(`${data?.message} || "Internal server error!"`);
+  }
 
   return (
     <>
@@ -79,35 +116,42 @@ function Accordion({
       )}
       <div className="accordion" ref={contentRef}>
         <h2 className="accordion-header p-lg-2 p-md-4 bg-blue text-center text-white">
-          Feedback for Emotional Regulation
+          Feedback for ToT Course 1
         </h2>
 
         {items.map((item, index) => (
           <div key={index} className="accordion-item">
             <div
-              className={
-                index > 4
-                  ? "bg-blue-feedback  py-4 px-5 d-flex gap-3 align-items-center justify-space-between"
-                  : "py-4 px-5 d-flex gap-3 align-items-center justify-space-between"
-              }
+              className={`py-4 px-5 d-flex gap-3 align-items-center justify-space-between
+py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
+                index > 7 ? "bg-blue-feedback" : ""
+              }`}
             >
               <div className="d-flex align-items-center gap-3 flex-grow-1">
-                {index < 5 ? (
-                  <h2
-                    className="text-gray text-nowrap"
+                {index < 6 ? (
+                  <p
+                    className="text-gray text-nowrap fw-bold"
                     onClick={() => handleToggle(index)}
                     style={{ cursor: "pointer" }}
                   >
                     Week {index + 1}:
-                  </h2>
+                  </p>
+                ) : index >= 6 && index < 7 ? (
+                  <p
+                    className="text-gray text-nowrap fw-bold"
+                    onClick={() => handleToggle(index)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Summary
+                  </p>
                 ) : (
-                  <h2
-                    className="text-gray"
+                  <p
+                    className="text-gray fw-bold"
                     onClick={() => handleToggle(index)}
                     style={{ cursor: "pointer" }}
                   >
                     Final Report:
-                  </h2>
+                  </p>
                 )}
                 <div
                   className="text-gray "
@@ -116,12 +160,13 @@ function Accordion({
                 >
                   {item.title}
                 </div>
-                {index === 5 && (
+                {index >= 6 && (
                   <p
                     className="text-blue"
                     style={{ zIndex: 100, cursor: "pointer" }}
                     onClick={() => {
                       handleToggle(index);
+                      setCurrentIndex(index);
                       setStartDownload(true);
                     }}
                   >

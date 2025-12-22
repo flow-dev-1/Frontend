@@ -12,7 +12,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
 
-function ResilienceFeedback() {
+function Transition2Feedback() {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
@@ -29,11 +29,6 @@ function ResilienceFeedback() {
   const [isWeekThreeLoaded, setWeekThreeData] = useState(false);
   const [isWeekFourLoaded, setWeekFourData] = useState(false);
   const [isWeekFiveLoaded, setWeekFiveData] = useState(false);
-  const [isWeekSixLoaded, setWeekSixData] = useState(false);
-  const [isWeekSevenLoaded, setWeekSevenData] = useState(false);
-  const [isWeekEightLoaded, setWeekEightData] = useState(false);
-  const [isWeekNineLoaded, setWeekNineData] = useState(false);
-  const [isWeekTenLoaded, setWeekTenData] = useState(false);
 
   const [allDataLoaded, setAllDataLoaded] = useState(false);
 
@@ -43,7 +38,7 @@ function ResilienceFeedback() {
         isWeekTwoLoaded &&
         isWeekThreeLoaded &&
         isWeekFourLoaded &&
-        isWeekFiveLoaded 
+        isWeekFiveLoaded
     );
   }, [
     isWeekOneLoaded,
@@ -76,19 +71,19 @@ function ResilienceFeedback() {
 
   const weekContents = [
     {
-      topic: "Introduction to Emotional Regulation",
+      topic: "Defining Your Next Chapter",
       component: (
         <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} />
       ),
     },
     {
-      topic: "Identifying Energy Levels",
+      topic: "Mindset and Values",
       component: (
         <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} />
       ),
     },
     {
-      topic: "The SONAR of Emotional Regulation",
+      topic: "Social and Financial Intelligence",
       component: (
         <Week3
           enrollmentId={enrollmentId}
@@ -97,20 +92,23 @@ function ResilienceFeedback() {
       ),
     },
     {
-      topic: "Introduction to Coping Skills",
+      topic: "Freedom and Responsibilitys",
       component: (
         <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} />
       ),
     },
     {
-      topic: "Wrapping Up!",
+      topic: "Goal Setting and Resilience",
       component: (
         <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} />
       ),
     },
-
     {
-      topic: "Summary of your journey through Emotional Regulation",
+      topic: "My Next Chapter",
+      component: "",
+    },
+    {
+      topic: "Summary of your journey through Transition 2",
       component: (
         <OverallFeedBack
           enrollmentId={enrollmentId}
@@ -121,7 +119,7 @@ function ResilienceFeedback() {
     },
   ];
 
-  const weeksTopic = weekContents.map((week) => week.topic);
+  const weeksTopic = weekContents.slice(0, 5).map((week) => week.topic);
   const items = weekContents.map((week) => ({
     title: week.topic,
     content: week.component,
@@ -160,10 +158,8 @@ function ResilienceFeedback() {
             Back to My Courses
           </button>
           <div className="compassion-title">
-          <h2 className="fs-5 fs-md-3">
-              Stay Strong, Keep Going!
-            </h2>
-          <h2 className="compassion fs-5">Emotional Regulation</h2>
+            <h2 className="fs-5 fs-md-3 tot-nav-text">SEL for Educators:</h2>
+            <h2 className="compassion fs-5 tot-nav-text">ToT Course 1</h2>
           </div>
 
           <ul className="compassion-list">
@@ -173,7 +169,7 @@ function ResilienceFeedback() {
                 className={
                   index + 1 <= currentWeek
                     ? "active-week"
-                    : index === 5
+                    : index >= 6
                     ? "d-none"
                     : ""
                 }
@@ -184,7 +180,7 @@ function ResilienceFeedback() {
                     className="course-list-icon"
                   />
                 </div>
-                <span className={index === 5 ? "d-none" : ""}>
+                <span className={index >= 5 ? "d-none" : ""}>
                   Week
                   {index + 1}
                 </span>
@@ -210,6 +206,7 @@ function ResilienceFeedback() {
             hasPercentile={hasPercentile}
             allDataLoaded={allDataLoaded}
             setHasPercentile={setHasPercentile}
+            enrollmentId={enrollmentId}
           />
         </section>
       </div>
@@ -217,6 +214,6 @@ function ResilienceFeedback() {
   );
 }
 
-export default ResilienceFeedback;
+export default Transition2Feedback;
 
 // week 4, all drag and drop
