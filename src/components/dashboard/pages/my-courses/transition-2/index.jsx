@@ -139,7 +139,7 @@ const WeekContent = () => {
     dispatch(setCurrentPage(currentPage));
     dispatch(setCurrentStep(currentStep));
 
-    return () => {};
+    return () => { };
   }, [dispatch]); // Added dispatch to dependency array
 
   const currentWeek = useSelector(selectCurrentWeek);
@@ -188,7 +188,7 @@ const WeekContent = () => {
       );
     }
 
-    return () => {};
+    return () => { };
   }, [data]);
 
   // If showing hurray, render that instead
@@ -376,11 +376,11 @@ const CourseContent = () => {
   const [maxAccessibleWeek, setMaxAccessibleWeek] = useState(1);
 
   const weeksTopic = [
-    "Introduction to Emotional Regulation",
-    "Identifying Energy Levels",
-    "The SONAR of Emotional Regulation",
-    "Introduction to Coping Skills",
-    "Wrapping Up!",
+    "Defining Your Next Chapter",
+    "Mindset and Values",
+    "Social and Financial Intelligence",
+    "Freedom and Responsibility",
+    "Goal Setting and Resilience",
   ];
 
   // Get enrollment data from location state
@@ -406,6 +406,24 @@ const CourseContent = () => {
       setMaxAccessibleWeek(accessibleWeek);
     }
   }, [enrolmentData]);
+
+  // Update maxAccessibleWeek and enrollmentProgress when currentWeek changes (e.g., after completing a week)
+  // This ensures the navigation and progress bar update immediately without requiring a page refresh
+  useEffect(() => {
+    if (currentWeek > maxAccessibleWeek) {
+      setMaxAccessibleWeek(currentWeek);
+    }
+
+    // Update progress based on the current week
+    // When moving to a new week, it means the previous week was completed
+    const progressPerWeek = 100 / weeksTopic.length;
+    const calculatedProgress = (currentWeek - 1) * progressPerWeek;
+
+    // Only update if the calculated progress is higher than the current progress
+    if (calculatedProgress > enrollmentProgress) {
+      setEnrollmentProgress(calculatedProgress);
+    }
+  }, [currentWeek, maxAccessibleWeek, enrollmentProgress, weeksTopic.length]);
 
   useEffect(() => {
     const segments = location.pathname.split("/").filter(Boolean);
@@ -563,8 +581,8 @@ const CourseContent = () => {
           </button>
 
           <div className="compassion-title">
-            <h2 className="fs-5 fs-md-3">Stay Strong, Keep Going!</h2>
-            <h2 className="compassion fs-5">Emotional Regulation</h2>
+            <h2 className="fs-5 fs-md-3">Navigating the next chapter with clarity</h2>
+            <h2 className="compassion fs-5">Transition 2</h2>
           </div>
 
           <ul className="compassion-list">
@@ -577,9 +595,8 @@ const CourseContent = () => {
               return (
                 <li
                   key={index}
-                  className={`${isActive ? "active-week" : ""} ${
-                    isAccessible ? "accessible-week" : "locked-week"
-                  }`}
+                  className={`${isActive ? "active-week" : ""} ${isAccessible ? "accessible-week" : "locked-week"
+                    }`}
                   onClick={() => handleWeekClick(weekNumber)}
                   style={{
                     cursor: isAccessible ? "pointer" : "not-allowed",
@@ -593,8 +610,8 @@ const CourseContent = () => {
                         isCompleted
                           ? "icon-park-solid:check-one"
                           : isAccessible
-                          ? "icon-park-outline:check-one"
-                          : "mdi:lock"
+                            ? "icon-park-outline:check-one"
+                            : "mdi:lock"
                       }
                       className="course-list-icon"
                     />

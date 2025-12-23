@@ -44,6 +44,9 @@ const MyCourseCard = ({ course }) => {
       });
     } else if (course?.course.title === "Emotional Regulation") {
       navigate(`/dashboard/emotional_regulation/feedback`, { state: { enrollmentData: course } })
+    } else if (course?.course.title === "Transition 2") {
+      navigate(`/dashboard/transition_2/feedback`, { state: { enrollmentData: course } })
+      
     } else if (course?.course.title === "TOT Course 1") {
       navigate(`/dashboard/tot/feedback`, {
         state: { enrollmentData: course },
@@ -75,7 +78,10 @@ const MyCourseCard = ({ course }) => {
       });
     } else if (course?.course.title === "Emotional Regulation") {
       navigate(`/dashboard/emotional_regulation`, { state: { enrollmentData: course } })
-    } else if (course?.course.title === "TOT Course 1") {
+    }  else if (course?.course.title === "Transition 2") {
+      navigate(`/dashboard/transition_2`, { state: { enrollmentData: course } })
+
+    }else if (course?.course.title === "TOT Course 1") {
       navigate(`/dashboard/tot`, {
         state: { enrollmentData: course },
       });

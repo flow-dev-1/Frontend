@@ -50,6 +50,8 @@ const CourseCard = ({
       navigate(`/dashboard/resilience_grit/feedback`, { state: { enrollmentData: isEnrolled } })
     }else if(course.title === "Emotional Regulation"){
       navigate(`/dashboard/emotional_regulation/feedback`, { state: { enrollmentData: isEnrolled } })
+    }else if(course.title === "Transition 2"){
+      navigate(`/dashboard/transition_2/feedback`, { state: { enrollmentData: isEnrolled } })
     }else if(course?.title === "TOT Course 1"){
       navigate(`/dashboard/tot/feedback`, { state: { enrollmentData: isEnrolled } })
     }else{
@@ -65,6 +67,8 @@ const CourseCard = ({
       navigate(`/dashboard/resilience_grit`, { state: { enrollmentData: isEnrolled } })
     }else if(course.title === "Emotional Regulation") {
       navigate(`/dashboard/emotional_regulation`, { state: { enrollmentData: isEnrolled } })
+    }else if(course.title === "Transition 2") {
+      navigate(`/dashboard/transition_2`, { state: { enrollmentData: isEnrolled } })
     }else if(course?.title === "TOT Course 1"){
       navigate(`/dashboard/tot`, { state: { enrollmentData: isEnrolled } })
     }else {

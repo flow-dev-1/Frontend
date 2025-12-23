@@ -63,30 +63,32 @@ function FlipCheckBoxesFrameSingle({
               key={index}
               className="col-12 col-md-6 col-lg-4 col-xl-3 d-flex flex-column align-items-center "
               style={{
-                backgroundImage: `url(${
-                  colorToBackgroundMap[option.color].checkBg
-                })`,
+                backgroundImage: `url(${colorToBackgroundMap[option.color].checkBg
+                  })`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 borderRadius: "10px",
                 padding: "15px",
+                cursor: "pointer",
               }}
+              onClick={() => openModal(option)}
             >
               <div className="d-flex justify-content-between align-items-center w-100">
                 <div
-                  onClick={() => openModal(option)}
                   style={{
                     fontWeight: "bold",
                     fontSize: "15px",
                     textAlign: "left",
-                    cursor: "pointer",
                     maxWidth: "100%",
                   }}
                 >
                   {option.value}
                 </div>
 
-                <label style={{ cursor: "pointer" }}>
+                <label
+                  style={{ cursor: "pointer" }}
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <img
                     src={selectedValues[index] ? checkedImage : uncheckedImage}
                     alt="checkbox"
@@ -120,9 +122,8 @@ function FlipCheckBoxesFrameSingle({
           <div
             className="px-4 py-3 text-center"
             style={{
-              backgroundImage: `url(${
-                colorToBackgroundMap[selectedOption.color].modalBg
-              })`,
+              backgroundImage: `url(${colorToBackgroundMap[selectedOption.color].modalBg
+                })`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               borderRadius: "15px",
@@ -151,9 +152,8 @@ function FlipCheckBoxesFrameSingle({
             <h2 className="mb-1 mt-1">{selectedOption.value}</h2>
             <hr
               style={{
-                border: `0.01em solid ${
-                  colorToBackgroundMap[selectedOption.color].colorCode
-                }`,
+                border: `0.01em solid ${colorToBackgroundMap[selectedOption.color].colorCode
+                  }`,
               }}
             />
 

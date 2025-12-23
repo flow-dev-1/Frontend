@@ -119,8 +119,8 @@ function Page6() {
     // If time is up we've already saved on timeout; allow proceed.
     if (isTimeUp) return true;
 
-    if (answers.length < 5) {
-      setErrorMessage("At least 5 values are required!");
+    if (answers.length < 3) {
+      setErrorMessage("At least 3 values are required!");
       return false;
     }
 

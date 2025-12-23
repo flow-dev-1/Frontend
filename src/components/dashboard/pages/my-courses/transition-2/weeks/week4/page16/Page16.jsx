@@ -110,9 +110,10 @@ function WeekFourAssessment() {
     // If its the last question submit else update answer
     dispatch(saveAssessment(answers));
 
+
     if (isLastQuestion) {
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 2;
+        answers.length !== totalSteps || userAnswers.activities.length !== 7;
       if (hasUnansweredQuestions) {
         setErrorMessage(
           "Oops! Some unanswered questions have been detected. Kindly go back and review!"

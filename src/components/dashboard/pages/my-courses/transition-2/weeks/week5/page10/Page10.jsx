@@ -111,9 +111,9 @@ function WeekFiveAssessment() {
     dispatch(saveAssessment(answers));
 
     if (isLastQuestion) {
-      console.log(userAnswers.activities.length, "");
+      console.log(userAnswers.activities.length, "asdf");
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 1;
+        answers.length !== totalSteps || userAnswers.activities.length !== 4;
       if (hasUnansweredQuestions) {
         setErrorMessage(
           "Oops! Some unanswered questions have been detected. Kindly go back and review!"

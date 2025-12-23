@@ -110,7 +110,7 @@ function WeekOneAssessment() {
 
     if (isLastQuestion) {
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 8;
+        answers.length !== totalSteps || userAnswers.activities.length !== 7;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(

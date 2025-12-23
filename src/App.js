@@ -160,17 +160,17 @@ function App() {
           <Route
             path="/dashboard/transition_2"
             element={
-              // <ProtectedRoute>
-              <Transition2Course />
-              // </ProtectedRoute>
+              <ProtectedRoute>
+                <Transition2Course />
+              </ProtectedRoute>
             }
           />
           <Route
             path="/dashboard/transition_2/feedback"
             element={
-              // <ProtectedRoute>
-              <Transition2Feedback />
-              // </ProtectedRoute>
+              <ProtectedRoute>
+                <Transition2Feedback />
+              </ProtectedRoute>
             }
           />
 

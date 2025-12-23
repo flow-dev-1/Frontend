@@ -26,8 +26,19 @@ function Page14() {
   const step = pageData?.steps[currentStep - 1];
 
   const [checkboxAnswers, setCheckboxAnswers] = useState({});
-  const [textAnswer, setTextAnswer] = useState("");
+  const [textAnswers, setTextAnswers] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
+
+  // Get the current step's text answer
+  const currentTextAnswer = textAnswers[currentStep] || "";
+
+  // Helper to update this step's text answer
+  const setCurrentTextAnswer = (value) => {
+    setTextAnswers((prev) => ({
+      ...prev,
+      [currentStep]: value,
+    }));
+  };
 
   useEffect(() => {
     if (!userAnswers) return;
@@ -37,7 +48,7 @@ function Page14() {
 
     if (response?.answer) {
       setCheckboxAnswers(response.answer.checkboxAnswers || {});
-      setTextAnswer(response.answer.textAnswer || "");
+      setTextAnswers(response.answer.textAnswers || {});
     }
   }, [userAnswers, pageData.id]);
 
@@ -53,9 +64,9 @@ function Page14() {
       }
     }
 
-    // Validation for step 1 (text input)
+    // Validation for step 1 and step 3 (text input)
     if (currentStep === 1 || currentStep === 3) {
-      if (!textAnswer.trim()) {
+      if (!currentTextAnswer.trim()) {
         setErrorMessage("Oops! Please enter a valid input!");
         return false;
       }
@@ -68,7 +79,7 @@ function Page14() {
         page: pageData.id,
         answer: {
           checkboxAnswers,
-          textAnswer,
+          textAnswers,
         },
       })
     );
@@ -103,8 +114,8 @@ function Page14() {
         return (
           <TextInputFrame
             step={step}
-            textAnswer={textAnswer}
-            setTextAnswer={setTextAnswer}
+            textAnswer={currentTextAnswer}
+            setTextAnswer={setCurrentTextAnswer}
             setErrorMessage={setErrorMessage}
           />
         );

@@ -22,3 +22,4 @@ function TextInputFrame({ step, textAnswer, setTextAnswer, setErrorMessage }) {
 }
 
 export default TextInputFrame;
+
