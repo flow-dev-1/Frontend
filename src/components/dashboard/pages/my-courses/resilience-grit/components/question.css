@@ -18,6 +18,12 @@
   background-position: cover;
 }
 
+.blue-fancy-rectangle {
+  background: url("../../../../../../assets/blue-fancy-rectangle.png") no-repeat;
+  background-size: 100% 100%;
+  background-position: cover;
+}
+
 .small-input:focus {
   border: none !important;
   outline: none !important;
@@ -554,7 +560,7 @@ button {
 
   .resilience-question-box-container {
     min-height: 37vh;
-    max-height: 40vh;
+    /* max-height: 40vh; */
     padding: 1rem 0.5rem;
     /* width: max-content; */
   }

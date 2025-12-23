@@ -11,6 +11,8 @@ import { assessments as totAssessments } from "../../components/dashboard/pages/
 
 import { courseContent as emotionalRegulationCourseContent } from "../../components/dashboard/pages/my-courses/emotional-regulation/data/activity";
 import { assessments as emotionalRegulationAssessments } from "../../components/dashboard/pages/my-courses/emotional-regulation/data/assessment";
+import { courseContent as transition2CourseContent } from "../../components/dashboard/pages/my-courses/transition-2/data/activity";
+import { assessments as transition2Assessments } from "../../components/dashboard/pages/my-courses/transition-2/data/assessment";
 
 const courseData = {
   compassion: {
@@ -20,6 +22,10 @@ const courseData = {
   transition: {
     courseContent: transitionCourseContent,
     assessments: transitionAssessments,
+  },
+  transition_2: {
+    courseContent: transition2CourseContent,
+    assessments: transition2Assessments,
   },
   resilience_grit: {
     courseContent: resilienceCourseContent,
@@ -54,6 +60,7 @@ const getCourseFromURL = () => {
     "resilience_grit",
     "tot",
     "emotional_regulation",
+    "transition_2",
   ].includes(lastSegment?.toLowerCase())
     ? lastSegment.toLowerCase()
     : "compassion";
@@ -109,8 +116,8 @@ const navigationSlice = createSlice({
     setCourse: (state, action) => {
       if (state.currentCourse !== action.payload) {
         state.currentCourse = action.payload;
-        state.currentWeek = 1;
-        state.currentPage = 1;
+        state.currentWeek = 3;
+        state.currentPage = 7;
         state.currentStep = 1;
       }
     },
@@ -118,14 +125,14 @@ const navigationSlice = createSlice({
       const newCourse = getCourseFromURL();
       if (state.currentCourse !== newCourse) {
         state.currentCourse = newCourse;
-        state.currentWeek = 1;
-        state.currentPage = 1;
+        state.currentWeek = 3;
+        state.currentPage = 7;
         state.currentStep = 1;
         state.showReview = false;
         state.showHurray = false;
 
-        sessionStorage.setItem("flow-currentWeek", "1");
-        sessionStorage.setItem("flow-currentPage", "1");
+        sessionStorage.setItem("flow-currentWeek", "3");
+        sessionStorage.setItem("flow-currentPage", "7");
         sessionStorage.setItem("flow-currentStep", "1");
       }
     },

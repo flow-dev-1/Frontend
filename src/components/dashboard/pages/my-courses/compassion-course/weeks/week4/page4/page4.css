@@ -72,6 +72,18 @@
 .inner-bucket {
   background: url("../../../../../../../../assets/Buckets/green.png") no-repeat;
 }
+.pink-dark-bucket {
+  background: url("../../../../../../../../assets/Buckets/pink-dark-bucket.png")
+    no-repeat;
+}
+.red-dark-bucket {
+  background: url("../../../../../../../../assets/Buckets/red-dark-bucket.png")
+    no-repeat;
+}
+.yellow-dark-bucket {
+  background: url("../../../../../../../../assets/Buckets/yellow-dark-bucket.png")
+    no-repeat;
+}
 
 .outer-bucket {
   background: url("../../../../../../../../assets/Buckets/orange.png") no-repeat;
@@ -80,6 +92,7 @@
 .both-bucket {
   background: url("../../../../../../../../assets/Buckets/red.png") no-repeat;
 }
+
 .inner-box {
   background: url("../../../../../../../../assets/tot-images/yes.png") no-repeat;
 }
@@ -91,6 +104,9 @@
 .inner-bucket,
 .outer-bucket,
 .both-bucket,
+.red-dark-bucket,
+.pink-dark-bucket,
+.yellow-dark-bucket,
 .inner-box,
 .outer-box {
   color: #fff;
