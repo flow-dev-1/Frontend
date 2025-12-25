@@ -11,7 +11,6 @@ import OverallFeedBack from "./weeks/overall/OverallFeedBack";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
-import VisionBoard from "./VisionBoard";
 
 function Transition2Feedback() {
   const navigate = useNavigate();
@@ -57,7 +56,7 @@ function Transition2Feedback() {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    // if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
+    if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
       const courseEnrollmentId = sessionStorage.getItem(
@@ -209,8 +208,6 @@ function Transition2Feedback() {
             setHasPercentile={setHasPercentile}
             enrollmentId={enrollmentId}
           />
-
-          {/* <VisionBoard /> */}
         </section>
       </div>
     </>

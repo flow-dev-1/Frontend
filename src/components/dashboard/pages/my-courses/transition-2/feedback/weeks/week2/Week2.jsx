@@ -35,7 +35,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/emotional-regulation-feedback-2", enrollmentId, 2],
+    queryKey: ["dashboard/transition2-feedback-2", enrollmentId, 2],
     queryFn: () =>
       isAdmin
         ? adminService.getUserCourseData(enrollmentId, 2, code)
@@ -81,6 +81,8 @@ function Week2({ enrollmentId, setWeekTwoData }) {
   useEffect(() => {
     if (!data) return;
 
+    console.table("data", data.activity?.activities);
+
     setActivityData(data.activity?.activities);
     setAssessmentData(data.assessment?.assessments);
     setWeekTwoData(true);
@@ -103,6 +105,27 @@ function Week2({ enrollmentId, setWeekTwoData }) {
       return answerObject ? answerObject : "";
     }
   }
+
+  // function getActivityAnswer(activityId, itemId) {
+  //   if (!activityData) return "";
+
+  //   const activity = activityData.find((a) => a.page === activityId);
+  //   if (!activity || !activity.answer) return "";
+
+  //   const answer = activity.answer;
+
+  //   if (!itemId) {
+  //     return answer ?? "";
+  //   } else {
+  //     if (Array.isArray(answer)) {
+  //       return answer.find((a) => a.id === itemId)?.value ?? "";
+  //     } else if (typeof answer === "object") {
+  //       return answer.id === itemId ? answer.value ?? "" : "";
+  //     } else {
+  //       return "";
+  //     }
+  //   }
+  // }
 
   function getActivityFeedback(activityId, itemId, index) {
     if (!itemId) {
@@ -146,7 +169,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     // });
   }
 
-  if (!isPending) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
@@ -156,6 +179,28 @@ function Week2({ enrollmentId, setWeekTwoData }) {
 
   const score =
     calculateResult(assessments, assessmentData, assessments?.length) || 0;
+
+  function getSelectedItems(selectedMap) {
+    if (!selectedMap || typeof selectedMap !== "object") return [];
+
+    const items = [
+      { value: "Honesty" },
+      { value: "Respect" },
+      { value: "Kindess" },
+      { value: "Responsibility" },
+      { value: "Family" },
+      { value: "Faith" },
+      { value: "Hardwork" },
+      { value: "Growth" },
+      { value: "Justice" },
+      { value: "Balance" },
+    ];
+
+    return Object.keys(selectedMap)
+      .filter((key) => selectedMap[key])
+      .map((index) => items[Number(index)]?.value)
+      .filter(Boolean);
+  }
 
   const submitFeedback = (value) => {
     if (!activityFeedbackId?.itemId) {
@@ -502,7 +547,13 @@ function Week2({ enrollmentId, setWeekTwoData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        <ul className="list-unstyled fs-md-2 flex-grow-1">
+          {(getActivityAnswer(activity3.id) || [])?.map((item, idx) => (
+            <li key={idx} className="text-lg">
+              {idx + 1}. {item.value}
+            </li>
+          ))}
+        </ul>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -555,7 +606,16 @@ function Week2({ enrollmentId, setWeekTwoData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity4.id)}</p>
+        <ul className="list-unstyled fs-md-2 flex-grow-1">
+          {(
+            getSelectedItems(getActivityAnswer(activity4.id)?.selectedValues) ||
+            []
+          )?.map((item, idx) => (
+            <li key={idx} className="text-lg">
+              {idx + 1}. {item}
+            </li>
+          ))}
+        </ul>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity4.id)
             ?.feedback && (

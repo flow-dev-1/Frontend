@@ -32,18 +32,16 @@ function Week1({ enrollmentId, setWeekOneData }) {
     activity5,
     activity6,
     activity7,
-    activity8,
   ] = pages;
 
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([]);
   const { isAdmin, code } = useSelector(adminData);
 
-  const [F1, F2] = activityData?.[3]?.feedback?.map((a) => a.value) || [];
   const { questions: assessments } = getWeekAssessment(1);
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/emotional-regulation-feedback-1", enrollmentId, 1],
+    queryKey: ["dashboard/transition2-feedback-1", enrollmentId, 1],
     queryFn: () =>
       isAdmin
         ? adminService.getUserCourseData(enrollmentId, 1, code)
@@ -89,6 +87,8 @@ function Week1({ enrollmentId, setWeekOneData }) {
   useEffect(() => {
     if (!data) return;
 
+    console.log(data.activity?.activities);
+
     setActivityData(data.activity?.activities);
     setAssessmentData(data.assessment?.assessments);
     setWeekOneData(true);
@@ -130,36 +130,20 @@ function Week1({ enrollmentId, setWeekOneData }) {
     }
   }
 
-  function drag1(type) {
-    console.log(activityData, "Activity Data");
-    if (!activityData || !activityData[3] || !activityData[3].answer) return [];
-
-    const indices =
-      type === "growth"
-        ? activityData[3]?.answer?.[0]?.value?.green
-        : activityData[3]?.answer?.[0]?.value?.red;
-
-    // console.log(indices, "Indices")
-
-    // console.log(activity2,"Activity 2")
-    return indices?.map((index) => activity4?.steps?.[1].images[index]) || [];
-  }
-
-  function challengeTable(type) {
-    // console.log(activityData, "Activity Data")
-    if (!activityData || !activityData[4] || !activityData[4]?.answer)
-      return [];
-
-    const data =
-      type === "challenge"
-        ? activityData[4]?.answer.map((item) => item?.value[0])
-        : activityData[4]?.answer.map((item) => item?.value[1]);
-
-    return data || [];
-  }
-
-  if (!isPending) {
+  if (isPending) {
     return <div>Loading...</div>;
+  }
+
+  function getSelectedItems(selectedMap, items) {
+    if (!selectedMap || typeof selectedMap !== "object") return [];
+
+    // const items =
+
+    return Object.keys(selectedMap)
+      .filter((key) => selectedMap[key])
+      .map((index) => items[Number(index)])
+
+      .filter(Boolean);
   }
 
   if (data?.status === "failed" || isError) {
@@ -272,7 +256,18 @@ function Week1({ enrollmentId, setWeekOneData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity2.id)}</p>
+        <ul className="list-unstyled fs-md-2 flex-grow-1">
+          {(
+            getSelectedItems(
+              getActivityAnswer(activity2.id)?.checkboxAnswers,
+              activity2.steps[0].options
+            ) || []
+          )?.map((item, idx) => (
+            <li key={idx} className="text-lg">
+              {idx + 1}. {item}
+            </li>
+          ))}
+        </ul>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity2.id)
             ?.feedback && (
@@ -314,7 +309,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
         )
       }
       <hr />
-      {/* Activity  */}
+      {/* Activity  3*/}
       <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
         Activity 3
       </p>
@@ -325,10 +320,16 @@ function Week1({ enrollmentId, setWeekOneData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answer:</h2>
+
         <ul className="list-unstyled fs-md-2 flex-grow-1">
-          {getActivityAnswer(activity3.id)?.map((item, idx) => (
+          {(
+            getSelectedItems(
+              getActivityAnswer(activity3.id)?.checkboxAnswers,
+              activity3.steps[0].options
+            ) || []
+          )?.map((item, idx) => (
             <li key={idx} className="text-lg">
-              {idx + 1}. {item.value}
+              {idx + 1}. {item}
             </li>
           ))}
         </ul>
@@ -382,13 +383,10 @@ function Week1({ enrollmentId, setWeekOneData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answer:</h2>
-        <ul className="list-unstyled fs-md-2 flex-grow-1">
-          {getActivityAnswer(activity3.id)?.map((item, idx) => (
-            <li key={idx} className="text-lg">
-              {idx + 1}. {item.value}
-            </li>
-          ))}
-        </ul>
+
+        <p className="fs-md-5 flex-grow-1">
+          {getActivityAnswer(activity3.id)?.textAnswer}
+        </p>
 
         {
           //This is only Visible for Flow Admins
@@ -449,13 +447,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answer:</h2>
-        <ul className="list-unstyled fs-md-2 flex-grow-1">
-          {getActivityAnswer(activity4.id)?.map((item, idx) => (
-            <li key={idx} className="text-lg">
-              {idx + 1}. {item.value}
-            </li>
-          ))}
-        </ul>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity4.id)}</p>
 
         {
           //This is only Visible for Flow Admins
@@ -516,13 +508,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answer:</h2>
-        <ul className="list-unstyled fs-md-2 flex-grow-1">
-          {getActivityAnswer(activity5.id)?.map((item, idx) => (
-            <li key={idx} className="text-lg">
-              {idx + 1}. {item.value}
-            </li>
-          ))}
-        </ul>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
 
         {
           //This is only Visible for Flow Admins
@@ -583,13 +569,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answer:</h2>
-        <ul className="list-unstyled fs-md-2 flex-grow-1">
-          {getActivityAnswer(activity6.id)?.map((item, idx) => (
-            <li key={idx} className="text-lg">
-              {idx + 1}. {item.value}
-            </li>
-          ))}
-        </ul>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity6.id)}</p>
 
         {
           //This is only Visible for Flow Admins
@@ -650,13 +630,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answer:</h2>
-        <ul className="list-unstyled fs-md-2 flex-grow-1">
-          {getActivityAnswer(activity7.id)?.map((item, idx) => (
-            <li key={idx} className="text-lg">
-              {idx + 1}. {item.value}
-            </li>
-          ))}
-        </ul>
+        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity7.id)}</p>
 
         {
           //This is only Visible for Flow Admins
