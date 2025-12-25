@@ -125,7 +125,10 @@ function WeekTwoPage8() {
               </p>
             </div>
 
-            <div className="d-flex justify-content-evenly justify-content-md-around align-items-center flex-wrap">
+            <div
+              className="d-flex justify-content-around justify-content-md-around align-items-center flex-wrap mx-auto"
+              style={{ maxWidth: "500px" }}
+            >
               {step.buckets &&
                 step.buckets.map((bucket) => (
                   <div
@@ -138,11 +141,11 @@ function WeekTwoPage8() {
                   >
                     <h2
                       className={
-                        bucket.id === "pink"
-                          ? "inner-count"
+                        "text-nowrap text-gray" + bucket.id === "pink"
+                          ? "pink-count"
                           : bucket.id === "orange"
-                          ? "outer-count"
-                          : "both-count"
+                          ? "orange-count"
+                          : "red-count"
                       }
                     >
                       {bucket.percent} %

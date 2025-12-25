@@ -219,11 +219,11 @@ const DragAndDropFrame = ({
                       >
                         <h2
                           className={
-                            bucket.id === "pink"
-                              ? "inner-count"
+                            "text-nowrap text-gray" + bucket.id === "pink"
+                              ? "pink-count"
                               : bucket.id === "orange"
-                              ? "outer-count"
-                              : "both-count"
+                              ? "orange-count"
+                              : "red-count"
                           }
                         >
                           {bucketResults[bucket.id]?.length || 0}

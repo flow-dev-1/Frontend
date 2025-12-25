@@ -19,7 +19,10 @@
 
 .inner-count,
 .outer-count,
-.both-count {
+.both-count,
+.pink-count,
+.orange-count,
+.red-count {
   background-color: white;
   text-align: center;
   width: 45.65px;
@@ -45,6 +48,21 @@
 .both-count {
   border: 4px solid #ee2447;
   color: #ee2447;
+}
+
+.pink-count {
+  border: 4px solid #f34bba;
+  color: #f34bba;
+}
+
+.orange-count {
+  border: 4px solid #fcaf17;
+  color: #fcaf17;
+}
+
+.red-count {
+  border: 4px solid #e32e2b;
+  color: #e32e2b;
 }
 
 .inner-bowl,
