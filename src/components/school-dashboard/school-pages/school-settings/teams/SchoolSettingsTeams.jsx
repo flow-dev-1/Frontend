@@ -360,7 +360,7 @@ const SchoolSettingsTeams = () => {
           </div>
           <h4 className="text-center">Successful</h4>
           <p className="text-center">
-            You have successfully invited a teammate.
+            You have successfully added a teammate.
           </p>
         </div>
       </Modal>

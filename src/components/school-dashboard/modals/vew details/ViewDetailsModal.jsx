@@ -13,14 +13,9 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [openEnrollModal, setOpenEnrollModal] = useState(false);
-  const [openEnrollModalEducator, setOpenEnrollModalEducator] = useState(false);
 
   const openEnrollementModal = () => {
-    if (course.grade === "Educator") {
-      setOpenEnrollModalEducator(true);
-    } else {
-      setOpenEnrollModal(true);
-    }
+    setOpenEnrollModal(true);
   };
 
   const handleDeleteClick = () => {
@@ -68,23 +63,26 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
   }
 
   const selectModal = (id) => {
-    navigate(`/school-dashboard/courses/enrolled/${encryptURI(id)}`);
-  };
-
-  const closeEnrollementModal = () => {
-    setOpenEnrollModal(false);
-    setOpenEnrollModalEducator(false);
-  };
-
-  let schoolId;
-  if (user?.isSchool) {
-    schoolId = user?._id;
-  } else {
-    schoolId = user?.school;
+    if (course.grade === 'Educator') {
+      navigate(`/school-dashboard/courses/enrolled/educators/${encryptURI(id)}`)
+    } else {
+      navigate(`/school-dashboard/courses/enrolled/${encryptURI(id)}`)
+    }
   }
 
-  const navigate = useNavigate();
-  const { id } = useParams();
+  const closeEnrollementModal = () => {
+    setOpenEnrollModal(false)
+  }
+
+  let schoolId
+  if (user?.isSchool) {
+    schoolId = user?._id
+  } else {
+    schoolId = user?.school
+  }
+
+  const navigate = useNavigate()
+  const { id } = useParams()
   const { data, isLoading, isError } = useQuery({
     queryKey: ["school-dashboard"],
     queryFn: () => schoolService.getEnrolledDetails(schoolId, courseId)
@@ -132,7 +130,7 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
                 <tr id="view">
                   <th>S/N</th>
                   <th>Enrolled Classes</th>
-                  <th>No. of Students</th>
+                  <th>No. of {course.grade === 'Educator' ? 'Educators' : 'Students'}</th>
                   <th>Enrollment Date</th>
                   <th>Day of the Week</th>
                   <th>Start Time</th>
@@ -145,7 +143,7 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
                   filteredCourses.map((group, index) => (
                     <tr key={index}>
                       <td>{index + 1}</td>
-                      <td>{group.stdClass} {group?.classTag}</td>
+                      <td>{group.stdClass} {course.grade !== 'Educator' ? group?.classTag : ''}</td>
                       <td>{group.studentEnrollments?.length || 0}</td>
                       <td>
                         {new Date(group.createdAt).getUTCDate()} -{" "}
@@ -178,7 +176,7 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
             </table>
           </div>
         </div>
-        {user?.isSchool && (
+        {user?.isSchool && course.grade !== 'Educator' && (
           <button
             id="cartBtn"
             onClick={openEnrollementModal}

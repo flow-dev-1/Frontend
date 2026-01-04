@@ -25,54 +25,21 @@ import EducatorOtpModal from '../../modals-pages/onboarding-modals/EducatorOtpMo
 Modal.setAppElement('#root') // Set the root element for the modal
 
 export default function InvitedAdminEducatorRegistration() {
-  const dispatch = useDispatch()
-  const [showPassword, setShowPassword] = useState(false)
-  const [modalIsOpen, setIsOpen] = useState(false)
-  const [openSuccessModal, setOpenSuccessModal] = useState(false)
-  const [formData, setFormData] = useState(null)
-  const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
-  const [countries, setCountries] = useState([])
-  const [isNigeria, setIsNigeria] = useState(true)
-  const [availableLGAs, setAvailableLGAs] = useState([]) // State to manage the list of LGAs
-  const navigate = useNavigate()
-  // State to track if the selected country is Nigeria
-  const [ setEmail] = useState('')
-
   const location = useLocation()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const getQueryParams = (search) => {
     const params = new URLSearchParams(search)
     return {
       email: params.get('email'),
       t: params.get('t'),
+      fullName: params.get('fullName'),
     }
   }
 
-  const { email, t } = getQueryParams(location.search)
-  dispatch(setToken(t))
-  localStorage.setItem('Flow-Auth-Token', t)
-  console.log(t)
+  const { email: urlEmail, t, fullName: urlFullName } = getQueryParams(location.search)
 
-  // Fetch parent details using the token
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['invited-educator'], // Add token to queryKey to refetch on token change
-    queryFn: () => userService.getEducatorDetails(t),
-    enabled: !!t, // Only run the query if token is present
-  })
-
-  // console.log(data?.data[0]?.fullName)
-  useEffect(() => {
-    if (data?.status === 'success') {
-      setValue('fullName', data?.data[0]?.fullName || 'N/A');
-      setValue('email', data?.data[0]?.email || 'N/A');
-      setValue('phoneNumber', data?.data[0]?.phone || 'N/A');
-      setValue('country', 'Nigeria');
-      setValue('state', data?.data[0]?.state || 'N/A');
-      setValue('lga', data?.data[0]?.lga || 'N/A');
-      setValue('gender', data?.data[0]?.gender || 'N/A');
-    }
-  }, [data])
-  console.log(formData)
   const schema = yup.object().shape({
     fullName: yup
       .string()
@@ -114,11 +81,53 @@ export default function InvitedAdminEducatorRegistration() {
     resolver: yupResolver(schema),
     defaultValues: {
       country: 'Nigeria',
+      email: urlEmail || '',
+      fullName: urlFullName || '',
     },
   })
 
+  const [showPassword, setShowPassword] = useState(false)
+  const [modalIsOpen, setIsOpen] = useState(false)
+  const [openSuccessModal, setOpenSuccessModal] = useState(false)
+  const [formData, setFormData] = useState(null)
+  const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
+  const [countries, setCountries] = useState([])
+  const [isNigeria, setIsNigeria] = useState(true)
+  const [availableLGAs, setAvailableLGAs] = useState([])
+
   const selectedCountry = watch('country')
   const selectedState = watch('state')
+
+  // Fetch parent details using the token
+  const { data } = useQuery({
+    queryKey: ['invited-educator', t],
+    queryFn: () => userService.getEducatorDetails(t),
+    enabled: !!t,
+  })
+
+  useEffect(() => {
+    if (t) {
+      dispatch(setToken(t))
+      localStorage.setItem('Flow-Auth-Token', t)
+    }
+  }, [t, dispatch])
+
+  useEffect(() => {
+    // Initial pre-population from URL
+    if (urlEmail) setValue('email', urlEmail);
+    if (urlFullName) setValue('fullName', urlFullName);
+
+    // Update with API data if available and valid
+    if (data?.status === 'success' && data?.data?.[0]) {
+      const apiInfo = data.data[0];
+      if (apiInfo.email && apiInfo.email !== 'N/A') setValue('email', apiInfo.email);
+      if (apiInfo.fullName && apiInfo.fullName !== 'N/A') setValue('fullName', apiInfo.fullName);
+      if (apiInfo.phone && apiInfo.phone !== 'N/A') setValue('phoneNumber', apiInfo.phone);
+      if (apiInfo.state && apiInfo.state !== 'N/A') setValue('state', apiInfo.state);
+      if (apiInfo.lga && apiInfo.lga !== 'N/A') setValue('lga', apiInfo.lga);
+      if (apiInfo.gender && apiInfo.gender !== 'N/A') setValue('gender', apiInfo.gender);
+    }
+  }, [data, urlEmail, urlFullName, setValue])
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
@@ -129,17 +138,11 @@ export default function InvitedAdminEducatorRegistration() {
       try {
         const response = await fetch('https://restcountries.com/v3.1/all')
         const data = await response.json()
-        // Sort the countries alphabetically by their common name
         const sortedData = data.sort((a, b) => {
-          const nameA = a.name.common.toUpperCase() // ignore upper and lowercase
-          const nameB = b.name.common.toUpperCase() // ignore upper and lowercase
-          if (nameA < nameB) {
-            return -1
-          }
-          if (nameA > nameB) {
-            return 1
-          }
-          // names must be equal
+          const nameA = a.name.common.toUpperCase()
+          const nameB = b.name.common.toUpperCase()
+          if (nameA < nameB) return -1
+          if (nameA > nameB) return 1
           return 0
         })
         setCountries(sortedData)
@@ -147,7 +150,6 @@ export default function InvitedAdminEducatorRegistration() {
         console.error('Error fetching countries:', error)
       }
     }
-
     fetchCountries()
   }, [])
 
@@ -159,8 +161,6 @@ export default function InvitedAdminEducatorRegistration() {
     }
   }, [isNigeria, selectedState])
 
-  // Watch for changes in the country field
-
   useEffect(() => {
     setIsNigeria(selectedCountry === 'Nigeria')
   }, [selectedCountry])
@@ -168,23 +168,38 @@ export default function InvitedAdminEducatorRegistration() {
   const mutation = useMutation({
     mutationFn: (data) => userService.postAdminEducator(data),
     onSuccess: (data) => {
-      console.log('Registration successful:', data)
       toast.success(data.message)
       dispatch(setToken(data?.token))
       localStorage.setItem('Flow-Auth-Token', data?.token)
-      openModal()
+      setIsOpen(true)
     },
     onError: (error) => {
       console.error('Registration error:', error)
-      toast.dismiss()
-      toast.error(error?.message)
-      toast.error(error || 'Registration failed')
+      toast.error(error?.message || 'Registration failed')
     },
   })
+
+  const resendOtpMutation = useMutation({
+    mutationFn: (data) => userService.postAdminEducator(data),
+    onSuccess: (data) => {
+      toast.success(data.message || 'OTP resent successfully!')
+    },
+    onError: (error) => {
+      toast.error(error?.message || 'Failed to resend OTP')
+    },
+  })
+
+  const handleResendOTP = () => {
+    if (formData) {
+      resendOtpMutation.mutate(formData)
+    } else {
+      toast.error('Unable to resend OTP. Please try registering again.')
+    }
+  }
+
   const onSubmit = (data) => {
-    console.log('data')
     const formData = {
-      fullName: data.fullName, // Combine first and last name
+      fullName: data.fullName,
       email: data.email,
       phone: data.phoneNumber,
       gender: data.gender,
@@ -198,12 +213,12 @@ export default function InvitedAdminEducatorRegistration() {
     mutation.mutate(formData)
   }
 
-  function openModal() {
-    setIsOpen(true)
-  }
-
   function closeModal() {
     setIsOpen(false)
+  }
+
+  function openModal() {
+    setIsOpen(true)
   }
 
   return (
@@ -244,7 +259,6 @@ export default function InvitedAdminEducatorRegistration() {
                 type='email'
                 placeholder='Type here...'
                 {...register('email')}
-                onChange={(e) => setEmail(e.target.value)}
                 disabled
               />
               {errors.email && (
@@ -426,7 +440,8 @@ export default function InvitedAdminEducatorRegistration() {
         overlayClassName='custom-overlay'
       >
         <EducatorOtpModal
-          email={email}
+          email={watch('email')}
+          resendOTP={handleResendOTP}
           setOpenSuccessModal={setOpenSuccessModal}
           closeModal={closeModal}
         />
