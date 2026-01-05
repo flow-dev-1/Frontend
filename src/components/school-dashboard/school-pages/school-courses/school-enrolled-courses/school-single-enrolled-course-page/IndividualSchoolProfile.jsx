@@ -4,7 +4,7 @@ import maleprofileImage from "../../../../../../assets/male-profile-image.png";
 import flag from "../../../../../../assets/Flag_of_Nigeria.png";
 import Modal from "react-modal";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import schoolService from "../../../../../../services/api/school";
 import EducatorProfileModal from "../../../../../dashboard/pages/profile/EducatorProfileModal";
@@ -19,21 +19,28 @@ export default function IndividualSchoolProfile({ onClose }) {
   const { userId } = useParams();
   const navigate = useNavigate();
   const [filterOption, setFilterOption] = useState("profile"); // Default to profile
+  const location = useLocation();
+
+  const isEducatorProfile = location.pathname.includes("/educators/");
 
   const fetchProfile = (params) => {
-    if (userType?.user?.grade === "Educator") {
+    console.log("Fetching profile for:", params, "isEducatorProfile:", isEducatorProfile);
+    if (isEducatorProfile || userType?.accountType === "Educator") {
       return schoolService.getMyProfileEducatorSchool(params);
     } else {
       return schoolService.getStudentProfileIndividual(params);
     }
   };
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["school-dashboard", userId], // Include userId for caching
-    queryFn: () => fetchProfile(userId), // Pass a function reference
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["school-dashboard", userId, isEducatorProfile],
+    queryFn: () => fetchProfile(userId),
     refetchOnMount: true,
     refetchOnWindowFocus: false,
   });
+
+  console.log("IndividualSchoolProfile Data:", data);
+  if (isError) console.error("IndividualSchoolProfile Query Error:", error);
 
   const openModal = () => {
     setIsOpen(true);
@@ -51,7 +58,11 @@ export default function IndividualSchoolProfile({ onClose }) {
   }
 
   const user =
-    userType?.user?.grade === "Educator" ? data?.educator : data?.user || {};
+    isEducatorProfile || userType?.accountType === "Educator"
+      ? data?.educator || data?.user
+      : data?.user || {};
+
+  console.log("Calculated User Object:", user);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -224,32 +235,34 @@ export default function IndividualSchoolProfile({ onClose }) {
               </p>
             </div>
 
-            <div className="guardian-info">
-              <h3
-                style={{ textAlign: "left", marginTop: "1rem" }}
-                className="guardian-title"
-              >
-                Parent/Guardian Information
-              </h3>
-              <p>
-                <span style={{ color: "#5B616A" }}>Full Name:</span>{" "}
-                <a href="#" className="guardian-link">
-                  {user?.guardianFullName || "Add Info"}
-                </a>
-              </p>
-              <p>
-                <span style={{ color: "#5B616A" }}>Email Address:</span>{" "}
-                <a href={`mailto:${user?.email}`} className="guardian-link">
-                  {user?.email || "Add Info"}
-                </a>
-              </p>
-              <p>
-                <span style={{ color: "#5B616A" }}>Phone Number:</span>{" "}
-                <a href={`tel:${user?.phone}`} className="guardian-link">
-                  {user?.phone || "Add Info"}
-                </a>
-              </p>
-            </div>
+            {!isEducatorProfile && userType?.accountType !== "Educator" && (
+              <div className="guardian-info">
+                <h3
+                  style={{ textAlign: "left", marginTop: "1rem" }}
+                  className="guardian-title"
+                >
+                  Parent/Guardian Information
+                </h3>
+                <p>
+                  <span style={{ color: "#5B616A" }}>Full Name:</span>{" "}
+                  <a href="#" className="guardian-link">
+                    {user?.guardianFullName || "Add Info"}
+                  </a>
+                </p>
+                <p>
+                  <span style={{ color: "#5B616A" }}>Email Address:</span>{" "}
+                  <a href={`mailto:${user?.email}`} className="guardian-link">
+                    {user?.email || "Add Info"}
+                  </a>
+                </p>
+                <p>
+                  <span style={{ color: "#5B616A" }}>Phone Number:</span>{" "}
+                  <a href={`tel:${user?.phone}`} className="guardian-link">
+                    {user?.phone || "Add Info"}
+                  </a>
+                </p>
+              </div>
+            )}
           </div>
         ) : (
           <SingleStudentEnrolledCourses />

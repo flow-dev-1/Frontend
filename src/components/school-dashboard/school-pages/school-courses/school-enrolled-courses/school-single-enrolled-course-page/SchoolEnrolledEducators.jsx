@@ -123,7 +123,7 @@ const SchoolEnrolledEducators = () => {
 
       <div className='image-container'>
         <img
-          src={backgroundImage}
+          src={data?.course?.course?.banner || backgroundImage}
           alt='Background'
           className='background-image'
         />
