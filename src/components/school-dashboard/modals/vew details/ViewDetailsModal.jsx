@@ -187,7 +187,8 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
               padding: "5px",
               borderRadius: "5px",
               marginLeft: "auto",
-              marginRight: "50px"
+              marginRight: "50px",
+              marginTop: "10px"
             }}
           >
             <span>+</span> Add A New Class
