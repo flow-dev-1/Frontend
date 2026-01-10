@@ -11,6 +11,7 @@ export default function EducatorOtpModal({
   resendOTP,
   closeModal,
   setOpenSuccessModal,
+  enrollmentId,
 }) {
   const dispatch = useDispatch();
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -36,7 +37,7 @@ export default function EducatorOtpModal({
 
   function handleSubmit() {
     console.log(otp.join(""), "OTP");
-    mutation.mutate({ code: otp.join("") });
+    mutation.mutate({ code: otp.join(""), enrollmentId });
   }
 
   const [countdown, setCountdown] = useState(0);
@@ -54,8 +55,10 @@ export default function EducatorOtpModal({
   }, [countdown]);
 
   const handleResendOTP = () => {
-    // setCountdown(600)
-    resendOTP();
+    if (resendOTP) {
+      setCountdown(600);
+      resendOTP();
+    }
   };
 
   const mutation = useMutation({

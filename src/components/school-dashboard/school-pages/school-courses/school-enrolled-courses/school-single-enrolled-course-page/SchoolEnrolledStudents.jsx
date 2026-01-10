@@ -66,12 +66,7 @@ const SchoolEnrolledStudents = () => {
     setShowDeleteModal(false);
   };
 
-  let schoolId;
-
-  // ToDO: Do a check if its a school or a user
-  if (user?.isSchool) {
-    schoolId = user?._id;
-  }
+  const schoolId = user?.isSchool ? user?._id : user?.school;
   const navigate = useNavigate();
   const { id } = useParams();
 

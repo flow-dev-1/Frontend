@@ -124,10 +124,8 @@ const SchoolCourseCard = ({
   )
 
   const handleDetailsClick = () => {
-    // Find the index of the current course in the coursesArray
-    const courseIndex = coursesArray?.courses.findIndex(
-      (c) => c._id === course._id
-    )
+
+    console.log(isEnrolled)
     // Use this index to get the corresponding enrolledData course
     if (isEnrolled) {
       setOpenViewModal(true);
@@ -362,6 +360,7 @@ const SchoolCourseCard = ({
         isOpen={openEnrollModalEducator}
         course={course}
         onRequestClose={closeEnrollementModal}
+        daysOfWeek={daysOfWeek}
       />
     </div>
   );

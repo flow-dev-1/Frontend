@@ -25,21 +25,22 @@ import EducatorOtpModal from '../../modals-pages/onboarding-modals/EducatorOtpMo
 Modal.setAppElement('#root') // Set the root element for the modal
 
 export default function InvitedAdminRegistration() {
-  const dispatch = useDispatch()
-  const [showPassword, setShowPassword] = useState(false)
-  const [modalIsOpen, setIsOpen] = useState(false)
-  const [openSuccessModal, setOpenSuccessModal] = useState(false)
-  const [formData, setFormData] = useState(null)
-  const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
-  const [countries, setCountries] = useState([])
-  const [isNigeria, setIsNigeria] = useState(true)
-  const [availableLGAs, setAvailableLGAs] = useState([]) // State to manage the list of LGAs
+  const location = useLocation()
   const navigate = useNavigate()
-  // State to track if the selected country is Nigeria
-  const [ email, setEmail] = useState('')
+  const dispatch = useDispatch()
 
+  const getQueryParams = (search) => {
+    const params = new URLSearchParams(search)
+    return {
+      email: params.get('email'),
+      t: params.get('t'),
+      fullName: params.get('fullName'),
+      enrollmentId: params.get('s'),
+    }
+  }
 
-  console.log(formData)
+  const { email: urlEmail, t, fullName: urlFullName, enrollmentId } = getQueryParams(location.search)
+
   const schema = yup.object().shape({
     fullName: yup
       .string()
@@ -81,11 +82,56 @@ export default function InvitedAdminRegistration() {
     resolver: yupResolver(schema),
     defaultValues: {
       country: 'Nigeria',
+      email: urlEmail || '',
+      fullName: urlFullName || '',
     },
   })
 
+  const [showPassword, setShowPassword] = useState(false)
+  const [modalIsOpen, setIsOpen] = useState(false)
+  const [openSuccessModal, setOpenSuccessModal] = useState(false)
+  const [formData, setFormData] = useState(null)
+  const [countryCode, setCountryCode] = useState(getCountryCallingCode('NG'))
+  const [countries, setCountries] = useState([])
+  const [isNigeria, setIsNigeria] = useState(true)
+  const [availableLGAs, setAvailableLGAs] = useState([])
+
   const selectedCountry = watch('country')
   const selectedState = watch('state')
+
+  // Fetch parent details using the token
+  const { data } = useQuery({
+    queryKey: ['invited-educator-admin', t],
+    queryFn: () => userService.getEducatorDetails(t),
+    enabled: !!t,
+  })
+
+  useEffect(() => {
+    if (t) {
+      dispatch(setToken(t))
+      localStorage.setItem('Flow-Auth-Token', t)
+    }
+  }, [t, dispatch])
+
+  useEffect(() => {
+    // Initial pre-population from URL
+    if (urlEmail) setValue('email', urlEmail);
+    if (urlFullName) setValue('fullName', urlFullName);
+
+    // Update with API data if available and valid
+    if (data?.status === 'success' && data?.data?.[0]) {
+      const apiInfo = data.data[0];
+      if (apiInfo.email && apiInfo.email !== 'N/A') setValue('email', apiInfo.email);
+      if (apiInfo.fullName && apiInfo.fullName !== 'N/A') setValue('fullName', apiInfo.fullName);
+      if (apiInfo.phone && apiInfo.phone !== 'N/A') setValue('phoneNumber', apiInfo.phone);
+      if (apiInfo.state && apiInfo.state !== 'N/A') setValue('state', apiInfo.state);
+      if (apiInfo.lga && apiInfo.lga !== 'N/A') setValue('lga', apiInfo.lga);
+      if (apiInfo.gender && apiInfo.gender !== 'N/A') setValue('gender', apiInfo.gender);
+    }
+  }, [data, urlEmail, urlFullName, setValue])
+
+
+
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword)
@@ -133,7 +179,7 @@ export default function InvitedAdminRegistration() {
   }, [selectedCountry])
 
   const mutation = useMutation({
-    mutationFn: (data) => userService.register('Individaul', data),
+    mutationFn: (data) => userService.register('Individual', data),
     onSuccess: (data) => {
       console.log('Registration successful:', data)
       toast.success(data.message)
@@ -148,6 +194,25 @@ export default function InvitedAdminRegistration() {
       toast.error(error || 'Registration failed')
     },
   })
+
+  const resendOtpMutation = useMutation({
+    mutationFn: (data) => userService.register('Individual', data),
+    onSuccess: (data) => {
+      toast.success(data.message || 'OTP resent successfully!')
+    },
+    onError: (error) => {
+      toast.error(error?.message || 'Failed to resend OTP')
+    },
+  })
+
+  const handleResendOTP = () => {
+    if (formData) {
+      resendOtpMutation.mutate(formData)
+    } else {
+      toast.error('Unable to resend OTP. Please try registering again.')
+    }
+  }
+
   const onSubmit = (data) => {
     console.log('data')
     const formData = {
@@ -211,7 +276,7 @@ export default function InvitedAdminRegistration() {
                 type='email'
                 placeholder='Type here...'
                 {...register('email')}
-                onChange={(e) => setEmail(e.target.value)}
+                disabled
               />
               {errors.email && (
                 <p className='error-message'>{errors.email.message}</p>
@@ -392,7 +457,9 @@ export default function InvitedAdminRegistration() {
         overlayClassName='custom-overlay'
       >
         <EducatorOtpModal
-          email={email}
+          email={watch('email')}
+          enrollmentId={enrollmentId}
+          resendOTP={handleResendOTP}
           setOpenSuccessModal={setOpenSuccessModal}
           closeModal={closeModal}
         />

@@ -22,7 +22,7 @@ const SchoolAllCourses = () => {
   const [filterOption, setFilterOption] = useState(""); // State for Filter Option
   let schoolId;
 
-  // ToDO: Do a check if its a school or a user
+  // ToDO: Do a check if its a school or a user(Educator)
   if (user?.isSchool) {
     schoolId = user?._id;
   }else{

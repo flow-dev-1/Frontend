@@ -131,7 +131,7 @@ export default function EducatorRegistrationForm() {
   }, [selectedCountry]);
 
   const mutation = useMutation({
-    mutationFn: (data) => userService.register("Individaul", data),
+    mutationFn: (data) => userService.register("Individual", data),
     onSuccess: (data) => {
       console.log("Registration successful:", data);
       toast.success(data.message);
@@ -146,6 +146,30 @@ export default function EducatorRegistrationForm() {
       toast.error(error || "Registration failed");
     },
   });
+
+  const resendOtpMutation = useMutation({
+    mutationFn: (data) => userService.register("Individual", data),
+    onSuccess: (data) => {
+      console.log("Resend OTP successful:", data);
+      toast.success(data.message || "OTP sent successfully");
+      dispatch(setToken(data?.token));
+      localStorage.setItem("Flow-Auth-Token", data?.token);
+    },
+    onError: (error) => {
+      console.error("Resend OTP error:", error);
+      toast.dismiss();
+      toast.error(error?.message || "Failed to resend OTP");
+    },
+  });
+
+  const handleResendOTP = () => {
+    if (formData) {
+      resendOtpMutation.mutate(formData);
+    } else {
+      toast.error("Unable to resend OTP. Please try registering again.");
+    }
+  };
+
   const onSubmit = (data) => {
     console.log("data");
     const formData = {
@@ -389,6 +413,7 @@ export default function EducatorRegistrationForm() {
       >
         <EducatorOtpModal
           email={email}
+          resendOTP={handleResendOTP}
           setOpenSuccessModal={setOpenSuccessModal}
           closeModal={closeModal}
         />
