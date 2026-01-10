@@ -13,6 +13,8 @@ import { courseContent as emotionalRegulationCourseContent } from "../../compone
 import { assessments as emotionalRegulationAssessments } from "../../components/dashboard/pages/my-courses/emotional-regulation/data/assessment";
 import { courseContent as transition2CourseContent } from "../../components/dashboard/pages/my-courses/transition-2/data/activity";
 import { assessments as transition2Assessments } from "../../components/dashboard/pages/my-courses/transition-2/data/assessment";
+import { courseContent as tot2CourseContent } from "../../components/dashboard/pages/my-courses/TOT-2/data/activity";
+import { assessments as tot2Assessments } from "../../components/dashboard/pages/my-courses/TOT-2/data/assessment";
 
 const courseData = {
   compassion: {
@@ -39,6 +41,10 @@ const courseData = {
     courseContent: emotionalRegulationCourseContent,
     assessments: emotionalRegulationAssessments,
   },
+  tot_2: {
+    courseContent: tot2CourseContent,
+    assessments: tot2Assessments,
+  },
 };
 
 const getCourseFromURL = () => {
@@ -61,6 +67,7 @@ const getCourseFromURL = () => {
     "tot",
     "emotional_regulation",
     "transition_2",
+    "tot_2",
   ].includes(lastSegment?.toLowerCase())
     ? lastSegment.toLowerCase()
     : "compassion";
@@ -116,8 +123,8 @@ const navigationSlice = createSlice({
     setCourse: (state, action) => {
       if (state.currentCourse !== action.payload) {
         state.currentCourse = action.payload;
-        state.currentWeek = 3;
-        state.currentPage = 8;
+        state.currentWeek = 1;
+        state.currentPage = 1;
         state.currentStep = 1;
       }
     },
@@ -125,14 +132,14 @@ const navigationSlice = createSlice({
       const newCourse = getCourseFromURL();
       if (state.currentCourse !== newCourse) {
         state.currentCourse = newCourse;
-        state.currentWeek = 3;
-        state.currentPage = 8;
+        state.currentWeek = 1;
+        state.currentPage = 1;
         state.currentStep = 1;
         state.showReview = false;
         state.showHurray = false;
 
-        sessionStorage.setItem("flow-currentWeek", "3");
-        sessionStorage.setItem("flow-currentPage", "8");
+        sessionStorage.setItem("flow-currentWeek", "1");
+        sessionStorage.setItem("flow-currentPage", "1");
         sessionStorage.setItem("flow-currentStep", "1");
       }
     },
