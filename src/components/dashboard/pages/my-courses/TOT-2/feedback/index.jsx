@@ -7,7 +7,6 @@ import Week2 from "./weeks/week2/Week2";
 import Week3 from "./weeks/week3/Week3";
 import Week4 from "./weeks/week4/Week4";
 import Week5 from "./weeks/week5/Week5";
-import Week6 from "./weeks/week6/Week6";
 import OverallFeedBack from "./weeks/overall/OverallFeedBack";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
@@ -30,10 +29,6 @@ function TOTFeedback() {
   const [isWeekThreeLoaded, setWeekThreeData] = useState(false);
   const [isWeekFourLoaded, setWeekFourData] = useState(false);
   const [isWeekFiveLoaded, setWeekFiveData] = useState(false);
-  const [isWeekSixLoaded, setWeekSixData] = useState(false);
-  const [isWeekSevenLoaded, setWeekSevenData] = useState(false);
-  const [isWeekEightLoaded, setWeekEightData] = useState(false);
-  const [isWeekNineLoaded, setWeekNineData] = useState(false);
 
   const [allDataLoaded, setAllDataLoaded] = useState(false);
 
@@ -43,8 +38,7 @@ function TOTFeedback() {
         isWeekTwoLoaded &&
         isWeekThreeLoaded &&
         isWeekFourLoaded &&
-        isWeekFiveLoaded &&
-        isWeekSixLoaded
+        isWeekFiveLoaded
     );
   }, [
     isWeekOneLoaded,
@@ -52,7 +46,6 @@ function TOTFeedback() {
     isWeekThreeLoaded,
     isWeekFourLoaded,
     isWeekFiveLoaded,
-    isWeekSixLoaded,
   ]);
 
   const currentWeek = activeIndex + 1;
@@ -78,19 +71,19 @@ function TOTFeedback() {
 
   const weekContents = [
     {
-      topic: "Understanding SEL & Positive Psychology",
+      topic: "Understanding Inclusion and Special Needs in the Classroom",
       component: (
         <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} />
       ),
     },
     {
-      topic: "Self-Awareness & Emotional Regulation",
+      topic: "The Inclusive Mindset: Empathy and Compassion",
       component: (
         <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} />
       ),
     },
     {
-      topic: "Building Relationships & Creating a Safe Classroom",
+      topic: "The Inclusive Mindset: Empathy, and Compassion",
       component: (
         <Week3
           enrollmentId={enrollmentId}
@@ -99,33 +92,20 @@ function TOTFeedback() {
       ),
     },
     {
-      topic: "Growth Mindset & Resilience for Educators",
+      topic:
+        "Practical Strategies for Supporting Students with Common Special Needs",
       component: (
         <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} />
       ),
     },
     {
-      topic: "Integrating SEL into Teaching Methods",
+      topic: "Collaboration, Support Systems, and Inclusive Implementation",
       component: (
         <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} />
       ),
     },
     {
-      topic: "Teacher Well-being & Sustainable SEL Practices",
-      component: (
-        <Week6 enrollmentId={enrollmentId} setWeekSixData={setWeekSixData} />
-      ),
-    },
-    {
-      topic: "SEL & Positive Psychology Implementation Plan Worksheet.",
-      component: "",
-    },
-    {
-      topic: "Teacher Resources for ToT Course 1",
-      component: "",
-    },
-    {
-      topic: "Summary of your journey through ToT Course 1",
+      topic: "Summary of your journey through ToT Course 2",
       component: (
         <OverallFeedBack
           enrollmentId={enrollmentId}
@@ -232,5 +212,3 @@ function TOTFeedback() {
 }
 
 export default TOTFeedback;
-
-// week 4, all drag and drop
