@@ -32,7 +32,7 @@ function Week5({ enrollmentId, setWeekFiveData }) {
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/emotional-regulation-feedback-5", enrollmentId, 5],
+    queryKey: ["dashboard/transition2-feedback-5", enrollmentId, 5],
     queryFn: () =>
       isAdmin
         ? adminService.getUserCourseData(enrollmentId, 5, code)
@@ -63,6 +63,8 @@ function Week5({ enrollmentId, setWeekFiveData }) {
 
   useEffect(() => {
     if (!data) return;
+
+    console.log(data.activity?.activities);
 
     setActivityData(data.activity?.activities);
     setAssessmentData(data.assessment?.assessments);
@@ -100,8 +102,20 @@ function Week5({ enrollmentId, setWeekFiveData }) {
     setActivityFeedbackId(null);
     setShowModal(false);
   };
+  function mapToColoredItems(obj) {
+    if (!obj || typeof obj !== "object") return [];
 
-  if (!isPending) {
+    const labels = ["S", "M", "A", "R", "T"];
+    const colors = ["#FCF85D", "#85D4FF", "#FF90C6", "#FFCDAC", "#C9FF61"];
+
+    return Object.values(obj).map((text, idx) => ({
+      label: labels[idx] || "",
+      text,
+      color: colors[idx],
+    }));
+  }
+
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
@@ -163,7 +177,13 @@ function Week5({ enrollmentId, setWeekFiveData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
+        <ul className="list-unstyled fs-md-2 flex-grow-1">
+          {(getActivityAnswer(activity1.id) || [])?.map((item, idx) => (
+            <li key={idx} className="text-lg">
+              {idx + 1}. {item.value}
+            </li>
+          ))}
+        </ul>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity1.id)
             ?.feedback && (
@@ -269,7 +289,25 @@ function Week5({ enrollmentId, setWeekFiveData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        <ul className="list-unstyled fs-md-2 flex-grow-1">
+          {mapToColoredItems(getActivityAnswer(activity3.id)?.[0]?.value).map(
+            (item, idx) => (
+              <div key={idx} className="d-flex gap-2 align-items-center">
+                <h2
+                  className="text-lg bg-gray p-3"
+                  style={{
+                    color: item.color,
+                    width: "40px",
+                    height: "45px",
+                  }}
+                >
+                  {item.label}
+                </h2>
+                <p>{item.text}</p>
+              </div>
+            )
+          )}
+        </ul>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -322,7 +360,9 @@ function Week5({ enrollmentId, setWeekFiveData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity4.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {getActivityAnswer(activity4.id)?.[0]?.value || ""}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity4.id)
             ?.feedback && (
@@ -369,7 +409,25 @@ function Week5({ enrollmentId, setWeekFiveData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity4.id)}</p>
+        <ul className="list-unstyled fs-md-2 flex-grow-1">
+          {mapToColoredItems(getActivityAnswer(activity4.id)?.[1]?.value).map(
+            (item, idx) => (
+              <div key={idx} className="d-flex gap-2 align-items-center">
+                <h2
+                  className="text-lg bg-gray p-3"
+                  style={{
+                    color: item.color,
+                    width: "40px",
+                    height: "45px",
+                  }}
+                >
+                  {item.label}
+                </h2>
+                <p>{item.text}</p>
+              </div>
+            )
+          )}
+        </ul>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity4.id)
             ?.feedback && (

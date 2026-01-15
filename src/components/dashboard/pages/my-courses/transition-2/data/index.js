@@ -66,7 +66,6 @@ const getWeekContentExcludingVideos = (weekNumber) => {
   // Filter out pages of type "video"
   const filteredPages = weekData.pages.filter((page) => page.type !== "video");
 
-  console.log(filteredPages);
   return {
     pages: filteredPages,
   };

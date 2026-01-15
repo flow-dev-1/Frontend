@@ -26,7 +26,7 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
     if (!data || data?.status === "failed") return;
     setAssessmentPercentile(data?.averagePercent);
     setHasPercentile(true);
-    return () => { };
+    return () => {};
   }, [data]);
 
   function getFeedBackMessage(percentile) {
@@ -39,7 +39,7 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
         return "Well done! You’ve shown a strong understanding of SEL and Positive Psychology concepts and are starting to connect them meaningfully to your classroom practice. You recognize how empathy, relationship-building, and emotional regulation influence learning outcomes. To keep improving, aim to apply SEL more consistently, model calm responses to challenges, and build structured moments for reflection or gratitude in your lessons. You’re well on your way to creating a classroom culture rooted in care, connection, and emotional growth.";
       case percentile >= 80 && percentile <= 94:
         return "Excellent work! You’ve demonstrated a clear understanding of SEL and Positive Psychology competencies and how its principles can transform both teaching and learning. You’ve likely developed effective strategies for fostering empathy, self-regulation, and resilience in your students, and you understand the importance of teacher wellbeing in sustaining those practices. Keep refining your skills by mentoring peers or sharing SEL practices in team meetings. Continue to model emotional intelligence in every interaction, and you will build the kind of classroom where students feel safe, motivated, and valued.";
-         case percentile >= 95:
+      case percentile >= 95:
         return "Outstanding achievement! You’ve shown exceptional mastery of Social and Emotional Learning. You not only understand the theory but also demonstrate how to live it out in your teaching, balancing self-awareness, empathy, and resilience with skill. Your approach likely fosters deep trust, engagement, and growth in your students. Continue to inspire others by leading discussions on SEL implementation and supporting colleagues who are just beginning their journey. Your dedication to nurturing emotional wellbeing in education sets a powerful example. Keep shining, the ripple effect of your work will last far beyond the classroom.";
       default:
         return "";
@@ -69,23 +69,25 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
       {/* <p className="fs-md-3 text-gray mt-3">
         Congratulations on completing the Transition Curriculum!
       </p> */}
+
       <p className="fs-md-3 text-gray mt-3">
-        Congratulations on completing the Social and Emotional Learning and Positive Psychology course!
-        Over the past weeks, you’ve learned what it truly means to teach with emotional intelligence,
-        self-awareness, and compassion. You’ve learned how SEL can strengthen not only your students’
-        growth but also your own wellbeing as an educator.
+        Congratulations on completing the Transition Curriculum!
       </p>
       <p className="fs-md-3 text-gray my-3">
-        You now have practical strategies to manage stress, build meaningful relationships,
-        and foster a supportive, thriving classroom environment. Remember,
-        every interaction with a student is an opportunity to model empathy, resilience, and positivity.
+        Over the past ten weeks, you’ve explored essential skills and concepts
+        to prepare you for secondary school. From understanding your “why” to
+        building resilience and setting goals, you’ve laid a strong foundation
+        for success.
       </p>
       <p className="fs-md-3 text-gray">
-        Keep practicing what you’ve learned, reflect often, stay mindful,
-        and continue nurturing both your emotional health and that of your students.
-        Teaching with heart transforms classrooms into communities where everyone grows together.
+        Remember, transition is an ongoing process. The lessons you’ve learned
+        in this course will continue to guide you as you navigate new challenges
+        and opportunities. Stay curious, keep growing, and never stop believing
+        in yourself.
       </p>
-
+      <p className="fs-md-3 text-gray">
+        Good luck on your journey ahead, and always strive to be your best self!
+      </p>
       <div className="bg-blue p-1 p-md-3 mt-2 rounded rounded-md-4">
         <h2 className="text-white fs-md-1">Overall Feedback</h2>
         <p className="text-white fs-md-3">

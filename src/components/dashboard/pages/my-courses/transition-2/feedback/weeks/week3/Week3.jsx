@@ -26,13 +26,11 @@ function Week3({ enrollmentId, setWeekThreeData }) {
   const [activityFeedbackId, setActivityFeedbackId] = useState(null);
   const { isAdmin, code } = useSelector(adminData);
 
-  const [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10] = activity3.steps;
-
   const { questions: assessments } = getWeekAssessment(3);
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/emotional-regulation-feedback-3", enrollmentId, 3],
+    queryKey: ["dashboard/transition2-feedback-3", enrollmentId, 3],
     queryFn: () =>
       isAdmin
         ? adminService.getUserCourseData(enrollmentId, 3, code)
@@ -106,19 +104,39 @@ function Week3({ enrollmentId, setWeekThreeData }) {
   });
 
   function drag1(type) {
-    if (!activityData || !activityData[4] || !activityData[4].answer) return [];
+    if (!activityData || !activityData[3] || !activityData[3].answer) return [];
 
     const indices =
-      type === "mild"
-        ? activityData[4]?.answer?.[0]?.value?.pink
-        : type === "frustrate"
-        ? activityData[4]?.answer?.[0]?.value?.orange
-        : activityData[4]?.answer?.[0]?.value?.red;
+      type === "needs"
+        ? activityData[3]?.answer?.[0]?.value?.pink
+        : type === "wants"
+        ? activityData[3]?.answer?.[0]?.value?.orange
+        : activityData[3]?.answer?.[0]?.value?.red;
 
     // console.log(indices, "Indices")
 
     // console.log(activity2,"Activity 2")
-    return indices?.map((index) => activity3?.steps?.[1].images[index]) || [];
+    return indices?.map((index) => activity4?.steps?.[1].images[index]) || [];
+  }
+
+  function getSelectedItems(selectedMap, items) {
+    if (!selectedMap || typeof selectedMap !== "object") return [];
+
+    // const items =
+
+    return Object.keys(selectedMap)
+      .filter((key) => selectedMap[key])
+      .map((index) => items[Number(index)])
+
+      .filter(Boolean);
+  }
+
+  function getSelectedText(input, options) {
+    if (!input || !options || !Array.isArray(options)) return null;
+
+    const match = options.find((option) => option.id === input.value);
+
+    return match ? match.text : null;
   }
 
   const handleModalOpen = () => {
@@ -196,7 +214,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
     });
   }
 
-  if (!isPending) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
@@ -273,7 +291,18 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity2.id)}</p>
+        <ul className="list-unstyled fs-md-2 flex-grow-1">
+          {(
+            getSelectedItems(
+              getActivityAnswer(activity2.id)?.selectedOption,
+              activity2.options
+            ) || []
+          )?.map((item, idx) => (
+            <li key={idx} className="text-lg">
+              {idx + 1}. {item}
+            </li>
+          ))}
+        </ul>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity2.id)
             ?.feedback && (
@@ -327,7 +356,12 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {getSelectedText(
+            getActivityAnswer(activity3.id)?.[0] || {},
+            activity3.steps[0].options
+          )}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -374,7 +408,12 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {getSelectedText(
+            getActivityAnswer(activity3.id)?.[1] || {},
+            activity3.steps[1].options
+          )}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -421,7 +460,12 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {getSelectedText(
+            getActivityAnswer(activity3.id)?.[2] || {},
+            activity3.steps[2].options
+          )}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -468,7 +512,12 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {getSelectedText(
+            getActivityAnswer(activity3.id)?.[3] || {},
+            activity3.steps[3].options
+          )}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -515,7 +564,12 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {getSelectedText(
+            getActivityAnswer(activity3.id)?.[4] || {},
+            activity3.steps[4].options
+          )}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -562,7 +616,12 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {getSelectedText(
+            getActivityAnswer(activity3.id)?.[5] || {},
+            activity3.steps[5].options
+          )}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -609,7 +668,12 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {getSelectedText(
+            getActivityAnswer(activity3.id)?.[6] || {},
+            activity3.steps[6].options
+          )}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -656,7 +720,12 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {getSelectedText(
+            getActivityAnswer(activity3.id)?.[7] || {},
+            activity3.steps[7].options
+          )}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -703,7 +772,12 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {getSelectedText(
+            getActivityAnswer(activity3.id)?.[8] || {},
+            activity3.steps[8].options
+          )}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -750,7 +824,12 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {getSelectedText(
+            getActivityAnswer(activity3.id)?.[9] || {},
+            activity3.steps[9].options
+          )}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -797,7 +876,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       <p className="bg-yellow py-md-3 px-md-5 py-1 px-2 text-gray d-inline-block rounded-5 fs-md-4">
         Activity 4
       </p>
-      <p
+      {/* <p
         className="text-gray fs-md-4 week-2-question-text"
         accordion
         style={{ fontSize: 1 + "em" }}
@@ -806,7 +885,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         <span className="fw-bold text-gray">
           {activity4.steps[0].statement}
         </span>
-      </p>
+      </p> */}
       <hr />
       <div className="d-flex gap-3">
         <h2
@@ -839,7 +918,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
               NEEDS
             </p>
             <div className="px-2 py-1 px-md-5 py-md-3">
-              {drag1("mild")?.map((item, idx) => (
+              {drag1("needs")?.map((item, idx) => (
                 <p className="fs-md-4">
                   {idx + 1}. {item}
                 </p>
@@ -854,7 +933,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
               WANTS
             </p>
             <div className="px-2 py-1 px-md-5 py-md-3">
-              {drag1("frustrate")?.map((item, idx) => (
+              {drag1("wants")?.map((item, idx) => (
                 <p className="fs-md-4">
                   {idx + 1}. {item}
                 </p>
@@ -869,7 +948,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
               SAVINGS
             </p>
             <div className="px-2 py-1 px-md-5 py-md-3">
-              {drag1("high")?.map((item, idx) => (
+              {drag1("savings")?.map((item, idx) => (
                 <p className="fs-md-4">
                   {idx + 1}. {item}
                 </p>
