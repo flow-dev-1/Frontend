@@ -15,6 +15,7 @@ const SchoolSettingsTeams = () => {
   const [showDropdown, setShowDropdown] = useState(null)
   const [showAssignClassModal, setShowAssignClassModal] = useState(false);
   const [selectedTeamId, setSelectedTeamId] = useState(null);
+  const [selectedClasses, setSelectedClasses] = useState([]);
   const [showLogoutDropdown, setShowLogoutDropdown] = useState(false);
 
   const queryClient = useQueryClient()
@@ -29,12 +30,28 @@ const SchoolSettingsTeams = () => {
 
   const openAssignClassModal = (teamId) => {
     setSelectedTeamId(teamId);
+    const teamMember = adminData?.find((admin) => admin._id === teamId);
+    if (teamMember && teamMember.classAssigned) {
+      // Deep copy and remove duplicates to ensure clean state
+      const uniqueAssigned = teamMember.classAssigned.reduce((acc, current) => {
+        const x = acc.find(item => item.stdClass === current.stdClass && item.classTag === current.classTag);
+        if (!x) {
+          return acc.concat([current]);
+        } else {
+          return acc;
+        }
+      }, []);
+      setSelectedClasses(uniqueAssigned);
+    } else {
+      setSelectedClasses([]);
+    }
     setShowAssignClassModal(true);
   };
 
   const closeAssignClassModal = () => {
     setShowAssignClassModal(false);
     setSelectedTeamId(null);
+    setSelectedClasses([]);
   };
 
   const { user } = useSelector((state) => state.user)
@@ -111,24 +128,23 @@ const SchoolSettingsTeams = () => {
     mutationFn: (data) =>
       schoolService.assignClassToTeamMember(schoolId, selectedTeamId, data),
     onMutate: () => {
-      toastId.current = toast.loading('Assigning class...')
+      toastId.current = toast.loading('Updating assigned classes...')
     },
     onSuccess: (data) => {
       toast.update(toastId.current, {
-        render: 'Class assigned successfully',
+        render: 'Classes assigned successfully',
         type: 'success',
         isLoading: false,
         autoClose: 3000,
       })
       closeAssignClassModal()
-      setSelectedTeamId(null);
       queryClient.invalidateQueries(['school-enrolled-classes'])
       queryClient.invalidateQueries(['school-teams'])
     },
     onError: (error) => {
       console.log(error)
       toast.update(toastId.current, {
-        render: error?.message || 'Error assigning class',
+        render: error?.message || 'Error assigning classes',
         type: 'error',
         isLoading: false,
         autoClose: 3000,
@@ -136,53 +152,28 @@ const SchoolSettingsTeams = () => {
     },
   })
 
-  const unAssignClassMutation = useMutation({
-    mutationFn: (data) =>
-      schoolService.assignClassToTeamMember(schoolId, selectedTeamId, data),
-    onMutate: () => {
-      toastId.current = toast.loading('Unassigning class...')
-    },
-    onSuccess: (data) => {
-      toast.update(toastId.current, {
-        render: 'Class unassigned successfully',
-        type: 'success',
-        isLoading: false,
-        autoClose: 3000,
-      })
-      closeAssignClassModal()
-      setSelectedTeamId(null);
-      queryClient.invalidateQueries(['school-teams'])
-    },
-    onError: (error) => {
-      toast.update(toastId.current, {
-        render: error?.message || 'Error unassigning class',
-        type: 'error',
-        isLoading: false,
-        autoClose: 3000,
-      })
-    },
-  })
+  // unAssignClassMutation removed as the single assignClassMutation now handles both assign and unassign via full replacement
 
-  const handleAssignClass = (type, stdClass, classTag) => {
-    if (!selectedTeamId) {
-      toast.error('Please select a team member')
-      return
-    }
+  const handleToggleClass = (stdClass, classTag) => {
+    const exists = selectedClasses.some(
+      (c) => c.stdClass === stdClass && c.classTag === classTag
+    );
 
-
-    const teamMember = adminData?.find(admin => admin._id === selectedTeamId)
-    const isClassAssigned = teamMember?.classAssigned?.some(
-      c => c.stdClass === stdClass && c.classTag === classTag
-    )
-
-    if (isClassAssigned) {
-      if (!window.confirm(`Are you sure you want to Unassign ${stdClass} (${classTag}) from this team member?`)) return
-      unAssignClassMutation.mutate({ stdClass, classTag, unAssign: true })
+    if (exists) {
+      setSelectedClasses(
+        selectedClasses.filter(
+          (c) => !(c.stdClass === stdClass && c.classTag === classTag)
+        )
+      );
     } else {
-      if (!window.confirm(`Are you sure you want to Assign ${stdClass} (${classTag}) to this team member?`)) return
-      assignClassMutation.mutate({ stdClass, classTag })
+      setSelectedClasses([...selectedClasses, { stdClass, classTag }]);
     }
-  }
+  };
+
+  const handleSaveClasses = () => {
+    if (!selectedTeamId) return;
+    assignClassMutation.mutate({ classes: selectedClasses });
+  };
 
 
 
@@ -245,14 +236,19 @@ const SchoolSettingsTeams = () => {
                 </td>
                 <td>
                   {admin?.classAssigned && admin.classAssigned.length > 0 ? (
-                    <div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
                       {admin.classAssigned.map((classItem, idx) => (
-                        <div key={idx} style={{ marginBottom: '8px' }}>
-                          <p style={{ margin: '0 0 4px 0', fontSize: '14px' }}>
-                            <strong>{classItem.stdClass}</strong> {classItem.classTag}
-                          </p>
-
-                        </div>
+                        <span key={idx} style={{
+                          backgroundColor: '#e6f7ff',
+                          border: '1px solid #1890ff',
+                          borderRadius: '4px',
+                          padding: '2px 6px',
+                          fontSize: '12px',
+                          color: '#1890ff',
+                          display: 'inline-block'
+                        }}>
+                          <strong>{classItem.stdClass}</strong> {classItem.classTag}
+                        </span>
                       ))}
                     </div>
                   ) : (
@@ -390,36 +386,49 @@ const SchoolSettingsTeams = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {enrolledClasses?.data?.map((course, index) => (
-                      <tr key={index}>
-                        <td>{course.stdClass}</td>
-                        <td>{course.classTag}</td>
-                        <td>
-
-                          <button
-                            onClick={() => {
-                              handleAssignClass(course._id, course.stdClass, course.classTag);
-                            }}
-                            style={{
-                              backgroundColor: adminData?.find(a => a._id === selectedTeamId)?.classAssigned?.some(
-                                c => c.stdClass === course.stdClass && c.classTag === course.classTag
-                              ) ? '#dc3545' : '#275DAD',
-                              color: 'white',
-                              border: 'none',
-                              padding: '8px 16px',
-                              borderRadius: '4px',
-                              cursor: 'pointer',
-                            }}
-                          >
-                            {adminData?.find(a => a._id === selectedTeamId)?.classAssigned?.some(
-                              c => c.stdClass === course.stdClass && c.classTag === course.classTag
-                            ) ? 'Unassign' : 'Assign'}
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                    {enrolledClasses?.data?.map((course, index) => {
+                      const isSelected = selectedClasses.some(
+                        (c) =>
+                          c.stdClass === course.stdClass &&
+                          c.classTag === course.classTag
+                      );
+                      return (
+                        <tr key={index}>
+                          <td>{course.stdClass}</td>
+                          <td>{course.classTag}</td>
+                          <td style={{ textAlign: "center" }}>
+                            <input
+                              type="checkbox"
+                              style={{ width: "20px", height: "20px", cursor: "pointer" }}
+                              checked={isSelected}
+                              onChange={() =>
+                                handleToggleClass(course.stdClass, course.classTag)
+                              }
+                            />
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
+              </div>
+              <div style={{ padding: "1rem", display: "flex", justifyContent: "flex-end" }}>
+                <button
+                  onClick={handleSaveClasses}
+                  disabled={assignClassMutation.isPending}
+                  style={{
+                    backgroundColor: "#275DAD",
+                    color: "white",
+                    border: "none",
+                    padding: "10px 20px",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    fontSize: "16px",
+                    opacity: assignClassMutation.isPending ? 0.7 : 1
+                  }}
+                >
+                  {assignClassMutation.isPending ? "Saving..." : "Save Changes"}
+                </button>
               </div>
             </div>
           </div>
