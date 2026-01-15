@@ -39,7 +39,7 @@ function Week4({ enrollmentId, setWeekFourData }) {
   const { questions: assessments } = getWeekAssessment(4);
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/emotional-regulation-feedback-4", enrollmentId, 4],
+    queryKey: ["dashboard/transition2-feedback-4", enrollmentId, 4],
     queryFn: () =>
       isAdmin
         ? adminService.getUserCourseData(enrollmentId, 4, code)
@@ -92,9 +92,20 @@ function Week4({ enrollmentId, setWeekFourData }) {
     setShowModal(false);
   };
 
-  function getActivityAnswer(activityId) {
-    return activityData?.find((activity) => activity.page === activityId)
-      ?.answer;
+  function getActivityAnswer(activityId, itemId) {
+    if (!itemId) {
+      return activityData?.find((activity) => activity.page === activityId)
+        ?.answer;
+    } else {
+      const answersList = activityData?.find(
+        (activity) => activity.page === activityId
+      )?.answer;
+
+      const answerObject = answersList?.find(
+        (activity) => activity.id === itemId
+      )?.value;
+      return answerObject ? answerObject : "";
+    }
   }
 
   function getActivityFeedback(activityId, itemId, index) {
@@ -114,7 +125,17 @@ function Week4({ enrollmentId, setWeekFourData }) {
     }
   }
 
-  if (!isPending) {
+  function getSelectedItems(selectedMap, items) {
+    if (!selectedMap || typeof selectedMap !== "object") return [];
+
+    return Object.keys(selectedMap)
+      .filter((key) => selectedMap[key])
+      .map((index) => items[Number(index)])
+
+      .filter(Boolean);
+  }
+
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
@@ -492,7 +513,9 @@ function Week4({ enrollmentId, setWeekFourData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity7.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {getActivityAnswer(activity7.id)?.textAnswers?.["1"]}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity7.id)
             ?.feedback && (
@@ -539,7 +562,18 @@ function Week4({ enrollmentId, setWeekFourData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity7.id)}</p>
+        <ul className="list-unstyled fs-md-2 flex-grow-1">
+          {(
+            getSelectedItems(
+              getActivityAnswer(activity7.id)?.checkboxAnswers,
+              activity7.steps[1].options
+            ) || []
+          )?.map((item, idx) => (
+            <li key={idx} className="text-lg">
+              {idx + 1}. {item}
+            </li>
+          ))}
+        </ul>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity7.id)
             ?.feedback && (
@@ -586,7 +620,9 @@ function Week4({ enrollmentId, setWeekFourData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity7.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {getActivityAnswer(activity7.id)?.textAnswers?.["3"]}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity7.id)
             ?.feedback && (

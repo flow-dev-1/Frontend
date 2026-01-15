@@ -4,14 +4,12 @@ import { Icon } from "@iconify/react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { ClimbingBoxLoader } from "react-spinners";
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
-import { saveAs } from "file-saver";
-import pdfTemplate from "../../../../../../../assets/tot-images/pdf/template.pdf";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import userService from "../../../../../../../services/api/user.js";
 import adminService from "../../../../../../../services/api/admin.js";
 import { adminData } from "../../../../../../../redux/reducers/adminReducer.js";
 import { useSelector } from "react-redux";
+import VisionBoard from "../VisionBoard.jsx";
 
 function Accordion({
   activeIndex,
@@ -22,88 +20,152 @@ function Accordion({
   setHasPercentile,
   enrollmentId,
 }) {
+  const pdfRef = useRef(null);
+
   const contentRef = useRef();
   const [pdfLoading, setPdfLoading] = useState(false);
   const [startDownload, setStartDownload] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { isAdmin, code } = useSelector(adminData);
-
   const [answers, setAnswers] = useState(null);
+  const { isAdmin, code } = useSelector(adminData);
 
   useEffect(() => {
     if (!startDownload) return;
 
     // download pdf, based on index, we will just check if the index is the one we want to downlaod, and serve the pdf we want, then return
 
-    // Worksheet
-    if (currentIndex === 6) {
-      console.log("downloading Worksheet pdf");
+    // Vision Board
+    if (currentIndex === 5) {
+      if (!pdfRef.current) return;
+
+      setPdfLoading(true);
+
+      html2canvas(pdfRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+      }).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "pt", "a4");
+
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+
+        const imgWidth = pageWidth;
+        const imgHeight = (canvas.height * pageWidth) / canvas.width;
+
+        let heightLeft = imgHeight;
+        let position = 0;
+
+        // First page
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        // Extra Page Incase
+        while (heightLeft > 1) {
+          position -= pageHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+
+        pdf.save("Vision-Board.pdf");
+
+        setPdfLoading(false);
+        setStartDownload(false);
+      });
 
       return;
     }
 
-    // Final course PDF (index 7)
-    if (currentIndex === 7) {
-      const originalState = activeIndex;
-      setPdfLoading(true);
-      setActiveIndex(null);
-
-      if (!hasPercentile) {
-        setActiveIndex(originalState);
-        setPdfLoading(false);
-        return;
-      }
-      console.log("downloading course pdf");
-
-      const link = document.createElement("a");
-      link.href = "/Teacher Resources.pdf";
-      link.download = "Teacher Resources.pdf";
-      link.click();
-
-      setStartDownload(false);
-      setActiveIndex("");
-      setHasPercentile(false);
-      setPdfLoading(false);
+    // Final course PDF (index 6)
+    if (currentIndex === 6) {
+      generatePDF();
 
       return;
     }
   }, [hasPercentile, allDataLoaded, startDownload, currentIndex]);
-  // toDo: Fetch User assessment and Activity Data
-  const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/tot-feedback-6", enrollmentId, 6],
-    queryFn: () =>
-      isAdmin
-        ? adminService.getUserCourseData(enrollmentId, 6, code)
-        : userService.getUserCourseData(enrollmentId, 6),
-    enabled: !!enrollmentId,
-    refetchOnMount: "always",
-    refetchOnWindowFocus: true,
-    keepPreviousData: false,
+
+  const generatePDF = async () => {
+    const originalState = activeIndex;
+    setPdfLoading(true);
+    setActiveIndex(null);
+
+    if (!hasPercentile) {
+      setActiveIndex(originalState);
+      setPdfLoading(false);
+      return;
+    }
+
+    if (allDataLoaded) {
+      setTimeout(() => {
+        const input = contentRef.current;
+
+        html2canvas(input).then((canvas) => {
+          const imgData = canvas.toDataURL("image/png");
+          const pdf = new jsPDF("p", "mm", "a4");
+          const imgWidth = 210;
+          const pageHeight = 295;
+          const imgHeight = (canvas.height * imgWidth) / canvas.width;
+          let heightLeft = imgHeight;
+          let position = 0;
+
+          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+
+          while (heightLeft >= 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+          }
+
+          pdf.save("Transition2Feedback.pdf");
+          setActiveIndex("");
+          setPdfLoading(false);
+          setHasPercentile(false);
+        });
+      }, 1000);
+    }
+  };
+
+  // toDo: Fetch User assessment and Activity Data for week and 2
+  const [first, second] = useQueries({
+    queries: [1, 2].map((step) => ({
+      queryKey: ["dashboard/transition2-feedback", enrollmentId, step],
+      queryFn: () =>
+        isAdmin
+          ? adminService.getUserCourseData(enrollmentId, step, code)
+          : userService.getUserCourseData(enrollmentId, step),
+      enabled: !!enrollmentId,
+      refetchOnMount: "always",
+      refetchOnWindowFocus: true,
+      keepPreviousData: false,
+    })),
   });
+
   const handleToggle = (index) => {
     window.scroll(0, 0);
     setActiveIndex(activeIndex === index ? "" : index);
   };
 
   useEffect(() => {
-    if (
-      data &&
-      data.activity &&
-      Array.isArray(data.activity.activities) &&
-      data.activity.activities[4] &&
-      data.activity.activities[4].answer !== undefined &&
-      data.activity.activities[4].answer !== null
-    ) {
-      setAnswers(data.activity.activities[4].answer);
-    }
+    if (!first?.data && !second?.data) return;
 
-    return () => {};
-  }, [data]);
+    const week1Answer = first?.data?.activity?.activities?.[2]?.answer ?? null;
 
-  if (isPending) {
+    const week2Answer = second?.data?.activity?.activities?.[3]?.answer ?? null;
+
+    setAnswers({
+      week1Page6: week1Answer,
+      week2page8: week2Answer,
+    });
+  }, [first?.data, second?.data]);
+
+  if (first.isPending || second.isPending) {
     // setWorksheetComponent("<div>Loading...</div>");
   }
-  if (data?.status === "failed" || isError) {
+  if (first?.status === "failed" || first.isError) {
     // alert(`${data?.message} || "Internal server error!"`);
   }
 
@@ -115,8 +177,8 @@ function Accordion({
         </div>
       )}
       <div className="accordion" ref={contentRef}>
-        <h2 className="accordion-header p-lg-2 p-md-4 bg-blue text-center text-white">
-          Feedback for ToT Course 1
+        <h2 className="accordion-header p-lg-2 p-md-4 bg-blue text-center text-white mt-2">
+          Feedback for Transition 2
         </h2>
 
         {items.map((item, index) => (
@@ -124,34 +186,34 @@ function Accordion({
             <div
               className={`py-4 px-5 d-flex gap-3 align-items-center justify-space-between
 py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
-                index > 7 ? "bg-blue-feedback" : ""
+                index > 5 ? "bg-blue-feedback" : ""
               }`}
             >
               <div className="d-flex align-items-center gap-3 flex-grow-1">
-                {index < 6 ? (
-                  <p
+                {index < 5 ? (
+                  <h2
                     className="text-gray text-nowrap fw-bold"
                     onClick={() => handleToggle(index)}
                     style={{ cursor: "pointer" }}
                   >
                     Week {index + 1}:
-                  </p>
-                ) : index >= 6 && index < 7 ? (
-                  <p
+                  </h2>
+                ) : index >= 5 && index < 6 ? (
+                  <h2
                     className="text-gray text-nowrap fw-bold"
                     onClick={() => handleToggle(index)}
                     style={{ cursor: "pointer" }}
                   >
-                    Summary
-                  </p>
+                    My Vision Board
+                  </h2>
                 ) : (
-                  <p
+                  <h2
                     className="text-gray fw-bold"
                     onClick={() => handleToggle(index)}
                     style={{ cursor: "pointer" }}
                   >
                     Final Report:
-                  </p>
+                  </h2>
                 )}
                 <div
                   className="text-gray "
@@ -160,7 +222,7 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
                 >
                   {item.title}
                 </div>
-                {index >= 6 && (
+                {index >= 5 && (
                   <p
                     className="text-blue"
                     style={{ zIndex: 100, cursor: "pointer" }}
@@ -192,6 +254,17 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
             )}
           </div>
         ))}
+      </div>
+      <div
+        ref={pdfRef}
+        style={{
+          position: "absolute",
+          left: "-9999px",
+          top: 0,
+          width: "794px",
+        }}
+      >
+        <VisionBoard answers={answers} />
       </div>
     </>
   );
