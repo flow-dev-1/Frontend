@@ -108,9 +108,11 @@ function WeekOneAssessment() {
     // If its the last question submit else update answer
     dispatch(saveAssessment(answers));
 
+
     if (isLastQuestion) {
+      // console.log(userAnswers.activities.length, "userAnswers.activities.length")
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 11;
+        answers.length !== totalSteps || userAnswers.activities.length !== 5;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(

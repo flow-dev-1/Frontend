@@ -51,7 +51,11 @@ const MyCourseCard = ({ course }) => {
       navigate(`/dashboard/tot/feedback`, {
         state: { enrollmentData: course },
       });
-    } else {
+    } else if (course?.course.title === "TOT Course 2") {
+      navigate(`/dashboard/tot_2/feedback`, {
+        state: { enrollmentData: course },
+      });
+    }else {
       navigate(`/dashboard/${course?.course.title}/feedback`, {
         state: { enrollmentData: course },
       });
@@ -85,7 +89,11 @@ const MyCourseCard = ({ course }) => {
       navigate(`/dashboard/tot`, {
         state: { enrollmentData: course },
       });
-    } else {
+    } else if (course?.course.title === "TOT Course 2") {
+      navigate(`/dashboard/tot_2`, {
+        state: { enrollmentData: course },
+      });
+    }else {
       navigate(`/dashboard/${course?.course?.title}`, {
         state: { enrollmentData: course },
       });

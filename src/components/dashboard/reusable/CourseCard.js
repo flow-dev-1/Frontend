@@ -54,6 +54,8 @@ const CourseCard = ({
       navigate(`/dashboard/transition_2/feedback`, { state: { enrollmentData: isEnrolled } })
     }else if(course?.title === "TOT Course 1"){
       navigate(`/dashboard/tot/feedback`, { state: { enrollmentData: isEnrolled } })
+    }else if(course?.title === "TOT Course 2"){
+      navigate(`/dashboard/tot_2/feedback`, { state: { enrollmentData: isEnrolled } })
     }else{
       navigate(`/dashboard/${course?.title}/feedback`, { state: { enrollmentData: isEnrolled } })
     }
@@ -71,6 +73,8 @@ const CourseCard = ({
       navigate(`/dashboard/transition_2`, { state: { enrollmentData: isEnrolled } })
     }else if(course?.title === "TOT Course 1"){
       navigate(`/dashboard/tot`, { state: { enrollmentData: isEnrolled } })
+    }else if(course?.title === "TOT Course 2"){
+      navigate(`/dashboard/tot_2`, { state: { enrollmentData: isEnrolled } })
     }else {
       navigate(`/dashboard/${course?.title}`, { state: { enrollmentData: isEnrolled } })
     }

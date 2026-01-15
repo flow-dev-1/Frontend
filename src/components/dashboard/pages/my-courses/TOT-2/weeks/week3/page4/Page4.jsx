@@ -109,8 +109,9 @@ function WeekThreeAssessment() {
     dispatch(saveAssessment(answers));
 
     if (isLastQuestion) {
+
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 5;
+        answers.length !== totalSteps || userAnswers.activities.length !== 1;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(
@@ -125,7 +126,6 @@ function WeekThreeAssessment() {
         totalSteps
       );
 
-      console.log(userScore, "userScore");
 
       mutation.mutate({
         ...userAnswers,

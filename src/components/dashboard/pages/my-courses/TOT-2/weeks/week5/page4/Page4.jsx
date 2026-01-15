@@ -53,15 +53,15 @@ function WeekFiveAssessment() {
         )}% in the quiz`
       );
       toast.success(data.message || "Answers saved successfully!"); // Show success toast
-      dispatch(
-        updateData({
-          course: null,
-          courseEnrollmentId: null,
-          week: 1,
-          activities: [],
-          assessments: [],
-        })
-      );
+      // dispatch(
+      //   updateData({
+      //     course: null,
+      //     courseEnrollmentId: null,
+      //     week: 1,
+      //     activities: [],
+      //     assessments: [],
+      //   })
+      // );
       dispatch(navigateNext());
     },
     onError: (error) => {
@@ -110,7 +110,7 @@ function WeekFiveAssessment() {
 
     if (isLastQuestion) {
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 5;
+        answers.length !== totalSteps || userAnswers.activities.length !== 1;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(

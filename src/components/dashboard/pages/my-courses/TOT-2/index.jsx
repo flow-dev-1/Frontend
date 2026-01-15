@@ -459,7 +459,7 @@ const CourseContent = () => {
 
           <div className="compassion-title">
             <h2 className="fs-5 fs-md-3 tot-nav-text">SEL for Educators:</h2>
-            <h2 className="compassion fs-5 tot-nav-text">ToT Course 1</h2>
+            <h2 className="compassion fs-5 tot-nav-text">ToT Course 2</h2>
           </div>
 
           <ul className="compassion-list">
