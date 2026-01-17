@@ -17,7 +17,7 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer.j
 import Modal from "../../components/Modal.jsx";
 import { useMutation } from "@tanstack/react-query";
 
-function Week5({ enrollmentId, setWeekOneData }) {
+function Week5({ enrollmentId, setWeekFiveData }) {
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState("");
   const [activityFeedbackId, setActivityFeedbackId] = useState(null);
@@ -92,7 +92,7 @@ function Week5({ enrollmentId, setWeekOneData }) {
     setActivityData(data.activity?.activities);
     setAssessmentData(data.assessment?.assessments);
 
-    setWeekOneData(true);
+    setWeekFiveData(true);
 
     return () => {};
   }, [data]);

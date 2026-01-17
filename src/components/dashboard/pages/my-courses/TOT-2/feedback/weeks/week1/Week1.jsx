@@ -81,6 +81,8 @@ function Week1({ enrollmentId, setWeekOneData }) {
     setActivityData(data.activity?.activities);
     setAssessmentData(data.assessment?.assessments);
 
+    console.log(activityData);
+
     setWeekOneData(true);
 
     return () => {};
@@ -383,7 +385,34 @@ function Week1({ enrollmentId, setWeekOneData }) {
         >
           Answers:
         </p>
-        {/* <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p> */}
+
+        {(() => {
+          const answers = getActivityAnswer(activity3.id);
+          if (!Array.isArray(answers))
+            return <p className="text-gray">Loading...</p>;
+
+          const step = answers.find((a) => a.id === activity3.id);
+
+          if (!step || !step.Inclusion)
+            return <p className="text-gray">Loading...uu</p>;
+
+          return (
+            <div className="d-flex flex-column gap-2">
+              <div>
+                <p className="bg-step text-gray rounded-4 px-2">Inclusion</p>
+                <p>{step.Inclusion}</p>
+              </div>
+              <div>
+                <p className="bg-step text-gray rounded-4 px-2">Integration</p>
+                <p>{step.Integration}</p>
+              </div>
+              <div>
+                <p className="bg-step text-gray rounded-4 px-2">Segregation</p>
+                <p>{step.Segregation}</p>
+              </div>
+            </div>
+          );
+        })()}
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -567,13 +596,13 @@ function Week1({ enrollmentId, setWeekOneData }) {
         >
           Answers:
         </p>
-        {/* {(() => {
+        {(() => {
           const answers = getActivityAnswer(activity4.id);
           if (!Array.isArray(answers))
             return <p className="text-gray">Loading...</p>;
 
           const step = answers.find(
-            (a) => a.stepId === activity4.steps[1].stepId // MIGHT MAKE SOME CHNAGES HERE
+            (a) => a.stepId === activity4.steps[2].stepId // MIGHT MAKE SOME CHNAGES HERE
           );
           if (!step || !step.value)
             return <p className="text-gray">Loading...</p>;
@@ -588,7 +617,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
               </p>
             </>
           );
-        })()} */}
+        })()}
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity4.id)
             ?.feedback && (
@@ -658,13 +687,13 @@ function Week1({ enrollmentId, setWeekOneData }) {
         >
           Answers:
         </p>
-        {/* {(() => {
+        {(() => {
           const answers = getActivityAnswer(activity5.id);
           if (!Array.isArray(answers))
             return <p className="text-gray">Loading...</p>;
 
           const step = answers.find(
-            (a) => a.stepId === activity5.steps[1].stepId
+            (a) => a.stepId === activity5.steps[0].stepId
           );
           if (!step || !step.value)
             return <p className="text-gray">Loading...</p>;
@@ -679,7 +708,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
               </p>
             </>
           );
-        })()} */}
+        })()}
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -744,13 +773,13 @@ function Week1({ enrollmentId, setWeekOneData }) {
         >
           Answers:
         </p>
-        {/* {(() => {
+        {(() => {
           const answers = getActivityAnswer(activity5.id);
           if (!Array.isArray(answers))
             return <p className="text-gray">Loading...</p>;
 
           const step = answers.find(
-            (a) => a.stepId === activity5.steps[2].stepId
+            (a) => a.stepId === activity5.steps[1].stepId
           );
           if (!step || !step.value)
             return <p className="text-gray">Loading...</p>;
@@ -765,7 +794,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
               </p>
             </>
           );
-        })()} */}
+        })()}
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
