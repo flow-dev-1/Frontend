@@ -8,10 +8,10 @@ import { Icon } from '@iconify/react'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { decryptId } from '../../../../../../utils/encryption'
 import Loading from '../../../../../loader/Loader'
-import schoolService from '../../../../../../services/api/user'
+import schoolService from '../../../../../../services/api/school'
 
 const SelfAwarenessFeedback = () => {
   const weeks = [1, 2, 3, 4, 5]
@@ -23,6 +23,24 @@ const SelfAwarenessFeedback = () => {
   const [pdfLoading, setPdfLoading] = useState(false)
   const contentRef = useRef()
   const { userId } = useParams()
+  const location = useLocation()
+  const stateEnrolmentData = location.state?.enrollmentData
+
+  // Fetch enrolment data if missing from state (e.g., on refresh)
+  const { data: fetchedEnrolledData, isLoading: enrollmentLoading } = useQuery({
+    queryKey: ['school-user-courses', userId],
+    queryFn: () => schoolService.getIndividualCoursesEnrolled(decryptId(userId)),
+    enabled: !stateEnrolmentData && !!userId,
+  })
+
+  // Prioritize state data, then fallback to fetched data matching our courseId
+  const enrolmentData = stateEnrolmentData ||
+    fetchedEnrolledData?.courses?.find(c => c.course?._id === courseId) ||
+    fetchedEnrolledData?.courses?.find(c => c.course === courseId);
+
+  if (enrollmentLoading) {
+    return <Loading />
+  }
 
   // // Fetch data for all weeks
   // const { data, isLoading: queryLoading } = useQuery({
@@ -144,13 +162,13 @@ const SelfAwarenessFeedback = () => {
       </div>
 
       <div ref={contentRef} className='feedback-container'>
-      <div
+        <div
           className='browse-all-courses-text'
-          style={{ margin: '1rem 0', width: '100%',borderRadius:"5px"}}
+          style={{ margin: '1rem 0', width: '100%', borderRadius: "5px" }}
         >
-          <p style={{ fontSize: '30px',textAlign:"center",fontFamily:"var(--headings1-font-family)" }}>Feedback for Self Awareness</p>
+          <p style={{ fontSize: '30px', textAlign: "center", fontFamily: "var(--headings1-font-family)" }}>Feedback for Self Awareness</p>
         </div>
-       
+
         {/* Week 1 */}
         <div className='week-title-container'>
           <div className='week-title'>
@@ -170,7 +188,7 @@ const SelfAwarenessFeedback = () => {
               style={{ cursor: 'pointer' }}
             />
           </div>
-          {(expandedWeek === 1 || expandedWeek === 'all') && <Week1 />}
+          {(expandedWeek === 1 || expandedWeek === 'all') && <Week1 enrollmentId={enrolmentData?._id} />}
         </div>
 
         {/* Week 2 */}
@@ -192,7 +210,7 @@ const SelfAwarenessFeedback = () => {
               style={{ cursor: 'pointer' }}
             />
           </div>
-          {(expandedWeek === 2 || expandedWeek === 'all') && <Week2 />}
+          {(expandedWeek === 2 || expandedWeek === 'all') && <Week2 enrollmentId={enrolmentData?._id} />}
         </div>
 
         {/* Week 3 */}
@@ -212,7 +230,7 @@ const SelfAwarenessFeedback = () => {
               style={{ cursor: 'pointer' }}
             />
           </div>
-          {(expandedWeek === 3 || expandedWeek === 'all') && <Week3 />}
+          {(expandedWeek === 3 || expandedWeek === 'all') && <Week3 enrollmentId={enrolmentData?._id} />}
         </div>
 
         {/* Week 4 */}
@@ -232,7 +250,7 @@ const SelfAwarenessFeedback = () => {
               style={{ cursor: 'pointer' }}
             />
           </div>
-          {(expandedWeek === 4 || expandedWeek === 'all') && <Week4 />}
+          {(expandedWeek === 4 || expandedWeek === 'all') && <Week4 enrollmentId={enrolmentData?._id} />}
         </div>
 
         {/* Week 5 */}
@@ -254,7 +272,7 @@ const SelfAwarenessFeedback = () => {
               style={{ cursor: 'pointer' }}
             />
           </div>
-          {(expandedWeek === 5 || expandedWeek === 'all') && <Week5 />}
+          {(expandedWeek === 5 || expandedWeek === 'all') && <Week5 enrollmentId={enrolmentData?._id} />}
         </div>
       </div>
     </>

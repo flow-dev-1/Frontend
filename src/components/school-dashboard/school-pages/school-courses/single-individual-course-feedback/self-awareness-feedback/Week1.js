@@ -1010,39 +1010,23 @@ const questionsArrayGreenFormatted = [
   // Add more questions if needed
 ];
 
-const Week1 = () => {
+const Week1 = ({ enrollmentId }) => {
   const week = 1;
-  const { userId } = useParams()
+  const { userId } = useParams();
   const courseId = "66853bf50118e2e0a02b6a5a";
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["dashboard/feedback/self-awareness", courseId, week],
-    queryFn: () => schoolService.getStudentMyActivites(courseId, week, decryptId(userId)),
+    queryKey: ["dashboard/feedback/self-awareness", enrollmentId || courseId, week],
+    queryFn: () => schoolService.getStudentCourseData(enrollmentId || courseId, week, decryptId(userId)),
   });
 
-  const [assessmentData, setAssessmentData] = useState(null);
-  const [assessmentLoading, setAssessmentLoading] = useState(true);
-  const [assessmentError, setAssessmentError] = useState(null);
   const [quizQuestions, setQuizQuestions] = useState([]);
-  
-  useEffect(() => {
-    const fetchAssessmentData = async () => {
-      setAssessmentLoading(true);
-      try {
-        const data = await schoolService.getStudentAssessments(courseId, week, decryptId(userId));
-        setAssessmentData(data);
-      } catch (error) {
-        setAssessmentError(error);
-      } finally {
-        setAssessmentLoading(false);
-      }
-    };
 
-    fetchAssessmentData();
-  }, [courseId, week]);
+  const assessmentData = data?.assessment;
+  const activityData = data?.activity;
 
-  const assessments = assessmentData?.existingAssessment.assessments;
-  const percent = assessmentData?.existingAssessment.rating;
-  const color = assessmentData?.existingAssessment?.personalityColor;
+  const assessments = assessmentData?.assessments;
+  const percent = assessmentData?.rating;
+  const color = assessmentData?.personalityColor;
   // console.log(percent)
   function getQuestionsByColor(color) {
     switch (color) {
@@ -1087,23 +1071,23 @@ const Week1 = () => {
     }
   }, [color, assessments]);
 
-  if (isLoading || assessmentLoading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (isError || assessmentError) {
+  if (isError || (!assessmentData && !activityData)) {
     return <div>Take Activity to see feedback.</div>;
   }
 
-  const buckets = data?.activity?.activities[5].buckets;
+  const buckets = activityData?.activities?.[5]?.buckets;
 
   const mappedContent = {
-    yes: buckets?.yes?.map((item) => item.content),
-    no: buckets?.no?.map((item) => item.content),
-    sometimes: buckets?.sometimes.map((item) => item.content)
+    yes: buckets?.yes?.map((item) => item.content) || [],
+    no: buckets?.no?.map((item) => item.content) || [],
+    sometimes: buckets?.sometimes?.map((item) => item.content) || []
   };
 
-  const backendAnswers = data?.activity?.activities[9].questionChecked;
+  const backendAnswers = data?.activity?.activities?.[9]?.questionChecked || {};
   // console.log(backendAnswers)
   const selectedAnswers = Object.values(backendAnswers).map(
     (item) => item.text
@@ -1116,21 +1100,21 @@ const Week1 = () => {
     {
       activity: 1,
       question: 'What do you think "Self Awareness" is?',
-      answer: data?.activity?.activities?.[1].answers[0],
-      feedback: data?.activity?.activities?.[1]?.feedback?.[0] || "",
+      answer: activityData?.activities?.[1]?.answers?.[0],
+      feedback: activityData?.activities?.[1]?.feedback?.[0] || "",
     },
     {
       activity: 2,
       question: "What do you understand by the word “Personality”?",
-      answer: data?.activity?.activities?.[3].answers[0],
-      feedback: data?.activity?.activities?.[3]?.feedback?.[0] || "",
+      answer: activityData?.activities?.[3]?.answers?.[0],
+      feedback: activityData?.activities?.[3]?.feedback?.[0] || "",
     },
     {
       activity: 3,
       question:
         "Drag-and-drop the statements on the left into any of these bowls.",
       answer: mappedContent,
-      feedback: data?.activity?.activities?.[5]?.feedback?.[0] || "",
+      feedback: activityData?.activities?.[5]?.feedback?.[0] || "",
     }
   ];
   const activityFour = [
@@ -1139,34 +1123,34 @@ const Week1 = () => {
       question:
         "Think about yourself, which of these personality colors describe you? Why do you think so?",
       selectedPersonality:
-        data?.activity?.activities?.[7].answer?.selectedPersonality,
-      explanation: data?.activity?.activities?.[7].answer?.explanation,
-      feedback: data?.activity?.activities?.[7]?.feedback?.[0] || "",
+        activityData?.activities?.[7]?.answer?.selectedPersonality,
+      explanation: activityData?.activities?.[7]?.answer?.explanation,
+      feedback: activityData?.activities?.[7]?.feedback?.[0] || "",
     }
   ];
-  const activityAnswers = data?.activity?.activities?.[12]?.answers || [];
+  const activityAnswers = activityData?.activities?.[12]?.answers || [];
   // console.log(activityAnswers);
   // Map through answers to create restActivities
   const restActivities = [
     {
       activity: 8,
       question: "Do you agree with this new result?",
-      answer: data?.activity?.activities?.[13].answers[2].answer,
-      feedback: data?.activity?.activities?.[13]?.feedback?.[2] || [],
+      answer: activityData?.activities?.[13]?.answers?.[2]?.answer,
+      feedback: activityData?.activities?.[13]?.feedback?.[0] || [],
     },
     {
       activity: 9,
       question:
         "Did you get the same color as the color you identified for yourself earlier?",
-      answer: data?.activity?.activities?.[13].answers[0].answer,
+      answer: activityData?.activities?.[13]?.answers?.[0]?.answer,
 
-      feedback: data?.activity?.activities?.[13]?.feedback?.[0] || [],
+      feedback: activityData?.activities?.[13]?.feedback?.[1] || [],
     },
     {
       activity: 10,
       question: "What was different? Why do you think this was different?",
-      answer: data?.activity?.activities?.[13].answers[1].answer,
-      feedback: data?.activity?.activities?.[13]?.feedback?.[1] || [],
+      answer: activityData?.activities?.[13]?.answers?.[1]?.answer,
+      feedback: activityData?.activities?.[13]?.feedback?.[2] || [],
     }
   ];
 
@@ -1226,7 +1210,7 @@ const Week1 = () => {
   // console.log(pieChart);
 
   return (
-    <div className="week-content">
+    <div className="week-content w-auto">
       {activities?.map((activity, index) => (
         <div style={{ border: "none" }} className="activity" key={index}>
           <p className="activity-badge">Activity {activity?.activity}</p>
@@ -1235,7 +1219,7 @@ const Week1 = () => {
             <span> {activity?.question}</span>
           </p>
 
-          {activity?.answer.yes ? (
+          {activity?.answer?.yes ? (
             <div
               style={{ width: "90%", margin: "1rem auto" }}
               className="drag-drop-activity gap-2"
@@ -1245,7 +1229,7 @@ const Week1 = () => {
               <div className="drag-drop-section">
                 <h5 id="yes">YES</h5>
                 <ul>
-                  {activity?.answer.yes.map((item, idx) => (
+                  {activity?.answer?.yes?.map((item, idx) => (
                     <strong>
                       <li key={idx}>
                         {" "}
@@ -1258,7 +1242,7 @@ const Week1 = () => {
               <div className="drag-drop-section">
                 <h5 id="no">NO</h5>
                 <ul>
-                  {activity?.answer.no.map((item, idx) => (
+                  {activity?.answer?.no?.map((item, idx) => (
                     <strong>
                       <li key={idx}>
                         {" "}
@@ -1271,7 +1255,7 @@ const Week1 = () => {
               <div className="drag-drop-section">
                 <h5 id="sometimes">SOMETIMES</h5>
                 <ul>
-                  {activity?.answer.sometimes.map((item, idx) => (
+                  {activity?.answer?.sometimes?.map((item, idx) => (
                     <strong>
                       <li key={idx}>
                         {" "}
@@ -1296,24 +1280,24 @@ const Week1 = () => {
             </p>
           )}
           {activity?.feedback?.length > 0 && (
-          <p className="feedback">
-            <div id="badge">Feedback:</div>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem"
-              }}
-            >
-              <div className="feedback-card">{activity?.feedback}</div>
-              {/* <Icon
+            <p className="feedback">
+              <div id="badge">Feedback:</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem"
+                }}
+              >
+                <div className="feedback-card">{activity?.feedback}</div>
+                {/* <Icon
                 style={{ color: "#275DAD" }}
                 width={20}
                 icon="lucide:edit"
               /> */}
-            </div>
-          </p>
+              </div>
+            </p>
           )}
         </div>
       ))}
@@ -1340,24 +1324,24 @@ const Week1 = () => {
             /> */}
           </p>
           {activity?.feedback?.length > 0 && (
-          <p className="feedback">
-            <div id="badge">Feedback:</div>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem"
-              }}
-            >
-              <div className="feedback-card">{activity?.feedback}</div>
-              {/* <Icon
+            <p className="feedback">
+              <div id="badge">Feedback:</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem"
+                }}
+              >
+                <div className="feedback-card">{activity?.feedback}</div>
+                {/* <Icon
                 style={{ color: "#275DAD" }}
                 width={20}
                 icon="lucide:edit"
               /> */}
-            </div>
-          </p>
+              </div>
+            </p>
           )}
         </div>
       ))}
@@ -1378,7 +1362,14 @@ const Week1 = () => {
                   alt={option.checked ? "Checked" : "Unchecked"}
                   style={{ width: "20px", marginRight: "10px" }}
                 />
-                <span style={{ fontSize: "14px" }} className="option-label">
+                <span
+                  style={{
+                    fontSize: "14px",
+                    textAlign: "left",
+                    display: "block"
+                  }}
+                  className="option-label"
+                >
                   {option.label}
                 </span>
                 <span className={`color-label ${option.color.toLowerCase()}`}>
@@ -1412,24 +1403,24 @@ const Week1 = () => {
             /> */}
           </p>
           {activity?.feedback?.length > 0 && (
-          <p className="feedback">
-            <div id="badge">Feedback:</div>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem"
-              }}
-            >
-              <div className="feedback-card">{activity.feedback}</div>
-              {/* <Icon
+            <p className="feedback">
+              <div id="badge">Feedback:</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem"
+                }}
+              >
+                <div className="feedback-card">{activity.feedback}</div>
+                {/* <Icon
                 style={{ color: "#275DAD" }}
                 width={20}
                 icon="lucide:edit"
               /> */}
-            </div>
-          </p>
+              </div>
+            </p>
           )}
         </div>
       ))}
@@ -1450,7 +1441,14 @@ const Week1 = () => {
                   alt={option.isCorrect ? "Checked" : "Unchecked"}
                   style={{ width: "20px", marginRight: "10px" }}
                 />
-                <span style={{ fontSize: "14px" }} className="option-label">
+                <span
+                  style={{
+                    fontSize: "14px",
+                    textAlign: "left",
+                    display: "block",
+                  }}
+                  className="option-label"
+                >
                   {option.label}
                 </span>
                 <p style={{ width: "120px", textAlign: "center" }}>

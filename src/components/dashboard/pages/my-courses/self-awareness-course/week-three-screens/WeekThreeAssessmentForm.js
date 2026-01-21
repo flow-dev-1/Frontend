@@ -182,10 +182,7 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
     }
   };
 
-  if (selectedAnswers[currentIndex - 1] === undefined) {
-    toast.error('Please select an answer before proceeding.')
-    return
-  }
+
   const handlePreviousStepClick = () => {
     if (currentIndex > 1) {
       setCurrentIndex(currentIndex - 1);

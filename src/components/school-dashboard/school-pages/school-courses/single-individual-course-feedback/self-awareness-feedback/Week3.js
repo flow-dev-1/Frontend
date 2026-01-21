@@ -12,7 +12,7 @@ import userService from '../../../../../../services/api/user'
 import { decryptId } from '../../../../../../utils/encryption'
 import schoolService from '../../../../../../services/api/school'
 import { useParams } from 'react-router-dom'
-let questionsQuiz = [
+const initialQuestionsQuiz = [
   {
     question:
       'Flowie believes that she can improve her drawing skills with practice and effort. Which mindset does this describe?',
@@ -318,94 +318,86 @@ let questionsQuiz = [
   },
 ]
 
-const Week3 = () => {
-  // const percentage = 20;
+const Week3 = ({ enrollmentId }) => {
   const { userId } = useParams()
   const week = 3
   const courseId = '66853bf50118e2e0a02b6a5a'
+  const [questionsQuiz, setQuestionsQuiz] = useState(initialQuestionsQuiz)
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['dashboard/feedback/self-awareness', courseId, week],
-    queryFn: () => schoolService.getStudentMyActivites(courseId, week, decryptId(userId)),
+    queryKey: ['dashboard/feedback/self-awareness', enrollmentId || courseId, week],
+    queryFn: () => schoolService.getStudentCourseData(enrollmentId || courseId, week, decryptId(userId)),
   })
 
-  // console.log(data?.activity?.activities[1]?.answers[0]);
-
-  const [assessmentData, setAssessmentData] = useState(null)
-  const [assessmentLoading, setAssessmentLoading] = useState(true)
-  const [assessmentError, setAssessmentError] = useState(null)
+  const assessmentData = data?.assessment;
+  const activityData = data?.activity;
+  const percentage = assessmentData?.rating || 0;
 
   useEffect(() => {
-    const fetchAndProcessAssessmentData = async () => {
-      setAssessmentLoading(true)
-      try {
-        const data = await schoolService.getStudentAssessments(courseId, week, decryptId(userId));
-        setAssessmentData(data)
-        const assessmentForChecked =
-          data?.existingAssessment.assessments[0].answers
-        // console.log(data?.existingAssessment.assessments[0].answers);
+    if (!data) return
+    const assessmentForChecked =
+      assessmentData?.assessments?.[0]?.answers
 
-        // Ensure that assessmentForChecked is valid before slicing
-        if (assessmentForChecked && assessmentForChecked.length >= 5) {
-          const valuesToCheck = assessmentForChecked
+    if (assessmentForChecked && assessmentForChecked.length >= 5) {
+      const valuesToCheck = assessmentForChecked
 
-          questionsQuiz = questionsQuiz.map((question, index) => {
-            return {
-              ...question,
-              options: question.options.map((option, optionIndex) => {
-                return {
-                  ...option,
-                  checked: optionIndex === valuesToCheck[index],
-                }
-              }),
-            }
-          })
-        } else {
-          console.error('Assessment answers are missing or incomplete.')
-        }
-      } catch (error) {
-        setAssessmentError(error)
-      } finally {
-        setAssessmentLoading(false)
-      }
+      setQuestionsQuiz(prevQuestions =>
+        prevQuestions.map((question, index) => {
+          return {
+            ...question,
+            options: question.options.map((option, optionIndex) => {
+              return {
+                ...option,
+                checked: optionIndex === valuesToCheck[index],
+              }
+            }),
+          }
+        })
+      )
     }
+  }, [data, assessmentData])
 
-    fetchAndProcessAssessmentData()
-  }, [courseId, week])
 
-  const percentage = assessmentData?.existingAssessment?.rating
-  // // console.log(updatedQuestionsQuiz);
-
-  if (isLoading || assessmentLoading) {
+  if (isLoading) {
     return <div>Loading...</div>
   }
 
-  if (isError || assessmentError) {
+  if (isError || (!assessmentData && !activityData)) {
     return <div>Take Activity to see feedback.</div>
   }
 
   const activities = [
     {
+      activity: 1,
       question: 'What do you understand by the word “Mindset”?',
-      answer: data?.activity?.activities[1]?.answers[0],
+      answer: activityData?.activities?.find(a => a.activity === 2)?.answers?.[0],
+      feedback: activityData?.activities?.find(a => a.activity === 2)?.feedback?.[0] || '',
     },
     {
+      activity: 2,
       question:
         'Do you feel like you have a growth mindset, or do you sometimes find yourself with a fixed mindset? Share your thoughts. It’s okay to be honest, this is all about learning and growing together!',
-      answer: data?.activity?.activities[3]?.answers[0],
+      answer: activityData?.activities?.find(a => a.activity === 4)?.answers?.[0],
+      feedback: activityData?.activities?.find(a => a.activity === 4)?.feedback?.[0] || '',
     },
     {
-      question: 'List five (5) lessons you got from the videos you watched.',
-      answer: data?.activity?.activities[5]?.answers.slice(0, 5),
+      activity: 3,
+      question:
+        'List five (5) lessons you got from the videos you watched.',
+      answer: activityData?.activities?.find(a => a.activity === 6)?.answers?.slice(0, 5),
+      feedback: activityData?.activities?.find(a => a.activity === 6)?.feedback?.[0] || '',
     },
     {
+      activity: 4,
       question:
         'List one (1) thing you will start working on, even on your growth journey.',
-      answer: data?.activity?.activities[5]?.answers[5],
+      answer: activityData?.activities?.find(a => a.activity === 6)?.answers?.[5],
+      feedback: activityData?.activities?.find(a => a.activity === 6)?.feedback?.[1] || '',
     },
   ]
 
   return (
-    <div className='week-content'>
+    <div className='week-content w-auto'>
       {activities.map((activity, index) => (
         <div style={{ border: 'none' }} className='activity' key={index}>
           <p className='activity-badge'>Activity {index + 1}</p>
@@ -434,7 +426,7 @@ const Week3 = () => {
           ) : (
             <div className='answer d-flex align-items-center gap-2'>
               <h4 style={{ color: '#555', marginTop: '.3rem' }}>Answer:</h4>{' '}
-              <p>{activity.answer}</p>
+              <p style={{ fontSize: '14px' }}>{activity.answer}</p>
             </div>
           )}
 
@@ -479,7 +471,14 @@ const Week3 = () => {
                   alt={option.isCorrect ? 'Checked' : 'Unchecked'}
                   style={{ width: '20px', marginRight: '10px' }}
                 />
-                <span style={{ fontSize: '14px' }} className='option-label'>
+                <span
+                  style={{
+                    fontSize: '14px',
+                    textAlign: 'left',
+                    display: 'block',
+                  }}
+                  className='option-label'
+                >
                   {option.label}
                 </span>
                 <p style={{ width: '120px', textAlign: 'center' }}>

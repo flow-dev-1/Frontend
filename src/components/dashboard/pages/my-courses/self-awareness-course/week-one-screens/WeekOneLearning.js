@@ -398,9 +398,8 @@ export default function WeekOneLearning({
 			<div className="content-container">
 				{renderActivityContent()}
 				<ModalComponent
-					show={reviewPopUp}
-					handleClose={closeReviewPopUp}
-					// Additional props for ModalComponent if needed
+					reviewPopUp={reviewPopUp}
+					closeReviewPopUp={closeReviewPopUp}
 				/>
 			</div>
 		</div>

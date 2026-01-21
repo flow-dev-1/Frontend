@@ -7,13 +7,13 @@ const ModalComponent = ({ reviewPopUp, closeReviewPopUp }) => {
   return (
     <Modal
       isOpen={reviewPopUp}
-      onRequestClose={closeReviewPopUp}
+      onRequestClose={() => { }} // Prevent closing on overlay click
       contentLabel='Review Modal'
       className='custom-modal'
       overlayClassName='custom-overlay'
-      shouldCloseOnOverlayClick={true}
+      shouldCloseOnOverlayClick={false}
     >
-      <ReviewPopUp />
+      <ReviewPopUp closeReviewPopUp={closeReviewPopUp} />
     </Modal>
   )
 }

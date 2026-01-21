@@ -371,25 +371,25 @@ const Week3 = ({ enrollmentId }) => {
   const activities = [
     {
       question: "What do you understand by the word “Mindset”?",
-      answer: data?.activity?.activities[1]?.answers?.[0],
-      feedback: data?.activity?.activities[1]?.feedback?.[0]
+      answer: data?.activity?.activities?.find(a => a.activity === 2)?.answers?.[0],
+      feedback: data?.activity?.activities?.find(a => a.activity === 2)?.feedback?.[0]
     },
     {
       question:
         "Do you feel like you have a growth mindset, or do you sometimes find yourself with a fixed mindset? Share your thoughts. It’s okay to be honest, this is all about learning and growing together!",
-      answer: data?.activity?.activities[3]?.answers?.[0],
-      feedback: data?.activity?.activities[3]?.feedback?.[0]
+      answer: data?.activity?.activities?.find(a => a.activity === 4)?.answers?.[0],
+      feedback: data?.activity?.activities?.find(a => a.activity === 4)?.feedback?.[0]
     },
     {
       question: "List five (5) lessons you got from the videos you watched.",
-      answer: data?.activity?.activities[5]?.answers.slice(0, 5),
-      feedback: data?.activity?.activities[5]?.feedback?.[0]
+      answer: data?.activity?.activities?.find(a => a.activity === 6)?.answers?.slice(0, 5),
+      feedback: data?.activity?.activities?.find(a => a.activity === 6)?.feedback?.[0]
     },
     {
       question:
         "List one (1) thing you will start working on, even on your growth journey.",
-      answer: data?.activity?.activities[5]?.answers?.[5],
-      feedback: data?.activity?.activities[5]?.feedback?.[1]
+      answer: data?.activity?.activities?.find(a => a.activity === 6)?.answers?.[5],
+      feedback: data?.activity?.activities?.find(a => a.activity === 6)?.feedback?.[1]
     }
   ];
 

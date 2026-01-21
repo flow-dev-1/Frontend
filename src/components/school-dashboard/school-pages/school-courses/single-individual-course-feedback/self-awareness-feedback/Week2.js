@@ -40,7 +40,7 @@ const questions = [
   },
 ]
 
-let questionsQuiz = [
+const initialQuestionsQuiz = [
   {
     question:
       'Which quality would help you best manage your chores and responsibilities at home well?',
@@ -196,77 +196,62 @@ let questionsQuiz = [
   },
 ]
 
-const Week2 = () => {
+const Week2 = ({ enrollmentId }) => {
   const { userId } = useParams()
   const week = 2
   const courseId = '66853bf50118e2e0a02b6a5a'
+  const [questionsQuiz, setQuestionsQuiz] = useState(initialQuestionsQuiz)
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['dashboard/feedback/self-awareness', courseId, week],
-    queryFn: () => schoolService.getStudentMyActivites(courseId, week, decryptId(userId)),
+    queryKey: ['dashboard/feedback/self-awareness', enrollmentId || courseId, week],
+    queryFn: () => schoolService.getStudentCourseData(enrollmentId || courseId, week, decryptId(userId)),
   })
 
-  const [assessmentData, setAssessmentData] = useState(null)
-  const [assessmentLoading, setAssessmentLoading] = useState(true)
-  const [assessmentError, setAssessmentError] = useState(null)
+  const assessmentData = data?.assessment;
+  const activityData = data?.activity;
 
   useEffect(() => {
-    const fetchAndProcessAssessmentData = async () => {
-      setAssessmentLoading(true)
-      try {
-        const data = await schoolService.getStudentAssessments(courseId, week, decryptId(userId));
-        setAssessmentData(data)
+    if (!data) return
 
-        const assessmentForChecked =
-          data?.existingAssessment?.assessments[0]?.assessment?.answers
-        // console.log(data?.existingAssessment?.assessments[0]?.assessment?.answers[5]);
-        // Ensure that assessmentForChecked is valid before slicing
-        if (assessmentForChecked && assessmentForChecked.length >= 5) {
-          const valuesToCheck = assessmentForChecked.slice(0, 5)
+    const assessmentForChecked =
+      assessmentData?.assessments?.[0]?.assessment?.answers
 
-          questionsQuiz = questionsQuiz.map((question, index) => {
-            return {
-              ...question,
-              options: question.options.map((option, optionIndex) => {
-                return {
-                  ...option,
-                  checked: optionIndex === valuesToCheck[index],
-                }
-              }),
-            }
-          })
+    if (assessmentForChecked && assessmentForChecked.length >= 5) {
+      const valuesToCheck = assessmentForChecked.slice(0, 5)
 
-          // You might want to update the state with the modified questionsQuiz
-          // console.log(questionsQuiz);
-        } else {
-          console.error('Assessment answers are missing or incomplete.')
-        }
-      } catch (error) {
-        setAssessmentError(error)
-      } finally {
-        setAssessmentLoading(false)
-      }
+      setQuestionsQuiz(prevQuestions =>
+        prevQuestions.map((question, index) => {
+          return {
+            ...question,
+            options: question.options.map((option, optionIndex) => {
+              return {
+                ...option,
+                checked: optionIndex === valuesToCheck[index],
+              }
+            }),
+          }
+        })
+      )
     }
-
-    fetchAndProcessAssessmentData()
-  }, [courseId, week])
+  }, [data, assessmentData])
 
   // console.log(updatedQuestionsQuiz);
 
-  if (isLoading || assessmentLoading) {
+  if (isLoading) {
     return <div>Loading...</div>
   }
 
-  if (isError || assessmentError) {
+  if (isError || (!assessmentData && !activityData)) {
     return <div>Take Activity to see feedback.</div>
   }
-  const strengths = data?.activity?.activities[3]?.answers?.strengths
-  const weaknesses = data?.activity?.activities[4]?.answers?.weakness
+  const strengths = activityData?.activities?.[3]?.answers?.strengths
+  const weaknesses = activityData?.activities?.[4]?.answers?.weakness
   const actviity1 = [
     {
       activity: 1,
       question: 'What do you think "Self Awareness" is?',
-      answer: data?.activity?.activities[1]?.answers[0],
-      feedback: '',
+      answer: activityData?.activities?.[1]?.answers?.[0],
+      feedback: activityData?.activities?.[1]?.feedback?.[0] || '',
     },
   ]
   const activities = [
@@ -274,85 +259,72 @@ const Week2 = () => {
       activity: 2, // New activity based on image
       question: 'Identify your Strengths.',
       answer: strengths,
-      feedback: '',
+      feedback: activityData?.activities?.[3]?.feedback?.[0] || '',
     },
     {
       activity: 3, // New activity based on image
       question: 'Identify your Weaknesses.',
       answer: weaknesses,
-      feedback: '',
+      feedback: activityData?.activities?.[4]?.feedback?.[0] || '',
     },
-    // {
-    //   activity: 4, // Another new activity based on image
-    //   question:
-    //     "Identify three (3) important people in your life and list their names below.",
-    //   answer: ["1. Name 1", "2. Name 2", "3. Name 3"],
-    //   feedback: null // No feedback provided in the image
-    // },
     {
       activity: 4, // New activity based on the latest image
       question:
         'A friend is feeling sad and needs someone to talk to because they just failed a test.They come to you for support. How would you help?',
       answer: {
-        strengths: data?.activity?.activities[6]?.answers?.strengthsQ1,
-        weaknesses: data?.activity?.activities[6]?.answers?.weaknessesQ1,
+        strengths: activityData?.activities?.[6]?.answers?.strengthsQ1,
+        weaknesses: activityData?.activities?.[6]?.answers?.weaknessesQ1,
       },
-      feedback: '',
+      feedback: activityData?.activities?.[6]?.feedback?.[0] || '',
     },
     {
       activity: 4, // New activity based on the latest image
       question:
         'Imagine you’re working on a group project at school. Your group is struggling to come up with an idea for the project. As a member of the team, how would you help?',
       answer: {
-        strengths: data?.activity?.activities[6]?.answers?.strengthsQ2,
-        weaknesses: data?.activity?.activities[6]?.answers?.weaknessesQ2,
+        strengths: activityData?.activities?.[6]?.answers?.strengthsQ2,
+        weaknesses: activityData?.activities?.[6]?.answers?.weaknessesQ2,
       },
-      feedback: '',
+      feedback: activityData?.activities?.[6]?.feedback?.[1] || '',
     },
     {
       activity: 4, // New activity based on the latest image
       question:
         'Is there a sport you dislike? What sport is this? Now imagine you were asked to represent your house in this particular sport, for your School’s inter-house sport competition, to win a laptop and a gaming console. How would you go about this?',
       answer: {
-        strengths: data?.activity?.activities[6]?.answers?.strengthsQ3,
-        weaknesses: data?.activity?.activities[6]?.answers?.weaknessesQ3,
+        strengths: activityData?.activities?.[6]?.answers?.strengthsQ3,
+        weaknesses: activityData?.activities?.[6]?.answers?.weaknessesQ3,
       },
-      feedback: '',
+      feedback: activityData?.activities?.[6]?.feedback?.[2] || '',
     },
   ]
   const quizEssay = [
     {
       activity: 1,
       question:
-        'What activity do you enjoy the most, and why do you think you are good at it?',
-      answer:
-        assessmentData?.existingAssessment?.assessments[0]?.assessment
-          ?.answers[5],
-      feedback: '',
+        "What activity do you enjoy the most, and why do you think you are good at it?",
+      answer: assessmentData?.assessments?.[0]?.assessment?.answers?.[5],
+      feedback: assessmentData?.assessments?.[0]?.feedback?.[0] || ""
     },
 
     {
       activity: 2, // New activity based on image
       question:
-        'When working in a group, what role do you naturally take on (e.g., leader, planner, helper)? Can you give an example?',
-      answer:
-        assessmentData?.existingAssessment?.assessments[0]?.assessment
-          ?.answers[7],
-      feedback: '',
+        "When working in a group, what role do you naturally take on (e.g., leader, planner, helper)? Can you give an example?",
+      answer: assessmentData?.assessments?.[0]?.assessment?.answers?.[6],
+      feedback: assessmentData?.assessments?.[0]?.feedback?.[1] || ""
     },
     {
       activity: 3, // New activity based on image
       question:
-        'Is there a task or subject that you avoid because you find it difficult? Why do you think it’s challenging for you?',
-      answer:
-        assessmentData?.existingAssessment?.assessments[0]?.assessment
-          ?.answers[8],
-      feedback: '',
-    },
-  ]
-  const percentage = assessmentData?.existingAssessment?.rating
+        "Is there a task or subject that you avoid because you find it difficult? Why do you think it’s challenging for you?",
+      answer: assessmentData?.assessments?.[0]?.assessment?.answers?.[7],
+      feedback: assessmentData?.assessments?.[0]?.feedback?.[2] || ""
+    }
+  ];
+  const percentage = assessmentData?.rating || 0
   return (
-    <div className='week-content'>
+    <div className='week-content w-auto'>
       <p className='activity-badge'>Activity 1</p>
 
       {actviity1.map((activity, index) => (
@@ -377,7 +349,7 @@ const Week2 = () => {
           ) : (
             <div className='answer d-flex align-items-center gap-2'>
               <h4 style={{ color: '#555', marginTop: '.3rem' }}>Answer:</h4>{' '}
-              <p> {activity.answer}</p>
+              <p style={{ fontSize: '14px' }}> {activity.answer}</p>
             </div>
           )}
 
@@ -414,7 +386,7 @@ const Week2 = () => {
           </p>
 
           {/* Check for answer type and render accordingly */}
-          {activity.answer.strengths ? (
+          {activity?.answer?.strengths ? (
             <div
               style={{ display: 'flex', width: '90%', margin: '1rem auto' }}
               className='strengths-weaknesses'
@@ -436,13 +408,13 @@ const Week2 = () => {
                     gridTemplateColumns: '1fr 1fr 1fr',
                   }}
                 >
-                  {activity.answer.strengths.map((item, idx) => (
-                    <div className='d-flex align-items-center gap-2'>
+                  {activity?.answer?.strengths?.map((item, idx) => (
+                    <div className='d-flex align-items-center gap-2' key={idx}>
                       <Icon
                         icon='radix-icons:dot-filled'
                         style={{ color: '#5B616A' }}
                       />
-                      <li key={idx}>{item}</li>
+                      <li>{item}</li>
                     </div>
                   ))}
                 </ul>
@@ -464,13 +436,13 @@ const Week2 = () => {
                     gridTemplateColumns: '1fr 1fr 1fr',
                   }}
                 >
-                  {activity.answer.weaknesses.map((item, idx) => (
-                    <div className='d-flex align-items-center gap-2'>
+                  {activity?.answer?.weaknesses?.map((item, idx) => (
+                    <div className='d-flex align-items-center gap-2' key={idx}>
                       <Icon
                         icon='radix-icons:dot-filled'
                         style={{ color: '#5B616A' }}
                       />
-                      <li key={idx}>{item}</li>
+                      <li>{item}</li>
                     </div>
                   ))}
                 </ul>
@@ -512,7 +484,7 @@ const Week2 = () => {
                   ))}
                 </ul>
               ) : (
-                <p>{typeof(activity?.answer) !== "string" ? "" : activity?.answer}</p>
+                <p>{typeof (activity?.answer) !== "string" ? "" : activity?.answer}</p>
               )}
             </div>
           )}
@@ -557,7 +529,14 @@ const Week2 = () => {
                   alt={option.isCorrect ? 'Checked' : 'Unchecked'}
                   style={{ width: '20px', marginRight: '10px' }}
                 />
-                <span style={{ fontSize: '14px' }} className='option-label'>
+                <span
+                  style={{
+                    fontSize: '14px',
+                    textAlign: 'left',
+                    display: 'block',
+                  }}
+                  className='option-label'
+                >
                   {option.label}
                 </span>
                 <p style={{ width: '120px', textAlign: 'center' }}>
@@ -608,7 +587,7 @@ const Week2 = () => {
           ) : (
             <div className='answer d-flex align-items-center gap-2'>
               <h4 style={{ color: '#555', marginTop: '.3rem' }}>Answer:</h4>{' '}
-              <p> Answer: {activity.answer}</p>
+              <p style={{ fontSize: '14px' }}> {activity.answer}</p>
             </div>
           )}
 

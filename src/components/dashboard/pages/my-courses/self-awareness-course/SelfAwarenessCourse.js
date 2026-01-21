@@ -51,11 +51,6 @@ function SelfAwarenessCourse() {
 		}
 	}, [completedWeeks]);
 
-	// useEffect(() => {
-	//   if (!course) return navigate("/dashboard")
-	//   setOpen(true)
-	// }, [location, course, navigate])
-
 	const storedWeekIndex = localStorage.getItem(`currentWeek-${id}`) || '1';
 	const initialWeekIndex = parseInt(storedWeekIndex, 10);
 
@@ -149,7 +144,29 @@ function SelfAwarenessCourse() {
 		if (index === lastItemPlusOne) {
 			return false;
 		}
+		// If no completed weeks, allow access to week 1
+		if (data.length === 0 && index === 1) {
+			return false;
+		}
 		return true;
+	};
+
+	// Helper functions for week states (using enrollment progress like Emotional Regulation)
+	const progressPerWeek = 100 / courses.catalogue.length; // 20% per week for 5 weeks
+
+	const isWeekCompleted = (weekNumber) => {
+		// A week is completed if the user has progressed beyond it
+		const progress = enrolmentData?.progress || 0;
+		return progress >= (weekNumber * progressPerWeek);
+	};
+
+	const isWeekAccessible = (weekNumber) => {
+		// Calculate max accessible week based on progress
+		const progress = enrolmentData?.progress || 0;
+		const calculatedMaxWeek = Math.ceil(progress / progressPerWeek);
+		// Allow access to current incomplete week + next week
+		const maxAccessibleWeek = Math.max(1, Math.min(calculatedMaxWeek + 1, courses.catalogue.length));
+		return weekNumber <= maxAccessibleWeek;
 	};
 
 	return (
@@ -188,32 +205,70 @@ function SelfAwarenessCourse() {
 							</div>
 
 							<ul className="sub-courses mt-2">
-								{courses.catalogue.map((week, index) => (
-									<li key={index} className='sub-course'>
-										<button
-											key={index}
-											className={`course-week-button ${
-												`week${index + 1}` === activeLink ? 'active' : ''
-											}`}
-											onClick={() => handleLinkClick(index)}
-											disabled={disableCourse(index + 1)}
-										>
-											<div>
-												<Icon
-													icon="icon-park-outline:check-one"
-													className="course-list-icon"
-												/>
-											</div>
-											<div className="d-flex align-items-center">
-												<p className="text-nowrap">{`Week ${
-													index + 1
-												} `}</p>
-												<p className="ms-3">{week.weekLesson}</p>
-											</div>
-										</button>
-									</li>
-								))}
+								{courses.catalogue.map((week, index) => {
+									const weekNumber = index + 1;
+									const isCompleted = isWeekCompleted(weekNumber);
+									const isAccessible = isWeekAccessible(weekNumber);
+									const isActive = `week${weekNumber}` === activeLink;
+
+									return (
+										<li key={index} className='sub-course'>
+											<button
+												key={index}
+												className={`course-week-button ${isActive ? 'active' : ''}`}
+												onClick={() => handleLinkClick(index)}
+												disabled={!isAccessible}
+												style={{
+													opacity: isAccessible ? 1 : 0.5,
+													cursor: isAccessible ? 'pointer' : 'not-allowed',
+													transition: 'all 0.3s ease',
+												}}
+											>
+												<div>
+													<Icon
+														icon={
+															isCompleted
+																? 'icon-park-solid:check-one'
+																: isAccessible
+																	? 'icon-park-outline:check-one'
+																	: 'mdi:lock'
+														}
+														className="course-list-icon"
+														style={{
+															color: isCompleted ? '#50AA50' : isAccessible ? '#275DAD' : '#999',
+														}}
+													/>
+												</div>
+												<div className="d-flex align-items-center">
+													<p className="text-nowrap">{`Week ${weekNumber} `}</p>
+													<p className="ms-3">{week.weekLesson}</p>
+												</div>
+											</button>
+										</li>
+									);
+								})}
 							</ul>
+
+							{/* Progress indicator */}
+							<div className="mt-4 px-3">
+								<div className="d-flex justify-content-between align-items-center mb-2">
+									<small className="text-muted">Course Progress</small>
+									<small className="fw-bold">{enrolmentData?.progress || 0}%</small>
+								</div>
+								<div className="progress" style={{ height: '8px' }}>
+									<div
+										className="progress-bar"
+										role="progressbar"
+										style={{
+											width: `${enrolmentData?.progress || 0}%`,
+											backgroundColor: '#00BCC3',
+										}}
+										aria-valuenow={enrolmentData?.progress || 0}
+										aria-valuemin="0"
+										aria-valuemax="100"
+									></div>
+								</div>
+							</div>
 						</div>
 					</div>
 

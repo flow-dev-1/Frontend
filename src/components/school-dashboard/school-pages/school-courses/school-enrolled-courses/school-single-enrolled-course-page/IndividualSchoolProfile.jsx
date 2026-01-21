@@ -25,7 +25,7 @@ export default function IndividualSchoolProfile({ onClose }) {
 
   const fetchProfile = (params) => {
     console.log("Fetching profile for:", params, "isEducatorProfile:", isEducatorProfile);
-    if (isEducatorProfile || userType?.accountType === "Educator") {
+    if (isEducatorProfile) {
       return schoolService.getMyProfileEducatorSchool(params);
     } else {
       return schoolService.getStudentProfileIndividual(params);
@@ -57,10 +57,7 @@ export default function IndividualSchoolProfile({ onClose }) {
     return <div>An error occurred while loading...</div>;
   }
 
-  const user =
-    isEducatorProfile || userType?.accountType === "Educator"
-      ? data?.educator || data?.user
-      : data?.user || {};
+  const user = isEducatorProfile ? data?.educator || data?.user : data?.user || {};
 
   console.log("Calculated User Object:", user);
 
@@ -70,6 +67,7 @@ export default function IndividualSchoolProfile({ onClose }) {
   };
 
   function toTitleCase(str) {
+    if (!str) return "";
     return str.replace(/\w\S*/g, function (txt) {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
