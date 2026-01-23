@@ -8,16 +8,16 @@ import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
 } from "../../../../resilience-grit/data/index.js";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import schoolService from "../../../../../../../../services/api/school.js";
 import userService from "../../../../../../../../services/api/user.js";
 import adminService from "../../../../../../../../services/api/admin.js";
 import { calculateResult } from "../../../utility.js";
 import { useSelector } from "react-redux";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer.js";
 import Modal from "../../components/Modal.jsx";
-import { useMutation } from "@tanstack/react-query";
 
-function Week1({ enrollmentId, setWeekOneData }) {
+function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState("");
   const [activityFeedbackId, setActivityFeedbackId] = useState(null);
@@ -38,16 +38,16 @@ function Week1({ enrollmentId, setWeekOneData }) {
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
     queryKey: ["dashboard/emotional-regulation-feedback-1", enrollmentId, 1],
-    queryFn: () =>
-      isAdmin
-        ? adminService.getUserCourseData(enrollmentId, 1, code)
-        : userService.getUserCourseData(enrollmentId, 1),
+    queryFn: () => {
+      if (isAdmin) return adminService.getUserCourseData(enrollmentId, 1, code);
+      if (isSchool) return schoolService.getStudentCourseData(enrollmentId, 1, studentId);
+      return userService.getUserCourseData(enrollmentId, 1);
+    },
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
     keepPreviousData: false,
   });
-
 
   const mutation = useMutation({
     mutationFn: () =>
@@ -155,8 +155,8 @@ function Week1({ enrollmentId, setWeekOneData }) {
     return <div>Loading...</div>;
   }
 
-  if (data?.status === "failed" || isError) {
-    return <div>{data?.message || "Internal server error!"}</div>;
+  if (data?.status === "failed" || isError || !data) {
+    return <div>Take Activity to see feedback.</div>;
   }
 
   const score =
@@ -253,7 +253,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
         )
       }
       <hr />
-      
+
       {/* Activity 2 */}
       <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
         Activity 2

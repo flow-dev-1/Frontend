@@ -10,6 +10,7 @@ import {
 } from "../../../data/index.js";
 import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
+import schoolService from "../../../../../../../../services/api/school.js";
 import adminService from "../../../../../../../../services/api/admin.js";
 import { calculateResult } from "../../../utility.js";
 import { useSelector } from "react-redux";
@@ -18,7 +19,7 @@ import Modal from "../../components/Modal.jsx";
 import { useMutation } from "@tanstack/react-query";
 import { act } from "react";
 
-function Week1({ enrollmentId, setWeekOneData }) {
+function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState("");
   const [activityFeedbackId, setActivityFeedbackId] = useState(null);
@@ -42,10 +43,11 @@ function Week1({ enrollmentId, setWeekOneData }) {
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
     queryKey: ["dashboard/transition2-feedback-1", enrollmentId, 1],
-    queryFn: () =>
-      isAdmin
-        ? adminService.getUserCourseData(enrollmentId, 1, code)
-        : userService.getUserCourseData(enrollmentId, 1),
+    queryFn: () => {
+      if (isAdmin) return adminService.getUserCourseData(enrollmentId, 1, code);
+      if (isSchool) return schoolService.getStudentCourseData(enrollmentId, 1, studentId);
+      return userService.getUserCourseData(enrollmentId, 1);
+    },
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -93,7 +95,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
     setAssessmentData(data.assessment?.assessments);
     setWeekOneData(true);
 
-    return () => {};
+    return () => { };
   }, [data]);
 
   function getActivityAnswer(activityId, itemId) {
@@ -146,8 +148,8 @@ function Week1({ enrollmentId, setWeekOneData }) {
       .filter(Boolean);
   }
 
-  if (data?.status === "failed" || isError) {
-    return <div>{data?.message || "Internal server error!"}</div>;
+  if (data?.status === "failed" || isError || !data) {
+    return <div>Take Activity to see feedback.</div>;
   }
 
   const score =
@@ -337,18 +339,18 @@ function Week1({ enrollmentId, setWeekOneData }) {
         {
           //This is only Visible for Flow Admins
           isAdmin &&
-            !activityData?.find((activity) => activity.page === activity3.id)
-              ?.feedback && (
-              <Icon
-                onClick={() => {
-                  setActivityFeedbackId({ activityId: activity3.id });
-                  handleModalOpen();
-                }}
-                style={{ color: "#D6D6D6" }}
-                width={35}
-                icon="tabler:message-2"
-              />
-            )
+          !activityData?.find((activity) => activity.page === activity3.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity3.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )
         }
       </div>
       {
@@ -391,18 +393,18 @@ function Week1({ enrollmentId, setWeekOneData }) {
         {
           //This is only Visible for Flow Admins
           isAdmin &&
-            !activityData?.find((activity) => activity.page === activity3.id)
-              ?.feedback && (
-              <Icon
-                onClick={() => {
-                  setActivityFeedbackId({ activityId: activity3.id });
-                  handleModalOpen();
-                }}
-                style={{ color: "#D6D6D6" }}
-                width={35}
-                icon="tabler:message-2"
-              />
-            )
+          !activityData?.find((activity) => activity.page === activity3.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity3.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )
         }
       </div>
       {
@@ -452,18 +454,18 @@ function Week1({ enrollmentId, setWeekOneData }) {
         {
           //This is only Visible for Flow Admins
           isAdmin &&
-            !activityData?.find((activity) => activity.page === activity4.id)
-              ?.feedback && (
-              <Icon
-                onClick={() => {
-                  setActivityFeedbackId({ activityId: activity4.id });
-                  handleModalOpen();
-                }}
-                style={{ color: "#D6D6D6" }}
-                width={35}
-                icon="tabler:message-2"
-              />
-            )
+          !activityData?.find((activity) => activity.page === activity4.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity4.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )
         }
       </div>
       {
@@ -513,18 +515,18 @@ function Week1({ enrollmentId, setWeekOneData }) {
         {
           //This is only Visible for Flow Admins
           isAdmin &&
-            !activityData?.find((activity) => activity.page === activity5.id)
-              ?.feedback && (
-              <Icon
-                onClick={() => {
-                  setActivityFeedbackId({ activityId: activity5.id });
-                  handleModalOpen();
-                }}
-                style={{ color: "#D6D6D6" }}
-                width={35}
-                icon="tabler:message-2"
-              />
-            )
+          !activityData?.find((activity) => activity.page === activity5.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity5.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )
         }
       </div>
       {
@@ -574,18 +576,18 @@ function Week1({ enrollmentId, setWeekOneData }) {
         {
           //This is only Visible for Flow Admins
           isAdmin &&
-            !activityData?.find((activity) => activity.page === activity6.id)
-              ?.feedback && (
-              <Icon
-                onClick={() => {
-                  setActivityFeedbackId({ activityId: activity6.id });
-                  handleModalOpen();
-                }}
-                style={{ color: "#D6D6D6" }}
-                width={35}
-                icon="tabler:message-2"
-              />
-            )
+          !activityData?.find((activity) => activity.page === activity6.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity6.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )
         }
       </div>
       {
@@ -635,18 +637,18 @@ function Week1({ enrollmentId, setWeekOneData }) {
         {
           //This is only Visible for Flow Admins
           isAdmin &&
-            !activityData?.find((activity) => activity.page === activity7.id)
-              ?.feedback && (
-              <Icon
-                onClick={() => {
-                  setActivityFeedbackId({ activityId: activity7.id });
-                  handleModalOpen();
-                }}
-                style={{ color: "#D6D6D6" }}
-                width={35}
-                icon="tabler:message-2"
-              />
-            )
+          !activityData?.find((activity) => activity.page === activity7.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity7.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )
         }
       </div>
       {
@@ -752,14 +754,14 @@ function Week1({ enrollmentId, setWeekOneData }) {
             {score < 40
               ? "Well done on starting your journey into Emotional Regulation! You’ve begun to explore the basics, including understanding emotions and identifying energy levels, but there’s plenty of room to grow. Spend more time revisiting key concepts, such as understanding the SONAR method for managing emotions. Practice small coping techniques and try applying them to simple daily challenges. Remember, emotional regulation is a skill that develops over time, so keep learning and practicing."
               : score < 60
-              ? "Good job! You’ve shown a foundational understanding of emotional regulation. To build on this, focus on strengthening your ability to identify emotions as they arise and using the SONAR method to deal with them effectively. Practice coping skills like physical or creative activities to handle difficult moments. With consistent effort, you’ll see more confidence in managing emotions across different situations."
-              : score < 80
-              ? "Great work! You’ve developed a solid understanding of emotional regulation. Over the course of these weeks, you’ve learned how to recognize energy levels, understand the SONAR method, and use basic coping skills. To take your skills further, focus on applying what you’ve learned to help you deal with high-energy or low-energy states and practice applying these skills in more complex situations. Keep practicing these techniques daily, and you’ll continue to see significant improvement in your emotional balance."
-              : score < 95
-              ? "Excellent work! You’ve demonstrated a strong understanding of emotional regulation concepts, from recognizing your energy levels to using the SONAR method and applying coping skills effectively. To keep growing, focus on applying these skills in a variety of scenarios, such as managing stress, improving relationships, or achieving personal goals. Your dedication to mastering emotional regulation is commendable—keep up the great work!"
-              : score <= 100
-              ? "Outstanding achievement! You’ve shown an exceptional understanding of emotional regulation and its application in your daily life. Your ability to recognize and manage emotions, balance energy levels, and use the SONAR framework effectively is truly impressive, and will set you up for great success and impact in life. Keep inspiring others with your emotional intelligence, and continue refining these skills as you grow. Your mastery of emotional regulation will serve you well in every aspect of life!"
-              : ""}
+                ? "Good job! You’ve shown a foundational understanding of emotional regulation. To build on this, focus on strengthening your ability to identify emotions as they arise and using the SONAR method to deal with them effectively. Practice coping skills like physical or creative activities to handle difficult moments. With consistent effort, you’ll see more confidence in managing emotions across different situations."
+                : score < 80
+                  ? "Great work! You’ve developed a solid understanding of emotional regulation. Over the course of these weeks, you’ve learned how to recognize energy levels, understand the SONAR method, and use basic coping skills. To take your skills further, focus on applying what you’ve learned to help you deal with high-energy or low-energy states and practice applying these skills in more complex situations. Keep practicing these techniques daily, and you’ll continue to see significant improvement in your emotional balance."
+                  : score < 95
+                    ? "Excellent work! You’ve demonstrated a strong understanding of emotional regulation concepts, from recognizing your energy levels to using the SONAR method and applying coping skills effectively. To keep growing, focus on applying these skills in a variety of scenarios, such as managing stress, improving relationships, or achieving personal goals. Your dedication to mastering emotional regulation is commendable—keep up the great work!"
+                    : score <= 100
+                      ? "Outstanding achievement! You’ve shown an exceptional understanding of emotional regulation and its application in your daily life. Your ability to recognize and manage emotions, balance energy levels, and use the SONAR framework effectively is truly impressive, and will set you up for great success and impact in life. Keep inspiring others with your emotional intelligence, and continue refining these skills as you grow. Your mastery of emotional regulation will serve you well in every aspect of life!"
+                      : ""}
           </p>
         </div>
         <Modal

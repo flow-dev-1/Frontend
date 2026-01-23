@@ -10,13 +10,14 @@ import {
 } from "../../../data/index.js";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
+import schoolService from "../../../../../../../../services/api/school.js";
 import adminService from "../../../../../../../../services/api/admin.js";
 import { calculateResult } from "../../../utility.js";
 import { useSelector } from "react-redux";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer.js";
 import Modal from "../../components/Modal.jsx";
 
-function Week3({ enrollmentId, setWeekThreeData }) {
+function Week3({ enrollmentId, setWeekThreeData, isSchool, studentId }) {
   const { pages } = getWeekContentExcludingVideos(3);
   const [activity1, activity2, activity3, activity4, activity5] = pages;
   const [activityData, setActivityData] = useState([]);
@@ -31,10 +32,11 @@ function Week3({ enrollmentId, setWeekThreeData }) {
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
     queryKey: ["dashboard/transition2-feedback-3", enrollmentId, 3],
-    queryFn: () =>
-      isAdmin
-        ? adminService.getUserCourseData(enrollmentId, 3, code)
-        : userService.getUserCourseData(enrollmentId, 3),
+    queryFn: () => {
+      if (isAdmin) return adminService.getUserCourseData(enrollmentId, 3, code);
+      if (isSchool) return schoolService.getStudentCourseData(enrollmentId, 3, studentId);
+      return userService.getUserCourseData(enrollmentId, 3);
+    },
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -48,7 +50,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
     setAssessmentData(data.assessment?.assessments);
     setWeekThreeData(true);
 
-    return () => {};
+    return () => { };
   }, [data]);
 
   function getActivityAnswer(activityId, itemId) {
@@ -110,8 +112,8 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       type === "needs"
         ? activityData[3]?.answer?.[0]?.value?.pink
         : type === "wants"
-        ? activityData[3]?.answer?.[0]?.value?.orange
-        : activityData[3]?.answer?.[0]?.value?.red;
+          ? activityData[3]?.answer?.[0]?.value?.orange
+          : activityData[3]?.answer?.[0]?.value?.red;
 
     // console.log(indices, "Indices")
 
@@ -218,8 +220,8 @@ function Week3({ enrollmentId, setWeekThreeData }) {
     return <div>Loading...</div>;
   }
 
-  if (data?.status === "failed" || isError) {
-    return <div>{data?.message || "Internal server error!"}</div>;
+  if (data?.status === "failed" || isError || !data) {
+    return <div>Take Activity to see feedback.</div>;
   }
 
   const score =
@@ -890,7 +892,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       <div className="d-flex gap-3">
         <h2
           className="text-blue fs-md-1 fw-bold"
-          // style={{ fontSize: 1 + "em" }}
+        // style={{ fontSize: 1 + "em" }}
         >
           Questions:
         </h2>
@@ -905,7 +907,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       <div className="d-flex gap-3">
         <h2
           className="text-gray fs-md-1 text-gray"
-          // style={{ fontSize: 1 + "em" }}
+        // style={{ fontSize: 1 + "em" }}
         >
           Answers:
         </h2>
@@ -960,18 +962,18 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         {
           //This is only Visible for Flow Admins
           isAdmin &&
-            !activityData?.find((activity) => activity.page === activity4.id)
-              ?.feedback && (
-              <Icon
-                onClick={() => {
-                  setActivityFeedbackId({ activityId: activity4.id });
-                  handleModalOpen();
-                }}
-                style={{ color: "#D6D6D6" }}
-                width={35}
-                icon="tabler:message-2"
-              />
-            )
+          !activityData?.find((activity) => activity.page === activity4.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity4.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )
         }
       </div>
       {
@@ -1077,14 +1079,14 @@ function Week3({ enrollmentId, setWeekThreeData }) {
             {score < 40
               ? "Well done on starting your journey into Emotional Regulation! You’ve begun to explore the basics, including understanding emotions and identifying energy levels, but there’s plenty of room to grow. Spend more time revisiting key concepts, such as understanding the SONAR method for managing emotions. Practice small coping techniques and try applying them to simple daily challenges. Remember, emotional regulation is a skill that develops over time, so keep learning and practicing."
               : score < 60
-              ? "Good job! You’ve shown a foundational understanding of emotional regulation. To build on this, focus on strengthening your ability to identify emotions as they arise and using the SONAR method to deal with them effectively. Practice coping skills like physical or creative activities to handle difficult moments. With consistent effort, you’ll see more confidence in managing emotions across different situations."
-              : score < 80
-              ? "Great work! You’ve developed a solid understanding of emotional regulation. Over the course of these weeks, you’ve learned how to recognize energy levels, understand the SONAR method, and use basic coping skills. To take your skills further, focus on applying what you’ve learned to help you deal with high-energy or low-energy states and practice applying these skills in more complex situations. Keep practicing these techniques daily, and you’ll continue to see significant improvement in your emotional balance."
-              : score < 95
-              ? "Excellent work! You’ve demonstrated a strong understanding of emotional regulation concepts, from recognizing your energy levels to using the SONAR method and applying coping skills effectively. To keep growing, focus on applying these skills in a variety of scenarios, such as managing stress, improving relationships, or achieving personal goals. Your dedication to mastering emotional regulation is commendable—keep up the great work!"
-              : score <= 100
-              ? "Outstanding achievement! You’ve shown an exceptional understanding of emotional regulation and its application in your daily life. Your ability to recognize and manage emotions, balance energy levels, and use the SONAR framework effectively is truly impressive, and will set you up for great success and impact in life. Keep inspiring others with your emotional intelligence, and continue refining these skills as you grow. Your mastery of emotional regulation will serve you well in every aspect of life!"
-              : ""}
+                ? "Good job! You’ve shown a foundational understanding of emotional regulation. To build on this, focus on strengthening your ability to identify emotions as they arise and using the SONAR method to deal with them effectively. Practice coping skills like physical or creative activities to handle difficult moments. With consistent effort, you’ll see more confidence in managing emotions across different situations."
+                : score < 80
+                  ? "Great work! You’ve developed a solid understanding of emotional regulation. Over the course of these weeks, you’ve learned how to recognize energy levels, understand the SONAR method, and use basic coping skills. To take your skills further, focus on applying what you’ve learned to help you deal with high-energy or low-energy states and practice applying these skills in more complex situations. Keep practicing these techniques daily, and you’ll continue to see significant improvement in your emotional balance."
+                  : score < 95
+                    ? "Excellent work! You’ve demonstrated a strong understanding of emotional regulation concepts, from recognizing your energy levels to using the SONAR method and applying coping skills effectively. To keep growing, focus on applying these skills in a variety of scenarios, such as managing stress, improving relationships, or achieving personal goals. Your dedication to mastering emotional regulation is commendable—keep up the great work!"
+                    : score <= 100
+                      ? "Outstanding achievement! You’ve shown an exceptional understanding of emotional regulation and its application in your daily life. Your ability to recognize and manage emotions, balance energy levels, and use the SONAR framework effectively is truly impressive, and will set you up for great success and impact in life. Keep inspiring others with your emotional intelligence, and continue refining these skills as you grow. Your mastery of emotional regulation will serve you well in every aspect of life!"
+                      : ""}
           </p>
         </div>
         <Modal

@@ -12,11 +12,12 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
 
-function Transition2Feedback() {
+function Transition2Feedback({ isSchool: isSchoolProp, studentId }) {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
+  const [isSchool, setIsSchool] = useState(isSchoolProp || false);
 
   // This is used to trigger the report download.
   const [hasPercentile, setHasPercentile] = useState(false);
@@ -35,10 +36,10 @@ function Transition2Feedback() {
   useEffect(() => {
     setAllDataLoaded(
       isWeekOneLoaded &&
-        isWeekTwoLoaded &&
-        isWeekThreeLoaded &&
-        isWeekFourLoaded &&
-        isWeekFiveLoaded
+      isWeekTwoLoaded &&
+      isWeekThreeLoaded &&
+      isWeekFourLoaded &&
+      isWeekFiveLoaded
     );
   }, [
     isWeekOneLoaded,
@@ -56,7 +57,7 @@ function Transition2Feedback() {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
+    if (!enrolmentData && !isAdmin?.isAdmin && !isSchool) return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
       const courseEnrollmentId = sessionStorage.getItem(
@@ -64,6 +65,13 @@ function Transition2Feedback() {
       );
       if (!courseEnrollmentId) return;
       setEnrollmentId(courseEnrollmentId);
+    } else if (isSchool) {
+      if (enrolmentData?._id) {
+        setEnrollmentId(enrolmentData._id);
+      }
+      if (location.state?.enrollmentData?._id) {
+        setEnrollmentId(location.state.enrollmentData._id);
+      }
     } else {
       setEnrollmentId(enrolmentData?._id);
     }
@@ -73,13 +81,13 @@ function Transition2Feedback() {
     {
       topic: "Defining Your Next Chapter",
       component: (
-        <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} />
+        <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
       topic: "Mindset and Values",
       component: (
-        <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} />
+        <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
@@ -88,19 +96,21 @@ function Transition2Feedback() {
         <Week3
           enrollmentId={enrollmentId}
           setWeekThreeData={setWeekThreeData}
+          isSchool={isSchool}
+          studentId={studentId}
         />
       ),
     },
     {
       topic: "Freedom and Responsibilitys",
       component: (
-        <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} />
+        <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
       topic: "Goal Setting and Resilience",
       component: (
-        <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} />
+        <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
@@ -113,7 +123,9 @@ function Transition2Feedback() {
         <OverallFeedBack
           enrollmentId={enrollmentId}
           setHasPercentile={setHasPercentile}
-          //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
+          isSchool={isSchool}
+          studentId={studentId}
+        //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
         />
       ),
     },
@@ -139,7 +151,7 @@ function Transition2Feedback() {
           </button>
           <div
             className="navbar-logo"
-            onClick={() => {}}
+            onClick={() => { }}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -147,49 +159,51 @@ function Transition2Feedback() {
         </div>
       </nav>
       <div className="main-content">
-        <aside className="d-none d-lg-block">
-          <button
-            disabled={isAdmin?.isAdmin}
-            onClick={() => navigate("/dashboard/my-courses")}
-            className="back"
-            style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
-          >
-            <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
-            Back to My Courses
-          </button>
-          <div className="compassion-title">
-            <h2 className="fs-5 fs-md-3 tot-nav-text">SEL for Educators:</h2>
-            <h2 className="compassion fs-5 tot-nav-text">ToT Course 1</h2>
-          </div>
+        {!isSchool && (
+          <aside className="d-none d-lg-block">
+            <button
+              disabled={isAdmin?.isAdmin}
+              onClick={() => navigate("/dashboard/my-courses")}
+              className="back"
+              style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
+            >
+              <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
+              Back to My Courses
+            </button>
+            <div className="compassion-title">
+              <h2 className="fs-5 fs-md-3 tot-nav-text">SEL for Educators:</h2>
+              <h2 className="compassion fs-5 tot-nav-text">ToT Course 1</h2>
+            </div>
 
-          <ul className="compassion-list">
-            {weeksTopic.map((item, index) => (
-              <li
-                key={index}
-                className={
-                  index + 1 <= currentWeek
-                    ? "active-week"
-                    : index >= 6
-                    ? "d-none"
-                    : ""
-                }
-              >
-                <div className="icon">
-                  <Icon
-                    icon="icon-park-outline:check-one"
-                    className="course-list-icon"
-                  />
-                </div>
-                <span className={index >= 5 ? "d-none" : ""}>
-                  Week
-                  {index + 1}
-                </span>
-                <span>{item} </span>
-              </li>
-            ))}
-          </ul>
-        </aside>
-        <section className="week-content position-relative mb-5 ">
+            <ul className="compassion-list">
+              {weeksTopic.map((item, index) => (
+                <li
+                  key={index}
+                  className={
+                    index + 1 <= currentWeek
+                      ? "active-week"
+                      : index >= 6
+                        ? "d-none"
+                        : ""
+                  }
+                >
+                  <div className="icon">
+                    <Icon
+                      icon="icon-park-outline:check-one"
+                      className="course-list-icon"
+                    />
+                  </div>
+                  <span className={index >= 5 ? "d-none" : ""}>
+                    Week
+                    {index + 1}
+                  </span>
+                  <span>{item} </span>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )}
+        <section className={`week-content position-relative mb-5 ${isSchool ? "w-100" : ""}`}>
           <Link
             disabled={isAdmin}
             to={"/dashboard/my-courses"}

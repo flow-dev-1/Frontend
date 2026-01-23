@@ -17,11 +17,12 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
 
-function TransitionFeedback() {
+function TransitionFeedback({ isSchool: isSchoolProp, studentId }) {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
+  const [isSchool, setIsSchool] = useState(isSchoolProp || false);
 
   // This is used to trigger the report download.
   const [hasPercentile, setHasPercentile] = useState(false);
@@ -45,15 +46,15 @@ function TransitionFeedback() {
   useEffect(() => {
     setAllDataLoaded(
       isWeekOneLoaded &&
-        isWeekTwoLoaded &&
-        isWeekThreeLoaded &&
-        isWeekFourLoaded &&
-        isWeekFiveLoaded &&
-        isWeekSixLoaded &&
-        isWeekSevenLoaded &&
-        isWeekEightLoaded &&
-        isWeekNineLoaded &&
-        isWeekTenLoaded
+      isWeekTwoLoaded &&
+      isWeekThreeLoaded &&
+      isWeekFourLoaded &&
+      isWeekFiveLoaded &&
+      isWeekSixLoaded &&
+      isWeekSevenLoaded &&
+      isWeekEightLoaded &&
+      isWeekNineLoaded &&
+      isWeekTenLoaded
     );
   }, [
     isWeekOneLoaded,
@@ -76,7 +77,7 @@ function TransitionFeedback() {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
+    if (!enrolmentData && !isAdmin?.isAdmin && !isSchool) return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
       const courseEnrollmentId = sessionStorage.getItem(
@@ -84,8 +85,15 @@ function TransitionFeedback() {
       );
       if (!courseEnrollmentId) return;
       setEnrollmentId(courseEnrollmentId);
+    } else if (isSchool) {
+      if (enrolmentData?._id) {
+        setEnrollmentId(enrolmentData._id);
+      }
+      if (location.state?.enrollmentData?._id) {
+        setEnrollmentId(location.state.enrollmentData._id);
+      }
     } else {
-      setEnrollmentId(enrolmentData._id);
+      setEnrollmentId(enrolmentData?._id);
     }
   }, []);
 
@@ -93,13 +101,13 @@ function TransitionFeedback() {
     {
       topic: "Introduction to Transition",
       component: (
-        <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} />
+        <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
       topic: "Growth and Fixed Mindset",
       component: (
-        <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} />
+        <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
@@ -108,25 +116,26 @@ function TransitionFeedback() {
         <Week3
           enrollmentId={enrollmentId}
           setWeekThreeData={setWeekThreeData}
+          isSchool={isSchool} studentId={studentId}
         />
       ),
     },
     {
       topic: "Understanding Values",
       component: (
-        <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} />
+        <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
       topic: "Core Values and how they matter",
       component: (
-        <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} />
+        <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
       topic: "Social Skills (Navigating Relationships)",
       component: (
-        <Week6 enrollmentId={enrollmentId} setWeekSixData={setWeekSixData} />
+        <Week6 enrollmentId={enrollmentId} setWeekSixData={setWeekSixData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
@@ -135,6 +144,7 @@ function TransitionFeedback() {
         <Week7
           enrollmentId={enrollmentId}
           setWeekSevenData={setWeekSevenData}
+          isSchool={isSchool} studentId={studentId}
         />
       ),
     },
@@ -144,19 +154,20 @@ function TransitionFeedback() {
         <Week8
           enrollmentId={enrollmentId}
           setWeekEightData={setWeekEightData}
+          isSchool={isSchool} studentId={studentId}
         />
       ),
     },
     {
       topic: "Resilience and Introduction to Coping Skills",
       component: (
-        <Week9 enrollmentId={enrollmentId} setWeekNineData={setWeekNineData} />
+        <Week9 enrollmentId={enrollmentId} setWeekNineData={setWeekNineData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
       topic: "Looking Ahead",
       component: (
-        <Week10 enrollmentId={enrollmentId} setWeekTenData={setWeekTenData} />
+        <Week10 enrollmentId={enrollmentId} setWeekTenData={setWeekTenData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
@@ -165,7 +176,7 @@ function TransitionFeedback() {
         <OverallFeedBack
           enrollmentId={enrollmentId}
           setHasPercentile={setHasPercentile}
-          //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
+        //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
         />
       ),
     },
@@ -191,7 +202,7 @@ function TransitionFeedback() {
           </button>
           <div
             className="navbar-logo"
-            onClick={() => {}}
+            onClick={() => { }}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -222,8 +233,8 @@ function TransitionFeedback() {
                   index + 1 <= currentWeek
                     ? "active-week"
                     : index === 10
-                    ? "d-none"
-                    : ""
+                      ? "d-none"
+                      : ""
                 }
               >
                 <div className="icon">

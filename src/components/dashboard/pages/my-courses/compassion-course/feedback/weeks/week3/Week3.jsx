@@ -10,13 +10,14 @@ import {
 } from "../../../../compassion-course/weeks/data";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
+import schoolService from "../../../../../../../../services/api/school.js";
 import adminService from "../../../../../../../../services/api/admin.js";
 import { calculateResult } from "../../../utility.js";
 import { useSelector } from "react-redux";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer.js";
 import Modal from "../../components/Modal.jsx";
 
-function Week3({ enrollmentId, setWeekThreeData }) {
+function Week3({ enrollmentId, setWeekThreeData, isSchool, studentId }) {
   const { pages } = getWeekContentExcludingVideos(3);
   const [activity1, activity2, activity3, activity4, activity5] = pages;
   const [activityData, setActivityData] = useState([]);
@@ -31,7 +32,11 @@ function Week3({ enrollmentId, setWeekThreeData }) {
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
     queryKey: ["dashboard/compassion-feedback-3", enrollmentId, 3],
-    queryFn: () => userService.getUserCourseData(enrollmentId, 3),
+    queryFn: () => {
+      if (isAdmin) return adminService.getUserCourseData(enrollmentId, 3, code);
+      if (isSchool) return schoolService.getStudentCourseData(enrollmentId, 3, studentId);
+      return userService.getUserCourseData(enrollmentId, 3);
+    },
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -45,7 +50,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
     setAssessmentData(data.assessment?.assessments);
     setWeekThreeData(true);
 
-    return () => {};
+    return () => { };
   }, [data]);
 
   function getActivityAnswer(activityId) {
@@ -100,8 +105,8 @@ function Week3({ enrollmentId, setWeekThreeData }) {
     return <div>Loading...</div>;
   }
 
-  if (data?.status === "failed" || isError) {
-    return <div>{data?.message || "Internal server error!"}</div>;
+  if (data?.status === "failed" || isError || !data) {
+    return <div>Take Activity to see feedback.</div>;
   }
 
   const score =
@@ -463,12 +468,12 @@ function Week3({ enrollmentId, setWeekThreeData }) {
             {score < 41
               ? "It looks like you may need more practice understanding compassion. Take time to reflect on how you can be more empathetic and caring toward others."
               : score < 61
-              ? "Good effort! You’re on the right track, but revisiting some aspects of showing compassion could help you improve further."
-              : score < 100
-              ? "Well done! You have a strong grasp of compassion, though there are some areas where you could practice being more mindful of others' needs."
-              : score === 100
-              ? "Fantastic! Your answers show a deep understanding of compassion and how to apply it in different situations. Keep up the great work!"
-              : ""}
+                ? "Good effort! You’re on the right track, but revisiting some aspects of showing compassion could help you improve further."
+                : score < 100
+                  ? "Well done! You have a strong grasp of compassion, though there are some areas where you could practice being more mindful of others' needs."
+                  : score === 100
+                    ? "Fantastic! Your answers show a deep understanding of compassion and how to apply it in different situations. Keep up the great work!"
+                    : ""}
           </p>
         </div>
       </div>

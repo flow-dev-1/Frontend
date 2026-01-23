@@ -10,6 +10,7 @@ import {
 } from "../../../../compassion-course/weeks/data";
 import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
+import schoolService from "../../../../../../../../services/api/school.js";
 import adminService from "../../../../../../../../services/api/admin.js";
 import { calculateResult } from "../../../utility.js";
 import { useSelector } from "react-redux";
@@ -17,7 +18,7 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer.j
 import Modal from "../../components/Modal.jsx";
 import { useMutation } from "@tanstack/react-query";
 
-function Week1({ enrollmentId, setWeekOneData }) {
+function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState("");
   const [activityFeedbackId, setActivityFeedbackId] = useState(null);
@@ -33,10 +34,11 @@ function Week1({ enrollmentId, setWeekOneData }) {
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
     queryKey: ["dashboard/compassion-feedback-1", enrollmentId, 1],
-    queryFn: () =>
-      isAdmin
-        ? adminService.getUserCourseData(enrollmentId, 1, code)
-        : userService.getUserCourseData(enrollmentId, 1),
+    queryFn: () => {
+      if (isAdmin) return adminService.getUserCourseData(enrollmentId, 1, code);
+      if (isSchool) return schoolService.getStudentCourseData(enrollmentId, 1, studentId);
+      return userService.getUserCourseData(enrollmentId, 1);
+    },
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -82,7 +84,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
     setAssessmentData(data.assessment?.assessments);
     setWeekOneData(true);
 
-    return () => {};
+    return () => { };
   }, [data]);
 
   function getActivityAnswer(activityId, itemId, index) {
@@ -168,8 +170,8 @@ function Week1({ enrollmentId, setWeekOneData }) {
     return <div>Loading...</div>;
   }
 
-  if (data?.status === "failed" || isError) {
-    return <div>{data?.message || "Internal server error!"}</div>;
+  if (data?.status === "failed" || isError || !data) {
+    return <div>Take Activity to see feedback.</div>;
   }
 
   const score =
@@ -431,12 +433,12 @@ function Week1({ enrollmentId, setWeekOneData }) {
             {score < 41
               ? "It looks like there’s room for improvement in your understanding of compassion and NVC. Reviewing these ideas will help you gain more clarity. Also, feel free to ask questions where you need help."
               : score < 61
-              ? "You’re on the right track but might need to revisit some key concepts around compassion and NVC. Keep learning and exploring!"
-              : score < 100
-              ? "Great job! You generally understand compassion and NVC, though there are a few areas you can explore further to deepen your knowledge."
-              : score === 100
-              ? "Your understanding of compassion and NVC is spot on! You’ve clearly understood the key concepts."
-              : ""}
+                ? "You’re on the right track but might need to revisit some key concepts around compassion and NVC. Keep learning and exploring!"
+                : score < 100
+                  ? "Great job! You generally understand compassion and NVC, though there are a few areas you can explore further to deepen your knowledge."
+                  : score === 100
+                    ? "Your understanding of compassion and NVC is spot on! You’ve clearly understood the key concepts."
+                    : ""}
           </p>
         </div>
         <Modal

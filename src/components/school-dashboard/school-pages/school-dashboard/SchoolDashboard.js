@@ -14,12 +14,12 @@ export default function SchoolDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useSelector((state) => state.user);
-  
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-  
+
   let schoolId;
-  
+
   if (user?.isSchool) {
     schoolId = user?._id;
   }
@@ -31,7 +31,7 @@ export default function SchoolDashboard() {
         setIsDropdownOpen(false);
       }
     }
-    
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -75,7 +75,7 @@ export default function SchoolDashboard() {
           <Link to="/school-dashboard" className="navbar-logo">
             <img src={logo} alt="" />
           </Link>
-          
+
           {showDropdown ? (
             <div className="navbar-dropdown-wrapper" ref={dropdownRef}>
               <div
@@ -116,6 +116,10 @@ export default function SchoolDashboard() {
 
       {location.pathname.startsWith("/dashboard/my-courses/") ? (
         <SchoolSingleCoursePage />
+      ) : location.pathname.includes("/courses/feedback") ? (
+        <div className="dashboard-content" style={{ width: '95%', margin: '0 auto' }}>
+          <Outlet />
+        </div>
       ) : (
         <div className="dashboard">
           <SchoolSidebar className="sidebar-content" />

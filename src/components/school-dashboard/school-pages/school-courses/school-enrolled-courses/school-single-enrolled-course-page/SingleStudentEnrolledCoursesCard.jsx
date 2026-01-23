@@ -110,6 +110,26 @@ const SingleStudentEnrolledCoursesCard = ({
         `/school-dashboard/courses/feedback/${encryptURI(userId)}`,
         { state: { enrollmentData: course } }
       )
+    } else if (course?.course.title === "Resilience & Grit") {
+      navigate(
+        `/school-dashboard/courses/feedback/resilience_grit/${encryptURI(userId)}`,
+        { state: { enrollmentData: course } }
+      )
+    } else if (course?.course.title === "Compassion") {
+      navigate(
+        `/school-dashboard/courses/feedback/compassion/${encryptURI(userId)}`,
+        { state: { enrollmentData: course } }
+      )
+    } else if (course?.course.title === "Transition 2") {
+      navigate(
+        `/school-dashboard/courses/feedback/transition_2/${encryptURI(userId)}`,
+        { state: { enrollmentData: course } }
+      )
+    } else if (course?.course.title === "Transition") {
+      navigate(
+        `/school-dashboard/courses/feedback/transition/${encryptURI(userId)}`,
+        { state: { enrollmentData: course } }
+      )
     } else {
       navigate(`/dashboard/${course?.course.title}/feedback`, { state: { enrollmentData: course } })
     }

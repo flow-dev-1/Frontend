@@ -17,7 +17,9 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer.j
 import Modal from "../../components/Modal.jsx";
 import { useMutation } from "@tanstack/react-query";
 
-function Week4({ enrollmentId, setWeekFourData }) {
+import schoolService from "../../../../../../../../services/api/school.js";
+
+function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
   const { pages } = getWeekContentExcludingVideos(4);
   const [activity1, activity2, activity3] = pages;
   const [activityData, setActivityData] = useState([]);
@@ -32,10 +34,11 @@ function Week4({ enrollmentId, setWeekFourData }) {
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
     queryKey: ["dashboard/resilience-feedback-4", enrollmentId, 4],
-    queryFn: () =>
-      isAdmin
-        ? adminService.getUserCourseData(enrollmentId, 4, code)
-        : userService.getUserCourseData(enrollmentId, 4),
+    queryFn: () => {
+      if (isAdmin) return adminService.getUserCourseData(enrollmentId, 4, code);
+      if (isSchool) return schoolService.getStudentCourseData(enrollmentId, 4, studentId);
+      return userService.getUserCourseData(enrollmentId, 4);
+    },
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -110,8 +113,8 @@ function Week4({ enrollmentId, setWeekFourData }) {
     return <div>Loading...</div>;
   }
 
-  if (data?.status === "failed" || isError) {
-    return <div>{data?.message || "Internal server error!"}</div>;
+  if (data?.status === "failed" || isError || !data) {
+    return <div>Take Activity to see feedback.</div>;
   }
 
   const score =
@@ -346,8 +349,8 @@ function Week4({ enrollmentId, setWeekFourData }) {
       }
 
       <hr />
-         {/* Assesment 1 */}
-         <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
+      {/* Assesment 1 */}
+      <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
         Assessment 1
       </p>
       <hr />

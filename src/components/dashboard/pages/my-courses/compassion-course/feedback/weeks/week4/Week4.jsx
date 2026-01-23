@@ -10,6 +10,7 @@ import {
 } from "../../../../compassion-course/weeks/data";
 import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
+import schoolService from "../../../../../../../../services/api/school.js";
 import adminService from "../../../../../../../../services/api/admin.js";
 import { calculateResult } from "../../../utility.js";
 import { useSelector } from "react-redux";
@@ -17,7 +18,7 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer.j
 import Modal from "../../components/Modal.jsx";
 import { useMutation } from "@tanstack/react-query";
 
-function Week4({ enrollmentId, setWeekFourData }) {
+function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
   const { pages } = getWeekContentExcludingVideos(4);
   const [activity1, activity2, activity3] = pages;
   const [activityData, setActivityData] = useState([]);
@@ -31,7 +32,11 @@ function Week4({ enrollmentId, setWeekFourData }) {
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
     queryKey: ["dashboard/compassion-feedback-4", enrollmentId, 4],
-    queryFn: () => userService.getUserCourseData(enrollmentId, 4),
+    queryFn: () => {
+      if (isAdmin) return adminService.getUserCourseData(enrollmentId, 4, code);
+      if (isSchool) return schoolService.getStudentCourseData(enrollmentId, 4, studentId);
+      return userService.getUserCourseData(enrollmentId, 4);
+    },
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -68,7 +73,7 @@ function Week4({ enrollmentId, setWeekFourData }) {
     setAssessmentData(data.assessment?.assessments);
     setWeekFourData(true);
 
-    return () => {};
+    return () => { };
   }, [data]);
 
   const handleModalOpen = () => {
@@ -107,10 +112,10 @@ function Week4({ enrollmentId, setWeekFourData }) {
       type === "green"
         ? activityData[2].answer.green
         : type === "orange"
-        ? activityData[2].answer.orange
-        : type === "red"
-        ? activityData[2].answer.red
-        : [];
+          ? activityData[2].answer.orange
+          : type === "red"
+            ? activityData[2].answer.red
+            : [];
     return indices?.map((index) => activity3?.images[index]) || [];
   }
 
@@ -118,8 +123,8 @@ function Week4({ enrollmentId, setWeekFourData }) {
     return <div>Loading...</div>;
   }
 
-  if (data?.status === "failed" || isError) {
-    return <div>{data?.message || "Internal server error!"}</div>;
+  if (data?.status === "failed" || isError || !data) {
+    return <div>Take Activity to see feedback.</div>;
   }
 
   const score =
@@ -456,12 +461,12 @@ function Week4({ enrollmentId, setWeekFourData }) {
             {score < 41
               ? "It seems like you need more time to fully understand the Circle of Concern and the difference between showing compassion to your inner and outer circles. Review the concept and think about how to apply it in your daily life."
               : score < 61
-              ? "Good effort! You have a general idea of the Circle of Concern, but there’s room for improvement in recognizing how to show compassion appropriately to different groups."
-              : score < 100
-              ? "Great job! You mostly understand the Circle of Concern, though you could benefit from thinking more about the boundaries between your inner and outer circles."
-              : score === 100
-              ? "Excellent understanding! You clearly grasp the idea of the Circle of Concern and how to interact with people in your inner and outer circles with compassion and respect."
-              : ""}
+                ? "Good effort! You have a general idea of the Circle of Concern, but there’s room for improvement in recognizing how to show compassion appropriately to different groups."
+                : score < 100
+                  ? "Great job! You mostly understand the Circle of Concern, though you could benefit from thinking more about the boundaries between your inner and outer circles."
+                  : score === 100
+                    ? "Excellent understanding! You clearly grasp the idea of the Circle of Concern and how to interact with people in your inner and outer circles with compassion and respect."
+                    : ""}
           </p>
         </div>
         <Modal

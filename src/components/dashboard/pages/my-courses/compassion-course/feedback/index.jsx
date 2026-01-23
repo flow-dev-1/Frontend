@@ -12,12 +12,12 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
 
-function CompassionFeedback() {
+function CompassionFeedback({ isSchool: isSchoolProp, studentId }) {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
-  const [isSchool, setIsSchool] = useState(false);
+  const [isSchool, setIsSchool] = useState(isSchoolProp || false);
 
   // This is used to trigger the report download.
   const [hasPercentile, setHasPercentile] = useState(false);
@@ -44,10 +44,10 @@ function CompassionFeedback() {
   useEffect(() => {
     setAllDataLoaded(
       isWeekOneLoaded &&
-        isWeekTwoLoaded &&
-        isWeekThreeLoaded &&
-        isWeekFourLoaded &&
-        isWeekFiveLoaded
+      isWeekTwoLoaded &&
+      isWeekThreeLoaded &&
+      isWeekFourLoaded &&
+      isWeekFiveLoaded
     );
   }, [
     isWeekOneLoaded,
@@ -65,7 +65,7 @@ function CompassionFeedback() {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
+    if (!enrolmentData && !isAdmin?.isAdmin && !isSchool) return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
       const courseEnrollmentId = sessionStorage.getItem(
@@ -73,6 +73,23 @@ function CompassionFeedback() {
       );
       if (!courseEnrollmentId) return;
       setEnrollmentId(courseEnrollmentId);
+    } else if (isSchool) {
+      // For school, we might rely on the parent wrapper passing it or fetching it? 
+      // Actually, Week components fetch data using enrollmentId OR studentId.
+      // But Week components take enrollmentId prop. 
+      // In SchoolResilienceFeedback, we passed studentId to Weeks.
+      // Let's check how Week components use it. 
+      if (enrolmentData?._id) {
+        setEnrollmentId(enrolmentData._id);
+      }
+      // If no enrollmentData (refresh), we might need to rely on the service to find it by studentId + courseId? 
+      // Or simply pass null enrollmentId and let the service handle it if it takes userId.
+      // Resilience logic: if (isSchool) return schoolService.getStudentCourseData(enrollmentId, 1, studentId);
+      // It uses enrollmentId. 
+      // We need to ensure we have enrollmentId.
+      if (location.state?.enrollmentData?._id) {
+        setEnrollmentId(location.state.enrollmentData._id);
+      }
     } else {
       setEnrollmentId(enrolmentData._id);
     }
@@ -82,13 +99,13 @@ function CompassionFeedback() {
     {
       topic: "Introduction to Compassion",
       component: (
-        <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} />
+        <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
       topic: "Self-Compassion",
       component: (
-        <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} />
+        <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
@@ -97,19 +114,20 @@ function CompassionFeedback() {
         <Week3
           enrollmentId={enrollmentId}
           setWeekThreeData={setWeekThreeData}
+          isSchool={isSchool} studentId={studentId}
         />
       ),
     },
     {
       topic: "Circle of Concern",
       component: (
-        <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} />
+        <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
       topic: "Life Scenarios - Let’s wear the shoes of others",
       component: (
-        <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} />
+        <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
@@ -118,7 +136,7 @@ function CompassionFeedback() {
         <OverallFeedBack
           enrollmentId={enrollmentId}
           setHasPercentile={setHasPercentile}
-          //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
+        //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
         />
       ),
     },
@@ -146,7 +164,7 @@ function CompassionFeedback() {
           </button>
           <div
             className="navbar-logo"
-            onClick={() => {}}
+            onClick={() => { }}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -181,8 +199,8 @@ function CompassionFeedback() {
                   index + 1 <= currentWeek
                     ? "active-week"
                     : index === 5
-                    ? "d-none"
-                    : ""
+                      ? "d-none"
+                      : ""
                 }
               >
                 <div className="icon">
