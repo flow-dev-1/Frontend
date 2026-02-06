@@ -7,12 +7,16 @@ import checkedImage from "../../../../../../assets/selfawareness-images/checked.
 import unCheckedImage from "../../../../../../assets/selfawareness-images/not-checked.png";
 import { Icon } from "@iconify/react";
 import FinalReport from "./FinalReport";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import userService from '../../../../../../services/api/user'
 import { toast } from "react-toastify";
 import { decryptId } from "../../../../../../utils/encryption";
 import schoolService from "../../../../../../services/api/school";
+import adminService from "../../../../../../services/api/admin";
 import { useParams } from 'react-router-dom'
+import FeedbackModal from "./FeedbackModal";
+import { useSelector } from "react-redux";
+import { adminData } from "../../../../../../redux/reducers/adminReducer";
 const initialQuestionsQuiz = [
   {
     question: 'What are values?',
@@ -397,16 +401,72 @@ const rightItemsArray = [
   ],
 ]
 
-const Week4 = ({ enrollmentId }) => {
+const Week4 = ({ enrollmentId, isSchool, studentId }) => {
   const { userId } = useParams()
   const week = 4
   const courseId = '66853bf50118e2e0a02b6a5a'
+  const queryClient = useQueryClient();
   const [questionsQuiz, setQuestionsQuiz] = useState(initialQuestionsQuiz)
+  const [activeModal, setActiveModal] = useState(null);
+  const [editingActivity, setEditingActivity] = useState(null);
+  const [activitiesDataState, setActivitiesDataState] = useState([]);
+
+  const { isAdmin, code } = useSelector(adminData);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['dashboard/feedback/self-awareness', enrollmentId || courseId, week],
-    queryFn: () => schoolService.getStudentCourseData(enrollmentId || courseId, week, decryptId(userId)),
+    queryFn: () => {
+      if (isAdmin && enrollmentId) return adminService.getUserCourseData(enrollmentId, week, code);
+      if (isSchool || isAdmin) return schoolService.getStudentCourseData(enrollmentId || courseId, week, studentId || decryptId(userId));
+      return schoolService.getStudentCourseData(enrollmentId || courseId, week, decryptId(userId));
+    },
+    enabled: !!enrollmentId || !!courseId,
   })
+
+  const feedbackMutation = useMutation({
+    mutationFn: (updatedActivities) => {
+      if (isAdmin) {
+        return adminService.submitAdminFeedback(
+          updatedActivities,
+          enrollmentId,
+          week,
+          data?.activity?.user,
+          code
+        );
+      }
+      return schoolService.getMyActivitesUpdate(
+        enrollmentId || courseId,
+        week,
+        decryptId(userId),
+        { activities: updatedActivities }
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["dashboard/feedback/self-awareness"]);
+      toast.success("Feedback submitted successfully");
+      closeModal();
+    },
+    onError: (error) => {
+      console.error("Feedback submission error:", error);
+      toast.error(error?.message || "Failed to submit feedback");
+    },
+  });
+
+  useEffect(() => {
+    if (data?.activity?.activities) {
+      setActivitiesDataState(data.activity.activities);
+    }
+  }, [data]);
+
+  const openModal = (activityIndex, feedback = "") => {
+    setActiveModal(activityIndex);
+    setEditingActivity({ index: activityIndex, feedback });
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
+    setEditingActivity(null);
+  };
 
   const assessmentData = data?.assessment;
   const activityData = data?.activity;
@@ -527,12 +587,50 @@ const Week4 = ({ enrollmentId }) => {
         "Are you happy with what these people think about you? If no, what would you like to change? If yes, type “YES” in the box.",
       answer: activityData?.activities?.[5]?.answers?.[2],
       feedback: activityData?.activities?.[5]?.feedback?.[2] || ""
+    },
+    {
+      activity: 6,
+      question: "Identify four (4) core values that resonate with you the most.",
+      answer: activityData?.activities?.[7]?.answers || [],
+      feedback: activityData?.activities?.[7]?.feedback?.[0] || ""
     }
   ];
 
+
+  const handleFeedbackSubmit = (activityId, feedback) => {
+    const adjustedActivityId = (() => {
+      switch (activityId) {
+        case 1: return 2;
+        case 2: return 4;
+        case 3:
+        case 4:
+        case 5: return 6;
+        case 6: return 8;
+        default: return activityId;
+      }
+    })();
+
+    const updatedActivities = activitiesDataState.map((act) => {
+      if (act.activity === adjustedActivityId) {
+        if ([3, 4, 5].includes(activityId)) {
+          const feedbackIndex = activityId - 3;
+          const updatedFeedback = Array.isArray(act.feedback) ? [...act.feedback] : [];
+          updatedFeedback[feedbackIndex] = feedback;
+          return { ...act, feedback: updatedFeedback };
+        } else {
+          return { ...act, feedback: [feedback] };
+        }
+      }
+      return act;
+    });
+
+    setActivitiesDataState(updatedActivities);
+    feedbackMutation.mutate(updatedActivities);
+  };
+
   return (
     <div className="week-content w-auto">
-      {activities.map((activity, index) => (
+      {activities.slice(0, 2).map((activity, index) => (
         <div style={{ border: "none" }} className="activity" key={index}>
           <p className="activity-badge">Activity {index + 1}</p>
           <p className="question d-flex align-items-center gap-2">
@@ -540,52 +638,78 @@ const Week4 = ({ enrollmentId }) => {
             <span>{activity.question}</span>
           </p>
 
-          {/* Check if answer is an array, object, or string and render accordingly */}
           {Array.isArray(activity.answer) ? (
             <ul className="answer-options4" style={{ paddingLeft: "1.5rem" }}>
-              <div className="answer d-flex align-items-center gap-2">
-                <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
-                {activity.answer.map((item, idx) => (
-                  <li
-                    key={idx}
-                    style={{ marginBottom: ".5rem", fontSize: "14px" }}
-                  >
-                    <Icon
-                      icon="radix-icons:dot-filled"
-                      style={{ color: "#5B616A" }}
-                    />
-                    {item}
-                  </li>
-                ))}
+              <div className="d-flex w-100 justify-content-between align-items-center gap-2">
+                <div className="d-flex gap-2">
+                  <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+                  {activity.answer.map((item, idx) => (
+                    <li
+                      key={idx}
+                      style={{ marginBottom: ".5rem", fontSize: "14px" }}
+                    >
+                      <Icon
+                        icon="radix-icons:dot-filled"
+                        style={{ color: "#5B616A" }}
+                      />
+                      {item}
+                    </li>
+                  ))}
+                </div>
+                {(!activity?.feedback || activity.feedback.length === 0) && (
+                  <Icon
+                    onClick={() => openModal(activity.activity)}
+                    style={{ color: "#D6D6D6", cursor: "pointer" }}
+                    width={20}
+                    icon="hugeicons:comment-01"
+                  />
+                )}
               </div>
             </ul>
           ) : typeof activity.answer === "object" &&
             activity.answer !== null ? (
             <ol className="answer-options" style={{ paddingLeft: "1.5rem" }}>
-              <div className="d-flex  gap-2">
-                <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
-                <div>
-                  {Object.entries(activity.answer).map(([key, value], idx) => (
-                    <li
-                      key={idx}
-                      style={{ marginBottom: ".5rem", fontSize: "14px" }}
-                    >
-                      <strong>{idx + 1}.</strong> {value}
-                    </li>
-                  ))}
+              <div className="d-flex w-100 justify-content-between align-items-center gap-2">
+                <div className="d-flex gap-2">
+                  <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+                  <div>
+                    {Object.entries(activity.answer).map(([key, value], idx) => (
+                      <li
+                        key={idx}
+                        style={{ marginBottom: ".5rem", fontSize: "14px" }}
+                      >
+                        <strong>{idx + 1}.</strong> {value}
+                      </li>
+                    ))}
+                  </div>
                 </div>
+                {(!activity?.feedback || activity.feedback.length === 0) && (
+                  <Icon
+                    onClick={() => openModal(activity.activity)}
+                    style={{ color: "#D6D6D6", cursor: "pointer" }}
+                    width={20}
+                    icon="hugeicons:comment-01"
+                  />
+                )}
               </div>
             </ol>
           ) : (
-            <div className="answer d-flex gap-2">
-              <div className="d-flex  gap-2">
+            <div className="answer d-flex w-100 justify-content-between align-items-center gap-2">
+              <div className="d-flex align-items-center gap-2">
                 <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
-                <p style={{ fontSize: "14px" }}>{activity.answer}</p>
+                <p style={{ fontSize: "14px", marginBottom: 0 }}>{activity.answer}</p>
               </div>
+              {(!activity?.feedback || activity.feedback.length === 0) && (
+                <Icon
+                  onClick={() => openModal(activity.activity)}
+                  style={{ color: "#D6D6D6", cursor: "pointer" }}
+                  width={20}
+                  icon="hugeicons:comment-01"
+                />
+              )}
             </div>
           )}
 
-          {/* Conditionally render feedback */}
           {activity.feedback && (
             <div className="feedback">
               <div id="badge">Feedback:</div>
@@ -599,7 +723,216 @@ const Week4 = ({ enrollmentId }) => {
               >
                 <div className="feedback-card">{activity.feedback}</div>
                 <Icon
-                  style={{ color: "#275DAD" }}
+                  onClick={() => openModal(activity.activity, activity.feedback)}
+                  style={{ color: "#275DAD", cursor: "pointer" }}
+                  width={20}
+                  icon="lucide:edit"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+
+      <p className="activity-badge">Activity 3</p>
+      {activities.slice(2, 5).map((activity, index) => (
+        <div style={{ border: "none" }} className="activity" key={index}>
+          <p className="question d-flex align-items-center gap-2">
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
+            <span>{activity.question}</span>
+          </p>
+
+          {Array.isArray(activity.answer) ? (
+            <ul className="answer-options4" style={{ paddingLeft: "1.5rem" }}>
+              <div className="d-flex w-100 justify-content-between align-items-center gap-2">
+                <div className="d-flex gap-2">
+                  <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+                  {activity.answer.map((item, idx) => (
+                    <li
+                      key={idx}
+                      style={{ marginBottom: ".5rem", fontSize: "14px" }}
+                    >
+                      <Icon
+                        icon="radix-icons:dot-filled"
+                        style={{ color: "#5B616A" }}
+                      />
+                      {item}
+                    </li>
+                  ))}
+                </div>
+                {(!activity?.feedback || activity.feedback.length === 0) && (
+                  <Icon
+                    onClick={() => openModal(activity.activity)}
+                    style={{ color: "#D6D6D6", cursor: "pointer" }}
+                    width={20}
+                    icon="hugeicons:comment-01"
+                  />
+                )}
+              </div>
+            </ul>
+          ) : typeof activity.answer === "object" &&
+            activity.answer !== null ? (
+            <ol className="answer-options" style={{ paddingLeft: "1.5rem" }}>
+              <div className="d-flex w-100 justify-content-between align-items-center gap-2">
+                <div className="d-flex gap-2">
+                  <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+                  <div>
+                    {Object.entries(activity.answer).map(([key, value], idx) => (
+                      <li
+                        key={idx}
+                        style={{ marginBottom: ".5rem", fontSize: "14px" }}
+                      >
+                        <strong>{idx + 1}.</strong> {value}
+                      </li>
+                    ))}
+                  </div>
+                </div>
+                {(!activity?.feedback || activity.feedback.length === 0) && (
+                  <Icon
+                    onClick={() => openModal(activity.activity)}
+                    style={{ color: "#D6D6D6", cursor: "pointer" }}
+                    width={20}
+                    icon="hugeicons:comment-01"
+                  />
+                )}
+              </div>
+            </ol>
+          ) : (
+            <div className="answer d-flex w-100 justify-content-between align-items-center gap-2">
+              <div className="d-flex align-items-center gap-2">
+                <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+                <p style={{ fontSize: "14px", marginBottom: 0 }}>{activity.answer}</p>
+              </div>
+              {(!activity?.feedback || activity.feedback.length === 0) && (
+                <Icon
+                  onClick={() => openModal(activity.activity)}
+                  style={{ color: "#D6D6D6", cursor: "pointer" }}
+                  width={20}
+                  icon="hugeicons:comment-01"
+                />
+              )}
+            </div>
+          )}
+
+          {activity.feedback && (
+            <div className="feedback">
+              <div id="badge">Feedback:</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem"
+                }}
+              >
+                <div className="feedback-card">{activity.feedback}</div>
+                <Icon
+                  onClick={() => openModal(activity.activity, activity.feedback)}
+                  style={{ color: "#275DAD", cursor: "pointer" }}
+                  width={20}
+                  icon="lucide:edit"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+
+      <p className="activity-badge">Activity 4</p>
+      {activities.slice(5, 6).map((activity, index) => (
+        <div style={{ border: "none" }} className="activity" key={index}>
+          <p className="question d-flex align-items-center gap-2">
+            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
+            <span>{activity.question}</span>
+          </p>
+
+          {Array.isArray(activity.answer) ? (
+            <ul className="answer-options4" style={{ paddingLeft: "1.5rem" }}>
+              <div className="d-flex w-100 justify-content-between align-items-center gap-2">
+                <div className="d-flex gap-2">
+                  <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+                  {activity.answer.map((item, idx) => (
+                    <li
+                      key={idx}
+                      style={{ marginBottom: ".5rem", fontSize: "14px" }}
+                    >
+                      <Icon
+                        icon="radix-icons:dot-filled"
+                        style={{ color: "#5B616A" }}
+                      />
+                      {item}
+                    </li>
+                  ))}
+                </div>
+                {(!activity?.feedback || activity.feedback.length === 0) && (
+                  <Icon
+                    onClick={() => openModal(activity.activity)}
+                    style={{ color: "#D6D6D6", cursor: "pointer" }}
+                    width={20}
+                    icon="hugeicons:comment-01"
+                  />
+                )}
+              </div>
+            </ul>
+          ) : typeof activity.answer === "object" &&
+            activity.answer !== null ? (
+            <ol className="answer-options" style={{ paddingLeft: "1.5rem" }}>
+              <div className="d-flex w-100 justify-content-between align-items-center gap-2">
+                <div className="d-flex gap-2">
+                  <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+                  <div>
+                    {Object.entries(activity.answer).map(([key, value], idx) => (
+                      <li
+                        key={idx}
+                        style={{ marginBottom: ".5rem", fontSize: "14px" }}
+                      >
+                        <strong>{idx + 1}.</strong> {value}
+                      </li>
+                    ))}
+                  </div>
+                </div>
+                {(!activity?.feedback || activity.feedback.length === 0) && (
+                  <Icon
+                    onClick={() => openModal(activity.activity)}
+                    style={{ color: "#D6D6D6", cursor: "pointer" }}
+                    width={20}
+                    icon="hugeicons:comment-01"
+                  />
+                )}
+              </div>
+            </ol>
+          ) : (
+            <div className="answer d-flex w-100 justify-content-between align-items-center gap-2">
+              <div className="d-flex align-items-center gap-2">
+                <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
+                <p style={{ fontSize: "14px", marginBottom: 0 }}>{activity.answer}</p>
+              </div>
+              {(!activity?.feedback || activity.feedback.length === 0) && (
+                <Icon
+                  onClick={() => openModal(activity.activity)}
+                  style={{ color: "#D6D6D6", cursor: "pointer" }}
+                  width={20}
+                  icon="hugeicons:comment-01"
+                />
+              )}
+            </div>
+          )}
+
+          {activity.feedback && (
+            <div className="feedback">
+              <div id="badge">Feedback:</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem"
+                }}
+              >
+                <div className="feedback-card">{activity.feedback}</div>
+                <Icon
+                  onClick={() => openModal(activity.activity, activity.feedback)}
+                  style={{ color: "#275DAD", cursor: "pointer" }}
                   width={20}
                   icon="lucide:edit"
                 />
@@ -614,7 +947,7 @@ const Week4 = ({ enrollmentId }) => {
         <div className="question-block" key={index}>
           <p className="question d-flex align-items-center gap-2">
             <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
-              Question{index + 1}:
+              Question {index + 1}:
             </h4>
             <span> {q.question}</span>
           </p>
@@ -626,21 +959,18 @@ const Week4 = ({ enrollmentId }) => {
                   alt={option.isCorrect ? "Checked" : "Unchecked"}
                   style={{ width: "20px", marginRight: "10px" }}
                 />
-                <span
-                  style={{
-                    fontSize: '14px',
-                    textAlign: 'left',
-                    display: 'block',
-                  }}
-                  className='option-label'
-                >
+                <span style={{
+                  fontSize: "14px",
+                  textAlign: "left",
+                  display: "block"
+                }} className="option-label">
                   {option.label}
                 </span>
-                <p style={{ width: "120px", textAlign: "center" }}>
+                <p style={{ width: "120px", textAlign: "center", marginBottom: 0 }}>
                   {option.isCorrect ? (
                     <span
                       style={{ color: "#50AA50" }}
-                      className="d-flex align-items-center justify-content-center gap-1 "
+                      className="d-flex align-items-center justify-content-center gap-1"
                     >
                       <Icon width={17} icon="ph:seal-check-light" />
                       Correct
@@ -660,7 +990,16 @@ const Week4 = ({ enrollmentId }) => {
           </div>
         </div>
       ))}
+
       <FinalReport rate={percentage} />
+
+      {activeModal !== null && (
+        <FeedbackModal
+          initialFeedback={editingActivity?.feedback || ""}
+          onClose={closeModal}
+          onSubmit={(feedback) => handleFeedbackSubmit(activeModal, feedback)}
+        />
+      )}
     </div>
   );
 };

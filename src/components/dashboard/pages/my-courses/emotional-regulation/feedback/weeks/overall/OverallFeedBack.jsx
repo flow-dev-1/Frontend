@@ -6,16 +6,16 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer.j
 import userService from "../../../../../../../../services/api/user.js";
 import adminService from "../../../../../../../../services/api/admin.js";
 
-function OverallFeedBack({ enrollmentId, setHasPercentile }) {
+function OverallFeedBack({ enrollmentId, setHasPercentile, isSchool, studentId }) {
   const [assessmentPercentile, setAssessmentPercentile] = useState(null);
   const { isAdmin, code } = useSelector(adminData);
 
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/resilience-feedback-overall", enrollmentId, 1],
-    queryFn: () =>
-      isAdmin
-        ? adminService.getUserCourseData(enrollmentId, 1, code)
-        : userService.getUserCoursePercentile(enrollmentId),
+    queryKey: ["dashboard/emotional-regulation-feedback-overall", enrollmentId, studentId],
+    queryFn: () => {
+      if (isAdmin) return adminService.getUserCourseData(enrollmentId, 1, code);
+      return userService.getUserCoursePercentile(enrollmentId);
+    },
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -30,8 +30,9 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
   }, [data]);
 
   function getFeedBackMessage(percentile) {
+    if (percentile === null || percentile === undefined) return "";
     switch (true) {
-      case percentile >= 10 && percentile <= 39:
+      case percentile >= 0 && percentile <= 39:
         return "Well done on starting your journey into Emotional Regulation! You’ve begun to explore the basics, including understanding emotions and identifying energy levels, but there’s plenty of room to grow. Spend more time revisiting key concepts, such as understanding the SONAR method for managing emotions. Practice small coping techniques and try applying them to simple daily challenges. Remember, emotional regulation is a skill that develops over time, so keep learning and practicing."
       case percentile >= 40 && percentile <= 59:
         return "Good job! You’ve shown a foundational understanding of emotional regulation. To build on this, focus on strengthening your ability to identify emotions as they arise and using the SONAR method to deal with them effectively. Practice coping skills like physical or creative activities to handle difficult moments. With consistent effort, you’ll see more confidence in managing emotions across different situations."
@@ -50,10 +51,10 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
     return <div>Loading...</div>;
   }
 
-  if (data?.status === "failed" || isError) {
+  if (data?.status === "failed" || isError || !data) {
     return (
       <div style={{ color: "red" }}>
-        {data?.message || "Internal server error!"}
+        {data?.message || "Take activity to see overall feedback!"}
       </div>
     );
   }

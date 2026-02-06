@@ -12,15 +12,24 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
 
-function ResilienceFeedback({ isSchool, studentId }) {
+function ResilienceFeedback({ isSchool: isSchoolProp, studentId }) {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
+  const [isSchool, setIsSchool] = useState(isSchoolProp || false);
 
   // This is used to trigger the report download.
   const [hasPercentile, setHasPercentile] = useState(false);
   const isAdmin = useSelector(adminData);
+
+  const { user } = useSelector((state) => state?.user);
+
+  useEffect(() => {
+    if (user?.isSchool) {
+      setIsSchool(true);
+    }
+  }, [user]);
 
   // states to check a certain week data has been loaded
   // This is for the final report generation
@@ -29,11 +38,6 @@ function ResilienceFeedback({ isSchool, studentId }) {
   const [isWeekThreeLoaded, setWeekThreeData] = useState(false);
   const [isWeekFourLoaded, setWeekFourData] = useState(false);
   const [isWeekFiveLoaded, setWeekFiveData] = useState(false);
-  const [isWeekSixLoaded, setWeekSixData] = useState(false);
-  const [isWeekSevenLoaded, setWeekSevenData] = useState(false);
-  const [isWeekEightLoaded, setWeekEightData] = useState(false);
-  const [isWeekNineLoaded, setWeekNineData] = useState(false);
-  const [isWeekTenLoaded, setWeekTenData] = useState(false);
 
   const [allDataLoaded, setAllDataLoaded] = useState(false);
 
@@ -69,6 +73,10 @@ function ResilienceFeedback({ isSchool, studentId }) {
       );
       if (!courseEnrollmentId) return;
       setEnrollmentId(courseEnrollmentId);
+    } else if (isSchool) {
+      if (enrolmentData?._id) {
+        setEnrollmentId(enrolmentData._id);
+      }
     } else {
       setEnrollmentId(enrolmentData?._id);
     }
@@ -116,6 +124,8 @@ function ResilienceFeedback({ isSchool, studentId }) {
         <OverallFeedBack
           enrollmentId={enrollmentId}
           setHasPercentile={setHasPercentile}
+          isSchool={isSchool}
+          studentId={studentId}
         //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
         />
       ),
@@ -134,7 +144,7 @@ function ResilienceFeedback({ isSchool, studentId }) {
         <div className="container">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => navigate("/dashboard")}
+            onClick={() => isSchool ? navigate("/school-dashboard") : navigate("/dashboard")}
             className="navbar-logo"
             style={{ border: "none", background: "#FFF" }}
           >
@@ -153,12 +163,12 @@ function ResilienceFeedback({ isSchool, studentId }) {
         <aside className="d-none d-lg-block">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => navigate("/dashboard/my-courses")}
+            onClick={() => isSchool ? navigate(-1) : navigate("/dashboard/my-courses")}
             className="back"
             style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
-            Back to My Courses
+            {isSchool ? "Go back" : "Back to My Courses"}
           </button>
           <div className="compassion-title">
             <h2 className="fs-5 fs-md-3">
@@ -197,12 +207,12 @@ function ResilienceFeedback({ isSchool, studentId }) {
         <section className="week-content position-relative mb-5 ">
           <Link
             disabled={isAdmin}
-            to={"/dashboard/my-courses"}
+            to={isSchool ? -1 : "/dashboard/my-courses"}
             className="back text-black mb-5 p-3 d-lg-none"
             style={{ cursor: "pointer", border: "none" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
-            Back to My Courses
+            {isSchool ? "Go back" : "Back to My Courses"}
           </Link>
           <Accordion
             activeIndex={activeIndex}

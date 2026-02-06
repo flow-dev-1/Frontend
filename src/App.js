@@ -318,24 +318,43 @@ function App() {
           />
           <Route
             path="/school-dashboard/courses/feedback/:userId"
-            element={<SchoolSelfAwarenessFeedback />}
+            element={
+              <ProtectedRoute>
+                <SchoolSelfAwarenessFeedback />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/school-dashboard/courses/feedback/resilience_grit/:userId"
-            element={<SchoolResilienceFeedback />}
+            element={
+              <ProtectedRoute>
+                <SchoolResilienceFeedback />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/school-dashboard/courses/feedback/compassion/:userId"
-            element={<SchoolCompassionFeedback />}
+            element={
+              <ProtectedRoute>
+                <SchoolCompassionFeedback />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/school-dashboard/courses/feedback/transition/:userId"
-            element={<SchoolTransitionFeedback />}
+            element={
+              <ProtectedRoute>
+                <SchoolTransitionFeedback />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/school-dashboard/courses/feedback/transition_2/:userId"
-            element={<SchoolTransition2Feedback />}
-
+            element={
+              <ProtectedRoute>
+                <SchoolTransition2Feedback />
+              </ProtectedRoute>
+            }
           />
 
           <Route

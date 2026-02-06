@@ -6,16 +6,16 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer.j
 import userService from "../../../../../../../../services/api/user.js";
 import adminService from "../../../../../../../../services/api/admin.js";
 
-function OverallFeedBack({ enrollmentId, setHasPercentile }) {
+function OverallFeedBack({ enrollmentId, setHasPercentile, isSchool, studentId }) {
   const [assessmentPercentile, setAssessmentPercentile] = useState(null);
   const { isAdmin, code } = useSelector(adminData);
 
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/compassion-feedback-overall", enrollmentId, 1],
-    queryFn: () =>
-      isAdmin
-        ? adminService.getUserCourseData(enrollmentId, 1, code)
-        : userService.getUserCoursePercentile(enrollmentId),
+    queryKey: ["dashboard/compassion-feedback-overall", enrollmentId, studentId],
+    queryFn: () => {
+      if (isAdmin) return adminService.getUserCourseData(enrollmentId, 1, code);
+      return userService.getUserCoursePercentile(enrollmentId);
+    },
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -26,12 +26,13 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
     if (!data || data?.status === "failed") return;
     setAssessmentPercentile(data?.averagePercent);
     setHasPercentile(true);
-    return () => {};
+    return () => { };
   }, [data]);
 
   function getFeedBackMessage(percentile) {
+    if (percentile === null || percentile === undefined) return "";
     switch (true) {
-      case percentile >= 10 && percentile <= 39:
+      case percentile >= 0 && percentile <= 39:
         return "Well done on taking the first steps in understanding compassion! While you’re starting to grasp the basic concepts, there’s room to deepen your understanding and application. Reflect on the importance of showing kindness to yourself and others, and revisit topics like self-compassion and the circle of concern. Practice small, compassionate actions in your daily life, and think about how they make a difference. Remember, compassion is a skill that grows with practice, so keep learning and taking steps forward.";
       case percentile >= 40 && percentile <= 59:
         return "Good job! You’ve shown some understanding of what it means to be compassionate. You’re beginning to appreciate the value of self-compassion and extending kindness to others. To build on this, focus on applying what you’ve learned about the circle of concern and putting yourself in others’ shoes. Consider how your actions can make a positive impact in real-life scenarios. With consistent practice, you’ll strengthen your ability to act compassionately toward yourself and those around you.";
@@ -50,10 +51,10 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
     return <div>Loading...</div>;
   }
 
-  if (data?.status === "failed" || isError) {
+  if (data?.status === "failed" || isError || !data) {
     return (
       <div style={{ color: "red" }}>
-        {data?.message || "Internal server error!"}
+        {data?.message || "Take activity to see overall feedback!"}
       </div>
     );
   }

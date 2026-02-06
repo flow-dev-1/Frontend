@@ -3,13 +3,13 @@ import celebrate from '../../../../../assets/hurray.png'
 import { useQuery } from '@tanstack/react-query';
 import userService from "../../../../../services/api/user.js";
 
-const HurrayComponent = ({ enrollmentData }) => {
+const HurrayComponent = ({ enrollmentData, enrollmentId }) => {
     const [assessmentPercentile, setAssessmentPercentile] = useState(null);
 
     const { data, isPending, status, isError } = useQuery({
-        queryKey: ["dashboard/self-awareness-feedback-overall", enrollmentData._id, 1],
-        queryFn: () => userService.getUserCoursePercentile(enrollmentData._id),
-        enabled: !!enrollmentData?._id,
+        queryKey: ["dashboard/self-awareness-feedback-overall", enrollmentData?._id || enrollmentId, 1],
+        queryFn: () => userService.getUserCoursePercentile(enrollmentData?._id || enrollmentId),
+        enabled: !!(enrollmentData?._id || enrollmentId),
         refetchOnMount: "always",
         refetchOnWindowFocus: true,
         keepPreviousData: false,

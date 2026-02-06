@@ -38,7 +38,7 @@ function Week2({ enrollmentId, setWeekTwoData, isSchool, studentId }) {
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/emotional-regulation-feedback-2", enrollmentId, 2],
+    queryKey: ["dashboard/resilience-feedback-2", enrollmentId, 2],
     queryFn: () => {
       if (isAdmin) return adminService.getUserCourseData(enrollmentId, 2, code);
       if (isSchool) return schoolService.getStudentCourseData(enrollmentId, 2, studentId);
@@ -123,7 +123,7 @@ function Week2({ enrollmentId, setWeekTwoData, isSchool, studentId }) {
 
       const answerObject = answersList?.find(
         (activity) => activity.stepId === itemId
-      ).value;
+      )?.value;
 
       // return answerObject ? answerObject[index] : null;
       return answerObject ? answerObject : null;

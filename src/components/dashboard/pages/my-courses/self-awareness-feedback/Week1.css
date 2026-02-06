@@ -21,10 +21,9 @@
 }
 
 .feedback-card {
-  background-color: #5ce1e6;
-  padding: 0.4rem;
-
-  color: #555;
+  background-color: #00bcc3;
+  padding: 0.8rem;
+  color: #5b616a;
   width: 100%;
   border-radius: 8px;
 }
@@ -38,16 +37,26 @@ div#badge {
 }
 
 .activity-badge {
-  padding: 0.2rem 0.5rem;
+  padding: 0.5rem 1.5rem;
   color: #5b616a;
-  font-size: 14px;
-  border-radius: 35px;
-  width: 120px;
+  font-size: 16px;
+  border-radius: 50px;
+  width: fit-content;
   text-align: center;
   background-color: #ffeebb;
   margin-top: 20px;
   margin-bottom: 20px;
+  display: inline-block;
+}
 
+.feedback-badge {
+  background-color: #6C757D;
+  color: white;
+  padding: 0.2rem 1rem;
+  border-radius: 50px;
+  font-size: 14px;
+  width: fit-content;
+  align-self: flex-start;
 }
 
 .feedback {

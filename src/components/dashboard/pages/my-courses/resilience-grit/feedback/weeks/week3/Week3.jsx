@@ -82,7 +82,7 @@ function Week3({ enrollmentId, setWeekThreeData, isSchool, studentId }) {
       )?.feedback;
       const answerObject = answersList?.find(
         (activity) => activity.stepId === itemId
-      ).value;
+      )?.value;
 
       // return answerObject ? answerObject[index] : null;
       return answerObject ? answerObject : null;

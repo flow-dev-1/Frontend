@@ -5,11 +5,16 @@ import checkedImage from '../../../../../../assets/selfawareness-images/checked.
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
 import { Icon } from '@iconify/react'
 import FinalReport from './FinalReport'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import userService from '../../../../../../services/api/user'
 import { decryptId } from '../../../../../../utils/encryption'
 import schoolService from '../../../../../../services/api/school'
+import adminService from "../../../../../../services/api/admin";
 import { useParams } from 'react-router-dom'
+import FeedbackModal from "./FeedbackModal";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { adminData } from "../../../../../../redux/reducers/adminReducer";
 const questions = [
   {
     question: 'When I make decisions:',
@@ -196,16 +201,72 @@ const initialQuestionsQuiz = [
   },
 ]
 
-const Week2 = ({ enrollmentId }) => {
+const Week2 = ({ enrollmentId, isSchool, studentId }) => {
   const { userId } = useParams()
   const week = 2
   const courseId = '66853bf50118e2e0a02b6a5a'
+  const queryClient = useQueryClient();
   const [questionsQuiz, setQuestionsQuiz] = useState(initialQuestionsQuiz)
+  const [activeModal, setActiveModal] = useState(null);
+  const [editingActivity, setEditingActivity] = useState(null);
+  const [activitiesDataState, setActivitiesDataState] = useState([]);
+
+  const { isAdmin, code } = useSelector(adminData);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['dashboard/feedback/self-awareness', enrollmentId || courseId, week],
-    queryFn: () => schoolService.getStudentCourseData(enrollmentId || courseId, week, decryptId(userId)),
+    queryFn: () => {
+      if (isAdmin && enrollmentId) return adminService.getUserCourseData(enrollmentId, week, code);
+      if (isSchool || isAdmin) return schoolService.getStudentCourseData(enrollmentId || courseId, week, studentId || decryptId(userId));
+      return schoolService.getStudentCourseData(enrollmentId || courseId, week, decryptId(userId));
+    },
+    enabled: !!enrollmentId || !!courseId,
   })
+
+  const feedbackMutation = useMutation({
+    mutationFn: (updatedActivities) => {
+      if (isAdmin) {
+        return adminService.submitAdminFeedback(
+          updatedActivities,
+          enrollmentId,
+          week,
+          data?.activity?.user,
+          code
+        );
+      }
+      return schoolService.getMyActivitesUpdate(
+        enrollmentId || courseId,
+        week,
+        decryptId(userId),
+        { activities: updatedActivities }
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["dashboard/feedback/self-awareness"]);
+      toast.success("Feedback submitted successfully");
+      closeModal();
+    },
+    onError: (error) => {
+      console.error("Feedback submission error:", error);
+      toast.error(error?.message || "Failed to submit feedback");
+    },
+  });
+
+  useEffect(() => {
+    if (data?.activity?.activities) {
+      setActivitiesDataState(data.activity.activities);
+    }
+  }, [data]);
+
+  const openModal = (activityIndex, feedback = "") => {
+    setActiveModal(activityIndex);
+    setEditingActivity({ index: activityIndex, feedback });
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
+    setEditingActivity(null);
+  };
 
   const assessmentData = data?.assessment;
   const activityData = data?.activity;
@@ -254,6 +315,41 @@ const Week2 = ({ enrollmentId }) => {
       feedback: activityData?.activities?.[1]?.feedback?.[0] || '',
     },
   ]
+
+
+  const handleFeedbackSubmit = (activityId, feedback) => {
+    const adjustedActivityId = (() => {
+      switch (activityId) {
+        case 1: return 2;
+        case 2: return 4;
+        case 3: return 5;
+        case 4:
+        case 5:
+        case 6: return 7;
+        default: return activityId;
+      }
+    })();
+
+    const updatedActivities = activitiesDataState.map((act) => {
+      if (act.activity === adjustedActivityId) {
+        if ([4, 5, 6].includes(activityId)) {
+          let activityIndex = activityId - 4;
+          let updatedFeedback = Array.isArray(act.feedback) ? [...act.feedback] : [];
+          for (let i = 0; i < 3; i++) {
+            updatedFeedback[i] = updatedFeedback[i] || "";
+          }
+          updatedFeedback[activityIndex] = feedback;
+          return { ...act, feedback: updatedFeedback };
+        } else {
+          return { ...act, feedback: [feedback] };
+        }
+      }
+      return act;
+    });
+
+    setActivitiesDataState(updatedActivities);
+    feedbackMutation.mutate(updatedActivities);
+  };
   const activities = [
     {
       activity: 2, // New activity based on image
@@ -268,7 +364,7 @@ const Week2 = ({ enrollmentId }) => {
       feedback: activityData?.activities?.[4]?.feedback?.[0] || '',
     },
     {
-      activity: 4, // New activity based on the latest image
+      activity: 4,
       question:
         'A friend is feeling sad and needs someone to talk to because they just failed a test.They come to you for support. How would you help?',
       answer: {
@@ -278,7 +374,7 @@ const Week2 = ({ enrollmentId }) => {
       feedback: activityData?.activities?.[6]?.feedback?.[0] || '',
     },
     {
-      activity: 4, // New activity based on the latest image
+      activity: 5,
       question:
         'Imagine you’re working on a group project at school. Your group is struggling to come up with an idea for the project. As a member of the team, how would you help?',
       answer: {
@@ -288,7 +384,7 @@ const Week2 = ({ enrollmentId }) => {
       feedback: activityData?.activities?.[6]?.feedback?.[1] || '',
     },
     {
-      activity: 4, // New activity based on the latest image
+      activity: 6,
       question:
         'Is there a sport you dislike? What sport is this? Now imagine you were asked to represent your house in this particular sport, for your School’s inter-house sport competition, to win a laptop and a gaming console. How would you go about this?',
       answer: {
@@ -354,7 +450,15 @@ const Week2 = ({ enrollmentId }) => {
           )}
 
           {/* Conditionally render feedback */}
-          {activity.feedback && (
+          {activeModal === activity?.activity && (
+            <FeedbackModal
+              initialFeedback={activity?.feedback || ""}
+              onClose={closeModal}
+              onSubmit={(feedback) => handleFeedbackSubmit(activity.activity, feedback)}
+            />
+          )}
+
+          {activity?.feedback?.length > 0 && (
             <div className='feedback'>
               <div id='badge'>Feedback:</div>
               <div
@@ -366,11 +470,12 @@ const Week2 = ({ enrollmentId }) => {
                 }}
               >
                 <div className='feedback-card'>{activity.feedback}</div>
-                {/* <Icon
-                  style={{ color: "#275DAD" }}
+                <Icon
+                  onClick={() => openModal(activity.activity, activity.feedback)}
+                  style={{ color: "#275DAD", cursor: "pointer" }}
                   width={20}
                   icon="lucide:edit"
-                /> */}
+                />
               </div>
             </div>
           )}
@@ -383,6 +488,14 @@ const Week2 = ({ enrollmentId }) => {
           <p className='question d-flex align-items-center gap-2'>
             <h4 style={{ color: '#275DAD', marginTop: '.3rem' }}>Question:</h4>
             <span> {activity.question}</span>
+            {(!activity?.feedback || activity.feedback.length === 0) && (
+              <Icon
+                onClick={() => openModal(activity.activity)}
+                style={{ color: "#D6D6D6", cursor: "pointer", marginLeft: "auto" }}
+                width={20}
+                icon="hugeicons:comment-01"
+              />
+            )}
           </p>
 
           {/* Check for answer type and render accordingly */}
@@ -490,8 +603,16 @@ const Week2 = ({ enrollmentId }) => {
           )}
 
           {/* Conditionally render feedback */}
-          {activity.feedback && (
-            <p className='feedback'>
+          {activeModal === activity.activity && (
+            <FeedbackModal
+              initialFeedback={activity?.feedback || ""}
+              onClose={closeModal}
+              onSubmit={(feedback) => handleFeedbackSubmit(activity.activity, feedback)}
+            />
+          )}
+
+          {activity?.feedback?.length > 0 && (
+            <div className='feedback'>
               <div id='badge'>Feedback:</div>
               <div
                 style={{
@@ -502,13 +623,14 @@ const Week2 = ({ enrollmentId }) => {
                 }}
               >
                 <div className='feedback-card'>{activity.feedback}</div>
-                {/* <Icon
-                  style={{ color: "#275DAD" }}
+                <Icon
+                  onClick={() => openModal(activity.activity, activity.feedback)}
+                  style={{ color: "#275DAD", cursor: "pointer" }}
                   width={20}
                   icon="lucide:edit"
-                /> */}
+                />
               </div>
-            </p>
+            </div>
           )}
         </div>
       ))}

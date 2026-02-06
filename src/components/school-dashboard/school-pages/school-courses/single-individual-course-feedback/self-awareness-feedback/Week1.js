@@ -6,10 +6,15 @@ import unCheckedImage from "../../../../../../assets/selfawareness-images/not-ch
 import { Icon } from "@iconify/react";
 import FinalReport from "./FinalReport";
 import userService from "../../../../../../services/api/user";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from 'react-router-dom'
 import { decryptId } from "../../../../../../utils/encryption";
 import schoolService from "../../../../../../services/api/school";
+import adminService from "../../../../../../services/api/admin";
+import FeedbackModal from "./FeedbackModal";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { adminData } from "../../../../../../redux/reducers/adminReducer";
 // rgba(253, 72, 61, 0.2);
 let questions = [
   {
@@ -1010,16 +1015,71 @@ const questionsArrayGreenFormatted = [
   // Add more questions if needed
 ];
 
-const Week1 = ({ enrollmentId }) => {
+const Week1 = ({ enrollmentId, isSchool, studentId }) => {
   const week = 1;
   const { userId } = useParams();
   const courseId = "66853bf50118e2e0a02b6a5a";
+  const queryClient = useQueryClient();
+  const [activeModal, setActiveModal] = useState(null);
+  const [editingActivity, setEditingActivity] = useState(null);
+  const [activitiesDataState, setActivitiesDataState] = useState([]);
+  const [quizQuestions, setQuizQuestions] = useState([]);
+  const { isAdmin, code } = useSelector(adminData);
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["dashboard/feedback/self-awareness", enrollmentId || courseId, week],
-    queryFn: () => schoolService.getStudentCourseData(enrollmentId || courseId, week, decryptId(userId)),
+    queryKey: ['dashboard/feedback/self-awareness', enrollmentId || courseId, week],
+    queryFn: () => {
+      if (isAdmin && enrollmentId) return adminService.getUserCourseData(enrollmentId, week, code);
+      if (isSchool || isAdmin) return schoolService.getStudentCourseData(enrollmentId || courseId, week, studentId || decryptId(userId));
+      return schoolService.getStudentCourseData(enrollmentId || courseId, week, decryptId(userId));
+    },
+    enabled: !!enrollmentId || !!courseId,
+  })
+
+  const feedbackMutation = useMutation({
+    mutationFn: (updatedActivities) => {
+      if (isAdmin) {
+        return adminService.submitAdminFeedback(
+          updatedActivities,
+          enrollmentId,
+          week,
+          data?.activity?.user,
+          code
+        );
+      }
+      return schoolService.getMyActivitesUpdate(
+        enrollmentId || courseId,
+        week,
+        decryptId(userId),
+        { activities: updatedActivities }
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["dashboard/feedback/self-awareness"]);
+      toast.success("Feedback submitted successfully");
+      closeModal();
+    },
+    onError: (error) => {
+      console.error("Feedback submission error:", error);
+      toast.error(error?.message || "Failed to submit feedback");
+    },
   });
 
-  const [quizQuestions, setQuizQuestions] = useState([]);
+  useEffect(() => {
+    if (data?.activity?.activities) {
+      setActivitiesDataState(data.activity.activities);
+    }
+  }, [data]);
+
+  const openModal = (activityIndex, feedback = "") => {
+    setActiveModal(activityIndex);
+    setEditingActivity({ index: activityIndex, feedback });
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
+    setEditingActivity(null);
+  };
 
   const assessmentData = data?.assessment;
   const activityData = data?.activity;
@@ -1207,7 +1267,39 @@ const Week1 = ({ enrollmentId }) => {
     };
   });
 
-  // console.log(pieChart);
+
+  const handleFeedbackSubmit = (activityId, feedback) => {
+    const adjustedActivityId = (() => {
+      switch (activityId) {
+        case 1: return 2;
+        case 2: return 4;
+        case 3: return 6;
+        case 4: return 8;
+        case 7: return 12;
+        case 8:
+        case 9:
+        case 10: return 14;
+        default: return activityId;
+      }
+    })();
+
+    const updatedActivities = activitiesDataState.map((act) => {
+      if (act.activity === adjustedActivityId) {
+        if ([8, 9, 10].includes(activityId)) {
+          const feedbackIndex = [8, 9, 10].indexOf(activityId);
+          const updatedFeedback = Array.isArray(act.feedback) ? [...act.feedback] : [];
+          updatedFeedback[feedbackIndex] = feedback;
+          return { ...act, feedback: updatedFeedback };
+        } else {
+          return { ...act, feedback: [feedback] };
+        }
+      }
+      return act;
+    });
+
+    setActivitiesDataState(updatedActivities);
+    feedbackMutation.mutate(updatedActivities);
+  };
 
   return (
     <div className="week-content w-auto">
@@ -1265,6 +1357,14 @@ const Week1 = ({ enrollmentId }) => {
                   ))}
                 </ul>
               </div>
+              {(!activity?.feedback || activity?.feedback?.length === 0) && (
+                <Icon
+                  onClick={() => openModal(activity?.activity)}
+                  style={{ color: "#275DAD", cursor: "pointer" }}
+                  width={20}
+                  icon="hugeicons:comment-01"
+                />
+              )}
             </div>
           ) : (
             <p className="d-flex align-items-center justify-content-between">
@@ -1272,15 +1372,27 @@ const Week1 = ({ enrollmentId }) => {
                 <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
                 <p style={{ fontSize: "14px" }}>{activity?.answer}</p>
               </div>
-              {/* <Icon
-                style={{ color: "#D6D6D6" }}
-                width={20}
-                icon="hugeicons:comment-01"
-              /> */}
+              {(!activity?.feedback || activity.feedback.length === 0) && (
+                <Icon
+                  onClick={() => openModal(activity.activity)}
+                  style={{ color: "#275DAD", cursor: "pointer" }}
+                  width={20}
+                  icon="hugeicons:comment-01"
+                />
+              )}
             </p>
           )}
+
+          {activeModal === activity?.activity && (
+            <FeedbackModal
+              initialFeedback={activity?.feedback || ""}
+              onClose={closeModal}
+              onSubmit={(feedback) => handleFeedbackSubmit(activity.activity, feedback)}
+            />
+          )}
+
           {activity?.feedback?.length > 0 && (
-            <p className="feedback">
+            <div className="feedback">
               <div id="badge">Feedback:</div>
               <div
                 style={{
@@ -1291,13 +1403,14 @@ const Week1 = ({ enrollmentId }) => {
                 }}
               >
                 <div className="feedback-card">{activity?.feedback}</div>
-                {/* <Icon
-                style={{ color: "#275DAD" }}
-                width={20}
-                icon="lucide:edit"
-              /> */}
+                <Icon
+                  onClick={() => openModal(activity.activity, activity.feedback)}
+                  style={{ color: "#275DAD", cursor: "pointer" }}
+                  width={20}
+                  icon="lucide:edit"
+                />
               </div>
-            </p>
+            </div>
           )}
         </div>
       ))}
@@ -1317,14 +1430,26 @@ const Week1 = ({ enrollmentId }) => {
                 {activity?.explanation}
               </p>
             </div>
-            {/* <Icon
-              style={{ color: "#D6D6D6" }}
-              width={20}
-              icon="hugeicons:comment-01"
-            /> */}
+            {(!activity?.feedback || activity.feedback.length === 0) && (
+              <Icon
+                onClick={() => openModal(activity.activity)}
+                style={{ color: "#275DAD", cursor: "pointer" }}
+                width={20}
+                icon="hugeicons:comment-01"
+              />
+            )}
           </p>
+
+          {activeModal === activity.activity && (
+            <FeedbackModal
+              initialFeedback={activity?.feedback || ""}
+              onClose={closeModal}
+              onSubmit={(feedback) => handleFeedbackSubmit(activity.activity, feedback)}
+            />
+          )}
+
           {activity?.feedback?.length > 0 && (
-            <p className="feedback">
+            <div className="feedback">
               <div id="badge">Feedback:</div>
               <div
                 style={{
@@ -1335,13 +1460,14 @@ const Week1 = ({ enrollmentId }) => {
                 }}
               >
                 <div className="feedback-card">{activity?.feedback}</div>
-                {/* <Icon
-                style={{ color: "#275DAD" }}
-                width={20}
-                icon="lucide:edit"
-              /> */}
+                <Icon
+                  onClick={() => openModal(activity.activity, activity.feedback)}
+                  style={{ color: "#275DAD", cursor: "pointer" }}
+                  width={20}
+                  icon="lucide:edit"
+                />
               </div>
-            </p>
+            </div>
           )}
         </div>
       ))}
@@ -1396,14 +1522,26 @@ const Week1 = ({ enrollmentId }) => {
               <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>
               <p style={{ fontSize: "14px" }}>{activity.answer}</p>
             </div>
-            {/* <Icon
-              style={{ color: "#D6D6D6" }}
-              width={20}
-              icon="hugeicons:comment-01"
-            /> */}
+            {(!activity?.feedback || activity.feedback.length === 0) && (
+              <Icon
+                onClick={() => openModal(activity.activity)}
+                style={{ color: "#275DAD", cursor: "pointer" }}
+                width={20}
+                icon="hugeicons:comment-01"
+              />
+            )}
           </p>
+
+          {activeModal === activity.activity && (
+            <FeedbackModal
+              initialFeedback={activity?.feedback || ""}
+              onClose={closeModal}
+              onSubmit={(feedback) => handleFeedbackSubmit(activity.activity, feedback)}
+            />
+          )}
+
           {activity?.feedback?.length > 0 && (
-            <p className="feedback">
+            <div className="feedback">
               <div id="badge">Feedback:</div>
               <div
                 style={{
@@ -1414,13 +1552,14 @@ const Week1 = ({ enrollmentId }) => {
                 }}
               >
                 <div className="feedback-card">{activity.feedback}</div>
-                {/* <Icon
-                style={{ color: "#275DAD" }}
-                width={20}
-                icon="lucide:edit"
-              /> */}
+                <Icon
+                  onClick={() => openModal(activity.activity, activity.feedback)}
+                  style={{ color: "#275DAD", cursor: "pointer" }}
+                  width={20}
+                  icon="lucide:edit"
+                />
               </div>
-            </p>
+            </div>
           )}
         </div>
       ))}

@@ -65,6 +65,22 @@ class AdminOBJ {
       return err?.response?.data || err.message;
     }
   }
+
+  submitAssessmentFeedback = async (data, params1, week, userId, token) => {
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    };
+    try {
+      const response = await api.patch(
+        `api/admins/course-enrollment/${params1}/post-assessment/${week}/${userId}`, data, config
+      )
+      return response.data
+    } catch (err) {
+      return err?.response?.data || err.message;
+    }
+  }
 }
 
 const admin = new AdminOBJ()
