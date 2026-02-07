@@ -63,6 +63,7 @@ import userService from "../../../../../services/api/user.js";
 import {
   updateData,
   userAnswer,
+  clearData,
 } from "../../../../../redux/reducers/userAnswersReducer.js";
 import { adminData } from "../../../../../redux/reducers/adminReducer.js";
 import { logoutSuccess } from "../../../../../redux/reducers/userReducer.js";
@@ -103,7 +104,7 @@ const WeekContent = () => {
     dispatch(setCurrentPage(currentPage));
     dispatch(setCurrentStep(currentStep));
 
-    return () => {};
+    return () => { };
   }, [dispatch]); // Added dispatch to dependency array
 
   const currentWeek = useSelector(selectCurrentWeek);
@@ -152,7 +153,7 @@ const WeekContent = () => {
       );
     }
 
-    return () => {};
+    return () => { };
   }, [data]);
 
   // If showing hurray, render that instead
@@ -297,6 +298,27 @@ const CourseContent = () => {
     "Circle of concern",
     `Life Scenarios - Let's wear the shoes of Others`,
   ];
+
+  const [enrollmentProgress, setEnrollmentProgress] = useState(0);
+  const [maxAccessibleWeek, setMaxAccessibleWeek] = useState(1);
+
+  // Access data from location.state
+  const enrolmentData = location.state?.enrollmentData;
+
+  useEffect(() => {
+    if (enrolmentData?.progress !== undefined) {
+      setEnrollmentProgress(enrolmentData.progress);
+
+      // Calculate max accessible week based on progress
+      // Each week is 20% of the course (100% / 5 weeks = 20% per week)
+      const progressPerWeek = 100 / weeksTopic.length;
+      const calculatedMaxWeek = Math.ceil(enrolmentData.progress / progressPerWeek);
+
+      // Allow access to current incomplete week + next week
+      const accessibleWeek = Math.max(1, Math.min(calculatedMaxWeek + 1, weeksTopic.length));
+      setMaxAccessibleWeek(accessibleWeek);
+    }
+  }, [enrolmentData]);
   const logOut = () => {
     // localStorage.removeItem('Flow-Auth-Token');
     localStorage.clear();
@@ -319,6 +341,33 @@ const CourseContent = () => {
     setMenuVisible(!menuVisible);
   };
 
+  const handleWeekClick = (weekNumber) => {
+    // Only allow navigation to completed weeks or the current week in progress
+    if (weekNumber <= maxAccessibleWeek) {
+      // Clear previous week data before switching
+      dispatch(clearData());
+
+      dispatch(setCurrentWeek(weekNumber));
+      dispatch(setCurrentPage(1));
+      dispatch(setCurrentStep(1));
+
+      // Update session storage
+      sessionStorage.setItem("flow-currentWeek", weekNumber.toString());
+      sessionStorage.setItem("flow-currentPage", "1");
+      sessionStorage.setItem("flow-currentStep", "1");
+    }
+  };
+
+  const isWeekAccessible = (weekNumber) => {
+    return weekNumber <= maxAccessibleWeek;
+  };
+
+  const isWeekCompleted = (weekNumber) => {
+    // A week is completed if the user has progressed beyond it
+    const progressPerWeek = 100 / weeksTopic.length;
+    return enrollmentProgress >= (weekNumber * progressPerWeek);
+  };
+
   return (
     <>
       <nav className="navbar">
@@ -333,7 +382,7 @@ const CourseContent = () => {
           </button>
           <div
             className="navbar-logo d-none d-lg-block"
-            onClick={() => {}}
+            onClick={() => { }}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -413,25 +462,66 @@ const CourseContent = () => {
           </div>
 
           <ul className="compassion-list">
-            {weeksTopic.map((item, index) => (
-              <li
-                key={index}
-                className={index + 1 <= currentWeek ? "active-week" : ""}
-              >
-                <div className="icon">
-                  <Icon
-                    icon="icon-park-outline:check-one"
-                    className="course-list-icon"
-                  />
-                </div>
-                <span>
-                  Week
-                  {index + 1}
-                </span>
-                <span>{item} </span>
-              </li>
-            ))}
+            {weeksTopic.map((item, index) => {
+              const weekNumber = index + 1;
+              const isAccessible = isWeekAccessible(weekNumber);
+              const isCompleted = isWeekCompleted(weekNumber);
+              const isActive = weekNumber === currentWeek;
+
+              return (
+                <li
+                  key={index}
+                  className={`${isActive ? "active-week" : ""} ${isAccessible ? "accessible-week" : "locked-week"
+                    }`}
+                  onClick={() => handleWeekClick(weekNumber)}
+                  style={{
+                    cursor: isAccessible ? "pointer" : "not-allowed",
+                    opacity: isAccessible ? 1 : 0.5,
+                    transition: "all 0.3s ease",
+                  }}
+                >
+                  <div className="icon">
+                    <Icon
+                      icon={
+                        isCompleted
+                          ? "icon-park-solid:check-one"
+                          : isAccessible
+                            ? "icon-park-outline:check-one"
+                            : "mdi:lock"
+                      }
+                      className="course-list-icon"
+                    />
+                  </div>
+                  <span>
+                    Week
+                    {weekNumber}
+                  </span>
+                  <span>{item} </span>
+                </li>
+              );
+            })}
           </ul>
+
+          {/* Progress indicator */}
+          <div className="mt-4 px-3">
+            <div className="d-flex justify-content-between align-items-center mb-2">
+              <small className="text-muted">Course Progress</small>
+              <small className="fw-bold">{enrollmentProgress}%</small>
+            </div>
+            <div className="progress" style={{ height: "8px" }}>
+              <div
+                className="progress-bar"
+                role="progressbar"
+                style={{
+                  width: `${enrollmentProgress}%`,
+                  backgroundColor: "#00BCC3",
+                }}
+                aria-valuenow={enrollmentProgress}
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+          </div>
         </aside>
         <aside
           className="d-none d-md-block d-lg-none"

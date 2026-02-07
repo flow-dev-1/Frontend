@@ -470,12 +470,14 @@ const Week2 = ({ enrollmentId, isSchool, studentId }) => {
                 }}
               >
                 <div className='feedback-card'>{activity.feedback}</div>
-                <Icon
-                  onClick={() => openModal(activity.activity, activity.feedback)}
-                  style={{ color: "#275DAD", cursor: "pointer" }}
-                  width={20}
-                  icon="lucide:edit"
-                />
+                {isAdmin && (
+                  <Icon
+                    onClick={() => openModal(activity.activity, activity.feedback)}
+                    style={{ color: "#275DAD", cursor: "pointer" }}
+                    width={20}
+                    icon="lucide:edit"
+                  />
+                )}
               </div>
             </div>
           )}
@@ -488,7 +490,7 @@ const Week2 = ({ enrollmentId, isSchool, studentId }) => {
           <p className='question d-flex align-items-center gap-2'>
             <h4 style={{ color: '#275DAD', marginTop: '.3rem' }}>Question:</h4>
             <span> {activity.question}</span>
-            {(!activity?.feedback || activity.feedback.length === 0) && (
+            {isAdmin && (!activity?.feedback || activity.feedback.length === 0) && (
               <Icon
                 onClick={() => openModal(activity.activity)}
                 style={{ color: "#D6D6D6", cursor: "pointer", marginLeft: "auto" }}
@@ -623,12 +625,14 @@ const Week2 = ({ enrollmentId, isSchool, studentId }) => {
                 }}
               >
                 <div className='feedback-card'>{activity.feedback}</div>
-                <Icon
-                  onClick={() => openModal(activity.activity, activity.feedback)}
-                  style={{ color: "#275DAD", cursor: "pointer" }}
-                  width={20}
-                  icon="lucide:edit"
-                />
+                {isAdmin && (
+                  <Icon
+                    onClick={() => openModal(activity.activity, activity.feedback)}
+                    style={{ color: "#275DAD", cursor: "pointer" }}
+                    width={20}
+                    icon="lucide:edit"
+                  />
+                )}
               </div>
             </div>
           )}

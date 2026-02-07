@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { logoutSuccess } from "../../../../redux/reducers/userReducer";
 import { clearToken } from "../../../../redux/reducers/jwtReducer";
 import { useSelector } from 'react-redux';
+import { clearCode } from "../../../../redux/reducers/adminReducer";
 
 export default function SchoolDashboard() {
   const dispatch = useDispatch();
@@ -52,6 +53,7 @@ export default function SchoolDashboard() {
     localStorage.clear();
     dispatch(logoutSuccess());
     dispatch(clearToken());
+    dispatch(clearCode());
     navigate("/sign-in", { replace: true });
   };
 

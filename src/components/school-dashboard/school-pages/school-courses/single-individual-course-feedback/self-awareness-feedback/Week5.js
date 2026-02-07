@@ -635,7 +635,7 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
                   <h4 style={{ color: '#555', marginTop: '.3rem' }}>Answer:</h4>{' '}
                   <p style={{ fontSize: '14px' }}>{activity.answer}</p>
                 </div>
-                {(!activity.feedback || activity.feedback.length === 0) && (
+                {isAdmin && (!activity.feedback || activity.feedback.length === 0) && (
                   <Icon
                     onClick={() => openModal(1)}
                     style={{ color: "#275DAD", cursor: "pointer" }}
@@ -660,11 +660,13 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
                 }}
               >
                 <div className="feedback-card">{activity.feedback}</div>
-                <Icon
-                  style={{ color: "#275DAD" }}
-                  width={20}
-                  icon="lucide:edit"
-                />
+                {isAdmin && (
+                  <Icon
+                    style={{ color: "#275DAD" }}
+                    width={20}
+                    icon="lucide:edit"
+                  />
+                )}
               </div>
             </div>
           )}
@@ -752,7 +754,7 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
                   )}
                 </ol>
               </div>
-              {(!activity.feedback || activity.feedback.length === 0) && (
+              {isAdmin && (!activity.feedback || activity.feedback.length === 0) && (
                 <Icon
                   onClick={() => openModal(3, index)}
                   style={{ color: "#275DAD", cursor: "pointer" }}
@@ -768,7 +770,7 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
                   <h4 style={{ color: '#555', marginTop: '.3rem' }}>Answer:</h4>{' '}
                   <p style={{ fontSize: '14px' }}>{activity.answer}</p>
                 </div>
-                {(!activity.feedback || activity.feedback.length === 0) && (
+                {isAdmin && (!activity.feedback || activity.feedback.length === 0) && (
                   <Icon
                     onClick={() => openModal(3, index)}
                     style={{ color: "#275DAD", cursor: "pointer" }}
@@ -793,11 +795,13 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
                 }}
               >
                 <div className="feedback-card">{activity.feedback}</div>
-                <Icon
-                  style={{ color: "#275DAD" }}
-                  width={20}
-                  icon="lucide:edit"
-                />
+                {isAdmin && (
+                  <Icon
+                    style={{ color: "#275DAD" }}
+                    width={20}
+                    icon="lucide:edit"
+                  />
+                )}
               </div>
             </div>
           )}

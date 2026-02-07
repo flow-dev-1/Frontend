@@ -656,7 +656,7 @@ const Week4 = ({ enrollmentId, isSchool, studentId }) => {
                     </li>
                   ))}
                 </div>
-                {(!activity?.feedback || activity.feedback.length === 0) && (
+                {isAdmin && (!activity?.feedback || activity.feedback.length === 0) && (
                   <Icon
                     onClick={() => openModal(activity.activity)}
                     style={{ color: "#D6D6D6", cursor: "pointer" }}
@@ -683,7 +683,7 @@ const Week4 = ({ enrollmentId, isSchool, studentId }) => {
                     ))}
                   </div>
                 </div>
-                {(!activity?.feedback || activity.feedback.length === 0) && (
+                {isAdmin && (!activity?.feedback || activity.feedback.length === 0) && (
                   <Icon
                     onClick={() => openModal(activity.activity)}
                     style={{ color: "#D6D6D6", cursor: "pointer" }}
@@ -699,7 +699,7 @@ const Week4 = ({ enrollmentId, isSchool, studentId }) => {
                 <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
                 <p style={{ fontSize: "14px", marginBottom: 0 }}>{activity.answer}</p>
               </div>
-              {(!activity?.feedback || activity.feedback.length === 0) && (
+              {isAdmin && (!activity?.feedback || activity.feedback.length === 0) && (
                 <Icon
                   onClick={() => openModal(activity.activity)}
                   style={{ color: "#D6D6D6", cursor: "pointer" }}
@@ -722,12 +722,14 @@ const Week4 = ({ enrollmentId, isSchool, studentId }) => {
                 }}
               >
                 <div className="feedback-card">{activity.feedback}</div>
-                <Icon
-                  onClick={() => openModal(activity.activity, activity.feedback)}
-                  style={{ color: "#275DAD", cursor: "pointer" }}
-                  width={20}
-                  icon="lucide:edit"
-                />
+                {isAdmin && (
+                  <Icon
+                    onClick={() => openModal(activity.activity, activity.feedback)}
+                    style={{ color: "#275DAD", cursor: "pointer" }}
+                    width={20}
+                    icon="lucide:edit"
+                  />
+                )}
               </div>
             </div>
           )}
@@ -760,7 +762,7 @@ const Week4 = ({ enrollmentId, isSchool, studentId }) => {
                     </li>
                   ))}
                 </div>
-                {(!activity?.feedback || activity.feedback.length === 0) && (
+                {isAdmin && (!activity?.feedback || activity.feedback.length === 0) && (
                   <Icon
                     onClick={() => openModal(activity.activity)}
                     style={{ color: "#D6D6D6", cursor: "pointer" }}
@@ -787,7 +789,7 @@ const Week4 = ({ enrollmentId, isSchool, studentId }) => {
                     ))}
                   </div>
                 </div>
-                {(!activity?.feedback || activity.feedback.length === 0) && (
+                {isAdmin && (!activity?.feedback || activity.feedback.length === 0) && (
                   <Icon
                     onClick={() => openModal(activity.activity)}
                     style={{ color: "#D6D6D6", cursor: "pointer" }}
@@ -826,12 +828,14 @@ const Week4 = ({ enrollmentId, isSchool, studentId }) => {
                 }}
               >
                 <div className="feedback-card">{activity.feedback}</div>
-                <Icon
-                  onClick={() => openModal(activity.activity, activity.feedback)}
-                  style={{ color: "#275DAD", cursor: "pointer" }}
-                  width={20}
-                  icon="lucide:edit"
-                />
+                {isAdmin && (
+                  <Icon
+                    onClick={() => openModal(activity.activity, activity.feedback)}
+                    style={{ color: "#275DAD", cursor: "pointer" }}
+                    width={20}
+                    icon="lucide:edit"
+                  />
+                )}
               </div>
             </div>
           )}
