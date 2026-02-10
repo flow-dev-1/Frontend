@@ -12,12 +12,12 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
 
-function CompassionFeedback({ isSchool: isSchoolProp, studentId }) {
+function CompassionFeedback({ studentId }) {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
-  const [isSchool, setIsSchool] = useState(isSchoolProp || false);
+  const [isSchool, setIsSchool] = useState(false);
 
   // This is used to trigger the report download.
   const [hasPercentile, setHasPercentile] = useState(false);
@@ -65,7 +65,7 @@ function CompassionFeedback({ isSchool: isSchoolProp, studentId }) {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    if (!enrolmentData && !isAdmin?.isAdmin && !isSchool) return navigate("/sign-in");
+    if (!isSchool && !enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
       const courseEnrollmentId = sessionStorage.getItem(
@@ -74,26 +74,13 @@ function CompassionFeedback({ isSchool: isSchoolProp, studentId }) {
       if (!courseEnrollmentId) return;
       setEnrollmentId(courseEnrollmentId);
     } else if (isSchool) {
-      // For school, we might rely on the parent wrapper passing it or fetching it? 
-      // Actually, Week components fetch data using enrollmentId OR studentId.
-      // But Week components take enrollmentId prop. 
-      // In SchoolResilienceFeedback, we passed studentId to Weeks.
-      // Let's check how Week components use it. 
       if (enrolmentData?._id) {
         setEnrollmentId(enrolmentData._id);
       }
-      // If no enrollmentData (refresh), we might need to rely on the service to find it by studentId + courseId? 
-      // Or simply pass null enrollmentId and let the service handle it if it takes userId.
-      // Resilience logic: if (isSchool) return schoolService.getStudentCourseData(enrollmentId, 1, studentId);
-      // It uses enrollmentId. 
-      // We need to ensure we have enrollmentId.
-      if (location.state?.enrollmentData?._id) {
-        setEnrollmentId(location.state.enrollmentData._id);
-      }
     } else {
-      setEnrollmentId(enrolmentData._id);
+      setEnrollmentId(enrolmentData?._id);
     }
-  }, []);
+  }, [isAdmin, enrolmentData, isSchool, navigate]);
 
   const weekContents = [
     {

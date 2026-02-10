@@ -24,6 +24,14 @@ function TransitionFeedback({ isSchool: isSchoolProp, studentId }) {
   const [enrollmentId, setEnrollmentId] = useState(null);
   const [isSchool, setIsSchool] = useState(isSchoolProp || false);
 
+  const { user } = useSelector((state) => state?.user);
+
+  useEffect(() => {
+    if (user?.isSchool) {
+      setIsSchool(true);
+    }
+  }, [user]);
+
   // This is used to trigger the report download.
   const [hasPercentile, setHasPercentile] = useState(false);
   const isAdmin = useSelector(adminData);
@@ -77,7 +85,7 @@ function TransitionFeedback({ isSchool: isSchoolProp, studentId }) {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    if (!enrolmentData && !isAdmin?.isAdmin && !isSchool) return navigate("/sign-in");
+    if (!isSchool && !enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
       const courseEnrollmentId = sessionStorage.getItem(
@@ -89,13 +97,10 @@ function TransitionFeedback({ isSchool: isSchoolProp, studentId }) {
       if (enrolmentData?._id) {
         setEnrollmentId(enrolmentData._id);
       }
-      if (location.state?.enrollmentData?._id) {
-        setEnrollmentId(location.state.enrollmentData._id);
-      }
     } else {
       setEnrollmentId(enrolmentData?._id);
     }
-  }, []);
+  }, [isAdmin, enrolmentData, isSchool, navigate]);
 
   const weekContents = [
     {
@@ -194,7 +199,7 @@ function TransitionFeedback({ isSchool: isSchoolProp, studentId }) {
         <div className="container">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => navigate("/dashboard")}
+            onClick={() => isSchool ? navigate("/school-dashboard") : navigate("/dashboard")}
             className="navbar-logo"
             style={{ border: "none", background: "#FFF" }}
           >
@@ -213,12 +218,12 @@ function TransitionFeedback({ isSchool: isSchoolProp, studentId }) {
         <aside className="d-none d-lg-block">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => navigate("/dashboard/my-courses")}
+            onClick={() => isSchool ? navigate(-1) : navigate("/dashboard/my-courses")}
             className="back"
             style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
-            Back to My Courses
+            {isSchool ? "Go back" : "Back to My Courses"}
           </button>
           <div className="compassion-title">
             <h2> From Curious to Confident: Transition with Ease</h2>
@@ -255,12 +260,12 @@ function TransitionFeedback({ isSchool: isSchoolProp, studentId }) {
         <section className="week-content position-relative mb-5 ">
           <Link
             disabled={isAdmin}
-            to={"/dashboard/my-courses"}
+            to={isSchool ? -1 : "/dashboard/my-courses"}
             className="back text-black mb-5 p-3 d-lg-none"
             style={{ cursor: "pointer", border: "none" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
-            Back to My Courses
+            {isSchool ? "Go back" : "Back to My Courses"}
           </Link>
           <Accordion
             activeIndex={activeIndex}

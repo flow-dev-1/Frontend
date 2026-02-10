@@ -23,6 +23,14 @@ function Transition2Feedback({ isSchool: isSchoolProp, studentId }) {
   const [hasPercentile, setHasPercentile] = useState(false);
   const isAdmin = useSelector(adminData);
 
+  const { user } = useSelector((state) => state?.user);
+
+  useEffect(() => {
+    if (user?.isSchool) {
+      setIsSchool(true);
+    }
+  }, [user]);
+
   // states to check a certain week data has been loaded
   // This is for the final report generation
   const [isWeekOneLoaded, setWeekOneData] = useState(false);
@@ -57,7 +65,7 @@ function Transition2Feedback({ isSchool: isSchoolProp, studentId }) {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    if (!enrolmentData && !isAdmin?.isAdmin && !isSchool) return navigate("/sign-in");
+    if (!isSchool && !enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
       const courseEnrollmentId = sessionStorage.getItem(
@@ -69,13 +77,10 @@ function Transition2Feedback({ isSchool: isSchoolProp, studentId }) {
       if (enrolmentData?._id) {
         setEnrollmentId(enrolmentData._id);
       }
-      if (location.state?.enrollmentData?._id) {
-        setEnrollmentId(location.state.enrollmentData._id);
-      }
     } else {
       setEnrollmentId(enrolmentData?._id);
     }
-  }, []);
+  }, [isAdmin, enrolmentData, isSchool, navigate]);
 
   const weekContents = [
     {
@@ -143,7 +148,7 @@ function Transition2Feedback({ isSchool: isSchoolProp, studentId }) {
         <div className="container">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => navigate("/dashboard")}
+            onClick={() => isSchool ? navigate("/school-dashboard") : navigate("/dashboard")}
             className="navbar-logo"
             style={{ border: "none", background: "#FFF" }}
           >
@@ -159,59 +164,57 @@ function Transition2Feedback({ isSchool: isSchoolProp, studentId }) {
         </div>
       </nav>
       <div className="main-content">
-        {!isSchool && (
-          <aside className="d-none d-lg-block">
-            <button
-              disabled={isAdmin?.isAdmin}
-              onClick={() => navigate("/dashboard/my-courses")}
-              className="back"
-              style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
-            >
-              <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
-              Back to My Courses
-            </button>
-            <div className="compassion-title">
-              <h2 className="fs-5 fs-md-3 tot-nav-text">SEL for Educators:</h2>
-              <h2 className="compassion fs-5 tot-nav-text">ToT Course 1</h2>
-            </div>
+        <aside className="d-none d-lg-block">
+          <button
+            disabled={isAdmin?.isAdmin}
+            onClick={() => isSchool ? navigate(-1) : navigate("/dashboard/my-courses")}
+            className="back"
+            style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
+          >
+            <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
+            {isSchool ? "Go back" : "Back to My Courses"}
+          </button>
+          <div className="compassion-title">
+            <h2 className="fs-5 fs-md-3 tot-nav-text">navigating the next chapter with clarity:</h2>
+            <h2 className="compassion fs-5 tot-nav-text">Transition 2</h2>
+          </div>
 
-            <ul className="compassion-list">
-              {weeksTopic.map((item, index) => (
-                <li
-                  key={index}
-                  className={
-                    index + 1 <= currentWeek
-                      ? "active-week"
-                      : index >= 6
-                        ? "d-none"
-                        : ""
-                  }
-                >
-                  <div className="icon">
-                    <Icon
-                      icon="icon-park-outline:check-one"
-                      className="course-list-icon"
-                    />
-                  </div>
-                  <span className={index >= 5 ? "d-none" : ""}>
-                    Week
-                    {index + 1}
-                  </span>
-                  <span>{item} </span>
-                </li>
-              ))}
-            </ul>
-          </aside>
-        )}
-        <section className={`week-content position-relative mb-5 ${isSchool ? "w-100" : ""}`}>
+          <ul className="compassion-list">
+            {weeksTopic.map((item, index) => (
+              <li
+                key={index}
+                className={
+                  index + 1 <= currentWeek
+                    ? "active-week"
+                    : index >= 6
+                      ? "d-none"
+                      : ""
+                }
+              >
+                <div className="icon">
+                  <Icon
+                    icon="icon-park-outline:check-one"
+                    className="course-list-icon"
+                  />
+                </div>
+                <span className={index >= 5 ? "d-none" : ""}>
+                  Week
+                  {index + 1}
+                </span>
+                <span>{item} </span>
+              </li>
+            ))}
+          </ul>
+        </aside>
+        <section className={`week-content position-relative mb-5`}>
           <Link
             disabled={isAdmin}
-            to={"/dashboard/my-courses"}
+            to={isSchool ? -1 : "/dashboard/my-courses"}
             className="back text-black mb-5 p-3 d-lg-none"
             style={{ cursor: "pointer", border: "none" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
-            Back to My Courses
+            {isSchool ? "Go back" : "Back to My Courses"}
           </Link>
           <Accordion
             activeIndex={activeIndex}

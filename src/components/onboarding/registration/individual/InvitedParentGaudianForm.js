@@ -18,11 +18,6 @@ const schema = yup.object().shape({
   guardianFullName: yup
     .string()
     .required("Full Name is required")
-    .test(
-      "is-three-words-or-less",
-      "Full Name must contain between 1 and 3 words",
-      (value) => value && value.trim().split(/\s+/).length <= 3
-    )
     .trim(),
   email: yup
     .string()
@@ -87,8 +82,8 @@ export default function InivitedParentGuardianForm({
         s === "Children's International School"
           ? "+2349062684338"
           : initialData.phone
-          ? initialData.phone
-          : ""
+            ? initialData.phone
+            : ""
       );
       setValue(
         "country",
@@ -103,8 +98,8 @@ export default function InivitedParentGuardianForm({
         initialData.lga
           ? initialData.lga
           : s !== "Children's International School"
-          ? ""
-          : "Lagos Island"
+            ? ""
+            : "Lagos Island"
       );
     }
   }, [initialData, email, setValue]);
