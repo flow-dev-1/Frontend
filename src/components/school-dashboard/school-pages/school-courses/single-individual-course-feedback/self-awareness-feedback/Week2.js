@@ -258,9 +258,9 @@ const Week2 = ({ enrollmentId, isSchool, studentId }) => {
     }
   }, [data]);
 
-  const openModal = (activityIndex, feedback = "") => {
-    setActiveModal(activityIndex);
-    setEditingActivity({ index: activityIndex, feedback });
+  const openModal = (activityId, feedback = "", index = null) => {
+    setActiveModal(activityId);
+    setEditingActivity({ id: activityId, feedback, index });
   };
 
   const closeModal = () => {
@@ -305,44 +305,35 @@ const Week2 = ({ enrollmentId, isSchool, studentId }) => {
   if (isError || (!assessmentData && !activityData)) {
     return <div>Take Activity to see feedback.</div>
   }
-  const strengths = activityData?.activities?.[3]?.answers?.strengths
-  const weaknesses = activityData?.activities?.[4]?.answers?.weakness
-  const actviity1 = [
+  const activityList = activityData?.activities || [];
+  const act1 = activityList.find(a => a.activity === 2);
+  const act3 = activityList.find(a => a.activity === 4);
+  const act4 = activityList.find(a => a.activity === 5);
+  const act6 = activityList.find(a => a.activity === 7);
+
+  const strengths = act3?.answers?.strengths || [];
+  const weaknesses = act4?.answers?.weakness || [];
+
+  const activity1 = [
     {
-      activity: 1,
+      activity: 2,
+      feedbackIndex: 0,
       question: 'What do you think "Self Awareness" is?',
-      answer: activityData?.activities?.[1]?.answers?.[0],
-      feedback: activityData?.activities?.[1]?.feedback?.[0] || '',
+      answer: act1?.answers?.[0] || "",
+      feedback: act1?.feedback?.[0] || '',
     },
   ]
 
-
-  const handleFeedbackSubmit = (activityId, feedback) => {
-    const adjustedActivityId = (() => {
-      switch (activityId) {
-        case 1: return 2;
-        case 2: return 4;
-        case 3: return 5;
-        case 4:
-        case 5:
-        case 6: return 7;
-        default: return activityId;
-      }
-    })();
-
+  const handleFeedbackSubmit = (activityId, feedback, feedbackIndex = null) => {
     const updatedActivities = activitiesDataState.map((act) => {
-      if (act.activity === adjustedActivityId) {
-        if ([4, 5, 6].includes(activityId)) {
-          let activityIndex = activityId - 4;
-          let updatedFeedback = Array.isArray(act.feedback) ? [...act.feedback] : [];
-          for (let i = 0; i < 3; i++) {
-            updatedFeedback[i] = updatedFeedback[i] || "";
-          }
-          updatedFeedback[activityIndex] = feedback;
-          return { ...act, feedback: updatedFeedback };
+      if (act.activity === activityId) {
+        let newFeedback = Array.isArray(act.feedback) ? [...act.feedback] : [act.feedback];
+        if (feedbackIndex !== null) {
+          newFeedback[feedbackIndex] = feedback;
         } else {
-          return { ...act, feedback: [feedback] };
+          newFeedback[0] = feedback;
         }
+        return { ...act, feedback: newFeedback };
       }
       return act;
     });
@@ -350,48 +341,54 @@ const Week2 = ({ enrollmentId, isSchool, studentId }) => {
     setActivitiesDataState(updatedActivities);
     feedbackMutation.mutate(updatedActivities);
   };
+
   const activities = [
     {
-      activity: 2, // New activity based on image
+      activity: 4,
+      feedbackIndex: 0,
       question: 'Identify your Strengths.',
       answer: strengths,
-      feedback: activityData?.activities?.[3]?.feedback?.[0] || '',
-    },
-    {
-      activity: 3, // New activity based on image
-      question: 'Identify your Weaknesses.',
-      answer: weaknesses,
-      feedback: activityData?.activities?.[4]?.feedback?.[0] || '',
-    },
-    {
-      activity: 4,
-      question:
-        'A friend is feeling sad and needs someone to talk to because they just failed a test.They come to you for support. How would you help?',
-      answer: {
-        strengths: activityData?.activities?.[6]?.answers?.strengthsQ1,
-        weaknesses: activityData?.activities?.[6]?.answers?.weaknessesQ1,
-      },
-      feedback: activityData?.activities?.[6]?.feedback?.[0] || '',
+      feedback: act3?.feedback?.[0] || '',
     },
     {
       activity: 5,
+      feedbackIndex: 0,
+      question: 'Identify your Weaknesses.',
+      answer: weaknesses,
+      feedback: act4?.feedback?.[0] || '',
+    },
+    {
+      activity: 7,
+      feedbackIndex: 0,
+      question:
+        'A friend is feeling sad and needs someone to talk to because they just failed a test.They come to you for support. How would you help?',
+      answer: {
+        strengths: act6?.answers?.strengthsQ1 || [],
+        weaknesses: act6?.answers?.weaknessesQ1 || [],
+      },
+      feedback: act6?.feedback?.[0] || '',
+    },
+    {
+      activity: 7,
+      feedbackIndex: 1,
       question:
         'Imagine you’re working on a group project at school. Your group is struggling to come up with an idea for the project. As a member of the team, how would you help?',
       answer: {
-        strengths: activityData?.activities?.[6]?.answers?.strengthsQ2,
-        weaknesses: activityData?.activities?.[6]?.answers?.weaknessesQ2,
+        strengths: act6?.answers?.strengthsQ2 || [],
+        weaknesses: act6?.answers?.weaknessesQ2 || [],
       },
-      feedback: activityData?.activities?.[6]?.feedback?.[1] || '',
+      feedback: act6?.feedback?.[1] || '',
     },
     {
-      activity: 6,
+      activity: 7,
+      feedbackIndex: 2,
       question:
         'Is there a sport you dislike? What sport is this? Now imagine you were asked to represent your house in this particular sport, for your School’s inter-house sport competition, to win a laptop and a gaming console. How would you go about this?',
       answer: {
-        strengths: activityData?.activities?.[6]?.answers?.strengthsQ3,
-        weaknesses: activityData?.activities?.[6]?.answers?.weaknessesQ3,
+        strengths: act6?.answers?.strengthsQ3 || [],
+        weaknesses: act6?.answers?.weaknessesQ3 || [],
       },
-      feedback: activityData?.activities?.[6]?.feedback?.[2] || '',
+      feedback: act6?.feedback?.[2] || '',
     },
   ]
   const quizEssay = [
@@ -423,7 +420,7 @@ const Week2 = ({ enrollmentId, isSchool, studentId }) => {
     <div className='week-content w-auto'>
       <p className='activity-badge'>Activity 1</p>
 
-      {actviity1.map((activity, index) => (
+      {activity1.map((activity, index) => (
         <div style={{ border: 'none' }} className='activity' key={index}>
           <p className='question d-flex align-items-center gap-2'>
             <h4 style={{ color: '#275DAD', marginTop: '.3rem' }}>Question:</h4>
@@ -450,11 +447,11 @@ const Week2 = ({ enrollmentId, isSchool, studentId }) => {
           )}
 
           {/* Conditionally render feedback */}
-          {activeModal === activity?.activity && (
+          {activeModal === activity?.activity && editingActivity?.index === activity.feedbackIndex && (
             <FeedbackModal
               initialFeedback={activity?.feedback || ""}
               onClose={closeModal}
-              onSubmit={(feedback) => handleFeedbackSubmit(activity.activity, feedback)}
+              onSubmit={(feedback) => handleFeedbackSubmit(activity.activity, feedback, activity.feedbackIndex)}
             />
           )}
 
@@ -472,7 +469,7 @@ const Week2 = ({ enrollmentId, isSchool, studentId }) => {
                 <div className='feedback-card'>{activity.feedback}</div>
                 {isAdmin && (
                   <Icon
-                    onClick={() => openModal(activity.activity, activity.feedback)}
+                    onClick={() => openModal(activity.activity, activity.feedback, activity.feedbackIndex)}
                     style={{ color: "#275DAD", cursor: "pointer" }}
                     width={20}
                     icon="lucide:edit"
@@ -492,7 +489,7 @@ const Week2 = ({ enrollmentId, isSchool, studentId }) => {
             <span> {activity.question}</span>
             {isAdmin && (!activity?.feedback || activity.feedback.length === 0) && (
               <Icon
-                onClick={() => openModal(activity.activity)}
+                onClick={() => openModal(activity.activity, "", activity.feedbackIndex)}
                 style={{ color: "#D6D6D6", cursor: "pointer", marginLeft: "auto" }}
                 width={20}
                 icon="hugeicons:comment-01"
@@ -605,11 +602,11 @@ const Week2 = ({ enrollmentId, isSchool, studentId }) => {
           )}
 
           {/* Conditionally render feedback */}
-          {activeModal === activity.activity && (
+          {activeModal === activity.activity && editingActivity?.index === activity.feedbackIndex && (
             <FeedbackModal
               initialFeedback={activity?.feedback || ""}
               onClose={closeModal}
-              onSubmit={(feedback) => handleFeedbackSubmit(activity.activity, feedback)}
+              onSubmit={(feedback) => handleFeedbackSubmit(activity.activity, feedback, activity.feedbackIndex)}
             />
           )}
 
@@ -627,7 +624,7 @@ const Week2 = ({ enrollmentId, isSchool, studentId }) => {
                 <div className='feedback-card'>{activity.feedback}</div>
                 {isAdmin && (
                   <Icon
-                    onClick={() => openModal(activity.activity, activity.feedback)}
+                    onClick={() => openModal(activity.activity, activity.feedback, activity.feedbackIndex)}
                     style={{ color: "#275DAD", cursor: "pointer" }}
                     width={20}
                     icon="lucide:edit"

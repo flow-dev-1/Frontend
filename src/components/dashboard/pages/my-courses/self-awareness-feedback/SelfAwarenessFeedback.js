@@ -17,6 +17,7 @@ import { adminData } from "../../../../../redux/reducers/adminReducer";
 import { useLocation } from "react-router-dom";
 import { ClimbingBoxLoader } from "react-spinners";
 import HurrayComponent from "./Hurray";
+import AIConfirmationModal from "./AIConfirmationModal";
 
 const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId: enrollmentIdProp }) => {
   const weeks = [1, 2, 3, 4, 5]; // List of weeks
@@ -26,6 +27,8 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
   const [assessmentLoading, setAssessmentLoading] = useState(true);
   const [expandedWeek, setExpandedWeek] = useState(null);
   const [pdfLoading, setPdfLoading] = useState(false); // NEW STATE FOR PDF LOADING
+  const [isAIModalOpen, setIsAIModalOpen] = useState(false);
+  const [selectedAIWeek, setSelectedAIWeek] = useState(null);
   const contentRef = useRef();
 
   const { isAdmin, code } = useSelector(adminData);
@@ -109,6 +112,65 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
     setExpandedWeek(expandedWeek === weekNumber ? null : weekNumber);
   };
 
+  const handleOpenAIModal = (weekNumber) => {
+    setSelectedAIWeek(weekNumber);
+    setIsAIModalOpen(true);
+  };
+
+  const handleConfirmAIGeneration = async () => {
+    setIsAIModalOpen(false);
+    console.log(`Generating AI feedback for week ${selectedAIWeek}`);
+
+    // Find the data for the selected week
+    const weekData = data?.[selectedAIWeek - 1];
+    if (!weekData || !weekData.activity) {
+      console.error("No data found for this week");
+      return;
+    }
+
+    // Format the payload to match user's Postman example
+    const payload = [
+      {
+        payload: {
+          activity: weekData.activity.activities,
+          id: weekData.activity._id
+        }
+      }
+    ];
+
+    console.log("Sending payload to AI webhook via POST:", JSON.stringify(payload, null, 2));
+
+    try {
+      const url = "https://n8n.srv895792.hstgr.cloud/webhook/7e9dafd3-852f-4050-99fb-a27f4a36e250";
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Read response as text first to handle empty or non-JSON responses
+      const text = await response.text();
+      let result;
+      try {
+        result = text ? JSON.parse(text) : { status: "success", message: "Webhook called successfully (empty response)" };
+      } catch (e) {
+        result = { status: "success", message: text || "Webhook called successfully" };
+      }
+
+      console.log("AI Webhook results:", result);
+    } catch (error) {
+      console.error("Error calling AI webhook:", error);
+    }
+  };
+
   // Function to temporarily expand all weeks, generate the PDF, then restore the original state
   const generatePDF = () => {
     if (!isDataLoaded) {
@@ -164,12 +226,26 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
         {/* Week 1 */}
         <div className="week-title-container">
           <div className="week-title">
-            <h2 onClick={() => toggleWeek(1)} style={{ fontSize: "24px" }}>
-              Week 1:{" "}
-              <span style={{ fontSize: "14px" }}>
-                Introduction to Self-Awareness
-              </span>
-            </h2>
+            <div className="week-left">
+              <h2 onClick={() => toggleWeek(1)} style={{ fontSize: "24px" }}>
+                Week 1:{" "}
+                <span style={{ fontSize: "14px" }}>
+                  Introduction to Self-Awareness
+                </span>
+              </h2>
+              {isAdmin && (expandedWeek === 1 || expandedWeek === "all") && data && data[0] && (
+                <button
+                  className="ai-generate-cta"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenAIModal(1);
+                  }}
+                >
+                  <Icon icon="solar:magic-stick-3-bold-duotone" className="icon" />
+                  Generate with AI
+                </button>
+              )}
+            </div>
             <Icon
               icon={
                 expandedWeek === 1 || expandedWeek === "all"
@@ -190,12 +266,26 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
         {/* Week 2 */}
         <div className="week-title-container">
           <div className="week-title">
-            <h2 onClick={() => toggleWeek(2)} style={{ fontSize: "24px" }}>
-              Week 2:{" "}
-              <span style={{ fontSize: "14px" }}>
-                Identifying Strengths and Weaknesses
-              </span>
-            </h2>
+            <div className="week-left">
+              <h2 onClick={() => toggleWeek(2)} style={{ fontSize: "24px" }}>
+                Week 2:{" "}
+                <span style={{ fontSize: "14px" }}>
+                  Identifying Strengths and Weaknesses
+                </span>
+              </h2>
+              {isAdmin && (expandedWeek === 2 || expandedWeek === "all") && data && data[1] && (
+                <button
+                  className="ai-generate-cta"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenAIModal(2);
+                  }}
+                >
+                  <Icon icon="solar:magic-stick-3-bold-duotone" className="icon" />
+                  Generate with AI
+                </button>
+              )}
+            </div>
             <Icon
               icon={
                 expandedWeek === 2 || expandedWeek === "all"
@@ -216,10 +306,24 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
         {/* Week 3 */}
         <div className="week-title-container">
           <div className="week-title">
-            <h2 onClick={() => toggleWeek(3)} style={{ fontSize: "24px" }}>
-              Week 3:{" "}
-              <span style={{ fontSize: "14px" }}>Understanding Mindset</span>
-            </h2>
+            <div className="week-left">
+              <h2 onClick={() => toggleWeek(3)} style={{ fontSize: "24px" }}>
+                Week 3:{" "}
+                <span style={{ fontSize: "14px" }}>Understanding Mindset</span>
+              </h2>
+              {isAdmin && (expandedWeek === 3 || expandedWeek === "all") && data && data[2] && (
+                <button
+                  className="ai-generate-cta"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenAIModal(3);
+                  }}
+                >
+                  <Icon icon="solar:magic-stick-3-bold-duotone" className="icon" />
+                  Generate with AI
+                </button>
+              )}
+            </div>
             <Icon
               icon={
                 expandedWeek === 3 || expandedWeek === "all"
@@ -240,10 +344,24 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
         {/* Week 4 */}
         <div className="week-title-container">
           <div className="week-title">
-            <h2 onClick={() => toggleWeek(4)} style={{ fontSize: "24px" }}>
-              Week 4:{" "}
-              <span style={{ fontSize: "14px" }}>Identifying Values</span>
-            </h2>
+            <div className="week-left">
+              <h2 onClick={() => toggleWeek(4)} style={{ fontSize: "24px" }}>
+                Week 4:{" "}
+                <span style={{ fontSize: "14px" }}>Identifying Values</span>
+              </h2>
+              {isAdmin && (expandedWeek === 4 || expandedWeek === "all") && data && data[3] && (
+                <button
+                  className="ai-generate-cta"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenAIModal(4);
+                  }}
+                >
+                  <Icon icon="solar:magic-stick-3-bold-duotone" className="icon" />
+                  Generate with AI
+                </button>
+              )}
+            </div>
             <Icon
               icon={
                 expandedWeek === 4 || expandedWeek === "all"
@@ -264,12 +382,26 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
         {/* Week 5 */}
         <div className="week-title-container">
           <div className="week-title">
-            <h2 onClick={() => toggleWeek(5)} style={{ fontSize: "24px" }}>
-              Week 5:{" "}
-              <span style={{ fontSize: "14px" }}>
-                Emotional Intelligence and Communication Skills
-              </span>
-            </h2>
+            <div className="week-left">
+              <h2 onClick={() => toggleWeek(5)} style={{ fontSize: "24px" }}>
+                Week 5:{" "}
+                <span style={{ fontSize: "14px" }}>
+                  Emotional Intelligence and Communication Skills
+                </span>
+              </h2>
+              {isAdmin && (expandedWeek === 5 || expandedWeek === "all") && data && data[4] && (
+                <button
+                  className="ai-generate-cta"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenAIModal(5);
+                  }}
+                >
+                  <Icon icon="solar:magic-stick-3-bold-duotone" className="icon" />
+                  Generate with AI
+                </button>
+              )}
+            </div>
             <Icon
               icon={
                 expandedWeek === 5 || expandedWeek === "all"
@@ -339,6 +471,13 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
           isSchool={isSchool}
           studentId={studentId}
         />}
+
+        <AIConfirmationModal
+          isOpen={isAIModalOpen}
+          onClose={() => setIsAIModalOpen(false)}
+          onConfirm={handleConfirmAIGeneration}
+          weekNumber={selectedAIWeek}
+        />
       </div>
     </>
   );

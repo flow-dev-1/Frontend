@@ -462,10 +462,10 @@ const Week4 = ({ enrollmentId, isSchool, studentId }) => {
     if (!data) return
     setPercent(data?.assessment?.rating || 0);
 
-    const assessmentForChecked =
-      data?.assessment?.assessments[0]?.answers;
-    const matchCount1 = data?.assessment?.assessments[0].matchesSet1;
-    const matchCount2 = data?.assessment?.assessments[0].matchesSet2;
+    const assessment = data?.assessment?.assessments?.[0] || {};
+    const assessmentForChecked = assessment.answers;
+    const matchCount1 = assessment.matchesSet1;
+    const matchCount2 = assessment.matchesSet2;
 
     // Using the matchset to form probable answer 0-8
     // true if selection matches index and false for odas
@@ -541,48 +541,54 @@ const Week4 = ({ enrollmentId, isSchool, studentId }) => {
     return <div>{data?.message}.</div>;
   }
 
+  const activityList = data?.activity?.activities || [];
+  const act1 = activityList.find(a => a.activity === 2);
+  const act3 = activityList.find(a => a.activity === 4);
+  const act5 = activityList.find(a => a.activity === 6);
+  const act8 = activityList.find(a => a.activity === 8);
+
   const activities = [
     {
-      activity: data?.activity?.activities[1]?.activity || 1,
+      activity: 2,
       feedbackIndex: 0,
       question: "What exactly are “Values”??",
-      answer: data?.activity?.activities[1]?.answers?.[0],
-      feedback: data?.activity?.activities[1]?.feedback?.[0]
+      answer: act1?.answers?.[0] || "",
+      feedback: act1?.feedback?.[0] || ""
     },
     {
-      activity: data?.activity?.activities[3]?.activity || 3,
+      activity: 4,
       feedbackIndex: 0,
       question: "Flip each card to know more about the values. Select the box on each card to pick the values you feel are a big part of who you are.",
-      answer: data?.activity?.activities[3]?.answers,
-      feedback: data?.activity?.activities[3]?.feedback?.[0]
+      answer: act3?.answers || [],
+      feedback: act3?.feedback?.[0] || ""
     },
     {
-      activity: data?.activity?.activities[5]?.activity || 5,
+      activity: 6,
       feedbackIndex: 0,
       question: "Identify three (3) important people in your live and list their names below.",
-      answer: data?.activity?.activities[5]?.answers?.[0],
-      feedback: data?.activity?.activities?.[5]?.feedback?.[0]
+      answer: act5?.answers?.[0] || "",
+      feedback: act5?.feedback?.[0] || ""
     },
     {
-      activity: data?.activity?.activities[5]?.activity || 5,
+      activity: 6,
       feedbackIndex: 1,
       question: "Write out what these people think about you.",
-      answer: data?.activity?.activities[5]?.answers?.[1],
-      feedback: data?.activity?.activities?.[5]?.feedback?.[1]
+      answer: act5?.answers?.[1] || "",
+      feedback: act5?.feedback?.[1] || ""
     },
     {
-      activity: data?.activity?.activities[5]?.activity || 5,
+      activity: 6,
       feedbackIndex: 2,
       question: "Are you happy with what these people think about you? If no, what would you like to change? If yes, type “YES” in the box.",
-      answer: data?.activity?.activities[5]?.answers?.[2],
-      feedback: data?.activity?.activities?.[5]?.feedback?.[2]
+      answer: act5?.answers?.[2] || "",
+      feedback: act5?.feedback?.[2] || ""
     },
     {
-      activity: data?.activity?.activities[7]?.activity || 8,
+      activity: 8,
       feedbackIndex: 0,
       question: "Identify four (4) core values that resonate with you the most.",
-      answer: data?.activity?.activities[7]?.answers,
-      feedback: data?.activity?.activities[7]?.feedback?.[0]
+      answer: act8?.answers || [],
+      feedback: act8?.feedback?.[0] || ""
     }
   ];
 

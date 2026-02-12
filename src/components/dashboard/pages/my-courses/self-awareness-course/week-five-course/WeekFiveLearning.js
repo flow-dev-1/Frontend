@@ -39,7 +39,7 @@ export default function WeekFiveLearning({
   })
   const week = 5;
 
-  const { data, isLoading, status, isError } = useQuery({
+  const { data: courseData, isLoading, status, isError } = useQuery({
     queryKey: ["self-awareness-course-5", courseId, week],
     queryFn: () => userService.getUserCourseData(courseId, week),
     refetchOnMount: "always",
@@ -48,123 +48,126 @@ export default function WeekFiveLearning({
   });
 
   // Check if data.activity exists and save it under one key 'activity1' in local storage
-  
+
   useEffect(() => {
+    if (!courseData) return;
 
-    if (!data) return
+    if (courseData.activity) {
+      const activities = courseData.activity.activities || [];
 
-    if (data.assessment && data.activity) {
-      const assessments = data?.assessment?.assessments;
-      const activities = data?.activity?.activities;
-      const percent = data?.assessment?.rating;
+      // Remote State Restoration: Jump to last saved page if it exists
+      if (courseData.activity.lastActivityIndex) {
+        setCurrentActivity(courseData.activity.lastActivityIndex);
+      }
 
-      // Create an object with week and activities
       const activityData = {
         week: week,
-        activities: activities
+        activities: activities,
       };
+
+      setFormData(activityData);
+      localStorage.setItem('week-5-activityData', JSON.stringify(activityData));
+
+      dispatch(
+        updateData({
+          course: course?.course?._id,
+          courseEnrollmentId: courseId,
+          week,
+          activities: activities,
+          assessments: courseData.assessment?.assessments || [],
+        })
+      );
+    }
+
+    if (courseData.assessment) {
+      const assessments = courseData.assessment.assessments || [];
+      const percent = courseData.assessment.rating;
 
       const assessment_data = {
         week: week,
         percentage: percent,
         assessments: assessments,
-        personalityColor:data?.assessment?.personalityColor ? data?.assessment?.personalityColor : "Yellow",
-      }
+        personalityColor: courseData.assessment.personalityColor || 'Yellow',
+      };
 
-      setFormData(activityData)
-      // Store the object in local storage under the key 'activity1'
-      localStorage.setItem("week-5-activityData", JSON.stringify(activityData));
       localStorage.setItem(
-        "weekFiveAssessmentData",
+        'weekFiveAssessmentData',
         JSON.stringify({ formattedData: assessment_data })
       );
-      // This Dispatch will be used in submiting the data at the assessment page
-      dispatch(
-        updateData({
-          course: course?.course?._id,
-          courseEnrollmentId: courseId,
-          week,
-          activities: data.activity?.activities,
-          assessments: data.assessment?.assessments,
-        })
-      );
-    } else {
-      // New user
-      setFormData({
-        week: week,
-        activities: []
-      })
-      dispatch(
-        updateData({
-          course: course?.course?._id,
-          courseEnrollmentId: courseId,
-          week,
-          activities: [],
-          assessments: [],
-        })
-      );
     }
+  }, [courseData]);
 
-  }, [data])
-
-
-  const [videoPlaying, setVideoPlaying] = useState(false)
-  const [reviewPopUp, setReviewPopUp] = useState(false)
-  const navigate = useNavigate()
+  const [videoPlaying, setVideoPlaying] = useState(false);
+  const [reviewPopUp, setReviewPopUp] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     localStorage.setItem(
       `week-${currentWeekIndex}-currentActivity`,
       JSON.stringify(currentActivity)
-    )
-  }, [currentActivity, currentWeekIndex])
+    );
+  }, [currentActivity, currentWeekIndex]);
 
   useEffect(() => {
-    localStorage.setItem(
-      `week-${currentWeekIndex}-activityData`,
-      JSON.stringify(formData)
-    )
-  }, [formData, currentWeekIndex])
+    localStorage.setItem(`week-${currentWeekIndex}-activityData`, JSON.stringify(formData));
+  }, [formData, currentWeekIndex]);
 
-  const handleNext = async (data = {}) => {
-    setFormData((prevData) => {
-      const updatedActivities = prevData?.activities?.map((item) =>
-        item.activity === currentActivity ? { ...item, ...data } : item
-      )
-      if (
-        !updatedActivities.find((item) => item.activity === currentActivity)
-      ) {
-        updatedActivities.push({ activity: currentActivity, ...data })
-      }
-      return { ...prevData, activities: updatedActivities }
-    })
+  const isCompleted = !!courseData?.assessment;
 
-    setCurrentActivity((prev) => prev + 1)
+  const handleNext = async (incomingData = {}) => {
+    const updatedActivities =
+      formData?.activities?.map((item) =>
+        item.activity === currentActivity ? { ...item, ...incomingData } : item
+      ) || [];
 
-  }
+    if (!updatedActivities.find((item) => item.activity === currentActivity)) {
+      updatedActivities.push({ activity: currentActivity, ...incomingData });
+    }
+
+    setFormData((prevData) => ({ ...prevData, activities: updatedActivities }));
+
+    const nextActivity = currentActivity + 1;
+    setCurrentActivity(nextActivity);
+
+    if (!isCompleted) {
+      // Fire and Forget: Save progress to background
+      const payload = {
+        week: week,
+        activities: updatedActivities,
+        lastActivityIndex: nextActivity // Save where they are going
+      };
+
+      userService.postMyActivity(courseId, payload).catch(err => {
+        console.error("Failed to auto-save activity:", err);
+      });
+    }
+  };
 
   const handlePrevious = () => {
-    setCurrentActivity((prev) => prev - 1)
-  }
+    setCurrentActivity((prev) => prev - 1);
+  };
 
-  const closeReviewPopUp = () => setReviewPopUp(false)
+  const closeReviewPopUp = () => setReviewPopUp(false);
 
   const handleNextWeekCourse = () => {
-    const nextWeekIndex = currentWeekIndex + 1
-    navigate(`/dashboard/self-awareness-course/${course._id}`, {
+    const nextWeekIndex = currentWeekIndex + 1;
+    navigate(`/dashboard/self-awareness-course/${courseId}`, {
       state: { course, weekIndex: nextWeekIndex },
-    })
-  }
+    });
+  };
 
   const handleSubmit = async () => {
+    if (isCompleted) {
+      return { success: true, message: "Week already completed." };
+    }
 
     if (formData?.activities?.length < 8) {
       return { success: false, message: "Submission failed" };
     }
 
     try {
-      const stringifiedFormData = JSON.stringify(formData)
-      const response = await userService.postMyActivity(course.course._id, stringifiedFormData);
+      const stringifiedFormData = JSON.stringify(formData);
+      const response = await userService.postMyActivity(courseId, stringifiedFormData);
 
       if (response.success) {
         toast.success(response?.message);
@@ -191,9 +194,9 @@ export default function WeekFiveLearning({
               setVideoPlaying={setVideoPlaying}
               videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-5/FLOW-5_1.mp4'
             />
-						<div className="mt-3">
-							<ProgressionButtons variant="next" onClickNext={handleNext} />
-						</div>
+            <div className="mt-3">
+              <ProgressionButtons variant="next" onClickNext={handleNext} />
+            </div>
           </>
         )
 
@@ -217,9 +220,9 @@ export default function WeekFiveLearning({
               setVideoPlaying={setVideoPlaying}
               videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-5/FLOW-5_2.mp4'
             />
-						<div className="mt-3">
-							<ProgressionButtons variant="both" onClickNext={handleNext} onClickPrev={handlePrevious} />
-						</div>
+            <div className="mt-3">
+              <ProgressionButtons variant="both" onClickNext={handleNext} onClickPrev={handlePrevious} />
+            </div>
           </>
         )
       case 4:
@@ -246,9 +249,9 @@ export default function WeekFiveLearning({
               setVideoPlaying={setVideoPlaying}
               videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-5/FLOW-5_3.mp4'
             />
-						<div className="mt-3">
-							<ProgressionButtons variant="both" onClickNext={handleNext} onClickPrev={handlePrevious} />
-						</div>
+            <div className="mt-3">
+              <ProgressionButtons variant="both" onClickNext={handleNext} onClickPrev={handlePrevious} />
+            </div>
           </>
         )
       case 6:
@@ -276,9 +279,9 @@ export default function WeekFiveLearning({
               setVideoPlaying={setVideoPlaying}
               videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-5/FLOW-5_4.mp4'
             />
-						<div className="mt-3">
-							<ProgressionButtons variant="both" onClickNext={handleNext} onClickPrev={handlePrevious} />
-						</div>
+            <div className="mt-3">
+              <ProgressionButtons variant="both" onClickNext={handleNext} onClickPrev={handlePrevious} />
+            </div>
           </>
         )
       case 8:
@@ -304,19 +307,20 @@ export default function WeekFiveLearning({
               setVideoPlaying={setVideoPlaying}
               videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-5/FLOW-5_5.mp4'
             />
-						<div className="mt-3">
-							<ProgressionButtons variant="both" onClickNext={handleNext} onClickPrev={handlePrevious} />
-						</div>
+            <div className="mt-3">
+              <ProgressionButtons variant="both" onClickNext={handleNext} onClickPrev={handlePrevious} />
+            </div>
           </>
         )
       case 10:
         return (
           <WeekFiveAssessmentForm
             onBack={handlePrevious}
-            handleNextWeekCourse={handleNextWeekCourse}
             onNext={handleNext}
             course={course}
+            handleActivitySubmit={handleSubmit}
             activityData={formData}
+            isCompleted={isCompleted}
           />
         )
       default:

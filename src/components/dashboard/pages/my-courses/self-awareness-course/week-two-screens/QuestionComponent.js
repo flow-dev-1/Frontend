@@ -72,16 +72,16 @@ const QuestionComponent = ({
 
         <ToastContainer />
       </div>
-			<div className="progression-btns mt-3">
-				{onBack && (
-					<button className="btn prev light" onClick={onBack}>
-						{'<<< Back'}
-					</button>
-				)}
-				<button className="btn next dark" onClick={handleNextClick}>
-					{'Next >>>'}
-				</button>
-			</div>
+      <div className="progression-btns mt-3">
+        {onBack && (
+          <button className="btn prev light" onClick={onBack}>
+            {'<<< Back'}
+          </button>
+        )}
+        <button className="btn next dark" onClick={handleNextClick}>
+          {'Next >>>'}
+        </button>
+      </div>
     </div>
   )
 }

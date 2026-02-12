@@ -47,23 +47,34 @@ export default function WeaknessIdentification({
   // Extract saved answers if they exist
   const savedAnswers =
     currentActivityData &&
-    currentActivityData.answers &&
-    currentActivityData.answers.weakness
+      currentActivityData.answers &&
+      currentActivityData.answers.weakness
       ? currentActivityData.answers.weakness
       : []
 
   // Initialize state for checked questions based on savedAnswers
-  const [questionChecked, setQuestionChecked] = useState(() =>
-    questionsArray.reduce(
-      (acc, question, index) => ({
-        ...acc,
-        [index]: savedAnswers.includes(question),
-      }),
-      {}
-    )
-  )
+  const [questionChecked, setQuestionChecked] = useState({})
 
-  const [selectedAnswers, setSelectedAnswers] = useState(savedAnswers)
+  const [selectedAnswers, setSelectedAnswers] = useState([])
+
+  useEffect(() => {
+    if (currentActivityData && currentActivityData.answers && currentActivityData.answers.weakness) {
+      const saved = currentActivityData.answers.weakness;
+      setQuestionChecked(
+        questionsArray.reduce(
+          (acc, question, index) => ({
+            ...acc,
+            [index]: saved.includes(question),
+          }),
+          {}
+        )
+      );
+      setSelectedAnswers(saved);
+    } else {
+      setQuestionChecked({});
+      setSelectedAnswers([]);
+    }
+  }, [formData, activityIndex]);
 
   useEffect(() => {
     // Update selected answers whenever questionChecked state changes
@@ -84,7 +95,7 @@ export default function WeaknessIdentification({
   const handleSubmit = () => {
     if (selectedAnswers.length === 0) {
       // Show an alert if no answers are selected
-      toast.error('Please select at least one strength.')
+      toast.error('Please select at least one weakness.')
       return
     }
 
@@ -118,13 +129,13 @@ export default function WeaknessIdentification({
           </ul>
         </div>
       </div>
-			<div className="mt-3">
-				<ProgressionButtons
-					variant={'both'}
-					onClickNext={handleSubmit}
-					onClickPrev={onBack}
-				/>
-			</div>
+      <div className="mt-3">
+        <ProgressionButtons
+          variant={'both'}
+          onClickNext={handleSubmit}
+          onClickPrev={onBack}
+        />
+      </div>
     </div>
   )
 }

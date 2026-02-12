@@ -7,13 +7,32 @@ export default function QuestionAboutPeople({ onBack, onNext, formData, activity
 	const initialAnswers = formData?.activities?.find(
 		(activity) => activity.activity === activityIndex
 	)?.answers || [
-		{ q1: '', q2: '', q3: '' }, // Default answers for question 1
-		{ q1: '', q2: '', q3: '' }, // Default answers for question 2
-		{ q1: '', q2: '', q3: '' }, // Default answers for question 3
-	];
+			{ q1: '', q2: '', q3: '' }, // Default answers for question 1
+			{ q1: '', q2: '', q3: '' }, // Default answers for question 2
+			{ q1: '', q2: '', q3: '' }, // Default answers for question 3
+		];
 
 	const [currentIndex, setCurrentIndex] = useState(1);
-	const [answers, setAnswers] = useState(initialAnswers);
+	const [answers, setAnswers] = useState([
+		{ q1: '', q2: '', q3: '' },
+		{ q1: '', q2: '', q3: '' },
+		{ q1: '', q2: '', q3: '' },
+	]);
+
+	useEffect(() => {
+		const currentActivityData = formData?.activities?.find(
+			(activity) => activity.activity === activityIndex
+		);
+		if (currentActivityData && currentActivityData.answers) {
+			setAnswers(currentActivityData.answers);
+		} else {
+			setAnswers([
+				{ q1: '', q2: '', q3: '' },
+				{ q1: '', q2: '', q3: '' },
+				{ q1: '', q2: '', q3: '' },
+			]);
+		}
+	}, [formData, activityIndex]);
 
 	// Handle input change for the text areas
 	const handleInputChange = (e, questionIndex) => {

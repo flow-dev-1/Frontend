@@ -56,7 +56,7 @@ export default function MindSetFlipQuestion({ onSubmit, onBack, onNext, activity
 
 	// Splitting the questions into chunks of 12 (3 rows x 4 columns)
 	const chunkSize = 12;
-	const questionChunks = questionsArray[0].reduce((chunks, item, index) => {
+	const questionChunks = (questionsArray[0] || []).reduce((chunks, item, index) => {
 		const chunkIndex = Math.floor(index / chunkSize);
 		if (!chunks[chunkIndex]) {
 			chunks[chunkIndex] = []; // start a new chunk
@@ -65,9 +65,9 @@ export default function MindSetFlipQuestion({ onSubmit, onBack, onNext, activity
 		return chunks;
 	}, []);
 
-	// Extract answers from formData for activity 4, if available
+	// Extract answers from formData for activityIndex, if available
 	const preFilledAnswers =
-		formData.activities.find((activity) => activity.activity === 4)?.answers || [];
+		formData?.activities?.find((activity) => activity.activity === activityIndex)?.answers || [];
 
 	// Initialize questionChecked state based on pre-filled answers
 	const initializeCheckedState = () => {
@@ -83,33 +83,52 @@ export default function MindSetFlipQuestion({ onSubmit, onBack, onNext, activity
 		}, {});
 	};
 
-	const [questionChecked, setQuestionChecked] = useState(initializeCheckedState);
+	const [questionChecked, setQuestionChecked] = useState(
+		questionChunks.reduce((acc, _, index) => ({ ...acc, [index]: [] }), {})
+	);
+	const [chunkCompletion, setChunkCompletion] = useState(
+		questionChunks.reduce((acc, _, index) => ({ ...acc, [index]: false }), {})
+	);
 
-	// Initialize chunkCompletion state based on pre-filled answers
-	const initializeChunkCompletion = () => {
-		return questionChunks.reduce((acc, chunk, chunkIndex) => {
-			acc[chunkIndex] = questionChecked[chunkIndex].length > 0;
+	useEffect(() => {
+		const preFilled = formData?.activities?.find((activity) => activity.activity === activityIndex)?.answers || [];
+		const newChecked = questionChunks.reduce((acc, chunk, chunkIndex) => {
+			const checkedIndices = chunk.reduce((checkedIndices, question, questionIndex) => {
+				if (preFilled.includes(question)) {
+					checkedIndices.push(questionIndex);
+				}
+				return checkedIndices;
+			}, []);
+			acc[chunkIndex] = checkedIndices;
 			return acc;
 		}, {});
-	};
 
-	const [chunkCompletion, setChunkCompletion] = useState(initializeChunkCompletion);
+		setQuestionChecked(newChecked);
+		setAnswers(preFilled);
+
+		const newCompletion = questionChunks.reduce((acc, chunk, chunkIndex) => {
+			acc[chunkIndex] = (newChecked[chunkIndex] || []).length > 0;
+			return acc;
+		}, {});
+		setChunkCompletion(newCompletion);
+	}, [formData, activityIndex]);
 
 	useEffect(() => {
 		// Update chunk completion if the checked state changes
 		setChunkCompletion((prev) => ({
 			...prev,
-			[currentChunkIndex]: questionChecked[currentChunkIndex].length > 0,
+			[currentChunkIndex]: (questionChecked[currentChunkIndex] || []).length > 0,
 		}));
 	}, [questionChecked, currentChunkIndex]);
 
 	const handleQuestionCheck = (chunkIndex, optionIndex) => {
 		setQuestionChecked((prevState) => {
 			const updated = { ...prevState };
-			if (updated[chunkIndex].includes(optionIndex)) {
-				updated[chunkIndex] = updated[chunkIndex].filter((i) => i !== optionIndex);
+			const current = updated[chunkIndex] || [];
+			if (current.includes(optionIndex)) {
+				updated[chunkIndex] = current.filter((i) => i !== optionIndex);
 			} else {
-				updated[chunkIndex] = [...updated[chunkIndex], optionIndex];
+				updated[chunkIndex] = [...current, optionIndex];
 			}
 			return updated;
 		});
@@ -141,7 +160,7 @@ export default function MindSetFlipQuestion({ onSubmit, onBack, onNext, activity
 							{currentChunk.map((item, index) => (
 								<li
 									key={index}
-                  className='d-flex'
+									className='d-flex'
 								>
 									<div onClick={() => handleItemClick(item)} className='flex-fill'>
 										<p className="question-p py-2 text-gray">{item}</p>
@@ -170,7 +189,7 @@ export default function MindSetFlipQuestion({ onSubmit, onBack, onNext, activity
 	};
 
 	const handleNextChunk = () => {
-		const checkedItems = questionChecked[currentChunkIndex];
+		const checkedItems = questionChecked[currentChunkIndex] || [];
 		if (checkedItems.length === 0) {
 			toast.error('Please select at least one item before proceeding.');
 			return;

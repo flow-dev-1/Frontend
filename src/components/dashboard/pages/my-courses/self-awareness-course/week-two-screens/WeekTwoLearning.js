@@ -31,8 +31,8 @@ export default function WeekTwoLearning({
 	const [formData, setFormData] = useState();
 	const week = 2;
 
-	const { data, isLoading, status, isError } = useQuery({
-		queryKey: ['self-awareness-course-1', courseId, week],
+	const { data: courseData, isLoading, status, isError } = useQuery({
+		queryKey: ['self-awareness-course-2', courseId, week],
 		queryFn: () => userService.getUserCourseData(courseId, week),
 		refetchOnMount: 'always',
 		refetchOnWindowFocus: true,
@@ -40,62 +40,52 @@ export default function WeekTwoLearning({
 	});
 
 	useEffect(() => {
-		if (!data) return;
+		if (!courseData) return;
 
-		if (data.assessment && data.activity) {
-			const assessments = data?.assessment?.assessments;
-			const activities = data?.activity?.activities;
-			const percent = data?.assessment?.rating;
+		if (courseData.activity) {
+			const activities = courseData.activity.activities || [];
 
-			// Create an object with week and activities
+			// Remote State Restoration: Jump to last saved page if it exists
+			if (courseData.activity.lastActivityIndex) {
+				setCurrentActivity(courseData.activity.lastActivityIndex);
+			}
+
 			const activityData = {
 				week: week,
 				activities: activities,
 			};
 
+			setFormData(activityData);
+			localStorage.setItem('week-2-activityData', JSON.stringify(activityData));
+
+			dispatch(
+				updateData({
+					course: course?.course?._id,
+					courseEnrollmentId: courseId,
+					week,
+					activities: activities,
+					assessments: courseData.assessment?.assessments || [],
+				})
+			);
+		}
+
+		if (courseData.assessment) {
+			const assessments = courseData.assessment.assessments || [];
+			const percent = courseData.assessment.rating;
+
 			const assessment_data = {
 				week: week,
 				percentage: percent,
 				assessments: assessments,
-				personalityColor: data?.assessment?.personalityColor
-					? data?.assessment?.personalityColor
-					: 'Yellow',
+				personalityColor: courseData.assessment.personalityColor || 'Yellow',
 			};
 
-			setFormData(activityData);
-			// Store the object in local storage under the key 'activity1'
-			localStorage.setItem('week-2-activityData', JSON.stringify(activityData));
 			localStorage.setItem(
 				'weekTwoAssessmentData',
 				JSON.stringify({ formattedData: assessment_data })
 			);
-
-			dispatch(
-				updateData({
-					course: course?.course?._id,
-					courseEnrollmentId: courseId,
-					week,
-					activities: data.activity?.activities,
-					assessments: data.assessment?.assessments,
-				})
-			);
-		} else {
-			// New user
-			setFormData({
-				week: week,
-				activities: [],
-			});
-			dispatch(
-				updateData({
-					course: course?.course?._id,
-					courseEnrollmentId: courseId,
-					week,
-					activities: [],
-					assessments: [],
-				})
-			);
 		}
-	}, [data]);
+	}, [courseData]);
 
 	const [videoPlaying, setVideoPlaying] = useState(false);
 	const [reviewPopUp, setReviewPopUp] = useState(false);
@@ -112,22 +102,34 @@ export default function WeekTwoLearning({
 		localStorage.setItem(`week-${currentWeekIndex}-activityData`, JSON.stringify(formData));
 	}, [formData, currentWeekIndex]);
 	//  console.log(course.course._id)
-	const handleNext = async (data = {}) => {
-		setFormData((prevData) => {
-			const updatedActivities = prevData?.activities?.map((item) =>
-				item.activity === currentActivity ? { ...item, ...data } : item
-			);
-			if (!updatedActivities.find((item) => item.activity === currentActivity)) {
-				updatedActivities.push({ activity: currentActivity, ...data });
-			}
-			return { ...prevData, activities: updatedActivities };
-		});
+	const isCompleted = !!courseData?.assessment;
 
-		const isLastActivity = currentActivity >= 9;
-		if (isLastActivity) {
-			setCurrentActivity(10);
-		} else {
-			setCurrentActivity((prev) => prev + 1);
+	const handleNext = async (incomingData = {}) => {
+		const updatedActivities =
+			formData?.activities?.map((item) =>
+				item.activity === currentActivity ? { ...item, ...incomingData } : item
+			) || [];
+
+		if (!updatedActivities.find((item) => item.activity === currentActivity)) {
+			updatedActivities.push({ activity: currentActivity, ...incomingData });
+		}
+
+		setFormData((prevData) => ({ ...prevData, activities: updatedActivities }));
+
+		const nextActivity = currentActivity >= 9 ? 10 : currentActivity + 1;
+		setCurrentActivity(nextActivity);
+
+		if (!isCompleted) {
+			// Fire and Forget: Save progress to background
+			const payload = {
+				week: week,
+				activities: updatedActivities,
+				lastActivityIndex: nextActivity // Save where they are going
+			};
+
+			userService.postMyActivity(courseId, payload).catch(err => {
+				console.error("Failed to auto-save activity:", err);
+			});
 		}
 	};
 
@@ -261,6 +263,7 @@ export default function WeekTwoLearning({
 						onNext={handleNext}
 						course={course}
 						activityData={formData}
+						isCompleted={isCompleted}
 					/>
 				);
 			default:

@@ -400,7 +400,7 @@ const Week3 = ({ enrollmentId, isSchool, studentId }) => {
     setPercent(data?.assessment?.rating || 0);
 
     const assessmentForChecked =
-      data?.assessment?.assessments[0].answers;
+      data?.assessment?.assessments?.[0]?.answers;
 
     setAssessmentData(assessmentForChecked)
     // console.log(data?.existingAssessment.assessments[0].answers);

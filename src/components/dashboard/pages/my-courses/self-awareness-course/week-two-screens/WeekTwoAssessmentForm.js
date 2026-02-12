@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { userAnswer, updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
 import { RotatingLines } from 'react-loader-spinner';
 
-export default function WeekTwoAssessmentForm({ onBack, onNext, course, activityData }) {
+export default function WeekTwoAssessmentForm({ onBack, onNext, course, activityData, isCompleted }) {
 	const dispatch = useDispatch();
 	const userAnswers = useSelector(userAnswer);
 	const [currentIndex, setCurrentIndex] = useState(1);
@@ -86,20 +86,23 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 	];
 
 	const handleStepClick = () => {
-		if (currentIndex < questionsArray.length) {
-			if (assessment.assessment.answers[currentIndex - 1] !== undefined) {
-				setCurrentIndex(currentIndex + 1);
-			} else {
-				toast.error('Please answer the question before proceeding.');
-			}
-		} else {
-			// Optionally handle submission or final step
-			// setDisableButton(false)
-			// onNext()
+		// Validate current question before moving forward or submitting
+		const currentAnswer = assessment?.assessment?.answers[currentIndex - 1];
+		const isAnswered = currentAnswer !== undefined && currentAnswer !== '';
+
+		if (!isCompleted && !isAnswered) {
+			toast.error('Please answer the question before proceeding.');
+			return;
 		}
 
-		if (currentIndex === 8) {
-			saveWeekTwoAssessment();
+		if (currentIndex < questionsArray.length) {
+			setCurrentIndex(currentIndex + 1);
+		} else {
+			if (isCompleted) {
+				onNext();
+			} else {
+				saveWeekTwoAssessment();
+			}
 		}
 	};
 
@@ -116,8 +119,8 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 	};
 
 	const handleQuestionCheck = (questionIndex, optionIndex) => {
-		// Prevent editing if answers are already saved
-		if (assessment.assessment.answers[questionIndex] !== undefined) {
+		// Prevent editing if answers are already saved or week is completed
+		if (isCompleted || assessment.assessment.answers[questionIndex] !== undefined) {
 			toast.info('You have already answered this question.');
 			return;
 		}
@@ -164,7 +167,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 	});
 
 	const saveWeekTwoAssessment = async () => {
-		if (disableButton) return;
+		if (disableButton || isCompleted) return;
 
 		try {
 			if (!activityData?.activities || activityData?.activities?.length !== 8) {
@@ -172,9 +175,12 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 				return;
 			}
 
-			// setDisableButton(true)
-
+			// Final check for all 8 assessment answers
 			const transformedData = transformAssessmentData();
+			if (transformedData.length !== 8 || transformedData.some(ans => ans === undefined || ans === '')) {
+				toast.error('Please ensure all 8 assessment questions are answered.');
+				return;
+			}
 			const valuesToCheck = transformedData.slice(0, 5);
 			const correctAnswers = [3, 1, 1, 0, 2];
 			const totalQuestions = valuesToCheck.length;
@@ -238,15 +244,14 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 											onClick={() =>
 												handleQuestionCheck(questionIndex, index)
 											}
-											className={`cursor-pointer mt-2 ${
-												assessment?.assessment?.answers[questionIndex] !==
+											className={`cursor-pointer mt-2 ${assessment?.assessment?.answers[questionIndex] !==
 												undefined
-													? 'disabled'
-													: ''
-											}`}
+												? 'disabled'
+												: ''
+												}`}
 											src={
 												assessment?.assessment?.answers[questionIndex] ===
-												index
+													index
 													? checkedImage
 													: unCheckedImage
 											}
@@ -277,6 +282,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 								className="px-3 pt-2"
 								placeholder="Type your answer here..."
 								rows="7"
+								disabled={isCompleted}
 								value={assessment.assessment.answers[questionIndex] || ''}
 								onChange={(e) => {
 									const updatedAnswers = [...assessment.assessment.answers];
@@ -341,7 +347,15 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 							width={20}
 						/>
 					) : (
-						<>{'Next >>>'}</>
+						<>
+							{isCompleted
+								? currentIndex === questionsArray.length
+									? 'Continue'
+									: 'Next >>>'
+								: currentIndex === questionsArray.length
+									? 'Submit'
+									: 'Next >>>'}
+						</>
 					)}
 				</button>
 			</div>

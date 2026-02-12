@@ -9,7 +9,7 @@ import { userAnswer, updateData } from '../../../../../../redux/reducers/userAns
 import { useMutation } from '@tanstack/react-query';
 import { RotatingLines } from 'react-loader-spinner';
 
-export default function WeekFourAssessmentForm({ onNext, onBack, course, activityData }) {
+export default function WeekFourAssessmentForm({ onNext, onBack, course, activityData, isCompleted }) {
 	const dispatch = useDispatch();
 	const userAnswers = useSelector(userAnswer);
 	const [arrows, setArrows] = useState([]); // State for managing arrows
@@ -147,7 +147,9 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 	useEffect(() => {
 		const assessmentData = {
 			week: 4,
-			assessment: { answers, matchesSet1, matchesSet2 },
+			answers, // Keep flat for now to match component usage
+			matchesSet1,
+			matchesSet2,
 		};
 		localStorage.setItem('weekFourAssessmentData', JSON.stringify(assessmentData));
 	}, [answers, matchesSet1, matchesSet2]);
@@ -185,8 +187,8 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 	};
 
 	const handleQuestionCheck = (optionIndex) => {
-		// Check if the answer for the current question has already been selected and persisted
-		if (answers[currentIndex - 1] !== undefined) {
+		// Check if the answer for the current question has already been selected and persisted or if week is completed
+		if (isCompleted || answers[currentIndex - 1] !== undefined) {
 			toast.error('You cannot change your answer once selected.');
 			return;
 		}
@@ -200,7 +202,7 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 	};
 
 	const handleNextStepClick = () => {
-		// Check if current step requires matching (questions 9 and 10)
+		// Validate matching questions
 		if (currentIndex === 9 && matchesSet1.length !== leftItemsArray.length) {
 			toast.error('Please complete the matching before proceeding.');
 			return;
@@ -210,18 +212,21 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 			return;
 		}
 
-		// Ensure users select an answer in earlier questions
-		if (answers[currentIndex - 1] === undefined && currentIndex <= 8) {
+		// Validate multiple choice questions
+		if (!isCompleted && currentIndex <= 8 && answers[currentIndex - 1] === undefined) {
 			toast.error('Please select an answer before proceeding.');
 			return;
 		}
 
-		// Move to the next question or screen
+		// Move to the next question or submit
 		if (currentIndex < questionsArray.length) {
 			setCurrentIndex(currentIndex + 1);
 		} else {
-			saveWeekFourAssessment();
-			// onNext()
+			if (isCompleted) {
+				onNext();
+			} else {
+				saveWeekFourAssessment();
+			}
 		}
 	};
 
@@ -260,7 +265,7 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 	});
 
 	const saveWeekFourAssessment = async () => {
-		if (disableButton) return;
+		if (disableButton || isCompleted) return;
 
 		try {
 			if (!activityData?.activities || activityData?.activities?.length !== 9) {
@@ -268,8 +273,16 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 				return;
 			}
 
-			const storedData = localStorage.getItem('weekFourAssessmentData');
-			let savedAnswers = JSON.parse(storedData);
+			// Final check for all answers and matches
+			if (
+				answers.length < 8 ||
+				answers.slice(0, 8).some((ans) => ans === undefined) ||
+				matchesSet1.length !== leftItemsArray.length ||
+				matchesSet2.length !== leftItemsArray2.length
+			) {
+				toast.error('Please ensure all 10 assessment items are completed.');
+				return;
+			}
 
 			const correctAnswers = [0, 2, 1, 1, 2, 2, 1, 2];
 			const correctMatchesSet1 = [
@@ -282,14 +295,14 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 				{ left: 1, right: 1 },
 				{ left: 2, right: 2 },
 			];
-			const valuesToCheck = savedAnswers.assessment.answers;
+			const valuesToCheck = answers;
 			const correctCount = valuesToCheck.reduce((count, current, index) => {
 				return current === correctAnswers[index] ? count + 1 : count;
 			}, 0);
 
-			// Check Matching Questionsma
-			const valuesToCheckForMatchSet1 = savedAnswers.assessment.matchesSet1;
-			const valuesToCheckForMatchSet2 = savedAnswers.assessment.matchesSet2;
+			// Check Matching Questions
+			const valuesToCheckForMatchSet1 = matchesSet1;
+			const valuesToCheckForMatchSet2 = matchesSet2;
 
 			const isMatchSet1Correct =
 				JSON.stringify(valuesToCheckForMatchSet1) === JSON.stringify(correctMatchesSet1);
@@ -306,9 +319,15 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 
 			toast.success(`You scored ${percentage}% in the quiz`);
 
+			const finalAssessmentData = {
+				answers,
+				matchesSet1,
+				matchesSet2,
+			};
+
 			const mutationData = {
 				...userAnswers,
-				assessments: [savedAnswers.assessment],
+				assessments: [finalAssessmentData],
 				activities: activityData?.activities,
 				rating: percentage.toString(),
 			};
@@ -382,6 +401,7 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 								onNext={handleNext}
 								arrows={arrows}
 								setArrows={setArrows}
+								isCompleted={isCompleted}
 							/>
 						</div>
 					)}
@@ -394,6 +414,7 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 								onNext={handleNext}
 								setArrows={setArrows2}
 								arrows={arrows2}
+								isCompleted={isCompleted}
 							/>
 						</div>
 					)}
@@ -439,7 +460,15 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 							width={20}
 						/>
 					) : (
-						<>{'Next >>>'}</>
+						<>
+							{isCompleted
+								? currentIndex === questionsArray.length
+									? 'Continue'
+									: 'Next >>>'
+								: currentIndex === questionsArray.length
+									? 'Submit'
+									: 'Next >>>'}
+						</>
 					)}
 				</button>
 			</div>

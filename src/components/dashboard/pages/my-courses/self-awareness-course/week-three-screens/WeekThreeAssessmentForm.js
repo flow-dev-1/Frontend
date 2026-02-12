@@ -9,7 +9,7 @@ import { userAnswer, updateData } from '../../../../../../redux/reducers/userAns
 import { useMutation } from '@tanstack/react-query';
 import { RotatingLines } from 'react-loader-spinner';
 
-export default function WeekThreeAssessmentForm({ onNext, onBack, course, activityData }) {
+export default function WeekThreeAssessmentForm({ onNext, onBack, course, activityData, isCompleted }) {
   const dispatch = useDispatch();
   const userAnswers = useSelector(userAnswer);
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -164,9 +164,10 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
   });
 
   const handleNextStepClick = () => {
-    console.log(selectedAnswers, ' selectedAnswers');
+    // Validate current question before moving forward or submitting
+    const isAnswered = selectedAnswers[currentIndex - 1] !== undefined;
 
-    if (selectedAnswers[currentIndex - 1] === undefined) {
+    if (!isCompleted && !isAnswered) {
       toast.error('Please select an answer before proceeding.');
       return;
     }
@@ -174,11 +175,15 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
     if (currentIndex < questionsArray.length) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      const result = {
-        week: 3,
-        assessments: { answers: Object.values(selectedAnswers) },
-      };
-      saveWeekThreeAssessment(result);
+      if (isCompleted) {
+        onNext();
+      } else {
+        const result = {
+          week: 3,
+          assessments: { answers: Object.values(selectedAnswers) },
+        };
+        saveWeekThreeAssessment(result);
+      }
     }
   };
 
@@ -192,7 +197,7 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
   };
 
   const handleQuestionCheck = (questionIndex, optionIndex) => {
-    if (selectedAnswers[questionIndex] !== undefined) {
+    if (isCompleted || selectedAnswers[questionIndex] !== undefined) {
       toast.error('You cannot change your answer once it is saved.');
       return;
     }
@@ -203,12 +208,18 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
   };
 
   const saveWeekThreeAssessment = async (result) => {
-    if (disableButton) return
-    // setDisableButton(true)
+    if (disableButton || isCompleted) return
 
     if (!activityData?.activities || activityData?.activities?.length !== 7) {
       toast.error("Please complete all activities before submitting the assessment.")
       return
+    }
+
+    // Final check for all 10 assessment answers
+    const answersArray = Object.values(selectedAnswers);
+    if (answersArray.length !== 10 || answersArray.some(ans => ans === undefined)) {
+      toast.error('Please ensure all 10 assessment questions are answered.');
+      return;
     }
     try {
       const correctAnswers = [1, 0, 1, 1, 1, 1, 1, 1, 1, 1]
@@ -329,7 +340,7 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
               width={20}
             />
           ) : currentIndex === questionsArray.length ? (
-            'Submit'
+            isCompleted ? 'Continue' : 'Submit'
           ) : (
             'Next >>>'
           )}

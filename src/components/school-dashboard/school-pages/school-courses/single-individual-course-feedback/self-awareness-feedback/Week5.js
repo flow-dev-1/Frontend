@@ -437,9 +437,9 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
     }
   }, [data]);
 
-  const openModal = (activityIndex, activitySubIndex = null, feedback = "") => {
-    setActiveModal(activityIndex);
-    setEditingActivity({ index: activityIndex, activitySubIndex, feedback });
+  const openModal = (activityId, feedback = "", index = null) => {
+    setActiveModal(activityId);
+    setEditingActivity({ id: activityId, feedback, index });
   };
 
   const closeModal = () => {
@@ -475,36 +475,44 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
     }
   }, [data, assessmentData])
 
+  const activityList = activityData?.activities || [];
+  const act1 = activityList.find(a => a.activity === 2);
+  const act3 = activityList.find(a => a.activity === 4);
+  const act5 = activityList.find(a => a.activity === 6);
+
   const activitiesOne = [
     {
+      activity: 2,
+      feedbackIndex: 0,
       question: " What do you understand by “Emotional Intelligence”?",
-      answer: activityData?.activities?.[1]?.answers?.[0],
-      feedback: activityData?.activities?.[1]?.feedback?.[0] || ""
-    }]
+      answer: act1?.answers?.[0] || "",
+      feedback: act1?.feedback?.[0] || ""
+    }
+  ];
 
-  // console.log("error", data?.activity?.activities?.[1]?.answers?.[0]);
   const Q1 = [
-    activityData?.activities?.[5]?.answers?.IWill?.[0],
-    activityData?.activities?.[5]?.answers?.IWillNot?.[0]
+    act5?.answers?.IWill?.[0] || "",
+    act5?.answers?.IWillNot?.[0] || ""
   ];
   const Q2 = [
-    activityData?.activities?.[5]?.answers?.IWill?.[1],
-    activityData?.activities?.[5]?.answers?.IWillNot?.[1]
+    act5?.answers?.IWill?.[1] || "",
+    act5?.answers?.IWillNot?.[1] || ""
   ];
   const Q3 = [
-    activityData?.activities?.[5]?.answers?.IWill?.[2],
-    activityData?.activities?.[5]?.answers?.IWillNot?.[2]
+    act5?.answers?.IWill?.[2] || "",
+    act5?.answers?.IWillNot?.[2] || ""
   ];
-  // FLS9982
   const Q4 = [
-    activityData?.activities?.[5]?.answers?.IWill?.[3],
-    activityData?.activities?.[5]?.answers?.IWill?.[3]
-  ]; const Q5 = [
-    activityData?.activities?.[5]?.answers?.IWill?.[4],
-    activityData?.activities?.[5]?.answers?.IWillNot?.[4]
+    act5?.answers?.IWill?.[3] || "",
+    act5?.answers?.IWillNot?.[3] || ""
   ];
-  // console.log(Q1);
-  const activityEmojiData = activityData?.activities?.[3]?.answers || [];
+  const Q5 = [
+    act5?.answers?.IWill?.[4] || "",
+    act5?.answers?.IWillNot?.[4] || ""
+  ];
+
+  const activityEmojiData = act3?.answers || [];
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -512,64 +520,65 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
   if (isError || (!assessmentData && !activityData)) {
     return <div>Take Activity to see feedback.</div>;
   }
-  // console.log(data?.activity?.activities[5]?.answers)
-  const myChecked = activityData?.activities?.[3]?.answers || []
+
   const activities = [
     {
+      activity: 6,
+      feedbackIndex: 0,
       question:
         "Two classmates, Sarah and Alex, have been assigned to work on a group project together. However, they have different ideas about how to approach the project, and tensions are rising between them. Sarah wants to take the lead and implement her ideas, while Alex feels sidelined and frustrated. If you were Sarah, how would you respond to this situation?",
       answer: Q1,
-      feedback: activityData?.activities?.[5]?.feedback?.[0] || ""
+      feedback: act5?.feedback?.[0] || ""
     },
     {
+      activity: 6,
+      feedbackIndex: 1,
       question:
         "During lunch break, a group of students starts pressuring Jack to skip class and join them in going to an off-campus party. Jack is torn between wanting to fit in with his peers and knowing that skipping class is against school rules and could negatively affect his grades. If you were Jack, how would you respond to this peer pressure situation?",
       answer: Q2,
-      feedback: activityData?.activities?.[5]?.feedback?.[1] || ""
+      feedback: act5?.feedback?.[1] || ""
     },
     {
+      activity: 6,
+      feedbackIndex: 2,
       question:
         "During a class presentation, James receives feedback from his teacher and classmates that his delivery was too monotone and he needs to work on his public speaking skills. James feels embarrassed and defensive, as he put a lot of effort into preparing for the presentation. If you were James, how would you respond to this situation?",
       answer: Q3,
-      feedback: activityData?.activities?.[5]?.feedback?.[2] || ""
+      feedback: act5?.feedback?.[2] || ""
     },
     {
+      activity: 6,
+      feedbackIndex: 3,
       question:
         "Tom has been feeling overwhelmed with schoolwork and family issues at home. This is beginning to make him quiet and easily tired. If you were Tom, how would you respond to this situation?",
       answer: Q4,
-      feedback: activityData?.activities?.[5]?.feedback?.[3] || ""
+      feedback: act5?.feedback?.[3] || ""
     },
     {
+      activity: 6,
+      feedbackIndex: 4,
       question:
         "Emily has been rehearsing for weeks to audition for the school play. However, when the cast list is posted, she discovers that she didn't get a part. She feels disappointed, rejected, and unsure of her abilities. If you were Emily, how would you respond to this situation?",
       answer: Q5,
-      feedback: activityData?.activities?.[5]?.feedback?.[4] || ""
+      feedback: act5?.feedback?.[4] || ""
     }
   ];
 
 
-  const handleFeedbackSubmit = (activityId, feedback) => {
-    const adjustedActivityId = (() => {
-      switch (activityId) {
-        case 1: return 2;
-        case 3: return 6;
-        default: return activityId;
-      }
-    })();
-
+  const handleFeedbackSubmit = (activityId, feedback, feedbackIndex = null) => {
     const updatedActivities = activitiesDataState.map((act) => {
-      if (act.activity === adjustedActivityId) {
-        if (activityId === 3) {
-          const feedbackIndex = editingActivity.activitySubIndex;
-          const updatedFeedback = Array.isArray(act.feedback) ? [...act.feedback] : [];
-          for (let i = 0; i < 5; i++) {
-            updatedFeedback[i] = updatedFeedback[i] || "";
+      if (act.activity === activityId) {
+        let newFeedback = Array.isArray(act.feedback) ? [...act.feedback] : [act.feedback];
+        if (feedbackIndex !== null) {
+          // Ensure feedback array has enough slots
+          for (let i = 0; i <= feedbackIndex; i++) {
+            if (newFeedback[i] === undefined) newFeedback[i] = "";
           }
-          updatedFeedback[feedbackIndex] = feedback;
-          return { ...act, feedback: updatedFeedback };
+          newFeedback[feedbackIndex] = feedback;
         } else {
-          return { ...act, feedback: [feedback] };
+          newFeedback[0] = feedback;
         }
+        return { ...act, feedback: newFeedback };
       }
       return act;
     });
@@ -637,7 +646,7 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
                 </div>
                 {isAdmin && (!activity.feedback || activity.feedback.length === 0) && (
                   <Icon
-                    onClick={() => openModal(1)}
+                    onClick={() => openModal(activity.activity, "", activity.feedbackIndex)}
                     style={{ color: "#275DAD", cursor: "pointer" }}
                     width={20}
                     icon="hugeicons:comment-01"
@@ -662,7 +671,8 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
                 <div className="feedback-card">{activity.feedback}</div>
                 {isAdmin && (
                   <Icon
-                    style={{ color: "#275DAD" }}
+                    onClick={() => openModal(activity.activity, activity.feedback, activity.feedbackIndex)}
+                    style={{ color: "#275DAD", cursor: "pointer" }}
                     width={20}
                     icon="lucide:edit"
                   />
@@ -756,7 +766,7 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
               </div>
               {isAdmin && (!activity.feedback || activity.feedback.length === 0) && (
                 <Icon
-                  onClick={() => openModal(3, index)}
+                  onClick={() => openModal(activity.activity, "", activity.feedbackIndex)}
                   style={{ color: "#275DAD", cursor: "pointer" }}
                   width={20}
                   icon="hugeicons:comment-01"
@@ -772,7 +782,7 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
                 </div>
                 {isAdmin && (!activity.feedback || activity.feedback.length === 0) && (
                   <Icon
-                    onClick={() => openModal(3, index)}
+                    onClick={() => openModal(activity.activity, "", activity.feedbackIndex)}
                     style={{ color: "#275DAD", cursor: "pointer" }}
                     width={20}
                     icon="hugeicons:comment-01"
@@ -797,7 +807,8 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
                 <div className="feedback-card">{activity.feedback}</div>
                 {isAdmin && (
                   <Icon
-                    style={{ color: "#275DAD" }}
+                    onClick={() => openModal(activity.activity, activity.feedback, activity.feedbackIndex)}
+                    style={{ color: "#275DAD", cursor: "pointer" }}
                     width={20}
                     icon="lucide:edit"
                   />
@@ -823,7 +834,7 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
             <p className="answer-font">Your answer</p>
             {checkList.map((check, index) => {
               const answerEmoji = emojis.find(
-                (emoji) => emoji.label === myChecked[index]
+                (emoji) => emoji.label === activityEmojiData[index]
               );
 
               return (
@@ -919,7 +930,13 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
           </div>
         </div>
       ))}
-      <FinalReport rate={percentage} />
+      {activeModal !== null && (
+        <FeedbackModal
+          initialFeedback={editingActivity?.feedback || ""}
+          onClose={closeModal}
+          onSubmit={(feedback) => handleFeedbackSubmit(activeModal, feedback, editingActivity.index)}
+        />
+      )}
     </div>
   );
 };

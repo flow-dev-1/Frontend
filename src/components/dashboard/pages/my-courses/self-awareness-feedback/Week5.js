@@ -456,7 +456,7 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
     if (!data) return
     setPercent(data?.assessment?.rating || 0);
     const assessmentForChecked =
-      data?.assessment.assessments[0].answers;
+      data?.assessment?.assessments?.[0]?.answers;
     console.log(data);
 
     // Ensure that assessmentForChecked is valid before slicing
@@ -478,37 +478,43 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
     }
   }, [data]);
 
+  const activityList = data?.activity?.activities || [];
+  const act1 = activityList.find(a => a.activity === 2);
+  const act2 = activityList.find(a => a.activity === 4);
+  const act3 = activityList.find(a => a.activity === 6);
+  const act4 = activityList.find(a => a.activity === 8);
+
   const activitiesOne = [
     {
-      activity: data?.activity?.activities[1]?.activity || 1,
+      activity: 2,
       feedbackIndex: 0,
       question: " What do you understand by “Emotional Intelligence”?",
-      answer: data?.activity?.activities[1].answers?.[0],
-      feedback: data?.activity?.activities[1].feedback?.[0]
+      answer: act1?.answers?.[0] || "",
+      feedback: act1?.feedback?.[0] || ""
     }]
 
   const Q1 = [
-    data?.activity?.activities[5]?.answers?.IWill?.[0],
-    data?.activity?.activities[5]?.answers?.IWillNot?.[0]
+    act3?.answers?.IWill?.[0] || "",
+    act3?.answers?.IWillNot?.[0] || ""
   ];
   const Q2 = [
-    data?.activity?.activities[5]?.answers?.IWill?.[1],
-    data?.activity?.activities[5]?.answers?.IWillNot?.[1]
+    act3?.answers?.IWill?.[1] || "",
+    act3?.answers?.IWillNot?.[1] || ""
   ];
   const Q3 = [
-    data?.activity?.activities[5]?.answers?.IWill?.[2],
-    data?.activity?.activities[5]?.answers?.IWillNot?.[2]
+    act3?.answers?.IWill?.[2] || "",
+    act3?.answers?.IWillNot?.[2] || ""
   ];
-  // FLS9982
   const Q4 = [
-    data?.activity?.activities[5]?.answers?.IWill?.[3],
-    data?.activity?.activities[5]?.answers?.IWill?.[3]
-  ]; const Q5 = [
-    data?.activity?.activities[5]?.answers?.IWill?.[4],
-    data?.activity?.activities[5]?.answers?.IWillNot?.[4]
+    act3?.answers?.IWill?.[3] || "",
+    act3?.answers?.IWillNot?.[3] || ""
   ];
-  // console.log(Q1);
-  const activityData = data?.activity?.activities?.[3]?.answers;
+  const Q5 = [
+    act3?.answers?.IWill?.[4] || "",
+    act3?.answers?.IWillNot?.[4] || ""
+  ];
+
+  const activityData = act2?.answers || [];
 
   if (isPending) {
     return <div>Loading...</div>;
@@ -518,47 +524,47 @@ const Week5 = ({ enrollmentId, isSchool, studentId }) => {
     return <div>{data?.message}.</div>;
   }
   // console.log(data?.activity?.activities[5]?.answers)
-  const myChecked = data?.activity?.activities[3]?.answers
+  const myChecked = act4?.answers || [];
   const activities = [
     {
-      activity: data?.activity?.activities[5]?.activity || 5,
+      activity: 6,
       feedbackIndex: 0,
       question:
         "Two classmates, Sarah and Alex, have been assigned to work on a group project together. However, they have different ideas about how to approach the project, and tensions are rising between them. Sarah wants to take the lead and implement her ideas, while Alex feels sidelined and frustrated. If you were Sarah, how would you respond to this situation?",
       answer: Q1,
-      feedback: data?.activity?.activities[5].feedback?.[0]
+      feedback: act3?.feedback?.[0] || ""
     },
     {
-      activity: data?.activity?.activities[5]?.activity || 5,
+      activity: 6,
       feedbackIndex: 1,
       question:
         "During lunch break, a group of students starts pressuring Jack to skip class and join them in going to an off-campus party. Jack is torn between wanting to fit in with his peers and knowing that skipping class is against school rules and could negatively affect his grades. If you were Jack, how would you respond to this peer pressure situation?",
       answer: Q2,
-      feedback: data?.activity?.activities[5].feedback?.[1]
+      feedback: act3?.feedback?.[1] || ""
     },
     {
-      activity: data?.activity?.activities[5]?.activity || 5,
+      activity: 6,
       feedbackIndex: 2,
       question:
         "During a class presentation, James receives feedback from his teacher and classmates that his delivery was too monotone and he needs to work on his public speaking skills. James feels embarrassed and defensive, as he put a lot of effort into preparing for the presentation. If you were James, how would you respond to this situation?",
       answer: Q3,
-      feedback: data?.activity?.activities[5].feedback?.[2]
+      feedback: act3?.feedback?.[2] || ""
     },
     {
-      activity: data?.activity?.activities[5]?.activity || 5,
+      activity: 6,
       feedbackIndex: 3,
       question:
         "Tom has been feeling overwhelmed with schoolwork and family issues at home. This is beginning to make him quiet and easily tired. If you were Tom, how would you respond to this situation?",
       answer: Q4,
-      feedback: data?.activity?.activities[5].feedback?.[4]
+      feedback: act3?.feedback?.[3] || ""
     },
     {
-      activity: data?.activity?.activities[5]?.activity || 5,
+      activity: 6,
       feedbackIndex: 4,
       question:
         "Emily has been rehearsing for weeks to audition for the school play. However, when the cast list is posted, she discovers that she didn't get a part. She feels disappointed, rejected, and unsure of her abilities. If you were Emily, how would you respond to this situation?",
       answer: Q5,
-      feedback: data?.activity?.activities[5].feedback?.[4]
+      feedback: act3?.feedback?.[4] || ""
     }
   ];
 

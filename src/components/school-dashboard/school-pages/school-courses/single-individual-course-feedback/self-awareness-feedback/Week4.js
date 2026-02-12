@@ -458,9 +458,9 @@ const Week4 = ({ enrollmentId, isSchool, studentId }) => {
     }
   }, [data]);
 
-  const openModal = (activityIndex, feedback = "") => {
-    setActiveModal(activityIndex);
-    setEditingActivity({ index: activityIndex, feedback });
+  const openModal = (activityId, feedback = "", index = null) => {
+    setActiveModal(activityId);
+    setEditingActivity({ id: activityId, feedback, index });
   };
 
   const closeModal = () => {
@@ -554,72 +554,71 @@ const Week4 = ({ enrollmentId, isSchool, studentId }) => {
     return <div>Take Activity to see feedback.</div>;
   }
 
+  const activityList = activityData?.activities || [];
+  const act1 = activityList.find(a => a.activity === 2);
+  const act3 = activityList.find(a => a.activity === 4);
+  const act5 = activityList.find(a => a.activity === 6);
+  const act8 = activityList.find(a => a.activity === 8);
+
   const activities = [
     {
-      activity: 1,
-      question: "What exactly are “Values”??",
-      answer: activityData?.activities?.[1]?.answers?.[0],
-      feedback: activityData?.activities?.[1]?.feedback?.[0] || ""
-    },
-    {
       activity: 2,
-      question:
-        "Flip each card to know more about the values. Select the box on each card to pick the values you feel are a big part of who you are.",
-      answer: activityData?.activities?.[3]?.answers || [],
-      feedback: activityData?.activities?.[3]?.feedback?.[0] || ""
-    },
-    {
-      activity: 3,
-      question:
-        "Identify three (3) important people in your live and list their names below.",
-      answer: activityData?.activities?.[5]?.answers?.[0],
-      feedback: activityData?.activities?.[5]?.feedback?.[0] || ""
+      feedbackIndex: 0,
+      question: "What exactly are “Values”??",
+      answer: act1?.answers?.[0] || "",
+      feedback: act1?.feedback?.[0] || ""
     },
     {
       activity: 4,
-      question: "Write out what these people think about you.",
-      answer: activityData?.activities?.[5]?.answers?.[1],
-      feedback: activityData?.activities?.[5]?.feedback?.[1] || ""
-    },
-    {
-      activity: 5,
+      feedbackIndex: 0,
       question:
-        "Are you happy with what these people think about you? If no, what would you like to change? If yes, type “YES” in the box.",
-      answer: activityData?.activities?.[5]?.answers?.[2],
-      feedback: activityData?.activities?.[5]?.feedback?.[2] || ""
+        "Flip each card to know more about the values. Select the box on each card to pick the values you feel are a big part of who you are.",
+      answer: act3?.answers || [],
+      feedback: act3?.feedback?.[0] || ""
     },
     {
       activity: 6,
+      feedbackIndex: 0,
+      question:
+        "Identify three (3) important people in your live and list their names below.",
+      answer: act5?.answers?.[0] || "",
+      feedback: act5?.feedback?.[0] || ""
+    },
+    {
+      activity: 6,
+      feedbackIndex: 1,
+      question: "Write out what these people think about you.",
+      answer: act5?.answers?.[1] || "",
+      feedback: act5?.feedback?.[1] || ""
+    },
+    {
+      activity: 6,
+      feedbackIndex: 2,
+      question:
+        "Are you happy with what these people think about you? If no, what would you like to change? If yes, type “YES” in the box.",
+      answer: act5?.answers?.[2] || "",
+      feedback: act5?.feedback?.[2] || ""
+    },
+    {
+      activity: 8,
+      feedbackIndex: 0,
       question: "Identify four (4) core values that resonate with you the most.",
-      answer: activityData?.activities?.[7]?.answers || [],
-      feedback: activityData?.activities?.[7]?.feedback?.[0] || ""
+      answer: act8?.answers || [],
+      feedback: act8?.feedback?.[0] || ""
     }
   ];
 
 
-  const handleFeedbackSubmit = (activityId, feedback) => {
-    const adjustedActivityId = (() => {
-      switch (activityId) {
-        case 1: return 2;
-        case 2: return 4;
-        case 3:
-        case 4:
-        case 5: return 6;
-        case 6: return 8;
-        default: return activityId;
-      }
-    })();
-
+  const handleFeedbackSubmit = (activityId, feedback, feedbackIndex = null) => {
     const updatedActivities = activitiesDataState.map((act) => {
-      if (act.activity === adjustedActivityId) {
-        if ([3, 4, 5].includes(activityId)) {
-          const feedbackIndex = activityId - 3;
-          const updatedFeedback = Array.isArray(act.feedback) ? [...act.feedback] : [];
-          updatedFeedback[feedbackIndex] = feedback;
-          return { ...act, feedback: updatedFeedback };
+      if (act.activity === activityId) {
+        let newFeedback = Array.isArray(act.feedback) ? [...act.feedback] : [act.feedback];
+        if (feedbackIndex !== null) {
+          newFeedback[feedbackIndex] = feedback;
         } else {
-          return { ...act, feedback: [feedback] };
+          newFeedback[0] = feedback;
         }
+        return { ...act, feedback: newFeedback };
       }
       return act;
     });
@@ -701,7 +700,7 @@ const Week4 = ({ enrollmentId, isSchool, studentId }) => {
               </div>
               {isAdmin && (!activity?.feedback || activity.feedback.length === 0) && (
                 <Icon
-                  onClick={() => openModal(activity.activity)}
+                  onClick={() => openModal(activity.activity, "", activity.feedbackIndex)}
                   style={{ color: "#D6D6D6", cursor: "pointer" }}
                   width={20}
                   icon="hugeicons:comment-01"
@@ -724,7 +723,7 @@ const Week4 = ({ enrollmentId, isSchool, studentId }) => {
                 <div className="feedback-card">{activity.feedback}</div>
                 {isAdmin && (
                   <Icon
-                    onClick={() => openModal(activity.activity, activity.feedback)}
+                    onClick={() => openModal(activity.activity, activity.feedback, activity.feedbackIndex)}
                     style={{ color: "#275DAD", cursor: "pointer" }}
                     width={20}
                     icon="lucide:edit"
@@ -807,7 +806,7 @@ const Week4 = ({ enrollmentId, isSchool, studentId }) => {
               </div>
               {(!activity?.feedback || activity.feedback.length === 0) && (
                 <Icon
-                  onClick={() => openModal(activity.activity)}
+                  onClick={() => openModal(activity.activity, "", activity.feedbackIndex)}
                   style={{ color: "#D6D6D6", cursor: "pointer" }}
                   width={20}
                   icon="hugeicons:comment-01"
@@ -830,7 +829,7 @@ const Week4 = ({ enrollmentId, isSchool, studentId }) => {
                 <div className="feedback-card">{activity.feedback}</div>
                 {isAdmin && (
                   <Icon
-                    onClick={() => openModal(activity.activity, activity.feedback)}
+                    onClick={() => openModal(activity.activity, activity.feedback, activity.feedbackIndex)}
                     style={{ color: "#275DAD", cursor: "pointer" }}
                     width={20}
                     icon="lucide:edit"
@@ -913,7 +912,7 @@ const Week4 = ({ enrollmentId, isSchool, studentId }) => {
               </div>
               {(!activity?.feedback || activity.feedback.length === 0) && (
                 <Icon
-                  onClick={() => openModal(activity.activity)}
+                  onClick={() => openModal(activity.activity, "", activity.feedbackIndex)}
                   style={{ color: "#D6D6D6", cursor: "pointer" }}
                   width={20}
                   icon="hugeicons:comment-01"
@@ -1001,7 +1000,7 @@ const Week4 = ({ enrollmentId, isSchool, studentId }) => {
         <FeedbackModal
           initialFeedback={editingActivity?.feedback || ""}
           onClose={closeModal}
-          onSubmit={(feedback) => handleFeedbackSubmit(activeModal, feedback)}
+          onSubmit={(feedback) => handleFeedbackSubmit(activeModal, feedback, editingActivity?.index)}
         />
       )}
     </div>

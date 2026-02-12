@@ -62,25 +62,32 @@ export default function ScenarioQuestions({ onBack, onNext, formData, activityIn
 		return answers ? answers[`${type}Q${questionNumber}`] || [] : [];
 	};
 
-	// Pre-fill strengthChecked state based on formData
-	const [strengthChecked, setStrengthChecked] = useState(() =>
-		questionsArray.reduce((acc, question, index) => {
-			const questionNumber = index + 1; // Assuming questionsArray is ordered
+	// Pre-fill strengthChecked and weaknessChecked states when formData changes
+	const [strengthChecked, setStrengthChecked] = useState(
+		questionsArray.reduce((acc, _, index) => ({ ...acc, [index]: [] }), {})
+	);
+	const [weaknessChecked, setWeaknessChecked] = useState(
+		questionsArray.reduce((acc, _, index) => ({ ...acc, [index]: [] }), {})
+	);
+
+	useEffect(() => {
+		const newStrengthChecked = questionsArray.reduce((acc, question, index) => {
+			const questionNumber = index + 1;
 			const answers = getAnswersByQuestion(activityIndex, questionNumber, 'strengths');
 			acc[index] = getSelectedIndexes(answers, question.questionList);
 			return acc;
-		}, {})
-	);
+		}, {});
 
-	// Pre-fill weaknessChecked state based on formData
-	const [weaknessChecked, setWeaknessChecked] = useState(() =>
-		questionsArray.reduce((acc, question, index) => {
-			const questionNumber = index + 1; // Assuming questionsArray is ordered
+		const newWeaknessChecked = questionsArray.reduce((acc, question, index) => {
+			const questionNumber = index + 1;
 			const answers = getAnswersByQuestion(activityIndex, questionNumber, 'weaknesses');
 			acc[index] = getSelectedIndexes(answers, question.questionListNegative);
 			return acc;
-		}, {})
-	);
+		}, {});
+
+		setStrengthChecked(newStrengthChecked);
+		setWeaknessChecked(newWeaknessChecked);
+	}, [formData, activityIndex]);
 
 	const [currentIndex, setCurrentIndex] = useState(1);
 	const [reviewPopUp, setReviewPopUp] = useState(false);
@@ -89,24 +96,26 @@ export default function ScenarioQuestions({ onBack, onNext, formData, activityIn
 		if (isStrength) {
 			setStrengthChecked((prevState) => {
 				const updated = { ...prevState };
-				if (updated[questionIndex].includes(optionIndex)) {
-					updated[questionIndex] = updated[questionIndex].filter(
+				const current = updated[questionIndex] || [];
+				if (current.includes(optionIndex)) {
+					updated[questionIndex] = current.filter(
 						(i) => i !== optionIndex
 					);
 				} else {
-					updated[questionIndex] = [...updated[questionIndex], optionIndex];
+					updated[questionIndex] = [...current, optionIndex];
 				}
 				return updated;
 			});
 		} else {
 			setWeaknessChecked((prevState) => {
 				const updated = { ...prevState };
-				if (updated[questionIndex].includes(optionIndex)) {
-					updated[questionIndex] = updated[questionIndex].filter(
+				const current = updated[questionIndex] || [];
+				if (current.includes(optionIndex)) {
+					updated[questionIndex] = current.filter(
 						(i) => i !== optionIndex
 					);
 				} else {
-					updated[questionIndex] = [...updated[questionIndex], optionIndex];
+					updated[questionIndex] = [...current, optionIndex];
 				}
 				return updated;
 			});
@@ -115,8 +124,8 @@ export default function ScenarioQuestions({ onBack, onNext, formData, activityIn
 
 	const handleStepClick = () => {
 		// Validate that at least one strength and one weakness is selected
-		const currentQuestionStrengths = strengthChecked[currentIndex - 1];
-		const currentQuestionWeaknesses = weaknessChecked[currentIndex - 1];
+		const currentQuestionStrengths = strengthChecked[currentIndex - 1] || [];
+		const currentQuestionWeaknesses = weaknessChecked[currentIndex - 1] || [];
 
 		if (currentQuestionStrengths.length === 0 || currentQuestionWeaknesses.length === 0) {
 			toast.error('Please select at least one strength and one weakness before proceeding.');
@@ -128,10 +137,10 @@ export default function ScenarioQuestions({ onBack, onNext, formData, activityIn
 		} else {
 			// Prepare data for submission
 			const data = questionsArray.reduce((acc, _, index) => {
-				acc[`strengthsQ${index + 1}`] = strengthChecked[index].map(
+				acc[`strengthsQ${index + 1}`] = (strengthChecked[index] || []).map(
 					(optionIndex) => questionsArray[index].questionList[optionIndex]
 				);
-				acc[`weaknessesQ${index + 1}`] = weaknessChecked[index].map(
+				acc[`weaknessesQ${index + 1}`] = (weaknessChecked[index] || []).map(
 					(optionIndex) => questionsArray[index].questionListNegative[optionIndex]
 				);
 				return acc;
@@ -170,7 +179,7 @@ export default function ScenarioQuestions({ onBack, onNext, formData, activityIn
 
 					<div className="d-flex flex-column flex-md-row justify-content-around mt-3">
 						<div className="d-flex flex-column text-center checkbox-questions  strength">
-							<img src={strengthImg} alt="" style={{ width: '100px' }}  />
+							<img src={strengthImg} alt="" style={{ width: '100px' }} />
 							<ul className="p-0 mt-4">
 								{currentQuestion.questionList.map((item, index) => (
 									<li key={index} className="d-flex my-1">
@@ -180,7 +189,7 @@ export default function ScenarioQuestions({ onBack, onNext, formData, activityIn
 											}
 											className="cursor-pointer"
 											src={
-												strengthChecked[currentIndex - 1].includes(index)
+												(strengthChecked[currentIndex - 1] || []).includes(index)
 													? checkedImage
 													: unCheckedImage
 											}
@@ -202,7 +211,7 @@ export default function ScenarioQuestions({ onBack, onNext, formData, activityIn
 											}
 											className="cursor-pointer"
 											src={
-												weaknessChecked[currentIndex - 1].includes(index)
+												(weaknessChecked[currentIndex - 1] || []).includes(index)
 													? checkedImage
 													: unCheckedImage
 											}

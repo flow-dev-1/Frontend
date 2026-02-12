@@ -313,7 +313,7 @@ const Week2 = ({ enrollmentId, isSchool, studentId }) => {
     if (!data) return
     setPercent(data?.assessment?.rating || 0);
     const assessmentForChecked =
-      data?.assessment?.assessments[0].assessment?.answers;
+      data?.assessment?.assessments?.[0]?.assessment?.answers;
     setAssessmentData(assessmentForChecked)
 
     if (assessmentForChecked && assessmentForChecked.length >= 5) {
@@ -343,66 +343,65 @@ const Week2 = ({ enrollmentId, isSchool, studentId }) => {
     return <div>{data?.message}.</div>;
   }
 
-  const strengths = data?.activity?.activities[3]?.answers?.strengths;
-  const weaknesses = data?.activity?.activities[4]?.answers?.weakness;
+  const activityList = data?.activity?.activities || [];
+  const act1 = activityList.find(a => a.activity === 2);
+  const act3 = activityList.find(a => a.activity === 4);
+  const act4 = activityList.find(a => a.activity === 5);
+  const act6 = activityList.find(a => a.activity === 7);
+
+  const strengths = act3?.answers?.strengths || [];
+  const weaknesses = act4?.answers?.weakness || [];
 
   const actviity1 = [
     {
-      activity: 2, // Backend activity number (activities[1].activity)
+      activity: 2,
       question: 'What do you understand by “Strengths & Weaknesses”?',
-      answer: data?.activity?.activities?.[1]?.answers?.[0],
-      feedback: data?.activity?.activities[1]?.feedback?.[0],
+      answer: act1?.answers?.[0] || "",
+      feedback: act1?.feedback?.[0] || "",
     }
   ];
   const activities = [
     {
-      activity: 4, // Backend activity number (activities[3].activity)
+      activity: 4,
       question: "Identify your Strengths.",
       answer: strengths,
-      feedback: data?.activity?.activities?.[3]?.feedback?.[0]
+      feedback: act3?.feedback?.[0] || "",
     },
     {
-      activity: 5, // Backend activity number (activities[4].activity)
+      activity: 5,
       question: "Identify your Weaknesses.",
       answer: weaknesses,
-      feedback: data?.activity?.activities?.[4]?.feedback?.[0]
+      feedback: act4?.feedback?.[0] || "",
     },
-    // {
-    //   activity: 4, // Another new activity based on image
-    //   question:
-    //     "Identify three (3) important people in your life and list their names below.",
-    //   answer: ["1. Name 1", "2. Name 2", "3. Name 3"],
-    //   feedback: null // No feedback provided in the image
-    // },
     {
-      activity: 7, // Backend activity number (activities[6].activity)
+      activity: 7,
       question:
         "A friend is feeling sad and needs someone to talk to because they just failed a test.They come to you for support. How would you help?",
       answer: {
-        strengths: data?.activity?.activities[6]?.answers?.strengthsQ1,
-        weaknesses: data?.activity?.activities[6]?.answers?.weaknessesQ1
+        strengths: act6?.answers?.strengthsQ1 || [],
+        weaknesses: act6?.answers?.weaknessesQ1 || []
       },
-      feedback: data?.activity?.activities[6]?.feedback ? data?.activity?.activities[6]?.feedback[0] : ""
+      feedback: act6?.feedback?.[0] || ""
     },
     {
-      activity: 7, // Backend activity number (activities[6].activity)
+      activity: 7,
       question:
         "Imagine you’re working on a group project at school. Your group is struggling to come up with an idea for the project. As a member of the team, how would you help?",
       answer: {
-        strengths: data?.activity?.activities[6]?.answers?.strengthsQ2,
-        weaknesses: data?.activity?.activities[6]?.answers?.weaknessesQ2
+        strengths: act6?.answers?.strengthsQ2 || [],
+        weaknesses: act6?.answers?.weaknessesQ2 || []
       },
-      feedback: data?.activity?.activities[6]?.feedback ? data?.activity?.activities[6]?.feedback[1] : ""
+      feedback: act6?.feedback?.[1] || ""
     },
     {
-      activity: 7, // Backend activity number (activities[6].activity)
+      activity: 7,
       question:
         "Is there a sport you dislike? What sport is this? Now imagine you were asked to represent your house in this particular sport, for your School’s inter-house sport competition, to win a laptop and a gaming console. How would you go about this?",
       answer: {
-        strengths: data?.activity?.activities[6]?.answers?.strengthsQ3,
-        weaknesses: data?.activity?.activities[6]?.answers?.weaknessesQ3
+        strengths: act6?.answers?.strengthsQ3 || [],
+        weaknesses: act6?.answers?.weaknessesQ3 || []
       },
-      feedback: data?.activity?.activities[6]?.feedback ? data?.activity?.activities[6]?.feedback[2] : ""
+      feedback: act6?.feedback?.[2] || ""
     }
   ];
 
@@ -411,7 +410,7 @@ const Week2 = ({ enrollmentId, isSchool, studentId }) => {
       activity: "assessment",
       question:
         "What activity do you enjoy the most, and why do you think you are good at it?",
-      answer: assessmentData?.[5],
+      answer: assessmentData?.[5] || "",
       feedback: data?.assessment?.feedback?.[0] || ""
     },
 
@@ -419,14 +418,14 @@ const Week2 = ({ enrollmentId, isSchool, studentId }) => {
       activity: "assessment",
       question:
         "When working in a group, what role do you naturally take on (e.g., leader, planner, helper)? Can you give an example?",
-      answer: assessmentData?.[6],
+      answer: assessmentData?.[6] || "",
       feedback: data?.assessment?.feedback?.[1] || ""
     },
     {
       activity: "assessment",
       question:
         "Is there a task or subject that you avoid because you find it difficult? Why do you think it’s challenging for you?",
-      answer: assessmentData?.[7],
+      answer: assessmentData?.[7] || "",
       feedback: data?.assessment?.feedback?.[2] || ""
     }
   ];

@@ -1139,7 +1139,9 @@ const Week1 = ({ enrollmentId, isSchool, studentId }) => {
     return <div>Take Activity to see feedback.</div>;
   }
 
-  const buckets = activityData?.activities?.[5]?.buckets;
+  const activityList = activityData?.activities || [];
+  const activity6 = activityList.find(a => a.activity === 6);
+  const buckets = activity6?.buckets;
 
   const mappedContent = {
     yes: buckets?.yes?.map((item) => item.content) || [],
@@ -1147,7 +1149,8 @@ const Week1 = ({ enrollmentId, isSchool, studentId }) => {
     sometimes: buckets?.sometimes?.map((item) => item.content) || []
   };
 
-  const backendAnswers = data?.activity?.activities?.[9]?.questionChecked || {};
+  const activity10 = activityList.find(a => a.activity === 10);
+  const backendAnswers = activity10?.questionChecked || {};
   // console.log(backendAnswers)
   const selectedAnswers = Object.values(backendAnswers).map(
     (item) => item.text
@@ -1156,61 +1159,69 @@ const Week1 = ({ enrollmentId, isSchool, studentId }) => {
 
   // console.log(questions);
 
+  const act2 = activityList.find(a => a.activity === 2);
+  const act4 = activityList.find(a => a.activity === 4);
+
   const activities = [
     {
       activity: 1,
       question: 'What do you think "Self Awareness" is?',
-      answer: activityData?.activities?.[1]?.answers?.[0],
-      feedback: activityData?.activities?.[1]?.feedback?.[0] || "",
+      answer: act2?.answers?.[0],
+      feedback: act2?.feedback?.[0] || "",
     },
     {
       activity: 2,
       question: "What do you understand by the word “Personality”?",
-      answer: activityData?.activities?.[3]?.answers?.[0],
-      feedback: activityData?.activities?.[3]?.feedback?.[0] || "",
+      answer: act4?.answers?.[0],
+      feedback: act4?.feedback?.[0] || "",
     },
     {
       activity: 3,
       question:
         "Drag-and-drop the statements on the left into any of these bowls.",
       answer: mappedContent,
-      feedback: activityData?.activities?.[5]?.feedback?.[0] || "",
+      feedback: activity6?.feedback?.[0] || "",
     }
   ];
+
+  const act8 = activityList.find(a => a.activity === 8);
   const activityFour = [
     {
       activity: 4,
       question:
         "Think about yourself, which of these personality colors describe you? Why do you think so?",
-      selectedPersonality:
-        activityData?.activities?.[7]?.answer?.selectedPersonality,
-      explanation: activityData?.activities?.[7]?.answer?.explanation,
-      feedback: activityData?.activities?.[7]?.feedback?.[0] || "",
+      selectedPersonality: act8?.answer?.selectedPersonality,
+      explanation: act8?.answer?.explanation,
+      feedback: act8?.feedback?.[0] || "",
     }
   ];
-  const activityAnswers = activityData?.activities?.[12]?.answers || [];
+
+  const act12 = activityList.find(a => a.activity === 12);
+  const activityAnswers = act12?.answers || [];
   // console.log(activityAnswers);
   // Map through answers to create restActivities
+
+  const act14 = activityList.find(a => a.activity === 14);
   const restActivities = [
     {
       activity: 8,
       question: "Do you agree with this new result?",
-      answer: activityData?.activities?.[13]?.answers?.[2]?.answer,
-      feedback: activityData?.activities?.[13]?.feedback?.[0] || [],
+      answer: act14?.answers?.[2]?.answer,
+      feedback: act14?.feedback?.[0] || [],
     },
     {
       activity: 9,
       question:
         "Did you get the same color as the color you identified for yourself earlier?",
-      answer: activityData?.activities?.[13]?.answers?.[0]?.answer,
+      answer: act14?.answers?.[0]?.answer,
 
-      feedback: activityData?.activities?.[13]?.feedback?.[1] || [],
+      feedback: act14?.feedback?.[1] || [],
     },
     {
       activity: 10,
       question: "What was different? Why do you think this was different?",
-      answer: activityData?.activities?.[13]?.answers?.[1]?.answer,
-      feedback: activityData?.activities?.[13]?.feedback?.[2] || [],
+      answer: act14?.answers?.[1]?.answer,
+      feedback: act14?.feedback?.[2] || [],
     }
   ];
 
