@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import { userAnswer, updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { RotatingLines } from 'react-loader-spinner';
 
 export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course, activityData, isCompleted }) {
@@ -284,6 +284,7 @@ export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course
 		});
 	};
 
+	const queryClient = useQueryClient();
 	// Mutation for saving user data
 	const mutation = useMutation({
 		mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
@@ -291,6 +292,10 @@ export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course
 			setIsLoading(false);
 			toast.dismiss();
 			toast.success(data.message || 'Answers saved successfully!'); // Show success toast
+
+			// Invalidate enrollment query to trigger real-time progress update
+			queryClient.invalidateQueries(['enrollment', userAnswers?.courseEnrollmentId]);
+
 			dispatch(
 				updateData({
 					course: null,

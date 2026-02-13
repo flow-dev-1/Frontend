@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import strengthweakness from '../../../../../../assets/selfawareness-images/strengthweakness.png';
 import StrengthIdentification from './StrengthIdentification';
@@ -9,7 +9,7 @@ import QuestionComponent from './QuestionComponent';
 import userService from '../../../../../../services/api/user.js';
 import { toast, ToastContainer } from 'react-toastify';
 import EndOfCourseComponent from './EndOfCourseComponent.js';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
 
@@ -28,7 +28,10 @@ export default function WeekTwoLearning({
 		const savedState = localStorage.getItem(`week-${currentWeekIndex}-currentActivity`);
 		return savedState ? JSON.parse(savedState) : 1;
 	});
-	const [formData, setFormData] = useState();
+	const [formData, setFormData] = useState(() => {
+		const savedData = localStorage.getItem(`week-2-activityData`);
+		return savedData ? JSON.parse(savedData) : { week: 2, activities: [] };
+	});
 	const week = 2;
 
 	const { data: courseData, isLoading, status, isError } = useQuery({
@@ -45,18 +48,21 @@ export default function WeekTwoLearning({
 		if (courseData.activity) {
 			const activities = courseData.activity.activities || [];
 
-			// Remote State Restoration: Jump to last saved page if it exists
-			if (courseData.activity.lastActivityIndex) {
+			// Remote State Restoration: Jump to last saved page if it exists and week is NOT completed
+			if (courseData.activity.lastActivityIndex && !isCompleted) {
 				setCurrentActivity(courseData.activity.lastActivityIndex);
 			}
 
-			const activityData = {
-				week: week,
-				activities: activities,
-			};
 
-			setFormData(activityData);
-			localStorage.setItem('week-2-activityData', JSON.stringify(activityData));
+			// Robust Merge: Only use remote activities if they are more comprehensive or if local is empty
+			setFormData((prevData) => {
+				const localActivities = prevData?.activities || [];
+				if (localActivities.length > 0 && activities.length <= localActivities.length) {
+					// Keep local data as it might be fresher
+					return prevData;
+				}
+				return { ...prevData, activities: activities };
+			});
 
 			dispatch(
 				updateData({
@@ -104,11 +110,13 @@ export default function WeekTwoLearning({
 	//  console.log(course.course._id)
 	const isCompleted = !!courseData?.assessment;
 
-	const handleNext = async (incomingData = {}) => {
-		const updatedActivities =
-			formData?.activities?.map((item) =>
-				item.activity === currentActivity ? { ...item, ...incomingData } : item
-			) || [];
+	const queryClient = useQueryClient();
+
+	const handleNext = useCallback(async (incomingData = {}) => {
+		const currentActivities = formData?.activities || courseData?.activity?.activities || [];
+		const updatedActivities = currentActivities.map((item) =>
+			item.activity === currentActivity ? { ...item, ...incomingData } : item
+		);
 
 		if (!updatedActivities.find((item) => item.activity === currentActivity)) {
 			updatedActivities.push({ activity: currentActivity, ...incomingData });
@@ -127,11 +135,16 @@ export default function WeekTwoLearning({
 				lastActivityIndex: nextActivity // Save where they are going
 			};
 
-			userService.postMyActivity(courseId, payload).catch(err => {
-				console.error("Failed to auto-save activity:", err);
-			});
+			userService.postMyActivity(courseId, payload)
+				.then(() => {
+					// Invalidate enrollment query to reflect any backend updates
+					queryClient.invalidateQueries(['enrollment', courseId]);
+				})
+				.catch(err => {
+					console.error("Failed to auto-save activity:", err);
+				});
 		}
-	};
+	}, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted]);
 
 	const handlePrevious = () => {
 		setCurrentActivity((prev) => prev - 1);
@@ -139,8 +152,8 @@ export default function WeekTwoLearning({
 
 	const handleNextWeekCourse = () => {
 		const nextWeekIndex = currentWeekIndex + 1;
-		navigate(`/dashboard/self-awareness-course/${course._id}`, {
-			state: { course, weekIndex: nextWeekIndex },
+		navigate(`/dashboard/self-awareness-course`, {
+			state: { enrollmentData: course, weekIndex: nextWeekIndex },
 		});
 	};
 

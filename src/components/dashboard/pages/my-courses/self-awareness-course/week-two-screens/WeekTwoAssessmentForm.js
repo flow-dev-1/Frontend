@@ -6,7 +6,7 @@ import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModa
 import userService from '../../../../../../services/api/user.js';
 import { toast } from 'react-toastify';
 import { isDisabled } from '@testing-library/user-event/dist/utils/index.js';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSelector, useDispatch } from 'react-redux';
 import { userAnswer, updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
 import { RotatingLines } from 'react-loader-spinner';
@@ -140,6 +140,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 		return assessment?.assessment?.answers.map((answerIndex) => answerIndex);
 	};
 
+	const queryClient = useQueryClient();
 	// Mutation for saving user data
 	const mutation = useMutation({
 		mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
@@ -147,6 +148,10 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 			setDisableButton(false);
 			toast.dismiss();
 			toast.success(data.message || 'Answers saved successfully!'); // Show success toast
+
+			// Invalidate enrollment query to trigger real-time progress update
+			queryClient.invalidateQueries(['enrollment', userAnswers?.courseEnrollmentId]);
+
 			dispatch(
 				updateData({
 					course: null,

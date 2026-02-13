@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Icon } from '@iconify/react'
 import { useNavigate } from 'react-router-dom'
 import MyFireWorks from '../Fireworks'
@@ -10,7 +10,7 @@ import EmojiRespond from './EmojiRespond'
 import EndOfCourseComponent from './EndOfCourseComponent'
 import userService from "../../../../../../services/api/user.js";
 import { toast, ToastContainer } from "react-toastify";
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import QuestionComponent from './QuestionsComponent.js'
 import emoational_image from '../../../../../../assets/selfawareness-images/emotional-intelligence.png'
 import { useDispatch } from "react-redux";
@@ -29,7 +29,10 @@ export default function WeekFiveLearning({
 }) {
   const dispatch = useDispatch();
   const [showPopup, setShowPopup] = useState(false)
-  const [formData, setFormData] = useState()
+  const [formData, setFormData] = useState(() => {
+    const savedData = localStorage.getItem(`week-5-activityData`);
+    return savedData ? JSON.parse(savedData) : { week: 5, activities: [] };
+  });
 
   const [currentActivity, setCurrentActivity] = useState(() => {
     const savedState = localStorage.getItem(
@@ -55,18 +58,20 @@ export default function WeekFiveLearning({
     if (courseData.activity) {
       const activities = courseData.activity.activities || [];
 
-      // Remote State Restoration: Jump to last saved page if it exists
-      if (courseData.activity.lastActivityIndex) {
+      // Remote State Restoration: Jump to last saved page if it exists and week is NOT completed
+      if (courseData.activity.lastActivityIndex && !isCompleted) {
         setCurrentActivity(courseData.activity.lastActivityIndex);
       }
 
-      const activityData = {
-        week: week,
-        activities: activities,
-      };
-
-      setFormData(activityData);
-      localStorage.setItem('week-5-activityData', JSON.stringify(activityData));
+      // Robust Merge: Only use remote activities if they are more comprehensive or if local is empty
+      setFormData((prevData) => {
+        const localActivities = prevData?.activities || [];
+        if (localActivities.length > 0 && activities.length <= localActivities.length) {
+          // Keep local data as it might be fresher
+          return prevData;
+        }
+        return { ...prevData, activities: activities };
+      });
 
       dispatch(
         updateData({
@@ -114,11 +119,13 @@ export default function WeekFiveLearning({
 
   const isCompleted = !!courseData?.assessment;
 
-  const handleNext = async (incomingData = {}) => {
-    const updatedActivities =
-      formData?.activities?.map((item) =>
-        item.activity === currentActivity ? { ...item, ...incomingData } : item
-      ) || [];
+  const queryClient = useQueryClient();
+
+  const handleNext = useCallback(async (incomingData = {}) => {
+    const currentActivities = formData?.activities || courseData?.activity?.activities || [];
+    const updatedActivities = currentActivities.map((item) =>
+      item.activity === currentActivity ? { ...item, ...incomingData } : item
+    );
 
     if (!updatedActivities.find((item) => item.activity === currentActivity)) {
       updatedActivities.push({ activity: currentActivity, ...incomingData });
@@ -137,11 +144,17 @@ export default function WeekFiveLearning({
         lastActivityIndex: nextActivity // Save where they are going
       };
 
-      userService.postMyActivity(courseId, payload).catch(err => {
-        console.error("Failed to auto-save activity:", err);
-      });
+      userService.postMyActivity(courseId, payload)
+        .then(() => {
+          // Invalidate enrollment query to reflect any backend updates
+          queryClient.invalidateQueries(['enrollment', courseId]);
+        })
+        .catch(err => {
+          console.error("Failed to auto-save activity:", err);
+        });
     }
-  };
+  }, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted]);
+
 
   const handlePrevious = () => {
     setCurrentActivity((prev) => prev - 1);
@@ -151,8 +164,8 @@ export default function WeekFiveLearning({
 
   const handleNextWeekCourse = () => {
     const nextWeekIndex = currentWeekIndex + 1;
-    navigate(`/dashboard/self-awareness-course/${courseId}`, {
-      state: { course, weekIndex: nextWeekIndex },
+    navigate(`/dashboard/self-awareness-course`, {
+      state: { enrollmentData: course, weekIndex: nextWeekIndex },
     });
   };
 

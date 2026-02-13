@@ -68,22 +68,36 @@ const initialBuckets = {
 	sometimes: [],
 };
 
-function DragDropComponent({ onBack, onNext, formData }) {
-	console.log(formData, 'FormData');
-	const [cards, setCards] = useState(formData?.cards || initialCards);
-	const [buckets, setBuckets] = useState(formData?.buckets || initialBuckets);
-	const [currentIndex, setCurrentIndex] = useState(0);
+function DragDropComponent({ onBack, onNext, formData, onUpdate, activityIndex }) {
+	const initialState = formData?.activities?.find((act) => act.activity === activityIndex) || {};
 
-	useEffect(() => {
-		if (formData) {
-			setCards(
-				formData?.activities?.length > 5 ? formData?.activities[5]?.cards : initialCards
-			);
-			setBuckets(
-				formData?.activities?.length > 5 ? formData?.activities[5]?.buckets : initialBuckets
-			);
+	const [cards, setCards] = useState(initialState.cards || initialCards);
+	const [buckets, setBuckets] = useState(initialState.buckets || initialBuckets);
+	const [currentIndex, setCurrentIndex] = useState(initialState.currentIndex || 0);
+
+	// Pushing state to parent only when it actually changes due to user action
+	const pushToParent = (updatedCards, updatedBuckets, updatedIndex) => {
+		if (onUpdate) {
+			onUpdate({
+				cards: updatedCards,
+				buckets: updatedBuckets,
+				currentIndex: updatedIndex,
+			});
 		}
-	}, [formData]);
+	};
+
+	// Remote/Parent change restoration (only if internal state is still initial)
+	useEffect(() => {
+		if (formData?.activities) {
+			const saved = formData.activities.find((act) => act.activity === activityIndex);
+			// Only restore if we don't have active local progress or if we're on the very first card
+			if (saved && currentIndex === 0 && buckets === initialBuckets) {
+				setCards(saved.cards || initialCards);
+				setBuckets(saved.buckets || initialBuckets);
+				setCurrentIndex(saved.currentIndex || 0);
+			}
+		}
+	}, [formData, activityIndex]);
 	// console.log(formData.activities[5].buckets)
 	const handleOnDragEnd = (result) => {
 		if (!result.destination) return;
@@ -100,13 +114,19 @@ function DragDropComponent({ onBack, onNext, formData }) {
 			setBuckets(newBuckets);
 			setCards((prevCards) => prevCards.slice(1)); // Move to the next card
 			setCurrentIndex(currentIndex + 1);
+
+			// Explicitly push update to parent
+			pushToParent(cards.slice(1), newBuckets, currentIndex + 1);
 		}
 	};
 
 	const handleBack = () => {
 		if (currentIndex > 0) {
-			setCards([initialCards[currentIndex - 1], ...cards]);
-			setCurrentIndex(currentIndex - 1);
+			const updatedCards = [initialCards[currentIndex - 1], ...cards];
+			const updatedIndex = currentIndex - 1;
+			setCards(updatedCards);
+			setCurrentIndex(updatedIndex);
+			pushToParent(updatedCards, buckets, updatedIndex);
 		} else {
 			onBack();
 		}
@@ -116,6 +136,7 @@ function DragDropComponent({ onBack, onNext, formData }) {
 		setCards(initialCards);
 		setBuckets(initialBuckets);
 		setCurrentIndex(0);
+		pushToParent(initialCards, initialBuckets, 0);
 	};
 
 	const areAllCardsPlaced = () => {
@@ -144,9 +165,8 @@ function DragDropComponent({ onBack, onNext, formData }) {
 												ref={provided.innerRef}
 												{...provided.draggableProps}
 												{...provided.dragHandleProps}
-												className={`card-item d-flex align-items-center justify-content-center ${
-													snapshot.isDragging ? 'draging' : ''
-												}`}
+												className={`card-item d-flex align-items-center justify-content-center ${snapshot.isDragging ? 'draging' : ''
+													}`}
 												style={{
 													cursor: snapshot.isDragging
 														? 'grabbing'
@@ -186,9 +206,8 @@ function DragDropComponent({ onBack, onNext, formData }) {
 										<div
 											ref={provided.innerRef}
 											{...provided.droppableProps}
-											className={`bucket bucket-${bucketType} ${
-												snapshot.isDraggingOver ? 'dragging-over' : ''
-											}`}
+											className={`bucket bucket-${bucketType} ${snapshot.isDraggingOver ? 'dragging-over' : ''
+												}`}
 											style={{
 												backgroundColor: snapshot.isDraggingOver
 													? 'rgba(0, 0, 0, 0.1)'
@@ -211,13 +230,13 @@ function DragDropComponent({ onBack, onNext, formData }) {
 													bucketType === 'yes'
 														? bucketYes
 														: bucketType === 'no'
-														? bucketNo
-														: bucketSometimes
+															? bucketNo
+															: bucketSometimes
 												}
 												alt={`bucket-${bucketType}`}
 												style={{
 													width: '100%',
-                          maxWidth: '100px',
+													maxWidth: '100px',
 													height: 'auto',
 													transition: 'transform 0.3s ease',
 													transform: snapshot.isDraggingOver
@@ -265,7 +284,7 @@ function DragDropComponent({ onBack, onNext, formData }) {
 						className="btn next dark"
 						onClick={() => onNext({ cards, buckets })}
 						disabled={!areAllCardsPlaced()}
-						// Disable if not all cards are placed
+					// Disable if not all cards are placed
 					>
 						{'Next >>>'}
 					</button>

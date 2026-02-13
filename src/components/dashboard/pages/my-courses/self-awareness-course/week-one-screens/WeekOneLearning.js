@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import QuestionComponent from './QuestionComponent';
@@ -17,7 +17,7 @@ import PersonalityTest from './PersonalityTest';
 import 'react-toastify/dist/ReactToastify.css';
 import WeekOneAssessmentForm from './WeekOneAssessmentForm';
 import userService from '../../../../../../services/api/user.js';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
 
@@ -38,7 +38,10 @@ export default function WeekOneLearning({
 
 		return savedState ? JSON.parse(savedState) : 1;
 	});
-	const [formData, setFormData] = useState();
+	const [formData, setFormData] = useState(() => {
+		const savedData = localStorage.getItem(`week-1-activityData`);
+		return savedData ? JSON.parse(savedData) : { week: 1, activities: [] };
+	});
 
 	const week = 1;
 	const { data: courseData, isLoading, status, isError } = useQuery({
@@ -55,18 +58,20 @@ export default function WeekOneLearning({
 		if (courseData.activity) {
 			const activities = courseData.activity.activities || [];
 
-			// Remote State Restoration: Jump to last saved page if it exists
-			if (courseData.activity.lastActivityIndex) {
+			// Remote State Restoration: Jump to last saved page if it exists and week is NOT completed
+			if (courseData.activity.lastActivityIndex && !isCompleted) {
 				setCurrentActivity(courseData.activity.lastActivityIndex);
 			}
 
-			const activityData = {
-				week: week,
-				activities: activities,
-			};
-
-			setFormData(activityData);
-			localStorage.setItem('week-1-activityData', JSON.stringify(activityData));
+			// Robust Merge: Only use remote activities if they are more comprehensive or if local is empty
+			setFormData((prevData) => {
+				const localActivities = prevData?.activities || [];
+				if (localActivities.length > 0 && activities.length <= localActivities.length) {
+					// Keep local data as it might be fresher (mid-activity saves)
+					return prevData;
+				}
+				return { ...prevData, activities: activities };
+			});
 
 			dispatch(
 				updateData({
@@ -126,11 +131,28 @@ export default function WeekOneLearning({
 
 	const isCompleted = !!courseData?.assessment;
 
-	const handleNext = async (incomingData = {}) => {
-		const updatedActivities =
-			formData?.activities?.map((item) =>
+	const queryClient = useQueryClient();
+
+	const onLocalUpdate = useCallback((incomingData) => {
+		setFormData((prevData) => {
+			const currentActivities = prevData?.activities || courseData?.activity?.activities || [];
+			const updatedActivities = currentActivities.map((item) =>
 				item.activity === currentActivity ? { ...item, ...incomingData } : item
-			) || [];
+			);
+
+			if (!updatedActivities.find((item) => item.activity === currentActivity)) {
+				updatedActivities.push({ activity: currentActivity, ...incomingData });
+			}
+
+			return { ...prevData, activities: updatedActivities };
+		});
+	}, [currentActivity, courseData?.activity?.activities]);
+
+	const handleNext = useCallback(async (incomingData = {}) => {
+		const currentActivities = formData?.activities || courseData?.activity?.activities || [];
+		const updatedActivities = currentActivities.map((item) =>
+			item.activity === currentActivity ? { ...item, ...incomingData } : item
+		);
 
 		if (!updatedActivities.find((item) => item.activity === currentActivity)) {
 			updatedActivities.push({ activity: currentActivity, ...incomingData });
@@ -141,7 +163,6 @@ export default function WeekOneLearning({
 		const nextActivity = currentActivity >= 15 ? 16 : currentActivity + 1;
 		setCurrentActivity(nextActivity);
 
-		const isCompleted = !!courseData?.assessment;
 		if (!isCompleted) {
 			// Fire and Forget: Save progress to background
 			const payload = {
@@ -150,11 +171,16 @@ export default function WeekOneLearning({
 				lastActivityIndex: nextActivity // Save where they are going
 			};
 
-			userService.postMyActivity(courseId, payload).catch(err => {
-				console.error("Failed to auto-save activity:", err);
-			});
+			userService.postMyActivity(courseId, payload)
+				.then(() => {
+					// Invalidate enrollment query to reflect any backend updates (e.g. lastWeekIndex)
+					queryClient.invalidateQueries(['enrollment', courseId]);
+				})
+				.catch(err => {
+					console.error("Failed to auto-save activity:", err);
+				});
 		}
-	};
+	}, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted]);
 
 	const handlePrevious = () => {
 		const prevActivity = currentActivity - 1;
@@ -165,8 +191,8 @@ export default function WeekOneLearning({
 
 	const handleNextWeekCourse = () => {
 		const nextWeekIndex = currentWeekIndex + 1;
-		navigate(`/dashboard/self-awareness-course/${courseId}`, {
-			state: { course, weekIndex: nextWeekIndex },
+		navigate(`/dashboard/self-awareness-course`, {
+			state: { enrollmentData: course, weekIndex: nextWeekIndex },
 		});
 	};
 
@@ -247,6 +273,7 @@ export default function WeekOneLearning({
 							activityIndex={currentActivity}
 							formData={formData}
 							onBack={handlePrevious}
+							onUpdate={onLocalUpdate}
 							onNext={handleNext}
 						/>
 					</div>
@@ -303,6 +330,7 @@ export default function WeekOneLearning({
 						activityIndex={currentActivity}
 						formData={formData}
 						onBack={handlePrevious}
+						onUpdate={onLocalUpdate}
 						onNext={handleNext}
 					/>
 				);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import MyFireWorks from '../Fireworks'
 import celebrate from '../../../../../../assets/celebrate.png'
@@ -11,7 +11,7 @@ import QuestionComponent from './QuestionComponent'
 import userService from '../../../../../../services/api/user.js'
 import { toast, ToastContainer } from 'react-toastify'
 import EndOfCourseComponent from './EndOfCourseComponent'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useDispatch } from "react-redux";
 import {
   updateData,
@@ -36,7 +36,10 @@ export default function WeekFourLearning({
     return savedState ? JSON.parse(savedState) : 1
   })
   const week = 4;
-  const [formData, setFormData] = useState()
+  const [formData, setFormData] = useState(() => {
+    const savedData = localStorage.getItem(`week-4-activityData`);
+    return savedData ? JSON.parse(savedData) : { week: 4, activities: [] };
+  });
 
   const { data: courseData, isLoading, status, isError } = useQuery({
     queryKey: ["self-awareness-course-4", courseId, week],
@@ -52,18 +55,20 @@ export default function WeekFourLearning({
     if (courseData.activity) {
       const activities = courseData.activity.activities || [];
 
-      // Remote State Restoration: Jump to last saved page if it exists
-      if (courseData.activity.lastActivityIndex) {
+      // Remote State Restoration: Jump to last saved page if it exists and week is NOT completed
+      if (courseData.activity.lastActivityIndex && !isCompleted) {
         setCurrentActivity(courseData.activity.lastActivityIndex);
       }
 
-      const activityData = {
-        week: week,
-        activities: activities,
-      };
-
-      setFormData(activityData);
-      localStorage.setItem('week-4-activityData', JSON.stringify(activityData));
+      // Robust Merge: Only use remote activities if they are more comprehensive or if local is empty
+      setFormData((prevData) => {
+        const localActivities = prevData?.activities || [];
+        if (localActivities.length > 0 && activities.length <= localActivities.length) {
+          // Keep local data as it might be fresher
+          return prevData;
+        }
+        return { ...prevData, activities: activities };
+      });
 
       dispatch(
         updateData({
@@ -75,6 +80,7 @@ export default function WeekFourLearning({
         })
       );
     }
+
 
     if (courseData.assessment) {
       const assessments = courseData.assessment.assessments || [];
@@ -110,11 +116,13 @@ export default function WeekFourLearning({
 
   const isCompleted = !!courseData?.assessment;
 
-  const handleNext = async (incomingData = {}) => {
-    const updatedActivities =
-      formData?.activities?.map((item) =>
-        item.activity === currentActivity ? { ...item, ...incomingData } : item
-      ) || [];
+  const queryClient = useQueryClient();
+
+  const handleNext = useCallback(async (incomingData = {}) => {
+    const currentActivities = formData?.activities || courseData?.activity?.activities || [];
+    const updatedActivities = currentActivities.map((item) =>
+      item.activity === currentActivity ? { ...item, ...incomingData } : item
+    );
 
     if (!updatedActivities.find((item) => item.activity === currentActivity)) {
       updatedActivities.push({ activity: currentActivity, ...incomingData });
@@ -133,11 +141,16 @@ export default function WeekFourLearning({
         lastActivityIndex: nextActivity // Save where they are going
       };
 
-      userService.postMyActivity(courseId, payload).catch(err => {
-        console.error("Failed to auto-save activity:", err);
-      });
+      userService.postMyActivity(courseId, payload)
+        .then(() => {
+          // Invalidate enrollment query to reflect any backend updates
+          queryClient.invalidateQueries(['enrollment', courseId]);
+        })
+        .catch(err => {
+          console.error("Failed to auto-save activity:", err);
+        });
     }
-  };
+  }, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted]);
 
   const handlePrevious = () => {
     setCurrentActivity((prev) => prev - 1)
@@ -147,8 +160,8 @@ export default function WeekFourLearning({
 
   const handleNextWeekCourse = () => {
     const nextWeekIndex = currentWeekIndex + 1
-    navigate(`/dashboard/self-awareness-course/${course._id}`, {
-      state: { course, weekIndex: nextWeekIndex },
+    navigate(`/dashboard/self-awareness-course`, {
+      state: { enrollmentData: course, weekIndex: nextWeekIndex },
     })
   }
 
