@@ -105,8 +105,8 @@ export default function WeekTwoLearning({
 	}, [currentActivity, currentWeekIndex]);
 
 	useEffect(() => {
-		localStorage.setItem(`week-${currentWeekIndex}-activityData`, JSON.stringify(formData));
-	}, [formData, currentWeekIndex]);
+		localStorage.setItem(`week-2-activityData`, JSON.stringify(formData));
+	}, [formData]);
 	//  console.log(course.course._id)
 	const isCompleted = !!courseData?.assessment;
 
@@ -127,7 +127,7 @@ export default function WeekTwoLearning({
 		const nextActivity = currentActivity >= 9 ? 10 : currentActivity + 1;
 		setCurrentActivity(nextActivity);
 
-		if (!isCompleted) {
+		if (!isCompleted && !isLoading) {
 			// Fire and Forget: Save progress to background
 			const payload = {
 				week: week,
@@ -144,7 +144,7 @@ export default function WeekTwoLearning({
 					console.error("Failed to auto-save activity:", err);
 				});
 		}
-	}, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted]);
+	}, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted, isLoading]);
 
 	const handlePrevious = () => {
 		setCurrentActivity((prev) => prev - 1);

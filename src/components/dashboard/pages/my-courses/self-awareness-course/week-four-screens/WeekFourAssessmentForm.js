@@ -254,7 +254,7 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 				updateData({
 					course: null,
 					courseEnrollmentId: null,
-					week: 1,
+					week: 4,
 					activities: [],
 					assessments: [],
 				})
