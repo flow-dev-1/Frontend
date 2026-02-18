@@ -29,6 +29,7 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
   const [pdfLoading, setPdfLoading] = useState(false); // NEW STATE FOR PDF LOADING
   const [isAIModalOpen, setIsAIModalOpen] = useState(false);
   const [selectedAIWeek, setSelectedAIWeek] = useState(null);
+  const [isAIGenerating, setIsAIGenerating] = useState(false);
   const contentRef = useRef();
 
   const { isAdmin, code } = useSelector(adminData);
@@ -119,6 +120,7 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
 
   const handleConfirmAIGeneration = async () => {
     setIsAIModalOpen(false);
+    setIsAIGenerating(true);
     console.log(`Generating AI feedback for week ${selectedAIWeek}`);
 
     // Find the data for the selected week
@@ -138,36 +140,45 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
       }
     ];
 
-    console.log("Sending payload to AI webhook via POST:", JSON.stringify(payload, null, 2));
+    console.log("Sending payload to AI webhook via backend proxy:", JSON.stringify(payload, null, 2));
 
     try {
-      const url = "https://n8n.srv895792.hstgr.cloud/webhook/7e9dafd3-852f-4050-99fb-a27f4a36e250";
+      const result = await adminService.generateAIFeedback(payload, code);
+      console.log("---------------- AI WEBHOOK RESPONSE START ----------------");
+      console.log(JSON.stringify(result, null, 2));
+      console.log("---------------- AI WEBHOOK RESPONSE END ------------------");
 
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
+      // Check if the webhook returned activity data to merge
+      const aiActivities = Array.isArray(result)
+        ? (result[0]?.activity || result[0]?.activities || result)
+        : (result?.activity || result?.activities || null);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (aiActivities && Array.isArray(aiActivities) && aiActivities.length > 0) {
+        // Webhook returned data — merge only feedback into original activities
+        const originalActivities = weekData.activity.activities;
+        const mergedActivities = originalActivities.map((original, index) => {
+          const aiItem = aiActivities.find(ai => ai.activity === original.activity) || aiActivities[index];
+          if (aiItem && aiItem.feedback) {
+            return { ...original, feedback: aiItem.feedback };
+          }
+          return original;
+        });
+
+        const userId = weekData.activity.user;
+        await adminService.submitAdminFeedback(mergedActivities, enrollmentId, selectedAIWeek, userId, code);
+        console.log("AI feedback merged and saved.");
+      } else {
+        // Webhook returned no data — it likely saved directly to DB
+        console.log("Webhook returned no activity data. It may have saved directly. Reloading...");
       }
 
-      // Read response as text first to handle empty or non-JSON responses
-      const text = await response.text();
-      let result;
-      try {
-        result = text ? JSON.parse(text) : { status: "success", message: "Webhook called successfully (empty response)" };
-      } catch (e) {
-        result = { status: "success", message: text || "Webhook called successfully" };
-      }
-
-      console.log("AI Webhook results:", result);
+      alert("AI feedback generated successfully!");
+      // window.location.reload();
     } catch (error) {
       console.error("Error calling AI webhook:", error);
+      alert("Failed to generate AI feedback. Please try again.");
+    } finally {
+      setIsAIGenerating(false);
     }
   };
 
@@ -233,16 +244,17 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
                   Introduction to Self-Awareness
                 </span>
               </h2>
-              {isAdmin && (expandedWeek === 1 || expandedWeek === "all") && data && data[0] && (
+              {isAdmin && isDataLoaded && (expandedWeek === 1 || expandedWeek === "all") && data?.[0]?.activity && (
                 <button
                   className="ai-generate-cta"
+                  disabled={isAIGenerating}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleOpenAIModal(1);
                   }}
                 >
-                  <Icon icon="solar:magic-stick-3-bold-duotone" className="icon" />
-                  Generate with AI
+                  <Icon icon={isAIGenerating && selectedAIWeek === 1 ? "eos-icons:loading" : "solar:magic-stick-3-bold-duotone"} className="icon" />
+                  {isAIGenerating && selectedAIWeek === 1 ? "Generating..." : "Generate with AI"}
                 </button>
               )}
             </div>
@@ -273,16 +285,17 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
                   Identifying Strengths and Weaknesses
                 </span>
               </h2>
-              {isAdmin && (expandedWeek === 2 || expandedWeek === "all") && data && data[1] && (
+              {isAdmin && isDataLoaded && (expandedWeek === 2 || expandedWeek === "all") && data?.[1]?.activity && (
                 <button
                   className="ai-generate-cta"
+                  disabled={isAIGenerating}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleOpenAIModal(2);
                   }}
                 >
-                  <Icon icon="solar:magic-stick-3-bold-duotone" className="icon" />
-                  Generate with AI
+                  <Icon icon={isAIGenerating && selectedAIWeek === 2 ? "eos-icons:loading" : "solar:magic-stick-3-bold-duotone"} className="icon" />
+                  {isAIGenerating && selectedAIWeek === 2 ? "Generating..." : "Generate with AI"}
                 </button>
               )}
             </div>
@@ -311,16 +324,17 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
                 Week 3:{" "}
                 <span style={{ fontSize: "14px" }}>Understanding Mindset</span>
               </h2>
-              {isAdmin && (expandedWeek === 3 || expandedWeek === "all") && data && data[2] && (
+              {isAdmin && isDataLoaded && (expandedWeek === 3 || expandedWeek === "all") && data?.[2]?.activity && (
                 <button
                   className="ai-generate-cta"
+                  disabled={isAIGenerating}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleOpenAIModal(3);
                   }}
                 >
-                  <Icon icon="solar:magic-stick-3-bold-duotone" className="icon" />
-                  Generate with AI
+                  <Icon icon={isAIGenerating && selectedAIWeek === 3 ? "eos-icons:loading" : "solar:magic-stick-3-bold-duotone"} className="icon" />
+                  {isAIGenerating && selectedAIWeek === 3 ? "Generating..." : "Generate with AI"}
                 </button>
               )}
             </div>
@@ -349,16 +363,17 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
                 Week 4:{" "}
                 <span style={{ fontSize: "14px" }}>Identifying Values</span>
               </h2>
-              {isAdmin && (expandedWeek === 4 || expandedWeek === "all") && data && data[3] && (
+              {isAdmin && isDataLoaded && (expandedWeek === 4 || expandedWeek === "all") && data?.[3]?.activity && (
                 <button
                   className="ai-generate-cta"
+                  disabled={isAIGenerating}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleOpenAIModal(4);
                   }}
                 >
-                  <Icon icon="solar:magic-stick-3-bold-duotone" className="icon" />
-                  Generate with AI
+                  <Icon icon={isAIGenerating && selectedAIWeek === 4 ? "eos-icons:loading" : "solar:magic-stick-3-bold-duotone"} className="icon" />
+                  {isAIGenerating && selectedAIWeek === 4 ? "Generating..." : "Generate with AI"}
                 </button>
               )}
             </div>
@@ -389,16 +404,17 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
                   Emotional Intelligence and Communication Skills
                 </span>
               </h2>
-              {isAdmin && (expandedWeek === 5 || expandedWeek === "all") && data && data[4] && (
+              {isAdmin && isDataLoaded && (expandedWeek === 5 || expandedWeek === "all") && data?.[4]?.activity && (
                 <button
                   className="ai-generate-cta"
+                  disabled={isAIGenerating}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleOpenAIModal(5);
                   }}
                 >
-                  <Icon icon="solar:magic-stick-3-bold-duotone" className="icon" />
-                  Generate with AI
+                  <Icon icon={isAIGenerating && selectedAIWeek === 5 ? "eos-icons:loading" : "solar:magic-stick-3-bold-duotone"} className="icon" />
+                  {isAIGenerating && selectedAIWeek === 5 ? "Generating..." : "Generate with AI"}
                 </button>
               )}
             </div>
@@ -478,6 +494,7 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
           onConfirm={handleConfirmAIGeneration}
           weekNumber={selectedAIWeek}
         />
+
       </div>
     </>
   );

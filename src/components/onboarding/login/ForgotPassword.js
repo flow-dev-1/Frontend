@@ -75,7 +75,7 @@ export default function ForgotPassword() {
   });
 
   const verifyTokenMutation = useMutation({
-    mutationFn: userService.verifyAccount,
+    mutationFn: userService.verifyToken,
     onSuccess: (data) => {
       toast.success(data?.message);
       navigate("/reset-password");
