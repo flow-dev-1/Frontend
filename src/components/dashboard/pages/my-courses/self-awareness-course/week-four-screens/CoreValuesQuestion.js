@@ -6,12 +6,14 @@ import ProgressionButtons from '../components/ProgressionButtons';
 
 export default function CoreValuesQuestion({ onBack, onNext, formData, activityIndex }) {
 	// Retrieve answers from formData for the current activity index
-	const initialSelectedValues =
-		formData.activities.find(
+	const [selectedValues, setSelectedValues] = useState([]);
+
+	useEffect(() => {
+		const saved = formData?.activities?.find(
 			(activity) => activity.activity === activityIndex && activity.answers
 		)?.answers || [];
-
-	const [selectedValues, setSelectedValues] = useState(initialSelectedValues);
+		setSelectedValues(saved);
+	}, [formData, activityIndex]);
 
 	const questionsArray = [
 		'Generosity',

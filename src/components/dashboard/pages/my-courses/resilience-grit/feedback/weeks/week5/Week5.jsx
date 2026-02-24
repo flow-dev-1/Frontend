@@ -16,7 +16,9 @@ import { useSelector } from "react-redux";
 import adminService from "../../../../../../../../services/api/admin.js";
 import Modal from "../../components/Modal.jsx";
 
-function Week5({ enrollmentId, setWeekFiveData }) {
+import schoolService from "../../../../../../../../services/api/school.js";
+
+function Week5({ enrollmentId, setWeekFiveData, isSchool, studentId }) {
   const { pages } = getWeekContentExcludingVideos(5);
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState("");
@@ -33,10 +35,11 @@ function Week5({ enrollmentId, setWeekFiveData }) {
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
     queryKey: ["dashboard/resilience-feedback-5", enrollmentId, 5],
-    queryFn: () =>
-      isAdmin
-        ? adminService.getUserCourseData(enrollmentId, 5, code)
-        : userService.getUserCourseData(enrollmentId, 5),
+    queryFn: () => {
+      if (isAdmin) return adminService.getUserCourseData(enrollmentId, 5, code);
+      if (isSchool) return schoolService.getStudentCourseData(enrollmentId, 5, studentId);
+      return userService.getUserCourseData(enrollmentId, 5);
+    },
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -87,7 +90,7 @@ function Week5({ enrollmentId, setWeekFiveData }) {
       )?.feedback;
       const answerObject = answersList?.find(
         (activity) => activity.stepId === itemId
-      ).value;
+      )?.value;
 
       // return answerObject ? answerObject[index] : null;
       return answerObject ? answerObject : null;
@@ -128,8 +131,8 @@ function Week5({ enrollmentId, setWeekFiveData }) {
     return <div>Loading...</div>;
   }
 
-  if (data?.status === "failed" || isError) {
-    return <div>{data?.message || "Internal server error!"}</div>;
+  if (data?.status === "failed" || isError || !data) {
+    return <div>Take Activity to see feedback.</div>;
   }
 
   const score =

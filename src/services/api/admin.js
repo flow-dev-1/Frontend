@@ -65,6 +65,40 @@ class AdminOBJ {
       return err?.response?.data || err.message;
     }
   }
+
+  submitAssessmentFeedback = async (data, params1, week, userId, token) => {
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    };
+    try {
+      const response = await api.patch(
+        `api/admins/course-enrollment/${params1}/post-assessment/${week}/${userId}`, data, config
+      )
+      return response.data
+    } catch (err) {
+      return err?.response?.data || err.message;
+    }
+  }
+
+  generateAIFeedback = async (payload, token) => {
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      timeout: 120000 // 2 minute timeout for AI processing
+    };
+    try {
+      const response = await api.post(
+        `api/admins/generate-ai-feedback`, payload, config
+      )
+      console.log("AdminService generateAIFeedback response:", response.data);
+      return response.data
+    } catch (err) {
+      return err?.response?.data || err.message;
+    }
+  }
 }
 
 const admin = new AdminOBJ()

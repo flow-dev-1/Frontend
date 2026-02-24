@@ -6,10 +6,10 @@ import userService from '../../../../../../services/api/user.js';
 import { useSelector, useDispatch } from 'react-redux';
 import { userAnswer, updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { RotatingLines } from 'react-loader-spinner';
 
-export default function WeekThreeAssessmentForm({ onNext, onBack, course, activityData }) {
+export default function WeekThreeAssessmentForm({ onNext, onBack, course, activityData, isCompleted }) {
   const dispatch = useDispatch();
   const userAnswers = useSelector(userAnswer);
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -137,6 +137,7 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
     // Save answers to localStorage whenever selectedAnswers changes
     localStorage.setItem('weekThreeAssessmentData', JSON.stringify(selectedAnswers));
   }, [selectedAnswers]);
+  const queryClient = useQueryClient();
   // Mutation for saving user data
   const mutation = useMutation({
     mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
@@ -144,11 +145,15 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
       setDisableButton(false);
       toast.dismiss();
       toast.success(data.message || 'Answers saved successfully!'); // Show success toast
+
+      // Invalidate enrollment query to trigger real-time progress update
+      queryClient.invalidateQueries(['enrollment', userAnswers?.courseEnrollmentId]);
+
       dispatch(
         updateData({
           course: null,
           courseEnrollmentId: null,
-          week: 1,
+          week: 3,
           activities: [],
           assessments: [],
         })
@@ -164,9 +169,10 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
   });
 
   const handleNextStepClick = () => {
-    console.log(selectedAnswers, ' selectedAnswers');
+    // Validate current question before moving forward or submitting
+    const isAnswered = selectedAnswers[currentIndex - 1] !== undefined;
 
-    if (selectedAnswers[currentIndex - 1] === undefined) {
+    if (!isCompleted && !isAnswered) {
       toast.error('Please select an answer before proceeding.');
       return;
     }
@@ -174,18 +180,19 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
     if (currentIndex < questionsArray.length) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      const result = {
-        week: 3,
-        assessments: { answers: Object.values(selectedAnswers) },
-      };
-      saveWeekThreeAssessment(result);
+      if (isCompleted) {
+        onNext();
+      } else {
+        const result = {
+          week: 3,
+          assessments: { answers: Object.values(selectedAnswers) },
+        };
+        saveWeekThreeAssessment(result);
+      }
     }
   };
 
-  if (selectedAnswers[currentIndex - 1] === undefined) {
-    toast.error('Please select an answer before proceeding.')
-    return
-  }
+
   const handlePreviousStepClick = () => {
     if (currentIndex > 1) {
       setCurrentIndex(currentIndex - 1);
@@ -195,7 +202,7 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
   };
 
   const handleQuestionCheck = (questionIndex, optionIndex) => {
-    if (selectedAnswers[questionIndex] !== undefined) {
+    if (isCompleted || selectedAnswers[questionIndex] !== undefined) {
       toast.error('You cannot change your answer once it is saved.');
       return;
     }
@@ -206,12 +213,18 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
   };
 
   const saveWeekThreeAssessment = async (result) => {
-    if (disableButton) return
-    // setDisableButton(true)
+    if (disableButton || isCompleted) return
 
     if (!activityData?.activities || activityData?.activities?.length !== 7) {
       toast.error("Please complete all activities before submitting the assessment.")
       return
+    }
+
+    // Final check for all 10 assessment answers
+    const answersArray = Object.values(selectedAnswers);
+    if (answersArray.length !== 10 || answersArray.some(ans => ans === undefined)) {
+      toast.error('Please ensure all 10 assessment questions are answered.');
+      return;
     }
     try {
       const correctAnswers = [1, 0, 1, 1, 1, 1, 1, 1, 1, 1]
@@ -332,7 +345,7 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
               width={20}
             />
           ) : currentIndex === questionsArray.length ? (
-            'Submit'
+            isCompleted ? 'Continue' : 'Submit'
           ) : (
             'Next >>>'
           )}

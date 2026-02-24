@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import QuestionComponent from './QuestionComponent';
@@ -17,7 +17,7 @@ import PersonalityTest from './PersonalityTest';
 import 'react-toastify/dist/ReactToastify.css';
 import WeekOneAssessmentForm from './WeekOneAssessmentForm';
 import userService from '../../../../../../services/api/user.js';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 import { updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
 
@@ -38,10 +38,13 @@ export default function WeekOneLearning({
 
 		return savedState ? JSON.parse(savedState) : 1;
 	});
-	const [formData, setFormData] = useState();
+	const [formData, setFormData] = useState(() => {
+		const savedData = localStorage.getItem(`week-1-activityData`);
+		return savedData ? JSON.parse(savedData) : { week: 1, activities: [] };
+	});
 
 	const week = 1;
-	const { data, isLoading, status, isError } = useQuery({
+	const { data: courseData, isLoading, status, isError } = useQuery({
 		queryKey: ['self-awareness-course-1', courseId, week],
 		queryFn: () => userService.getUserCourseData(courseId, week),
 		refetchOnMount: 'always',
@@ -50,62 +53,54 @@ export default function WeekOneLearning({
 	});
 
 	useEffect(() => {
-		if (!data) return;
+		if (!courseData) return;
 
-		if (data.assessment && data.activity) {
-			const assessments = data?.assessment?.assessments;
-			const activities = data?.activity?.activities;
-			const percent = data?.assessment?.rating;
+		if (courseData.activity) {
+			const activities = courseData.activity.activities || [];
 
-			// Create an object with week and activities
-			const activityData = {
-				week: week,
-				activities: activities,
-			};
+			// Remote State Restoration: Jump to last saved page if it exists and week is NOT completed
+			if (courseData.activity.lastActivityIndex && !isCompleted) {
+				setCurrentActivity(courseData.activity.lastActivityIndex);
+			}
+
+			// Robust Merge: Only use remote activities if they are more comprehensive or if local is empty
+			setFormData((prevData) => {
+				const localActivities = prevData?.activities || [];
+				if (localActivities.length > 0 && activities.length <= localActivities.length) {
+					// Keep local data as it might be fresher (mid-activity saves)
+					return prevData;
+				}
+				return { ...prevData, activities: activities };
+			});
+
+			dispatch(
+				updateData({
+					course: course?.course?._id,
+					courseEnrollmentId: courseId,
+					week,
+					activities: activities,
+					assessments: courseData.assessment?.assessments || [],
+				})
+			);
+		}
+
+		if (courseData.assessment) {
+			const assessments = courseData.assessment.assessments || [];
+			const percent = courseData.assessment.rating;
 
 			const assessment_data = {
 				week: week,
 				percentage: percent,
 				assessments: assessments,
-				personalityColor: data?.assessment?.personalityColor
-					? data?.assessment?.personalityColor
-					: 'Yellow',
+				personalityColor: courseData.assessment.personalityColor || 'Yellow',
 			};
 
-			setFormData(activityData);
-			// Store the object in local storage under the key 'activity1'
-			localStorage.setItem('week-1-activityData', JSON.stringify(activityData));
 			localStorage.setItem(
 				'weekOneAssessmentData',
 				JSON.stringify({ formattedData: assessment_data })
 			);
-			// This Dispatch will be used in submiting the data at the assessment page
-			dispatch(
-				updateData({
-					course: course?.course?._id,
-					courseEnrollmentId: courseId,
-					week,
-					activities: data.activity?.activities,
-					assessments: data.assessment?.assessments,
-				})
-			);
-		} else {
-			// New user
-			setFormData({
-				week: week,
-				activities: [],
-			});
-			dispatch(
-				updateData({
-					course: course?.course?._id,
-					courseEnrollmentId: courseId,
-					week,
-					activities: [],
-					assessments: [],
-				})
-			);
 		}
-	}, [data]);
+	}, [courseData]);
 
 	useEffect(() => {
 		const canSee = localStorage.getItem(`${courseId}-can-see`);
@@ -131,29 +126,61 @@ export default function WeekOneLearning({
 	}, [currentActivity, currentWeekIndex]);
 
 	useEffect(() => {
-		localStorage.setItem(`week-${currentWeekIndex}-activityData`, JSON.stringify(formData));
-	}, [formData, currentWeekIndex]);
+		localStorage.setItem(`week-1-activityData`, JSON.stringify(formData));
+	}, [formData]);
 
-	const handleNext = async (data = {}) => {
+	const isCompleted = !!courseData?.assessment;
+
+	const queryClient = useQueryClient();
+
+	const onLocalUpdate = useCallback((incomingData) => {
 		setFormData((prevData) => {
-			const updatedActivities = prevData?.activities?.map((item) =>
-				item.activity === currentActivity ? { ...item, ...data } : item
+			const currentActivities = prevData?.activities || courseData?.activity?.activities || [];
+			const updatedActivities = currentActivities.map((item) =>
+				item.activity === currentActivity ? { ...item, ...incomingData } : item
 			);
-			if (!updatedActivities?.find((item) => item.activity === currentActivity)) {
-				updatedActivities?.push({ activity: currentActivity, ...data });
+
+			if (!updatedActivities.find((item) => item.activity === currentActivity)) {
+				updatedActivities.push({ activity: currentActivity, ...incomingData });
 			}
+
 			return { ...prevData, activities: updatedActivities };
 		});
+	}, [currentActivity, courseData?.activity?.activities]);
 
-		// Check if it's the last activity defined and go to the default case
-		const isLastActivity = currentActivity >= 15;
-		if (isLastActivity) {
-			setCurrentActivity(16); // This will trigger the default case in renderActivityContent
-		} else {
-			const nextActivity = currentActivity + 1;
-			setCurrentActivity(nextActivity);
+	const handleNext = useCallback(async (incomingData = {}) => {
+		const currentActivities = formData?.activities || courseData?.activity?.activities || [];
+		const updatedActivities = currentActivities.map((item) =>
+			item.activity === currentActivity ? { ...item, ...incomingData } : item
+		);
+
+		if (!updatedActivities.find((item) => item.activity === currentActivity)) {
+			updatedActivities.push({ activity: currentActivity, ...incomingData });
 		}
-	};
+
+		setFormData((prevData) => ({ ...prevData, activities: updatedActivities }));
+
+		const nextActivity = currentActivity >= 15 ? 16 : currentActivity + 1;
+		setCurrentActivity(nextActivity);
+
+		if (!isCompleted && !isLoading) {
+			// Fire and Forget: Save progress to background
+			const payload = {
+				week: week,
+				activities: updatedActivities,
+				lastActivityIndex: nextActivity // Save where they are going
+			};
+
+			userService.postMyActivity(courseId, payload)
+				.then(() => {
+					// Invalidate enrollment query to reflect any backend updates (e.g. lastWeekIndex)
+					queryClient.invalidateQueries(['enrollment', courseId]);
+				})
+				.catch(err => {
+					console.error("Failed to auto-save activity:", err);
+				});
+		}
+	}, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted, isLoading]);
 
 	const handlePrevious = () => {
 		const prevActivity = currentActivity - 1;
@@ -164,8 +191,8 @@ export default function WeekOneLearning({
 
 	const handleNextWeekCourse = () => {
 		const nextWeekIndex = currentWeekIndex + 1;
-		navigate(`/dashboard/self-awareness-course/${courseId}`, {
-			state: { course, weekIndex: nextWeekIndex },
+		navigate(`/dashboard/self-awareness-course`, {
+			state: { enrollmentData: course, weekIndex: nextWeekIndex },
 		});
 	};
 
@@ -246,6 +273,7 @@ export default function WeekOneLearning({
 							activityIndex={currentActivity}
 							formData={formData}
 							onBack={handlePrevious}
+							onUpdate={onLocalUpdate}
 							onNext={handleNext}
 						/>
 					</div>
@@ -302,6 +330,7 @@ export default function WeekOneLearning({
 						activityIndex={currentActivity}
 						formData={formData}
 						onBack={handlePrevious}
+						onUpdate={onLocalUpdate}
 						onNext={handleNext}
 					/>
 				);
@@ -376,6 +405,7 @@ export default function WeekOneLearning({
 						onNext={handleNext}
 						course={course}
 						activityData={formData}
+						isCompleted={isCompleted}
 					/>
 				);
 
@@ -398,9 +428,8 @@ export default function WeekOneLearning({
 			<div className="content-container">
 				{renderActivityContent()}
 				<ModalComponent
-					show={reviewPopUp}
-					handleClose={closeReviewPopUp}
-					// Additional props for ModalComponent if needed
+					reviewPopUp={reviewPopUp}
+					closeReviewPopUp={closeReviewPopUp}
 				/>
 			</div>
 		</div>

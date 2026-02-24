@@ -12,15 +12,24 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
 
-function Transition2Feedback() {
+function Transition2Feedback({ isSchool: isSchoolProp, studentId }) {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
+  const [isSchool, setIsSchool] = useState(isSchoolProp || false);
 
   // This is used to trigger the report download.
   const [hasPercentile, setHasPercentile] = useState(false);
   const isAdmin = useSelector(adminData);
+
+  const { user } = useSelector((state) => state?.user);
+
+  useEffect(() => {
+    if (user?.isSchool) {
+      setIsSchool(true);
+    }
+  }, [user]);
 
   // states to check a certain week data has been loaded
   // This is for the final report generation
@@ -35,10 +44,10 @@ function Transition2Feedback() {
   useEffect(() => {
     setAllDataLoaded(
       isWeekOneLoaded &&
-        isWeekTwoLoaded &&
-        isWeekThreeLoaded &&
-        isWeekFourLoaded &&
-        isWeekFiveLoaded
+      isWeekTwoLoaded &&
+      isWeekThreeLoaded &&
+      isWeekFourLoaded &&
+      isWeekFiveLoaded
     );
   }, [
     isWeekOneLoaded,
@@ -56,7 +65,7 @@ function Transition2Feedback() {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
+    if (!isSchool && !enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
       const courseEnrollmentId = sessionStorage.getItem(
@@ -64,22 +73,26 @@ function Transition2Feedback() {
       );
       if (!courseEnrollmentId) return;
       setEnrollmentId(courseEnrollmentId);
+    } else if (isSchool) {
+      if (enrolmentData?._id) {
+        setEnrollmentId(enrolmentData._id);
+      }
     } else {
       setEnrollmentId(enrolmentData?._id);
     }
-  }, []);
+  }, [isAdmin, enrolmentData, isSchool, navigate]);
 
   const weekContents = [
     {
       topic: "Defining Your Next Chapter",
       component: (
-        <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} />
+        <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
       topic: "Mindset and Values",
       component: (
-        <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} />
+        <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
@@ -88,19 +101,21 @@ function Transition2Feedback() {
         <Week3
           enrollmentId={enrollmentId}
           setWeekThreeData={setWeekThreeData}
+          isSchool={isSchool}
+          studentId={studentId}
         />
       ),
     },
     {
       topic: "Freedom and Responsibilitys",
       component: (
-        <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} />
+        <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
       topic: "Goal Setting and Resilience",
       component: (
-        <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} />
+        <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
@@ -113,7 +128,9 @@ function Transition2Feedback() {
         <OverallFeedBack
           enrollmentId={enrollmentId}
           setHasPercentile={setHasPercentile}
-          //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
+          isSchool={isSchool}
+          studentId={studentId}
+        //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
         />
       ),
     },
@@ -131,7 +148,7 @@ function Transition2Feedback() {
         <div className="container">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => navigate("/dashboard")}
+            onClick={() => isSchool ? navigate("/school-dashboard") : navigate("/dashboard")}
             className="navbar-logo"
             style={{ border: "none", background: "#FFF" }}
           >
@@ -139,7 +156,7 @@ function Transition2Feedback() {
           </button>
           <div
             className="navbar-logo"
-            onClick={() => {}}
+            onClick={() => { }}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -150,16 +167,16 @@ function Transition2Feedback() {
         <aside className="d-none d-lg-block">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => navigate("/dashboard/my-courses")}
+            onClick={() => isSchool ? navigate(-1) : navigate("/dashboard/my-courses")}
             className="back"
             style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
-            Back to My Courses
+            {isSchool ? "Go back" : "Back to My Courses"}
           </button>
           <div className="compassion-title">
-            <h2 className="fs-5 fs-md-3 tot-nav-text">SEL for Educators:</h2>
-            <h2 className="compassion fs-5 tot-nav-text">ToT Course 1</h2>
+            <h2 className="fs-5 fs-md-3 tot-nav-text">navigating the next chapter with clarity:</h2>
+            <h2 className="compassion fs-5 tot-nav-text">Transition 2</h2>
           </div>
 
           <ul className="compassion-list">
@@ -170,8 +187,8 @@ function Transition2Feedback() {
                   index + 1 <= currentWeek
                     ? "active-week"
                     : index >= 6
-                    ? "d-none"
-                    : ""
+                      ? "d-none"
+                      : ""
                 }
               >
                 <div className="icon">
@@ -189,15 +206,15 @@ function Transition2Feedback() {
             ))}
           </ul>
         </aside>
-        <section className="week-content position-relative mb-5 ">
+        <section className={`week-content position-relative mb-5`}>
           <Link
             disabled={isAdmin}
-            to={"/dashboard/my-courses"}
+            to={isSchool ? -1 : "/dashboard/my-courses"}
             className="back text-black mb-5 p-3 d-lg-none"
             style={{ cursor: "pointer", border: "none" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
-            Back to My Courses
+            {isSchool ? "Go back" : "Back to My Courses"}
           </Link>
           <Accordion
             activeIndex={activeIndex}

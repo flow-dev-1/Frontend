@@ -50,11 +50,16 @@ import SelfAwarenessFeedback from "./components/dashboard/pages/my-courses/self-
 import InvitedAdminEducatorRegistration from "./components/onboarding/registration/InvitedEducatorRegistrationForm.js";
 import IndividualSchoolProfile from "./components/school-dashboard/school-pages/school-courses/school-enrolled-courses/school-single-enrolled-course-page/IndividualSchoolProfile.jsx";
 import SchoolSelfAwarenessFeedback from "./components/school-dashboard/school-pages/school-courses/single-individual-course-feedback/self-awareness-feedback/SchoolSelfAwarenessFeedback.js";
+import SchoolResilienceFeedback from "./components/school-dashboard/school-pages/school-courses/single-individual-course-feedback/resilience-feedback/SchoolResilienceFeedback.jsx";
+import SchoolCompassionFeedback from "./components/school-dashboard/school-pages/school-courses/single-individual-course-feedback/compassion-feedback/SchoolCompassionFeedback.jsx";
+import SchoolTransitionFeedback from "./components/school-dashboard/school-pages/school-courses/single-individual-course-feedback/transition-feedback/SchoolTransitionFeedback.jsx";
 import CompassionCourse from "./components/dashboard/pages/my-courses/compassion-course/index.jsx";
 import CompassionFeedback from "./components/dashboard/pages/my-courses/compassion-course/feedback/index.jsx";
 
 import TransitionCourse from "./components/dashboard/pages/my-courses/transition-course/index.jsx";
 import TransitionFeedback from "./components/dashboard/pages/my-courses/transition-course/feedback/index.jsx";
+
+import SchoolTransition2Feedback from "./components/dashboard/pages/my-courses/transition-2/feedback/SchoolTransition2Feedback.jsx";
 import ResilienceCourse from "./components/dashboard/pages/my-courses/resilience-grit/index.jsx";
 import ResilienceFeedback from "./components/dashboard/pages/my-courses/resilience-grit/feedback/index.jsx";
 import TOTCourse from "./components/dashboard/pages/my-courses/TOT/index.jsx";
@@ -313,7 +318,43 @@ function App() {
           />
           <Route
             path="/school-dashboard/courses/feedback/:userId"
-            element={<SchoolSelfAwarenessFeedback />}
+            element={
+              <ProtectedRoute>
+                <SchoolSelfAwarenessFeedback />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/school-dashboard/courses/feedback/resilience_grit/:userId"
+            element={
+              <ProtectedRoute>
+                <SchoolResilienceFeedback />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/school-dashboard/courses/feedback/compassion/:userId"
+            element={
+              <ProtectedRoute>
+                <SchoolCompassionFeedback />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/school-dashboard/courses/feedback/transition/:userId"
+            element={
+              <ProtectedRoute>
+                <SchoolTransitionFeedback />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/school-dashboard/courses/feedback/transition_2/:userId"
+            element={
+              <ProtectedRoute>
+                <SchoolTransition2Feedback />
+              </ProtectedRoute>
+            }
           />
 
           <Route

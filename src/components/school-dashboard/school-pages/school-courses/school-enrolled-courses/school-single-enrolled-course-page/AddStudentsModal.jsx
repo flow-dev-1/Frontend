@@ -83,12 +83,7 @@ const AddStudentModal = ({ isOpen, onRequestClose, classOfficial, classTag }) =>
   })
 
   const { user } = useSelector((state) => state.user)
-  let schoolId
-
-  // ToDO: Do a check if its a school or a user
-  if (user?.isSchool) {
-    schoolId = user?._id
-  }
+  const schoolId = user?.isSchool ? user?._id : user?.school
   const { id } = useParams()
 
   const mutation = useMutation({

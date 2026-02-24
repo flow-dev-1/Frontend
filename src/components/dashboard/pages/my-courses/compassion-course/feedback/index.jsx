@@ -12,7 +12,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
 
-function CompassionFeedback() {
+function CompassionFeedback({ studentId }) {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
@@ -44,10 +44,10 @@ function CompassionFeedback() {
   useEffect(() => {
     setAllDataLoaded(
       isWeekOneLoaded &&
-        isWeekTwoLoaded &&
-        isWeekThreeLoaded &&
-        isWeekFourLoaded &&
-        isWeekFiveLoaded
+      isWeekTwoLoaded &&
+      isWeekThreeLoaded &&
+      isWeekFourLoaded &&
+      isWeekFiveLoaded
     );
   }, [
     isWeekOneLoaded,
@@ -65,7 +65,7 @@ function CompassionFeedback() {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
+    if (!isSchool && !enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
       const courseEnrollmentId = sessionStorage.getItem(
@@ -73,22 +73,26 @@ function CompassionFeedback() {
       );
       if (!courseEnrollmentId) return;
       setEnrollmentId(courseEnrollmentId);
+    } else if (isSchool) {
+      if (enrolmentData?._id) {
+        setEnrollmentId(enrolmentData._id);
+      }
     } else {
-      setEnrollmentId(enrolmentData._id);
+      setEnrollmentId(enrolmentData?._id);
     }
-  }, []);
+  }, [isAdmin, enrolmentData, isSchool, navigate]);
 
   const weekContents = [
     {
       topic: "Introduction to Compassion",
       component: (
-        <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} />
+        <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
       topic: "Self-Compassion",
       component: (
-        <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} />
+        <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
@@ -97,19 +101,20 @@ function CompassionFeedback() {
         <Week3
           enrollmentId={enrollmentId}
           setWeekThreeData={setWeekThreeData}
+          isSchool={isSchool} studentId={studentId}
         />
       ),
     },
     {
       topic: "Circle of Concern",
       component: (
-        <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} />
+        <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
       topic: "Life Scenarios - Let’s wear the shoes of others",
       component: (
-        <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} />
+        <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
@@ -118,7 +123,7 @@ function CompassionFeedback() {
         <OverallFeedBack
           enrollmentId={enrollmentId}
           setHasPercentile={setHasPercentile}
-          //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
+        //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
         />
       ),
     },
@@ -146,7 +151,7 @@ function CompassionFeedback() {
           </button>
           <div
             className="navbar-logo"
-            onClick={() => {}}
+            onClick={() => { }}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -181,8 +186,8 @@ function CompassionFeedback() {
                   index + 1 <= currentWeek
                     ? "active-week"
                     : index === 5
-                    ? "d-none"
-                    : ""
+                      ? "d-none"
+                      : ""
                 }
               >
                 <div className="icon">

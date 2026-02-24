@@ -12,15 +12,24 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
 
-function ResilienceFeedback() {
+function EmotionalRegulationFeedback({ studentId }) {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
+  const [isSchool, setIsSchool] = useState(false);
 
   // This is used to trigger the report download.
   const [hasPercentile, setHasPercentile] = useState(false);
   const isAdmin = useSelector(adminData);
+
+  const { user } = useSelector((state) => state?.user);
+
+  useEffect(() => {
+    if (user?.isSchool) {
+      setIsSchool(true);
+    }
+  }, [user]);
 
   // states to check a certain week data has been loaded
   // This is for the final report generation
@@ -29,21 +38,16 @@ function ResilienceFeedback() {
   const [isWeekThreeLoaded, setWeekThreeData] = useState(false);
   const [isWeekFourLoaded, setWeekFourData] = useState(false);
   const [isWeekFiveLoaded, setWeekFiveData] = useState(false);
-  const [isWeekSixLoaded, setWeekSixData] = useState(false);
-  const [isWeekSevenLoaded, setWeekSevenData] = useState(false);
-  const [isWeekEightLoaded, setWeekEightData] = useState(false);
-  const [isWeekNineLoaded, setWeekNineData] = useState(false);
-  const [isWeekTenLoaded, setWeekTenData] = useState(false);
 
   const [allDataLoaded, setAllDataLoaded] = useState(false);
 
   useEffect(() => {
     setAllDataLoaded(
       isWeekOneLoaded &&
-        isWeekTwoLoaded &&
-        isWeekThreeLoaded &&
-        isWeekFourLoaded &&
-        isWeekFiveLoaded 
+      isWeekTwoLoaded &&
+      isWeekThreeLoaded &&
+      isWeekFourLoaded &&
+      isWeekFiveLoaded
     );
   }, [
     isWeekOneLoaded,
@@ -61,7 +65,7 @@ function ResilienceFeedback() {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    // if (!enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
+    if (!isSchool && !enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
       const courseEnrollmentId = sessionStorage.getItem(
@@ -69,22 +73,26 @@ function ResilienceFeedback() {
       );
       if (!courseEnrollmentId) return;
       setEnrollmentId(courseEnrollmentId);
+    } else if (isSchool) {
+      if (enrolmentData?._id) {
+        setEnrollmentId(enrolmentData._id);
+      }
     } else {
       setEnrollmentId(enrolmentData?._id);
     }
-  }, []);
+  }, [isAdmin, enrolmentData, isSchool, navigate]);
 
   const weekContents = [
     {
       topic: "Introduction to Emotional Regulation",
       component: (
-        <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} />
+        <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
       topic: "Identifying Energy Levels",
       component: (
-        <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} />
+        <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
@@ -93,19 +101,20 @@ function ResilienceFeedback() {
         <Week3
           enrollmentId={enrollmentId}
           setWeekThreeData={setWeekThreeData}
+          isSchool={isSchool} studentId={studentId}
         />
       ),
     },
     {
       topic: "Introduction to Coping Skills",
       component: (
-        <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} />
+        <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} isSchool={isSchool} studentId={studentId} />
       ),
     },
     {
       topic: "Wrapping Up!",
       component: (
-        <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} />
+        <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} isSchool={isSchool} studentId={studentId} />
       ),
     },
 
@@ -115,7 +124,9 @@ function ResilienceFeedback() {
         <OverallFeedBack
           enrollmentId={enrollmentId}
           setHasPercentile={setHasPercentile}
-          //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
+          isSchool={isSchool}
+          studentId={studentId}
+        //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
         />
       ),
     },
@@ -133,7 +144,7 @@ function ResilienceFeedback() {
         <div className="container">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => navigate("/dashboard")}
+            onClick={() => isSchool ? navigate("/school-dashboard") : navigate("/dashboard")}
             className="navbar-logo"
             style={{ border: "none", background: "#FFF" }}
           >
@@ -141,7 +152,7 @@ function ResilienceFeedback() {
           </button>
           <div
             className="navbar-logo"
-            onClick={() => {}}
+            onClick={() => { }}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -152,18 +163,18 @@ function ResilienceFeedback() {
         <aside className="d-none d-lg-block">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => navigate("/dashboard/my-courses")}
+            onClick={() => isSchool ? navigate(-1) : navigate("/dashboard/my-courses")}
             className="back"
             style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
-            Back to My Courses
+            {isSchool ? "Go back" : "Back to My Courses"}
           </button>
           <div className="compassion-title">
-          <h2 className="fs-5 fs-md-3">
+            <h2 className="fs-5 fs-md-3">
               Stay Strong, Keep Going!
             </h2>
-          <h2 className="compassion fs-5">Emotional Regulation</h2>
+            <h2 className="compassion fs-5">Emotional Regulation</h2>
           </div>
 
           <ul className="compassion-list">
@@ -174,8 +185,8 @@ function ResilienceFeedback() {
                   index + 1 <= currentWeek
                     ? "active-week"
                     : index === 5
-                    ? "d-none"
-                    : ""
+                      ? "d-none"
+                      : ""
                 }
               >
                 <div className="icon">
@@ -196,12 +207,12 @@ function ResilienceFeedback() {
         <section className="week-content position-relative mb-5 ">
           <Link
             disabled={isAdmin}
-            to={"/dashboard/my-courses"}
+            to={isSchool ? -1 : "/dashboard/my-courses"}
             className="back text-black mb-5 p-3 d-lg-none"
             style={{ cursor: "pointer", border: "none" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
-            Back to My Courses
+            {isSchool ? "Go back" : "Back to My Courses"}
           </Link>
           <Accordion
             activeIndex={activeIndex}
@@ -217,6 +228,6 @@ function ResilienceFeedback() {
   );
 }
 
-export default ResilienceFeedback;
+export default EmotionalRegulationFeedback;
 
 // week 4, all drag and drop

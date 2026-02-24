@@ -54,7 +54,7 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -64,7 +64,7 @@ export const courseContent = {
         id: 4,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_3.mp4",
         type: "showFeelings",
         navigation: {
           prev: true,
@@ -75,7 +75,7 @@ export const courseContent = {
         id: 5,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -133,7 +133,7 @@ export const courseContent = {
         id: 7,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -157,7 +157,7 @@ export const courseContent = {
         id: 9,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_5.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_5.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -245,7 +245,7 @@ export const courseContent = {
         id: 11,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -269,7 +269,7 @@ export const courseContent = {
         id: 13,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_7.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_7.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -627,7 +627,7 @@ export const courseContent = {
         id: 15,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_8.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_8.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -649,7 +649,7 @@ export const courseContent = {
         id: 17,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_9.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_9.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -708,7 +708,7 @@ export const courseContent = {
         id: 19,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_10.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_10.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -742,7 +742,7 @@ export const courseContent = {
         id: 21,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_11.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_11.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -793,7 +793,7 @@ export const courseContent = {
         id: 23,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_12.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_12.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -808,7 +808,7 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/ToT_2_1.mp4",
         hasNextButton: true,
       },
       {
@@ -828,7 +828,7 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/ToT_2_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -878,7 +878,7 @@ export const courseContent = {
         id: 5,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/ToT_2_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -939,7 +939,7 @@ export const courseContent = {
         id: 7,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/ToT_2_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -963,7 +963,7 @@ export const courseContent = {
         id: 9,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_5.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/ToT_2_5.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1166,7 +1166,7 @@ export const courseContent = {
         id: 11,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_6.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/ToT_2_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1325,7 +1325,7 @@ export const courseContent = {
         id: 13,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_7.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/ToT_2_7.mp4",
         navigation: {
           prev: true,
           next: true,

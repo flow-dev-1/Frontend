@@ -18,7 +18,9 @@ import Modal from "../../components/Modal.jsx";
 import { useMutation } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 
-function Week2({ enrollmentId, setWeekTwoData }) {
+import schoolService from "../../../../../../../../services/api/school.js";
+
+function Week2({ enrollmentId, setWeekTwoData, isSchool, studentId }) {
   const { pages } = getWeekContentExcludingVideos(2);
 
   const [activity1, activity2] = pages;
@@ -36,11 +38,12 @@ function Week2({ enrollmentId, setWeekTwoData }) {
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/emotional-regulation-feedback-2", enrollmentId, 2],
-    queryFn: () =>
-      isAdmin
-        ? adminService.getUserCourseData(enrollmentId, 2, code)
-        : userService.getUserCourseData(enrollmentId, 2),
+    queryKey: ["dashboard/resilience-feedback-2", enrollmentId, 2],
+    queryFn: () => {
+      if (isAdmin) return adminService.getUserCourseData(enrollmentId, 2, code);
+      if (isSchool) return schoolService.getStudentCourseData(enrollmentId, 2, studentId);
+      return userService.getUserCourseData(enrollmentId, 2);
+    },
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -120,7 +123,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
 
       const answerObject = answersList?.find(
         (activity) => activity.stepId === itemId
-      ).value;
+      )?.value;
 
       // return answerObject ? answerObject[index] : null;
       return answerObject ? answerObject : null;
@@ -153,8 +156,8 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     return <div>Loading...</div>;
   }
 
-  if (data?.status === "failed" || isError) {
-    return <div>{data?.message}</div>;
+  if (data?.status === "failed" || isError || !data) {
+    return <div>Take Activity to see feedback.</div>;
   }
 
   const score =

@@ -379,6 +379,18 @@ class SchoolOBJ {
     }
   }
 
+  getStudentCourseData = async (params1, week, params2) => {
+    try {
+      const response = await api.get(
+        `api/schools/course-enrollment/${params1}/${week}/${params2}`
+      )
+      return response.data
+    } catch (err) {
+      console.log(err?.response?.data || err.message)
+      throw err?.response?.data || err.message
+    }
+  }
+
 
   getStudentProfileIndividual = async (id) => {
     try {

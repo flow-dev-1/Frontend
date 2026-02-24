@@ -14,7 +14,7 @@ Modal.setAppElement('#root');
 
 // Toast notification (import from your preferred toast library)
 
-export default function PersonalityTest({ onNext, onBack, formData, activityIndex }) {
+export default function PersonalityTest({ onNext, onBack, formData, activityIndex, onUpdate }) {
 	const answers = [
 		{
 			title: "You're working on a group project, and it's time to divide the tasks. How do you approach this situation?",
@@ -135,10 +135,20 @@ export default function PersonalityTest({ onNext, onBack, formData, activityInde
 	const [currentIndex, setCurrentIndex] = useState(initialState.currentIndex || 1);
 	const [questionChecked, setQuestionChecked] = useState(
 		initialState.questionChecked ||
-			answers.reduce((acc, _, index) => ({ ...acc, [index]: null }), {})
+		answers.reduce((acc, _, index) => ({ ...acc, [index]: null }), {})
 	);
 
 	const [showModal, setShowModal] = useState(false);
+
+	// Pushing state to parent only when it actually changes due to user action
+	const pushToParent = (updatedIndex, updatedChecked) => {
+		if (onUpdate) {
+			onUpdate({
+				currentIndex: updatedIndex,
+				questionChecked: updatedChecked,
+			});
+		}
+	};
 	const [chartData, setChartData] = useState([
 		{ name: 'Red', value: 0, color: '#FF6384' },
 		{ name: 'Green', value: 0, color: '#36A2EB' },
@@ -155,7 +165,9 @@ export default function PersonalityTest({ onNext, onBack, formData, activityInde
 		}
 
 		if (currentIndex < answers.length + 1) {
-			setCurrentIndex(currentIndex + 1);
+			const nextIndex = currentIndex + 1;
+			setCurrentIndex(nextIndex);
+			pushToParent(nextIndex, questionChecked);
 		} else {
 			const totalQuestions = Object.keys(questionChecked).length;
 
@@ -205,19 +217,21 @@ export default function PersonalityTest({ onNext, onBack, formData, activityInde
 		}
 	};
 
-	// Handle question selection
 	const handleQuestionCheck = (questionIndex, optionIndex) => {
 		const selectedText = answers[questionIndex].questionList[optionIndex];
-		setQuestionChecked((prevState) => ({
-			...prevState,
+		const updatedChecked = {
+			...questionChecked,
 			[questionIndex]: { index: optionIndex, text: selectedText },
-		}));
+		};
+		setQuestionChecked(updatedChecked);
+		pushToParent(currentIndex, updatedChecked);
 	};
 
-	// Handle the "Back" button click
 	const handleBackClick = () => {
 		if (currentIndex > 1) {
-			setCurrentIndex(currentIndex - 1);
+			const nextIndex = currentIndex - 1;
+			setCurrentIndex(nextIndex);
+			pushToParent(nextIndex, questionChecked);
 		} else {
 			onBack();
 		}

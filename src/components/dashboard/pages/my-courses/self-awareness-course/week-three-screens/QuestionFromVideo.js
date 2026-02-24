@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function QuestionFromVideo({ formData, onBack, onNext }) {
 	const [currentIndex, setCurrentIndex] = useState(1);
 	const [errorMessage, setErrorMessage] = useState('');
-	const initialAnswers = formData?.activities?.find((activity) => activity.activity === 6)
-		?.answers || ['', '', '', '', '', ''];
+	const [answers, setAnswers] = useState(['', '', '', '', '', '']);
 
-	const [answers, setAnswers] = useState(initialAnswers);
+	useEffect(() => {
+		const currentActivityData = formData?.activities?.find((activity) => activity.activity === 6);
+		if (currentActivityData && currentActivityData.answers) {
+			setAnswers(currentActivityData.answers);
+		} else {
+			setAnswers(['', '', '', '', '', '']);
+		}
+	}, [formData]);
 
 	const handleInputChange = (event, index) => {
 		const { value } = event.target;
@@ -85,9 +91,8 @@ export default function QuestionFromVideo({ formData, onBack, onNext }) {
 												>
 													<textarea
 														rows="3"
-														placeholder={`${
-															index + 1
-														}. Type your answer here...`}
+														placeholder={`${index + 1
+															}. Type your answer here...`}
 														value={answers[index]}
 														onChange={(e) =>
 															handleInputChange(e, index)

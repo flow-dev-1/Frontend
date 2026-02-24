@@ -96,7 +96,7 @@ div#badge {
   width: 70px;
   border-radius: 27px;
   font-size: 13px;
-  text-align: center;
+  text-align: left !important;
 }
 
 .color-label.red {

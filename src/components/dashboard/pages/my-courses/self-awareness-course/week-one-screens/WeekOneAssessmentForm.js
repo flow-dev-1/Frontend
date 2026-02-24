@@ -6,10 +6,10 @@ import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import { userAnswer, updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { RotatingLines } from 'react-loader-spinner';
 
-export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course, activityData }) {
+export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course, activityData, isCompleted }) {
 	const dispatch = useDispatch();
 	const userAnswers = useSelector(userAnswer);
 	const [currentIndex, setCurrentIndex] = useState(1);
@@ -259,8 +259,11 @@ export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course
 		if (currentIndex < questionsArray.length + 1) {
 			setCurrentIndex(currentIndex + 1);
 		} else {
-			saveAssessmentData();
-			// Show review popup immediately
+			if (isCompleted) {
+				onNext();
+			} else {
+				saveAssessmentData();
+			}
 		}
 	};
 
@@ -273,6 +276,7 @@ export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course
 	};
 
 	const handleQuestionCheck = (questionIndex, optionIndex) => {
+		if (isCompleted) return;
 		setQuestionChecked((prevState) => {
 			const newState = [...prevState];
 			newState[questionIndex] = optionIndex;
@@ -280,6 +284,7 @@ export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course
 		});
 	};
 
+	const queryClient = useQueryClient();
 	// Mutation for saving user data
 	const mutation = useMutation({
 		mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
@@ -287,6 +292,10 @@ export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course
 			setIsLoading(false);
 			toast.dismiss();
 			toast.success(data.message || 'Answers saved successfully!'); // Show success toast
+
+			// Invalidate enrollment query to trigger real-time progress update
+			queryClient.invalidateQueries(['enrollment', userAnswers?.courseEnrollmentId]);
+
 			dispatch(
 				updateData({
 					course: null,
@@ -307,7 +316,7 @@ export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course
 	});
 
 	const saveAssessmentData = async () => {
-		if (isLoading) return;
+		if (isLoading || isCompleted) return;
 
 		//For week 1 there ought to be 14 activities
 		if (!activityData?.activities || activityData?.activities?.length !== 14) {
@@ -467,7 +476,7 @@ export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course
 							width={20}
 						/>
 					) : (
-						<>{'Next >>>'}</>
+						<>{currentIndex === getQuestionsArray().length + 1 && isCompleted ? 'Continue' : 'Next >>>'}</>
 					)}
 				</button>
 			</div>

@@ -235,6 +235,15 @@ class UserOBJ {
     }
   };
 
+  getSingleEnrollment = async (id) => {
+    try {
+      const response = await api.get(`api/users/courses/enrollment/${id}`);
+      return response.data;
+    } catch (err) {
+      return err?.response?.data || err.message;
+    }
+  };
+
   getIndividualCourses = async () => {
     try {
       // Check if data is not empty
@@ -277,8 +286,8 @@ class UserOBJ {
       return err?.response?.data || err.message;
     }
   }
-    // This is for self-Awareness course
-  postMyAssessment = async (courseId,courseEnrollmentId, formData) => {
+  // This is for self-Awareness course
+  postMyAssessment = async (courseId, courseEnrollmentId, formData) => {
     try {
       const response = await api.post(
         `api/users/course-enrollment/${courseId}/assesment?enrollmentId=${courseEnrollmentId}`,
@@ -306,7 +315,7 @@ class UserOBJ {
     }
   }
 
-  submitUserCourseReaction = async (courseId,reaction) => {
+  submitUserCourseReaction = async (courseId, reaction) => {
 
     try {
       const response = await api.put(`api/users/courses/${courseId}/reaction?reaction=${reaction}`)
@@ -316,7 +325,7 @@ class UserOBJ {
       throw err?.response?.data || err.message;
     }
   }
-  
+
   getUserCourseData = async (params1, week) => {
     try {
       const response = await api.get(
@@ -381,10 +390,10 @@ class UserOBJ {
       const response = await api.get(
         `api/admins/course-enrollment/${params1}/get-assesment/${week}/${params2}`
       );
-      
+
       return response.data;
     } catch (err) {
-      console.log(err?.response?.data || err.message,"Error here");
+      console.log(err?.response?.data || err.message, "Error here");
       throw err?.response?.data || err.message;
     }
   };

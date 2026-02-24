@@ -85,7 +85,7 @@ const SingleStudentEnrolledCoursesCard = ({
     const status = getStatus(course?.progress) // You can change this based on your data
     setCourseStatus(status)
 
-    return () => {}
+    return () => { }
   }, [course])
 
   const getStatusColor = (status) => {
@@ -102,9 +102,33 @@ const SingleStudentEnrolledCoursesCard = ({
   }
 
   const handleFeedbackNavigation = (course) => {
+    console.log("DEBUG: Full Course Object:", course)
+    console.log("DEBUG: Enrollment ID (_id):", course?._id)
+    console.log("DEBUG: Course ID (course._id):", course?.course?._id)
     if (course?.course.title === "Self Awareness") {
       navigate(
-        `/school-dashboard/courses/feedback/${encryptURI(userId)}`
+        `/school-dashboard/courses/feedback/${encryptURI(userId)}`,
+        { state: { enrollmentData: course } }
+      )
+    } else if (course?.course.title === "Resilience & Grit") {
+      navigate(
+        `/school-dashboard/courses/feedback/resilience_grit/${encryptURI(userId)}`,
+        { state: { enrollmentData: course } }
+      )
+    } else if (course?.course.title === "Compassion") {
+      navigate(
+        `/school-dashboard/courses/feedback/compassion/${encryptURI(userId)}`,
+        { state: { enrollmentData: course } }
+      )
+    } else if (course?.course.title === "Transition 2") {
+      navigate(
+        `/school-dashboard/courses/feedback/transition_2/${encryptURI(userId)}`,
+        { state: { enrollmentData: course } }
+      )
+    } else if (course?.course.title === "Transition") {
+      navigate(
+        `/school-dashboard/courses/feedback/transition/${encryptURI(userId)}`,
+        { state: { enrollmentData: course } }
       )
     } else {
       navigate(`/dashboard/${course?.course.title}/feedback`, { state: { enrollmentData: course } })
@@ -217,11 +241,10 @@ const SingleStudentEnrolledCoursesCard = ({
                   course?.progress === 0 || course?.progress === undefined
                     ? '#A6A6A6'
                     : '#329BD6',
-                border: `1px solid ${
-                  course?.progress === 0 || course?.progress === undefined
-                    ? '#D6D6D6'
-                    : '#329bd6'
-                }`,
+                border: `1px solid ${course?.progress === 0 || course?.progress === undefined
+                  ? '#D6D6D6'
+                  : '#329bd6'
+                  }`,
                 padding: '5px 10px',
                 cursor:
                   course?.progress === 0 || course?.progress === undefined

@@ -15,7 +15,7 @@ import emojiNostalgia from '../../../../../../assets/selfawareness-images/emocom
 
 import ProgressionButtons from '../components/ProgressionButtons';
 
-export default function EmojiRespond({ onNext, onBack, formData }) {
+export default function EmojiRespond({ onNext, onBack, formData, activityIndex }) {
 	const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
 	const [selectedOptions, setSelectedOptions] = useState({});
 	const dropdownRefs = useRef([]);
@@ -71,10 +71,15 @@ export default function EmojiRespond({ onNext, onBack, formData }) {
 
 	useEffect(() => {
 		// Prepopulate selectedOptions based on formData
-		if (formData?.activities[5]?.answers) {
-			setSelectedOptions(formData.activities[5].answers);
+		const currentActivityData = formData?.activities?.find(
+			(activity) => activity.activity === activityIndex
+		);
+		if (currentActivityData && currentActivityData.answers) {
+			setSelectedOptions(currentActivityData.answers);
+		} else {
+			setSelectedOptions({});
 		}
-	}, [formData]);
+	}, [formData, activityIndex]);
 
 	const handleEmojiClick = (index) => {
 		setOpenDropdownIndex(index === openDropdownIndex ? null : index);

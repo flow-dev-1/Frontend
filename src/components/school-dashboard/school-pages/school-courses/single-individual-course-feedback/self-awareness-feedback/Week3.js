@@ -7,12 +7,17 @@ import checkedImage from '../../../../../../assets/selfawareness-images/checked.
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
 import { Icon } from '@iconify/react'
 import FinalReport from './FinalReport'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import userService from '../../../../../../services/api/user'
 import { decryptId } from '../../../../../../utils/encryption'
 import schoolService from '../../../../../../services/api/school'
+import adminService from "../../../../../../services/api/admin";
 import { useParams } from 'react-router-dom'
-let questionsQuiz = [
+import FeedbackModal from "./FeedbackModal";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { adminData } from "../../../../../../redux/reducers/adminReducer";
+const initialQuestionsQuiz = [
   {
     question:
       'Flowie believes that she can improve her drawing skills with practice and effort. Which mindset does this describe?',
@@ -318,95 +323,173 @@ let questionsQuiz = [
   },
 ]
 
-const Week3 = () => {
-  // const percentage = 20;
+const Week3 = ({ enrollmentId, isSchool, studentId }) => {
   const { userId } = useParams()
   const week = 3
   const courseId = '66853bf50118e2e0a02b6a5a'
+  const queryClient = useQueryClient();
+  const [questionsQuiz, setQuestionsQuiz] = useState(initialQuestionsQuiz)
+  const [activeModal, setActiveModal] = useState(null);
+  const [editingActivity, setEditingActivity] = useState(null);
+  const [activitiesDataState, setActivitiesDataState] = useState([]);
+
+  const { isAdmin, code } = useSelector(adminData);
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['dashboard/feedback/self-awareness', courseId, week],
-    queryFn: () => schoolService.getStudentMyActivites(courseId, week, decryptId(userId)),
+    queryKey: ['dashboard/feedback/self-awareness', enrollmentId || courseId, week],
+    queryFn: () => {
+      if (isAdmin && enrollmentId) return adminService.getUserCourseData(enrollmentId, week, code);
+      if (isSchool || isAdmin) return schoolService.getStudentCourseData(enrollmentId || courseId, week, studentId || decryptId(userId));
+      return schoolService.getStudentCourseData(enrollmentId || courseId, week, decryptId(userId));
+    },
+    enabled: !!enrollmentId || !!courseId,
   })
 
-  // console.log(data?.activity?.activities[1]?.answers[0]);
-
-  const [assessmentData, setAssessmentData] = useState(null)
-  const [assessmentLoading, setAssessmentLoading] = useState(true)
-  const [assessmentError, setAssessmentError] = useState(null)
+  const feedbackMutation = useMutation({
+    mutationFn: (updatedActivities) => {
+      if (isAdmin) {
+        return adminService.submitAdminFeedback(
+          updatedActivities,
+          enrollmentId,
+          week,
+          data?.activity?.user,
+          code
+        );
+      }
+      return schoolService.getMyActivitesUpdate(
+        enrollmentId || courseId,
+        week,
+        decryptId(userId),
+        { activities: updatedActivities }
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["dashboard/feedback/self-awareness"]);
+      toast.success("Feedback submitted successfully");
+      closeModal();
+    },
+    onError: (error) => {
+      console.error("Feedback submission error:", error);
+      toast.error(error?.message || "Failed to submit feedback");
+    },
+  });
 
   useEffect(() => {
-    const fetchAndProcessAssessmentData = async () => {
-      setAssessmentLoading(true)
-      try {
-        const data = await schoolService.getStudentAssessments(courseId, week, decryptId(userId));
-        setAssessmentData(data)
-        const assessmentForChecked =
-          data?.existingAssessment.assessments[0].answers
-        // console.log(data?.existingAssessment.assessments[0].answers);
-
-        // Ensure that assessmentForChecked is valid before slicing
-        if (assessmentForChecked && assessmentForChecked.length >= 5) {
-          const valuesToCheck = assessmentForChecked
-
-          questionsQuiz = questionsQuiz.map((question, index) => {
-            return {
-              ...question,
-              options: question.options.map((option, optionIndex) => {
-                return {
-                  ...option,
-                  checked: optionIndex === valuesToCheck[index],
-                }
-              }),
-            }
-          })
-        } else {
-          console.error('Assessment answers are missing or incomplete.')
-        }
-      } catch (error) {
-        setAssessmentError(error)
-      } finally {
-        setAssessmentLoading(false)
-      }
+    if (data?.activity?.activities) {
+      setActivitiesDataState(data.activity.activities);
     }
+  }, [data]);
 
-    fetchAndProcessAssessmentData()
-  }, [courseId, week])
+  const openModal = (activityIndex, feedback = "") => {
+    setActiveModal(activityIndex);
+    setEditingActivity({ index: activityIndex, feedback });
+  };
 
-  const percentage = assessmentData?.existingAssessment?.rating
-  // // console.log(updatedQuestionsQuiz);
+  const closeModal = () => {
+    setActiveModal(null);
+    setEditingActivity(null);
+  };
 
-  if (isLoading || assessmentLoading) {
+  const assessmentData = data?.assessment;
+  const activityData = data?.activity;
+  const percentage = assessmentData?.rating || 0;
+
+  useEffect(() => {
+    if (!data) return
+    const assessmentForChecked =
+      assessmentData?.assessments?.[0]?.answers
+
+    if (assessmentForChecked && assessmentForChecked.length >= 5) {
+      const valuesToCheck = assessmentForChecked
+
+      setQuestionsQuiz(prevQuestions =>
+        prevQuestions.map((question, index) => {
+          return {
+            ...question,
+            options: question.options.map((option, optionIndex) => {
+              return {
+                ...option,
+                checked: optionIndex === valuesToCheck[index],
+              }
+            }),
+          }
+        })
+      )
+    }
+  }, [data, assessmentData])
+
+
+  if (isLoading) {
     return <div>Loading...</div>
   }
 
-  if (isError || assessmentError) {
+  if (isError || (!assessmentData && !activityData)) {
     return <div>Take Activity to see feedback.</div>
   }
 
   const activities = [
     {
+      activity: 1,
       question: 'What do you understand by the word “Mindset”?',
-      answer: data?.activity?.activities[1]?.answers[0],
+      answer: activityData?.activities?.find(a => a.activity === 2)?.answers?.[0],
+      feedback: activityData?.activities?.find(a => a.activity === 2)?.feedback?.[0] || '',
     },
     {
+      activity: 2,
       question:
         'Do you feel like you have a growth mindset, or do you sometimes find yourself with a fixed mindset? Share your thoughts. It’s okay to be honest, this is all about learning and growing together!',
-      answer: data?.activity?.activities[3]?.answers[0],
+      answer: activityData?.activities?.find(a => a.activity === 4)?.answers?.[0],
+      feedback: activityData?.activities?.find(a => a.activity === 4)?.feedback?.[0] || '',
     },
     {
-      question: 'List five (5) lessons you got from the videos you watched.',
-      answer: data?.activity?.activities[5]?.answers.slice(0, 5),
+      activity: 3,
+      question:
+        'List five (5) lessons you got from the videos you watched.',
+      answer: activityData?.activities?.find(a => a.activity === 6)?.answers?.slice(0, 5),
+      feedback: activityData?.activities?.find(a => a.activity === 6)?.feedback?.[0] || '',
     },
     {
+      activity: 4,
       question:
         'List one (1) thing you will start working on, even on your growth journey.',
-      answer: data?.activity?.activities[5]?.answers[5],
+      answer: activityData?.activities?.find(a => a.activity === 6)?.answers?.[5],
+      feedback: activityData?.activities?.find(a => a.activity === 6)?.feedback?.[1] || '',
     },
   ]
 
+
+  const handleFeedbackSubmit = (activityId, feedback) => {
+    const adjustedActivityId = (() => {
+      switch (activityId) {
+        case 1: return 2;
+        case 2: return 4;
+        case 3:
+        case 4: return 6;
+        default: return activityId;
+      }
+    })();
+
+    const updatedActivities = activitiesDataState.map((act) => {
+      if (act.activity === adjustedActivityId) {
+        if ([3, 4].includes(activityId)) {
+          const feedbackIndex = activityId === 3 ? 0 : 1;
+          const updatedFeedback = Array.isArray(act.feedback) ? [...act.feedback] : [];
+          updatedFeedback[feedbackIndex] = feedback;
+          return { ...act, feedback: updatedFeedback };
+        } else {
+          return { ...act, feedback: [feedback] };
+        }
+      }
+      return act;
+    });
+
+    setActivitiesDataState(updatedActivities);
+    feedbackMutation.mutate(updatedActivities);
+  };
+
   return (
-    <div className='week-content'>
-      {activities.map((activity, index) => (
+    <div className='week-content w-auto'>
+      {activities.slice(0, 2).map((activity, index) => (
         <div style={{ border: 'none' }} className='activity' key={index}>
           <p className='activity-badge'>Activity {index + 1}</p>
           <p className='question d-flex align-items-center gap-2'>
@@ -417,29 +500,57 @@ const Week3 = () => {
           {/* Check if answer is an array and render as an ordered list */}
           {Array.isArray(activity.answer) ? (
             <ol className='answer-options' style={{ paddingLeft: '1.5rem' }}>
-              <div className='d-flex  gap-2'>
-                <h4 style={{ color: '#555', marginTop: '.3rem' }}>Answer:</h4>{' '}
-                <div>
-                  {activity.answer.map((item, idx) => (
-                    <li
-                      key={idx}
-                      style={{ marginBottom: '.5rem', fontSize: '14px' }}
-                    >
-                      {idx + 1}. {item}
-                    </li>
-                  ))}
+              <div className='d-flex w-100 justify-content-between align-items-center gap-2'>
+                <div className='d-flex  gap-2'>
+                  <h4 style={{ color: '#555', marginTop: '.3rem' }}>Answer:</h4>{' '}
+                  <div>
+                    {activity.answer.map((item, idx) => (
+                      <li
+                        key={idx}
+                        style={{ marginBottom: '.5rem', fontSize: '14px' }}
+                      >
+                        {idx + 1}. {item}
+                      </li>
+                    ))}
+                  </div>
                 </div>
+                {isAdmin && (!activity?.feedback || activity.feedback.length === 0) && (
+                  <Icon
+                    onClick={() => openModal(activity.activity)}
+                    style={{ color: "#275DAD", cursor: "pointer" }}
+                    width={20}
+                    icon="hugeicons:comment-01"
+                  />
+                )}
               </div>
             </ol>
           ) : (
-            <div className='answer d-flex align-items-center gap-2'>
-              <h4 style={{ color: '#555', marginTop: '.3rem' }}>Answer:</h4>{' '}
-              <p>{activity.answer}</p>
+            <div className='answer d-flex w-100 justify-content-between align-items-center gap-2'>
+              <div className='d-flex align-items-center gap-2'>
+                <h4 style={{ color: '#555', marginTop: '.3rem' }}>Answer:</h4>{' '}
+                <p style={{ fontSize: '14px' }}>{activity.answer}</p>
+              </div>
+              {isAdmin && (!activity?.feedback || activity.feedback.length === 0) && (
+                <Icon
+                  onClick={() => openModal(activity.activity)}
+                  style={{ color: "#275DAD", cursor: "pointer" }}
+                  width={20}
+                  icon="hugeicons:comment-01"
+                />
+              )}
             </div>
           )}
 
           {/* Conditionally render feedback */}
-          {activity.feedback && (
+          {activeModal === activity.activity && (
+            <FeedbackModal
+              initialFeedback={activity?.feedback || ""}
+              onClose={closeModal}
+              onSubmit={(feedback) => handleFeedbackSubmit(activity.activity, feedback)}
+            />
+          )}
+
+          {activity?.feedback?.length > 0 && (
             <div className='feedback'>
               <div id='badge'>Feedback:</div>
               <div
@@ -451,11 +562,99 @@ const Week3 = () => {
                 }}
               >
                 <div className='feedback-card'>{activity.feedback}</div>
-                {/* <Icon
-                  style={{ color: "#275DAD" }}
+                <Icon
+                  onClick={() => openModal(activity.activity, activity.feedback)}
+                  style={{ color: "#275DAD", cursor: "pointer" }}
                   width={20}
                   icon="lucide:edit"
-                /> */}
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+
+      <p className='activity-badge'>Activity 3</p>
+      {activities.slice(2).map((activity, index) => (
+        <div style={{ border: 'none' }} className='activity' key={index}>
+          <p className='question d-flex align-items-center gap-2'>
+            <h4 style={{ color: '#275DAD', marginTop: '.3rem' }}>Question:</h4>
+            <span>{activity.question}</span>
+          </p>
+
+          {/* Check if answer is an array and render as an ordered list */}
+          {Array.isArray(activity.answer) ? (
+            <ol className='answer-options' style={{ paddingLeft: '1.5rem' }}>
+              <div className='d-flex w-100 justify-content-between align-items-center gap-2'>
+                <div className='d-flex  gap-2'>
+                  <h4 style={{ color: '#555', marginTop: '.3rem' }}>Answer:</h4>{' '}
+                  <div>
+                    {activity.answer.map((item, idx) => (
+                      <li
+                        key={idx}
+                        style={{ marginBottom: '.5rem', fontSize: '14px' }}
+                      >
+                        {idx + 1}. {item}
+                      </li>
+                    ))}
+                  </div>
+                </div>
+                {isAdmin && (!activity?.feedback || activity.feedback.length === 0) && (
+                  <Icon
+                    onClick={() => openModal(activity.activity)}
+                    style={{ color: "#275DAD", cursor: "pointer" }}
+                    width={20}
+                    icon="hugeicons:comment-01"
+                  />
+                )}
+              </div>
+            </ol>
+          ) : (
+            <div className='answer d-flex w-100 justify-content-between align-items-center gap-2'>
+              <div className='d-flex align-items-center gap-2'>
+                <h4 style={{ color: '#555', marginTop: '.3rem' }}>Answer:</h4>{' '}
+                <p style={{ fontSize: '14px' }}>{activity.answer}</p>
+              </div>
+              {isAdmin && (!activity?.feedback || activity.feedback.length === 0) && (
+                <Icon
+                  onClick={() => openModal(activity.activity)}
+                  style={{ color: "#275DAD", cursor: "pointer" }}
+                  width={20}
+                  icon="hugeicons:comment-01"
+                />
+              )}
+            </div>
+          )}
+
+          {/* Conditionally render feedback */}
+          {activeModal === activity.activity && (
+            <FeedbackModal
+              initialFeedback={activity?.feedback || ""}
+              onClose={closeModal}
+              onSubmit={(feedback) => handleFeedbackSubmit(activity.activity, feedback)}
+            />
+          )}
+
+          {activity?.feedback?.length > 0 && (
+            <div className='feedback'>
+              <div id='badge'>Feedback:</div>
+              <div
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                }}
+              >
+                <div className='feedback-card'>{activity.feedback}</div>
+                {isAdmin && (
+                  <Icon
+                    onClick={() => openModal(activity.activity, activity.feedback)}
+                    style={{ color: "#275DAD", cursor: "pointer" }}
+                    width={20}
+                    icon="lucide:edit"
+                  />
+                )}
               </div>
             </div>
           )}
@@ -479,7 +678,14 @@ const Week3 = () => {
                   alt={option.isCorrect ? 'Checked' : 'Unchecked'}
                   style={{ width: '20px', marginRight: '10px' }}
                 />
-                <span style={{ fontSize: '14px' }} className='option-label'>
+                <span
+                  style={{
+                    fontSize: '14px',
+                    textAlign: 'left',
+                    display: 'block',
+                  }}
+                  className='option-label'
+                >
                   {option.label}
                 </span>
                 <p style={{ width: '120px', textAlign: 'center' }}>

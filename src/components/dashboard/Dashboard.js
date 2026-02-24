@@ -12,6 +12,7 @@ import SelfAwarenessCourse from "./pages/my-courses/self-awareness-course/SelfAw
 import { updateData } from "../../redux/reducers/userAnswersReducer";
 import { Icon } from "@iconify/react";
 import { useSelector } from 'react-redux';
+import { clearCode } from "../../redux/reducers/adminReducer";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -25,13 +26,13 @@ export default function Dashboard() {
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-    if(!user) return
+    if (!user) return
 
-    if(user?.isSchool) return navigate('/sign-in', { replace: true })
-  
-    return () => {    }
+    if (user?.isSchool) return navigate('/sign-in', { replace: true })
+
+    return () => { }
   }, [user])
-  
+
 
 
   const logOut = () => {
@@ -40,6 +41,7 @@ export default function Dashboard() {
     sessionStorage.clear();
     dispatch(logoutSuccess());
     dispatch(clearToken());
+    dispatch(clearCode());
     dispatch(
       updateData({
         course: null,
@@ -81,6 +83,34 @@ export default function Dashboard() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // Inactivity Logout Logic
+  useEffect(() => {
+    const timeoutLimit = 5 * 60 * 1000; // 5 minutes
+    let timeoutId;
+
+    const resetTimer = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        logOut();
+      }, timeoutLimit);
+    };
+
+    const events = ['mousemove', 'mousedown', 'keypress', 'scroll', 'touchstart'];
+
+    events.forEach(event => {
+      window.addEventListener(event, resetTimer);
+    });
+
+    resetTimer();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      events.forEach(event => {
+        window.removeEventListener(event, resetTimer);
+      });
+    };
+  }, [logOut]);
 
   const showDropdown = user?.isEducator && user?.isSchoolAdmin;
 

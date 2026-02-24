@@ -10,21 +10,30 @@ import {
 } from "../../../../compassion-course/weeks/data";
 import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
+import schoolService from "../../../../../../../../services/api/school.js";
 import { calculateResult } from "../../../utility.js";
+import { useSelector } from "react-redux";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer.js";
+import adminService from "../../../../../../../../services/api/admin.js";
 
-function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
+function Week5({ enrollmentId, setShowModal, setWeekFiveData, isSchool, studentId }) {
   const { pages } = getWeekContentExcludingVideos(5);
   const [acitivity1] = pages;
   const [q1, q2, q3, q4, q5, q6, q7, q8] = acitivity1.scenarios;
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([]);
+  const { isAdmin, code } = useSelector(adminData);
 
   const { questions: assessments } = getWeekAssessment(5);
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
     queryKey: ["dashboard/compassion-feedback-5", enrollmentId, 5],
-    queryFn: () => userService.getUserCourseData(enrollmentId, 5),
+    queryFn: () => {
+      if (isAdmin) return adminService.getUserCourseData(enrollmentId, 5, code);
+      if (isSchool) return schoolService.getStudentCourseData(enrollmentId, 5, studentId);
+      return userService.getUserCourseData(enrollmentId, 5);
+    },
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -38,7 +47,7 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
     setAssessmentData(data.assessment?.assessments);
     setWeekFiveData(true);
 
-    return () => {};
+    return () => { };
   }, [data]);
 
   function getActivityAnswer(item) {
@@ -62,8 +71,8 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
     return <div>Loading...</div>;
   }
 
-  if (data?.status === "failed" || isError) {
-    return <div>{data?.message || "Internal server error!"}</div>;
+  if (data?.status === "failed" || isError || !data) {
+    return <div>Take Activity to see feedback.</div>;
   }
 
   const score =
@@ -228,12 +237,12 @@ function Week5({ enrollmentId, setShowModal, setWeekFiveData }) {
             {score < 41
               ? "It looks like you’re having some difficulty grasping the concepts of compassion and boundaries. You can take some time to review the concepts, and think about how you can show compassion in everyday situations while protecting your own well-being. Also, feel free to ask your teacher for help and email us if you have any questions."
               : score < 61
-              ? "Good effort! You understand the basics of Compassion and I see more room for improvements. So, you can speak with your teacher to allow you to go through the course again and also search out more resources to help you understand compassion and boundaries better. Also, feel free to email us if you have any questions."
-              : score < 100
-              ? "Great job! You mostly understand Compassion, and you’ve done a great job coming this far. At your convenience, you can review the concepts again and feel free to email us if you have any questions."
-              : score === 100
-              ? "Amazing! You have an excellent understanding of Compassion, and setting healthy boundaries while being compassionate. We are super proud of you for making it this far and encourage you to keep being compassionate. At your convenience, you can review the concepts again and feel free to email us if you have any questions."
-              : ""}
+                ? "Good effort! You understand the basics of Compassion and I see more room for improvements. So, you can speak with your teacher to allow you to go through the course again and also search out more resources to help you understand compassion and boundaries better. Also, feel free to email us if you have any questions."
+                : score < 100
+                  ? "Great job! You mostly understand Compassion, and you’ve done a great job coming this far. At your convenience, you can review the concepts again and feel free to email us if you have any questions."
+                  : score === 100
+                    ? "Amazing! You have an excellent understanding of Compassion, and setting healthy boundaries while being compassionate. We are super proud of you for making it this far and encourage you to keep being compassionate. At your convenience, you can review the concepts again and feel free to email us if you have any questions."
+                    : ""}
           </p>
         </div>
       </div>

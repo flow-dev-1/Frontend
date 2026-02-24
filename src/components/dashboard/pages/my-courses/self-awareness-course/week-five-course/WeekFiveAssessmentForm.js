@@ -7,7 +7,7 @@ import userService from '../../../../../../services/api/user.js';
 import { useSelector, useDispatch } from 'react-redux';
 import { userAnswer, updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { RotatingLines } from 'react-loader-spinner';
 
 export default function NewAssessmentForm({
@@ -16,6 +16,7 @@ export default function NewAssessmentForm({
 	course,
 	handleActivitySubmit,
 	activityData,
+	isCompleted,
 }) {
 	const dispatch = useDispatch();
 	const userAnswers = useSelector(userAnswer);
@@ -148,7 +149,7 @@ export default function NewAssessmentForm({
 	});
 
 	const handleQuestionCheck = (optionIndex) => {
-		if (isSubmitted) {
+		if (isCompleted || isSubmitted) {
 			toast.error('You cannot change your answers after submission.');
 			return;
 		}
@@ -167,14 +168,22 @@ export default function NewAssessmentForm({
 	};
 
 	const handleNextStepClick = () => {
-		if (answers[currentIndex] === undefined) {
+		// Validate current question
+		const isAnswered = answers[currentIndex] !== undefined;
+
+		if (!isCompleted && !isAnswered) {
 			toast.error('Please select an answer before proceeding.');
 			return;
 		}
+
 		if (currentIndex < questionsArray.length - 1) {
 			setCurrentIndex(currentIndex + 1);
 		} else {
-			saveNewAssessment();
+			if (isCompleted) {
+				onNext();
+			} else {
+				saveNewAssessment();
+			}
 		}
 	};
 
@@ -186,6 +195,7 @@ export default function NewAssessmentForm({
 		}
 	};
 
+	const queryClient = useQueryClient();
 	// Mutation for saving user data
 	const mutation = useMutation({
 		mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
@@ -193,6 +203,10 @@ export default function NewAssessmentForm({
 			setIsLoading(false);
 			toast.dismiss();
 			toast.success(data.message || 'Answers saved successfully!'); // Show success toast
+
+			// Invalidate enrollment query to trigger real-time progress update
+			queryClient.invalidateQueries(['enrollment', userAnswers?.courseEnrollmentId]);
+
 			localStorage.removeItem('weekFiveAssessmentData');
 			onNext();
 		},
@@ -203,160 +217,164 @@ export default function NewAssessmentForm({
 		},
 	});
 
-	
+
 	const saveNewAssessment = async () => {
-		if (disableButton) return
-	
+		if (disableButton || isCompleted) return
+
 		try {
-		  if (!activityData?.activities || activityData?.activities?.length !== 9) {
-			toast.error("Please complete all activities before submitting the assessment.");
-			return
-		  }
-	
-		  const storedData = localStorage.getItem('weekFiveAssessmentData')
-		  let savedAnswers = JSON.parse(storedData)
-		  const correctAnswers = [1, 1, 1, 1, 1, 0, 0, 1, 2, 1] // Adjust according to correct answers
-		  const valuesToCheck = savedAnswers.assessment.answers
-		  const totalQuestions = valuesToCheck.length
-		  const correctCount = valuesToCheck.reduce((count, current, index) => {
-			return current === correctAnswers[index] ? count + 1 : count
-		  }, 0)
-	
-		  const percentage = Math.round((correctCount / totalQuestions) * 100)
-		  toast.success(`You scored ${percentage}% in the quiz`)
-	
-		  const dataToSend = {
-			rating: percentage,
-			assessments: savedAnswers.assessment,
-			week: 5,
-		  }
-	
-		  const mutationData = {
-			...userAnswers,
-			assessments: [savedAnswers.assessment],
-			activities: activityData?.activities,
-			rating: percentage.toString()
-		  };
-	
-		  mutation.mutate(mutationData);
-	
-	
+			if (!activityData?.activities || activityData?.activities?.length !== 9) {
+				toast.error("Please complete all activities before submitting the assessment.");
+				return
+			}
+
+			// Final check for all 10 assessment answers
+			if (answers.length !== 10 || answers.some(ans => ans === undefined)) {
+				toast.error('Please ensure all 10 assessment questions are answered.');
+				return;
+			}
+
+			const correctAnswers = [1, 1, 1, 1, 1, 0, 0, 1, 2, 1] // Adjust according to correct answers
+			const totalQuestions = answers.length
+			const correctCount = answers.reduce((count, current, index) => {
+				return current === correctAnswers[index] ? count + 1 : count
+			}, 0)
+
+			const percentage = Math.round((correctCount / totalQuestions) * 100)
+			toast.success(`You scored ${percentage}% in the quiz`)
+
+			const finalAssessmentData = { answers };
+
+			const mutationData = {
+				...userAnswers,
+				assessments: [finalAssessmentData],
+				activities: activityData?.activities,
+				rating: percentage.toString()
+			};
+
+			mutation.mutate(mutationData);
+
+
 		} catch (error) {
-		  console.log(error)
-		  setIsLoading(false)
-		  toast.error('Something went wrong. Please contact flow admin for support!');
+			console.log(error)
+			setIsLoading(false)
+			toast.error('Something went wrong. Please contact flow admin for support!');
 		}
-	
-	
-	  }
-	
-	  useEffect(() => {
+
+
+	}
+
+	useEffect(() => {
 		const assessmentData = {
-		  week: 5,
-		  assessment: { answers },
-		  submitted: isSubmitted,
+			week: 5,
+			assessment: { answers },
+			submitted: isSubmitted,
 		}
 		localStorage.setItem('weekFiveAssessmentData', JSON.stringify(assessmentData))
-	  }, [answers, isSubmitted])
-	
-	  const renderQuestion = () => {
+	}, [answers, isSubmitted])
+
+	const renderQuestion = () => {
 		const question = questionsArray[currentIndex]
-	
+
 		return (
-		  <div className='week-two'>
-			<div style={{ height: '550px' }} className='assessment question-box'>
-			  {currentIndex === 0 && (
-				<div style={{ marginTop: "1rem" }} className='assessment-box'>
-				  <h2 style={{ color: '#FAFAFA', textAlign: "center" }}>Assessment</h2>
-				  <p style={{ color: '#FAFAFA' }} className='text-center'>
-					Scenario around your values.
-				  </p>
+			<div className='week-two'>
+				<div style={{ height: '550px' }} className='assessment question-box'>
+					{currentIndex === 0 && (
+						<div style={{ marginTop: "1rem" }} className='assessment-box'>
+							<h2 style={{ color: '#FAFAFA', textAlign: "center" }}>Assessment</h2>
+							<p style={{ color: '#FAFAFA' }} className='text-center'>
+								Scenario around your values.
+							</p>
+						</div>
+					)}
+					<div className='d-flex align-items-start mt-3'>
+						<h1 style={{ color: '#5B616A' }}>{currentIndex + 1}.</h1>
+						<h2
+							style={{ color: '#5B616A' }}
+							className='text-center mb-0 fs-1 ms-3'
+						>
+							{question.title}
+						</h2>
+					</div>
+					<div className='text-center checkbox-questions'>
+						<ul className='p-0 mt-4 d-flex flex-column'>
+							{question.questionList.map((item, index) => (
+								<li key={index} className='d-flex align-items-center'>
+									<img
+										onClick={() => handleQuestionCheck(index)}
+										className='cursor-pointer'
+										src={
+											answers[currentIndex] === index
+												? checkedImage
+												: unCheckedImage
+										}
+										alt={
+											answers[currentIndex] === index ? 'Checked' : 'Unchecked'
+										}
+										style={{
+											cursor:
+												(isCompleted || (isSubmitted && answers[currentIndex] !== index))
+													? 'not-allowed'
+													: 'pointer',
+										}}
+									/>
+									<p className='question-p ms-3'>{item}</p>
+								</li>
+							))}
+						</ul>
+					</div>
 				</div>
-			  )}
-			  <div className='d-flex align-items-start mt-3'>
-				<h1 style={{ color: '#5B616A' }}>{currentIndex + 1}.</h1>
-				<h2
-				  style={{ color: '#5B616A' }}
-				  className='text-center mb-0 fs-1 ms-3'
-				>
-				  {question.title}
-				</h2>
-			  </div>
-			  <div className='text-center checkbox-questions'>
-				<ul className='p-0 mt-4 d-flex flex-column'>
-				  {question.questionList.map((item, index) => (
-					<li key={index} className='d-flex align-items-center'>
-					  <img
-						onClick={() => handleQuestionCheck(index)}
-						className='cursor-pointer'
-						src={
-						  answers[currentIndex] === index
-							? checkedImage
-							: unCheckedImage
-						}
-						alt={
-						  answers[currentIndex] === index ? 'Checked' : 'Unchecked'
-						}
-						style={{
-						  cursor:
-							isSubmitted && answers[currentIndex] !== index
-							  ? 'not-allowed'
-							  : 'pointer',
-						}}
-					  />
-					  <p className='question-p ms-3'>{item}</p>
-					</li>
-				  ))}
-				</ul>
-			  </div>
 			</div>
-		  </div>
 		)
-	  }
-	
-	  return (
-		<div>
-		  {renderQuestion()}
-	
-		  <div className='slider-indicator'>
-			<ul className='p-0 mt-5'>
-			  {Array.from({ length: questionsArray.length }, (_, index) => (
-				<li
-				  key={index}
-				  className={currentIndex >= index ? 'answered' : ''}
-				></li>
-			  ))}
-			</ul>
-		  </div>
-	
-		  <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-			<button
-			  className='btn progress-btn btn-light'
-			  onClick={handlePreviousStepClick}
-			  disabled={mutation.isPending}
-			>
-			  {'<<<'} Back
-			</button>
-			<button
-			  className='btn progress-btn btn-dark'
-			  onClick={handleNextStepClick}
-			  disabled={mutation.isPending}
-			>
-			  {
-				mutation.isPending ? <RotatingLines
-				  className="me-2 text-white"
-				  type="Oval"
-				  strokeColor="white"
-				  height={20}
-				  width={20}
-				/> : <>
-				  Next {'>>>'}
-				</>
-			  }
-	
-			</button>
-		  </div>
-		</div>
-	  )
 	}
-	
+
+	return (
+		<div>
+			{renderQuestion()}
+
+			<div className='slider-indicator'>
+				<ul className='p-0 mt-5'>
+					{Array.from({ length: questionsArray.length }, (_, index) => (
+						<li
+							key={index}
+							className={currentIndex >= index ? 'answered' : ''}
+						></li>
+					))}
+				</ul>
+			</div>
+
+			<div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
+				<button
+					className='btn progress-btn btn-light'
+					onClick={handlePreviousStepClick}
+					disabled={mutation.isPending}
+				>
+					{'<<<'} Back
+				</button>
+				<button
+					className='btn progress-btn btn-dark'
+					onClick={handleNextStepClick}
+					disabled={mutation.isPending}
+				>
+					{
+						mutation.isPending ? <RotatingLines
+							className="me-2 text-white"
+							type="Oval"
+							strokeColor="white"
+							height={20}
+							width={20}
+						/> : <>
+							{isCompleted
+								? currentIndex === questionsArray.length - 1
+									? 'Continue'
+									: 'Next >>>'
+								: currentIndex === questionsArray.length - 1
+									? 'Submit'
+									: 'Next >>>'}
+						</>
+					}
+
+				</button>
+			</div>
+		</div>
+	)
+}

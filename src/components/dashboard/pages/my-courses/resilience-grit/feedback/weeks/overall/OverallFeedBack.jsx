@@ -6,16 +6,19 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer.j
 import userService from "../../../../../../../../services/api/user.js";
 import adminService from "../../../../../../../../services/api/admin.js";
 
-function OverallFeedBack({ enrollmentId, setHasPercentile }) {
+function OverallFeedBack({ enrollmentId, setHasPercentile, isSchool, studentId }) {
   const [assessmentPercentile, setAssessmentPercentile] = useState(null);
   const { isAdmin, code } = useSelector(adminData);
 
   const { data, isPending, status, isError } = useQuery({
-    queryKey: ["dashboard/resilience-feedback-overall", enrollmentId, 1],
-    queryFn: () =>
-      isAdmin
-        ? adminService.getUserCourseData(enrollmentId, 1, code)
-        : userService.getUserCoursePercentile(enrollmentId),
+    queryKey: ["dashboard/resilience-feedback-overall", enrollmentId, studentId],
+    queryFn: () => {
+      if (isAdmin) return adminService.getUserCourseData(enrollmentId, 1, code);
+      // For school, we might need a specific endpoint if getUserCoursePercentile is restricted to the student
+      // But let's assume it works or we need to handle it. 
+      // userService.getUserCoursePercentile currently doesn't take studentId.
+      return userService.getUserCoursePercentile(enrollmentId);
+    },
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -30,11 +33,14 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
   }, [data]);
 
   function getFeedBackMessage(percentile) {
+    if (percentile === null || percentile === undefined) return "";
     switch (true) {
-      case percentile >= 10 && percentile <= 39:
+      case percentile >= 0 && percentile <= 39:
         return "Well done on starting your journey into understanding resilience! You’ve gained a basic understanding of the words, ‘Resilience’ and ‘Grit’. However, you need to revisit the course again and listen more attentively to the lessons. You can reach out to your teachers or classmates for help if you still find yourself struggling. Reaching out for help shows that you are a smart person.";
       case percentile >= 40 && percentile <= 59:
         return "Good job! You’ve shown a good understanding of resilience and grits. You’re beginning to grasp concepts like the 7 C’s and the role of support systems in building resilience. To deepen your understanding, try practicing adaptability in real-life scenarios and applying the coping skills you have learned. Work on applying these principles when facing challenges, no matter how little or insignificant the challenge might seem; with consistent effort, you’ll strengthen your resilient bones."
+      case percentile >= 60 && percentile <= 79:
+        return "Great work! You’ve developed a solid understanding of resilience and grit. To take it a step further, focus on building stronger connections with your support network and practicing coping skills in real-life situations. Apply these principles consistently, even in small challenges, to strengthen your resilience and ability to bounce back. Keep up the good work—you’re on the right track!";
       case percentile >= 80 && percentile <= 94:
         return "Excellent job! You’ve shown a strong understanding of resilience and how to build it into your life. You have learned to effectively use strategies like the 7 C’s, practicing adaptability, and relying on your support systems when needed. To continue growing, focus on maintaining these habits and applying them in different areas of your life, whether it’s personal goals or overcoming unexpected challenges. Remember, resilience is a skill that gets stronger with use, and your dedication is truly inspiring. Keep pushing forward—you’re doing amazing!";
       case percentile >= 95 && percentile <= 100:
@@ -48,10 +54,10 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
     return <div>Loading...</div>;
   }
 
-  if (data?.status === "failed" || isError) {
+  if (data?.status === "failed" || isError || !data) {
     return (
       <div style={{ color: "red" }}>
-        {data?.message || "Internal server error!"}
+        {data?.message || "Take activity to see overall feedback!"}
       </div>
     );
   }

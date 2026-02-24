@@ -4,18 +4,20 @@ import { useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer.js";
 import userService from "../../../../../../../../services/api/user.js";
+import schoolService from "../../../../../../../../services/api/school.js";
 import adminService from "../../../../../../../../services/api/admin.js";
 
-function OverallFeedBack({ enrollmentId, setHasPercentile }) {
+function OverallFeedBack({ enrollmentId, setHasPercentile, isSchool, studentId }) {
   const [assessmentPercentile, setAssessmentPercentile] = useState(null);
   const { isAdmin, code } = useSelector(adminData);
 
   const { data, isPending, status, isError } = useQuery({
     queryKey: ["dashboard/tot-feedback-overall", enrollmentId, 1],
-    queryFn: () =>
-      isAdmin
-        ? adminService.getUserCourseData(enrollmentId, 1, code)
-        : userService.getUserCoursePercentile(enrollmentId),
+    queryFn: () => {
+      if (isAdmin) return adminService.getUserCourseData(enrollmentId, 1, code);
+      if (isSchool) return schoolService.getStudentCourseData(enrollmentId, 1, studentId);
+      return userService.getUserCoursePercentile(enrollmentId);
+    },
     enabled: !!enrollmentId,
     refetchOnMount: "always",
     refetchOnWindowFocus: true,
@@ -26,7 +28,7 @@ function OverallFeedBack({ enrollmentId, setHasPercentile }) {
     if (!data || data?.status === "failed") return;
     setAssessmentPercentile(data?.averagePercent);
     setHasPercentile(true);
-    return () => {};
+    return () => { };
   }, [data]);
 
   function getFeedBackMessage(percentile) {

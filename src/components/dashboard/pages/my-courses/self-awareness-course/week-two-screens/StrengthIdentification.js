@@ -51,17 +51,28 @@ export default function StrengthIdentification({ formData, onNext, onBack, activ
 			: [];
 
 	// Initialize state for checked questions based on savedAnswers
-	const [questionChecked, setQuestionChecked] = useState(() =>
-		questionsArray.reduce(
-			(acc, question, index) => ({
-				...acc,
-				[index]: savedAnswers.includes(question),
-			}),
-			{}
-		)
-	);
+	const [questionChecked, setQuestionChecked] = useState({});
 
-	const [selectedAnswers, setSelectedAnswers] = useState(savedAnswers);
+	const [selectedAnswers, setSelectedAnswers] = useState([]);
+
+	useEffect(() => {
+		if (currentActivityData && currentActivityData.answers && currentActivityData.answers.strengths) {
+			const saved = currentActivityData.answers.strengths;
+			setQuestionChecked(
+				questionsArray.reduce(
+					(acc, question, index) => ({
+						...acc,
+						[index]: saved.includes(question),
+					}),
+					{}
+				)
+			)
+			setSelectedAnswers(saved);
+		} else {
+			setQuestionChecked({});
+			setSelectedAnswers([]);
+		}
+	}, [formData, activityIndex]);
 
 	useEffect(() => {
 		// Update selected answers whenever questionChecked state changes
@@ -101,7 +112,7 @@ export default function StrengthIdentification({ formData, onNext, onBack, activ
 					</div>
 				</div>
 				<div className="assessment checkbox-questions mt-4">
-					<ul className="p-0" style={{width: '100%'}}>
+					<ul className="p-0" style={{ width: '100%' }}>
 						{questionsArray.map((item, index) => (
 							<li key={index} className="d-flex">
 								<img

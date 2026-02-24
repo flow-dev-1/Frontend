@@ -6,10 +6,15 @@ import unCheckedImage from "../../../../../../assets/selfawareness-images/not-ch
 import { Icon } from "@iconify/react";
 import FinalReport from "./FinalReport";
 import userService from "../../../../../../services/api/user";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from 'react-router-dom'
 import { decryptId } from "../../../../../../utils/encryption";
 import schoolService from "../../../../../../services/api/school";
+import adminService from "../../../../../../services/api/admin";
+import FeedbackModal from "./FeedbackModal";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { adminData } from "../../../../../../redux/reducers/adminReducer";
 // rgba(253, 72, 61, 0.2);
 let questions = [
   {
@@ -1010,39 +1015,78 @@ const questionsArrayGreenFormatted = [
   // Add more questions if needed
 ];
 
-const Week1 = () => {
+const Week1 = ({ enrollmentId, isSchool, studentId }) => {
   const week = 1;
-  const { userId } = useParams()
+  const { userId } = useParams();
   const courseId = "66853bf50118e2e0a02b6a5a";
+  const queryClient = useQueryClient();
+  const [activeModal, setActiveModal] = useState(null);
+  const [editingActivity, setEditingActivity] = useState(null);
+  const [activitiesDataState, setActivitiesDataState] = useState([]);
+  const [quizQuestions, setQuizQuestions] = useState([]);
+  const { isAdmin, code } = useSelector(adminData);
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["dashboard/feedback/self-awareness", courseId, week],
-    queryFn: () => schoolService.getStudentMyActivites(courseId, week, decryptId(userId)),
+    queryKey: ['dashboard/feedback/self-awareness', enrollmentId || courseId, week],
+    queryFn: () => {
+      if (isAdmin && enrollmentId) return adminService.getUserCourseData(enrollmentId, week, code);
+      if (isSchool || isAdmin) return schoolService.getStudentCourseData(enrollmentId || courseId, week, studentId || decryptId(userId));
+      return schoolService.getStudentCourseData(enrollmentId || courseId, week, decryptId(userId));
+    },
+    enabled: !!enrollmentId || !!courseId,
+  })
+
+  const feedbackMutation = useMutation({
+    mutationFn: (updatedActivities) => {
+      if (isAdmin) {
+        return adminService.submitAdminFeedback(
+          updatedActivities,
+          enrollmentId,
+          week,
+          data?.activity?.user,
+          code
+        );
+      }
+      return schoolService.getMyActivitesUpdate(
+        enrollmentId || courseId,
+        week,
+        decryptId(userId),
+        { activities: updatedActivities }
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["dashboard/feedback/self-awareness"]);
+      toast.success("Feedback submitted successfully");
+      closeModal();
+    },
+    onError: (error) => {
+      console.error("Feedback submission error:", error);
+      toast.error(error?.message || "Failed to submit feedback");
+    },
   });
 
-  const [assessmentData, setAssessmentData] = useState(null);
-  const [assessmentLoading, setAssessmentLoading] = useState(true);
-  const [assessmentError, setAssessmentError] = useState(null);
-  const [quizQuestions, setQuizQuestions] = useState([]);
-  
   useEffect(() => {
-    const fetchAssessmentData = async () => {
-      setAssessmentLoading(true);
-      try {
-        const data = await schoolService.getStudentAssessments(courseId, week, decryptId(userId));
-        setAssessmentData(data);
-      } catch (error) {
-        setAssessmentError(error);
-      } finally {
-        setAssessmentLoading(false);
-      }
-    };
+    if (data?.activity?.activities) {
+      setActivitiesDataState(data.activity.activities);
+    }
+  }, [data]);
 
-    fetchAssessmentData();
-  }, [courseId, week]);
+  const openModal = (activityIndex, feedback = "") => {
+    setActiveModal(activityIndex);
+    setEditingActivity({ index: activityIndex, feedback });
+  };
 
-  const assessments = assessmentData?.existingAssessment.assessments;
-  const percent = assessmentData?.existingAssessment.rating;
-  const color = assessmentData?.existingAssessment?.personalityColor;
+  const closeModal = () => {
+    setActiveModal(null);
+    setEditingActivity(null);
+  };
+
+  const assessmentData = data?.assessment;
+  const activityData = data?.activity;
+
+  const assessments = assessmentData?.assessments;
+  const percent = assessmentData?.rating;
+  const color = assessmentData?.personalityColor;
   // console.log(percent)
   function getQuestionsByColor(color) {
     switch (color) {
@@ -1087,23 +1131,26 @@ const Week1 = () => {
     }
   }, [color, assessments]);
 
-  if (isLoading || assessmentLoading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (isError || assessmentError) {
+  if (isError || (!assessmentData && !activityData)) {
     return <div>Take Activity to see feedback.</div>;
   }
 
-  const buckets = data?.activity?.activities[5].buckets;
+  const activityList = activityData?.activities || [];
+  const activity6 = activityList.find(a => a.activity === 6);
+  const buckets = activity6?.buckets;
 
   const mappedContent = {
-    yes: buckets?.yes?.map((item) => item.content),
-    no: buckets?.no?.map((item) => item.content),
-    sometimes: buckets?.sometimes.map((item) => item.content)
+    yes: buckets?.yes?.map((item) => item.content) || [],
+    no: buckets?.no?.map((item) => item.content) || [],
+    sometimes: buckets?.sometimes?.map((item) => item.content) || []
   };
 
-  const backendAnswers = data?.activity?.activities[9].questionChecked;
+  const activity10 = activityList.find(a => a.activity === 10);
+  const backendAnswers = activity10?.questionChecked || {};
   // console.log(backendAnswers)
   const selectedAnswers = Object.values(backendAnswers).map(
     (item) => item.text
@@ -1112,61 +1159,69 @@ const Week1 = () => {
 
   // console.log(questions);
 
+  const act2 = activityList.find(a => a.activity === 2);
+  const act4 = activityList.find(a => a.activity === 4);
+
   const activities = [
     {
       activity: 1,
       question: 'What do you think "Self Awareness" is?',
-      answer: data?.activity?.activities?.[1].answers[0],
-      feedback: data?.activity?.activities?.[1]?.feedback?.[0] || "",
+      answer: act2?.answers?.[0],
+      feedback: act2?.feedback?.[0] || "",
     },
     {
       activity: 2,
       question: "What do you understand by the word “Personality”?",
-      answer: data?.activity?.activities?.[3].answers[0],
-      feedback: data?.activity?.activities?.[3]?.feedback?.[0] || "",
+      answer: act4?.answers?.[0],
+      feedback: act4?.feedback?.[0] || "",
     },
     {
       activity: 3,
       question:
         "Drag-and-drop the statements on the left into any of these bowls.",
       answer: mappedContent,
-      feedback: data?.activity?.activities?.[5]?.feedback?.[0] || "",
+      feedback: activity6?.feedback?.[0] || "",
     }
   ];
+
+  const act8 = activityList.find(a => a.activity === 8);
   const activityFour = [
     {
       activity: 4,
       question:
         "Think about yourself, which of these personality colors describe you? Why do you think so?",
-      selectedPersonality:
-        data?.activity?.activities?.[7].answer?.selectedPersonality,
-      explanation: data?.activity?.activities?.[7].answer?.explanation,
-      feedback: data?.activity?.activities?.[7]?.feedback?.[0] || "",
+      selectedPersonality: act8?.answer?.selectedPersonality,
+      explanation: act8?.answer?.explanation,
+      feedback: act8?.feedback?.[0] || "",
     }
   ];
-  const activityAnswers = data?.activity?.activities?.[12]?.answers || [];
+
+  const act12 = activityList.find(a => a.activity === 12);
+  const activityAnswers = act12?.answers || [];
   // console.log(activityAnswers);
   // Map through answers to create restActivities
+
+  const act14 = activityList.find(a => a.activity === 14);
   const restActivities = [
     {
       activity: 8,
       question: "Do you agree with this new result?",
-      answer: data?.activity?.activities?.[13].answers[2].answer,
-      feedback: data?.activity?.activities?.[13]?.feedback?.[2] || [],
+      answer: act14?.answers?.[2]?.answer,
+      feedback: act14?.feedback?.[0] || [],
     },
     {
       activity: 9,
       question:
         "Did you get the same color as the color you identified for yourself earlier?",
-      answer: data?.activity?.activities?.[13].answers[0].answer,
+      answer: act14?.answers?.[0]?.answer,
 
-      feedback: data?.activity?.activities?.[13]?.feedback?.[0] || [],
+      feedback: act14?.feedback?.[1] || [],
     },
     {
       activity: 10,
       question: "What was different? Why do you think this was different?",
-      answer: data?.activity?.activities?.[13].answers[1].answer,
-      feedback: data?.activity?.activities?.[13]?.feedback?.[1] || [],
+      answer: act14?.answers?.[1]?.answer,
+      feedback: act14?.feedback?.[2] || [],
     }
   ];
 
@@ -1223,10 +1278,42 @@ const Week1 = () => {
     };
   });
 
-  // console.log(pieChart);
+
+  const handleFeedbackSubmit = (activityId, feedback) => {
+    const adjustedActivityId = (() => {
+      switch (activityId) {
+        case 1: return 2;
+        case 2: return 4;
+        case 3: return 6;
+        case 4: return 8;
+        case 7: return 12;
+        case 8:
+        case 9:
+        case 10: return 14;
+        default: return activityId;
+      }
+    })();
+
+    const updatedActivities = activitiesDataState.map((act) => {
+      if (act.activity === adjustedActivityId) {
+        if ([8, 9, 10].includes(activityId)) {
+          const feedbackIndex = [8, 9, 10].indexOf(activityId);
+          const updatedFeedback = Array.isArray(act.feedback) ? [...act.feedback] : [];
+          updatedFeedback[feedbackIndex] = feedback;
+          return { ...act, feedback: updatedFeedback };
+        } else {
+          return { ...act, feedback: [feedback] };
+        }
+      }
+      return act;
+    });
+
+    setActivitiesDataState(updatedActivities);
+    feedbackMutation.mutate(updatedActivities);
+  };
 
   return (
-    <div className="week-content">
+    <div className="week-content w-auto">
       {activities?.map((activity, index) => (
         <div style={{ border: "none" }} className="activity" key={index}>
           <p className="activity-badge">Activity {activity?.activity}</p>
@@ -1235,7 +1322,7 @@ const Week1 = () => {
             <span> {activity?.question}</span>
           </p>
 
-          {activity?.answer.yes ? (
+          {activity?.answer?.yes ? (
             <div
               style={{ width: "90%", margin: "1rem auto" }}
               className="drag-drop-activity gap-2"
@@ -1245,7 +1332,7 @@ const Week1 = () => {
               <div className="drag-drop-section">
                 <h5 id="yes">YES</h5>
                 <ul>
-                  {activity?.answer.yes.map((item, idx) => (
+                  {activity?.answer?.yes?.map((item, idx) => (
                     <strong>
                       <li key={idx}>
                         {" "}
@@ -1258,7 +1345,7 @@ const Week1 = () => {
               <div className="drag-drop-section">
                 <h5 id="no">NO</h5>
                 <ul>
-                  {activity?.answer.no.map((item, idx) => (
+                  {activity?.answer?.no?.map((item, idx) => (
                     <strong>
                       <li key={idx}>
                         {" "}
@@ -1271,7 +1358,7 @@ const Week1 = () => {
               <div className="drag-drop-section">
                 <h5 id="sometimes">SOMETIMES</h5>
                 <ul>
-                  {activity?.answer.sometimes.map((item, idx) => (
+                  {activity?.answer?.sometimes?.map((item, idx) => (
                     <strong>
                       <li key={idx}>
                         {" "}
@@ -1281,6 +1368,14 @@ const Week1 = () => {
                   ))}
                 </ul>
               </div>
+              {isAdmin && (!activity?.feedback || activity?.feedback?.length === 0) && (
+                <Icon
+                  onClick={() => openModal(activity?.activity)}
+                  style={{ color: "#275DAD", cursor: "pointer" }}
+                  width={20}
+                  icon="hugeicons:comment-01"
+                />
+              )}
             </div>
           ) : (
             <p className="d-flex align-items-center justify-content-between">
@@ -1288,32 +1383,47 @@ const Week1 = () => {
                 <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
                 <p style={{ fontSize: "14px" }}>{activity?.answer}</p>
               </div>
-              {/* <Icon
-                style={{ color: "#D6D6D6" }}
-                width={20}
-                icon="hugeicons:comment-01"
-              /> */}
+              {isAdmin && (!activity?.feedback || activity.feedback.length === 0) && (
+                <Icon
+                  onClick={() => openModal(activity.activity)}
+                  style={{ color: "#275DAD", cursor: "pointer" }}
+                  width={20}
+                  icon="hugeicons:comment-01"
+                />
+              )}
             </p>
           )}
+
+          {activeModal === activity?.activity && (
+            <FeedbackModal
+              initialFeedback={activity?.feedback || ""}
+              onClose={closeModal}
+              onSubmit={(feedback) => handleFeedbackSubmit(activity.activity, feedback)}
+            />
+          )}
+
           {activity?.feedback?.length > 0 && (
-          <p className="feedback">
-            <div id="badge">Feedback:</div>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem"
-              }}
-            >
-              <div className="feedback-card">{activity?.feedback}</div>
-              {/* <Icon
-                style={{ color: "#275DAD" }}
-                width={20}
-                icon="lucide:edit"
-              /> */}
+            <div className="feedback">
+              <div id="badge">Feedback:</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem"
+                }}
+              >
+                <div className="feedback-card">{activity?.feedback}</div>
+                {isAdmin && (
+                  <Icon
+                    onClick={() => openModal(activity.activity, activity.feedback)}
+                    style={{ color: "#275DAD", cursor: "pointer" }}
+                    width={20}
+                    icon="lucide:edit"
+                  />
+                )}
+              </div>
             </div>
-          </p>
           )}
         </div>
       ))}
@@ -1333,31 +1443,46 @@ const Week1 = () => {
                 {activity?.explanation}
               </p>
             </div>
-            {/* <Icon
-              style={{ color: "#D6D6D6" }}
-              width={20}
-              icon="hugeicons:comment-01"
-            /> */}
-          </p>
-          {activity?.feedback?.length > 0 && (
-          <p className="feedback">
-            <div id="badge">Feedback:</div>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem"
-              }}
-            >
-              <div className="feedback-card">{activity?.feedback}</div>
-              {/* <Icon
-                style={{ color: "#275DAD" }}
+            {isAdmin && (!activity?.feedback || activity.feedback.length === 0) && (
+              <Icon
+                onClick={() => openModal(activity.activity)}
+                style={{ color: "#275DAD", cursor: "pointer" }}
                 width={20}
-                icon="lucide:edit"
-              /> */}
-            </div>
+                icon="hugeicons:comment-01"
+              />
+            )}
           </p>
+
+          {activeModal === activity.activity && (
+            <FeedbackModal
+              initialFeedback={activity?.feedback || ""}
+              onClose={closeModal}
+              onSubmit={(feedback) => handleFeedbackSubmit(activity.activity, feedback)}
+            />
+          )}
+
+          {activity?.feedback?.length > 0 && (
+            <div className="feedback">
+              <div id="badge">Feedback:</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem"
+                }}
+              >
+                <div className="feedback-card">{activity?.feedback}</div>
+                {isAdmin && (
+                  <Icon
+                    onClick={() => openModal(activity.activity, activity.feedback)}
+                    style={{ color: "#275DAD", cursor: "pointer" }}
+                    width={20}
+                    icon="lucide:edit"
+                  />
+                )}
+              </div>
+            </div>
           )}
         </div>
       ))}
@@ -1378,7 +1503,14 @@ const Week1 = () => {
                   alt={option.checked ? "Checked" : "Unchecked"}
                   style={{ width: "20px", marginRight: "10px" }}
                 />
-                <span style={{ fontSize: "14px" }} className="option-label">
+                <span
+                  style={{
+                    fontSize: "14px",
+                    textAlign: "left",
+                    display: "block"
+                  }}
+                  className="option-label"
+                >
                   {option.label}
                 </span>
                 <span className={`color-label ${option.color.toLowerCase()}`}>
@@ -1405,31 +1537,46 @@ const Week1 = () => {
               <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>
               <p style={{ fontSize: "14px" }}>{activity.answer}</p>
             </div>
-            {/* <Icon
-              style={{ color: "#D6D6D6" }}
-              width={20}
-              icon="hugeicons:comment-01"
-            /> */}
-          </p>
-          {activity?.feedback?.length > 0 && (
-          <p className="feedback">
-            <div id="badge">Feedback:</div>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem"
-              }}
-            >
-              <div className="feedback-card">{activity.feedback}</div>
-              {/* <Icon
-                style={{ color: "#275DAD" }}
+            {isAdmin && (!activity?.feedback || activity.feedback.length === 0) && (
+              <Icon
+                onClick={() => openModal(activity.activity)}
+                style={{ color: "#275DAD", cursor: "pointer" }}
                 width={20}
-                icon="lucide:edit"
-              /> */}
-            </div>
+                icon="hugeicons:comment-01"
+              />
+            )}
           </p>
+
+          {activeModal === activity.activity && (
+            <FeedbackModal
+              initialFeedback={activity?.feedback || ""}
+              onClose={closeModal}
+              onSubmit={(feedback) => handleFeedbackSubmit(activity.activity, feedback)}
+            />
+          )}
+
+          {activity?.feedback?.length > 0 && (
+            <div className="feedback">
+              <div id="badge">Feedback:</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem"
+                }}
+              >
+                <div className="feedback-card">{activity.feedback}</div>
+                {isAdmin && (
+                  <Icon
+                    onClick={() => openModal(activity.activity, activity.feedback)}
+                    style={{ color: "#275DAD", cursor: "pointer" }}
+                    width={20}
+                    icon="lucide:edit"
+                  />
+                )}
+              </div>
+            </div>
           )}
         </div>
       ))}
@@ -1450,7 +1597,14 @@ const Week1 = () => {
                   alt={option.isCorrect ? "Checked" : "Unchecked"}
                   style={{ width: "20px", marginRight: "10px" }}
                 />
-                <span style={{ fontSize: "14px" }} className="option-label">
+                <span
+                  style={{
+                    fontSize: "14px",
+                    textAlign: "left",
+                    display: "block",
+                  }}
+                  className="option-label"
+                >
                   {option.label}
                 </span>
                 <p style={{ width: "120px", textAlign: "center" }}>

@@ -1,5 +1,5 @@
 // src/components/EndOfCourseComponent.js
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import MyFireWorks from '../Fireworks'
 import celebrate from '../../../../../../assets/celebrate.png'
 
@@ -8,10 +8,21 @@ const EndOfCourseComponent = ({
   handleNextWeekCourse,
   handleLinkClick,
   setCurrentActivity,
+  openReviewPopUp,
 }) => {
   currentWeekIndex = 1
 
   const [showFireWork, setShowFireWork] = useState(true)
+  const [hasTriggeredReview, setHasTriggeredReview] = useState(false);
+
+  // Trigger the feedback modal when the component mounts
+  useEffect(() => {
+    if (openReviewPopUp && !hasTriggeredReview) {
+      openReviewPopUp();
+      setHasTriggeredReview(true);
+    }
+  }, [openReviewPopUp, hasTriggeredReview]);
+
   return (
     <div className="end-of-course-page">
       <div className="congrats">
