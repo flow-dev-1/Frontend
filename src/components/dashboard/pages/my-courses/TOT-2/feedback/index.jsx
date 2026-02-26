@@ -190,7 +190,7 @@ function TOTFeedback() {
                     className="course-list-icon"
                   />
                 </div>
-                <span className={index >= 6 ? "d-none" : ""}>
+                <span className={index >= 5 ? "d-none" : ""}>
                   Week
                   {index + 1}
                 </span>

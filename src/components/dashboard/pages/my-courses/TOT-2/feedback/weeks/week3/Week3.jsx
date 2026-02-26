@@ -17,7 +17,7 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer.j
 import Modal from "../../components/Modal.jsx";
 import { useMutation } from "@tanstack/react-query";
 
-function Week3({ enrollmentId, setWeekOneData }) {
+function Week3({ enrollmentId, setWeekThreeData }) {
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState("");
   const [activityFeedbackId, setActivityFeedbackId] = useState(null);
@@ -81,7 +81,7 @@ function Week3({ enrollmentId, setWeekOneData }) {
     setActivityData(data.activity?.activities);
     setAssessmentData(data.assessment?.assessments);
 
-    setWeekOneData(true);
+    setWeekThreeData(true);
 
     return () => {};
   }, [data]);
@@ -119,38 +119,6 @@ function Week3({ enrollmentId, setWeekOneData }) {
       // return answerObject ? answerObject[index] : null;
       return answerObject ? answerObject : null;
     }
-  }
-
-  function getOptionDetails(option) {
-    const options = [
-      {
-        id: "A",
-        text: "Self Awareness",
-        subText: "(Recognizing emotions & strengths)",
-      },
-      {
-        id: "B",
-        text: "Self Management",
-        subText: "(Regulating emotions & stress)",
-      },
-      {
-        id: "C",
-        text: "Social Awareness",
-        subText: "(Empathy & understanding perspectives)",
-      },
-      {
-        id: "D",
-        text: "Relationship Skills",
-        subText: "(Building positive interactions)",
-      },
-      {
-        id: "E",
-        text: "Responsible Decision Making",
-        subText: "(Making ethical and safe choices)",
-      },
-    ];
-
-    return options.find((item) => item.id === option) || null;
   }
 
   if (isPending) {

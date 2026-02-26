@@ -20,9 +20,6 @@ function Accordion({
   const [pdfLoading, setPdfLoading] = useState(false);
   const [startDownload, setStartDownload] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { isAdmin, code } = useSelector(adminData);
-
-  const [answers, setAnswers] = useState(null);
 
   useEffect(() => {
     if (!startDownload) return;
