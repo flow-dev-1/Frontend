@@ -24,20 +24,19 @@ function Page20() {
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
-      (item) => item.page === pageData.id
+      (item) => item.page === pageData.id,
     );
     const answerCopy = adminDatas.isAdmin
       ? []
       : response?.answer
-      ? [...response.answer]
-      : [];
+        ? [...response.answer]
+        : [];
     setAnswers(answerCopy);
     return () => {};
   }, [userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
-    
 
     if (answers.length < 2) {
       setErrorMessage("At least 2 values are required!");
@@ -47,7 +46,7 @@ function Page20() {
     const emptyInputs = answers.filter((item) => item?.value?.trim() === "");
     if (emptyInputs.length > 0) {
       setErrorMessage(
-        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
+        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`,
       );
       return false;
     }
@@ -69,7 +68,7 @@ function Page20() {
     setAnswers((prevAnswers) => {
       // Check if the answer already exists
       const existingAnswerIndex = prevAnswers.findIndex(
-        (answer) => answer.index === index
+        (answer) => answer.index === index,
       );
       if (existingAnswerIndex > -1) {
         // Update existing answer
@@ -111,9 +110,9 @@ function Page20() {
                   // style={{ minWidth: { md: "150px" } }}
                 >
                   {/* Label */}
-                  <h2 className="bg-gray text-white p-1 mt-1 d-inline-block fs-2 fst-normal rounded-1">
+                  <p className="bg-gray text-white p-1 mt-1 d-inline-block fs-5 rounded-1">
                     {field.number}.
-                  </h2>
+                  </p>
 
                   <BigTextBox
                     value={
