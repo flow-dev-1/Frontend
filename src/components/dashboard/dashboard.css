@@ -1,35 +1,73 @@
-/* src/App.css */
+/* src/components/dashboard/dashboard.css */
 
 .dashboard {
-  /* display: flex; */
+  display: flex;
   width: 100%;
+  min-height: 100vh;
 }
 
 .sidebar-content {
-  flex: 2;
+  width: 250px;
+  flex-shrink: 0;
 }
 
 .dashboard-content {
-  flex: 4;
+  flex-grow: 1;
   padding: 40px 20px;
-  /* margin: 50px 0 0 250px; */
+  margin-left: 250px;
+  /* Sidebar width on desktop */
+  transition: margin-left 0.3s ease-in-out;
+  min-height: 100vh;
+  background-color: #f8f9fa;
 }
 
-.course-profile {
-  width: 100%;
-}
-.course-sidebar-content {
-  width: 100%;
+/* ── Hamburger button ── */
+.hamburger-icon {
+  display: none;
+  background: none;
+  border: none;
+  z-index: 1001;
+  /* Above sidebar-overlay */
+  color: #00bcc3;
+  font-size: 30px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  margin-left: auto;
 }
 
-/* sidebar-content */
+.navbar-right-desktop {
+  display: flex;
+  align-items: center;
+}
 
-@media screen and (max-width: 1024px) and (orientation: landscape) {
-  .sidebar-user {
+/* ── Responsive adjustments ── */
+
+@media (max-width: 768px) {
+  .hamburger-icon {
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar-right-desktop {
+    display: none;
+  }
+
+  .dashboard-content {
+    margin-left: 0 !important;
+    padding: 20px 15px;
+    width: 100%;
+  }
+
+  /* Hide legacy elements if any still exist in DOM */
+  .book-icon-landscape,
+  .sidebar-user-tablet-icons {
     display: none !important;
   }
+}
+
+@media (max-width: 480px) {
   .dashboard-content {
-    width: 100%;
-    margin: 50px 0 0 !important;
+    padding: 15px 10px;
   }
 }

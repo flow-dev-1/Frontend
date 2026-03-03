@@ -107,7 +107,7 @@ const WeekContent = () => {
     dispatch(setCurrentPage(currentPage));
     dispatch(setCurrentStep(currentStep));
 
-    return () => {};
+    return () => { };
   }, [dispatch]); // Added dispatch to dependency array
 
   const currentWeek = useSelector(selectCurrentWeek);
@@ -156,7 +156,7 @@ const WeekContent = () => {
       );
     }
 
-    return () => {};
+    return () => { };
   }, [data]);
 
   // If showing hurray, render that instead
@@ -278,6 +278,7 @@ const CourseContent = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [enrollmentProgress, setEnrollmentProgress] = useState(0);
   const [maxAccessibleWeek, setMaxAccessibleWeek] = useState(1);
+  const [enrollmentId, setEnrollmentId] = useState(null);
 
   const weeksTopic = [
     "Understanding SEL & Positive Psychology",
@@ -290,25 +291,40 @@ const CourseContent = () => {
   // Get enrollment data from location state
   const enrolmentData = location.state?.enrollmentData;
 
+  // Capture enrollmentId from location state on mount
   useEffect(() => {
-    if (enrolmentData?.progress !== undefined) {
-      setEnrollmentProgress(enrolmentData.progress);
-
-      // Calculate max accessible week based on progress
-      // Each week is ~16.67% of the course (100% / 6 weeks)
-      const progressPerWeek = 100 / weeksTopic.length;
-      const calculatedMaxWeek = Math.ceil(
-        enrolmentData.progress / progressPerWeek
-      );
-
-      // Allow access to current incomplete week + next week
-      const accessibleWeek = Math.max(
-        1,
-        Math.min(calculatedMaxWeek + 1, weeksTopic.length)
-      );
-      setMaxAccessibleWeek(accessibleWeek);
+    if (enrolmentData?._id) {
+      setEnrollmentId(enrolmentData._id);
     }
-  }, [enrolmentData]);
+  }, []);
+
+  // Fetch live enrollment data so progress bar stays up-to-date after each week
+  const { data: liveEnrollment } = useQuery({
+    queryKey: ["tot2-enrollment-progress", enrollmentId, currentWeek],
+    queryFn: () => userService.getSingleEnrollment(enrollmentId),
+    enabled: !!enrollmentId,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+  });
+
+  useEffect(() => {
+    // Prefer live server data; fall back to initial location.state snapshot
+    const progress =
+      liveEnrollment?.enrollment?.progress ?? liveEnrollment?.progress ?? enrolmentData?.progress ?? 0;
+
+    setEnrollmentProgress(progress);
+
+    // Calculate max accessible week based on progress
+    const progressPerWeek = 100 / weeksTopic.length;
+    const calculatedMaxWeek = Math.ceil(progress / progressPerWeek);
+
+    // Allow access to current incomplete week + next week
+    const accessibleWeek = Math.max(
+      1,
+      Math.min(calculatedMaxWeek + 1, weeksTopic.length)
+    );
+    setMaxAccessibleWeek(accessibleWeek);
+  }, [liveEnrollment, enrolmentData]);
 
   useEffect(() => {
     const segments = location.pathname.split("/").filter(Boolean);
@@ -457,7 +473,7 @@ const CourseContent = () => {
             Back to My Courses
           </button>
 
-          <div className="compassion-title">
+          <div className="tot-title">
             <h2 className="fs-5 fs-md-3 tot-nav-text">SEL for Educators:</h2>
             <h2 className="compassion fs-5 tot-nav-text">ToT Course 2</h2>
           </div>
@@ -472,9 +488,8 @@ const CourseContent = () => {
               return (
                 <li
                   key={index}
-                  className={`${isActive ? "active-week" : ""} ${
-                    isAccessible ? "accessible-week" : "locked-week"
-                  }`}
+                  className={`${isActive ? "active-week" : ""} ${isAccessible ? "accessible-week" : "locked-week"
+                    }`}
                   onClick={() => handleWeekClick(weekNumber)}
                   style={{
                     cursor: isAccessible ? "pointer" : "not-allowed",
@@ -488,8 +503,8 @@ const CourseContent = () => {
                         isCompleted
                           ? "icon-park-solid:check-one"
                           : isAccessible
-                          ? "icon-park-outline:check-one"
-                          : "mdi:lock"
+                            ? "icon-park-outline:check-one"
+                            : "mdi:lock"
                       }
                       className="course-list-icon"
                     />

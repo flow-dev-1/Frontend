@@ -17,13 +17,13 @@ export default function PopUp() {
 
   const handleEmojiClick = (value) => {
 
-    if (adminDatas.isAdmin){
+    if (adminDatas.isAdmin) {
       dispatch(hideReviewPopup());
-      return 
+      return
       // window.close();
-    } 
+    }
 
-    console.log(userAnswers,"User Answers here")
+    console.log(userAnswers, "User Answers here")
     if (!userAnswers.course || !value) {
       toast.error("Something went wrong!")
 
@@ -62,7 +62,7 @@ export default function PopUp() {
   return (
     <div
       style={{ width: "620px", paddingTop: "30px" }}
-      className="review-popup modal-content position-absolute top-50 start-50 translate-middle"
+      className="review-popup position-absolute top-50 start-50 translate-middle"
     >
       <div className="">
         <h1 style={{ margin: "0 auto" }} className="review">

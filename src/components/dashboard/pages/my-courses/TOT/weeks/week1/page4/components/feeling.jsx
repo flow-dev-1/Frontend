@@ -18,7 +18,7 @@ export default function Feeling({ answers = [], setAnswers }) {
   };
 
   return (
-    <div className="modal-content  p-1 p-md-4 feeling-modal">
+    <div className="p-1 p-md-4 feeling-modal">
       <div className="tot-text">
         <div className="px-1 px-md-5 text-center">
           <h1 className="text-blue mb-4" style={{ fontSize: 1 + "em" }}>
@@ -28,41 +28,36 @@ export default function Feeling({ answers = [], setAnswers }) {
 
         <div className="d-flex justify-content-center review-buttons gap-3">
           <button
-            className={`btn sad ${
-              selectedFeeling === "feeling1" ? "selected" : ""
-            }`}
+            className={`btn sad ${selectedFeeling === "feeling1" ? "selected" : ""
+              }`}
             onClick={() => handleEmojiClick("feeling1")}
           >
             <img src={feeling1} alt="Feeling 1" />
           </button>
           <button
-            className={`btn sad ${
-              selectedFeeling === "feeling2" ? "selected" : ""
-            }`}
+            className={`btn sad ${selectedFeeling === "feeling2" ? "selected" : ""
+              }`}
             onClick={() => handleEmojiClick("feeling2")}
           >
             <img src={feeling2} alt="Feeling 2" />
           </button>
           <button
-            className={`btn sad ${
-              selectedFeeling === "feeling3" ? "selected" : ""
-            }`}
+            className={`btn sad ${selectedFeeling === "feeling3" ? "selected" : ""
+              }`}
             onClick={() => handleEmojiClick("feeling3")}
           >
             <img src={feeling3} alt="Feeling 3" />
           </button>
           <button
-            className={`btn sad ${
-              selectedFeeling === "feeling4" ? "selected" : ""
-            }`}
+            className={`btn sad ${selectedFeeling === "feeling4" ? "selected" : ""
+              }`}
             onClick={() => handleEmojiClick("feeling4")}
           >
             <img src={feeling4} alt="Feeling 4" />
           </button>
           <button
-            className={`btn sad ${
-              selectedFeeling === "feeling5" ? "selected" : ""
-            }`}
+            className={`btn sad ${selectedFeeling === "feeling5" ? "selected" : ""
+              }`}
             onClick={() => handleEmojiClick("feeling5")}
           >
             <img src={feeling5} alt="Feeling 5" />

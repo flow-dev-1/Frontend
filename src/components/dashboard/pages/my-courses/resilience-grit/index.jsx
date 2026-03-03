@@ -319,24 +319,43 @@ const CourseContent = () => {
 
   const [enrollmentProgress, setEnrollmentProgress] = useState(0);
   const [maxAccessibleWeek, setMaxAccessibleWeek] = useState(1);
+  const [enrollmentId, setEnrollmentId] = useState(null);
 
   // Access data from location.state
   const enrolmentData = location.state?.enrollmentData;
 
+  // Capture enrollmentId from location state on mount
   useEffect(() => {
-    if (enrolmentData?.progress !== undefined) {
-      setEnrollmentProgress(enrolmentData.progress);
-
-      // Calculate max accessible week based on progress
-      // Each week is 20% of the course (100% / 5 weeks = 20% per week)
-      const progressPerWeek = 100 / weeksTopic.length;
-      const calculatedMaxWeek = Math.ceil(enrolmentData.progress / progressPerWeek);
-
-      // Allow access to current incomplete week + next week
-      const accessibleWeek = Math.max(1, Math.min(calculatedMaxWeek + 1, weeksTopic.length));
-      setMaxAccessibleWeek(accessibleWeek);
+    if (enrolmentData?._id) {
+      setEnrollmentId(enrolmentData._id);
     }
-  }, [enrolmentData]);
+  }, []);
+
+  // Fetch live enrollment data so progress bar stays up-to-date after each week
+  const { data: liveEnrollment } = useQuery({
+    queryKey: ["resilience-enrollment-progress", enrollmentId, currentWeek],
+    queryFn: () => userService.getSingleEnrollment(enrollmentId),
+    enabled: !!enrollmentId,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+  });
+
+  useEffect(() => {
+    // Prefer live server data; fall back to initial location.state snapshot
+    const progress =
+      liveEnrollment?.enrollment?.progress ?? liveEnrollment?.progress ?? enrolmentData?.progress ?? 0;
+
+    setEnrollmentProgress(progress);
+
+    // Calculate max accessible week based on progress
+    // Each week is 20% of the course (100% / 5 weeks = 20% per week)
+    const progressPerWeek = 100 / weeksTopic.length;
+    const calculatedMaxWeek = Math.ceil(progress / progressPerWeek);
+
+    // Allow access to current incomplete week + next week
+    const accessibleWeek = Math.max(1, Math.min(calculatedMaxWeek + 1, weeksTopic.length));
+    setMaxAccessibleWeek(accessibleWeek);
+  }, [liveEnrollment, enrolmentData]);
 
   useEffect(() => {
     const segments = location.pathname.split("/").filter(Boolean);

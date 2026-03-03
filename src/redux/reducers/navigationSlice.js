@@ -187,6 +187,11 @@ const navigationSlice = createSlice({
           ) {
             state.showReview = true;
           } else if (
+            state.currentCourse === "tot_2" &&
+            (state.currentWeek === 5 || isFirstWeek)
+          ) {
+            state.showReview = true;
+          } else if (
             state.currentCourse !== "transition" &&
             state.currentCourse !== "tot" &&
             (state.currentWeek === 5 || isFirstWeek)

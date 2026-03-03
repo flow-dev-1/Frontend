@@ -12,7 +12,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
 
-function TOTFeedback() {
+function TOT2Feedback() {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
@@ -84,19 +84,19 @@ function TOTFeedback() {
 
   const weekContents = [
     {
-      topic: "Understanding Inclusion and Special Needs in the Classroom",
+      topic: "Understanding SEL & Positive Psychology",
       component: (
         <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} />
       ),
     },
     {
-      topic: "The Inclusive Mindset: Empathy and Compassion",
+      topic: "Self-Awareness & Emotional Regulation",
       component: (
         <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} />
       ),
     },
     {
-      topic: "The Inclusive Mindset: Empathy, and Compassion",
+      topic: "Building Relationships & Creating a Safe Classroom",
       component: (
         <Week3
           enrollmentId={enrollmentId}
@@ -105,17 +105,24 @@ function TOTFeedback() {
       ),
     },
     {
-      topic:
-        "Practical Strategies for Supporting Students with Common Special Needs",
+      topic: "Growth Mindset & Resilience for Educators",
       component: (
         <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} />
       ),
     },
     {
-      topic: "Collaboration, Support Systems, and Inclusive Implementation",
+      topic: "Integrating SEL into Teaching Methods",
       component: (
         <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} />
       ),
+    },
+    {
+      topic: "SEL & Positive Psychology Implementation Plan Worksheet.",
+      component: "",
+    },
+    {
+      topic: "Teacher Resources for ToT Course 2",
+      component: "",
     },
     {
       topic: "Summary of your journey through ToT Course 2",
@@ -129,7 +136,7 @@ function TOTFeedback() {
     },
   ];
 
-  const weeksTopic = weekContents.slice(0, 6).map((week) => week.topic);
+  const weeksTopic = weekContents.slice(0, 5).map((week) => week.topic);
   const items = weekContents.map((week) => ({
     title: week.topic,
     content: week.component,
@@ -179,7 +186,7 @@ function TOTFeedback() {
                 className={
                   index + 1 <= currentWeek
                     ? "active-week"
-                    : index >= 6
+                    : index >= 5
                       ? "d-none"
                       : ""
                 }
@@ -224,4 +231,6 @@ function TOTFeedback() {
   );
 }
 
-export default TOTFeedback;
+export default TOT2Feedback;
+
+// week 4, all drag and drop

@@ -114,7 +114,17 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
+      <div className="modal-content" style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        padding: '15px',
+        width: '95%',
+        maxWidth: '990px',
+        maxHeight: '90vh',
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+      }}>
         <div className="hediee">
           <div className="modal-header">
             <h2>Enrolled Classes</h2>
@@ -123,8 +133,22 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
             X
           </button>
         </div>
-        <div className="modal-body">
-          <div className="table-container">
+        <div className="modal-body" style={{
+          width: '100%',
+          flex: 1,
+          minHeight: 0,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          WebkitOverflowScrolling: 'touch',
+          display: 'block',
+          padding: '5px 0',
+        }}>
+          <div className="table-container" style={{
+            width: '100%',
+            overflowX: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            display: 'block',
+          }}>
             <table id="my-table" className="students-table">
               <thead>
                 <tr id="view">

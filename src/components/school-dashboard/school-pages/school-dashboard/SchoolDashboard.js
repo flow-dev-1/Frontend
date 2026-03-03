@@ -4,6 +4,7 @@ import SchoolSidebar from "./sidebar/SchoolSidebar";
 import logo from "../../../../assets/logo.png";
 import SchoolSingleCoursePage from "../school-single-course-page/SchoolSingleCoursePage";
 import "./dashboard.css";
+import { Icon } from '@iconify/react';
 import { useDispatch } from "react-redux";
 import { logoutSuccess } from "../../../../redux/reducers/userReducer";
 import { clearToken } from "../../../../redux/reducers/jwtReducer";
@@ -17,6 +18,7 @@ export default function SchoolDashboard() {
   const { user } = useSelector((state) => state.user);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   let schoolId;
@@ -78,41 +80,53 @@ export default function SchoolDashboard() {
             <img src={logo} alt="" />
           </Link>
 
-          {showDropdown ? (
-            <div className="navbar-dropdown-wrapper" ref={dropdownRef}>
+          {/* Desktop: show logout/account dropdown */}
+          <div className="navbar-right-desktop">
+            {showDropdown ? (
+              <div className="navbar-dropdown-wrapper" ref={dropdownRef}>
+                <div
+                  className="navbar-logo"
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  style={{ cursor: "pointer" }}
+                >
+                  Account ▼
+                </div>
+                {isDropdownOpen && (
+                  <div className="navbar-dropdown-menu">
+                    <div
+                      className="navbar-dropdown-item"
+                      onClick={switchToEducatorDashboard}
+                    >
+                      Switch Dashboard
+                    </div>
+                    <div
+                      className="navbar-dropdown-item"
+                      onClick={logOut}
+                    >
+                      Logout
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
               <div
                 className="navbar-logo"
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                onClick={logOut}
                 style={{ cursor: "pointer" }}
               >
-                Account ▼
+                Logout
               </div>
-              {isDropdownOpen && (
-                <div className="navbar-dropdown-menu">
-                  <div
-                    className="navbar-dropdown-item"
-                    onClick={switchToEducatorDashboard}
-                  >
-                    Switch Dashboard
-                  </div>
-                  <div
-                    className="navbar-dropdown-item"
-                    onClick={logOut}
-                  >
-                    Logout
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div
-              className="navbar-logo"
-              onClick={logOut}
-              style={{ cursor: "pointer" }}
-            >
-              Logout
-            </div>
-          )}
+            )}
+          </div>
+
+          {/* Mobile: show hamburger icon */}
+          <button
+            className="hamburger-icon"
+            onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+            aria-label="Toggle menu"
+          >
+            <Icon icon={isMobileSidebarOpen ? 'mdi:close' : 'mdi:menu'} />
+          </button>
         </div>
       </nav>
 
@@ -124,7 +138,14 @@ export default function SchoolDashboard() {
         </div>
       ) : (
         <div className="dashboard">
-          <SchoolSidebar className="sidebar-content" />
+          <SchoolSidebar
+            className="sidebar-content"
+            isMobileOpen={isMobileSidebarOpen}
+            onMobileClose={() => setIsMobileSidebarOpen(false)}
+            onLogout={logOut}
+            showAccountDropdown={showDropdown}
+            onSwitchDashboard={switchToEducatorDashboard}
+          />
           <div className="dashboard-content">
             <Outlet />
           </div>

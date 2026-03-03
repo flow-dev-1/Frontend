@@ -3,40 +3,51 @@
 @import url("https://fonts.cdnfonts.com/css/good-unicorn");
 
 @import url("https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
 :root {
   --paragraph-font-family: "ABeeZee", sans-serif;
   --headings-font-family: "ABeeZee", sans-serif;
 }
-/* Modal container styles */
+
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7); /* Backdrop */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
   z-index: 999;
 }
 
-/* Modal content styles */
+/*
+  App.css has a global .modal-content rule with:
+    - align-items: center  (prevents children from stretching to full width)
+    - padding: 30px 60px  (eats up width on mobile)
+  We override ALL of those with !important here.
+*/
 .modal-content {
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-  width: 991px;
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  background: white !important;
+  border-radius: 8px !important;
+  width: 95% !important;
+  max-width: 990px !important;
+  max-height: 90vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  /* CRITICAL: override App.css align-items:center */
+  justify-content: flex-start !important;
+  padding: 15px !important;
+  /* CRITICAL: override App.css padding:30px 60px */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3) !important;
+  overflow: hidden !important;
+  position: relative !important;
 }
 
 .modal-close-btn {
-  /* position: absolute; */
   margin-bottom: 30px;
-  /* right: 10px;. */
   background: transparent;
   border: none;
   font-size: 25px;
@@ -55,10 +66,21 @@
   margin: 0;
 }
 
+/* App.css also has .modal-content h2 { font-size:40px } — override it */
+.modal-content .modal-header h2 {
+  font-size: 1.4rem !important;
+}
+
 .modal-body {
-  padding: 15px 0;
-  overflow-y: auto;
-  flex: 1;
+  width: 100% !important;
+  /* ensure it stretches full width */
+  padding: 5px 0 !important;
+  flex: 1 !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
+  display: block !important;
 }
 
 h2 {
@@ -78,17 +100,60 @@ tr#view {
 
 td {
   font-size: 13px;
-  /* font-weight: 100; */
-}
-
-.students-table {
-  border: 0px;
-  border: red;
 }
 
 .hediee {
   display: flex;
-  width: 90%;
-  justify-content: space-around;
-  margin: auto;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5px;
+  margin-bottom: 8px;
+}
+
+/* The ONE element responsible for horizontal scroll */
+.table-container {
+  width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  -webkit-overflow-scrolling: touch !important;
+  display: block !important;
+  touch-action: pan-x pan-y;
+}
+
+.students-table {
+  width: 100%;
+  min-width: 750px;
+  border-collapse: collapse;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    width: 98% !important;
+    max-height: 85vh !important;
+    padding: 12px !important;
+  }
+
+  .modal-body {
+    padding: 5px 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  .table-container {
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-x pan-y;
+    scrollbar-width: thin;
+  }
+
+  .students-table {
+    min-width: 600px !important;
+  }
+
+  .hediee {
+    width: 100%;
+    padding: 0 2px;
+  }
 }

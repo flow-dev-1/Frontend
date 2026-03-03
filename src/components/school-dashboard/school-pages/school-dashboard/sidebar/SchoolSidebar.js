@@ -5,10 +5,11 @@ import './sidebar.css'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 
-function SchoolSidebar() {
+function SchoolSidebar({ isMobileOpen, onMobileClose, onLogout, showAccountDropdown, onSwitchDashboard }) {
   const location = useLocation()
   const [isCoursesOpen, setIsCoursesOpen] = useState(false)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const [isAccountOpen, setIsAccountOpen] = useState(false)
   const navigate = useNavigate()
   const { user } = useSelector((state) => state.user);
 
@@ -22,12 +23,22 @@ function SchoolSidebar() {
 
     setIsCoursesOpen(!isCoursesOpen)
     setIsSettingsOpen(false)
+    setIsAccountOpen(false)
+    if (onMobileClose) onMobileClose()
   }
 
   const toggleSettings = () => {
     navigate('/school-dashboard/settings/profile')
     setIsSettingsOpen(!isSettingsOpen)
     setIsCoursesOpen(false)
+    setIsAccountOpen(false)
+    if (onMobileClose) onMobileClose()
+  }
+
+  const toggleAccount = () => {
+    setIsAccountOpen(!isAccountOpen)
+    setIsCoursesOpen(false)
+    setIsSettingsOpen(false)
   }
 
   const isActiveLink = (path) => {
@@ -46,183 +57,235 @@ function SchoolSidebar() {
     } else {
       setIsSettingsOpen(false)
     }
+
+    // Reset account dropdown when path changes
+    setIsAccountOpen(false)
   }, [location.pathname])
 
   return (
-    <div className='sidebar-user'>
-      <div className='sidebar-user-content'>
-        <ul className='sidebar-user-menu mt-3 desktop'>
-          <li>
-            <Link
-              to='/school-dashboard'
-              className={`link ${isActiveLink('/school-dashboard') ? 'active' : ''
-                }`}
-            >
-              <Icon icon='ion:grid-outline' className='sidebar-icon' />
-              Overview
-            </Link>
-          </li>
+    <>
+      {isMobileOpen && <div className="sidebar-overlay" onClick={onMobileClose} />}
+      <div className={`sidebar-user ${isMobileOpen ? 'mobile-open' : ''}`}>
+        <div className='sidebar-user-content'>
+          <ul className='sidebar-user-menu mt-3 desktop'>
+            <li>
+              <Link
+                to='/school-dashboard'
+                className={`link ${isActiveLink('/school-dashboard') ? 'active' : ''
+                  }`}
+                onClick={onMobileClose}
+              >
+                <Icon icon='ion:grid-outline' className='sidebar-icon' />
+                Overview
+              </Link>
+            </li>
 
-          <li>
-            <div
-              className={`link ${isCoursesOpen ? 'active' : ''}`}
-              onClick={toggleCourses}
-            >
-              <Icon icon='bi:book' className='sidebar-icon' />
-              Courses
-              <Icon
-                icon={isCoursesOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'}
-                className='chevron-icon'
-              />
-            </div>
-            {isCoursesOpen && (
-              <ul className='nested-menu'>
-                {
-                  (user?.isSchool || user?.schoolAdminPermission === "Admin") &&
+            <li>
+              <div
+                className={`link ${isCoursesOpen ? 'active' : ''}`}
+                onClick={toggleCourses}
+              >
+                <Icon icon='bi:book' className='sidebar-icon' />
+                Courses
+                <Icon
+                  icon={isCoursesOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'}
+                  className='chevron-icon'
+                />
+              </div>
+              {isCoursesOpen && (
+                <ul className='nested-menu'>
+                  {
+                    (user?.isSchool || user?.schoolAdminPermission === "Admin") &&
+                    <li>
+                      <Link
+                        to='/school-dashboard/courses/all'
+                        className={`link ${isActiveLink('/school-dashboard/courses/all')
+                          ? 'active-inner'
+                          : 'inner'
+                          }`}
+                      >
+                        All
+                      </Link>
+                    </li>
+                  }
+
                   <li>
                     <Link
-                      to='/school-dashboard/courses/all'
-                      className={`link ${isActiveLink('/school-dashboard/courses/all')
+                      to='/school-dashboard/courses/enrolled'
+                      className={`link ${isActiveLink('/school-dashboard/courses/enrolled')
                         ? 'active-inner'
                         : 'inner'
                         }`}
                     >
-                      All
+                      Enrolled
                     </Link>
                   </li>
-                }
+                </ul>
+              )}
+            </li>
 
-                <li>
-                  <Link
-                    to='/school-dashboard/courses/enrolled'
-                    className={`link ${isActiveLink('/school-dashboard/courses/enrolled')
-                      ? 'active-inner'
-                      : 'inner'
-                      }`}
-                  >
-                    Enrolled
-                  </Link>
-                </li>
-              </ul>
-            )}
-          </li>
+            <li>
+              <Link
+                to='/school-dashboard/support'
+                className={`link ${isActiveLink('/school-dashboard/support') ? 'active' : ''
+                  }`}
+                onClick={onMobileClose}
+              >
+                <Icon icon='ph:users-light' className='sidebar-icon' />
+                Support
+              </Link>
+            </li>
 
-          <li>
-            <Link
-              to='/school-dashboard/support'
-              className={`link ${isActiveLink('/school-dashboard/support') ? 'active' : ''
-                }`}
-            >
-              <Icon icon='ph:users-light' className='sidebar-icon' />
-              Support
-            </Link>
-          </li>
+            <li>
+              <Link
+                to='/school-dashboard/payment-history'
+                className={`link ${isActiveLink('/school-dashboard/payment-history')
+                  ? 'active'
+                  : ''
+                  }`}
+                onClick={onMobileClose}
+              >
+                <Icon
+                  width={26}
+                  icon='solar:dollar-outline'
+                  className='sidebar-icon'
+                />
+                Payment History
+              </Link>
+            </li>
 
-          <li>
-            <Link
-              to='/school-dashboard/payment-history'
-              className={`link ${isActiveLink('/school-dashboard/payment-history')
-                ? 'active'
-                : ''
-                }`}
-            >
-              <Icon
-                width={26}
-                icon='solar:dollar-outline'
-                className='sidebar-icon'
-              />
-              Payment History
-            </Link>
-          </li>
-
-          <li>
-            <div
-              className={`link ${isSettingsOpen ? 'active' : ''}`}
-              onClick={toggleSettings}
-            >
-              <Icon icon='ep:setting' className='sidebar-icon' />
-              Settings
-              <Icon
-                icon={isSettingsOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'}
-                className='chevron-icon'
-              />
-            </div>
-            {isSettingsOpen && (
-              <ul className='nested-menu'>
-                <li>
-                  <Link
-                    to='/school-dashboard/settings/profile'
-                    className={`link ${isActiveLink('/school-dashboard/settings/profile')
-                      ? 'active-inner'
-                      : 'inner'
-                      }`}
-                  >
-                    Profile
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to='/school-dashboard/settings/teams'
-                    className={`link ${isActiveLink('/school-dashboard/settings/teams')
-                      ? 'active-inner'
-                      : 'inner'
-                      }`}
-                  >
-                    Teams
-                  </Link>
-                </li>
-
-                {
-                  user?.isSchool &&
+            <li>
+              <div
+                className={`link ${isSettingsOpen ? 'active' : ''}`}
+                onClick={toggleSettings}
+              >
+                <Icon icon='ep:setting' className='sidebar-icon' />
+                Settings
+                <Icon
+                  icon={isSettingsOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'}
+                  className='chevron-icon'
+                />
+              </div>
+              {isSettingsOpen && (
+                <ul className='nested-menu'>
                   <li>
                     <Link
-                      to='/school-dashboard/settings/change-password'
-                      className={`link ${isActiveLink('/school-dashboard/settings/change-password')
+                      to='/school-dashboard/settings/profile'
+                      className={`link ${isActiveLink('/school-dashboard/settings/profile')
                         ? 'active-inner'
                         : 'inner'
                         }`}
                     >
-                      Change Password
+                      Profile
                     </Link>
                   </li>
-                }
-
-                <li>
-                  <Link
-                    to='/school-dashboard/settings/email-notifications'
-                    className={`link ${isActiveLink(
-                      '/school-dashboard/settings/email-notifications'
-                    )
-                      ? 'active-inner'
-                      : 'inner'
-                      }`}
-                  >
-                    Email Notifications
-                  </Link>
-                </li>
-                {
-                  user?.isSchool &&
                   <li>
                     <Link
-                      to='/school-dashboard/settings/deactivate-account'
+                      to='/school-dashboard/settings/teams'
+                      className={`link ${isActiveLink('/school-dashboard/settings/teams')
+                        ? 'active-inner'
+                        : 'inner'
+                        }`}
+                    >
+                      Teams
+                    </Link>
+                  </li>
+
+                  {
+                    user?.isSchool &&
+                    <li>
+                      <Link
+                        to='/school-dashboard/settings/change-password'
+                        className={`link ${isActiveLink('/school-dashboard/settings/change-password')
+                          ? 'active-inner'
+                          : 'inner'
+                          }`}
+                      >
+                        Change Password
+                      </Link>
+                    </li>
+                  }
+
+                  <li>
+                    <Link
+                      to='/school-dashboard/settings/email-notifications'
                       className={`link ${isActiveLink(
-                        '/school-dashboard/settings/deactivate-account'
+                        '/school-dashboard/settings/email-notifications'
                       )
                         ? 'active-inner'
                         : 'inner'
                         }`}
                     >
-                      Deactivate Account
+                      Email Notifications
                     </Link>
                   </li>
-                }
+                  {
+                    user?.isSchool &&
+                    <li>
+                      <Link
+                        to='/school-dashboard/settings/deactivate-account'
+                        className={`link ${isActiveLink(
+                          '/school-dashboard/settings/deactivate-account'
+                        )
+                          ? 'active-inner'
+                          : 'inner'
+                          }`}
+                      >
+                        Deactivate Account
+                      </Link>
+                    </li>
+                  }
 
-              </ul>
-            )}
-          </li>
-        </ul>
+                </ul>
+              )}
+            </li>
+
+            {/* Account — visible only on mobile */}
+            <li className="mobile-only-account">
+              <div
+                className={`link ${isAccountOpen ? 'active' : ''}`}
+                onClick={toggleAccount}
+              >
+                <Icon icon='ph:user-circle-light' className='sidebar-icon' />
+                Account
+                <Icon
+                  icon={isAccountOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'}
+                  className='chevron-icon'
+                />
+              </div>
+              {isAccountOpen && (
+                <ul className='nested-menu'>
+                  {showAccountDropdown && (
+                    <li>
+                      <div
+                        className="link inner"
+                        onClick={() => {
+                          onMobileClose();
+                          if (onSwitchDashboard) onSwitchDashboard();
+                        }}
+                      >
+                        Switch Dashboard
+                      </div>
+                    </li>
+                  )}
+                  <li>
+                    <div
+                      className="link inner"
+                      onClick={() => {
+                        onMobileClose();
+                        if (onLogout) onLogout();
+                      }}
+                    >
+                      Logout
+                    </div>
+                  </li>
+                </ul>
+              )}
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

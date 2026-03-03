@@ -4,6 +4,9 @@ import { Icon } from "@iconify/react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { ClimbingBoxLoader } from "react-spinners";
+import { useQuery } from "@tanstack/react-query";
+import userService from "../../../../../../../services/api/user.js";
+import adminService from "../../../../../../../services/api/admin.js";
 import { adminData } from "../../../../../../../redux/reducers/adminReducer.js";
 import { useSelector } from "react-redux";
 
@@ -20,9 +23,51 @@ function Accordion({
   const [pdfLoading, setPdfLoading] = useState(false);
   const [startDownload, setStartDownload] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { isAdmin, code } = useSelector(adminData);
 
   useEffect(() => {
     if (!startDownload) return;
+
+    // Worksheet (index 5 for TOT-2)
+    if (currentIndex === 5) {
+      console.log("downloading Worksheet pdf");
+      const link = document.createElement("a");
+      link.href = "/Special Needs and Inclusive Education in Classrooms (TOT Course 2) Implementation Plan Template.pdf";
+      link.download = "Special Needs and Inclusive Education in Classrooms (TOT Course 2) Implementation Plan Template.pdf";
+      link.click();
+
+      setStartDownload(false);
+      setActiveIndex("");
+      return;
+    }
+
+    // Final course PDF (index 6 for TOT-2)
+    if (currentIndex === 6) {
+      const originalState = activeIndex;
+      setPdfLoading(true);
+      setActiveIndex(null);
+
+      if (!hasPercentile) {
+        setActiveIndex(originalState);
+        setPdfLoading(false);
+        return;
+      }
+      console.log("downloading course pdf");
+
+      const link = document.createElement("a");
+      link.href = "/Teacher Resources.pdf";
+      link.download = "Teacher Resources.pdf";
+      link.click();
+
+      setStartDownload(false);
+      setActiveIndex("");
+      setHasPercentile(false);
+      setPdfLoading(false);
+
+      return;
+    }
+
+    // Overall feedback PDF (index 7 for TOT-2)
     generatePDF();
   }, [hasPercentile, allDataLoaded, startDownload, currentIndex]);
 
@@ -89,10 +134,8 @@ function Accordion({
         {items.map((item, index) => (
           <div key={index} className="accordion-item">
             <div
-              className={`py-4 px-5 d-flex gap-3 align-items-center justify-space-between
-py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
-                index > 4 ? "bg-blue-feedback" : ""
-              }`}
+              className={`py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${index > 6 ? "bg-blue-feedback" : ""
+                }`}
             >
               <div className="d-flex align-items-center gap-3 flex-grow-1">
                 {index < 5 ? (
@@ -103,7 +146,7 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
                   >
                     Week {index + 1}:
                   </p>
-                ) : index >= 6 && index < 7 ? (
+                ) : index === 5 ? (
                   <p
                     className="text-gray text-nowrap fw-bold"
                     onClick={() => handleToggle(index)}
@@ -132,7 +175,7 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
                     className="text-blue"
                     style={{ zIndex: 100, cursor: "pointer" }}
                     onClick={() => {
-                      // handleToggle(index);
+                      handleToggle(index);
                       setCurrentIndex(index);
                       setStartDownload(true);
                     }}

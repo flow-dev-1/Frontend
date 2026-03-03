@@ -173,6 +173,7 @@ select {
   height: 14px;
   border-radius: 4px;
 }
+
 .box-1 {
   width: 14px;
   height: 14px;
@@ -285,4 +286,40 @@ p.active.gender {
   background-color: #5ce1e6;
   color: #275dad;
   margin-top: 0.2rem;
+}
+
+@media (max-width: 768px) {
+  .top-cards {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .balance,
+  .stat {
+    width: 100% !important;
+    height: auto !important;
+    padding: 1rem !important;
+  }
+
+  .balance .value {
+    width: 100% !important;
+  }
+
+  .charts {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .chart {
+    width: 100% !important;
+  }
+
+  .summary {
+    margin-left: 0;
+    justify-content: center;
+  }
+
+  #play {
+    width: 100%;
+  }
 }
