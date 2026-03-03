@@ -198,7 +198,7 @@ const WeekContent = () => {
           week: currentWeek,
           activities: data.activity?.activities,
           assessments: data.assessment?.assessments,
-        })
+        }),
       );
     } else {
       dispatch(
@@ -210,7 +210,7 @@ const WeekContent = () => {
           week: currentWeek,
           activities: userAnswers.activities,
           assessments: userAnswers.assessments,
-        })
+        }),
       );
     }
 
@@ -445,7 +445,6 @@ const WeekContent = () => {
   );
 };
 
-
 const CourseContent = () => {
   const { isAdmin } = useSelector(adminData);
   const currentWeek = useSelector(selectCurrentWeek);
@@ -471,14 +470,19 @@ const CourseContent = () => {
   useEffect(() => {
     if (enrolmentData?.progress !== undefined) {
       setEnrollmentProgress(enrolmentData.progress);
-      
+
       // Calculate max accessible week based on progress
       // Each week is ~16.67% of the course (100% / 6 weeks)
       const progressPerWeek = 100 / weeksTopic.length;
-      const calculatedMaxWeek = Math.ceil(enrolmentData.progress / progressPerWeek);
-      
+      const calculatedMaxWeek = Math.ceil(
+        enrolmentData.progress / progressPerWeek,
+      );
+
       // Allow access to current incomplete week + next week
-      const accessibleWeek = Math.max(1, Math.min(calculatedMaxWeek + 1, weeksTopic.length));
+      const accessibleWeek = Math.max(
+        1,
+        Math.min(calculatedMaxWeek + 1, weeksTopic.length),
+      );
       setMaxAccessibleWeek(accessibleWeek);
     }
   }, [enrolmentData]);
@@ -517,7 +521,7 @@ const CourseContent = () => {
   const isWeekCompleted = (weekNumber) => {
     // A week is completed if the user has progressed beyond it
     const progressPerWeek = 100 / weeksTopic.length;
-    return enrollmentProgress >= (weekNumber * progressPerWeek);
+    return enrollmentProgress >= weekNumber * progressPerWeek;
   };
 
   const logOut = () => {
@@ -532,7 +536,7 @@ const CourseContent = () => {
         week: 1,
         activities: [],
         assessments: [],
-      })
+      }),
     );
     navigate("/sign-in", { replace: true });
   };
@@ -630,7 +634,7 @@ const CourseContent = () => {
             Back to My Courses
           </button>
 
-          <div className="compassion-title">
+          <div className="tot-title">
             <h2 className="fs-5 fs-md-3 tot-nav-text">SEL for Educators:</h2>
             <h2 className="compassion fs-5 tot-nav-text">ToT Course 1</h2>
           </div>
@@ -661,13 +665,15 @@ const CourseContent = () => {
                         isCompleted
                           ? "icon-park-solid:check-one"
                           : isAccessible
-                          ? "icon-park-outline:check-one"
-                          : "mdi:lock"
+                            ? "icon-park-outline:check-one"
+                            : "mdi:lock"
                       }
                       className="course-list-icon"
                     />
                   </div>
-                  <span style={{ whiteSpace: "nowrap" }}>Week {weekNumber}</span>
+                  <span style={{ whiteSpace: "nowrap" }}>
+                    Week {weekNumber}
+                  </span>
                   <span className="">{item}</span>
                 </li>
               );
