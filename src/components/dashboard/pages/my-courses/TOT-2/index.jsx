@@ -140,7 +140,7 @@ const WeekContent = () => {
           week: currentWeek,
           activities: data.activity?.activities,
           assessments: data.assessment?.assessments,
-        })
+        }),
       );
     } else {
       dispatch(
@@ -152,7 +152,7 @@ const WeekContent = () => {
           week: currentWeek,
           activities: userAnswers.activities,
           assessments: userAnswers.assessments,
-        })
+        }),
       );
     }
 
@@ -280,11 +280,11 @@ const CourseContent = () => {
   const [maxAccessibleWeek, setMaxAccessibleWeek] = useState(1);
 
   const weeksTopic = [
-    "Understanding SEL & Positive Psychology",
-    "Self-Awareness & Emotional Regulation",
-    "Building Relationships & Creating a Safe Classroom",
-    "Growth Mindset & Resilience for Educators",
-    "Integrating SEL into Teaching Methods",
+    "Understanding Inclusion and Special Needs in the Classroom",
+    "The Inclusive Mindset: Empathy and Compassion",
+    "The Inclusive Mindset: Empathy, and Compassion",
+    "Practical Strategies for Supporting Students with Common Special Needs",
+    "Collaboration, Support Systems, and Inclusive Implementation",
   ];
 
   // Get enrollment data from location state
@@ -298,13 +298,13 @@ const CourseContent = () => {
       // Each week is ~16.67% of the course (100% / 6 weeks)
       const progressPerWeek = 100 / weeksTopic.length;
       const calculatedMaxWeek = Math.ceil(
-        enrolmentData.progress / progressPerWeek
+        enrolmentData.progress / progressPerWeek,
       );
 
       // Allow access to current incomplete week + next week
       const accessibleWeek = Math.max(
         1,
-        Math.min(calculatedMaxWeek + 1, weeksTopic.length)
+        Math.min(calculatedMaxWeek + 1, weeksTopic.length),
       );
       setMaxAccessibleWeek(accessibleWeek);
     }
@@ -359,7 +359,7 @@ const CourseContent = () => {
         week: 1,
         activities: [],
         assessments: [],
-      })
+      }),
     );
     navigate("/sign-in", { replace: true });
   };
@@ -488,8 +488,8 @@ const CourseContent = () => {
                         isCompleted
                           ? "icon-park-solid:check-one"
                           : isAccessible
-                          ? "icon-park-outline:check-one"
-                          : "mdi:lock"
+                            ? "icon-park-outline:check-one"
+                            : "mdi:lock"
                       }
                       className="course-list-icon"
                     />
