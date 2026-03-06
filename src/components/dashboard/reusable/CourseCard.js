@@ -36,12 +36,7 @@ const CourseCard = ({
     return ((likes / courseEnrollment) * 100).toFixed(1)
   }
 
-  const truncateText = (text, maxLength) => {
-    if (text.length > maxLength) {
-      return text.slice(0, maxLength) + '...'
-    }
-    return text
-  }
+
 
   const handleFeedbackNavigation = (course) => {
     if(course?.title === "Self Awareness"){
@@ -110,7 +105,7 @@ const CourseCard = ({
             </h3>
             <h3 style={{ color: '#555', fontSize: '24px' }}>{course?.title}</h3>
             <p style={{ height: '50px' }}>
-              {truncateText(course?.description, 100)}
+              {course?.description}
             </p>
             <div className='d-flex icons'>
               {/* <span>

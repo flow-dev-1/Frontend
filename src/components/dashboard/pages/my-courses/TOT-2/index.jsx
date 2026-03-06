@@ -140,7 +140,7 @@ const WeekContent = () => {
           week: currentWeek,
           activities: data.activity?.activities,
           assessments: data.assessment?.assessments,
-        })
+        }),
       );
     } else {
       dispatch(
@@ -152,7 +152,7 @@ const WeekContent = () => {
           week: currentWeek,
           activities: userAnswers.activities,
           assessments: userAnswers.assessments,
-        })
+        }),
       );
     }
 
@@ -281,11 +281,11 @@ const CourseContent = () => {
   const [enrollmentId, setEnrollmentId] = useState(null);
 
   const weeksTopic = [
-    "Understanding SEL & Positive Psychology",
-    "Self-Awareness & Emotional Regulation",
-    "Building Relationships & Creating a Safe Classroom",
-    "Growth Mindset & Resilience for Educators",
-    "Integrating SEL into Teaching Methods",
+    "Understanding Inclusion and Special Needs in the Classroom",
+    "The Inclusive Mindset: Empathy and Compassion",
+    "The Inclusive Mindset: Empathy, and Compassion",
+    "Practical Strategies for Supporting Students with Common Special Needs",
+    "Collaboration, Support Systems, and Inclusive Implementation",
   ];
 
   // Get enrollment data from location state
@@ -375,7 +375,7 @@ const CourseContent = () => {
         week: 1,
         activities: [],
         assessments: [],
-      })
+      }),
     );
     navigate("/sign-in", { replace: true });
   };
