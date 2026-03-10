@@ -4,13 +4,54 @@ export const courseContent = {
     pages: [
       {
         id: 1,
+        type: "multiStep",
+        title: "Write a letter to yourself.",
+        steps: [
+          {
+            stepId: 1,
+          },
+          {
+            stepId: 2,
+          },
+          {
+            stepId: 3,
+          },
+          {
+            stepId: 4,
+          },
+          {
+            stepId: 5,
+          },
+          {
+            stepId: 6,
+          },
+          {
+            stepId: 7,
+          },
+          {
+            stepId: 8,
+          },
+          {
+            stepId: 9,
+          },
+          {
+            stepId: 10,
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 2,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_1.mp4",
         hasNextButton: true,
       },
       {
-        id: 2,
+        id: 3,
         type: "question",
         questionType: "text",
         question:
@@ -24,7 +65,7 @@ export const courseContent = {
         },
       },
       {
-        id: 3,
+        id: 4,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_2.mp4",
@@ -34,7 +75,7 @@ export const courseContent = {
         },
       },
       {
-        id: 4,
+        id: 5,
         type: "question",
         questionType: "text",
         question: `Type one word that comes to mind when you hear “Inclusive Classroom.”`,
@@ -47,7 +88,7 @@ export const courseContent = {
         },
       },
       {
-        id: 5,
+        id: 6,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_3.mp4",
@@ -57,7 +98,7 @@ export const courseContent = {
         },
       },
       {
-        id: 6,
+        id: 7,
         type: "question",
         question:
           "As a teacher, I’d love to hear your definition of these three words.",
@@ -80,7 +121,7 @@ export const courseContent = {
         },
       },
       {
-        id: 7,
+        id: 8,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_4.mp4",
@@ -90,7 +131,7 @@ export const courseContent = {
         },
       },
       {
-        id: 8,
+        id: 9,
         type: "multiStep",
         steps: [
           {
@@ -119,9 +160,18 @@ export const courseContent = {
               },
             ],
             images: [
-              "All students learn together with support available as needed.",
-              "Children are taught separately in special classrooms.",
-              "Learners are placed in the school but not supported to participate.",
+              "Students with disabilities learn in separate classrooms",
+              "Students with learning difficulties are placed in lower ability classes",
+              "Students are separated based on academic ability",
+              " Learners with disabilities attend special schools only",
+              "Students with special needs sit in the same classroom but receive no additional support",
+              "Students with learning difficulties must adapt to the normal teaching style",
+              " All learners follow the same lesson without adjustments",
+              "Students with disabilities attend the same school but rarely participate in activities",
+              "All students learn together with the right support",
+              "Teachers adjust lessons to meet different learning needs",
+              "Students receive different resources to help them succeed",
+              "Every learner participates in classroom activities",
             ],
           },
           {
@@ -151,7 +201,7 @@ export const courseContent = {
         },
       },
       {
-        id: 9,
+        id: 10,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_5.mp4",
@@ -161,38 +211,26 @@ export const courseContent = {
         },
       },
       {
-        id: 10,
+        id: 11,
         type: "multiStep",
         steps: [
           {
             stepId: 1,
             type: "dropdownScenario",
             question:
-              "This student faces Dyslexia, meaning they struggle significantly with decoding and processing written text.",
+              "Based on your current understanding, do you think you have any learners with SEND (Special Educational Needs and Disabilities) in your classroom?",
             options: [
               {
                 id: "1",
-                text: "Text to speech software, simplified text versions and use of visual aids.",
+                text: "Yes.",
               },
               {
                 id: "2",
-                text: "Guided questions and assessments, peer to peer discussion.",
-              },
-            ],
-          },
-          {
-            stepId: 2,
-            type: "dropdownScenario",
-            question:
-              "This student is an Average learner who will succeed with standard classroom instruction.",
-            options: [
-              {
-                id: "1",
-                text: "Text to speech software, simplified text versions and use of visual aids.",
+                text: "No",
               },
               {
-                id: "2",
-                text: "Guided questions and assessments, peer to peer discussion.",
+                id: "3",
+                text: "I'm not sure",
               },
             ],
           },
@@ -203,10 +241,164 @@ export const courseContent = {
         },
       },
       {
-        id: 11,
+        id: 12,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_6.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 13,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Take a moment to look at these two profiles. For each learner, consider the 'Challenge' they face, and then choose the specific 'Supports' that will unlock their potential in your classroom.",
+            ],
+            options:
+              "Competence, Confidence, Coping, Control, Character, Connections, and Contribution.",
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question:
+              "A student avoids reading out loud and struggles to follow written instructions. What might be the possible barrier?",
+            options: [
+              {
+                id: "1",
+                text: "Dyslexia",
+              },
+              {
+                id: "2",
+                text: "Visual Impairment",
+              },
+              {
+                id: "3",
+                text: "Hearing Impairment",
+              },
+              {
+                id: "4",
+                text: "Anxiety",
+              },
+            ],
+            correctOption: "1",
+            feedback:
+              "Dyslexia affects how a learner processes written language, which can make reading tasks challenging.",
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question:
+              "A student frequently leaves their seat, interrupts others, and struggles to stay focused during lessons. What might be the possible barrier?",
+            options: [
+              {
+                id: "1",
+                text: "ADHD",
+              },
+              {
+                id: "2",
+                text: "Dyslexia",
+              },
+              {
+                id: "3",
+                text: "Hearing Impairment",
+              },
+              {
+                id: "4",
+                text: "Physical Disability",
+              },
+            ],
+            correctOption: "1",
+            feedback:
+              "ADHD can affect attention, impulse control, and activity levels, making it difficult for learners to remain focused during lessons.",
+          },
+          {
+            stepId: 4,
+            type: "dropdownScenario",
+            question: `A student often misunderstands spoken instructions and frequently asks classmates what the teacher said. What might be the possible barrier?`,
+            options: [
+              {
+                id: "1",
+                text: "Hearing Impairment",
+              },
+              {
+                id: "2",
+                text: "Dyslexia",
+              },
+              {
+                id: "3",
+                text: "ADHD",
+              },
+              {
+                id: "4",
+                text: "Physical Disability",
+              },
+            ],
+            correctOption: "1",
+            feedback:
+              "Hearing impairments can make it difficult for learners to clearly understand spoken instructions in the classroom.",
+          },
+          {
+            stepId: 5,
+            type: "dropdownScenario",
+            question:
+              "A student struggles to see what is written on the board and often squints or moves closer to read. What might be the possible barrier?",
+            options: [
+              {
+                id: "1",
+                text: "Visual Impairment",
+              },
+              {
+                id: "2",
+                text: "ADHD",
+              },
+              {
+                id: "3",
+                text: "Dyslexia",
+              },
+              {
+                id: "4",
+                text: "Anxiety",
+              },
+            ],
+            correctOption: "1",
+            feedback:
+              "Visual impairments can affect a student’s ability to see written materials clearly.",
+          },
+          {
+            stepId: 6,
+            type: "dropdownScenario",
+            question:
+              "A student understands concepts when explained verbally but struggles significantly with writing tasks. What might be the possible barrier?",
+            options: [
+              {
+                id: "1",
+                text: "Dysgraphia",
+              },
+              {
+                id: "2",
+                text: "ADHD",
+              },
+              {
+                id: "3",
+                text: "Visual Impairment",
+              },
+              {
+                id: "4",
+                text: "Hearing Impairment",
+              },
+            ],
+            correctOption: "1",
+            feedback:
+              "Dysgraphia affects a learner’s ability to write clearly and organize written expression.",
+          },
+        ],
         navigation: {
           prev: true,
           next: true,

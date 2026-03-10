@@ -10,9 +10,10 @@ const Page1 = () => {
   return (
     <>
       <VideoComponent videoSrc={pageData.videoSrc} />
-      <div className="d-flex justify-content-center mt-3">
-        <Button text="Next" />
-      </div>
+       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
+             <Button text="Prev" />
+             <Button text="Next"/>
+           </div>
     </>
   );
 };

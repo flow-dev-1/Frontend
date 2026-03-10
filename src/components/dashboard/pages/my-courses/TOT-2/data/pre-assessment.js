@@ -1,7 +1,8 @@
 export const pre_assessments = {
   week1: {
     title: "Pre-Assessment",
-    subtitle: "Let's test your knowledge",
+    subtitle:
+      "Please answer the following questions based on your current understanding. This assessment helps us understand your starting point.",
     questions: [
       {
         id: 1,

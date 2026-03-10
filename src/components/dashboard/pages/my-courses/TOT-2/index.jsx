@@ -17,6 +17,7 @@ import PopUp from "./components/ReviewPopUp";
 import Hurray from "./components/Hurray";
 
 // Week 1
+import TOT2PreAssesment from "./weeks/week1/preAssesement/PreAssesment.jsx";
 import Page1 from "./weeks/week1/page1/Page1";
 import Page2 from "./weeks/week1/page2/Page2";
 import Page3 from "./weeks/week1/page3/Page3";
@@ -29,6 +30,7 @@ import Page9 from "./weeks/week1/page9/Page9";
 import Page10 from "./weeks/week1/page10/Page10";
 import Page11 from "./weeks/week1/page11/Page11";
 import Page12 from "./weeks/week1/page12/Page12.jsx";
+import Page17 from "./weeks/week1/page17/Page17.jsx";
 
 // Week 2
 import WeekTwoPage1 from "./weeks/week2/page1/Page1";
@@ -86,7 +88,7 @@ const WeekContent = () => {
 
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
-    if (!enrolmentData && !isAdmin) return navigate("/sign-in");
+    // if (!enrolmentData && !isAdmin) return navigate("/sign-in");
     setEnrollmentId(enrolmentData?._id);
     setCourse(enrolmentData?.course?._id);
   }, []);
@@ -170,28 +172,30 @@ const WeekContent = () => {
       case 1:
         switch (currentPage) {
           case 1:
-            return <Page1 />;
+            return <TOT2PreAssesment />;
           case 2:
-            return <Page2 />;
+            return <Page1 />;
           case 3:
-            return <Page3 />;
+            return <Page2 />;
           case 4:
-            return <Page4 />;
+            return <Page3 />;
           case 5:
-            return <Page5 />;
+            return <Page4 />;
           case 6:
-            return <Page6 />;
+            return <Page5 />;
           case 7:
-            return <Page7 />;
+            return <Page6 />;
           case 8:
-            return <Page8 />;
+            return <Page7 />;
           case 9:
-            return <Page9 />;
+            return <Page8 />;
           case 10:
-            return <Page10 />;
+            return <Page9 />;
           case 11:
-            return <Page11 />;
+            return <Page10 />;
           case 12:
+            return <Page11 />;
+          case 13:
             return <Page12 />;
           default:
             return null;
