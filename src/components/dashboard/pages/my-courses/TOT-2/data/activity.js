@@ -404,6 +404,196 @@ export const courseContent = {
           next: true,
         },
       },
+      {
+        id: 14,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_13.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 15,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            text: "Read the sentence and answer the question that follows.",
+          },
+          {
+            stepId: 2,
+            type: "image",
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question: "How easy was this sentence to read?",
+            options: [
+              {
+                id: "1",
+                text: "Very easy.",
+              },
+              {
+                id: "2",
+                text: "A bit difficult",
+              },
+              {
+                id: "3",
+                text: "Difficult",
+              },
+              {
+                id: "4",
+                text: "Very Difficult",
+              },
+            ],
+            feedback:
+              "Many learners with dyslexia experience reading in this way every day. This is why inclusive teaching strategies are important. They help remove barriers so that every learner has a fair opportunity to succeed.",
+          },
+
+          {
+            stepId: 4,
+            type: "instruction",
+            title: "Instruction",
+            text: "Listen carefully and try to identify the correct instruction.",
+          },
+          {
+            stepId: 5,
+            type: "text",
+            text: "This will be a video",
+          },
+          {
+            stepId: 6,
+            type: "dropdownScenario",
+            question: "How easy was it to understand the instructions?",
+            options: [
+              {
+                id: "1",
+                text: "Very easy.",
+              },
+              {
+                id: "2",
+                text: "A bit difficult",
+              },
+              {
+                id: "3",
+                text: "Difficult",
+              },
+              {
+                id: "4",
+                text: "Very Difficult",
+              },
+            ],
+            feedback:
+              "For many learners, especially those with auditory processing difficulties or attention challenges, classrooms can feel like this every day. Clear instructions, visual supports, and calm learning environments can make a huge difference in helping every learner succeed.",
+          },
+          {
+            stepId: 7,
+            type: "instruction",
+            title: "Instruction",
+            text: "Below is a sequence of numbers required to solve the problem below. Click the  “PLAY” button to reveal the numbers.  \nNote: This is a view once sequence and visible for 5 seconds.",
+            number: [7, 3, 9, 2, 6],
+          },
+          {
+            stepId: 8,
+            type: "dropdownScenario",
+            question: "What was the number sequence shown earlier?",
+            options: [
+              {
+                id: "1",
+                text: "7 - 3 - 9 - 2 - 6",
+              },
+              {
+                id: "2",
+                text: "7 - 9 - 3 - 2 - 6",
+              },
+              {
+                id: "3",
+                text: "3 - 7 - 9 - 2 - 6",
+              },
+              {
+                id: "4",
+                text: "9 - 3 - 7 - 2 - 6",
+              },
+            ],
+            feedback:
+              "Many learners struggle with working memory, the ability to hold and process information at the same time. Breaking instructions into smaller steps and using visual reminders can support learners who find tasks like this challenging.",
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 16,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_13.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 17,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            text: "Drag each statement into the correct category.",
+          },
+          {
+            stepId: 2,
+            type: "imageDragAndDrop",
+            instruction:
+              "Drag-and-drop the statements on the left into any of these boxes.",
+            buckets: [
+              {
+                id: "green",
+                title: "Equality",
+              },
+              {
+                id: "orange",
+                title: "Equity",
+              },
+            ],
+            images: [
+              "All students receive the same worksheet",
+              "All students take the same test with identical instructions",
+              "All learners are given the same amount of time to complete tasks",
+              "Every student receives the same textbook",
+              "All students follow the same teaching method",
+              "Every learner completes the same assignment in the same way",
+              "A dyslexic learner receives an audiobook version of a text",
+              "A student with mobility challenges sits closer to the classroom door",
+              "A learner receives extra time to complete an assessment",
+              "A student uses visual aids to support understanding",
+              "A learner receives simplified instructions for a task",
+              "A student uses assistive technology to complete their work",
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 18,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
     ],
   },
   week2: {

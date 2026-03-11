@@ -30,7 +30,12 @@ import Page9 from "./weeks/week1/page9/Page9";
 import Page10 from "./weeks/week1/page10/Page10";
 import Page11 from "./weeks/week1/page11/Page11";
 import Page12 from "./weeks/week1/page12/Page12.jsx";
+import Page13 from "./weeks/week1/page13/Page13.jsx";
+import Page14 from "./weeks/week1/page14/Page14.jsx";
+import Page15 from "./weeks/week1/page15/Page15.jsx";
+import Page16 from "./weeks/week1/page16/Page16.jsx";
 import Page17 from "./weeks/week1/page17/Page17.jsx";
+import Page18 from "./weeks/week1/page18/Page18.jsx";
 
 // Week 2
 import WeekTwoPage1 from "./weeks/week2/page1/Page1";
@@ -197,6 +202,18 @@ const WeekContent = () => {
             return <Page11 />;
           case 13:
             return <Page12 />;
+          case 14:
+            return <Page13 />;
+          case 15:
+            return <Page14 />;
+          case 16:
+            return <Page15 />;
+          case 17:
+            return <Page16 />;
+          case 18:
+            return <Page17 />;
+          case 19:
+            return <Page18 />;
           default:
             return null;
         }
