@@ -48,6 +48,8 @@ import WeekTwoPage7 from "./weeks/week2/page7/Page7.jsx";
 import WeekTwoPage8 from "./weeks/week2/page8/Page8.jsx";
 import WeekTwoPage9 from "./weeks/week2/page9/Page9.jsx";
 import WeekTwoPage10 from "./weeks/week2/page10/Page10.jsx";
+import WeekTwoPage11 from "./weeks/week2/page11/Page11.jsx";
+import WeekTwoPage12 from "./weeks/week2/page12/Page12.jsx";
 
 // Week 3
 import WeekThreePage1 from "./weeks/week3/page1/Page1";
@@ -93,7 +95,7 @@ const WeekContent = () => {
 
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
-    // if (!enrolmentData && !isAdmin) return navigate("/sign-in");
+    if (!enrolmentData && !isAdmin) return navigate("/sign-in");
     setEnrollmentId(enrolmentData?._id);
     setCourse(enrolmentData?.course?._id);
   }, []);
@@ -239,6 +241,10 @@ const WeekContent = () => {
             return <WeekTwoPage9 />;
           case 10:
             return <WeekTwoPage10 />;
+          case 11:
+            return <WeekTwoPage11 />;
+          case 12:
+            return <WeekTwoPage12 />;
           default:
             return null;
         }
@@ -478,7 +484,7 @@ const CourseContent = () => {
             Back to My Courses
           </button>
 
-          <div className="compassion-title">
+          <div className="tot-title">
             <h2 className="fs-5 fs-md-3 tot-nav-text">SEL for Educators:</h2>
             <h2 className="compassion fs-5 tot-nav-text">ToT Course 2</h2>
           </div>

@@ -55,7 +55,7 @@ function Page2() {
     // Hardcoded feedback logic
     if (currentStep === 1) {
       setFeedbackText(
-        "Every child deserves to feel safe, valued, and capable. <br /> Creating that environment begins with the mindset teachers bring into the classroom.",
+        "Every child deserves to feel safe, valued, and capable.  Creating that environment begins with the mindset teachers bring into the classroom.",
       );
       setShowFeedback(true);
     } else if (currentStep === 2) {
@@ -174,7 +174,7 @@ function Page2() {
 
       <TOTFeedbackModal show={showFeedback} onHide={handleNext}>
         <div className="text-center">
-          <p className="fs-4 text-blue">{feedbackText}</p>
+          <p className="text-blue">{feedbackText}</p>
         </div>
       </TOTFeedbackModal>
     </>

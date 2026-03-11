@@ -680,31 +680,23 @@ export const courseContent = {
             stepId: 1,
             type: "instruction",
             challenge:
-              "On the screen, you will see statements describing assumptions teachers often make about learners with special needs. Select the ones that describe reactions or judgments you have seen in yourself. The goal here is not to criticize, it is to build awareness.",
+              "As teachers, we sometimes make quick judgments about learners before fully understanding what they are experiencing. Think about the situations below. Which of these reactions have you noticed in yourself at least once?",
           },
           {
             stepId: 2,
-            type: "imageDragAndDrop",
-            instruction:
-              "Drag-and-drop the statements on the left into any of these bowls.",
-            steps: 4,
-            buckets: [
-              {
-                id: "green",
-                title: "YES",
-              },
-              {
-                id: "red",
-                title: "NO",
-              },
+            type: "checkbox",
+            question:
+              "Which of these reactions have you noticed in yourself at least once?",
+            options: [
+              "I have assumed a learner was being lazy when they struggled to complete work.",
+              "I have thought a learner was being disrespectful when they avoided participating.",
+              "I have assumed a quiet learner was doing fine without checking in.",
+              "I have felt frustrated when a learner repeatedly interrupted the lesson.",
+              "I have focused more attention on confident learners than quieter ones.",
+              "I try to pause and understand what might be happening before reacting.",
             ],
-            images: [
-              "I expected a student with a diagnosed learning difficulty to automatically perform poorly on the test.",
-              "I labelled a student in my mind (e.g., 'the anxious one,' 'the disruptive one') before fully understanding their core needs.",
-              "I assumed a student with a mobility challenge would not want to participate in the group activity.",
-              "I reacted to the visible challenging behavior without pausing to understand the underlying SEND need.",
-              "I focused primarily on the most vocal learners and often overlooked the subtle needs of quiet students with any special need",
-            ],
+            feedback:
+              "Quick judgments are a natural human response, especially in busy classrooms. Inclusive teaching begins when we become aware of these reactions and choose to pause before responding. When teachers shift from judging behaviour to understanding behaviour, they create a classroom where learners feel safer and more supported.",
           },
         ],
         navigation: {
@@ -738,23 +730,23 @@ export const courseContent = {
             stepId: 2,
             type: "dropdownScenario",
             question:
-              "A child with ADHD asks many hyper-focused questions in class about a specific topic.",
+              "A learner with ADHD asks many detailed questions about a topic during class.",
             options: [
               {
                 id: "1",
-                text: "Deep Curiosity and High Engagement.",
+                text: "Deep Curiosity and engagement.",
               },
               {
                 id: "2",
-                text: "Creativity and Exceptional Spatial Thinking.",
+                text: "Disruptive behaviour",
               },
               {
                 id: "3",
-                text: "Empathy and Prosocial Behavior.",
+                text: "Lack of focus",
               },
               {
                 id: "4",
-                text: "Tenacity and Persistence.",
+                text: "Attention seeking",
               },
             ],
           },
@@ -762,46 +754,46 @@ export const courseContent = {
             stepId: 3,
             type: "dropdownScenario",
             question:
-              "A child who struggles to write (Dysgraphia) builds small, intricate objects with scraps found around the classroom during free time.",
+              "A learner who struggles with writing spends time building detailed structures with classroom materials.",
             options: [
               {
                 id: "1",
-                text: "Deep Curiosity and High Engagement.",
+                text: "Creativity and spatial thinking",
               },
               {
                 id: "2",
-                text: "Creativity and Exceptional Spatial Thinking.",
+                text: "Avoiding work",
               },
               {
                 id: "3",
-                text: "Empathy and Prosocial Behavior.",
+                text: "Lack of interest in class",
               },
               {
                 id: "4",
-                text: "Tenacity and Persistence.",
+                text: "Poor organization",
               },
             ],
           },
           {
             stepId: 4,
             type: "dropdownScenario",
-            question: `A child who seems restless and needs movement keeps helping others pick up fallen materials or books without being asked.`,
+            question: `A learner who struggles with sitting still frequently helps classmates pick up materials.`,
             options: [
               {
                 id: "1",
-                text: "Deep Curiosity and High Engagement.",
+                text: "Empathy and helping behaviour",
               },
               {
                 id: "2",
-                text: "Creativity and Exceptional Spatial Thinking.",
+                text: "Avoiding tasks",
               },
               {
                 id: "3",
-                text: "Empathy and Prosocial Behavior.",
+                text: "Seeking attention",
               },
               {
                 id: "4",
-                text: "Tenacity and Persistence.",
+                text: "Lack of discipline",
               },
             ],
           },
@@ -809,23 +801,23 @@ export const courseContent = {
             stepId: 5,
             type: "dropdownScenario",
             question:
-              "A child with a significant Learning Difference struggles to write but never gives up until they finish the lengthy assignment, long after others have moved on.",
+              "A learner who finds writing difficult continues working long after others have finished.",
             options: [
               {
                 id: "1",
-                text: "Deep Curiosity and High Engagement.",
+                text: "Persistence and determination",
               },
               {
                 id: "2",
-                text: "Creativity and Exceptional Spatial Thinking.",
+                text: "Slow learning",
               },
               {
                 id: "3",
-                text: "Empathy and Prosocial Behavior.",
+                text: "Poor time management",
               },
               {
                 id: "4",
-                text: "Tenacity and Persistence.",
+                text: "Low confidence",
               },
             ],
           },
@@ -847,12 +839,80 @@ export const courseContent = {
       },
       {
         id: 8,
-        type: "question",
-        questionType: "text",
-        question: "Is Empathy the same as Compassion?",
-        hasImage: false,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Identify whether the teacher response demonstrates Empathy or Compassion.",
+            ],
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question:
+              "A teacher pauses to understand why a learner is overwhelmed before responding.",
+            options: [
+              {
+                id: "1",
+                text: "Empathy",
+              },
+              {
+                id: "2",
+                text: "Compassion",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question:
+              "A teacher allows a learner to move to a quiet space when they feel overwhelmed.",
+            options: [
+              {
+                id: "1",
+                text: "Empathy",
+              },
+              {
+                id: "2",
+                text: "Compassion",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "dropdownScenario",
+            question: `A teacher recognizes that a learner’s frustration may come from difficulty understanding instructions.`,
+            options: [
+              {
+                id: "1",
+                text: "Empathy",
+              },
+              {
+                id: "2",
+                text: "Compassion",
+              },
+            ],
+          },
+          {
+            stepId: 5,
+            type: "dropdownScenario",
+            question:
+              "A teacher offers simplified instructions and additional guidance.",
+            options: [
+              {
+                id: "1",
+                text: "Empathy",
+              },
+              {
+                id: "2",
+                text: "Compassion",
+              },
+            ],
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
@@ -863,6 +923,128 @@ export const courseContent = {
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_5.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 10,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "dropdownScenario",
+            question:
+              "A learner covers their ears during noisy group work. What might the learner need?",
+            options: [
+              {
+                id: "1",
+                text: "Sensory sensitivity",
+              },
+              {
+                id: "2",
+                text: "A quieter learning space",
+              },
+              {
+                id: "3",
+                text: "Lack of interest in the activity",
+              },
+              {
+                id: "4",
+                text: "Poor behaviour",
+              },
+              {
+                id: "5",
+                text: "Attention seeking",
+              },
+            ],
+            correctOption: "1",
+            feedback:
+              "Some learners experience sensory sensitivity to noise or busy environments. Providing a quieter space or reducing sensory overload can help them participate more comfortably.",
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question:
+              "A learner suddenly refuses to begin a difficult assignment. What might the learner need?",
+            options: [
+              {
+                id: "1",
+                text: "Cognitive overload",
+              },
+              {
+                id: "2",
+                text: "The task may feel too difficult",
+              },
+              {
+                id: "3",
+                text: "Disobedience",
+              },
+              {
+                id: "4",
+                text: "Laziness",
+              },
+              {
+                id: "5",
+                text: "Distraction",
+              },
+            ],
+            correctOption: "1",
+            feedback:
+              "When tasks feel overwhelming, some learners may shut down or avoid starting. Breaking the task into smaller steps or offering support can help reduce cognitive overload.",
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question: `A learner becomes upset when the classroom routine changes. What might the learner need?`,
+            options: [
+              {
+                id: "1",
+                text: "Need for predictability or structure",
+              },
+              {
+                id: "2",
+                text: "Advance warning about changes",
+              },
+              {
+                id: "3",
+                text: "Lack of discipline",
+              },
+              {
+                id: "4",
+                text: "Disinterest in the lesson",
+              },
+              {
+                id: "5",
+                text: "Peer conflict",
+              },
+            ],
+            correctOption: "1",
+            feedback:
+              "Many learners feel safer and more comfortable when routines are predictable. Giving advance notice about changes can help them adjust more easily.",
+          },
+          {
+            stepId: 4,
+            type: "question",
+            questionType: "text",
+            question:
+              "What is one change you will make in how you respond to challenging behaviour in your classroom?",
+            hasImage: false,
+            imageSrc: "mindset.png",
+            inputType: "bigTextBox",
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+        {
+        id: 11,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_2.mp4",
         navigation: {
           prev: true,
           next: true,
