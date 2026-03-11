@@ -3,7 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
-import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+import CustomDropDown from "../../../components/CustomDropDown";
+import TOTFeedbackModal from "../../../components/TOTFeedbackModal";
+import StepIndicator from "../../../components/StepIndicator";
+import {
+  selectPageData,
+  selectCurrentStep,
+  navigateNext,
+} from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import {
   userAnswer,
@@ -13,18 +20,27 @@ import {
 function Page2() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
+  const currentStep = useSelector(selectCurrentStep);
   const adminDatas = useSelector(adminData);
   const userAnswers = useSelector(userAnswer);
-  const [myAnswer, setMyAnswer] = useState(userAnswers);
+  const [myAnswer, setMyAnswer] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackText, setFeedbackText] = useState("");
+
   useEffect(() => {
-    if (!userAnswers) return;
+    if (!userAnswers || !pageData) return;
     const response = userAnswers?.activities?.find(
-      (item) => item.page === pageData.id
+      (item) => item.page === pageData.id,
     );
-    setMyAnswer(response?.answer ? response.answer : "");
-    return () => {};
-  }, [userAnswers]);
+
+    if (response?.answer && Array.isArray(response.answer)) {
+      const stepAnswer = response.answer.find((a) => a.stepId === currentStep);
+      setMyAnswer(stepAnswer ? stepAnswer.value : "");
+    } else {
+      setMyAnswer("");
+    }
+  }, [userAnswers, pageData, currentStep]);
 
   const saveUserInput = () => {
     if (!adminDatas.isAdmin && !myAnswer) {
@@ -32,42 +48,135 @@ function Page2() {
       return false;
     }
 
-    setErrorMessage(""); // Clear error if input is valid
-    // Allow flow admin to proceed without input but do not dispatch answer
+    setErrorMessage("");
+
     if (adminDatas.isAdmin) return true;
+
+    // Hardcoded feedback logic
+    if (currentStep === 1) {
+      setFeedbackText(
+        "Every child deserves to feel safe, valued, and capable. <br /> Creating that environment begins with the mindset teachers bring into the classroom.",
+      );
+      setShowFeedback(true);
+    } else if (currentStep === 2) {
+      const stepData = pageData.steps[1];
+      const selectedOption = stepData.options.find(
+        (opt) => opt.text === myAnswer,
+      );
+      const feedbackMap = {
+        1: "Segregation refers to the physical separation of learners with disabilities from mainstream classrooms, often placing them in separate schools or units.",
+        2: "Integration involves placing learners with disabilities in mainstream classrooms without necessarily adapting the curriculum or teaching methods to meet their specific needs.",
+        3: "Inclusion is an approach that ensures all learners, regardless of ability, are fully integrated into the classroom with appropriate support and accommodations to enable their participation and success.",
+      };
+      setFeedbackText(feedbackMap[selectedOption?.id] || "");
+      setShowFeedback(true);
+    }
+
+    // Save answer
+    const currentActivities = userAnswers?.activities || [];
+    const response = currentActivities.find(
+      (item) => item.page === pageData.id,
+    );
+    let updatedAnswers = response?.answer ? [...response.answer] : [];
+
+    const existingStepIndex = updatedAnswers.findIndex(
+      (a) => a.stepId === currentStep,
+    );
+    if (existingStepIndex !== -1) {
+      updatedAnswers[existingStepIndex] = {
+        stepId: currentStep,
+        value: myAnswer,
+      };
+    } else {
+      updatedAnswers.push({ stepId: currentStep, value: myAnswer });
+    }
+
     dispatch(
       saveActivity({
         page: pageData.id,
-        answer: myAnswer,
-      })
+        answer: updatedAnswers,
+      }),
     );
-    return true;
+
+    return false; // Prevent immediate navigation, wait for modal close
   };
 
-  const handleInputChange = (e) => {
-    setErrorMessage("");
-    setMyAnswer(e.target.value);
+  const handleNext = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext());
+  };
+
+  const renderStep = () => {
+    if (!pageData?.steps) return null;
+    const step = pageData.steps[currentStep - 1];
+
+    if (step.type === "question" && step.inputType === "bigTextBox") {
+      return (
+        <>
+          <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-start mt-4">
+            <h2 className="text-blue fs-1 mb-0 flex-shrink-0 tot-question-text">
+              Question 1:
+            </h2>
+            <div className="d-flex flex-column flex-grow-1 min-w-0 tot-question-text">
+              <h2 className="text-gray fs-1 mb-2 ">{step.question}</h2>
+            </div>
+          </div>
+          <BigTextBox
+            handleChange={(e) => {
+              setErrorMessage("");
+              setMyAnswer(e.target.value);
+            }}
+            value={myAnswer}
+          />
+        </>
+      );
+    }
+
+    if (step.type === "dropdownScenario") {
+      return (
+        <>
+          <div className="d-flex justify-content-center">
+            <h2 className="text-white bg-blue p-2 rounded fs-1 mb-0 flex-shrink-0 tot-question-text">
+              Question 2
+            </h2>
+          </div>
+          <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-start mt-4">
+            <div className="d-flex flex-column flex-grow-1 min-w-0 tot-question-text">
+              <h2 className="text-gray fs-1 mb-2 fw-bold">{step.question}</h2>
+            </div>
+          </div>
+          <div className="mt-4">
+            <CustomDropDown
+              options={step.options.map((opt) => opt.text)}
+              value={myAnswer}
+              onChange={(val) => {
+                setErrorMessage("");
+                setMyAnswer(val);
+              }}
+            />
+          </div>
+        </>
+      );
+    }
+
+    return null;
   };
 
   return (
     <>
-      <QuestionBox extraStyle="bg-custom-blue">
-        <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-start mt-4">
-          <h2 className="text-blue fs-1 mb-0 flex-shrink-0 tot-question-text">
-            Question:
-          </h2>
-
-          <div className="d-flex flex-column flex-grow-1 min-w-0 tot-question-text">
-            <h2 className="text-gray fs-1 mb-2 ">{pageData.question} </h2>
-          </div>
-        </div>
-        <BigTextBox handleChange={handleInputChange} value={myAnswer} />
-      </QuestionBox>
+      <QuestionBox extraStyle="bg-custom-blue">{renderStep()}</QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
+      <StepIndicator totalSteps={pageData?.steps?.length || 0} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
+
+      <TOTFeedbackModal show={showFeedback} onHide={handleNext}>
+        <div className="text-center">
+          <p className="fs-4 text-blue">{feedbackText}</p>
+        </div>
+      </TOTFeedbackModal>
     </>
   );
 }

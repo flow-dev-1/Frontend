@@ -608,13 +608,53 @@ export const courseContent = {
       },
       {
         id: 2,
-        type: "question",
-        questionType: "text",
-        question:
-          "In one word, describe how you want your SEND learners to feel when they walk through your classroom door.",
-        hasImage: false,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        type: "multiStep",
+        title: "Write a letter to yourself.",
+        steps: [
+          {
+            stepId: 1,
+            type: "question",
+            questionType: "text",
+            question:
+              "In one word, describe how you want your SEND learners to feel when they walk through your classroom door.",
+            hasImage: false,
+            imageSrc: "mindset.png",
+            inputType: "bigTextBox",
+            feedback: [
+              "Every child deserves to feel safe, valued, and capable. ",
+              "Creating that environment begins with the mindset teachers bring into the classroom.",
+            ],
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question:
+              "Think about your classroom for a moment. When a learner struggles or behaves in a challenging way, what is usually your first reaction?",
+            options: [
+              {
+                id: "1",
+                text: "I try to understand what the learner might be experiencing",
+              },
+              {
+                id: "2",
+                text: "I focus on correcting the behaviour quickly",
+              },
+              {
+                id: "3",
+                text: "I feel unsure about how to respond",
+              },
+              {
+                id: "4",
+                text: "I try to support the learner but sometimes feel frustrated",
+              },
+            ],
+            feedback: [
+              "Segregation refers to the physical separation of learners with disabilities from mainstream classrooms, often placing them in separate schools or units.",
+              "Integration involves placing learners with disabilities in mainstream classrooms without necessarily adapting the curriculum or teaching methods to meet their specific needs.",
+              "Inclusion is an approach that ensures all learners, regardless of ability, are fully integrated into the classroom with appropriate support and accommodations to enable their participation and success.",
+            ],
+          },
+        ],
         navigation: {
           prev: true,
           next: true,

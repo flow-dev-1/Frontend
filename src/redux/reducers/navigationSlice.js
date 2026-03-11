@@ -79,26 +79,26 @@ const calculateMultiStepTotal = (pageData) => {
 
   // Check for consolidated scenarios with subQuestions (old structure)
   const hasConsolidatedScenarios = pageData.steps.some(
-    (step) => step.type === "scenario" && step.subQuestions
+    (step) => step.type === "scenario" && step.subQuestions,
   );
 
   if (hasConsolidatedScenarios) {
     // Calculate: 1 instruction + (number of scenarios × 7 steps each)
     const scenarioCount = pageData.steps.filter(
-      (step) => step.type === "scenario" && step.subQuestions
+      (step) => step.type === "scenario" && step.subQuestions,
     ).length;
     return 1 + scenarioCount * 7;
   }
 
   // Check for SONAR scenarios with sonarSteps (new structure)
   const hasSonarScenarios = pageData.steps.some(
-    (step) => step.type === "scenario" && step.sonarSteps
+    (step) => step.type === "scenario" && step.sonarSteps,
   );
 
   if (hasSonarScenarios) {
     // Calculate: 1 instruction + (number of scenarios × 2 steps each: scenario + sonar)
     const scenarioCount = pageData.steps.filter(
-      (step) => step.type === "scenario" && step.sonarSteps
+      (step) => step.type === "scenario" && step.sonarSteps,
     ).length;
     return 1 + scenarioCount * 2;
   }
@@ -123,8 +123,8 @@ const navigationSlice = createSlice({
     setCourse: (state, action) => {
       if (state.currentCourse !== action.payload) {
         state.currentCourse = action.payload;
-        state.currentWeek = 1;
-        state.currentPage = 17;
+        state.currentWeek = 2;
+        state.currentPage = 1;
         state.currentStep = 1;
       }
     },
@@ -132,14 +132,14 @@ const navigationSlice = createSlice({
       const newCourse = getCourseFromURL();
       if (state.currentCourse !== newCourse) {
         state.currentCourse = newCourse;
-        state.currentWeek = 1;
-        state.currentPage = 17;
+        state.currentWeek = 2;
+        state.currentPage = 1;
         state.currentStep = 1;
         state.showReview = false;
         state.showHurray = false;
 
-        sessionStorage.setItem("flow-currentWeek", "1");
-        sessionStorage.setItem("flow-currentPage", "17");
+        sessionStorage.setItem("flow-currentWeek", "2");
+        sessionStorage.setItem("flow-currentPage", "1");
         sessionStorage.setItem("flow-currentStep", "1");
       }
     },
@@ -203,7 +203,7 @@ const navigationSlice = createSlice({
       }
 
       const pageData = weekData?.pages.find(
-        (page) => page.id === state.currentPage
+        (page) => page.id === state.currentPage,
       );
       const isLastPage = state.currentPage === totalPages;
 
@@ -279,7 +279,7 @@ const navigationSlice = createSlice({
       }
 
       const pageData = weekData?.pages.find(
-        (page) => page.id === state.currentPage
+        (page) => page.id === state.currentPage,
       );
 
       // Calculate total steps based on page type
@@ -384,7 +384,7 @@ export const selectPageData = createSelector(
     }
 
     return weekData?.pages.find((page) => page.id === navigation.currentPage);
-  }
+  },
 );
 
 export const selectNavigationState = createSelector(
@@ -403,7 +403,7 @@ export const selectNavigationState = createSelector(
       totalSteps = pageData?.questions?.length || 0;
     } else {
       pageData = weekData?.pages.find(
-        (page) => page.id === navigation.currentPage
+        (page) => page.id === navigation.currentPage,
       );
 
       if (pageData?.type === "imageDragAndDrop") {
@@ -433,7 +433,7 @@ export const selectNavigationState = createSelector(
       weekData,
       totalSteps,
     };
-  }
+  },
 );
 
 export default navigationSlice.reducer;
