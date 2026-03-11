@@ -4,99 +4,39 @@ export const assessments = {
     subtitle: "Let's test your knowledge",
     questions: [
       {
-        id: 1,
+        id: "A",
+        type: "reflection",
         question:
-          "Which educational practice involves placing all students in the same physical classroom but expects learners with special needs to change their behavior or learning style without providing systemic support?",
+          "What is one mindset shift you are taking away from this week?",
+      },
+      {
+        id: "B",
+        type: "reflection",
+        question:
+          "Think about your classroom. \nWhat is one small adjustment you could make to better support a learner who struggles?",
+      },
+      {
+        id: 1,
+        question: "What does inclusive education aim to achieve?",
         options: [
-          { id: "A", text: "Inclusion" },
-          { id: "B", text: "Equity" },
-          { id: "C", text: "Segregation" },
-          { id: "D", text: "Integration" },
+          {
+            id: "A",
+            text: "Teaching all students in exactly the same way.",
+          },
+          {
+            id: "B",
+            text: "Ensuring learners with special needs are separated from others.",
+          },
+          {
+            id: "C",
+            text: "Providing all learners equal access to learning opportunities.",
+          },
+          {
+            id: "D",
+            text: "Reducing academic expectations for some learners.",
+          },
         ],
         correctOption: "D",
-      },
-      {
-        id: 2,
-        question: "The central concept of Inclusion is fundamentally about:",
-        options: [
-          {
-            id: "A",
-            text: "Placing struggling learners and average learners in the same classroom",
-          },
-          {
-            id: "B",
-            text: "Ensuring every learner is supported to participate fully in a way that values their contribution",
-          },
-          {
-            id: "C",
-            text: "Giving all students the exact same set of learning materials and resources",
-          },
-          {
-            id: "D",
-            text: "Identifying a learner's current ability level and placing them in the correct academic track",
-          },
-        ],
-        correctOption: "B",
-      },
-      {
-        id: 3,
-        question:
-          "A teacher provides a student with dyslexia a text-to-speech audio version of a novel, while the rest of the class reads the print version. This approach is an example of:",
-        options: [
-          {
-            id: "A",
-            text: "Integration, because the student is adapting to the teacher's lesson",
-          },
-          {
-            id: "B",
-            text: "Equality, because all students are working on the same novel",
-          },
-          {
-            id: "C",
-            text: "Equity, because the resources were adjusted to meet the specific needs of the learner",
-          },
-          {
-            id: "D",
-            text: "Segregation, because the student is using a different tool",
-          },
-        ],
-        correctOption: "C",
-      },
-      {
-        id: 4,
-        question:
-          "What is the primary goal of recognizing and grouping learners into the six Special Educational Needs (SEN) categories?",
-        options: [
-          {
-            id: "A",
-            text: "To effectively understand the barriers a child faces and determine the appropriate support strategies",
-          },
-          {
-            id: "B",
-            text: "To strictly adhere to government labeling and diagnosis protocols",
-          },
-          {
-            id: "C",
-            text: "To compare a learner's performance against the national average standards",
-          },
-          {
-            id: "D",
-            text: "To justify the removal of a learner from the mainstream classroom setting",
-          },
-        ],
-        correctOption: "A",
-      },
-      {
-        id: 5,
-        question:
-          "Which of the following educational practices is explicitly defined as harmful to both students and society at large and is characterized by separating learners based on their perceived abilities?",
-        options: [
-          { id: "A", text: "Segregation" },
-          { id: "B", text: "Integration" },
-          { id: "C", text: "Equality" },
-          { id: "D", text: "Tracking" },
-        ],
-        correctOption: "A",
       },
     ],
   },

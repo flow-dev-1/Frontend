@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import AssessmentQuestion from "../../../components/AssessmentQuestion";
+import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
 import {
   navigateNext,
@@ -49,8 +50,8 @@ function WeekOneAssessment() {
         `You scored ${calculateResult(
           assessmentData.questions,
           answers,
-          totalSteps
-        )}% in the quiz`
+          totalSteps,
+        )}% in the quiz`,
       );
       toast.success(data.message || "Answers saved successfully!"); // Show success toast
       // dispatch(
@@ -76,7 +77,7 @@ function WeekOneAssessment() {
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
       const stepIndex = updatedAnswers.findIndex(
-        (answer) => answer.id === currentStep
+        (answer) => answer.id === currentStep,
       );
 
       if (stepIndex !== -1) {
@@ -108,7 +109,6 @@ function WeekOneAssessment() {
     // If its the last question submit else update answer
     dispatch(saveAssessment(answers));
 
-
     if (isLastQuestion) {
       // console.log(userAnswers.activities.length, "userAnswers.activities.length")
       const hasUnansweredQuestions =
@@ -116,16 +116,15 @@ function WeekOneAssessment() {
 
       if (hasUnansweredQuestions) {
         setErrorMessage(
-          "Oops! Some unanswered questions have been detected. Kindly go back and review!"
+          "Oops! Some unanswered questions have been detected. Kindly go back and review!",
         );
         return false;
       }
 
-      const userScore = calculateResult(
-        assessmentData.questions,
-        answers,
-        totalSteps
+      const mcqs = assessmentData.questions.filter(
+        (q) => q.type !== "reflection",
       );
+      const userScore = calculateResult(mcqs, answers, mcqs.length);
 
       mutation.mutate({
         ...userAnswers,
@@ -196,44 +195,64 @@ function WeekOneAssessment() {
     const currentQuestion = assessmentData.questions[currentStep - 1];
     if (!currentQuestion) return <div>Invalid Step</div>;
 
+    if (currentQuestion.type === "reflection") {
+      return (
+        <QuestionBox extraStyle="bg-custom-blue">
+          <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-start mt-4">
+            <h2 className="text-blue fs-1 mb-0 flex-shrink-0 tot-question-text">
+              Question:
+            </h2>
+
+            <div className="d-flex flex-column flex-grow-1 min-w-0 tot-question-text">
+              <h2 className="text-gray fs-1 mb-2 ">
+                {" "}
+                {currentQuestion.question}
+              </h2>
+            </div>
+          </div>
+          <BigTextBox
+            handleChange={(e) => handleOptionSelect(e.target.value)}
+            value={answers.find((a) => a.id === currentStep)?.value || ""}
+          />
+        </QuestionBox>
+      );
+    }
+
     const formattedOptions = currentQuestion.options.map((option) => ({
       [option.id]: option.text,
     }));
 
     return (
-      <AssessmentQuestion
-        data={{
-          question: currentQuestion.question,
-          options: formattedOptions,
-        }}
-        currentStep={currentStep}
-        selectedOption={answers[currentStep - 1]?.value || ""}
-        onOptionSelect={handleOptionSelect}
-        isPreAssessment={true}
-      />
+      <>
+        <div className="text-white p-3 mb-3">
+          <h2 className="fs-1 text-blue text-center tot-week-2-question-text fw-bold ">
+            Week 1 Assessment
+          </h2>
+          <p className="text-center text-blue">{assessmentData.subtitle}</p>
+        </div>
+        <AssessmentQuestion
+          data={{
+            question: currentQuestion.question,
+            options: formattedOptions,
+          }}
+          currentStep={currentQuestion.id}
+          selectedOption={answers[currentStep - 1]?.value || ""}
+          onOptionSelect={handleOptionSelect}
+          isPreAssessment={true}
+        />
+      </>
     );
   };
 
   if (!assessmentData) return null;
 
-  // If we're on the last question and user has made a selection,
-  // show the review popup instead of the next button
-
-  const hasCurrentSelection = !!answers[currentStep];
+  const currentAnswer = answers.find((a) => a.id === currentStep);
+  const hasCurrentSelection = !!currentAnswer?.value;
   const shouldShowReviewButton = isLastQuestion && hasCurrentSelection;
 
   return (
     <>
-      <QuestionBox>
-        <div className="text-white p-3 mb-3">
-          <h2 className="fs-1 text-blue text-center tot-week-2-question-text fw-bold ">
-            {assessmentData.title}
-          </h2>
-          <p className="text-center text-blue">{assessmentData.subtitle}</p>
-        </div>
-
-        {renderStep()}
-      </QuestionBox>
+      <QuestionBox>{renderStep()}</QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
       {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
