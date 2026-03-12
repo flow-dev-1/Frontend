@@ -67,16 +67,6 @@ function WeekFivePage8() {
 
     setErrorMessage(""); // Clear error if input is valid
 
-    const isCorrect = value === step.correctOption;
-    const correctOptionText =
-      step.options.find((o) => o.id === step.correctOption)?.text || "";
-
-    setFeedbackInfo({
-      isCorrect,
-      feedback: step.feedback || "",
-      correctOptionText,
-    });
-
     const activityData = {
       page: pageData.id,
       answer: answers,
@@ -84,8 +74,15 @@ function WeekFivePage8() {
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
     // Show feedback modal instead of navigating immediately
-    setShowFeedback(true);
-    // return true;
+    if (currentStep > 8) {
+      setFeedbackInfo({
+        feedback: step.feedback || "",
+      });
+      setShowFeedback(true);
+      return false
+    }
+
+    return true;
   };
 
   const renderStep = () => {
@@ -144,11 +141,6 @@ function WeekFivePage8() {
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
       <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
-        <p className="text-blue mb-3">
-          {feedbackInfo.isCorrect
-            ? "Correct!"
-            : `${feedbackInfo.correctOptionText} is the right answer!`}
-        </p>
         <p className="text-blue">{feedbackInfo.feedback}</p>
       </TOTFeedbackModal>
     </>

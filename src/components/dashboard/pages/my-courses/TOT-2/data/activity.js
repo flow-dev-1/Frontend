@@ -2409,131 +2409,154 @@ export const courseContent = {
             options: [
               {
                 id: "1",
-                text: "Dyslexia",
-              },
-              {
-                id: "2",
-                text: "Visual Impairment",
-              },
-              {
-                id: "3",
-                text: "Hearing Impairment",
-              },
-              {
-                id: "4",
-                text: "Anxiety",
+                text: "",
               },
             ],
-            correctOption: "1",
-            feedback:
-              "Dyslexia affects how a learner processes written language, which can make reading tasks challenging.",
           },
           {
             stepId: 3,
             type: "dropdownScenario",
-            question:
-              "A student frequently leaves their seat, interrupts others, and struggles to stay focused during lessons. What might be the possible barrier?",
+            question: "Often calls out during lessons.",
             options: [
               {
                 id: "1",
-                text: "ADHD",
-              },
-              {
-                id: "2",
-                text: "Dyslexia",
-              },
-              {
-                id: "3",
-                text: "Hearing Impairment",
-              },
-              {
-                id: "4",
-                text: "Physical Disability",
+                text: "",
               },
             ],
-            correctOption: "1",
-            feedback:
-              "ADHD can affect attention, impulse control, and activity levels, making it difficult for learners to remain focused during lessons.",
           },
           {
             stepId: 4,
             type: "dropdownScenario",
-            question: `A student often misunderstands spoken instructions and frequently asks classmates what the teacher said. What might be the possible barrier?`,
+            question: `Takes more time to complete tasks.`,
             options: [
               {
                 id: "1",
-                text: "Hearing Impairment",
-              },
-              {
-                id: "2",
-                text: "Dyslexia",
-              },
-              {
-                id: "3",
-                text: "ADHD",
-              },
-              {
-                id: "4",
-                text: "Physical Disability",
+                text: "",
               },
             ],
-            correctOption: "1",
-            feedback:
-              "Hearing impairments can make it difficult for learners to clearly understand spoken instructions in the classroom.",
           },
           {
             stepId: 5,
             type: "dropdownScenario",
-            question:
-              "A student struggles to see what is written on the board and often squints or moves closer to read. What might be the possible barrier?",
+            question: "Avoids starting difficult tasks and gives up quickly.",
             options: [
               {
                 id: "1",
-                text: "Visual Impairment",
-              },
-              {
-                id: "2",
-                text: "ADHD",
-              },
-              {
-                id: "3",
-                text: "Dyslexia",
-              },
-              {
-                id: "4",
-                text: "Anxiety",
+                text: "",
               },
             ],
-            correctOption: "1",
-            feedback:
-              "Visual impairments can affect a student’s ability to see written materials clearly.",
           },
           {
             stepId: 6,
             type: "dropdownScenario",
-            question:
-              "A student understands concepts when explained verbally but struggles significantly with writing tasks. What might be the possible barrier?",
+            question: "Frequently makes mistakes when copying from the board.",
             options: [
               {
                 id: "1",
-                text: "Dysgraphia",
+                text: "",
+              },
+            ],
+          },
+          {
+            stepId: 7,
+            type: "dropdownScenario",
+            question: "Appears disengaged during long written activities.",
+            options: [
+              {
+                id: "1",
+                text: "",
+              },
+            ],
+          },
+          {
+            stepId: 8,
+            type: "dropdownScenario",
+            question: "Becomes frustrated when tasks feel overwhelming.",
+            options: [
+              {
+                id: "1",
+                text: "",
+              },
+            ],
+            feedback:
+              "Observations are factual and help identify support strategies. Labels can feel judgmental and may cause parents to become defensive.",
+          },
+          {
+            stepId: 9,
+            type: "dropdownScenario",
+            question:
+              "A parent becomes defensive when you raise concerns about their child. What is the best response?",
+            options: [
+              {
+                id: "1",
+                text: "Insist that you are correct.",
               },
               {
                 id: "2",
-                text: "ADHD",
+                text: "End the conversation immediately.",
               },
               {
                 id: "3",
-                text: "Visual Impairment",
+                text: "Listen calmly and ask about their observations at home.",
               },
               {
                 id: "4",
-                text: "Hearing Impairment",
+                text: "Blame the parent.",
               },
             ],
-            correctOption: "1",
             feedback:
-              "Dysgraphia affects a learner’s ability to write clearly and organize written expression.",
+              "Parents often become defensive when they feel their child is being judged. Listening calmly and inviting their perspective helps build trust and collaboration.",
+          },
+          {
+            stepId: 10,
+            type: "dropdownScenario",
+            question: `You share classroom observations with a parent, but they respond: "My child doesn't behave like that at home." What is the most effective response?`,
+            options: [
+              {
+                id: "1",
+                text: "Tell the parent they are wrong.",
+              },
+              {
+                id: "2",
+                text: " Explain calmly what you have observed and ask if they notice anything similar at home.",
+              },
+              {
+                id: "3",
+                text: "End the conversation.",
+              },
+              {
+                id: "4",
+                text: "Tell the parent the school will handle it alone.",
+              },
+            ],
+            feedback:
+              "Parents and teachers may see different behaviours because children behave differently in different environments. Sharing observations calmly encourages collaboration rather than conflict.",
+          },
+          {
+            stepId: 11,
+            type: "dropdownScenario",
+            question:
+              "You want to involve a parent in supporting their child's learning. Which statement encourages collaboration?",
+            options: [
+              {
+                id: "1",
+                text: "You need to work harder with your child at home.",
+              },
+              {
+                id: "2",
+                text: "I think we should both try different strategies to support learning.",
+              },
+              {
+                id: "3",
+                text: "This is mainly a home problem.",
+              },
+              {
+                id: "4",
+                text: "Your child needs to try harder.",
+              },
+            ],
+            feedback:
+              "Collaborative language helps parents feel included in the process and encourages teamwork between home and school.",
           },
         ],
         navigation: {

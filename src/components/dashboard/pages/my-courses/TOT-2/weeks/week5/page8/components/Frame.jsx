@@ -10,7 +10,7 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
       const stepIndex = updatedAnswers.findIndex(
-        (answer) => answer.stepId === step
+        (answer) => answer.stepId === step,
       );
 
       if (stepIndex !== -1) {
@@ -33,9 +33,15 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
     <QuestionBox extraStyle={"bg-custom-blue"}>
       <div className="p-1 p-md-5">
         <div className="text-center mb-5 mt-4 mt-md-0">
-          <h2 className="text-white bg-blue py-2 px-4 fs-2 font-bold rounded-3 d-inline display-4 text-center tot-week-2-question-text">
-            Observation 1 {step - 1}
-          </h2>
+          {step < 9 ? (
+            <h2 className="text-white bg-blue py-2 px-4 fs-2 font-bold rounded-3 d-inline display-4 text-center tot-week-2-question-text">
+              Observation {step - 1}
+            </h2>
+          ) : (
+            <h2 className="text-white bg-blue py-2 px-4 fs-2 font-bold rounded-3 d-inline display-4 text-center tot-week-2-question-text">
+              Scenario {step - 8}
+            </h2>
+          )}
         </div>
         <div className="d-flex gap-2 flex-column flex-md-row">
           <h2 className="text-gray fs-3 fs-md-1 tot-week-2-question-text text-center fw-bold">
