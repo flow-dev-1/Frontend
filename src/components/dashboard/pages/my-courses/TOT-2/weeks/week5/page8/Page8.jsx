@@ -16,7 +16,7 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
-function WeekFivePage4() {
+function WeekFivePage8() {
   const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
@@ -24,14 +24,21 @@ function WeekFivePage4() {
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const step = pageData?.steps[currentStep - 1];
+  const userAnswers = useSelector(userAnswer);
+  const adminDatas = useSelector(adminData);
+
   const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackInfo, setFeedbackInfo] = useState({
+    isCorrect: false,
+    feedback: "",
+    correctOptionText: "",
+  });
+
   const handleCloseFeedback = () => {
     setShowFeedback(false);
     dispatch(navigateNext()); // Navigate after closing the modal
   };
 
-  const userAnswers = useSelector(userAnswer);
-  const adminDatas = useSelector(adminData);
   // console.log(userAnswers)
 
   useEffect(() => {
@@ -40,19 +47,35 @@ function WeekFivePage4() {
       (item) => item.page === pageData.id,
     );
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
-  }, [userAnswers]);
+  }, [userAnswers, pageData.id]);
 
   const saveUserInput = () => {
     if (currentStep === 1) return true;
     if (adminDatas.isAdmin) return true;
 
     const stepData = answers.find((item) => item.stepId === currentStep);
-    if (!stepData || !stepData.value) {
+    if (!stepData) {
       setErrorMessage("Oops! Please select an option.");
       return false;
     }
 
+    const value = stepData.value;
+    if (!value) {
+      setErrorMessage("Please select an option!");
+      return false;
+    }
+
     setErrorMessage(""); // Clear error if input is valid
+
+    const isCorrect = value === step.correctOption;
+    const correctOptionText =
+      step.options.find((o) => o.id === step.correctOption)?.text || "";
+
+    setFeedbackInfo({
+      isCorrect,
+      feedback: step.feedback || "",
+      correctOptionText,
+    });
 
     const activityData = {
       page: pageData.id,
@@ -61,11 +84,8 @@ function WeekFivePage4() {
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
     // Show feedback modal instead of navigating immediately
-    if (currentStep === 3) {
-      setShowFeedback(true);
-    }
-
-    return true;
+    setShowFeedback(true);
+    // return true;
   };
 
   const renderStep = () => {
@@ -82,14 +102,14 @@ function WeekFivePage4() {
             </div>
 
             <div className="text-center mb-5 mt-3 mt-md-0">
-              {step.instructions.map((item, index) => (
-                <h2
-                  key={index}
-                  className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text"
-                >
-                  {item}
-                </h2>
-              ))}
+              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
+                Teachers should describe what they observe rather than applying
+                labels
+                <br />
+                <br />
+                <br />
+                Match the observation to the label.
+              </h2>
             </div>
           </QuestionBox>
         );
@@ -125,16 +145,14 @@ function WeekFivePage4() {
       </div>
       <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
         <p className="text-blue mb-3">
-          {" "}
-          Supportive language builds trust with parents.
+          {feedbackInfo.isCorrect
+            ? "Correct!"
+            : `${feedbackInfo.correctOptionText} is the right answer!`}
         </p>
-        <p className="text-blue">
-          When teachers focus on collaboration instead of blame, parents are
-          more open to working together to support the child.
-        </p>
+        <p className="text-blue">{feedbackInfo.feedback}</p>
       </TOTFeedbackModal>
     </>
   );
 }
 
-export default WeekFivePage4;
+export default WeekFivePage8;

@@ -1090,7 +1090,6 @@ export const courseContent = {
           next: true,
         },
       },
-
       {
         id: 3,
         type: "multiStep",
@@ -2116,18 +2115,38 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+5/Week+5_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_1.mp4",
         hasNextButton: true,
       },
       {
         id: 2,
-        type: "question",
-        questionType: "text",
-        question:
-          "How confident do you feel speaking to parents about learning or behaviour concerns?",
-        hasImage: false,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "dropdownScenario",
+            question:
+              "Who plays the most important role in supporting a learner with special needs?",
+            options: [
+              {
+                id: "1",
+                text: "The teacher",
+              },
+              {
+                id: "2",
+                text: "The parents or caregivers",
+              },
+              {
+                id: "3",
+                text: "School leadership",
+              },
+              {
+                id: "4",
+                text: "A team effort between all of them",
+              },
+            ],
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
@@ -2137,8 +2156,680 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+5/Week+5_2.mp4",
-        hasNextButton: true,
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 4,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Match the less effective statement with the more supportive alternative.",
+            ],
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question:
+              "Let's think together about how we can support your child.",
+            options: [
+              {
+                id: "1",
+                text: "Your child needs to behave better.",
+              },
+              {
+                id: "2",
+                text: "Your child struggles with everything.",
+              },
+              {
+                id: "3",
+                text: "You need to help your child more.",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question: "I’ve noticed a few areas where we can support learning.",
+            options: [
+              {
+                id: "1",
+                text: "Your child needs to behave better.",
+              },
+              {
+                id: "2",
+                text: "Your child struggles with everything.",
+              },
+              {
+                id: "3",
+                text: "You need to help your child more.",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "dropdownScenario",
+            question: `We can work together to support learning at home and school.`,
+            options: [
+              {
+                id: "1",
+                text: "Your child needs to behave better.",
+              },
+              {
+                id: "2",
+                text: "Your child struggles with everything.",
+              },
+              {
+                id: "3",
+                text: "You need to help your child more.",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 5,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 6,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "dropdownScenario",
+            question:
+              "A student keeps interrupting the class while you are teaching. What is the most effective response?",
+            options: [
+              {
+                id: "1",
+                text: "Stop talking right now or you’ll be sent out.",
+              },
+              {
+                id: "2",
+                text: "Ignore the student completely and continue teaching.",
+              },
+              {
+                id: "3",
+                text: "Why are you always disrupting the class?",
+              },
+              {
+                id: "4",
+                text: "Pause and calmly say, “Let’s remember our class agreement about listening while others speak.",
+              },
+              {
+                id: "5",
+                text: "Tell the student they are being disrespectful in front of everyone.",
+              },
+            ],
+            feedback:
+              "Referring back to classroom agreements or shared expectations helps guide behavior without shaming the student. This supports a respectful and positive classroom culture.",
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question:
+              "You notice a student who rarely participates in class discussions. What is the best way to support them?",
+            options: [
+              {
+                id: "1",
+                text: "Call on them unexpectedly to force participation.",
+              },
+              {
+                id: "2",
+                text: "Ignore them and focus on more active students.",
+              },
+              {
+                id: "3",
+                text: "Ask them privately if they would feel comfortable sharing their ideas in smaller groups.",
+              },
+              {
+                id: "4",
+                text: "Tell them they need to speak more in class.",
+              },
+              {
+                id: "5",
+                text: "Compare them with other students who participate more.",
+              },
+            ],
+            feedback:
+              "Some students need psychological safety before speaking in class. Offering smaller group discussions or private encouragement can help build confidence gradually.",
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question: ` A student gives an incorrect answer during a class discussion. What is the best response?`,
+            options: [
+              {
+                id: "1",
+                text: "That’s wrong. Does anyone else know the answer?",
+              },
+              {
+                id: "2",
+                text: "Ignore the answer and move to another student.",
+              },
+              {
+                id: "3",
+                text: "That’s not correct. Please pay more attention.",
+              },
+              {
+                id: "4",
+                text: "That’s an interesting idea. Let’s explore it together and see how we might adjust it.",
+              },
+              {
+                id: "5",
+                text: "Tell the student they should have studied more.",
+              },
+            ],
+            feedback:
+              "Responding positively to mistakes encourages a growth mindset. Students learn that mistakes are part of the learning process, which increases participation and confidence.",
+          },
+          {
+            stepId: 4,
+            type: "dropdownScenario",
+            question:
+              "During group work, one student is doing all the work while others remain passive. What is the most effective teacher response?",
+            options: [
+              {
+                id: "1",
+                text: "Let the group continue since the work is getting done.",
+              },
+              {
+                id: "2",
+                text: "Tell the stronger student to continue since they understand the task.",
+              },
+              {
+                id: "3",
+                text: "Remind the group that everyone should contribute and assign each student a role.",
+              },
+              {
+                id: "4",
+                text: "Move the weaker students to another group.",
+              },
+              {
+                id: "5",
+                text: "Ask the hardworking student to complete the task alone.",
+              },
+            ],
+            feedback:
+              "Assigning clear roles within group activities helps ensure all students participate and develop collaboration skills.",
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 7,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 8,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Teachers should describe what they observe rather than applying labels.",
+              "Match the observation to the label.",
+            ],
+            options:
+              "Competence, Confidence, Coping, Control, Character, Connections, and Contribution.",
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question: "Struggles to stay focused during long tasks.",
+            options: [
+              {
+                id: "1",
+                text: "Dyslexia",
+              },
+              {
+                id: "2",
+                text: "Visual Impairment",
+              },
+              {
+                id: "3",
+                text: "Hearing Impairment",
+              },
+              {
+                id: "4",
+                text: "Anxiety",
+              },
+            ],
+            correctOption: "1",
+            feedback:
+              "Dyslexia affects how a learner processes written language, which can make reading tasks challenging.",
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question:
+              "A student frequently leaves their seat, interrupts others, and struggles to stay focused during lessons. What might be the possible barrier?",
+            options: [
+              {
+                id: "1",
+                text: "ADHD",
+              },
+              {
+                id: "2",
+                text: "Dyslexia",
+              },
+              {
+                id: "3",
+                text: "Hearing Impairment",
+              },
+              {
+                id: "4",
+                text: "Physical Disability",
+              },
+            ],
+            correctOption: "1",
+            feedback:
+              "ADHD can affect attention, impulse control, and activity levels, making it difficult for learners to remain focused during lessons.",
+          },
+          {
+            stepId: 4,
+            type: "dropdownScenario",
+            question: `A student often misunderstands spoken instructions and frequently asks classmates what the teacher said. What might be the possible barrier?`,
+            options: [
+              {
+                id: "1",
+                text: "Hearing Impairment",
+              },
+              {
+                id: "2",
+                text: "Dyslexia",
+              },
+              {
+                id: "3",
+                text: "ADHD",
+              },
+              {
+                id: "4",
+                text: "Physical Disability",
+              },
+            ],
+            correctOption: "1",
+            feedback:
+              "Hearing impairments can make it difficult for learners to clearly understand spoken instructions in the classroom.",
+          },
+          {
+            stepId: 5,
+            type: "dropdownScenario",
+            question:
+              "A student struggles to see what is written on the board and often squints or moves closer to read. What might be the possible barrier?",
+            options: [
+              {
+                id: "1",
+                text: "Visual Impairment",
+              },
+              {
+                id: "2",
+                text: "ADHD",
+              },
+              {
+                id: "3",
+                text: "Dyslexia",
+              },
+              {
+                id: "4",
+                text: "Anxiety",
+              },
+            ],
+            correctOption: "1",
+            feedback:
+              "Visual impairments can affect a student’s ability to see written materials clearly.",
+          },
+          {
+            stepId: 6,
+            type: "dropdownScenario",
+            question:
+              "A student understands concepts when explained verbally but struggles significantly with writing tasks. What might be the possible barrier?",
+            options: [
+              {
+                id: "1",
+                text: "Dysgraphia",
+              },
+              {
+                id: "2",
+                text: "ADHD",
+              },
+              {
+                id: "3",
+                text: "Visual Impairment",
+              },
+              {
+                id: "4",
+                text: "Hearing Impairment",
+              },
+            ],
+            correctOption: "1",
+            feedback:
+              "Dysgraphia affects a learner’s ability to write clearly and organize written expression.",
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 9,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 10,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: ["Match the element of an IEP with its purpose."],
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question: "Who will implement support.",
+            options: [
+              {
+                id: "1",
+                text: "Learner strengths.",
+              },
+              {
+                id: "2",
+                text: "Barriers.",
+              },
+              {
+                id: "3",
+                text: "Adjustments.",
+              },
+              {
+                id: "4",
+                text: "Accountability.",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question: "Strategies to support learning.",
+            options: [
+              {
+                id: "1",
+                text: "Learner strengths.",
+              },
+              {
+                id: "2",
+                text: "Barriers.",
+              },
+              {
+                id: "3",
+                text: "Adjustments.",
+              },
+              {
+                id: "4",
+                text: "Accountability.",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "dropdownScenario",
+            question: `Challenges affecting participation.`,
+            options: [
+              {
+                id: "1",
+                text: "Learner strengths.",
+              },
+              {
+                id: "2",
+                text: "Barriers.",
+              },
+              {
+                id: "3",
+                text: "Adjustments.",
+              },
+              {
+                id: "4",
+                text: "Accountability.",
+              },
+            ],
+          },
+          {
+            stepId: 5,
+            type: "dropdownScenario",
+            question: `What the learner does well.`,
+            options: [
+              {
+                id: "1",
+                text: "Learner strengths.",
+              },
+              {
+                id: "2",
+                text: "Barriers.",
+              },
+              {
+                id: "3",
+                text: "Adjustments.",
+              },
+              {
+                id: "4",
+                text: "Accountability.",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 11,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 12,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "dropdownScenario",
+            question:
+              "Which of the following are common signs of teacher burnout?",
+            options: [
+              {
+                id: "1",
+                text: "Emotional exhaustion",
+              },
+              {
+                id: "2",
+                text: "Increased impatience with students",
+              },
+              {
+                id: "3",
+                text: "Loss of empathy toward learners",
+              },
+              {
+                id: "4",
+                text: "Chronic fatigue",
+              },
+              {
+                id: "5",
+                text: "All of the above",
+              },
+            ],
+            correctOption: "1",
+            feedback:
+              "Burnout often shows up as emotional exhaustion, irritability, fatigue, and reduced empathy. Recognising these signs early allows teachers to seek support before stress becomes overwhelming.",
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question:
+              "A teacher begins feeling emotionally drained and notices they are becoming impatient with students more often than usual. What might this indicate?",
+            options: [
+              {
+                id: "1",
+                text: "A lack of classroom discipline",
+              },
+              {
+                id: "2",
+                text: "DyslexA normal teaching experience that requires no attentionia",
+              },
+              {
+                id: "3",
+                text: "A possible early sign of burnout",
+              },
+              {
+                id: "4",
+                text: "That the teacher should lower expectations",
+              },
+            ],
+            correctOption: "3",
+            feedback:
+              "Emotional exhaustion and increased impatience are early warning signs that a teacher may be experiencing burnout.",
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question: `Which strategy best helps teachers manage stress in inclusive classrooms?`,
+            options: [
+              {
+                id: "1",
+                text: "Taking full responsibility for every learner's progress",
+              },
+              {
+                id: "2",
+                text: " Ignoring stress and pushing through",
+              },
+              {
+                id: "3",
+                text: "Collaborating with colleagues and sharing challenges",
+              },
+              {
+                id: "4",
+                text: "Avoiding communication with parents",
+              },
+            ],
+            correctOption: "3",
+            feedback:
+              "Collaboration helps reduce emotional pressure and allows teachers to share strategies and support one another.",
+          },
+          {
+            stepId: 4,
+            type: "dropdownScenario",
+            question:
+              "Why is setting emotional boundaries important for teachers?",
+            options: [
+              {
+                id: "1",
+                text: "It prevents teachers from caring about student",
+              },
+              {
+                id: "2",
+                text: "It helps teachers protect their wellbeing while still supporting learners",
+              },
+              {
+                id: "3",
+                text: "It reduces teacher responsibility",
+              },
+              {
+                id: "4",
+                text: "It allows teachers to avoid difficult situations",
+              },
+            ],
+            correctOption: "2",
+            feedback:
+              "Emotional boundaries allow teachers to care deeply without becoming emotionally overwhelmed.",
+          },
+          {
+            stepId: 5,
+            type: "dropdownScenario",
+            question:
+              "Which statement best reflects a healthy mindset for teachers working in inclusive classrooms?",
+            options: [
+              {
+                id: "1",
+                text: "I must solve every challenge myself",
+              },
+              {
+                id: "2",
+                text: "If a learner struggles, I have failed",
+              },
+              {
+                id: "3",
+                text: "Small progress is meaningful and worth celebrating",
+              },
+              {
+                id: "4",
+                text: "Inclusion should eliminate all classroom challenges",
+              },
+              {
+                id: "5",
+                text: "Ask the hardworking student to complete the task alone.",
+              },
+            ],
+            correctOption: "3",
+            feedback:
+              "Inclusive teaching focuses on gradual progress rather than perfection.",
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 13,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
       },
     ],
   },

@@ -6,9 +6,7 @@ import Button from "../../../components/Button";
 import {
   selectPageData,
   selectCurrentStep,
-  navigateNext,
 } from "../../../../../../../../redux/reducers/navigationSlice";
-import TOTFeedbackModal from "../../../components/TOTFeedbackModal";
 import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
@@ -16,7 +14,7 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
-function WeekFivePage4() {
+function WeekFivePage10() {
   const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
@@ -24,12 +22,6 @@ function WeekFivePage4() {
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const step = pageData?.steps[currentStep - 1];
-  const [showFeedback, setShowFeedback] = useState(false);
-  const handleCloseFeedback = () => {
-    setShowFeedback(false);
-    dispatch(navigateNext()); // Navigate after closing the modal
-  };
-
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
   // console.log(userAnswers)
@@ -37,7 +29,7 @@ function WeekFivePage4() {
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
-      (item) => item.page === pageData.id,
+      (item) => item.page === pageData.id
     );
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
   }, [userAnswers]);
@@ -59,11 +51,6 @@ function WeekFivePage4() {
       answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
-
-    // Show feedback modal instead of navigating immediately
-    if (currentStep === 3) {
-      setShowFeedback(true);
-    }
 
     return true;
   };
@@ -123,18 +110,8 @@ function WeekFivePage4() {
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
-      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
-        <p className="text-blue mb-3">
-          {" "}
-          Supportive language builds trust with parents.
-        </p>
-        <p className="text-blue">
-          When teachers focus on collaboration instead of blame, parents are
-          more open to working together to support the child.
-        </p>
-      </TOTFeedbackModal>
     </>
   );
 }
 
-export default WeekFivePage4;
+export default WeekFivePage10;
