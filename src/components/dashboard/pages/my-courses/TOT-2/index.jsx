@@ -67,8 +67,21 @@ import WeekThreePage12 from "./weeks/week3/page12/Page12.jsx";
 import WeekThreePage13 from "./weeks/week3/page13/Page13.jsx";
 
 // Week 4
-import WeekFourPage1 from "./weeks/week4/page1/Page1";
-import WeekFourPage2 from "./weeks/week4/page2/Page2";
+import WeekFourPage1 from "./weeks/week4/page1/Page1.jsx";
+import WeekFourPage2 from "./weeks/week4/page2/Page2.jsx";
+import WeekFourPage3 from "./weeks/week4/page3/Page3.jsx";
+import WeekFourPage4 from "./weeks/week4/page4/Page4.jsx";
+import WeekFourPage5 from "./weeks/week4/page5/Page5.jsx";
+import WeekFourPage6 from "./weeks/week4/page6/Page6.jsx";
+import WeekFourPage7 from "./weeks/week4/page7/Page7.jsx";
+import WeekFourPage8 from "./weeks/week4/page8/Page8.jsx";
+import WeekFourPage9 from "./weeks/week4/page9/Page9.jsx";
+import WeekFourPage10 from "./weeks/week4/page10/Page10.jsx";
+import WeekFourPage11 from "./weeks/week4/page11/Page11.jsx";
+import WeekFourPage12 from "./weeks/week4/page12/Page12.jsx";
+import WeekFourPage13 from "./weeks/week4/page13/Page13.jsx";
+import WeekFourPage14 from "./weeks/week4/page14/Page14.jsx";
+
 
 // Week5
 import WeekFivePage1 from "./weeks/week5/page1/Page1.jsx";
@@ -294,6 +307,30 @@ const WeekContent = () => {
             return <WeekFourPage1 />;
           case 2:
             return <WeekFourPage2 />;
+          case 3:
+            return <WeekFourPage3 />;
+          case 4:
+            return <WeekFourPage4 />;
+          case 5:
+            return <WeekFourPage5 />;
+          case 6:
+            return <WeekFourPage6 />;
+          case 7:
+            return <WeekFourPage7 />;
+          case 8:
+            return <WeekFourPage8 />;
+          case 9:
+            return <WeekFourPage9 />;
+          case 10:
+            return <WeekFourPage10 />;
+          case 11:
+            return <WeekFourPage11 />;
+          case 12:
+            return <WeekFourPage12/>;
+          case 13:
+            return <WeekFourPage13 />;
+          case 14:
+            return <WeekFourPage14 />;
           default:
             return null;
         }

@@ -1,6 +1,6 @@
 export const assessments = {
   week1: {
-    title: "Post Assessment",
+    title: "Week 1 Assessment",
     subtitle: "Let's test your knowledge",
     questions: [
       {
@@ -41,7 +41,7 @@ export const assessments = {
     ],
   },
   week2: {
-    title: "Post Assessment",
+    title: "Week 3 Assessment",
     subtitle: "Let's test your knowledge",
     questions: [
       {
@@ -135,7 +135,7 @@ export const assessments = {
     ],
   },
   week3: {
-    title: "Post Assessment",
+    title: "Week 3 Assessment",
     subtitle: "Let's test your knowledge",
     questions: [
       {
@@ -248,7 +248,7 @@ export const assessments = {
     ],
   },
   week4: {
-    title: "Post Assessment",
+    title: "Week 4 Assessment",
     subtitle: "Let's test your knowledge",
     questions: [
       {
@@ -423,7 +423,7 @@ export const assessments = {
     ],
   },
   week5: {
-    title: "Post Assessment",
+    title: "Week 5 Assessment",
     subtitle: "Let's test your knowledge",
     questions: [
       {

@@ -14,7 +14,7 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
-function Page8() {
+function WeekFourPage9() {
   const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
@@ -29,13 +29,12 @@ function Page8() {
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
-      (item) => item.page === pageData.id
+      (item) => item.page === pageData.id,
     );
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
   }, [userAnswers]);
 
   const saveUserInput = () => {
-    if (currentStep === 1) return true;
     if (adminDatas.isAdmin) return true;
 
     const stepData = answers.find((item) => item.stepId === currentStep);
@@ -59,26 +58,6 @@ function Page8() {
     if (!step) return <div>Invalid Step</div>;
 
     switch (step.type) {
-      case "instruction":
-        return (
-          <QuestionBox extraStyle="bg-blue">
-            <div className="text-center mb-5 mt-5 mt-md-4">
-              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction">
-                Instruction
-              </h1>
-            </div>
-
-            <div className="text-center mb-5 mt-3 mt-md-0">
-              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
-                Let’s practice shifting our lens. You will see short scenarios
-                involving SEND learners. Your task is to look beyond the
-                challenge and identify the underlying strength being displayed.
-              </h2>
-              {/* <h2 className="text-white px-5 d-inline-block text-start tot-week-2-question-text">
-              </h2> */}
-            </div>
-          </QuestionBox>
-        );
       case "dropdownScenario":
         return (
           <Frame
@@ -113,4 +92,4 @@ function Page8() {
   );
 }
 
-export default Page8;
+export default WeekFourPage9;

@@ -39,22 +39,8 @@ function WeekThreePage7() {
     if (adminDatas.isAdmin) return true;
 
     const stepData = answers.find((item) => item.stepId === currentStep);
-    if (!stepData) {
-      setErrorMessage("Oops! All inputs must be filled out.");
-      return false;
-    }
-
-    const values = Object.values(stepData.value);
-    if (values.length < 1) {
-      setErrorMessage("At least 1 value are required!");
-      return false;
-    }
-
-    const emptyInputs = values.filter((value) => value.trim() === "");
-    if (emptyInputs.length > 0) {
-      setErrorMessage(
-        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
-      );
+    if (!stepData || !stepData.value) {
+      setErrorMessage("Oops! Please select an option.");
       return false;
     }
 

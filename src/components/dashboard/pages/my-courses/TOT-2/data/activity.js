@@ -1148,7 +1148,7 @@ export const courseContent = {
           {
             stepId: 1,
             type: "dropdownScenario",
-            question: "Based on your knowledge, what does UDL stand for??",
+            question: "Based on your knowledge, what does UDL stand for?",
             options: [
               {
                 id: "1",
@@ -1630,10 +1630,482 @@ export const courseContent = {
     pages: [
       {
         id: 1,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "dropdownScenario",
+            question:
+              "When a learner displays challenging behaviour, what is your first instinct?",
+            options: [
+              {
+                id: "1",
+                text: "Correct the behaviour immediately",
+              },
+              {
+                id: "2",
+                text: "Ask the learner what might be wrong",
+              },
+              {
+                id: "3",
+                text: "Ignore the behaviour",
+              },
+              {
+                id: "4",
+                text: "Feel unsure how to respond",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 2,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_1.mp4",
-        hasNextButton: true,
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 3,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Match the behaviour to the most likely underlying need.",
+            ],
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question: "Learner refuses to read aloud",
+            options: [
+              {
+                id: "1",
+                text: "Reading difficulty",
+              },
+              {
+                id: "2",
+                text: "Attention regulation difficulty",
+              },
+              {
+                id: "3",
+                text: "Cognitive overload",
+              },
+              {
+                id: "4",
+                text: "Difficulty with transitions",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question: "Learner constantly leaves their seat",
+            options: [
+              {
+                id: "1",
+                text: "Reading difficulty",
+              },
+              {
+                id: "2",
+                text: "Attention regulation difficulty",
+              },
+              {
+                id: "3",
+                text: "Cognitive overload",
+              },
+              {
+                id: "4",
+                text: "Difficulty with transitions",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "dropdownScenario",
+            question: `Learner shuts down during complex tasks`,
+            options: [
+              {
+                id: "1",
+                text: "Reading difficulty",
+              },
+              {
+                id: "2",
+                text: "Attention regulation difficulty",
+              },
+              {
+                id: "3",
+                text: "Cognitive overload",
+              },
+              {
+                id: "4",
+                text: "Difficulty with transitions",
+              },
+            ],
+          },
+          {
+            stepId: 5,
+            type: "dropdownScenario",
+            question: `Learner becomes distressed when routines change`,
+            options: [
+              {
+                id: "1",
+                text: "Reading difficulty",
+              },
+              {
+                id: "2",
+                text: "Attention regulation difficulty",
+              },
+              {
+                id: "3",
+                text: "Cognitive overload",
+              },
+              {
+                id: "4",
+                text: "Difficulty with transitions",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 4,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_5.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 5,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "dropdownScenario",
+            question:
+              "A learner becomes overwhelmed during a difficult maths task and refuses to continue working. What is the most supportive teacher response?",
+            options: [
+              {
+                id: "1",
+                text: "Tell the learner to finish the task immediately",
+              },
+              {
+                id: "2",
+                text: "Break the task into smaller steps",
+              },
+              {
+                id: "3",
+                text: "Send the learner out of class",
+              },
+              {
+                id: "4",
+                text: "Ignore the situation",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+
+      {
+        id: 6,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_5.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 7,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "dropdownScenario",
+            question:
+              "A learner becomes very distressed when the classroom routine suddenly changes. What is the most helpful teacher response?",
+            options: [
+              {
+                id: "1",
+                text: "Provide advance warning before schedule changes",
+              },
+              {
+                id: "2",
+                text: "Tell the learner to stop reacting",
+              },
+              {
+                id: "3",
+                text: "Ignore the distress",
+              },
+              {
+                id: "4",
+                text: "Remove the learner from the classroom",
+              },
+            ],
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question:
+              "A learner with autism becomes overwhelmed during a noisy group activity. What should the teacher do first?",
+            options: [
+              {
+                id: "1",
+                text: "Reduce noise and speak calmly",
+              },
+              {
+                id: "2",
+                text: "Raise their voice to regain control",
+              },
+              {
+                id: "3",
+                text: "Punish the behaviour",
+              },
+              {
+                id: "4",
+                text: "Ignore the learner",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 8,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_5.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 9,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "dropdownScenario",
+            question:
+              "A student with ADHD frequently leaves their seat during lessons. Which strategy is most supportive?",
+            options: [
+              {
+                id: "1",
+                text: "Punish the student",
+              },
+              {
+                id: "2",
+                text: "Allow structured movement breaks",
+              },
+              {
+                id: "3",
+                text: "Ignore the behaviour",
+              },
+              {
+                id: "4",
+                text: "Remove the student from class",
+              },
+            ],
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question: `A teacher says to a learner with ADHD: "Why can't you just sit still like everyone else?" What is the problem with this response?`,
+            options: [
+              {
+                id: "1",
+                text: "It ignores the learner's regulation difficulty",
+              },
+              {
+                id: "2",
+                text: "The learner should try harder",
+              },
+              {
+                id: "3",
+                text: "The class should wait longer",
+              },
+              {
+                id: "4",
+                text: "The teacher should assign extra homework",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 10,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_5.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 11,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "dropdownScenario",
+            question:
+              "A learner understands the lesson but struggles to read the worksheet. What is the most supportive response?",
+            options: [
+              {
+                id: "1",
+                text: "Offer an audio version of the text",
+              },
+              {
+                id: "2",
+                text: "Ask the learner to read faster",
+              },
+              {
+                id: "3",
+                text: "Reduce the learning objective",
+              },
+              {
+                id: "4",
+                text: "Remove the learner from the task",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 12,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_5.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 13,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "dropdownScenario",
+            question: "Reduce handwriting strain",
+            options: [
+              {
+                id: "1",
+                text: "Allow typing",
+              },
+              {
+                id: "2",
+                text: "Oral responses",
+              },
+              {
+                id: "3",
+                text: "Graphic organisers",
+              },
+            ],
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question: "Allow expression of understanding",
+            options: [
+              {
+                id: "1",
+                text: "Allow typing",
+              },
+              {
+                id: "2",
+                text: "Oral responses",
+              },
+              {
+                id: "3",
+                text: "Graphic organisers",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question: "Support idea organisation",
+            options: [
+              {
+                id: "1",
+                text: "Allow typing",
+              },
+              {
+                id: "2",
+                text: "Oral responses",
+              },
+              {
+                id: "3",
+                text: "Graphic organisers",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "dropdownScenario",
+            question:
+              "A learner becomes frustrated during a writing task and refuses to continue. What is the most inclusive response?",
+            options: [
+              {
+                id: "1",
+                text: "Allow an alternative way to show understanding",
+              },
+              {
+                id: "2",
+                text: "Force the learner to finish writing",
+              },
+              {
+                id: "3",
+                text: "Remove the learner from the lesson",
+              },
+              {
+                id: "4",
+                text: "Ignore the behaviour",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
       },
     ],
   },

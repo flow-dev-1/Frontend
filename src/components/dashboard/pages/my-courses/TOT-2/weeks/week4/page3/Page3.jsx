@@ -14,7 +14,7 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
-function Page8() {
+function WeekFourPage3() {
   const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
@@ -69,13 +69,14 @@ function Page8() {
             </div>
 
             <div className="text-center mb-5 mt-3 mt-md-0">
-              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
-                Let’s practice shifting our lens. You will see short scenarios
-                involving SEND learners. Your task is to look beyond the
-                challenge and identify the underlying strength being displayed.
-              </h2>
-              {/* <h2 className="text-white px-5 d-inline-block text-start tot-week-2-question-text">
-              </h2> */}
+              {step.instructions.map((item, index) => (
+                <h2
+                  key={index}
+                  className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text"
+                >
+                  {item}
+                </h2>
+              ))}
             </div>
           </QuestionBox>
         );
@@ -113,4 +114,4 @@ function Page8() {
   );
 }
 
-export default Page8;
+export default WeekFourPage3;
