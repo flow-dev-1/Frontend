@@ -139,6 +139,12 @@ export const assessments = {
     subtitle: "Let's test your knowledge",
     questions: [
       {
+        id: "A",
+        type: "reflection",
+        question:
+          "What is one mindset shift you are taking away from this week?",
+      },
+      {
         id: 1,
         question:
           "Which statement best describes Universal Design for Learning in relation to SEND learners?",

@@ -1040,7 +1040,7 @@ export const courseContent = {
           next: true,
         },
       },
-        {
+      {
         id: 11,
         type: "video",
         videoSrc:
@@ -1057,13 +1057,6 @@ export const courseContent = {
     pages: [
       {
         id: 1,
-        type: "video",
-        videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_1.mp4",
-        hasNextButton: true,
-      },
-      {
-        id: 2,
         type: "question",
         question:
           "Quick question, when you plan a lesson, what usually comes first for you?",
@@ -1088,10 +1081,543 @@ export const courseContent = {
         correctOption: "B",
       },
       {
+        id: 2,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_1.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+
+      {
         id: 3,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            text: "Drag each statement into the correct category.",
+          },
+          {
+            stepId: 2,
+            type: "imageDragAndDrop",
+            instruction:
+              "Drag-and-drop the statements on the left into any of these boxes.",
+            buckets: [
+              {
+                id: "green",
+                title: "Learning Barrier",
+              },
+              {
+                id: "orange",
+                title: "Learner Variability",
+              },
+            ],
+            images: [
+              "A lesson relies only on long written texts",
+              "A learner needs extra time to process information",
+              "A test only allows written answers",
+              "A student prefers visual diagrams to understand concepts",
+              "Instructions are given only verbally",
+              "A learner needs short learning breaks to stay focused",
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 4,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 5,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "dropdownScenario",
+            question: "Based on your knowledge, what does UDL stand for??",
+            options: [
+              {
+                id: "1",
+                text: "Universal Design for Learning",
+              },
+              {
+                id: "2",
+                text: "Unified Development Learning",
+              },
+              {
+                id: "3",
+                text: "Understanding Diverse Learners",
+              },
+              {
+                id: "4",
+                text: "Universal Development Lessons",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 6,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+3/Week+3_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 7,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Select the most preferable solution to the scenario challenges displayed.",
+            ],
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question:
+              "A learner with ADHD begins to lose focus during a long lecture.",
+            options: [
+              {
+                id: "1",
+                text: "Continue teaching and expect the learner to adapt",
+              },
+              {
+                id: "2",
+                text: "Add short activities or movement breaks",
+              },
+              {
+                id: "3",
+                text: "Ask the learner to copy more notes",
+              },
+              {
+                id: "4",
+                text: "Ignore the behaviour",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question:
+              "A learner becomes anxious when classroom routines suddenly change.",
+            options: [
+              {
+                id: "1",
+                text: "Provide advance notice of changes",
+              },
+              {
+                id: "2",
+                text: "Tell the learner to calm down",
+              },
+              {
+                id: "3",
+                text: "Ignore the anxiety",
+              },
+              {
+                id: "4",
+                text: "Remove the learner from the class",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "dropdownScenario",
+            question: `A learner struggles to stay motivated during long individual tasks.`,
+            options: [
+              {
+                id: "1",
+                text: "Introduce small task checkpoints",
+              },
+              {
+                id: "2",
+                text: "Extend the task time",
+              },
+              {
+                id: "3",
+                text: "Remove the learner from the activity",
+              },
+              {
+                id: "4",
+                text: "Ask the learner to complete extra work",
+              },
+            ],
+          },
+          {
+            stepId: 5,
+            type: "dropdownScenario",
+            question: "A learner loses attention during teacher explanations.",
+            options: [
+              {
+                id: "1",
+                text: "Use visuals or interactive discussion",
+              },
+              {
+                id: "2",
+                text: "Repeat the lecture",
+              },
+              {
+                id: "3",
+                text: "Assign more notes",
+              },
+              {
+                id: "4",
+                text: "Move the learner to the back",
+              },
+            ],
+          },
+          {
+            stepId: 6,
+            type: "dropdownScenario",
+            question: "A learner works better when collaborating with others.",
+            options: [
+              {
+                id: "1",
+                text: "Offer group work options",
+              },
+              {
+                id: "2",
+                text: " Force independent work",
+              },
+              {
+                id: "3",
+                text: "Reduce the difficulty of the task",
+              },
+              {
+                id: "4",
+                text: "Remove collaboration entirely",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 8,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 9,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Select the teaching method to the learner who may benefit most.",
+            ],
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question: "Audio explanation",
+            options: [
+              {
+                id: "1",
+                text: "Dyslexia",
+              },
+              {
+                id: "2",
+                text: "ADHD",
+              },
+              {
+                id: "3",
+                text: "Intellectual disability",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question: "Visual diagrams",
+            options: [
+              {
+                id: "1",
+                text: "Dyslexia",
+              },
+              {
+                id: "2",
+                text: "ADHD",
+              },
+              {
+                id: "3",
+                text: "Intellectual disability",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "dropdownScenario",
+            question: `Short learning chunks`,
+            options: [
+              {
+                id: "1",
+                text: "Dyslexia",
+              },
+              {
+                id: "2",
+                text: "ADHD",
+              },
+              {
+                id: "3",
+                text: "Intellectual disability",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 10,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_5.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 11,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "Select the most preferable solution to the scenario challenges displayed.",
+            ],
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question:
+              "A student understands a science concept but struggles with writing.",
+            options: [
+              {
+                id: "1",
+                text: "A long written essay",
+              },
+              {
+                id: "2",
+                text: "An oral explanation",
+              },
+              {
+                id: "3",
+                text: "A silent timed test",
+              },
+              {
+                id: "4",
+                text: "Copying from the board",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "dropdownScenario",
+            question: "A learner with anxiety struggles during timed tests.",
+            options: [
+              {
+                id: "1",
+                text: "Allow flexible timing",
+              },
+              {
+                id: "2",
+                text: "Increase test pressure",
+              },
+              {
+                id: "3",
+                text: "Remove the assessment",
+              },
+              {
+                id: "4",
+                text: "Ignore the anxiety",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "dropdownScenario",
+            question: `A learner understands a concept but struggles with written explanations.`,
+            options: [
+              {
+                id: "1",
+                text: "Allow visual diagrams or models",
+              },
+              {
+                id: "2",
+                text: "Require longer written responses",
+              },
+              {
+                id: "3",
+                text: "Reduce the learning objective",
+              },
+              {
+                id: "4",
+                text: "Remove the learner from the task",
+              },
+            ],
+          },
+          {
+            stepId: 5,
+            type: "dropdownScenario",
+            question:
+              "A learner finds written instructions difficult to understand.",
+            options: [
+              {
+                id: "1",
+                text: "Provide verbal explanation and examples",
+              },
+              {
+                id: "2",
+                text: "Repeat the written instructions",
+              },
+              {
+                id: "3",
+                text: "Reduce the task difficulty",
+              },
+              {
+                id: "4",
+                text: "Remove the learner from the lesson",
+              },
+            ],
+          },
+          {
+            stepId: 6,
+            type: "dropdownScenario",
+            question:
+              "A learner shows strong understanding when speaking but struggles with writing.",
+            options: [
+              {
+                id: "1",
+                text: "Allow oral presentations",
+              },
+              {
+                id: "2",
+                text: "Force written responses",
+              },
+              {
+                id: "3",
+                text: "Lower expectations",
+              },
+              {
+                id: "4",
+                text: "Skip the assessment",
+              },
+            ],
+          },
+          {
+            stepId: 7,
+            type: "instruction",
+            title: "Instruction",
+            instructions: ["Match each principle to its meaning."],
+          },
+          {
+            stepId: 8,
+            type: "dropdownScenario",
+            question: "How learners stay motivated",
+            options: [
+              {
+                id: "1",
+                text: "Engagement",
+              },
+              {
+                id: "2",
+                text: "Representation",
+              },
+              {
+                id: "3",
+                text: "Action and Expression",
+              },
+            ],
+          },
+          {
+            stepId: 9,
+            type: "dropdownScenario",
+            question: "How information is presented",
+            options: [
+              {
+                id: "1",
+                text: "Engagement",
+              },
+              {
+                id: "2",
+                text: "Representation",
+              },
+              {
+                id: "3",
+                text: "Action and Expression",
+              },
+            ],
+          },
+          {
+            stepId: 10,
+            type: "dropdownScenario",
+            question: "How learners show what they know",
+            options: [
+              {
+                id: "1",
+                text: "Engagement",
+              },
+              {
+                id: "2",
+                text: "Representation",
+              },
+              {
+                id: "3",
+                text: "Action and Expression",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 12,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/Week+2_5.mp4",
         navigation: {
           prev: true,
           next: true,

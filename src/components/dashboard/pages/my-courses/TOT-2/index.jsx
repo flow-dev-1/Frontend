@@ -54,8 +54,17 @@ import WeekTwoPage12 from "./weeks/week2/page12/Page12.jsx";
 // Week 3
 import WeekThreePage1 from "./weeks/week3/page1/Page1";
 import WeekThreePage2 from "./weeks/week3/page2/Page2";
-import WeekThreePage3 from "./weeks/week3/page3/Page3";
-import WeekThreePage4 from "./weeks/week3/page4/Page4";
+import WeekThreePage3 from "./weeks/week3/page3/Page3.jsx";
+import WeekThreePage4 from "./weeks/week3/page4/Page4.jsx";
+import WeekThreePage5 from "./weeks/week3/page5/Page5.jsx";
+import WeekThreePage6 from "./weeks/week3/page6/Page6.jsx";
+import WeekThreePage7 from "./weeks/week3/page7/Page7.jsx";
+import WeekThreePage8 from "./weeks/week3/page8/Page8.jsx";
+import WeekThreePage9 from "./weeks/week3/page9/Page9.jsx";
+import WeekThreePage10 from "./weeks/week3/page10/Page10.jsx";
+import WeekThreePage11 from "./weeks/week3/page11/Page11.jsx";
+import WeekThreePage12 from "./weeks/week3/page12/Page12.jsx";
+import WeekThreePage13 from "./weeks/week3/page13/Page13.jsx";
 
 // Week 4
 import WeekFourPage1 from "./weeks/week4/page1/Page1";
@@ -95,7 +104,7 @@ const WeekContent = () => {
 
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
-    if (!enrolmentData && !isAdmin) return navigate("/sign-in");
+    // if (!enrolmentData && !isAdmin) return navigate("/sign-in");
     setEnrollmentId(enrolmentData?._id);
     setCourse(enrolmentData?.course?._id);
   }, []);
@@ -258,6 +267,24 @@ const WeekContent = () => {
             return <WeekThreePage3 />;
           case 4:
             return <WeekThreePage4 />;
+          case 5:
+            return <WeekThreePage5 />;
+          case 6:
+            return <WeekThreePage6 />;
+          case 7:
+            return <WeekThreePage7 />;
+          case 8:
+            return <WeekThreePage8 />;
+          case 9:
+            return <WeekThreePage9 />;
+          case 10:
+            return <WeekThreePage10 />;
+          case 11:
+            return <WeekThreePage11 />;
+          case 12:
+            return <WeekThreePage12 />;
+          case 13:
+            return <WeekThreePage13 />;
           default:
             return null;
         }
