@@ -2409,7 +2409,31 @@ export const courseContent = {
             options: [
               {
                 id: "1",
-                text: "",
+                text: "Lazy",
+              },
+              {
+                id: "2",
+                text: "Disruptive",
+              },
+              {
+                id: "3",
+                text: "Slow Learner",
+              },
+              {
+                id: "4",
+                text: "Not trying",
+              },
+              {
+                id: "5",
+                text: "Careless",
+              },
+              {
+                id: "6",
+                text: "Unmotivated",
+              },
+              {
+                id: "7",
+                text: "Difficult child",
               },
             ],
           },
@@ -2418,9 +2442,33 @@ export const courseContent = {
             type: "dropdownScenario",
             question: "Often calls out during lessons.",
             options: [
-              {
+                  {
                 id: "1",
-                text: "",
+                text: "Lazy",
+              },
+              {
+                id: "2",
+                text: "Disruptive",
+              },
+              {
+                id: "3",
+                text: "Slow Learner",
+              },
+              {
+                id: "4",
+                text: "Not trying",
+              },
+              {
+                id: "5",
+                text: "Careless",
+              },
+              {
+                id: "6",
+                text: "Unmotivated",
+              },
+              {
+                id: "7",
+                text: "Difficult child",
               },
             ],
           },
@@ -2429,9 +2477,33 @@ export const courseContent = {
             type: "dropdownScenario",
             question: `Takes more time to complete tasks.`,
             options: [
-              {
+                  {
                 id: "1",
-                text: "",
+                text: "Lazy",
+              },
+              {
+                id: "2",
+                text: "Disruptive",
+              },
+              {
+                id: "3",
+                text: "Slow Learner",
+              },
+              {
+                id: "4",
+                text: "Not trying",
+              },
+              {
+                id: "5",
+                text: "Careless",
+              },
+              {
+                id: "6",
+                text: "Unmotivated",
+              },
+              {
+                id: "7",
+                text: "Difficult child",
               },
             ],
           },
@@ -2440,9 +2512,33 @@ export const courseContent = {
             type: "dropdownScenario",
             question: "Avoids starting difficult tasks and gives up quickly.",
             options: [
-              {
+                  {
                 id: "1",
-                text: "",
+                text: "Lazy",
+              },
+              {
+                id: "2",
+                text: "Disruptive",
+              },
+              {
+                id: "3",
+                text: "Slow Learner",
+              },
+              {
+                id: "4",
+                text: "Not trying",
+              },
+              {
+                id: "5",
+                text: "Careless",
+              },
+              {
+                id: "6",
+                text: "Unmotivated",
+              },
+              {
+                id: "7",
+                text: "Difficult child",
               },
             ],
           },
@@ -2451,9 +2547,33 @@ export const courseContent = {
             type: "dropdownScenario",
             question: "Frequently makes mistakes when copying from the board.",
             options: [
-              {
+                  {
                 id: "1",
-                text: "",
+                text: "Lazy",
+              },
+              {
+                id: "2",
+                text: "Disruptive",
+              },
+              {
+                id: "3",
+                text: "Slow Learner",
+              },
+              {
+                id: "4",
+                text: "Not trying",
+              },
+              {
+                id: "5",
+                text: "Careless",
+              },
+              {
+                id: "6",
+                text: "Unmotivated",
+              },
+              {
+                id: "7",
+                text: "Difficult child",
               },
             ],
           },
@@ -2462,9 +2582,33 @@ export const courseContent = {
             type: "dropdownScenario",
             question: "Appears disengaged during long written activities.",
             options: [
-              {
+                  {
                 id: "1",
-                text: "",
+                text: "Lazy",
+              },
+              {
+                id: "2",
+                text: "Disruptive",
+              },
+              {
+                id: "3",
+                text: "Slow Learner",
+              },
+              {
+                id: "4",
+                text: "Not trying",
+              },
+              {
+                id: "5",
+                text: "Careless",
+              },
+              {
+                id: "6",
+                text: "Unmotivated",
+              },
+              {
+                id: "7",
+                text: "Difficult child",
               },
             ],
           },
@@ -2473,9 +2617,33 @@ export const courseContent = {
             type: "dropdownScenario",
             question: "Becomes frustrated when tasks feel overwhelming.",
             options: [
-              {
+                  {
                 id: "1",
-                text: "",
+                text: "Lazy",
+              },
+              {
+                id: "2",
+                text: "Disruptive",
+              },
+              {
+                id: "3",
+                text: "Slow Learner",
+              },
+              {
+                id: "4",
+                text: "Not trying",
+              },
+              {
+                id: "5",
+                text: "Careless",
+              },
+              {
+                id: "6",
+                text: "Unmotivated",
+              },
+              {
+                id: "7",
+                text: "Difficult child",
               },
             ],
             feedback:
