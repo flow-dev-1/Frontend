@@ -4,8 +4,7 @@ import { Icon } from "@iconify/react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { ClimbingBoxLoader } from "react-spinners";
-import { adminData } from "../../../../../../../redux/reducers/adminReducer.js";
-import { useSelector } from "react-redux";
+import pdfTemplate from "../../../../../../../assets/tot-images/pdf/template.pdf";
 
 function Accordion({
   activeIndex,
@@ -23,6 +22,32 @@ function Accordion({
 
   useEffect(() => {
     if (!startDownload) return;
+
+    if (currentIndex === 5) {
+      const originalState = activeIndex;
+      setPdfLoading(true);
+      setActiveIndex(null);
+
+      if (!hasPercentile) {
+        setActiveIndex(originalState);
+        setPdfLoading(false);
+        return;
+      }
+      console.log("downloading course pdf");
+
+      // replace this with the actual pdf template
+      const link = document.createElement("a");
+      link.href = "/Teacher Resources.pdf";
+      link.download = "Teacher Resources.pdf";
+      link.click();
+
+      setStartDownload(false);
+      setActiveIndex("");
+      setHasPercentile(false);
+      setPdfLoading(false);
+
+      return;
+    }
     generatePDF();
   }, [hasPercentile, allDataLoaded, startDownload, currentIndex]);
 
@@ -82,7 +107,7 @@ function Accordion({
         </div>
       )}
       <div className="accordion" ref={contentRef}>
-        <h2 className="accordion-header p-lg-2 p-md-4 bg-blue text-center text-white">
+        <h2 className="accordion-header p-lg-2 p-md-4 bg-blue text-center text-white tot-question-text">
           Feedback for ToT Course 2
         </h2>
 
@@ -91,7 +116,7 @@ function Accordion({
             <div
               className={`py-4 px-5 d-flex gap-3 align-items-center justify-space-between
 py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
-                index > 4 ? "bg-blue-feedback" : ""
+                index > 5 ? "bg-blue-feedback" : ""
               }`}
             >
               <div className="d-flex align-items-center gap-3 flex-grow-1">
@@ -117,7 +142,7 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
                     onClick={() => handleToggle(index)}
                     style={{ cursor: "pointer" }}
                   >
-                    Final Report:
+                    Resource:
                   </p>
                 )}
                 <div

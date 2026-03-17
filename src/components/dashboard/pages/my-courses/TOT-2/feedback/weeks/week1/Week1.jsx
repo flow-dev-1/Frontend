@@ -7,6 +7,7 @@ import wrong from "../../../../../../../../assets/wrong.png";
 import {
   getWeekAssessment,
   getWeekContentExcludingVideos,
+  getWeekPreAssessment,
 } from "../../../data/index.js";
 import { useQuery } from "@tanstack/react-query";
 import userService from "../../../../../../../../services/api/user.js";
@@ -23,13 +24,38 @@ function Week1({ enrollmentId, setWeekOneData }) {
   const [activityFeedbackId, setActivityFeedbackId] = useState(null);
   const { pages } = getWeekContentExcludingVideos(1);
 
-  const [activity1, activity2, activity3, activity4, activity5] = pages;
+  const [
+    _,
+    activity1,
+    activity2,
+    activity3,
+    activity4,
+    activity5,
+    activity6,
+    activity7,
+    activity8,
+  ] = pages;
 
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([]);
+  const [preAssessmentData, setPreAssessmentData] = useState([]);
   const { isAdmin, code } = useSelector(adminData);
 
-  const { questions: assessments } = getWeekAssessment(1);
+  const { questions } = getWeekAssessment(1);
+
+  const { reflectionsAssessment, assessments } = questions.reduce(
+    (acc, q) => {
+      if (q.type === "reflection") {
+        acc.reflectionsAssessment.push(q);
+      } else {
+        acc.assessments.push(q);
+      }
+      return acc;
+    },
+    { reflectionsAssessment: [], assessments: [] },
+  );
+  const { questions: preAssessments } = getWeekPreAssessment(1);
+
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
     queryKey: ["dashboard/tot-feedback-2", enrollmentId, 1],
@@ -50,7 +76,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
         enrollmentId,
         1,
         data?.activity?.user,
-        code
+        code,
       ),
     onSuccess: (data) => {
       setModalData("");
@@ -81,7 +107,9 @@ function Week1({ enrollmentId, setWeekOneData }) {
     setActivityData(data.activity?.activities);
     setAssessmentData(data.assessment?.assessments);
 
-    console.log(activityData);
+    setPreAssessmentData(
+      data.activity?.activities.find((p) => p.page == 1).answer,
+    );
 
     setWeekOneData(true);
 
@@ -94,11 +122,11 @@ function Week1({ enrollmentId, setWeekOneData }) {
         ?.answer;
     } else {
       const answersList = activityData?.find(
-        (activity) => activity.page === activityId
+        (activity) => activity.page === activityId,
       )?.answer;
 
       const answerObject = answersList?.find(
-        (activity) => activity.id === itemId
+        (activity) => activity.id === itemId,
       )?.value;
 
       return answerObject ? answerObject : "";
@@ -111,11 +139,11 @@ function Week1({ enrollmentId, setWeekOneData }) {
         ?.feedback;
     } else {
       const answersList = activityData?.find(
-        (activity) => activity.page === activityId
+        (activity) => activity.page === activityId,
       )?.feedback;
 
       const answerObject = answersList?.find(
-        (activity) => activity.stepId === itemId
+        (activity) => activity.stepId === itemId,
       ).value;
 
       // return answerObject ? answerObject[index] : null;
@@ -131,46 +159,28 @@ function Week1({ enrollmentId, setWeekOneData }) {
       type === "inclusion"
         ? activityData[3]?.answer?.[0]?.value?.green
         : type === "integration"
-        ? activityData[3]?.answer?.[0]?.value?.orange
-        : activityData[3]?.answer?.[0]?.value?.red;
+          ? activityData[3]?.answer?.[0]?.value?.orange
+          : activityData[3]?.answer?.[0]?.value?.red;
     return indices?.map((index) => activity4?.steps?.[1].images[index]) || [];
   }
 
-  function getOptionDetails(option) {
-    const options = [
-      {
-        id: "1",
-        text: "Segregation",
-      },
-      {
-        id: "2",
-        text: "Integration",
-      },
-      {
-        id: "3",
-        text: "Inclusion",
-      },
-    ];
+  function drag2(type) {
+    console.log(activityData, "Activity Data");
+    if (!activityData || !activityData[7] || !activityData[7].answer) return [];
 
+    const indices =
+      type === "equality"
+        ? activityData[7]?.answer?.[0]?.value?.green
+        : activityData[7]?.answer?.[0]?.value?.orange;
+
+    return indices?.map((index) => activity8?.steps?.[1].images[index]) || [];
+  }
+
+  function getOptionDetails(options, option) {
     return options.find((item) => item.id === option) || null;
   }
 
-  function getOptionDetails2(option) {
-    const options = [
-      {
-        id: "1",
-        text: "Text to speech software, simplified text versions and use of visual aids.",
-      },
-      {
-        id: "2",
-        text: "Guided questions and assessments, peer to peer discussion.",
-      },
-    ];
-
-    return options.find((item) => item.id === option) || null;
-  }
-
-  if (isPending) {
+  if (!isPending) {
     return <div>Loading...</div>;
   }
 
@@ -184,14 +194,14 @@ function Week1({ enrollmentId, setWeekOneData }) {
   const submitFeedback = (value) => {
     if (!activityFeedbackId?.itemId) {
       const answerData = activityData.find(
-        (item) => item.page === activityFeedbackId.activityId
+        (item) => item.page === activityFeedbackId.activityId,
       );
       answerData.feedback = value;
       handleModalClose();
       mutation.mutate();
     } else {
       const answerData = activityData?.find(
-        (item) => item.page === activityFeedbackId.activityId
+        (item) => item.page === activityFeedbackId.activityId,
       );
 
       if (!answerData.feedback) {
@@ -199,7 +209,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
       }
 
       const existingFeedbackIndex = answerData.feedback.findIndex(
-        (item) => item.stepId === activityFeedbackId.itemId
+        (item) => item.stepId === activityFeedbackId.itemId,
       );
 
       if (existingFeedbackIndex >= 0) {
@@ -219,6 +229,83 @@ function Week1({ enrollmentId, setWeekOneData }) {
 
   return (
     <>
+      {/* PreAssesment 1 */}
+      <p className="bg-blue py-1 px-1 py-md-3 px-md-2 text-white d-inline-block rounded-5 fs-md-4">
+        Pre-Assessment
+      </p>
+      <hr />
+      {preAssessments.map(({ id, question, options, correctOption }, i) => {
+        // todo:  fetch preassesment data from backend and switch
+        const selectedAnswer = Array.isArray(preAssessmentData)
+          ? preAssessmentData.find((answer) => answer.id === id)?.value
+          : undefined;
+        return (
+          <>
+            <div className="d-flex gap-3" key={i}>
+              <p
+                className="text-blue fs-md-1 text-nowrap week-2-question-text fw-bold"
+                style={{ fontSize: 1 + "em" }}
+              >
+                Questions {i + 1}:
+              </p>
+              <p
+                className="text-blue fs-md-4 week-2-question-text"
+                style={{ fontSize: 1 + "em" }}
+              >
+                {question}
+              </p>
+            </div>
+            {options.map((option, index) => {
+              const optionKey = Object.keys(option)[0];
+              const optionText = option[optionKey];
+              const isCorrectOption = correctOption === optionText;
+              const isAnswer = selectedAnswer === optionText;
+              // console.log(assessmentData,"AssessmentData")
+
+              return (
+                <div
+                  key={index}
+                  className="d-flex gap-md-2 p-0 p-md-1 mb-3 justify-content-between"
+                >
+                  <div className="d-flex gap-md-2 p-1">
+                    <img
+                      src={isAnswer ? checkedImage : unCheckedImage}
+                      alt={`Option ${optionKey}`}
+                      style={{ width: 20, height: 20 }}
+                    />
+                    <div
+                      className="week-2-question-text text-gray"
+                      style={{ fontSize: 1 + "em" }}
+                    >{`${optionText}. ${option.text}`}</div>
+                  </div>
+                  {isCorrectOption ? (
+                    <p className="d-flex gap-1">
+                      {" "}
+                      <img
+                        src={correct}
+                        alt=""
+                        style={{ width: 20, height: 20 }}
+                      />{" "}
+                      Correct
+                    </p>
+                  ) : (
+                    <p className="d-flex gap-1">
+                      {" "}
+                      <img
+                        src={wrong}
+                        alt=""
+                        style={{ width: 20, height: 20 }}
+                      />
+                      Wrong
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+          </>
+        );
+      })}
+      <hr />
       {/* Activity 1 */}
       <p className="bg-blue py-md-3 px-md-5 py-1 px-2 text-white d-inline-block rounded-5 fs-md-4">
         Activity 1
@@ -574,91 +661,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
       }
 
       <hr />
-      <div className="d-flex gap-3">
-        <p
-          className="text-blue fs-md-1 week-2-question-text fw-bold"
-          style={{ fontSize: 1 + "em" }}
-        >
-          Questions:
-        </p>
-        <p
-          className="text-blue fs-md-4 week-2-question-text"
-          style={{ fontSize: 1 + "em" }}
-        >
-          {activity4.steps[2].question}
-        </p>
-      </div>
-      <div className="d-flex gap-3">
-        <p
-          className="text-gray fs-md-1 text-gray week-2-question-text"
-          accordion
-          style={{ fontSize: 1 + "em" }}
-        >
-          Answers:
-        </p>
-        {(() => {
-          const answers = getActivityAnswer(activity4.id);
-          if (!Array.isArray(answers))
-            return <p className="text-gray">Loading...</p>;
 
-          const step = answers.find(
-            (a) => a.stepId === activity4.steps[2].stepId // MIGHT MAKE SOME CHNAGES HERE
-          );
-          if (!step || !step.value)
-            return <p className="text-gray">Loading...</p>;
-
-          const details = getOptionDetails(step.value);
-          if (!details) return <p className="text-gray">Loading...</p>;
-
-          return (
-            <>
-              <p className="text-gray">
-                {details.id}. {details.text}
-              </p>
-            </>
-          );
-        })()}
-        {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity4.id)
-            ?.feedback && (
-            <Icon
-              onClick={() => {
-                setActivityFeedbackId({ activityId: activity4.id });
-                handleModalOpen();
-              }}
-              style={{ color: "#D6D6D6" }}
-              width={35}
-              icon="tabler:message-2"
-            />
-          )}
-      </div>
-      {
-        // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity4.id)
-          ?.feedback && (
-          <div className="d-flex gap-3">
-            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
-              Feedback
-            </p>
-            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity4.id)}
-            </p>
-            {isAdmin && (
-              <Icon
-                onClick={() => {
-                  setModalData(getActivityFeedback(activity4.id));
-                  setActivityFeedbackId({ activityId: activity4.id });
-                  handleModalOpen();
-                }}
-                style={{ color: "#275DAD" }}
-                width={35}
-                icon="lucide:edit"
-              />
-            )}
-          </div>
-        )
-      }
-      <hr />
       {/* Activity 5 */}
       <p className="bg-blue py-md-3 px-md-5 py-1 px-2 text-white d-inline-block rounded-5 fs-md-4">
         Activity 5
@@ -669,11 +672,10 @@ function Week1({ enrollmentId, setWeekOneData }) {
           className="text-blue fs-md-1 week-2-question-text fw-bold"
           style={{ fontSize: 1 + "em" }}
         >
-          Learner A:
+          Questions:
         </p>
         <p
           className="text-blue fs-md-4 week-2-question-text"
-          accordion
           style={{ fontSize: 1 + "em" }}
         >
           {activity5.steps[0].question}
@@ -687,28 +689,31 @@ function Week1({ enrollmentId, setWeekOneData }) {
         >
           Answers:
         </p>
-        {(() => {
-          const answers = getActivityAnswer(activity5.id);
-          if (!Array.isArray(answers))
-            return <p className="text-gray">Loading...</p>;
+        <div>
+          {(() => {
+            const answers = getActivityAnswer(activity5.id);
+            if (!Array.isArray(answers))
+              return <p className="text-gray">Loading...</p>;
 
-          const step = answers.find(
-            (a) => a.stepId === activity5.steps[0].stepId
-          );
-          if (!step || !step.value)
-            return <p className="text-gray">Loading...</p>;
+            const step = answers.find(
+              (a) => a.stepId === activity5.steps[0].stepId,
+            );
+            if (!step || !step.value)
+              return <p className="text-gray">Loading...</p>;
 
-          const details = getOptionDetails2(step.value);
-          if (!details) return <p className="text-gray">Loading...</p>;
+            const details = getOptionDetails(
+              activity5.steps[0].options,
+              step.value,
+            );
+            if (!details) return <p className="text-gray">Loading...</p>;
 
-          return (
-            <>
-              <p className="text-gray">
-                {details.id}. {details.text}
-              </p>
-            </>
-          );
-        })()}
+            return (
+              <>
+                <p className="text-gray">{details.text}</p>
+              </>
+            );
+          })()}
+        </div>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (
@@ -749,58 +754,73 @@ function Week1({ enrollmentId, setWeekOneData }) {
           </div>
         )
       }
+
       <hr />
+      {/* Activity 6 */}
+      <p className="bg-blue py-md-3 px-md-5 py-1 px-2 text-white d-inline-block rounded-5 fs-md-4">
+        Activity 6
+      </p>
+      <hr />
+      {activity6.steps[0].instructions.map((text) => (
+        <>
+          <span className="text-gray">{text}</span>
+          <br />
+        </>
+      ))}
       <div className="d-flex gap-3">
         <p
           className="text-blue fs-md-1 week-2-question-text fw-bold"
           style={{ fontSize: 1 + "em" }}
         >
-          Learner B:
+          Scenario 1:
         </p>
         <p
           className="text-blue fs-md-4 week-2-question-text"
-          accordion
           style={{ fontSize: 1 + "em" }}
         >
-          {activity5.steps[1].question}
+          {activity6.steps[1].question}
         </p>
       </div>
       <div className="d-flex gap-3">
         <p
-          className="text-gray fs-md-1 text-gray week-2-question-text"
+          className="fw-bold text-gray fs-md-1 text-gray week-2-question-text"
           accordion
           style={{ fontSize: 1 + "em" }}
         >
           Answers:
         </p>
-        {(() => {
-          const answers = getActivityAnswer(activity5.id);
-          if (!Array.isArray(answers))
-            return <p className="text-gray">Loading...</p>;
+        <div>
+          {(() => {
+            const answers = getActivityAnswer(activity6.id);
+            if (!Array.isArray(answers))
+              return <p className="text-gray">Loading...</p>;
 
-          const step = answers.find(
-            (a) => a.stepId === activity5.steps[1].stepId
-          );
-          if (!step || !step.value)
-            return <p className="text-gray">Loading...</p>;
+            const step = answers.find(
+              (a) => a.stepId === activity6.steps[1].stepId,
+            );
+            if (!step || !step.value)
+              return <p className="text-gray">Loading...</p>;
 
-          const details = getOptionDetails2(step.value);
-          if (!details) return <p className="text-gray">Loading...</p>;
+            const details = getOptionDetails(
+              activity6.steps[1].options,
+              step.value,
+            );
+            if (!details) return <p className="text-gray">Loading...</p>;
 
-          return (
-            <>
-              <p className="text-gray">
-                {details.id}. {details.text}
-              </p>
-            </>
-          );
-        })()}
+            return (
+              <>
+                <p className="text-gray">{details.text}</p>
+              </>
+            );
+          })()}
+        </div>
+
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity5.id)
+          !activityData?.find((activity) => activity.page === activity6.id)
             ?.feedback && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity5.id });
+                setActivityFeedbackId({ activityId: activity6.id });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -811,20 +831,753 @@ function Week1({ enrollmentId, setWeekOneData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity5.id)
+        activityData?.find((activity) => activity.page === activity6.id)
           ?.feedback && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity5.id)}
+              {getActivityFeedback(activity6.id)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity5.id));
-                  setActivityFeedbackId({ activityId: activity5.id });
+                  setModalData(getActivityFeedback(activity6.id));
+                  setActivityFeedbackId({ activityId: activity6.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Scenario 2:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity6.steps[2].question}
+        </p>
+      </div>
+      <div className="d-flex gap-3">
+        <p
+          className="fw-bold text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <div>
+          {(() => {
+            const answers = getActivityAnswer(activity6.id);
+            if (!Array.isArray(answers))
+              return <p className="text-gray">Loading...</p>;
+
+            const step = answers.find(
+              (a) => a.stepId === activity6.steps[2].stepId,
+            );
+            if (!step || !step.value)
+              return <p className="text-gray">Loading...</p>;
+
+            const details = getOptionDetails(
+              activity6.steps[2].options,
+              step.value,
+            );
+            if (!details) return <p className="text-gray">Loading...</p>;
+
+            return (
+              <>
+                <p className="text-gray">{details.text}</p>
+              </>
+            );
+          })()}
+        </div>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity6.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity6.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity6.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity6.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity6.id));
+                  setActivityFeedbackId({ activityId: activity6.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Scenario 3:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity6.steps[3].question}
+        </p>
+      </div>
+      <div className="d-flex gap-3">
+        <p
+          className="fw-bold text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <div>
+          {(() => {
+            const answers = getActivityAnswer(activity6.id);
+            if (!Array.isArray(answers))
+              return <p className="text-gray">Loading...</p>;
+
+            const step = answers.find(
+              (a) => a.stepId === activity6.steps[3].stepId,
+            );
+            if (!step || !step.value)
+              return <p className="text-gray">Loading...</p>;
+
+            const details = getOptionDetails(
+              activity6.steps[3].options,
+              step.value,
+            );
+            if (!details) return <p className="text-gray">Loading...</p>;
+
+            return (
+              <>
+                <p className="text-gray">{details.text}</p>
+              </>
+            );
+          })()}
+        </div>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity6.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity6.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity6.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity6.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity6.id));
+                  setActivityFeedbackId({ activityId: activity6.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Scenario 4:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity6.steps[4].question}
+        </p>
+      </div>
+      <div className="d-flex gap-3">
+        <p
+          className="fw-bold text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <div>
+          {(() => {
+            const answers = getActivityAnswer(activity6.id);
+            if (!Array.isArray(answers))
+              return <p className="text-gray">Loading...</p>;
+
+            const step = answers.find(
+              (a) => a.stepId === activity6.steps[4].stepId,
+            );
+            if (!step || !step.value)
+              return <p className="text-gray">Loading...</p>;
+
+            const details = getOptionDetails(
+              activity6.steps[4].options,
+              step.value,
+            );
+            if (!details) return <p className="text-gray">Loading...</p>;
+
+            return (
+              <>
+                <p className="text-gray">{details.text}</p>
+              </>
+            );
+          })()}
+        </div>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity6.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity6.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity6.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity6.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity6.id));
+                  setActivityFeedbackId({ activityId: activity6.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Scenario 5:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity6.steps[5].question}
+        </p>
+      </div>
+      <div className="d-flex gap-3">
+        <p
+          className="fw-bold text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <div>
+          {(() => {
+            const answers = getActivityAnswer(activity6.id);
+            if (!Array.isArray(answers))
+              return <p className="text-gray">Loading...</p>;
+
+            const step = answers.find(
+              (a) => a.stepId === activity6.steps[5].stepId,
+            );
+            if (!step || !step.value)
+              return <p className="text-gray">Loading...</p>;
+
+            const details = getOptionDetails(
+              activity6.steps[5].options,
+              step.value,
+            );
+            if (!details) return <p className="text-gray">Loading...</p>;
+
+            return (
+              <>
+                <p className="text-gray">{details.text}</p>
+              </>
+            );
+          })()}
+        </div>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity6.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity6.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity6.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity6.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity6.id));
+                  setActivityFeedbackId({ activityId: activity6.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+
+      {/* Activity 7 */}
+      <p className="bg-blue py-md-3 px-md-5 py-1 px-2 text-white d-inline-block rounded-5 fs-md-4">
+        Activity 7
+      </p>
+      <hr />
+      <span className="text-gray">{activity7.steps[0].text}</span>
+      <br />
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Question 1:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity7.steps[2].question}
+        </p>
+      </div>
+      <div className="d-flex gap-3">
+        <p
+          className="fw-bold text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <div>
+          {(() => {
+            const answers = getActivityAnswer(activity7.id);
+            if (!Array.isArray(answers))
+              return <p className="text-gray">Loading...</p>;
+
+            const step = answers.find(
+              (a) => a.stepId === activity7.steps[2].stepId,
+            );
+            if (!step || !step.value)
+              return <p className="text-gray">Loading...</p>;
+
+            const details = getOptionDetails(
+              activity7.steps[2].options,
+              step.value,
+            );
+            if (!details) return <p className="text-gray">Loading...</p>;
+
+            return (
+              <>
+                <p className="text-gray">{details.text}</p>
+              </>
+            );
+          })()}
+        </div>
+
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity7.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity7.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity7.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity7.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity7.id));
+                  setActivityFeedbackId({ activityId: activity7.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+
+      <hr />
+      <span className="text-gray">{activity7.steps[3].text}</span>
+      <br />
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Question 2:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity7.steps[5].question}
+        </p>
+      </div>
+      <div className="d-flex gap-3">
+        <p
+          className="fw-bold text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <div>
+          {(() => {
+            const answers = getActivityAnswer(activity7.id);
+            if (!Array.isArray(answers))
+              return <p className="text-gray">Loading...</p>;
+
+            const step = answers.find(
+              (a) => a.stepId === activity7.steps[5].stepId,
+            );
+            if (!step || !step.value)
+              return <p className="text-gray">Loading...</p>;
+
+            const details = getOptionDetails(
+              activity7.steps[5].options,
+              step.value,
+            );
+            if (!details) return <p className="text-gray">Loading...</p>;
+
+            return (
+              <>
+                <p className="text-gray">{details.text}</p>
+              </>
+            );
+          })()}
+        </div>
+
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity7.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity7.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity7.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity7.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity7.id));
+                  setActivityFeedbackId({ activityId: activity7.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+
+      <hr />
+      <span className="text-gray">{activity7.steps[6].text}</span>
+      <br />
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Question 3:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity7.steps[7].question}
+        </p>
+      </div>
+      <div className="d-flex gap-3">
+        <p
+          className="fw-bold text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <div>
+          {(() => {
+            const answers = getActivityAnswer(activity7.id);
+            if (!Array.isArray(answers))
+              return <p className="text-gray">Loading...</p>;
+
+            const step = answers.find(
+              (a) => a.stepId === activity7.steps[7].stepId,
+            );
+            if (!step || !step.value)
+              return <p className="text-gray">Loading...</p>;
+
+            const details = getOptionDetails(
+              activity7.steps[7].options,
+              step.value,
+            );
+            if (!details) return <p className="text-gray">Loading...</p>;
+
+            return (
+              <>
+                <p className="text-gray">{details.text}</p>
+              </>
+            );
+          })()}
+        </div>
+
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity7.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity7.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity7.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activity7.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity7.id));
+                  setActivityFeedbackId({ activityId: activity7.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      {/* Activity 8 */}
+      <p className="bg-blue py-md-3 px-md-5 py-1 px-2 text-white d-inline-block rounded-5 fs-md-4">
+        Activity 8
+      </p>
+      <hr />
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Questions:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity8.steps[1].instruction}
+        </p>
+      </div>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <div className="flex-grow-1 d-flex">
+          <div className="flex-grow-1">
+            <p
+              className="text-center bg-green text-white py-md-3 py-1 fs-md-1 week-2-question-text"
+              style={{ fontSize: 1 + "em" }}
+            >
+              EQUALITY
+            </p>
+            <div className="px-2 py-1 px-md-5 py-md-3">
+              {drag2("equality")?.map((item, idx) => (
+                <p className="fs-md-4">
+                  {idx + 1}. {item}
+                </p>
+              ))}
+            </div>
+          </div>
+          <div className="flex-grow-1">
+            <p
+              className="bg-orange text-center text-white py-md-3 py-1 fs-md-1 week-2-question-text"
+              style={{ fontSize: 1 + "em" }}
+            >
+              EQUITY
+            </p>
+            <div className="px-2 py-1 px-md-5 py-md-3">
+              {drag2("equity")?.map((item, idx) => (
+                <p className="fs-md-4">
+                  {idx + 1}. {item}
+                </p>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {
+          //This is only Visible for Flow Admins
+          isAdmin &&
+            !activityData?.find((activity) => activity.page === activity8.id)
+              ?.feedback && (
+              <Icon
+                onClick={() => {
+                  setActivityFeedbackId({ activityId: activity8.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#D6D6D6" }}
+                width={35}
+                icon="tabler:message-2"
+              />
+            )
+        }
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity8.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-1 p-md-2 rounded">
+              {getActivityFeedback(activity8.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity8.id));
+                  setActivityFeedbackId({ activityId: activity8.id });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -841,9 +1594,84 @@ function Week1({ enrollmentId, setWeekOneData }) {
         Post-Assessment
       </p>
       <hr />
+      {reflectionsAssessment.map((activity, index) => {
+        const selectedAnswer = assessmentData?.find(
+          (answer) => answer.id === activity.id,
+        )?.answer;
+
+        return (
+          <div key={activity.id}>
+            <div className="d-flex gap-3">
+              <p
+                className="text-blue fs-md-1 week-2-question-text fw-bold"
+                style={{ fontSize: 1 + "em" }}
+              >
+                Reflection {index + 1}:
+              </p>
+              <p
+                className="text-blue fs-md-4 week-2-question-text"
+                style={{ fontSize: 1 + "em" }}
+              >
+                {activity.question}
+              </p>
+            </div>
+
+            <div className="d-flex gap-3">
+              <p
+                className="text-gray fs-md-1 text-gray week-2-question-text"
+                style={{ fontSize: 1 + "em" }}
+              >
+                Answers:
+              </p>
+              <p className="fs-md-5 flex-grow-1">{selectedAnswer}</p>
+
+              {isAdmin &&
+                !activityData?.find((a) => a.page === activity.id)
+                  ?.feedback && (
+                  <Icon
+                    onClick={() => {
+                      setActivityFeedbackId({ activityId: activity.id });
+                      handleModalOpen();
+                    }}
+                    style={{ color: "#D6D6D6" }}
+                    width={35}
+                    icon="tabler:message-2"
+                  />
+                )}
+            </div>
+
+            {activityData?.find((a) => a.page === activity.id)?.feedback && (
+              <div className="d-flex gap-3">
+                <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+                  Feedback
+                </p>
+                <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+                  {activityData?.find((a) => a.page === activity.id)?.feedback}
+                </p>
+
+                {isAdmin && (
+                  <Icon
+                    onClick={() => {
+                      setModalData(
+                        activityData?.find((a) => a.page === activity.id)
+                          ?.feedback,
+                      );
+                      setActivityFeedbackId({ activityId: activity.id });
+                      handleModalOpen();
+                    }}
+                    style={{ color: "#275DAD" }}
+                    width={35}
+                    icon="lucide:edit"
+                  />
+                )}
+              </div>
+            )}
+          </div>
+        );
+      })}
       {assessments.map(({ id, question, options, correctOption }, i) => {
         const selectedAnswer = assessmentData?.find(
-          (answer) => answer.id === id
+          (answer) => answer.id === id,
         )?.value;
         return (
           <>
@@ -861,7 +1689,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
                 {question}
               </p>
             </div>
-            {options.map((option, index) => {
+            {options?.map((option, index) => {
               const optionKey = Object.keys(option)[0];
               const optionText = option[optionKey];
               const isCorrectOption = correctOption === optionText;
@@ -923,14 +1751,14 @@ function Week1({ enrollmentId, setWeekOneData }) {
             {score < 40
               ? "You’ve taken an important first step in exploring Social and Emotional Learning and Positive Psychology. You’ve started to understand the value of emotional awareness, relationship skills, and teacher wellbeing. However, it seems you may still be building a full grasp of how SEL connects to classroom practice. Revisit the lessons and take time to reflect on how self-awareness and self-management can shape your approach to teaching. Don’t hesitate to ask questions or discuss ideas with your peers; collaboration is one of the best ways to deepen understanding. Every teacher starts somewhere, and your willingness to learn is already a sign of growth"
               : score < 60
-              ? "Good effort! You’re beginning to grasp key SEL and Positive Psychology principles such as self-awareness, empathy, and the importance of wellbeing in the classroom. You have a fair understanding of how emotional intelligence supports both teachers and students, but there’s room to strengthen your practical application. Try focusing on mindfulness and emotional regulation strategies in your daily teaching routine. Reflect after each class, ‘How did your emotional state affect your students' responses?’ The more intentional you are, the more confident and balanced you’ll become in integrating SEL principles effectively."
-              : score < 80
-              ? "Well done! You’ve shown a strong understanding of SEL and Positive Psychology concepts and are starting to connect them meaningfully to your classroom practice. You recognize how empathy, relationship-building, and emotional regulation influence learning outcomes. To keep improving, aim to apply SEL more consistently, model calm responses to challenges, and build structured moments for reflection or gratitude in your lessons. You’re well on your way to creating a classroom culture rooted in care, connection, and emotional growth."
-              : score < 95
-              ? "Excellent work! You’ve demonstrated a clear understanding of SEL and Positive Psychology competencies and how its principles can transform both teaching and learning. You’ve likely developed effective strategies for fostering empathy, self-regulation, and resilience in your students, and you understand the importance of teacher wellbeing in sustaining those practices. Keep refining your skills by mentoring peers or sharing SEL practices in team meetings. Continue to model emotional intelligence in every interaction, and you will build the kind of classroom where students feel safe, motivated, and valued."
-              : score <= 100
-              ? "Outstanding achievement! You’ve shown exceptional mastery of Social and Emotional Learning. You not only understand the theory but also demonstrate how to live it out in your teaching, balancing self-awareness, empathy, and resilience with skill. Your approach likely fosters deep trust, engagement, and growth in your students. Continue to inspire others by leading discussions on SEL implementation and supporting colleagues who are just beginning their journey. Your dedication to nurturing emotional wellbeing in education sets a powerful example. Keep shining, the ripple effect of your work will last far beyond the classroom."
-              : ""}
+                ? "Good effort! You’re beginning to grasp key SEL and Positive Psychology principles such as self-awareness, empathy, and the importance of wellbeing in the classroom. You have a fair understanding of how emotional intelligence supports both teachers and students, but there’s room to strengthen your practical application. Try focusing on mindfulness and emotional regulation strategies in your daily teaching routine. Reflect after each class, ‘How did your emotional state affect your students' responses?’ The more intentional you are, the more confident and balanced you’ll become in integrating SEL principles effectively."
+                : score < 80
+                  ? "Well done! You’ve shown a strong understanding of SEL and Positive Psychology concepts and are starting to connect them meaningfully to your classroom practice. You recognize how empathy, relationship-building, and emotional regulation influence learning outcomes. To keep improving, aim to apply SEL more consistently, model calm responses to challenges, and build structured moments for reflection or gratitude in your lessons. You’re well on your way to creating a classroom culture rooted in care, connection, and emotional growth."
+                  : score < 95
+                    ? "Excellent work! You’ve demonstrated a clear understanding of SEL and Positive Psychology competencies and how its principles can transform both teaching and learning. You’ve likely developed effective strategies for fostering empathy, self-regulation, and resilience in your students, and you understand the importance of teacher wellbeing in sustaining those practices. Keep refining your skills by mentoring peers or sharing SEL practices in team meetings. Continue to model emotional intelligence in every interaction, and you will build the kind of classroom where students feel safe, motivated, and valued."
+                    : score <= 100
+                      ? "Outstanding achievement! You’ve shown exceptional mastery of Social and Emotional Learning. You not only understand the theory but also demonstrate how to live it out in your teaching, balancing self-awareness, empathy, and resilience with skill. Your approach likely fosters deep trust, engagement, and growth in your students. Continue to inspire others by leading discussions on SEL implementation and supporting colleagues who are just beginning their journey. Your dedication to nurturing emotional wellbeing in education sets a powerful example. Keep shining, the ripple effect of your work will last far beyond the classroom."
+                      : ""}
           </p>
         </div>
         <Modal
