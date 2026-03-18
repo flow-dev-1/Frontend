@@ -10,7 +10,10 @@ import "./page8.css";
 import {
   selectPageData,
   selectCurrentStep,
+  navigateNext,
 } from "../../../../../../../../redux/reducers/navigationSlice";
+import TOTFeedbackModal from "../../../components/TOTFeedbackModal";
+
 import {
   userAnswer,
   saveActivity,
@@ -57,11 +60,17 @@ function Page8() {
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
 
+  const [showFeedback, setShowFeedback] = useState(false);
+  const handleCloseFeedback = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext()); // Navigate after closing the modal
+  };
+
   useEffect(() => {
     if (!userAnswers) return;
 
     const response = userAnswers.activities?.find(
-      (item) => item.page === pageData.id
+      (item) => item.page === pageData.id,
     );
 
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
@@ -104,10 +113,16 @@ function Page8() {
       saveActivity({
         page: pageData.id,
         answer: answers,
-      })
+      }),
     );
 
-    return true;
+    // Show feedback modal instead of navigating immediately
+    if (step.type === "dropdownScenario") {
+      setShowFeedback(true);
+    } else {
+      dispatch(navigateNext());
+    }
+    // return true;
   };
 
   const renderStep = () => {
@@ -181,6 +196,16 @@ function Page8() {
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
+
+      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue mb-3">
+          Many classrooms operate somewhere between integration and inclusion
+        </p>
+        <p className="text-blue">
+          Over the next few weeks, you will learn strategies to help move your
+          classroom closer to true inclusive practice.
+        </p>
+      </TOTFeedbackModal>
     </>
   );
 }

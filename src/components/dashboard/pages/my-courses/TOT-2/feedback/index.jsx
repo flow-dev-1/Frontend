@@ -12,7 +12,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
 
-function TOTFeedback() {
+function TOT2Feedback() {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
@@ -44,10 +44,10 @@ function TOTFeedback() {
   useEffect(() => {
     setAllDataLoaded(
       isWeekOneLoaded &&
-      isWeekTwoLoaded &&
-      isWeekThreeLoaded &&
-      isWeekFourLoaded &&
-      isWeekFiveLoaded
+        isWeekTwoLoaded &&
+        isWeekThreeLoaded &&
+        isWeekFourLoaded &&
+        isWeekFiveLoaded,
     );
   }, [
     isWeekOneLoaded,
@@ -65,11 +65,11 @@ function TOTFeedback() {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    if (!isSchool && !enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
+    // if (!isSchool && !enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
       const courseEnrollmentId = sessionStorage.getItem(
-        "flow-courseEnrollmentId"
+        "flow-courseEnrollmentId",
       );
       if (!courseEnrollmentId) return;
       setEnrollmentId(courseEnrollmentId);
@@ -118,18 +118,22 @@ function TOTFeedback() {
       ),
     },
     {
+      topic: "Individualized Education Plan (IEP) Template",
+      component: "",
+    },
+    {
       topic: "Summary of your journey through ToT Course 2",
       component: (
         <OverallFeedBack
           enrollmentId={enrollmentId}
           setHasPercentile={setHasPercentile}
-        //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
+          //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
         />
       ),
     },
   ];
 
-  const weeksTopic = weekContents.slice(0, 6).map((week) => week.topic);
+  const weeksTopic = weekContents.slice(0, 5).map((week) => week.topic);
   const items = weekContents.map((week) => ({
     title: week.topic,
     content: week.component,
@@ -141,7 +145,9 @@ function TOTFeedback() {
         <div className="container">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => isSchool ? navigate("/school-dashboard") : navigate("/dashboard")}
+            onClick={() =>
+              isSchool ? navigate("/school-dashboard") : navigate("/dashboard")
+            }
             className="navbar-logo"
             style={{ border: "none", background: "#FFF" }}
           >
@@ -149,7 +155,7 @@ function TOTFeedback() {
           </button>
           <div
             className="navbar-logo"
-            onClick={() => { }}
+            onClick={() => {}}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -160,7 +166,9 @@ function TOTFeedback() {
         <aside className="d-none d-lg-block">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => isSchool ? navigate(-1) : navigate("/dashboard/my-courses")}
+            onClick={() =>
+              isSchool ? navigate(-1) : navigate("/dashboard/my-courses")
+            }
             className="back"
             style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
           >
@@ -224,4 +232,4 @@ function TOTFeedback() {
   );
 }
 
-export default TOTFeedback;
+export default TOT2Feedback;

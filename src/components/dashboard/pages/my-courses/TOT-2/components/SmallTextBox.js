@@ -1,10 +1,12 @@
 import React from "react";
 
 function SmallTextBox({ value, onChange }) {
-
-  console.log(value,"Value den")
+  console.log(value, "Value den");
   return (
-    <label className="small-input p-3 border-0 small-input-label">
+    <label
+      className="small-input p-3 bg-white"
+      style={{ borderRadius: "10px" }}
+    >
       <input
         className=" border-0 bg-transparent border-outline-0  form-control small-input"
         placeholder="Type your answer here..."
