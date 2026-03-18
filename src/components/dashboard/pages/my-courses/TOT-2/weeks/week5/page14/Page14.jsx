@@ -7,7 +7,6 @@ import {
   navigateNext,
   selectCurrentStep,
   selectCurrentWeek,
-  showReviewPopup,
 } from "../../../../../../../../redux/reducers/navigationSlice";
 import { getWeekAssessment } from "../../../data";
 import StepIndicator from "../../../components/StepIndicator";
@@ -37,7 +36,7 @@ function WeekFiveAssessment() {
   useEffect(() => {
     if (!userAnswers) return;
     setAnswers(userAnswers?.assessments || []);
-    return () => {};
+    return () => { };
   }, [userAnswers]);
 
   // Mutation for saving user data
@@ -109,8 +108,9 @@ function WeekFiveAssessment() {
     dispatch(saveAssessment(answers));
 
     if (isLastQuestion) {
+      console.log(userAnswers.activities.length, "userAnswers.activities.length")
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 1;
+        answers.length !== totalSteps || userAnswers.activities.length !== 6;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(
@@ -213,10 +213,8 @@ function WeekFiveAssessment() {
 
   if (!assessmentData) return null;
 
-  // If we're on the last question and user has made a selection,
-  // show the review popup instead of the next button
-
-  const hasCurrentSelection = !!answers[currentStep];
+  const currentAnswer = answers.find((a) => a.id === currentStep);
+  const hasCurrentSelection = !!currentAnswer?.value;
   const shouldShowReviewButton = isLastQuestion && hasCurrentSelection;
 
   return (
@@ -236,18 +234,11 @@ function WeekFiveAssessment() {
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" loading={mutation.isPending} />
-        {shouldShowReviewButton ? (
-          <Button
-            text="Review"
-            customOnClick={() => dispatch(showReviewPopup())}
-          />
-        ) : (
-          <Button
-            text="Next"
-            customOnClick={saveUserData}
-            loading={mutation.isPending}
-          />
-        )}
+        <Button
+          text={shouldShowReviewButton ? "Submit" : "Next"}
+          customOnClick={saveUserData}
+          loading={mutation.isPending}
+        />
       </div>
     </>
   );

@@ -35,8 +35,10 @@ function WeekFivePage10() {
   }, [userAnswers]);
 
   const saveUserInput = () => {
-    if (currentStep === 1) return true;
     if (adminDatas.isAdmin) return true;
+
+    // Only dropdown steps require a selection before proceeding.
+    if (step?.type !== "dropdownScenario") return true;
 
     const stepData = answers.find((item) => item.stepId === currentStep);
     if (!stepData || !stepData.value) {
@@ -101,7 +103,7 @@ function WeekFivePage10() {
   return (
     <>
       {renderStep()}
-      {currentStep !== 1 && errorMessage && (
+      {errorMessage && (
         <div className="text-danger">{errorMessage}</div>
       )}{" "}
       {/* Display error message */}

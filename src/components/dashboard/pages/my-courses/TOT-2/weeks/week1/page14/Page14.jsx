@@ -58,11 +58,13 @@ function Page14() {
     if (currentStep === 7) {
       setIsRevealed(false);
       setCountdown(5);
+      setHasPlayed(false);
     }
   }, [currentStep]);
 
   const handlePlaySequence = () => {
     if (hasPlayed) return;
+    setErrorMessage("");
     setIsRevealed(true);
     setHasPlayed(true);
 
@@ -80,8 +82,18 @@ function Page14() {
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
 
-    // Steps 1, 2, 4, 5, 7 are instruction-like or text steps
-    if ([1, 2, 4, 5, 7].includes(currentStep)) {
+    // Steps 1, 2, 4, and 5 are instruction-like or text steps.
+    if ([1, 2, 4, 5].includes(currentStep)) {
+      return true;
+    }
+
+    // Step 7 must be played before the user can proceed.
+    if (currentStep === 7) {
+      if (!hasPlayed) {
+        setErrorMessage("Please click Play to reveal the sequence before continuing.");
+        return false;
+      }
+      setErrorMessage("");
       return true;
     }
 

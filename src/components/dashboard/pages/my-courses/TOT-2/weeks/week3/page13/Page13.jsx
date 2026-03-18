@@ -8,7 +8,6 @@ import {
   navigateNext,
   selectCurrentStep,
   selectCurrentWeek,
-  showReviewPopup,
 } from "../../../../../../../../redux/reducers/navigationSlice";
 import { getWeekAssessment } from "../../../data";
 import StepIndicator from "../../../components/StepIndicator";
@@ -34,6 +33,19 @@ function WeekThreeAssessment() {
   const userAnswers = useSelector(userAnswer);
   const isLastQuestion = currentStep === assessmentData.totalQuestions;
   const adminDatas = useSelector(adminData);
+  const currentQuestion = assessmentData?.questions?.[currentStep - 1];
+  const mcqQuestions =
+    assessmentData?.questions?.filter((q) => q.type !== "reflection") || [];
+
+  const getCurrentAnswer = () => {
+    if (!currentQuestion) return null;
+
+    // Prefer question-id mapping; fallback to legacy step-id mapping.
+    return (
+      answers.find((a) => a.id === currentQuestion.id) ||
+      answers.find((a) => a.id === currentStep)
+    );
+  };
 
   useEffect(() => {
     if (!userAnswers) return;
@@ -48,9 +60,9 @@ function WeekThreeAssessment() {
       toast.dismiss();
       toast.success(
         `You scored ${calculateResult(
-          assessmentData.questions,
+          mcqQuestions,
           answers,
-          totalSteps,
+          mcqQuestions.length,
         )}% in the quiz`,
       );
       toast.success(data.message || "Answers saved successfully!"); // Show success toast
@@ -74,20 +86,25 @@ function WeekThreeAssessment() {
 
   const handleOptionSelect = (optionKey) => {
     setErrorMessage("");
+    if (!currentQuestion) return;
+
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
       const stepIndex = updatedAnswers.findIndex(
-        (answer) => answer.id === currentStep,
+        (answer) =>
+          answer.id === currentQuestion.id ||
+          answer.id === currentStep,
       );
 
       if (stepIndex !== -1) {
         updatedAnswers[stepIndex] = {
           ...updatedAnswers[stepIndex],
+          id: currentQuestion.id,
           value: optionKey,
         };
       } else {
         updatedAnswers.push({
-          id: currentStep,
+          id: currentQuestion.id,
           value: optionKey,
         });
       }
@@ -98,7 +115,11 @@ function WeekThreeAssessment() {
 
   const saveUserData = () => {
     if (adminDatas.isAdmin) return true;
-    const stepData = answers.find((item) => item.id === currentStep);
+    if (!currentQuestion) return false;
+
+    const stepData =
+      answers.find((item) => item.id === currentQuestion.id) ||
+      answers.find((item) => item.id === currentStep);
     if (!stepData) {
       setErrorMessage("Oops! Please choose an option to proceed.");
       return false;
@@ -112,7 +133,7 @@ function WeekThreeAssessment() {
     if (isLastQuestion) {
       // console.log(userAnswers.activities.length, "userAnswers.activities.length")
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 5;
+        answers.length !== totalSteps || userAnswers.activities.length !== 6;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(
@@ -121,10 +142,11 @@ function WeekThreeAssessment() {
         return false;
       }
 
-      const mcqs = assessmentData.questions.filter(
-        (q) => q.type !== "reflection",
+      const userScore = calculateResult(
+        mcqQuestions,
+        answers,
+        mcqQuestions.length,
       );
-      const userScore = calculateResult(mcqs, answers, mcqs.length);
 
       mutation.mutate({
         ...userAnswers,
@@ -192,7 +214,6 @@ function WeekThreeAssessment() {
   const renderStep = () => {
     if (!assessmentData) return <div>Loading assessment...</div>;
 
-    const currentQuestion = assessmentData.questions[currentStep - 1];
     if (!currentQuestion) return <div>Invalid Step</div>;
 
     if (currentQuestion.type === "reflection") {
@@ -212,7 +233,7 @@ function WeekThreeAssessment() {
           </div>
           <BigTextBox
             handleChange={(e) => handleOptionSelect(e.target.value)}
-            value={answers.find((a) => a.id === currentStep)?.value || ""}
+            value={getCurrentAnswer()?.value || ""}
           />
         </QuestionBox>
       );
@@ -236,7 +257,7 @@ function WeekThreeAssessment() {
             options: formattedOptions,
           }}
           currentStep={currentQuestion.id}
-          selectedOption={answers[currentStep - 1]?.value || ""}
+          selectedOption={getCurrentAnswer()?.value || ""}
           onOptionSelect={handleOptionSelect}
           isPreAssessment={true}
         />
@@ -246,7 +267,7 @@ function WeekThreeAssessment() {
 
   if (!assessmentData) return null;
 
-  const currentAnswer = answers.find((a) => a.id === currentStep);
+  const currentAnswer = getCurrentAnswer();
   const hasCurrentSelection = !!currentAnswer?.value;
   const shouldShowReviewButton = isLastQuestion && hasCurrentSelection;
 
@@ -258,18 +279,11 @@ function WeekThreeAssessment() {
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" loading={mutation.isPending} />
-        {shouldShowReviewButton ? (
-          <Button
-            text="Review"
-            customOnClick={() => dispatch(showReviewPopup())}
-          />
-        ) : (
-          <Button
-            text="Next"
-            customOnClick={saveUserData}
-            loading={mutation.isPending}
-          />
-        )}
+        <Button
+          text={shouldShowReviewButton ? "Submit" : "Next"}
+          customOnClick={saveUserData}
+          loading={mutation.isPending}
+        />
       </div>
     </>
   );

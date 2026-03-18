@@ -37,7 +37,7 @@ function WeekTwoAssessment() {
   useEffect(() => {
     if (!userAnswers) return;
     setAnswers(userAnswers?.assessments || []);
-    return () => {};
+    return () => { };
   }, [userAnswers]);
 
   // Mutation for saving user data
@@ -109,9 +109,9 @@ function WeekTwoAssessment() {
     dispatch(saveAssessment(answers));
 
     if (isLastQuestion) {
-
+      // console.log(userAnswers.activities.length, "userAnswers.activities.length")
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 4;
+        answers.length !== totalSteps || userAnswers.activities.length !== 5;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(

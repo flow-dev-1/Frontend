@@ -15,6 +15,8 @@ const Button = ({ loading, text, customOnClick }) => {
   const handleClick = (e) => {
     e.preventDefault();
 
+    if (loading) return;
+
     if (customOnClick) {
       const inputOkay = customOnClick();
 
@@ -36,6 +38,8 @@ const Button = ({ loading, text, customOnClick }) => {
   // }               or maybe we can use this // (imageDragAndDrop || multiStep || interactiveScenario || multiScenario ), get it from page data, for the assesment, just get pag etype
 
   const isNextButton = text === "Next";
+  const isSubmitButton = text === "Submit";
+  const isActionButton = isNextButton || isSubmitButton;
   const isPrevButton = text === "Prev";
 
   return (
@@ -49,9 +53,10 @@ const Button = ({ loading, text, customOnClick }) => {
       }`}
       onClick={handleClick}
       type="button"
-      // disabled={loading}
+      disabled={loading}
+      style={{ opacity: loading ? 0.7 : 1, cursor: loading ? "not-allowed" : "pointer" }}
     >
-      {loading && isNextButton ? (
+      {loading && isActionButton ? (
         <RotatingLines
           className="me-2 text-white"
           type="Oval"

@@ -18,24 +18,24 @@ import Hurray from "./components/Hurray";
 
 // Week 1
 import TOT2PreAssesment from "./weeks/week1/preAssesement/PreAssesment.jsx";
-import Page1 from "./weeks/week1/page1/Page1";
-import Page2 from "./weeks/week1/page2/Page2";
-import Page3 from "./weeks/week1/page3/Page3";
-import Page4 from "./weeks/week1/page4/Page4";
-import Page5 from "./weeks/week1/page5/Page5";
-import Page6 from "./weeks/week1/page6/Page6";
-import Page7 from "./weeks/week1/page7/Page7";
-import Page8 from "./weeks/week1/page8/Page8";
-import Page9 from "./weeks/week1/page9/Page9";
-import Page10 from "./weeks/week1/page10/Page10";
-import Page11 from "./weeks/week1/page11/Page11";
-import Page12 from "./weeks/week1/page12/Page12.jsx";
-import Page13 from "./weeks/week1/page13/Page13.jsx";
-import Page14 from "./weeks/week1/page14/Page14.jsx";
-import Page15 from "./weeks/week1/page15/Page15.jsx";
-import Page16 from "./weeks/week1/page16/Page16.jsx";
-import Page17 from "./weeks/week1/page17/Page17.jsx";
-import Page18 from "./weeks/week1/page18/Page18.jsx";
+import WeekOnePage2 from "./weeks/week1/page1/Page1";
+import WeekOnePage3 from "./weeks/week1/page2/Page2";
+import WeekOnePage4 from "./weeks/week1/page3/Page3";
+import WeekOnePage5 from "./weeks/week1/page4/Page4";
+import WeekOnePage6 from "./weeks/week1/page5/Page5";
+import WeekOnePage7 from "./weeks/week1/page6/Page6";
+import WeekOnePage8 from "./weeks/week1/page7/Page7";
+import WeekOnePage9 from "./weeks/week1/page8/Page8";
+import WeekOnePage10 from "./weeks/week1/page9/Page9";
+import WeekOnePage11 from "./weeks/week1/page10/Page10";
+import WeekOnePage12 from "./weeks/week1/page11/Page11";
+import WeekOnePage13 from "./weeks/week1/page12/Page12.jsx";
+import WeekOnePage14 from "./weeks/week1/page13/Page13.jsx";
+import WeekOnePage15 from "./weeks/week1/page14/Page14.jsx";
+import WeekOnePage16 from "./weeks/week1/page15/Page15.jsx";
+import WeekOnePage17 from "./weeks/week1/page16/Page16.jsx";
+import WeekOnePage18 from "./weeks/week1/page17/Page17.jsx";
+import WeekOnePage19 from "./weeks/week1/page18/Page18.jsx";
 
 // Week 2
 import WeekTwoPage1 from "./weeks/week2/page1/Page1";
@@ -213,41 +213,41 @@ const WeekContent = () => {
           case 1:
             return <TOT2PreAssesment />;
           case 2:
-            return <Page1 />;
+            return <WeekOnePage2 />;
           case 3:
-            return <Page2 />;
+            return <WeekOnePage3 />;
           case 4:
-            return <Page3 />;
+            return <WeekOnePage4 />;
           case 5:
-            return <Page4 />;
+            return <WeekOnePage5 />;
           case 6:
-            return <Page5 />;
+            return <WeekOnePage6 />;
           case 7:
-            return <Page6 />;
+            return <WeekOnePage7 />;
           case 8:
-            return <Page7 />;
+            return <WeekOnePage8 />;
           case 9:
-            return <Page8 />;
+            return <WeekOnePage9 />;
           case 10:
-            return <Page9 />;
+            return <WeekOnePage10 />;
           case 11:
-            return <Page10 />;
+            return <WeekOnePage11 />;
           case 12:
-            return <Page11 />;
+            return <WeekOnePage12 />;
           case 13:
-            return <Page12 />;
+            return <WeekOnePage13 />;
           case 14:
-            return <Page13 />;
+            return <WeekOnePage14 />;
           case 15:
-            return <Page14 />;
+            return <WeekOnePage15 />;
           case 16:
-            return <Page15 />;
+            return <WeekOnePage16 />;
           case 17:
-            return <Page16 />;
+            return <WeekOnePage17 />;
           case 18:
-            return <Page17 />;
+            return <WeekOnePage18 />;
           case 19:
-            return <Page18 />;
+            return <WeekOnePage19 />;
           default:
             return null;
         }

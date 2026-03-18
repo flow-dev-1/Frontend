@@ -91,7 +91,7 @@ function WeekFourPage1() {
   return (
     <>
       {renderStep()}
-      {currentStep !== 1 && errorMessage && (
+      {errorMessage && (
         <div className="text-danger">{errorMessage}</div>
       )}{" "}
       {/* Display error message */}
