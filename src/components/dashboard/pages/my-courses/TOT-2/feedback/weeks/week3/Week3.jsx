@@ -196,7 +196,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
 
     return indices?.map((index) => activity2?.steps?.[1].images[index]) || [];
   }
-  if (!isPending) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
@@ -1618,7 +1618,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       {reflectionsAssessment.map((activity, index) => {
         const selectedAnswer = assessmentData?.find(
           (answer) => answer.id === activity.id,
-        )?.answer;
+        )?.value;
 
         return (
           <div key={activity.id}>
@@ -1627,7 +1627,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
                 className="text-blue fs-md-1 week-2-question-text fw-bold"
                 style={{ fontSize: 1 + "em" }}
               >
-                Reflection {index + 1}:
+                Reflection:
               </p>
               <p
                 className="text-blue fs-md-4 week-2-question-text"

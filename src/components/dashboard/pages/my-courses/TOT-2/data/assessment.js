@@ -214,7 +214,7 @@ export const assessments = {
         id: "A",
         type: "reflection",
         question:
-          "What is one mindset shift you are taking away from this week?",
+          "Think about one lesson you recently taught. What is one small change you could make to make that lesson more inclusive?",
       },
       {
         id: 1,

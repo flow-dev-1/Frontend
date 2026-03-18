@@ -23,18 +23,8 @@ function Week5({ enrollmentId, setWeekFiveData }) {
   const [activityFeedbackId, setActivityFeedbackId] = useState(null);
   const { pages } = getWeekContentExcludingVideos(5);
 
-  const [
-    activity1,
-    activity2,
-    activity3,
-    activity4,
-    activity5,
-    activity6,
-    activity7,
-    activity8,
-    activity9,
-    activity10,
-  ] = pages;
+  const [activity1, activity2, activity3, activity4, activity5, activity6] =
+    pages;
 
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([]);
@@ -132,10 +122,6 @@ function Week5({ enrollmentId, setWeekFiveData }) {
     }
   }
 
-  function getOptionDetails(options, option) {
-    return options.find((item) => item.id === option) || null;
-  }
-
   function getAllOptionsWithCorrectAnswer(options, correctAnswerId) {
     let results = [];
     options.map((option) => {
@@ -183,7 +169,7 @@ function Week5({ enrollmentId, setWeekFiveData }) {
     });
   }
 
-  if (!isPending) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 

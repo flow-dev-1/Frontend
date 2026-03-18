@@ -79,6 +79,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     if (!data) return;
 
     setActivityData(data.activity?.activities);
+    console.log(data.activity?.activities, "Activity Data");
     setAssessmentData(data.assessment?.assessments);
 
     setWeekTwoData(true);
@@ -172,7 +173,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
     });
   }
 
-  if (!isPending) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
@@ -257,12 +258,12 @@ function Week2({ enrollmentId, setWeekTwoData }) {
             const step = answers.find(
               (a) => a.stepId === activity1.steps[0].stepId,
             );
-            if (!step || !step.answer)
+            if (!step || !step.value)
               return <p className="text-gray">Loading...</p>;
 
             return (
               <>
-                <p className="text-gray">{step.answer}</p>
+                <p className="text-gray">{step.value}</p>
               </>
             );
           })()}
@@ -342,15 +343,9 @@ function Week2({ enrollmentId, setWeekTwoData }) {
             if (!step || !step.value)
               return <p className="text-gray">Loading...</p>;
 
-            const details = getOptionDetails(
-              activity1.steps[1].options,
-              step.value,
-            );
-            if (!details) return <p className="text-gray">Loading...</p>;
-
             return (
               <>
-                <p className="text-gray">{details.text}</p>
+                <p className="text-gray">{step.value}</p>
               </>
             );
           })()}
@@ -437,15 +432,13 @@ function Week2({ enrollmentId, setWeekTwoData }) {
             if (!step || !step.value)
               return <p className="text-gray">Loading...</p>;
 
-            const details = getOptionDetails(
-              activity2.steps[1].options,
-              step.value,
-            );
-            if (!details) return <p className="text-gray">Loading...</p>;
-
             return (
               <>
-                <p className="text-gray">{details.text}</p>
+                {step.value.map((item, index) => (
+                  <p className="text-gray mb-1" key={index}>
+                    {item}
+                  </p>
+                ))}
               </>
             );
           })()}
@@ -1334,7 +1327,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
 
       {/* Assesment 1 */}
       <p className="bg-blue py-1 px-1 py-md-3 px-md-2 text-white d-inline-block rounded-5 fs-md-4">
-        Posst-Assessment
+        Post-Assessment
       </p>
       <hr />
       {assessments.map(({ id, question, options, correctOption }, i) => {

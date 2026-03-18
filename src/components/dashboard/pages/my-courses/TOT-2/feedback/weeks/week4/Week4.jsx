@@ -181,7 +181,7 @@ function Week4({ enrollmentId, setWeekFourData }) {
     }
   }
 
-  if (!isPending) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
