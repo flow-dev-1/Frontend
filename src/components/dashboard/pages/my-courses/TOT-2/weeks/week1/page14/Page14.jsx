@@ -90,7 +90,9 @@ function Page14() {
     // Step 7 must be played before the user can proceed.
     if (currentStep === 7) {
       if (!hasPlayed) {
-        setErrorMessage("Please click Play to reveal the sequence before continuing.");
+        setErrorMessage(
+          "Please click Play to reveal the sequence before continuing.",
+        );
         return false;
       }
       setErrorMessage("");
@@ -224,12 +226,10 @@ function Page14() {
 
       case "text":
         return (
-          <QuestionBox extraStyle="bg-blue shadow-lg border-0">
-            <div className="d-flex align-items-center justify-content-center h-100">
-              <pen className="text-white display-5 fw-bold mb-0 font-nanum-pen">
-                {step.text}
-              </pen>
-            </div>
+          <QuestionBox extraStyle="bg-blue shadow-lg border-0 d-flex align-items-center justify-content-center">
+            <pen className="text-white display-5 fw-bold mb-0 font-nanum-pen">
+              {step.text}
+            </pen>
           </QuestionBox>
         );
 
