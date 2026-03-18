@@ -23,18 +23,8 @@ function Week5({ enrollmentId, setWeekFiveData }) {
   const [activityFeedbackId, setActivityFeedbackId] = useState(null);
   const { pages } = getWeekContentExcludingVideos(5);
 
-  const [
-    activity1,
-    activity2,
-    activity3,
-    activity4,
-    activity5,
-    activity6,
-    activity7,
-    activity8,
-    activity9,
-    activity10,
-  ] = pages;
+  const [activity1, activity2, activity3, activity4, activity5, activity6] =
+    pages;
 
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([]);
@@ -132,10 +122,6 @@ function Week5({ enrollmentId, setWeekFiveData }) {
     }
   }
 
-  function getOptionDetails(options, option) {
-    return options.find((item) => item.id === option) || null;
-  }
-
   function getAllOptionsWithCorrectAnswer(options, correctAnswerId) {
     let results = [];
     options.map((option) => {
@@ -183,7 +169,7 @@ function Week5({ enrollmentId, setWeekFiveData }) {
     });
   }
 
-  if (!isPending) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
@@ -2172,9 +2158,9 @@ function Week5({ enrollmentId, setWeekFiveData }) {
       <hr />
       {/* Weekly Report */}
       <div className="bg-button p-3 p-md-5 rounded-4">
-        <h2 className="text-white fs-md-1">Weekly Report</h2>
+        <h2 className="text-white fs-md-1 tot-question-text">Weekly Report</h2>
         <div className="d-flex flex-column flex-md-row gap-4">
-          <h2 className="text-gray fs-md-1 ratio-1x1 bg-aqua rounded-4 p-3 p-md-5 d-flex justify-content-center border border-6 border-blue">
+          <h2 className="text-gray fs-md-1 ratio-1x1 bg-aqua rounded-4 p-3 p-md-5 d-flex justify-content-center border border-6 border-blue tot-question-text">
             {score}%
           </h2>
           <p className="text-white">

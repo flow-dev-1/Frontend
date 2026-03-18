@@ -4,7 +4,6 @@ import { Icon } from "@iconify/react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { ClimbingBoxLoader } from "react-spinners";
-import pdfTemplate from "../../../../../../../assets/tot-images/pdf/template.pdf";
 
 function Accordion({
   activeIndex,
@@ -28,11 +27,6 @@ function Accordion({
       setPdfLoading(true);
       setActiveIndex(null);
 
-      if (!hasPercentile) {
-        setActiveIndex(originalState);
-        setPdfLoading(false);
-        return;
-      }
       console.log("downloading course pdf");
 
       // replace this with the actual pdf template
@@ -43,7 +37,6 @@ function Accordion({
 
       setStartDownload(false);
       setActiveIndex("");
-      setHasPercentile(false);
       setPdfLoading(false);
 
       return;

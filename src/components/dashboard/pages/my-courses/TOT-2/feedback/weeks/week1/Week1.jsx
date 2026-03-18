@@ -153,25 +153,25 @@ function Week1({ enrollmentId, setWeekOneData }) {
 
   function drag1(type) {
     console.log(activityData, "Activity Data");
-    if (!activityData || !activityData[3] || !activityData[3].answer) return [];
+    if (!activityData || !activityData[4] || !activityData[4].answer) return [];
 
     const indices =
       type === "inclusion"
-        ? activityData[3]?.answer?.[0]?.value?.green
+        ? activityData[4]?.answer?.[0]?.value?.green
         : type === "integration"
-          ? activityData[3]?.answer?.[0]?.value?.orange
-          : activityData[3]?.answer?.[0]?.value?.red;
+          ? activityData[4]?.answer?.[0]?.value?.orange
+          : activityData[4]?.answer?.[0]?.value?.red;
     return indices?.map((index) => activity4?.steps?.[1].images[index]) || [];
   }
 
   function drag2(type) {
     console.log(activityData, "Activity Data");
-    if (!activityData || !activityData[7] || !activityData[7].answer) return [];
+    if (!activityData || !activityData[8] || !activityData[8].answer) return [];
 
     const indices =
       type === "equality"
-        ? activityData[7]?.answer?.[0]?.value?.green
-        : activityData[7]?.answer?.[0]?.value?.orange;
+        ? activityData[8]?.answer?.[0]?.value?.green
+        : activityData[8]?.answer?.[0]?.value?.orange;
 
     return indices?.map((index) => activity8?.steps?.[1].images[index]) || [];
   }
@@ -180,7 +180,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
     return options.find((item) => item.id === option) || null;
   }
 
-  if (!isPending) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
@@ -642,6 +642,94 @@ function Week1({ enrollmentId, setWeekOneData }) {
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-1 p-md-2 rounded">
+              {getActivityFeedback(activity4.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity4.id));
+                  setActivityFeedbackId({ activityId: activity4.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+
+      <div className="d-flex gap-3">
+        <p
+          className="text-blue fs-md-1 week-2-question-text fw-bold"
+          style={{ fontSize: 1 + "em" }}
+        >
+          Questions:
+        </p>
+        <p
+          className="text-blue fs-md-4 week-2-question-text"
+          style={{ fontSize: 1 + "em" }}
+        >
+          {activity4.steps[2].question}
+        </p>
+      </div>
+      <div className="d-flex gap-3">
+        <p
+          className="text-gray fs-md-1 text-gray week-2-question-text"
+          accordion
+          style={{ fontSize: 1 + "em" }}
+        >
+          Answers:
+        </p>
+        <div>
+          {(() => {
+            const answers = getActivityAnswer(activity4.id);
+            if (!Array.isArray(answers))
+              return <p className="text-gray">Loading...</p>;
+
+            const step = answers.find(
+              (a) => a.stepId === activity4.steps[2].stepId,
+            );
+            if (!step || !step.value)
+              return <p className="text-gray">Loading...</p>;
+
+            const details = getOptionDetails(
+              activity4.steps[2].options,
+              step.value,
+            );
+            if (!details) return <p className="text-gray">Loading...</p>;
+
+            return (
+              <>
+                <p className="text-gray">{details.text}</p>
+              </>
+            );
+          })()}
+        </div>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activity4.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity4.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity4.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
               {getActivityFeedback(activity4.id)}
             </p>
             {isAdmin && (
@@ -1597,7 +1685,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
       {reflectionsAssessment.map((activity, index) => {
         const selectedAnswer = assessmentData?.find(
           (answer) => answer.id === activity.id,
-        )?.answer;
+        )?.value;
 
         return (
           <div key={activity.id}>
@@ -1742,9 +1830,9 @@ function Week1({ enrollmentId, setWeekOneData }) {
       <hr />
       {/* Weekly Report */}
       <div className="bg-button p-3 p-md-5 rounded-4">
-        <h2 className="text-white fs-md-1">Weekly Report</h2>
+        <h2 className="text-white fs-md-1 tot-question-text">Weekly Report</h2>
         <div className="d-flex flex-column flex-md-row gap-4">
-          <h2 className="text-gray fs-md-1 ratio-1x1 bg-aqua rounded-4 p-3 p-md-5 d-flex justify-content-center border border-6 border-blue">
+          <h2 className="text-gray fs-md-1 ratio-1x1 bg-aqua rounded-4 p-3 p-md-5 d-flex justify-content-center border border-6 border-blue tot-question-text">
             {score}%
           </h2>
           <p className="text-white">

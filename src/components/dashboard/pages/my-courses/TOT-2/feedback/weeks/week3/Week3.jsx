@@ -196,7 +196,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
 
     return indices?.map((index) => activity2?.steps?.[1].images[index]) || [];
   }
-  if (!isPending) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
@@ -1618,7 +1618,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       {reflectionsAssessment.map((activity, index) => {
         const selectedAnswer = assessmentData?.find(
           (answer) => answer.id === activity.id,
-        )?.answer;
+        )?.value;
 
         return (
           <div key={activity.id}>
@@ -1627,7 +1627,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
                 className="text-blue fs-md-1 week-2-question-text fw-bold"
                 style={{ fontSize: 1 + "em" }}
               >
-                Reflection {index + 1}:
+                Reflection:
               </p>
               <p
                 className="text-blue fs-md-4 week-2-question-text"
@@ -1763,9 +1763,9 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       <hr />
       {/* Weekly Report */}
       <div className="bg-button p-3 p-md-5 rounded-4">
-        <h2 className="text-white fs-md-1">Weekly Report</h2>
+        <h2 className="text-white fs-md-1 tot-question-text">Weekly Report</h2>
         <div className="d-flex flex-column flex-md-row gap-4">
-          <h2 className="text-gray fs-md-1 ratio-1x1 bg-aqua rounded-4 p-3 p-md-5 d-flex justify-content-center border border-6 border-blue">
+          <h2 className="text-gray fs-md-1 ratio-1x1 bg-aqua rounded-4 p-3 p-md-5 d-flex justify-content-center border border-6 border-blue tot-question-text">
             {score}%
           </h2>
           <p className="text-white">
