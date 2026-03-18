@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
-import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+import TOTFeedbackModal from "../../../components/TOTFeedbackModal";
+import {
+  selectPageData,
+  navigateNext,
+} from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import {
   userAnswer,
@@ -17,6 +21,12 @@ function Page4() {
   const userAnswers = useSelector(userAnswer);
   const [myAnswer, setMyAnswer] = useState(userAnswers);
   const [errorMessage, setErrorMessage] = useState("");
+    const [showFeedback, setShowFeedback] = useState(false);
+    const handleCloseFeedback = () => {
+      setShowFeedback(false);
+      dispatch(navigateNext()); // Navigate after closing the modal
+    };
+
 
   useEffect(() => {
     if (!userAnswers) return;
@@ -40,9 +50,12 @@ function Page4() {
       saveActivity({
         page: pageData.id,
         answer: myAnswer,
-      })
+      }),
     );
-    return true;
+
+    // Show feedback modal instead of navigating immediately
+    setShowFeedback(true);
+    // return true;
   };
 
   const handleInputChange = (e) => {
@@ -69,6 +82,16 @@ function Page4() {
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
+
+      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue mb-3">Thank you for sharing!</p>
+        <p className="text-blue">
+          Teachers often associate inclusion with words like fairness,
+          diversity, support, and belonging. Throughout this course, we will
+          explore what inclusion truly means and how it can be practiced
+          effectively in real classrooms
+        </p>
+      </TOTFeedbackModal>
     </>
   );
 }

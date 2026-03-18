@@ -44,10 +44,10 @@ function TOT2Feedback() {
   useEffect(() => {
     setAllDataLoaded(
       isWeekOneLoaded &&
-      isWeekTwoLoaded &&
-      isWeekThreeLoaded &&
-      isWeekFourLoaded &&
-      isWeekFiveLoaded
+        isWeekTwoLoaded &&
+        isWeekThreeLoaded &&
+        isWeekFourLoaded &&
+        isWeekFiveLoaded,
     );
   }, [
     isWeekOneLoaded,
@@ -65,11 +65,11 @@ function TOT2Feedback() {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    if (!isSchool && !enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
+    // if (!isSchool && !enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
       const courseEnrollmentId = sessionStorage.getItem(
-        "flow-courseEnrollmentId"
+        "flow-courseEnrollmentId",
       );
       if (!courseEnrollmentId) return;
       setEnrollmentId(courseEnrollmentId);
@@ -84,19 +84,19 @@ function TOT2Feedback() {
 
   const weekContents = [
     {
-      topic: "Understanding SEL & Positive Psychology",
+      topic: "Understanding Inclusion and Special Needs in the Classroom",
       component: (
         <Week1 enrollmentId={enrollmentId} setWeekOneData={setWeekOneData} />
       ),
     },
     {
-      topic: "Self-Awareness & Emotional Regulation",
+      topic: "The Inclusive Mindset: Empathy and Compassion",
       component: (
         <Week2 enrollmentId={enrollmentId} setWeekTwoData={setWeekTwoData} />
       ),
     },
     {
-      topic: "Building Relationships & Creating a Safe Classroom",
+      topic: "The Inclusive Mindset: Empathy, and Compassion",
       component: (
         <Week3
           enrollmentId={enrollmentId}
@@ -105,23 +105,20 @@ function TOT2Feedback() {
       ),
     },
     {
-      topic: "Growth Mindset & Resilience for Educators",
+      topic:
+        "Practical Strategies for Supporting Students with Common Special Needs",
       component: (
         <Week4 enrollmentId={enrollmentId} setWeekFourData={setWeekFourData} />
       ),
     },
     {
-      topic: "Integrating SEL into Teaching Methods",
+      topic: "Collaboration, Support Systems, and Inclusive Implementation",
       component: (
         <Week5 enrollmentId={enrollmentId} setWeekFiveData={setWeekFiveData} />
       ),
     },
     {
-      topic: "SEL & Positive Psychology Implementation Plan Worksheet.",
-      component: "",
-    },
-    {
-      topic: "Teacher Resources for ToT Course 2",
+      topic: "Individualized Education Plan (IEP) Template",
       component: "",
     },
     {
@@ -130,7 +127,7 @@ function TOT2Feedback() {
         <OverallFeedBack
           enrollmentId={enrollmentId}
           setHasPercentile={setHasPercentile}
-        //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
+          //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
         />
       ),
     },
@@ -148,7 +145,9 @@ function TOT2Feedback() {
         <div className="container">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => isSchool ? navigate("/school-dashboard") : navigate("/dashboard")}
+            onClick={() =>
+              isSchool ? navigate("/school-dashboard") : navigate("/dashboard")
+            }
             className="navbar-logo"
             style={{ border: "none", background: "#FFF" }}
           >
@@ -156,7 +155,7 @@ function TOT2Feedback() {
           </button>
           <div
             className="navbar-logo"
-            onClick={() => { }}
+            onClick={() => {}}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -167,7 +166,9 @@ function TOT2Feedback() {
         <aside className="d-none d-lg-block">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => isSchool ? navigate(-1) : navigate("/dashboard/my-courses")}
+            onClick={() =>
+              isSchool ? navigate(-1) : navigate("/dashboard/my-courses")
+            }
             className="back"
             style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
           >
@@ -186,7 +187,7 @@ function TOT2Feedback() {
                 className={
                   index + 1 <= currentWeek
                     ? "active-week"
-                    : index >= 5
+                    : index >= 6
                       ? "d-none"
                       : ""
                 }
@@ -232,5 +233,3 @@ function TOT2Feedback() {
 }
 
 export default TOT2Feedback;
-
-// week 4, all drag and drop

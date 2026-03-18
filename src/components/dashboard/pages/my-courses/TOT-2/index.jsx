@@ -17,6 +17,7 @@ import PopUp from "./components/ReviewPopUp";
 import Hurray from "./components/Hurray";
 
 // Week 1
+import TOT2PreAssesment from "./weeks/week1/preAssesement/PreAssesment.jsx";
 import Page1 from "./weeks/week1/page1/Page1";
 import Page2 from "./weeks/week1/page2/Page2";
 import Page3 from "./weeks/week1/page3/Page3";
@@ -29,6 +30,12 @@ import Page9 from "./weeks/week1/page9/Page9";
 import Page10 from "./weeks/week1/page10/Page10";
 import Page11 from "./weeks/week1/page11/Page11";
 import Page12 from "./weeks/week1/page12/Page12.jsx";
+import Page13 from "./weeks/week1/page13/Page13.jsx";
+import Page14 from "./weeks/week1/page14/Page14.jsx";
+import Page15 from "./weeks/week1/page15/Page15.jsx";
+import Page16 from "./weeks/week1/page16/Page16.jsx";
+import Page17 from "./weeks/week1/page17/Page17.jsx";
+import Page18 from "./weeks/week1/page18/Page18.jsx";
 
 // Week 2
 import WeekTwoPage1 from "./weeks/week2/page1/Page1";
@@ -41,22 +48,56 @@ import WeekTwoPage7 from "./weeks/week2/page7/Page7.jsx";
 import WeekTwoPage8 from "./weeks/week2/page8/Page8.jsx";
 import WeekTwoPage9 from "./weeks/week2/page9/Page9.jsx";
 import WeekTwoPage10 from "./weeks/week2/page10/Page10.jsx";
+import WeekTwoPage11 from "./weeks/week2/page11/Page11.jsx";
+import WeekTwoPage12 from "./weeks/week2/page12/Page12.jsx";
 
 // Week 3
 import WeekThreePage1 from "./weeks/week3/page1/Page1";
 import WeekThreePage2 from "./weeks/week3/page2/Page2";
-import WeekThreePage3 from "./weeks/week3/page3/Page3";
-import WeekThreePage4 from "./weeks/week3/page4/Page4";
+import WeekThreePage3 from "./weeks/week3/page3/Page3.jsx";
+import WeekThreePage4 from "./weeks/week3/page4/Page4.jsx";
+import WeekThreePage5 from "./weeks/week3/page5/Page5.jsx";
+import WeekThreePage6 from "./weeks/week3/page6/Page6.jsx";
+import WeekThreePage7 from "./weeks/week3/page7/Page7.jsx";
+import WeekThreePage8 from "./weeks/week3/page8/Page8.jsx";
+import WeekThreePage9 from "./weeks/week3/page9/Page9.jsx";
+import WeekThreePage10 from "./weeks/week3/page10/Page10.jsx";
+import WeekThreePage11 from "./weeks/week3/page11/Page11.jsx";
+import WeekThreePage12 from "./weeks/week3/page12/Page12.jsx";
+import WeekThreePage13 from "./weeks/week3/page13/Page13.jsx";
 
 // Week 4
-import WeekFourPage1 from "./weeks/week4/page1/Page1";
-import WeekFourPage2 from "./weeks/week4/page2/Page2";
+import WeekFourPage1 from "./weeks/week4/page1/Page1.jsx";
+import WeekFourPage2 from "./weeks/week4/page2/Page2.jsx";
+import WeekFourPage3 from "./weeks/week4/page3/Page3.jsx";
+import WeekFourPage4 from "./weeks/week4/page4/Page4.jsx";
+import WeekFourPage5 from "./weeks/week4/page5/Page5.jsx";
+import WeekFourPage6 from "./weeks/week4/page6/Page6.jsx";
+import WeekFourPage7 from "./weeks/week4/page7/Page7.jsx";
+import WeekFourPage8 from "./weeks/week4/page8/Page8.jsx";
+import WeekFourPage9 from "./weeks/week4/page9/Page9.jsx";
+import WeekFourPage10 from "./weeks/week4/page10/Page10.jsx";
+import WeekFourPage11 from "./weeks/week4/page11/Page11.jsx";
+import WeekFourPage12 from "./weeks/week4/page12/Page12.jsx";
+import WeekFourPage13 from "./weeks/week4/page13/Page13.jsx";
+import WeekFourPage14 from "./weeks/week4/page14/Page14.jsx";
+
 
 // Week5
 import WeekFivePage1 from "./weeks/week5/page1/Page1.jsx";
 import WeekFivePage2 from "./weeks/week5/page2/Page2.jsx";
 import WeekFivePage3 from "./weeks/week5/page3/Page3.jsx";
 import WeekFivePage4 from "./weeks/week5/page4/Page4.jsx";
+import WeekFivePage5 from "./weeks/week5/page5/Page5.jsx";
+import WeekFivePage6 from "./weeks/week5/page6/Page6.jsx";
+import WeekFivePage7 from "./weeks/week5/page7/Page7.jsx";
+import WeekFivePage8 from "./weeks/week5/page8/Page8.jsx";
+import WeekFivePage9 from "./weeks/week5/page9/Page9.jsx";
+import WeekFivePage10 from "./weeks/week5/page10/Page10.jsx";
+import WeekFivePage11 from "./weeks/week5/page11/Page11.jsx";
+import WeekFivePage12 from "./weeks/week5/page12/Page12.jsx";
+import WeekFivePage13 from "./weeks/week5/page13/Page13.jsx";
+import WeekFivePage14 from "./weeks/week5/page14/Page14.jsx";
 
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -170,29 +211,43 @@ const WeekContent = () => {
       case 1:
         switch (currentPage) {
           case 1:
-            return <Page1 />;
+            return <TOT2PreAssesment />;
           case 2:
-            return <Page2 />;
+            return <Page1 />;
           case 3:
-            return <Page3 />;
+            return <Page2 />;
           case 4:
-            return <Page4 />;
+            return <Page3 />;
           case 5:
-            return <Page5 />;
+            return <Page4 />;
           case 6:
-            return <Page6 />;
+            return <Page5 />;
           case 7:
-            return <Page7 />;
+            return <Page6 />;
           case 8:
-            return <Page8 />;
+            return <Page7 />;
           case 9:
-            return <Page9 />;
+            return <Page8 />;
           case 10:
-            return <Page10 />;
+            return <Page9 />;
           case 11:
-            return <Page11 />;
+            return <Page10 />;
           case 12:
+            return <Page11 />;
+          case 13:
             return <Page12 />;
+          case 14:
+            return <Page13 />;
+          case 15:
+            return <Page14 />;
+          case 16:
+            return <Page15 />;
+          case 17:
+            return <Page16 />;
+          case 18:
+            return <Page17 />;
+          case 19:
+            return <Page18 />;
           default:
             return null;
         }
@@ -218,6 +273,10 @@ const WeekContent = () => {
             return <WeekTwoPage9 />;
           case 10:
             return <WeekTwoPage10 />;
+          case 11:
+            return <WeekTwoPage11 />;
+          case 12:
+            return <WeekTwoPage12 />;
           default:
             return null;
         }
@@ -231,6 +290,24 @@ const WeekContent = () => {
             return <WeekThreePage3 />;
           case 4:
             return <WeekThreePage4 />;
+          case 5:
+            return <WeekThreePage5 />;
+          case 6:
+            return <WeekThreePage6 />;
+          case 7:
+            return <WeekThreePage7 />;
+          case 8:
+            return <WeekThreePage8 />;
+          case 9:
+            return <WeekThreePage9 />;
+          case 10:
+            return <WeekThreePage10 />;
+          case 11:
+            return <WeekThreePage11 />;
+          case 12:
+            return <WeekThreePage12 />;
+          case 13:
+            return <WeekThreePage13 />;
           default:
             return null;
         }
@@ -240,6 +317,30 @@ const WeekContent = () => {
             return <WeekFourPage1 />;
           case 2:
             return <WeekFourPage2 />;
+          case 3:
+            return <WeekFourPage3 />;
+          case 4:
+            return <WeekFourPage4 />;
+          case 5:
+            return <WeekFourPage5 />;
+          case 6:
+            return <WeekFourPage6 />;
+          case 7:
+            return <WeekFourPage7 />;
+          case 8:
+            return <WeekFourPage8 />;
+          case 9:
+            return <WeekFourPage9 />;
+          case 10:
+            return <WeekFourPage10 />;
+          case 11:
+            return <WeekFourPage11 />;
+          case 12:
+            return <WeekFourPage12/>;
+          case 13:
+            return <WeekFourPage13 />;
+          case 14:
+            return <WeekFourPage14 />;
           default:
             return null;
         }
@@ -253,6 +354,26 @@ const WeekContent = () => {
             return <WeekFivePage3 />;
           case 4:
             return <WeekFivePage4 />;
+          case 5:
+            return <WeekFivePage5 />;
+          case 6:
+            return <WeekFivePage6 />;
+          case 7:
+            return <WeekFivePage7 />;
+          case 8:
+            return <WeekFivePage8 />;
+          case 9:
+            return <WeekFivePage9 />;
+          case 10:
+            return <WeekFivePage10 />;
+          case 11:
+            return <WeekFivePage11 />;
+          case 12:
+            return <WeekFivePage12 />;
+          case 13:
+            return <WeekFivePage13 />;
+          case 14:
+            return <WeekFivePage14 />;
           default:
             return null;
         }

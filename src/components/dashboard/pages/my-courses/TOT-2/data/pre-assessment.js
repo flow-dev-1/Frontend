@@ -1,148 +1,144 @@
 export const pre_assessments = {
   week1: {
     title: "Pre-Assessment",
-    subtitle: "Let's test your knowledge",
+    subtitle:
+      "Please answer the following questions based on your current understanding. This assessment helps us understand your starting point.",
     questions: [
       {
         id: 1,
-        question:
-          "Why is Social-Emotional Learning (SEL) considered a key part of student development in today's classrooms?",
+        question: "What does inclusive education aim to achieve?",
         options: [
           {
             id: "A",
-            text: "Because it focuses on replacing academic subjects with life skills that are more relevant to students' emotions.",
+            text: "Teaching all students in exactly the same way.",
           },
           {
             id: "B",
-            text: "Because it offers tools for students to navigate their emotions, build healthy relationships, and make thoughtful decisions.",
+            text: "Ensuring learners with special needs are separated from others.",
           },
           {
             id: "C",
-            text: "Because it guarantees an end to conflict in school environments.",
+            text: "Providing all learners equal access to learning opportunities.",
           },
           {
             id: "D",
-            text: "Because it directly boosts test scores by focusing solely on behavior management.",
+            text: "Reducing academic expectations for some learners.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 2,
         question:
-          "Which of the following best illustrates an area that is outside the core focus of Social-Emotional Learning (SEL)?",
+          "A learner refuses to participate in a difficult task. What is the most helpful first step for a teacher?",
         options: [
           {
             id: "A",
-            text: "Helping students identify their feelings and regulate their emotional responses.",
+            text: "Punish the behaviour.",
           },
           {
             id: "B",
-            text: "Encouraging learners to form supportive peer connections and resolve conflicts peacefully.",
+            text: "Ignore the behaviour.",
           },
           {
             id: "C",
-            text: "Teaching students to recall and retain subject-specific information for exams.",
+            text: "Try to understand what may be causing the difficulty.",
           },
           {
             id: "D",
-            text: "Guiding learners to weigh consequences and make ethical, constructive choices.",
+            text: "Send the learner out of the classroom.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 3,
-        question:
-          "In what context does Social-Emotional Learning (SEL) have the greatest long-term impact on students?",
+        question: "Which statement best describes empathy in teaching?",
         options: [
           {
             id: "A",
-            text: "When it's treated as a separate subject taught once a week.",
+            text: "Feeling sorry for struggling learners.",
           },
           {
             id: "B",
-            text: "When it's woven consistently into classroom routines, teaching methods, and teacher-student interactions.",
+            text: "Understanding what a learner may be experiencing.",
           },
           {
             id: "C",
-            text: "When it's introduced as a response to challenging student behavior.",
+            text: "Lowering expectations for some learners.",
           },
           {
             id: "D",
-            text: "When it's offered as a support strategy only for students struggling socially or emotionally.",
+            text: "Allowing students to do whatever they want.",
           },
         ],
         correctOption: "B",
       },
       {
         id: 4,
-        question:
-          "Which of the following classroom practices best demonstrates an educator's self-awareness?",
+        question: "Why do some learners struggle in traditional classrooms?",
         options: [
           {
             id: "A",
-            text: "Changing instructional methods only when student performance declines.",
+            text: "They lack motivation.",
           },
           {
             id: "B",
-            text: "Not showing personal emotions to maintain a professional image.",
+            text: "They need to try harder.",
           },
           {
             id: "C",
-            text: "Noticing moments of personal frustration and intentionally responding in calm, constructive ways.",
+            text: "Lessons are often designed for one type of learner.",
           },
           {
             id: "D",
-            text: "Responding to misbehavior primarily with firm rules and consequences.",
+            text: "They cannot meet academic standards.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 5,
-        question:
-          "In what way does Positive Psychology meaningfully support the goals of Social-Emotional Learning (SEL)?",
+        question: "Which of the following best supports learner engagement?",
         options: [
           {
             id: "A",
-            text: "By identifying and correcting students' emotional and behavioral problems.",
+            text: "Strict discipline and silence.",
           },
           {
             id: "B",
-            text: "By prioritizing the repair of weaknesses before building other skills.",
+            text: "Predictable routines and clear expectations.",
           },
           {
             id: "C",
-            text: "By encouraging a strengths-based approach that highlights gratitude, resilience, and overall well-being.",
+            text: "Ignoring behavioural challenges.",
           },
           {
             id: "D",
-            text: "By minimizing the role of emotions in learning environments.",
+            text: "Giving the same activity to every learner.",
           },
         ],
         correctOption: "B",
       },
       {
         id: 6,
-        question:
-          "Why might many people struggle to identify their personal strengths compared to their weaknesses?",
+        question: "Which of the following is an example of inclusive assessment?",
         options: [
           {
             id: "A",
-            text: "Because they believe weaknesses are more important to acknowledge and correct.",
+            text: "One timed written test for all learners.",
           },
           {
             id: "B",
-            text: "Because they’ve had more practice noticing flaws than recognizing what they do well.",
+            text: "Allowing learners different ways to demonstrate understanding.",
           },
           {
             id: "C",
-            text: "Because strengths are rarely discussed or valued in learning environments.",
+            text: "Removing assessments entirely.",
           },
           {
             id: "D",
-            text: "Because strengths don’t play a meaningful role in personal or academic growth.",
+            text: "Lowering expectations for some learners.",
           },
         ],
         correctOption: "B",
@@ -150,95 +146,93 @@ export const pre_assessments = {
       {
         id: 7,
         question:
-          "Which of the following teaching practices best reflects a strengths-based approach in the classroom?",
+          "Which person plays an important role in supporting learners with special needs?",
         options: [
           {
             id: "A",
-            text: "Focusing recognition on students with the highest academic scores.",
+            text: "Only the teacher.",
           },
           {
             id: "B",
-            text: "Noticing and nurturing each student’s unique qualities, efforts, and growth areas.",
+            text: "Only parents.",
           },
           {
             id: "C",
-            text: "Giving the same praise to all students to keep the environment positive.",
+            text: "Only school leadership.",
           },
           {
             id: "D",
-            text: "Minimizing corrective feedback to avoid hurting students’ confidence.",
+            text: "All of the above.",
           },
         ],
-        correctOption: "B",
+        correctOption: "D",
       },
       {
         id: 8,
-        question:
-          "What is one meaningful way gratitude can shape student behavior and classroom engagement?",
+        question: "Which statement best reflects a strength-based approach?",
         options: [
           {
             id: "A",
-            text: "It helps reduce stress levels, strengthens peer relationships, and boosts emotional well-being.",
+            text: "Focus on what learners cannot do.",
           },
           {
             id: "B",
-            text: "It leads students to comply more strictly with classroom rules and authority figures.",
+            text: "Compare learners to others.",
           },
           {
             id: "C",
-            text: "It replaces the need for teaching conflict resolution or emotional regulation skills.",
+            text: "Identify and build on learner strengths.",
           },
           {
             id: "D",
-            text: "It tends to benefit students who are already performing well academically.",
+            text: "Avoid difficult tasks.",
           },
         ],
-        correctOption: "B",
+        correctOption: "C",
       },
       {
         id: 9,
         question:
-          "A student expresses frustration during a lesson, saying, “I just can’t do this.” Which of the following teacher responses best reflects the application of Social-Emotional Learning and Positive Psychology?",
+          "Which behaviour might signal that a learner is experiencing cognitive overload?",
         options: [
           {
             id: "A",
-            text: "Let’s take a moment to remember something you’ve done well before, maybe we can use that as a starting point.",
+            text: "Leaving their seat repeatedly.",
           },
           {
             id: "B",
-            text: "Try not to think too much about it. Just move on to the next activity.",
+            text: "Shutting down during complex tasks.",
           },
           {
             id: "C",
-            text: "Why don’t you let your classmate handle this one so we can keep moving?.",
+            text: "Talking to friends.",
           },
           {
             id: "D",
-            text: "We’ll talk about this later,  let’s focus on something else right now..",
+            text: "Completing work slowly.",
           },
         ],
         correctOption: "B",
       },
       {
         id: 10,
-        question:
-          "Why is it important for educators to practice SEL in their own lives?",
+        question: "Which of the following is a sign of teacher burnout?",
         options: [
           {
             id: "A",
-            text: "To avoid engaging emotionally with students and completely miss SEL’s true purpose.",
+            text: "Enjoying teaching",
           },
           {
             id: "B",
-            text: "To fulfill mandated requirements for social-emotional learning within the curriculum.",
+            text: "Feeling emotionally exhausted and overwhelmed",
           },
           {
             id: "C",
-            text: "To manage their own emotions and demonstrate healthy coping strategies to students.",
+            text: "Planning lessons carefully.",
           },
           {
             id: "D",
-            text: "To foster genuine relationships, model emotional skills, and support classroom culture.",
+            text: "Collaborating with colleagues.",
           },
         ],
         correctOption: "B",

@@ -1,172 +1,202 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import Button from "../../../components/Button";
-
+import TOTFeedbackModal from "../../../components/TOTFeedbackModal";
+import StepIndicator from "../../../components/StepIndicator";
 import {
   selectPageData,
   selectCurrentStep,
+  navigateNext,
 } from "../../../../../../../../redux/reducers/navigationSlice";
-import StepIndicator from "../../../components/StepIndicator";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-import DragAndDropFrame from "./components/DragAndDropFrame";
 
-const InternalStepIndicator = ({ totalSteps, currentStep }) => {
-  return (
-    <div
-      className="d-flex justify-content-cente mt-4 flex-wrap"
-      style={{ gap: "10px" }}
-    >
-      {[...Array(totalSteps)].map((_, index) => (
-        <div
-          key={index}
-          className={`${
-            index + 2 <= currentStep ? "bg-step-active" : "bg-step"
-          }`}
-          style={{
-            // flexBasis: "35px",
-            width: "35px",
-            height: "17px",
-            borderRadius: "8px",
-            cursor: index <= currentStep ? "pointer" : "default",
-          }}
-        />
-      ))}
-    </div>
-  );
-};
+import checkedImage from "../../../../../../../../assets/checkedbox.png";
+import uncheckedImage from "../../../../../../../../assets/uncheckedBox.png";
 
-function WeekTwoPage4() {
-  const dispatch = useDispatch(); // Initialize dispatch
+function Page4() {
+  const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
-  const totalSteps = pageData?.steps?.length || 0;
-  const [answers, setAnswers] = useState([]); // State to hold answers
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
-  const step = pageData?.steps[currentStep - 1];
-  const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
-  const [dragDropImageLength, setDragDropImageLength] = useState(4);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const userAnswers = useSelector(userAnswer);
+
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackText, setFeedbackText] = useState("");
 
   useEffect(() => {
-    if (!userAnswers) return;
-
-    const response = userAnswers.activities?.find(
-      (item) => item.page === pageData.id
+    if (!userAnswers || !pageData) return;
+    const response = userAnswers?.activities?.find(
+      (item) => item.page === pageData.id,
     );
 
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
-  }, [userAnswers]);
-
-  const saveUserInput = () => {
-    if (adminDatas.isAdmin) return true;
-    if (currentStep === 1) return true;
-
-    const stepData = answers.find((item) => item.stepId === currentStep);
-
-    if (!stepData) {
-      setErrorMessage("Oops! All Images must be placed in the buckects.");
-      return false;
+    if (response?.answer && Array.isArray(response.answer)) {
+      const stepAnswer = response.answer.find((a) => a.stepId === currentStep);
+      setSelectedOptions(stepAnswer ? stepAnswer.value : []);
+    } else {
+      setSelectedOptions([]);
     }
+  }, [userAnswers, pageData, currentStep]);
 
-    console.log(stepData.value, "Step data value");
-
-    // Check total images dropped
-    const totalDropped =
-      (stepData.value.green?.length || 0) + (stepData.value.red?.length || 0);
-    if (totalDropped !== dragDropImageLength) {
-      setErrorMessage(
-        `Please place all ${dragDropImageLength} images in the buckets.`
-      );
-      return false;
-    }
-
-    setErrorMessage(""); // Clear error if input is valid
-
-    const activityData = {
-      page: pageData.id,
-      answer: answers,
-    };
-    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
-
-    return true;
+  const toggleOption = (option) => {
+    setErrorMessage("");
+    setSelectedOptions((prev) =>
+      prev.includes(option)
+        ? prev.filter((item) => item !== option)
+        : [...prev, option],
+    );
   };
 
-  // console.log(answers, "Answers")
+  const saveUserInput = () => {
+    const step = pageData.steps[currentStep - 1];
+
+    if (!step) return false;
+
+    if (step.type === "instruction") {
+      return true;
+    }
+
+    if (!adminDatas.isAdmin && selectedOptions.length === 0) {
+      setErrorMessage("Oops! Please select at least one option!");
+      return false;
+    }
+
+    setErrorMessage("");
+
+    if (adminDatas.isAdmin) {
+      return true;
+    }
+
+    // Prepare for feedback
+    setFeedbackText(step.feedback || "");
+    setShowFeedback(true);
+
+    // Save answers
+    const currentActivities = userAnswers?.activities || [];
+    const response = currentActivities.find(
+      (item) => item.page === pageData.id,
+    );
+    let updatedAnswers = response?.answer ? [...response.answer] : [];
+
+    const existingStepIndex = updatedAnswers.findIndex(
+      (a) => a.stepId === currentStep,
+    );
+    if (existingStepIndex !== -1) {
+      updatedAnswers[existingStepIndex] = {
+        stepId: currentStep,
+        value: selectedOptions,
+      };
+    } else {
+      updatedAnswers.push({ stepId: currentStep, value: selectedOptions });
+    }
+
+    dispatch(
+      saveActivity({
+        page: pageData.id,
+        answer: updatedAnswers,
+      }),
+    );
+
+    return false; // Stay until modal close
+  };
+
+  const handleNext = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext());
+  };
 
   const renderStep = () => {
-    if (!step) return <div>Invalid Step</div>;
+    if (!pageData?.steps) return null;
+    const step = pageData.steps[currentStep - 1];
 
-    switch (step.type) {
-      case "instruction":
-        return (
-          <QuestionBox extraStyle="bg-blue">
-            <div className="text-center mb-5 mt-5 mt-md-4">
-              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction mt-5">
-                Instruction
-              </h1>
-            </div>
+    if (!step) return null;
 
-            <div className="text-center mb-5 mt-3 mt-md-0">
-              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
-                On the screen, you will see statements describing assumptions
-                teachers often make about learners with special needs.
-              </h2>
-            </div>
-            <div className="text-center mt-3 mt-md-0">
-              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
-                Select the ones that describe reactions or judgments you have
-                seen in yourself. The goal here is not to criticize, it is to
-                build awareness.
-              </h2>
-            </div>
-          </QuestionBox>
-        );
-      case "imageDragAndDrop":
-        return (
-          <DragAndDropFrame
-            info={{
-              images: step.images,
-              buckets: step.buckets,
-              instruction: step.instruction,
-            }}
-            setErrorMessage={setErrorMessage}
-            answers={answers}
-            setAnswers={setAnswers}
-            setCurrentImageIndex1={setCurrentImageIndex}
-            setDragDropImageLength={setDragDropImageLength}
-          />
-        );
-      default:
-        return <div>Unknown step type</div>;
+    if (step.type === "instruction") {
+      return (
+        <QuestionBox extraStyle="bg-blue">
+          <div className="text-center mb-5 mt-5 mt-md-4">
+            <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction">
+              Instruction
+            </h1>
+          </div>
+
+          <div className="text-center mb-5 mt-3 mt-md-0">
+            <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
+              {step.challenge}
+            </h2>
+          </div>
+        </QuestionBox>
+      );
     }
+
+    if (step.type === "checkbox") {
+      return (
+        <QuestionBox extraStyle="bg-custom-blue">
+          <div className="px-3 px-md-5 py-4">
+            <h2 className="text-blue fs-1 mb-4 fw-bold tot-question-text">
+              {step.question}
+            </h2>
+
+            <div className="mt-4 ml-6">
+              {step.options.map((option, index) => {
+                const isChecked = selectedOptions.includes(option);
+                return (
+                  <div
+                    key={index}
+                    className="d-flex align-items-center gap-3 mb-3 p-2"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => toggleOption(option)}
+                  >
+                    <img
+                      src={isChecked ? checkedImage : uncheckedImage}
+                      alt="checkbox"
+                      style={{ width: 28, height: 28 }}
+                    />
+                    <label
+                      className="fs-4 text-gray mb-0"
+                      style={{ cursor: "pointer" }}
+                    >
+                      {option}
+                    </label>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </QuestionBox>
+      );
+    }
+
+    return null;
   };
 
   return (
     <>
       {renderStep()}
-      {currentStep !== 1 && errorMessage && (
-        <div className="text-danger">{errorMessage}</div>
-      )}{" "}
-      {/* Display error message */}
-      <div className="d-flex justify-content-center align-items-cente gap-2">
-        <StepIndicator totalSteps={totalSteps} />
-        <InternalStepIndicator
-          totalSteps={dragDropImageLength}
-          currentStep={currentImageIndex + 1}
-        />
-      </div>
-      <div className="d-flex justify-content-center gap-96px mt-3 gap-4">
+      {errorMessage && (
+        <div className="text-danger text-center mt-2 fw-bold">
+          {errorMessage}
+        </div>
+      )}
+      <StepIndicator totalSteps={pageData?.steps?.length || 0} />
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
+
+      <TOTFeedbackModal show={showFeedback} onHide={handleNext}>
+        <div className="text-center p-2">
+          <p className="text-blue">{feedbackText}</p>
+        </div>
+      </TOTFeedbackModal>
     </>
   );
 }
 
-export default WeekTwoPage4;
+export default Page4;

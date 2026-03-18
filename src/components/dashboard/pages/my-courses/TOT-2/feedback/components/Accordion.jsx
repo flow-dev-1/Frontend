@@ -4,11 +4,7 @@ import { Icon } from "@iconify/react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { ClimbingBoxLoader } from "react-spinners";
-import { useQuery } from "@tanstack/react-query";
-import userService from "../../../../../../../services/api/user.js";
-import adminService from "../../../../../../../services/api/admin.js";
-import { adminData } from "../../../../../../../redux/reducers/adminReducer.js";
-import { useSelector } from "react-redux";
+import pdfTemplate from "../../../../../../../assets/tot-images/pdf/template.pdf";
 
 function Accordion({
   activeIndex,
@@ -23,26 +19,11 @@ function Accordion({
   const [pdfLoading, setPdfLoading] = useState(false);
   const [startDownload, setStartDownload] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { isAdmin, code } = useSelector(adminData);
 
   useEffect(() => {
     if (!startDownload) return;
 
-    // Worksheet (index 5 for TOT-2)
     if (currentIndex === 5) {
-      console.log("downloading Worksheet pdf");
-      const link = document.createElement("a");
-      link.href = "/Special Needs and Inclusive Education in Classrooms (TOT Course 2) Implementation Plan Template.pdf";
-      link.download = "Special Needs and Inclusive Education in Classrooms (TOT Course 2) Implementation Plan Template.pdf";
-      link.click();
-
-      setStartDownload(false);
-      setActiveIndex("");
-      return;
-    }
-
-    // Final course PDF (index 6 for TOT-2)
-    if (currentIndex === 6) {
       const originalState = activeIndex;
       setPdfLoading(true);
       setActiveIndex(null);
@@ -54,6 +35,7 @@ function Accordion({
       }
       console.log("downloading course pdf");
 
+      // replace this with the actual pdf template
       const link = document.createElement("a");
       link.href = "/Teacher Resources.pdf";
       link.download = "Teacher Resources.pdf";
@@ -66,8 +48,6 @@ function Accordion({
 
       return;
     }
-
-    // Overall feedback PDF (index 7 for TOT-2)
     generatePDF();
   }, [hasPercentile, allDataLoaded, startDownload, currentIndex]);
 
@@ -127,15 +107,17 @@ function Accordion({
         </div>
       )}
       <div className="accordion" ref={contentRef}>
-        <h2 className="accordion-header p-lg-2 p-md-4 bg-blue text-center text-white">
+        <h2 className="accordion-header p-lg-2 p-md-4 bg-blue text-center text-white tot-question-text">
           Feedback for ToT Course 2
         </h2>
 
         {items.map((item, index) => (
           <div key={index} className="accordion-item">
             <div
-              className={`py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${index > 6 ? "bg-blue-feedback" : ""
-                }`}
+              className={`py-4 px-5 d-flex gap-3 align-items-center justify-space-between
+py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
+                index > 5 ? "bg-blue-feedback" : ""
+              }`}
             >
               <div className="d-flex align-items-center gap-3 flex-grow-1">
                 {index < 5 ? (
@@ -146,7 +128,7 @@ function Accordion({
                   >
                     Week {index + 1}:
                   </p>
-                ) : index === 5 ? (
+                ) : index >= 6 && index < 7 ? (
                   <p
                     className="text-gray text-nowrap fw-bold"
                     onClick={() => handleToggle(index)}
@@ -160,7 +142,7 @@ function Accordion({
                     onClick={() => handleToggle(index)}
                     style={{ cursor: "pointer" }}
                   >
-                    Final Report:
+                    Resource:
                   </p>
                 )}
                 <div
@@ -175,7 +157,7 @@ function Accordion({
                     className="text-blue"
                     style={{ zIndex: 100, cursor: "pointer" }}
                     onClick={() => {
-                      handleToggle(index);
+                      // handleToggle(index);
                       setCurrentIndex(index);
                       setStartDownload(true);
                     }}

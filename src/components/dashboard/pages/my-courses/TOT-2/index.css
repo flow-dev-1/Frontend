@@ -15,3 +15,17 @@
         margin-bottom: 1rem !important;
     }
 }
+
+.feedback-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.tracking-wider {
+    letter-spacing: 0.1em;
+}
+
+.text-info {
+    color: #5CE1E6 !important;
+}
+
