@@ -49,11 +49,11 @@ function TOTFeedback() {
   useEffect(() => {
     setAllDataLoaded(
       isWeekOneLoaded &&
-      isWeekTwoLoaded &&
-      isWeekThreeLoaded &&
-      isWeekFourLoaded &&
-      isWeekFiveLoaded &&
-      isWeekSixLoaded
+        isWeekTwoLoaded &&
+        isWeekThreeLoaded &&
+        isWeekFourLoaded &&
+        isWeekFiveLoaded &&
+        isWeekSixLoaded,
     );
   }, [
     isWeekOneLoaded,
@@ -72,11 +72,12 @@ function TOTFeedback() {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
 
-    if (!isSchool && !enrolmentData && !isAdmin?.isAdmin) return navigate("/sign-in");
+    if (!isSchool && !enrolmentData && !isAdmin?.isAdmin)
+      return navigate("/sign-in");
 
     if (isAdmin?.isAdmin) {
       const courseEnrollmentId = sessionStorage.getItem(
-        "flow-courseEnrollmentId"
+        "flow-courseEnrollmentId",
       );
       if (!courseEnrollmentId) return;
       setEnrollmentId(courseEnrollmentId);
@@ -143,7 +144,7 @@ function TOTFeedback() {
         <OverallFeedBack
           enrollmentId={enrollmentId}
           setHasPercentile={setHasPercentile}
-        //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
+          //todo: pass a percentile prop which will be responsible for the detecting the correct messsage to display on the overall page
         />
       ),
     },
@@ -161,7 +162,9 @@ function TOTFeedback() {
         <div className="container">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => isSchool ? navigate("/school-dashboard") : navigate("/dashboard")}
+            onClick={() =>
+              isSchool ? navigate("/school-dashboard") : navigate("/dashboard")
+            }
             className="navbar-logo"
             style={{ border: "none", background: "#FFF" }}
           >
@@ -169,7 +172,7 @@ function TOTFeedback() {
           </button>
           <div
             className="navbar-logo"
-            onClick={() => { }}
+            onClick={() => {}}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -180,14 +183,16 @@ function TOTFeedback() {
         <aside className="d-none d-lg-block">
           <button
             disabled={isAdmin?.isAdmin}
-            onClick={() => isSchool ? navigate(-1) : navigate("/dashboard/my-courses")}
+            onClick={() =>
+              isSchool ? navigate(-1) : navigate("/dashboard/my-courses")
+            }
             className="back"
             style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
             {isSchool ? "Go back" : "Back to My Courses"}
           </button>
-          <div className="compassion-title">
+          <div className="tot-title">
             <h2 className="fs-5 fs-md-3 tot-nav-text">SEL for Educators:</h2>
             <h2 className="compassion fs-5 tot-nav-text">ToT Course 1</h2>
           </div>
