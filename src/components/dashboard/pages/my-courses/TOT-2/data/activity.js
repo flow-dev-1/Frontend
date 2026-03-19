@@ -462,8 +462,9 @@ export const courseContent = {
           },
           {
             stepId: 5,
-            type: "text",
-            text: "This will be a video",
+            type: "video",
+            videoSrc:
+              "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_13.mp4",
           },
           {
             stepId: 6,
@@ -2442,7 +2443,7 @@ export const courseContent = {
             type: "dropdownScenario",
             question: "Often calls out during lessons.",
             options: [
-                  {
+              {
                 id: "1",
                 text: "Lazy",
               },
@@ -2477,7 +2478,7 @@ export const courseContent = {
             type: "dropdownScenario",
             question: `Takes more time to complete tasks.`,
             options: [
-                  {
+              {
                 id: "1",
                 text: "Lazy",
               },
@@ -2512,7 +2513,7 @@ export const courseContent = {
             type: "dropdownScenario",
             question: "Avoids starting difficult tasks and gives up quickly.",
             options: [
-                  {
+              {
                 id: "1",
                 text: "Lazy",
               },
@@ -2547,7 +2548,7 @@ export const courseContent = {
             type: "dropdownScenario",
             question: "Frequently makes mistakes when copying from the board.",
             options: [
-                  {
+              {
                 id: "1",
                 text: "Lazy",
               },
@@ -2582,7 +2583,7 @@ export const courseContent = {
             type: "dropdownScenario",
             question: "Appears disengaged during long written activities.",
             options: [
-                  {
+              {
                 id: "1",
                 text: "Lazy",
               },
@@ -2617,7 +2618,7 @@ export const courseContent = {
             type: "dropdownScenario",
             question: "Becomes frustrated when tasks feel overwhelming.",
             options: [
-                  {
+              {
                 id: "1",
                 text: "Lazy",
               },
