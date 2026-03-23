@@ -16,6 +16,7 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import VideoComponent from "../../../components/Video";
 
 function Page14() {
   const dispatch = useDispatch(); // Initialize dispatch
@@ -224,14 +225,8 @@ function Page14() {
           />
         );
 
-      case "text":
-        return (
-          <QuestionBox extraStyle="bg-blue shadow-lg border-0 d-flex align-items-center justify-content-center">
-            <pen className="text-white display-5 fw-bold mb-0 font-nanum-pen">
-              {step.text}
-            </pen>
-          </QuestionBox>
-        );
+      case "video":
+        return <VideoComponent videoSrc={step.videoSrc} />;
 
       case "dropdownScenario":
         return (
