@@ -89,13 +89,12 @@ function Page2() {
       </div>
 
       <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
-        <p className="text-blue mb-3">Great work! </p>
+        <p className="text-blue mb-3">Thank you for sharing!</p>
         <p className="text-blue">
-          This activity highlights the important differences between
-          segregation, integration, and inclusion. True inclusive education goes
-          beyond simply placing students in the same classroom; it ensures that
-          all learners receive the support, resources, and opportunities they
-          need to fully participate and succeed
+          Teachers often associate inclusion with words like fairness,
+          diversity, support, and belonging. Throughout this course, we will
+          explore what inclusion truly means and how it can be practiced
+          effectively in classrooms.
         </p>
       </TOTFeedbackModal>
     </>

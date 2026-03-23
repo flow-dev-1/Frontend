@@ -63,7 +63,7 @@ function WeekFivePage4() {
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
     // Show feedback modal instead of navigating immediately
-    if (currentStep === 3) {
+    if (currentStep === 4) {
       setShowFeedback(true);
     }
 
@@ -116,9 +116,7 @@ function WeekFivePage4() {
   return (
     <>
       {renderStep()}
-      {errorMessage && (
-        <div className="text-danger">{errorMessage}</div>
-      )}{" "}
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
       {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">

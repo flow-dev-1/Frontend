@@ -82,7 +82,6 @@ import WeekFourPage12 from "./weeks/week4/page12/Page12.jsx";
 import WeekFourPage13 from "./weeks/week4/page13/Page13.jsx";
 import WeekFourPage14 from "./weeks/week4/page14/Page14.jsx";
 
-
 // Week5
 import WeekFivePage1 from "./weeks/week5/page1/Page1.jsx";
 import WeekFivePage2 from "./weeks/week5/page2/Page2.jsx";
@@ -148,7 +147,7 @@ const WeekContent = () => {
     dispatch(setCurrentPage(currentPage));
     dispatch(setCurrentStep(currentStep));
 
-    return () => { };
+    return () => {};
   }, [dispatch]); // Added dispatch to dependency array
 
   const currentWeek = useSelector(selectCurrentWeek);
@@ -197,7 +196,7 @@ const WeekContent = () => {
       );
     }
 
-    return () => { };
+    return () => {};
   }, [data]);
 
   // If showing hurray, render that instead
@@ -336,7 +335,7 @@ const WeekContent = () => {
           case 11:
             return <WeekFourPage11 />;
           case 12:
-            return <WeekFourPage12/>;
+            return <WeekFourPage12 />;
           case 13:
             return <WeekFourPage13 />;
           case 14:
@@ -431,7 +430,10 @@ const CourseContent = () => {
   useEffect(() => {
     // Prefer live server data; fall back to initial location.state snapshot
     const progress =
-      liveEnrollment?.enrollment?.progress ?? liveEnrollment?.progress ?? enrolmentData?.progress ?? 0;
+      liveEnrollment?.enrollment?.progress ??
+      liveEnrollment?.progress ??
+      enrolmentData?.progress ??
+      0;
 
     setEnrollmentProgress(progress);
 
@@ -442,7 +444,7 @@ const CourseContent = () => {
     // Allow access to current incomplete week + next week
     const accessibleWeek = Math.max(
       1,
-      Math.min(calculatedMaxWeek + 1, weeksTopic.length)
+      Math.min(calculatedMaxWeek + 1, weeksTopic.length),
     );
     setMaxAccessibleWeek(accessibleWeek);
   }, [liveEnrollment, enrolmentData]);
@@ -595,8 +597,13 @@ const CourseContent = () => {
           </button>
 
           <div className="tot-title">
-            <h2 className="fs-5 fs-md-3 tot-nav-text">SEL for Educators:</h2>
-            <h2 className="compassion fs-5 tot-nav-text">ToT Course 2</h2>
+            <h2 className="fs-5 fs-md-3 tot-nav-text">
+              Special Needs and Inclusive Education in Classrooms:
+            </h2>
+            <h2 className="compassion fs-5 tot-nav-text">
+              {" "}
+              Leaving no learner behind.
+            </h2>
           </div>
 
           <ul className="compassion-list">
@@ -609,8 +616,9 @@ const CourseContent = () => {
               return (
                 <li
                   key={index}
-                  className={`${isActive ? "active-week" : ""} ${isAccessible ? "accessible-week" : "locked-week"
-                    }`}
+                  className={`${isActive ? "active-week" : ""} ${
+                    isAccessible ? "accessible-week" : "locked-week"
+                  }`}
                   onClick={() => handleWeekClick(weekNumber)}
                   style={{
                     cursor: isAccessible ? "pointer" : "not-allowed",

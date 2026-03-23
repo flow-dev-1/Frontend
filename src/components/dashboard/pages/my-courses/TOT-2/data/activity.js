@@ -469,6 +469,29 @@ export const courseContent = {
           {
             stepId: 6,
             type: "dropdownScenario",
+            question: "What was the correct instruction?",
+            options: [
+              {
+                id: "1",
+                text: "Click the green button after the bell.",
+              },
+              {
+                id: "2",
+                text: "Select the blue icon immediately.",
+              },
+              {
+                id: "3",
+                text: "Wait five seconds then press red.",
+              },
+              {
+                id: "4",
+                text: "Press the red button twice immediately.",
+              },
+            ],
+          },
+          {
+            stepId: 7,
+            type: "dropdownScenario",
             question: "How easy was it to understand the instructions?",
             options: [
               {
@@ -492,14 +515,14 @@ export const courseContent = {
               "For many learners, especially those with auditory processing difficulties or attention challenges, classrooms can feel like this every day. Clear instructions, visual supports, and calm learning environments can make a huge difference in helping every learner succeed.",
           },
           {
-            stepId: 7,
+            stepId: 8,
             type: "instruction",
             title: "Instruction",
             text: "Below is a sequence of numbers required to solve the problem below. Click the  “PLAY” button to reveal the numbers.  \nNote: This is a view once sequence and visible for 5 seconds.",
             number: [7, 3, 9, 2, 6],
           },
           {
-            stepId: 8,
+            stepId: 9,
             type: "dropdownScenario",
             question: "What was the number sequence shown earlier?",
             options: [
@@ -2612,6 +2635,8 @@ export const courseContent = {
                 text: "Difficult child",
               },
             ],
+            feedback:
+              "Observations are factual and help identify support strategies. Labels can feel judgmental and may cause parents to become defensive.",
           },
           {
             stepId: 8,
