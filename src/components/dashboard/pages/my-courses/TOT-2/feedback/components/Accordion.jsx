@@ -101,7 +101,7 @@ function Accordion({
       )}
       <div className="accordion" ref={contentRef}>
         <h2 className="accordion-header p-lg-2 p-md-4 bg-blue text-center text-white tot-question-text">
-          Feedback for ToT Course 2
+          Feedback for Special Needs and Inclusive Education in Classrooms.
         </h2>
 
         {items.map((item, index) => (
