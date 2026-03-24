@@ -29,7 +29,7 @@ function Page8() {
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
-      (item) => item.page === pageData.id
+      (item) => item.page === pageData.id,
     );
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
   }, [userAnswers]);
@@ -70,9 +70,8 @@ function Page8() {
 
             <div className="text-center mb-5 mt-3 mt-md-0">
               <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
-                Let’s practice shifting our lens. You will see short scenarios
-                involving SEND learners. Your task is to look beyond the
-                challenge and identify the underlying strength being displayed.
+                Identify whether the teacher response demonstrates Empathy or
+                Compassion.
               </h2>
               {/* <h2 className="text-white px-5 d-inline-block text-start tot-week-2-question-text">
               </h2> */}

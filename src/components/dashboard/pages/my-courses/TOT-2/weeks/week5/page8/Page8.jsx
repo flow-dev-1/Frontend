@@ -76,12 +76,12 @@ function WeekFivePage8() {
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
     // Show feedback modal instead of navigating immediately
-    if (currentStep > 8) {
+    if (currentStep > 7) {
       setFeedbackInfo({
         feedback: step.feedback || "",
       });
       setShowFeedback(true);
-      return false
+      return false;
     }
 
     return true;
@@ -133,9 +133,7 @@ function WeekFivePage8() {
   return (
     <>
       {renderStep()}
-      {errorMessage && (
-        <div className="text-danger">{errorMessage}</div>
-      )}{" "}
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
       {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">

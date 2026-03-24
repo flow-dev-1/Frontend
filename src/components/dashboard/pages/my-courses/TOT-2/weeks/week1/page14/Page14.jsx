@@ -88,8 +88,8 @@ function Page14() {
       return true;
     }
 
-    // Step 7 must be played before the user can proceed.
-    if (currentStep === 7) {
+    // Step 8 must be played before the user can proceed.
+    if (currentStep === 8) {
       if (!hasPlayed) {
         setErrorMessage(
           "Please click Play to reveal the sequence before continuing.",
@@ -133,6 +133,8 @@ function Page14() {
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
+    // dont show feedback for step 6
+    if (currentStep === 6) return true;
     // Show feedback modal instead of navigating immediately
     setShowFeedback(true);
   };
@@ -142,7 +144,7 @@ function Page14() {
 
     switch (step.type) {
       case "instruction":
-        if (currentStep === 7) {
+        if (currentStep === 8) {
           return (
             <QuestionBox extraStyle="bg-blue position-relative overflow-hidden shadow-lg border-0">
               <div className="position-absolute top-0 end-0 m3">
