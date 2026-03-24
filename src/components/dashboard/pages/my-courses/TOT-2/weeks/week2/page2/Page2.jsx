@@ -59,16 +59,9 @@ function Page2() {
       );
       setShowFeedback(true);
     } else if (currentStep === 2) {
-      const stepData = pageData.steps[1];
-      const selectedOption = stepData.options.find(
-        (opt) => opt.text === myAnswer,
-      );
-      const feedbackMap = {
-        1: "Segregation refers to the physical separation of learners with disabilities from mainstream classrooms, often placing them in separate schools or units.",
-        2: "Integration involves placing learners with disabilities in mainstream classrooms without necessarily adapting the curriculum or teaching methods to meet their specific needs.",
-        3: "Inclusion is an approach that ensures all learners, regardless of ability, are fully integrated into the classroom with appropriate support and accommodations to enable their participation and success.",
-      };
-      setFeedbackText(feedbackMap[selectedOption?.id] || "");
+      setFeedbackText(`Every teacher responds differently in challenging situations.
+Inclusive teaching begins when we pause and reflect on how our mindset influences our reactions. When we shift from asking:
+“Why is this learner behaving this way?” to asking: “What might this learner be experiencing?” we begin to create a more supportive and inclusive classroom.`);
       setShowFeedback(true);
     }
 

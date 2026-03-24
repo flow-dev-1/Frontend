@@ -177,8 +177,13 @@ function TOT2Feedback() {
             {isSchool ? "Go back" : "Back to My Courses"}
           </button>
           <div className="tot-title">
-            <h2 className="fs-5 fs-md-3 tot-nav-text">SEL for Educators:</h2>
-            <h2 className="compassion fs-5 tot-nav-text">ToT Course 2</h2>
+            <h2 className="fs-5 fs-md-3 tot-nav-text">
+              Special Needs and Inclusive Education in Classrooms:
+            </h2>
+            <h2 className="compassion fs-5 tot-nav-text">
+              {" "}
+              Leaving no learner behind.
+            </h2>
           </div>
 
           <ul className="compassion-list">
