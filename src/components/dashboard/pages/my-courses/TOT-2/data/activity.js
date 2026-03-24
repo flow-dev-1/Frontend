@@ -464,7 +464,7 @@ export const courseContent = {
             stepId: 5,
             type: "video",
             videoSrc:
-              "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_13.mp4",
+              "https://d3sc34m1n26ele.cloudfront.net/tot2_videos/Week+1/Cognitive+Overload.mp4",
           },
           {
             stepId: 6,
