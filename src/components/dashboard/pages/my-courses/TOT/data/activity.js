@@ -4,13 +4,6 @@ export const courseContent = {
     pages: [
       {
         id: 1,
-        type: "video",
-        videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_1.mp4",
-        hasNextButton: true,
-      },
-      {
-        id: 2,
         type: "multiStep",
         title: "Write a letter to yourself.",
         steps: [
@@ -44,6 +37,9 @@ export const courseContent = {
           {
             stepId: 10,
           },
+          {
+            stepId: 11,
+          },
         ],
         navigation: {
           prev: true,
@@ -51,7 +47,7 @@ export const courseContent = {
         },
       },
       {
-        id: 3,
+        id: 2,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_2.mp4",
@@ -61,7 +57,7 @@ export const courseContent = {
         },
       },
       {
-        id: 4,
+        id: 3,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_3.mp4",
@@ -72,7 +68,7 @@ export const courseContent = {
         },
       },
       {
-        id: 5,
+        id: 4,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_4.mp4",
@@ -82,7 +78,7 @@ export const courseContent = {
         },
       },
       {
-        id: 6,
+        id: 5,
         type: "multiStep",
         title: "Write a letter to yourself.",
         steps: [
@@ -130,7 +126,7 @@ export const courseContent = {
         },
       },
       {
-        id: 7,
+        id: 6,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_4.mp4",
@@ -140,11 +136,11 @@ export const courseContent = {
         },
       },
       {
-        id: 8,
+        id: 7,
         type: "question",
         questionType: "text",
         question:
-          "Imagine a world where emotions don’t matter in education. A world where we only focus on grades and tests. What would that look like?",
+          "Describe what a classroom without emotional awareness might look like.",
         hasImage: false,
         imageSrc: "mindset.png",
         inputType: "bigTextBox",
@@ -154,7 +150,7 @@ export const courseContent = {
         },
       },
       {
-        id: 9,
+        id: 8,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_5.mp4",
@@ -164,7 +160,7 @@ export const courseContent = {
         },
       },
       {
-        id: 10,
+        id: 9,
         type: "multiStep",
         title: "Classroom Decision Making",
         steps: [
@@ -242,7 +238,7 @@ export const courseContent = {
         },
       },
       {
-        id: 11,
+        id: 10,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_6.mp4",
@@ -252,21 +248,44 @@ export const courseContent = {
         },
       },
       {
-        id: 12,
-        type: "question",
-        questionType: "text",
-        question:
-          "From this activity, how do SEL-based responses impact a student's confidence and engagement?",
-        hasImage: true,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        id: 11,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question: "How might this affect your teaching?",
+            options: [
+              {
+                id: "1",
+                text: "No effect",
+              },
+              {
+                id: "2",
+                text: "Slight impact",
+              },
+              {
+                id: "3",
+                text: "Moderate impact",
+              },
+              {
+                id: "4",
+                text: "Moderate impact",
+              },
+            ],
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
         },
       },
       {
-        id: 13,
+        id: 12,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_7.mp4",
@@ -276,7 +295,7 @@ export const courseContent = {
         },
       },
       {
-        id: 14,
+        id: 13,
         type: "multiStep",
         steps: [
           {
@@ -624,7 +643,7 @@ export const courseContent = {
         },
       },
       {
-        id: 15,
+        id: 14,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_8.mp4",
@@ -634,7 +653,7 @@ export const courseContent = {
         },
       },
       {
-        id: 16,
+        id: 15,
         type: "listQuestion",
         question: `“What is Right with Me? (my Strengths)”.`,
         inputCount: 5,
@@ -646,7 +665,7 @@ export const courseContent = {
         },
       },
       {
-        id: 17,
+        id: 16,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_9.mp4",
@@ -656,7 +675,41 @@ export const courseContent = {
         },
       },
       {
+        id: 17,
+        type: "listQuestion",
+        question: "List out two things you are grateful for.",
+        inputCount: 3,
+        fields: [
+          {
+            number: "1",
+            textFieldColor: "green",
+            colorCode: "#4CB748",
+          },
+          {
+            number: "2",
+            textFieldColor: "orange",
+            colorCode: "#FDD8B6",
+          },
+        ],
+        inputType: "text",
+        inputPlaceholder: "Type your answer here",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
         id: 18,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_9.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 19,
         type: "multiStep",
         steps: [
           {
@@ -705,7 +758,7 @@ export const courseContent = {
         },
       },
       {
-        id: 19,
+        id: 20,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_10.mp4",
@@ -715,7 +768,7 @@ export const courseContent = {
         },
       },
       {
-        id: 20,
+        id: 21,
         type: "listQuestion",
         question: "List out two things you are grateful for.",
         inputCount: 3,
@@ -739,7 +792,7 @@ export const courseContent = {
         },
       },
       {
-        id: 21,
+        id: 22,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_11.mp4",
@@ -749,37 +802,34 @@ export const courseContent = {
         },
       },
       {
-        id: 22,
+        id: 23,
         type: "multiStep",
         steps: [
           {
             stepId: 1,
-            type: "instruction",
-            title: "Instruction",
-            instructions: [
-              "In the next activity, you will be asked to reframe a teacher’s statement to reflect a strength based feedback.",
-            ],
-          },
-
-          {
-            stepId: 2,
-            type: "scenario",
-            questions: [
+            type: "dropdownScenario",
+            question:
+              "Which of these ways is NOT a way to create balance when it comes to prioritizing your well-being?",
+            options: [
               {
-                type: "Question",
-                question:
-                  "I sometimes doubt whether I’m making a real difference in my students’ lives.",
+                id: "A",
+                text: "Setting boundaries.",
               },
-            ],
-          },
-          {
-            stepId: 3,
-            type: "scenario",
-            questions: [
               {
-                type: "Question",
-                question:
-                  "There’s never enough time to get everything done, and I feel overwhelmed",
+                id: "B",
+                text: "Getting enough rest.",
+              },
+              {
+                id: "C",
+                text: "Always covering for your always absent colleague.",
+              },
+              {
+                id: "D",
+                text: "Practicing mindfulness",
+              },
+              {
+                id: "E",
+                text: "Taking a moment to breathe during a busy school day.",
               },
             ],
           },
@@ -790,7 +840,55 @@ export const courseContent = {
         },
       },
       {
-        id: 23,
+        id: 24,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_12.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 25,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question:
+              "Which of these ways is NOT a way to create balance when it comes to prioritizing your well-being?",
+            options: [
+              {
+                id: "1",
+                text: "No effect",
+              },
+              {
+                id: "2",
+                text: "Slight impact",
+              },
+              {
+                id: "3",
+                text: "Moderate impact",
+              },
+              {
+                id: "4",
+                text: "Moderate impact",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 26,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_12.mp4",

@@ -40,7 +40,10 @@ import Page20 from "./weeks/week1/page20/Page20.jsx";
 import Page21 from "./weeks/week1/page21/Page21.jsx";
 import Page22 from "./weeks/week1/page22/Page22.jsx";
 import Page23 from "./weeks/week1/page23/Page23.jsx";
-import Page24 from "./weeks/week1/page24/Page24.jsx";
+import Page24 from "./weeks/week1/page24/Page24";
+import Page25 from "./weeks/week1/page25/Page25.jsx";
+import Page26 from "./weeks/week1/page26/Page26.jsx";
+import Page27 from "./weeks/week1/page27/Page27.jsx";
 
 // Week 2
 import WeekTwoPage1 from "./weeks/week2/page1/Page1";
@@ -165,7 +168,7 @@ const WeekContent = () => {
     dispatch(setCurrentPage(currentPage));
     dispatch(setCurrentStep(currentStep));
 
-    return () => { };
+    return () => {};
   }, [dispatch]); // Added dispatch to dependency array
 
   const currentWeek = useSelector(selectCurrentWeek);
@@ -214,7 +217,7 @@ const WeekContent = () => {
       );
     }
 
-    return () => { };
+    return () => {};
   }, [data]);
 
   // If showing hurray, render that instead
@@ -275,6 +278,12 @@ const WeekContent = () => {
             return <Page23 />;
           case 24:
             return <Page24 />;
+          case 25:
+            return <Page25 />;
+          case 26:
+            return <Page26 />;
+          case 27:
+            return <Page27 />;
           default:
             return null;
         }
@@ -487,7 +496,10 @@ const CourseContent = () => {
   useEffect(() => {
     // Prefer live server data; fall back to initial location.state snapshot
     const progress =
-      liveEnrollment?.enrollment?.progress ?? liveEnrollment?.progress ?? enrolmentData?.progress ?? 0;
+      liveEnrollment?.enrollment?.progress ??
+      liveEnrollment?.progress ??
+      enrolmentData?.progress ??
+      0;
 
     setEnrollmentProgress(progress);
 
@@ -651,8 +663,12 @@ const CourseContent = () => {
           </button>
 
           <div className="tot-title">
-            <h2 className="fs-5 fs-md-3 tot-nav-text">SEL for Educators:</h2>
-            <h2 className="compassion fs-5 tot-nav-text">ToT Course 1</h2>
+            <h2 className="fs-5 fs-md-3 tot-nav-text">
+              SEL & Positive Psychology for Educators:
+            </h2>
+            <h2 className="compassion fs-5 tot-nav-text">
+              Feel it. Teach it. Transform lives
+            </h2>
           </div>
 
           <ul className="compassion-list">
@@ -665,8 +681,9 @@ const CourseContent = () => {
               return (
                 <li
                   key={index}
-                  className={`${isActive ? "active-week" : ""} ${isAccessible ? "accessible-week" : "locked-week"
-                    }`}
+                  className={`${isActive ? "active-week" : ""} ${
+                    isAccessible ? "accessible-week" : "locked-week"
+                  }`}
                   onClick={() => handleWeekClick(weekNumber)}
                   style={{
                     cursor: isAccessible ? "pointer" : "not-allowed",

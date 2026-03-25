@@ -1,29 +1,27 @@
-import React, { useState } from "react";
+import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
-import BigTextBox from "../../../../components/BigTextBox";
+import CustomDropDown from "./CustomDropDown";
 
 function Frame({ data, answers, setAnswers, setErrorMessage }) {
-  const { step, question } = data;
+  const { step, question, options } = data;
 
-  const handleInputChange = (index, value) => {
+  const handleInputChange = (value) => {
     setErrorMessage("");
-    // Update answers state with the new value
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
       const stepIndex = updatedAnswers.findIndex(
-        (answer) => answer.stepId === step
+        (answer) => answer.stepId === step,
       );
 
       if (stepIndex !== -1) {
         updatedAnswers[stepIndex] = {
           ...updatedAnswers[stepIndex],
-          stepId: step,
-          value,
+          value: value, // Store single value directly
         };
       } else {
         updatedAnswers.push({
           stepId: step,
-          value,
+          value: value,
         });
       }
 
@@ -32,7 +30,7 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
   };
 
   return (
-    <QuestionBox extraStyle="bg-custom-blue">
+    <QuestionBox extraStyle={"bg-step-active"}>
       <div className="p-1 p-md-5">
         <div className="text-center mb-5 mt-4 mt-md-0">
           <h2 className="text-white bg-blue py-2 px-4 fs-2 font-bold rounded-3 d-inline display-4 text-center tot-week-2-question-text">
@@ -40,15 +38,20 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
           </h2>
         </div>
         <div className="d-flex gap-2 flex-column flex-md-row">
-          <h2 className="text-gray fs-1 fs-md-1 tot-week-2-question-text text-center fw-bold">
+          <h2 className="text-gray fs-3 fs-md-1 tot-week-2-question-text text-center">
             {question}
           </h2>
         </div>
-        <BigTextBox
-          value={answers.find((answer) => answer.stepId === step)?.value || ""} // Pass the current answer
-          handleChange={(e) => handleInputChange(step, e.target.value)} // Handle input change
-        />
-        {/* <BigTextBox handleChange={handleInputChange} value={myAnswer} /> */}
+
+        <div className="mt-2">
+          <CustomDropDown
+            value={
+              answers.find((answer) => answer.stepId === step)?.value || ""
+            }
+            onChange={handleInputChange}
+            options={options} // Pass options here
+          />
+        </div>
       </div>
     </QuestionBox>
   );
