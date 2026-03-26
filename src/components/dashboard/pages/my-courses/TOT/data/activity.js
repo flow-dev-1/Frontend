@@ -2054,6 +2054,71 @@ export const courseContent = {
       {
         id: 4,
         type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "What does the word, ‘Growth Mindset’ mean to you?",
+              },
+            ],
+          },
+          {
+            stepId: 2,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "Is ‘Resilience’ a word familiar to you? What does it mean?",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 5,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 6,
+        type: "question",
+        questionType: "text",
+        question:
+          "From what I have explained so far, give an example of a statement that shows a fixed mindset.",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 7,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 8,
+        type: "multiStep",
         title: "Write a letter to yourself.",
         steps: [
           {
@@ -2105,7 +2170,7 @@ export const courseContent = {
         },
       },
       {
-        id: 5,
+        id: 9,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_3.mp4",
@@ -2115,7 +2180,7 @@ export const courseContent = {
         },
       },
       {
-        id: 6,
+        id: 10,
         type: "multiStep",
         steps: [
           {
@@ -2207,7 +2272,7 @@ export const courseContent = {
                 ],
               },
               {
-                id: 1,
+                id: 3,
                 text: "1. Start of Teaching Career",
                 color: "red",
                 bgColor: "#EE2447",
@@ -2233,7 +2298,7 @@ export const courseContent = {
         },
       },
       {
-        id: 7,
+        id: 11,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_4.mp4",
@@ -2243,7 +2308,7 @@ export const courseContent = {
         },
       },
       {
-        id: 8,
+        id: 12,
         type: "multiStep",
         steps: [
           {
@@ -2313,7 +2378,7 @@ export const courseContent = {
         },
       },
       {
-        id: 9,
+        id: 13,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_5.mp4",
@@ -2323,7 +2388,7 @@ export const courseContent = {
         },
       },
       {
-        id: 10,
+        id: 14,
         type: "multiStep",
         steps: [
           {
@@ -2365,6 +2430,17 @@ export const courseContent = {
               },
             ],
           },
+          {
+            stepId: 5,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "What’s one thing you’ve learned that made you a better teacher?",
+              },
+            ],
+          },
         ],
         navigation: {
           prev: true,
@@ -2372,7 +2448,7 @@ export const courseContent = {
         },
       },
       {
-        id: 11,
+        id: 15,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_6.mp4",

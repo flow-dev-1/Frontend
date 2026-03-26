@@ -1,135 +1,70 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
+import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
-import {
-  selectPageData,
-  selectCurrentStep,
-} from "../../../../../../../../redux/reducers/navigationSlice";
-import StepIndicator from "../../../components/StepIndicator";
+import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-import CareerLadderFrame from "./components/CareerLadderFrame";
+import adaptability from "../../../../../../../../assets/resilience-grit-images/adaptability.png";
 
-function WeekFourPage6() {
+function Page6() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
-  const currentStep = useSelector(selectCurrentStep);
-  const totalSteps = pageData?.steps?.length || 0;
-  const [answers, setAnswers] = useState({});
-  const [errorMessage, setErrorMessage] = useState("");
-  const step = pageData?.steps[currentStep - 1];
-  const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
+  const userAnswers = useSelector(userAnswer);
+  const [myAnswer, setMyAnswer] = useState(userAnswers);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (!userAnswers) return;
-    const response = userAnswers.activities?.find(
-      (item) => item.page === pageData.id
+    const response = userAnswers?.activities?.find(
+      (item) => item.page === pageData.id,
     );
-
-    if (response?.answer) {
-      setAnswers(response.answer);
-    }
-  }, [userAnswers, pageData?.id]);
+    setMyAnswer(response?.answer ? response.answer : "");
+    return () => {};
+  }, [userAnswers]);
 
   const saveUserInput = () => {
-    // Skip validation for instruction step
-    if (currentStep === 1) return true;
-    if (adminDatas.isAdmin) return true;
-
-    // For career ladder step, validate all boxes are completed
-    if (step?.type === "careerLadder") {
-      const boxes = step.boxes || [];
-      const allCompleted = boxes.every((box) => {
-        const boxAnswers = answers[box.id];
-        if (!boxAnswers) return false;
-
-        // Check if both questions are answered
-        return box.questions.every((q) => {
-          const answer = boxAnswers[q.id];
-          return answer && answer.trim() !== "";
-        });
-      });
-
-      if (!allCompleted) {
-        setErrorMessage(
-          "Please complete all boxes in the career ladder before proceeding."
-        );
-        return false;
-      }
-
-      setErrorMessage("");
-
-      const activityData = {
-        page: pageData.id,
-        answer: answers,
-      };
-      dispatch(saveActivity(activityData));
-      return true;
+    if (!adminDatas.isAdmin && !myAnswer) {
+      setErrorMessage("Oops! Please enter a valid input!");
+      return false;
     }
 
+    setErrorMessage(""); // Clear error if input is valid
+    // Allow flow admin to proceed without input but do not dispatch answer
+    if (adminDatas.isAdmin) return true;
+    dispatch(
+      saveActivity({
+        page: pageData.id,
+        answer: myAnswer,
+      }),
+    );
     return true;
   };
 
-  const renderStep = () => {
-    if (!step) return <div>Invalid Step</div>;
-
-    switch (step.type) {
-      case "instruction":
-        return (
-          <QuestionBox extraStyle="bg-blue">
-            <div className="text-center mb-5 mt-5 mt-md-4">
-              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction">
-                Instruction
-              </h1>
-            </div>
-
-            <div className="text-center mb-5 mt-3 mt-md-0">
-              {step.instructions.map((instruction, index) => (
-                <React.Fragment key={index}>
-                  <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
-                    {instruction}
-                  </h2>
-                  {index < step.instructions.length - 1 && (
-                    <>
-                      <br />
-                      <br />
-                    </>
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
-          </QuestionBox>
-        );
-
-      case "careerLadder":
-        return (
-          <CareerLadderFrame
-            boxes={step.boxes}
-            answers={answers}
-            setAnswers={setAnswers}
-            setErrorMessage={setErrorMessage}
-          />
-        );
-
-      default:
-        return <div>Unknown step type</div>;
-    }
+  const handleInputChange = (e) => {
+    setErrorMessage("");
+    setMyAnswer(e.target.value);
   };
 
   return (
     <>
-      {renderStep()}
-      {currentStep !== 1 && errorMessage && (
-        <div className="text-danger text-center mt-3 fw-bold fs-5">
-          {errorMessage}
+      <QuestionBox extraStyle="bg-custom-blue">
+        <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-start mt-4">
+          <div className="d-flex flex-column flex-grow-1 min-w-0 tot-question-text">
+            <h2 className="text-blue fs-1 mb-2 ">
+              From what I have explained so far, give an example of a statement
+              that shows a fixed mindset.
+            </h2>
+          </div>
         </div>
-      )}
-      <StepIndicator totalSteps={totalSteps} />
+        <BigTextBox handleChange={handleInputChange} value={myAnswer} />
+      </QuestionBox>
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
@@ -138,4 +73,4 @@ function WeekFourPage6() {
   );
 }
 
-export default WeekFourPage6;
+export default Page6;

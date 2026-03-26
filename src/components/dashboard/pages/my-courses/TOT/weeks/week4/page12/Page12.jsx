@@ -1,259 +1,175 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import AssessmentQuestion from "../../../components/AssessmentQuestion";
+import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
 import {
+  selectPageData,
   navigateNext,
   selectCurrentStep,
-  selectCurrentWeek,
-  showReviewPopup,
 } from "../../../../../../../../redux/reducers/navigationSlice";
-import { getWeekAssessment } from "../../../data";
+import TOTFeedbackModal from "../../../../TOT-2/components/TOTFeedbackModal";
 import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
-  updateData,
-  saveAssessment,
+  saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-toastify";
-import userService from "../../../../../../../../services/api/user";
-import { calculateResult } from "../../../utility";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import Frame from "./components/Frame";
 
-function WeekFourAssessment() {
-  const dispatch = useDispatch();
+function WeekThreePage8() {
+  const dispatch = useDispatch(); // Initialize dispatch
+  const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
-  const currentWeek = useSelector(selectCurrentWeek);
-  const assessmentData = getWeekAssessment(currentWeek);
-  const totalSteps = assessmentData?.questions?.length || 0;
+  const totalSteps = pageData?.steps?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
+
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
+
+  const [showFeedback, setShowFeedback] = useState(false);
+  const handleCloseFeedback = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext()); // Navigate after closing the modal
+  };
+  const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
-  const isLastQuestion = currentStep === assessmentData.totalQuestions;
   const adminDatas = useSelector(adminData);
 
   useEffect(() => {
     if (!userAnswers) return;
-    setAnswers(userAnswers?.assessments || []);
-    return () => {};
+    const response = userAnswers.activities?.find(
+      (item) => item.page === pageData.id,
+    );
+
+    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
   }, [userAnswers]);
 
-  // Mutation for saving user data
-  const mutation = useMutation({
-    mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
-    onSuccess: (data) => {
-      toast.dismiss();
-      toast.success(
-        `You scored ${calculateResult(
-          assessmentData.questions,
-          answers,
-          totalSteps
-        )}% in the quiz`
-      );
-      toast.success(data.message || "Answers saved successfully!"); // Show success toast
-      dispatch(
-        updateData({
-          course: null,
-          courseEnrollmentId: null,
-          week: 1,
-          activities: [],
-          assessments: [],
-        })
-      );
-      dispatch(navigateNext());
-    },
-    onError: (error) => {
-      console.log(error, "errorrrr");
-      toast.dismiss();
-      toast.error(error?.message || error?.error || "Error saving answers"); // Show error toast
-    },
-  });
-
-  const handleOptionSelect = (optionKey) => {
-    setErrorMessage("");
-    setAnswers((prevAnswers) => {
-      const updatedAnswers = [...prevAnswers];
-      const stepIndex = updatedAnswers.findIndex(
-        (answer) => answer.id === currentStep
-      );
-
-      if (stepIndex !== -1) {
-        updatedAnswers[stepIndex] = {
-          ...updatedAnswers[stepIndex],
-          value: optionKey,
-        };
-      } else {
-        updatedAnswers.push({
-          id: currentStep,
-          value: optionKey,
-        });
-      }
-
-      return updatedAnswers;
-    });
-  };
-
-  const saveUserData = () => {
+  const saveUserInput = () => {
+    if (currentStep === 1 || currentStep === 2) return true;
     if (adminDatas.isAdmin) return true;
-    const stepData = answers.find((item) => item.id === currentStep);
+
+    const stepData = answers.find((item) => item.stepId === currentStep);
     if (!stepData) {
-      setErrorMessage("Oops! Please choose an option to proceed.");
+      setErrorMessage("Oops! All inputs must be filled out.");
+      return false;
+    }
+
+    const reframeValue = stepData.reframe || "";
+
+    const values = [reframeValue];
+    if (values.length < 1 || values.some((v) => v.trim() === "")) {
+      setErrorMessage("At least 3 values are required!");
+      return false;
+    }
+
+    const emptyInputs = values.filter((value) => value.trim() === "");
+    if (emptyInputs.length > 0) {
+      setErrorMessage(
+        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`,
+      );
       return false;
     }
 
     setErrorMessage(""); // Clear error if input is valid
 
-    // If its the last question submit else update answer
-    dispatch(saveAssessment(answers));
-
-
-    if (isLastQuestion) {
-      const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 5;
-
-      if (hasUnansweredQuestions) {
-        setErrorMessage(
-          "Oops! Some unanswered questions have been detected. Kindly go back and review!"
-        );
-        return false;
-      }
-
-      const userScore = calculateResult(
-        assessmentData.questions,
-        answers,
-        totalSteps
-      );
-
-      console.log(userScore, "userScore");
-
-      mutation.mutate({
-        ...userAnswers,
-        assessments: answers,
-        rating: userScore.toString(),
-      });
-
-      // For nested questions check that all answeres were provided
-
-      // Page 2 has nested questions
-      // const selectedActivity = userAnswers.activities.find(
-      //   (activity) => activity.page === 2
-      // );
-      // const isValidActivity =
-      //   selectedActivity &&
-      //   Array.isArray(selectedActivity.answer) &&
-      //   selectedActivity.answer.length === 3;
-
-      // if (isValidActivity) {
-      //   const userScore = calculateResult(
-      //     assessmentData.questions,
-      //     answers,
-      //     totalSteps
-      //   );
-
-      //   console.log(userScore, "userScore");
-
-      //   mutation.mutate({
-      //     ...userAnswers,
-      //     assessments: answers,
-      //     rating: userScore.toString(),
-      //   });
-
-      //   //*****************This will come in later wen the code begins to break or escape questions ******/
-
-      //   // const isValid = selectedActivity.answer.every(item =>
-      //   //   item.stepId !== undefined &&
-      //   //   item.value &&
-      //   //   Object.keys(item.value).length === 3
-      //   // );
-
-      //   // if (isValid) {
-      //   //   const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
-
-      //   //   console.log(userScore, "userScore")
-
-      //   //   // mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
-      //   // } else {
-
-      //   //   setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-      //   //   return false;
-      //   // }
-      // } else {
-      //   setErrorMessage(
-      //     "Oops! Some unanswered questions have been detected. Kindly go back and review!"
-      //   );
-      //   return false;
-      // }
-    } else {
+    const activityData = {
+      page: pageData.id,
+      answer: answers,
+    };
+    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    if (currentStep !== 6) {
       return true;
     }
+
+    setShowFeedback(true);
+    return false;
+  };
+
+  const handleInputChange = (e) => {
+    setErrorMessage("");
+    setAnswers(e.target.value);
   };
 
   const renderStep = () => {
-    if (!assessmentData) return <div>Loading assessment...</div>;
+    if (!step) return <div>Invalid Step</div>;
 
-    const currentQuestion = assessmentData.questions[currentStep - 1];
-    if (!currentQuestion) return <div>Invalid Step</div>;
+    switch (step.type) {
+      case "instruction":
+        return (
+          <QuestionBox extraStyle="bg-blue pt-1 pt-md-5">
+            <div className="text-center mt-5 mt-md-4 mb-3 mb-md-5">
+              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction">
+                Instruction
+              </h1>
+            </div>
 
-    const formattedOptions = currentQuestion.options.map((option) => ({
-      [option.id]: option.text,
-    }));
-
-    return (
-      <AssessmentQuestion
-        data={{
-          question: currentQuestion.question,
-          options: formattedOptions,
-        }}
-        currentStep={currentStep}
-        selectedOption={answers[currentStep - 1]?.value || ""}
-        onOptionSelect={handleOptionSelect}
-        isPreAssessment={true}
-      />
-    );
+            <div className="text-center mt-3 mt-md-0">
+              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
+                In this next activity, you'll practice shifting from
+                fixed-mindset praise to growth-oriented feedback, so you can
+                help your students stay motivated, especially when learning gets
+                tough.
+              </h2>
+            </div>
+          </QuestionBox>
+        );
+      case "example":
+        return (
+          <Frame
+            data={{
+              step: step.stepId,
+              question: step.questions[0].question,
+              questions: step.questions.map((q) => ({
+                [q.type]: q.question,
+              })),
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+            type={step.type}
+          />
+        );
+      case "scenario":
+        return (
+          <Frame
+            data={{
+              step: step.stepId,
+              question: step.questions[0].question,
+              questions: step.questions.map((q) => ({
+                [q.type]: q.question,
+              })),
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+            type={step.type}
+          />
+        );
+      default:
+        return <div>Unknown step type</div>;
+    }
   };
-
-  if (!assessmentData) return null;
-
-  // If we're on the last question and user has made a selection,
-  // show the review popup instead of the next button
-
-  const hasCurrentSelection = !!answers[currentStep];
-  const shouldShowReviewButton = isLastQuestion && hasCurrentSelection;
 
   return (
     <>
-      <QuestionBox>
-        <div className="text-white p-3 mb-3">
-          <h2 className="fs-1 text-blue text-center tot-week-2-question-text fw-bold ">
-            {assessmentData.title}
-          </h2>
-          <p className="text-center text-blue">{assessmentData.subtitle}</p>
-        </div>
-
-        {renderStep()}
-      </QuestionBox>
-      {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
+      {renderStep()}
+      {currentStep !== 1 && errorMessage && (
+        <div className="text-danger">{errorMessage}</div>
+      )}{" "}
       {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
-        <Button text="Prev" loading={mutation.isPending} />
-        {shouldShowReviewButton ? (
-          <Button
-            text="Review"
-            customOnClick={() => dispatch(showReviewPopup())}
-          />
-        ) : (
-          <Button
-            text="Next"
-            customOnClick={saveUserData}
-            loading={mutation.isPending}
-          />
-        )}
+        <Button text="Prev" />
+        <Button text="Next" customOnClick={saveUserInput} />
       </div>
+      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue">
+          Growth-focused feedback helps students believe their effort can lead
+          to improvement.
+        </p>
+      </TOTFeedbackModal>
     </>
   );
 }
 
-export default WeekFourAssessment;
+export default WeekThreePage8;
