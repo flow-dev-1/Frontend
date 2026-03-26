@@ -3,7 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
-import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+import {
+  selectPageData,
+  navigateNext,
+  selectCurrentStep,
+} from "../../../../../../../../redux/reducers/navigationSlice";
+import TOTFeedbackModal from "../../../../TOT-2/components/TOTFeedbackModal";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import {
   userAnswer,
@@ -11,18 +16,23 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import adaptability from "../../../../../../../../assets/resilience-grit-images/adaptability.png";
 
-function Page6() {
+function Page4() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
   const userAnswers = useSelector(userAnswer);
-  const [myAnswer, setMyAnswer] = useState(userAnswers || "");
+  const [myAnswer, setMyAnswer] = useState(userAnswers);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showFeedback, setShowFeedback] = useState(false);
+  const handleCloseFeedback = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext()); // Navigate after closing the modal
+  };
 
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers?.activities?.find(
-      (item) => item.page === pageData.id
+      (item) => item.page === pageData.id,
     );
     setMyAnswer(response?.answer ? response.answer : "");
     return () => {};
@@ -41,17 +51,17 @@ function Page6() {
       saveActivity({
         page: pageData.id,
         answer: myAnswer,
-      })
+      }),
     );
-    return true;
+    // Show feedback modal instead of navigating immediately
+    setShowFeedback(true);
+    // return true;
   };
 
   const handleInputChange = (e) => {
     setErrorMessage("");
     setMyAnswer(e.target.value);
   };
-  console.log(myAnswer);
-  
 
   return (
     <>
@@ -70,8 +80,16 @@ function Page6() {
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
+
+      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue">
+          Recognizing the strategies that help you recharge is an important part
+          of sustaining your well-being. Small and intentional self-care actions
+          can help you maintain balance and energy in your teaching journey.
+        </p>
+      </TOTFeedbackModal>
     </>
   );
 }
 
-export default Page6;
+export default Page4;

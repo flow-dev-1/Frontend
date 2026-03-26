@@ -1,6 +1,7 @@
 import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
 import MediumTextBox from "../../../week3/page10/components/MediumTextBox";
+import SmallTextBox from "../../../week3/page10/components/SmallInputTextBox";
 
 function Frame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, questions } = data;
@@ -38,9 +39,9 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
             <h2 className="text-gray fs-4 fs-md-1 tot-week-2-question-text mt-3">
               {question}
             </h2>
-            <MediumTextBox
+            <SmallTextBox
               value={answers.find((answer) => answer.id === step)?.[type] || ""}
-              handleChange={(e) => handleInputChange(type, e.target.value)}
+              onChange={(e) => handleInputChange(type, e.target.value)}
             />
           </React.Fragment>
         ))}

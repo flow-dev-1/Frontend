@@ -2517,19 +2517,12 @@ export const courseContent = {
       {
         id: 4,
         type: "question",
-        questions: [
-          {
-            type: "subject",
-            question: "What subject(s) do you teach?",
-          },
-          {
-            type: "skill",
-            question:
-              "Which SEL skill do you think is or can be embedded in it?",
-          },
-        ],
-        inputType: "text",
-        inputPlaceholder: "Type your answer here",
+        questionType: "text",
+        question:
+          "Sincerely, do you think SEL can be incorporated into EVERY single subject?",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
         navigation: {
           prev: true,
           next: true,
@@ -2547,6 +2540,52 @@ export const courseContent = {
       },
       {
         id: 6,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "The next activity helps you think about how to intentionally use storytelling to spark meaningful conversations in your classroom. \nSelect the appropriate SEL skills that matches the story.",
+            ],
+            options:
+              "Competence, Confidence, Coping, Control, Character, Connections, and Contribution.",
+          },
+          {
+            stepId: 2,
+            type: "question",
+            question: [
+              {
+                type: "subject",
+                question: "Subject:",
+              },
+              {
+                type: "skill",
+                question: "SEL Skill:",
+              },
+            ],
+            inputType: "text",
+            inputPlaceholder: "Type your answer here",
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 7,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+5/Week+5_3.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 8,
         type: "question",
         questions: [
           {
@@ -2570,7 +2609,7 @@ export const courseContent = {
         },
       },
       {
-        id: 7,
+        id: 9,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+5/Week+5_4.mp4",
@@ -2580,7 +2619,7 @@ export const courseContent = {
         },
       },
       {
-        id: 8,
+        id: 10,
         type: "multiStep",
         steps: [
           {
@@ -2695,7 +2734,7 @@ export const courseContent = {
         },
       },
       {
-        id: 9,
+        id: 11,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+5/Week+5_5.mp4",
@@ -2705,7 +2744,7 @@ export const courseContent = {
         },
       },
       {
-        id: 10,
+        id: 12,
         type: "question",
         questionType: "text",
         question:
@@ -2719,7 +2758,7 @@ export const courseContent = {
         },
       },
       {
-        id: 11,
+        id: 13,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+5/Week+5_6.mp4",
@@ -2742,6 +2781,30 @@ export const courseContent = {
       },
       {
         id: 2,
+        type: "question",
+        questionType: "text",
+        question:
+          "Have you ever seen a match stick light up other matchsticks when it is lit? \n\nNow, imagine that the match stick goes off, would it still be able to light other matchsticks?",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 3,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_3.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 4,
         type: "multiStep",
         steps: [
           {
@@ -2902,14 +2965,14 @@ export const courseContent = {
         },
       },
       {
-        id: 3,
+        id: 5,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_2.mp4",
         hasNextButton: true,
       },
       {
-        id: 4,
+        id: 6,
         type: "question",
         questionType: "text",
         question:
@@ -2923,7 +2986,7 @@ export const courseContent = {
         },
       },
       {
-        id: 5,
+        id: 7,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_3.mp4",
@@ -2933,11 +2996,11 @@ export const courseContent = {
         },
       },
       {
-        id: 6,
+        id: 8,
         type: "question",
         questionType: "text",
         question:
-          "What is one moment from your recent teaching experience that made you feel grateful?",
+          "What is one moment from your recent teaching experience that made you feel grateful? It could be a student’s progress, a kind gesture from a colleague, or even something small, like a quiet moment before class started.",
         hasImage: false,
         imageSrc: "mindset.png",
         inputType: "bigTextBox",
@@ -2947,7 +3010,7 @@ export const courseContent = {
         },
       },
       {
-        id: 7,
+        id: 9,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_4.mp4",
@@ -2957,7 +3020,7 @@ export const courseContent = {
         },
       },
       {
-        id: 8,
+        id: 10,
         type: "multiStep",
         title: "Write a letter to yourself.",
         steps: [
@@ -3012,7 +3075,7 @@ export const courseContent = {
         },
       },
       {
-        id: 9,
+        id: 11,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_5.mp4",
@@ -3022,7 +3085,7 @@ export const courseContent = {
         },
       },
       {
-        id: 10,
+        id: 12,
         type: "multiStep",
         steps: [
           {
@@ -3179,7 +3242,7 @@ export const courseContent = {
         },
       },
       {
-        id: 11,
+        id: 13,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_6.mp4",

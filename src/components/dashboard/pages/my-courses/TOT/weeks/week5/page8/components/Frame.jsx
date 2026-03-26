@@ -1,27 +1,29 @@
 import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
-import CustomDropDown from "./CustomDropDown";
+import MediumTextBox from "../../../week3/page10/components/MediumTextBox";
+import SmallTextBox from "../../../week3/page10/components/SmallInputTextBox";
 
 function Frame({ data, answers, setAnswers, setErrorMessage }) {
-  const { step, question, options } = data;
+  const { step, questions } = data;
 
-  const handleInputChange = (value) => {
+  const handleInputChange = (inputType, value) => {
     setErrorMessage("");
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
       const stepIndex = updatedAnswers.findIndex(
-        (answer) => answer.stepId === step
+        (answer) => answer.id === step
       );
 
       if (stepIndex !== -1) {
         updatedAnswers[stepIndex] = {
           ...updatedAnswers[stepIndex],
-          value: value, // Store single value directly
+          id: step,
+          [inputType]: value,
         };
       } else {
         updatedAnswers.push({
-          stepId: step,
-          value: value,
+          id: step,
+          [inputType]: value,
         });
       }
 
@@ -30,28 +32,19 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
   };
 
   return (
-    <QuestionBox extraStyle={"bg-custom-blue"}>
+    <QuestionBox extraStyle="bg-custom-blue">
       <div className="p-1 p-md-5">
-        <div className="text-center mb-5 mt-4 mt-md-0">
-          <h2 className="text-white bg-blue py-2 px-4 fs-2 font-bold rounded-3 d-inline display-4 text-center tot-week-2-question-text">
-            Scenario {step - 1}
-          </h2>
-        </div>
-        <div className="d-flex gap-2 flex-column flex-md-row">
-          <h2 className="text-gray fs-3 fs-md-1 tot-week-2-question-text text-center fw-bold">
-            {question}
-          </h2>
-        </div>
-
-        <div className="mt-2">
-          <CustomDropDown
-            value={
-              answers.find((answer) => answer.stepId === step)?.value || ""
-            }
-            onChange={handleInputChange}
-            options={options} // Pass options here
-          />
-        </div>
+        {questions.map(({ type, question }, index) => (
+          <React.Fragment key={index}>
+            <h2 className="text-gray fs-4 fs-md-1 tot-week-2-question-text mt-3">
+              {question}
+            </h2>
+            <SmallTextBox
+              value={answers.find((answer) => answer.id === step)?.[type] || ""}
+              onChange={(e) => handleInputChange(type, e.target.value)}
+            />
+          </React.Fragment>
+        ))}
       </div>
     </QuestionBox>
   );

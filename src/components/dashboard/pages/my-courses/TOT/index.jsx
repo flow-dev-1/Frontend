@@ -106,12 +106,14 @@ import WeekFivePage3 from "./weeks/week5/page3/Page3.jsx";
 import WeekFivePage4 from "./weeks/week5/page4/Page4.jsx";
 import WeekFivePage5 from "./weeks/week5/page5/Page5.jsx";
 import WeekFivePage6 from "./weeks/week5/page6/Page6.jsx";
-import WeekFivePage7 from "./weeks/week5/page7/page7.jsx";
-import WeekFivePage8 from "./weeks/week5/page8/page8.jsx";
-import WeekFivePage9 from "./weeks/week5/page9/Page9";
-import WeekFivePage10 from "./weeks/week5/page10/Page10";
-import WeekFivePage11 from "./weeks/week5/page11/Page11";
+import WeekFivePage7 from "./weeks/week5/page7/Page7.jsx";
+import WeekFivePage8 from "./weeks/week5/page8/Page8.jsx";
+import WeekFivePage9 from "./weeks/week5/page9/Page9.jsx";
+import WeekFivePage10 from "./weeks/week5/page10/Page10.jsx";
+import WeekFivePage11 from "./weeks/week5/page11/Page11.jsx";
 import WeekFivePage12 from "./weeks/week5/page12/Page12";
+import WeekFivePage13 from "./weeks/week5/page13/Page13";
+import WeekFivePage14 from "./weeks/week5/page14/Page14";
 
 // Week 6
 import WeekSixPage1 from "./weeks/week6/page1/Page1";
@@ -120,12 +122,14 @@ import WeekSixPage3 from "./weeks/week6/page3/Page3";
 import WeekSixPage4 from "./weeks/week6/page4/Page4";
 import WeekSixPage5 from "./weeks/week6/page5/Page5";
 import WeekSixPage6 from "./weeks/week6/page6/Page6";
-import WeekSixPage7 from "./weeks/week6/page7/page7.jsx";
+import WeekSixPage7 from "./weeks/week6/page7/Page7.jsx";
 import WeekSixPage8 from "./weeks/week6/page8/Page8";
-import WeekSixPage9 from "./weeks/week6/page9/Page9";
+import WeekSixPage9 from "./weeks/week6/page9/Page9.jsx";
 import WeekSixPage10 from "./weeks/week6/page10/Page10";
 import WeekSixPage11 from "./weeks/week6/page11/Page11";
 import WeekSixPage12 from "./weeks/week6/page12/Page12";
+import WeekSixPage13 from "./weeks/week6/page13/Page13";
+import WeekSixPage14 from "./weeks/week6/page14/Page14";
 
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -433,6 +437,10 @@ const WeekContent = () => {
             return <WeekFivePage11 />;
           case 12:
             return <WeekFivePage12 />;
+          case 13:
+            return <WeekFivePage13 />;
+          case 14:
+            return <WeekFivePage14 />;
           default:
             return null;
         }
@@ -462,6 +470,10 @@ const WeekContent = () => {
             return <WeekSixPage11 />;
           case 12:
             return <WeekSixPage12 />;
+          case 13:
+            return <WeekSixPage13 />;
+          case 14:
+            return <WeekSixPage14 />;
           default:
             return null;
         }

@@ -43,7 +43,7 @@ const DragAndDropFrame = ({
 
   const totalDropped = Object.values(bucketResults).reduce(
     (sum, arr) => sum + arr.length,
-    0
+    0,
   );
   const allImagesDropped = totalDropped >= images.length;
 
@@ -69,7 +69,7 @@ const DragAndDropFrame = ({
       // Update answers state
       setAnswers((prevAnswers) => {
         const existingAnswerIndex = prevAnswers.findIndex(
-          (answer) => answer.stepId === 2
+          (answer) => answer.stepId === 2,
         );
 
         if (existingAnswerIndex !== -1) {
@@ -94,10 +94,10 @@ const DragAndDropFrame = ({
 
       // Update current image index
       setCurrentImageIndex((prevIndex) =>
-        prevIndex + 1 < images.length ? prevIndex + 1 : prevIndex
+        prevIndex + 1 < images.length ? prevIndex + 1 : prevIndex,
       );
       setCurrentImageIndex1((prevIndex) =>
-        prevIndex + 1 < images.length ? prevIndex + 1 : prevIndex
+        prevIndex + 1 < images.length ? prevIndex + 1 : prevIndex,
       );
     }
   };
@@ -118,9 +118,11 @@ const DragAndDropFrame = ({
   const renderDragItem = () => {
     if (currentImageIndex >= images.length || allImagesDropped) return null;
 
-    const imagePath = require(`../../../../../../../../../assets/drag-images/tot-drag-images/week6/page8/image${
-      currentImageIndex + 1
-    }.png`);
+    const imagePath = require(
+      `../../../../../../../../../assets/drag-images/tot-drag-images/week6/page8/image${
+        currentImageIndex + 1
+      }.png`,
+    );
 
     return (
       <Draggable
@@ -138,8 +140,8 @@ const DragAndDropFrame = ({
               cursor: allImagesDropped
                 ? "not-allowed"
                 : snapshot.isDragging
-                ? "grabbing"
-                : "grab",
+                  ? "grabbing"
+                  : "grab",
               opacity: allImagesDropped ? 0.5 : 1,
               transform: `${provided.draggableProps.style?.transform || ""} ${
                 snapshot.isDragging ? "scale(0.3)" : ""
@@ -222,8 +224,8 @@ const DragAndDropFrame = ({
                             bucket.id === "green"
                               ? "inner-count"
                               : bucket.id === "orange"
-                              ? "outer-count"
-                              : "both-count"
+                                ? "outer-count"
+                                : "both-count"
                           }
                         >
                           {bucketResults[bucket.id]?.length || 0}
@@ -233,8 +235,13 @@ const DragAndDropFrame = ({
                             bucket.id === "green"
                               ? "inner-bowl bucket-text"
                               : bucket.id === "orange"
-                              ? "outer-bowl bucket-text"
-                              : "both-bowl bucket-text"
+                                ? "outer-bowl bucket-text"
+                                : "both-bowl bucket-text"
+                          }
+                          style={
+                            {
+                              // width: "clamp(100px, 15vw, 127px)",
+                            }
                           }
                         >
                           <p className="text-center">{bucket.title}</p>

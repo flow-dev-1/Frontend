@@ -1,139 +1,101 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import Frame from "./components/Frame";
+import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
 import {
   selectPageData,
-  selectCurrentStep,
+  navigateNext,
 } from "../../../../../../../../redux/reducers/navigationSlice";
-import StepIndicator from "../../../components/StepIndicator";
+import TOTFeedbackModal from "../../../../TOT-2/components/TOTFeedbackModal";
+
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import adaptability from "../../../../../../../../assets/resilience-grit-images/adaptability.png";
 
-function WeekSixPage2() {
-  const dispatch = useDispatch(); // Initialize dispatch
+function WeekTwoPage2() {
+  const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
-  const currentStep = useSelector(selectCurrentStep);
-  const totalSteps = pageData?.steps?.length || 0;
-  const [answers, setAnswers] = useState([]); // State to hold answers
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
-  const step = pageData?.steps[currentStep - 1];
-  const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
-  // console.log(userAnswers)
+  const userAnswers = useSelector(userAnswer);
+  const [myAnswer, setMyAnswer] = useState(userAnswers);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const [showFeedback, setShowFeedback] = useState(false);
+  const handleCloseFeedback = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext()); // Navigate after closing the modal
+  };
 
   useEffect(() => {
     if (!userAnswers) return;
-    const response = userAnswers.activities?.find(
-      (item) => item.page === pageData.id
+    const response = userAnswers?.activities?.find(
+      (item) => item.page === pageData.id,
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    setMyAnswer(response?.answer ? response.answer : "");
+    return () => {};
   }, [userAnswers]);
 
   const saveUserInput = () => {
-    if (currentStep === 1) return true;
-    if (adminDatas.isAdmin) return true;
-
-    const stepData = answers.find((item) => item.stepId === currentStep);
-    if (!stepData) {
-      setErrorMessage("Oops! All inputs must be filled out.");
-      return false;
-    }
-
-    const values = Object.values(stepData.value);
-    if (values.length < 1) {
-      setErrorMessage("At least 1 value are required!");
-      return false;
-    }
-
-    const emptyInputs = values.filter((value) => value.trim() === "");
-    if (emptyInputs.length > 0) {
-      setErrorMessage(
-        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
-      );
+    if (!adminDatas.isAdmin && !myAnswer) {
+      setErrorMessage("Oops! Please enter a valid input!");
       return false;
     }
 
     setErrorMessage(""); // Clear error if input is valid
+    // Allow flow admin to proceed without input but do not dispatch answer
+    if (adminDatas.isAdmin) return true;
+    dispatch(
+      saveActivity({
+        page: pageData.id,
+        answer: myAnswer,
+      }),
+    );
 
-    const activityData = {
-      page: pageData.id,
-      answer: answers,
-    };
-    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
-
-    return true;
+    // Show feedback modal instead of navigating immediately
+    setShowFeedback(true);
+    // return true;
   };
 
-  const renderStep = () => {
-    if (!step) return <div>Invalid Step</div>;
-
-    switch (step.type) {
-      case "instruction":
-        return (
-          <QuestionBox extraStyle="bg-blue">
-            <div className="text-center mb-5 mt-5 mt-md-4">
-              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction">
-                Instruction
-              </h1>
-            </div>
-
-            <div className="text-center mb-5 mt-3 mt-md-0">
-              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
-                Below are six statements related to how you may have been
-                <br />
-                feeling recently.
-                <br />
-                <br />
-                <br />
-                <br />
-                For each one, choose the option that best reflects your
-                experience: <br />
-                <span className="fw-bold">
-                  Never, Occasionally, Frequently, Always.
-                </span>
-              </h2>
-              {/* <h2 className="text-white px-5 d-inline-block text-start tot-week-2-question-text">
-              </h2> */}
-            </div>
-          </QuestionBox>
-        );
-      case "dropdownScenario":
-        return (
-          <Frame
-            data={{
-              step: step.stepId,
-              question: step.question,
-              options: step.options,
-            }}
-            setErrorMessage={setErrorMessage}
-            answers={answers}
-            setAnswers={setAnswers}
-          />
-        );
-      default:
-        return <div>Unknown step type</div>;
-    }
+  const handleInputChange = (e) => {
+    setErrorMessage("");
+    setMyAnswer(e.target.value);
   };
 
   return (
     <>
-      {renderStep()}
-      {currentStep !== 1 && errorMessage && (
-        <div className="text-danger">{errorMessage}</div>
-      )}{" "}
-      {/* Display error message */}
-      <StepIndicator totalSteps={totalSteps} />
+      <QuestionBox extraStyle="bg-custom-blue">
+        <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-start mt-5">
+          <h2 className="text-blue fs-1 mb-0 flex-shrink-0 tot-question-text">
+            Question:
+          </h2>
+
+          <div className="d-flex flex-column flex-grow-1 min-w-0 tot-question-text mb-5">
+            <h2 className="text-gray fs-1 mb-2 ">
+              Type in what you remember from last week.
+            </h2>
+          </div>
+        </div>
+        <BigTextBox handleChange={handleInputChange} value={myAnswer} />
+      </QuestionBox>
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
+      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue mb-3">Thank you for reflecting.</p>
+        <p className="text-blue">
+          Revisiting what we learned helps strengthen connections between new
+          and previous ideas. As we continue, you will see how the concepts from
+          last week connect directly to today’s focus.
+        </p>
+      </TOTFeedbackModal>
     </>
   );
 }
 
-export default WeekSixPage2;
+export default WeekTwoPage2;
