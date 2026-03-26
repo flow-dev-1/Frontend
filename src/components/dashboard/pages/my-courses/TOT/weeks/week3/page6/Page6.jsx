@@ -5,8 +5,10 @@ import Frame from "./components/Frame";
 import Button from "../../../components/Button";
 import {
   selectPageData,
+  navigateNext,
   selectCurrentStep,
 } from "../../../../../../../../redux/reducers/navigationSlice";
+import TOTFeedbackModal from "../../../../TOT-2/components/TOTFeedbackModal";
 import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
@@ -21,6 +23,12 @@ function Page6() {
   const totalSteps = pageData?.steps?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
+
+  const [showFeedback, setShowFeedback] = useState(false);
+  const handleCloseFeedback = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext()); // Navigate after closing the modal
+  };
   const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
@@ -29,7 +37,7 @@ function Page6() {
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
-      (item) => item.page === pageData.id
+      (item) => item.page === pageData.id,
     );
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
   }, [userAnswers]);
@@ -53,7 +61,7 @@ function Page6() {
     const emptyInputs = values.filter((value) => value.trim() === "");
     if (emptyInputs.length > 0) {
       setErrorMessage(
-        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
+        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`,
       );
       return false;
     }
@@ -66,7 +74,12 @@ function Page6() {
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
-    return true;
+    if (currentStep !== 6) {
+      return true;
+    }
+
+    setShowFeedback(true);
+    return false;
   };
 
   const renderStep = () => {
@@ -130,6 +143,12 @@ function Page6() {
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
+      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue">
+          These small moments of connection help build trust and belonging in
+          the classroom.{" "}
+        </p>
+      </TOTFeedbackModal>
     </>
   );
 }

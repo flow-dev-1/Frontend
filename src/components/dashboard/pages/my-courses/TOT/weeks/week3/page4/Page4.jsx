@@ -4,7 +4,9 @@ import Button from "../../../components/Button";
 import {
   selectPageData,
   selectCurrentStep,
+  navigateNext,
 } from "../../../../../../../../redux/reducers/navigationSlice";
+import TOTFeedbackModal from "../../../../TOT-2/components/TOTFeedbackModal";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import {
   userAnswer,
@@ -20,6 +22,11 @@ function Page4() {
   const totalSteps = pageData?.steps?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const [showFeedback, setShowFeedback] = useState(false);
+  const handleCloseFeedback = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext()); // Navigate after closing the modal
+  };
 
   const step = pageData?.steps[currentStep - 1]; // Get the current step data
   const userAnswers = useSelector(userAnswer);
@@ -30,7 +37,7 @@ function Page4() {
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
-      (item) => item.page === pageData.id
+      (item) => item.page === pageData.id,
     );
 
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
@@ -52,8 +59,12 @@ function Page4() {
       answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    if (currentStep !== 2) {
+      return true;
+    }
 
-    return true;
+    setShowFeedback(true);
+    return false;
   };
 
   // console.log(answers, "Answers")
@@ -94,6 +105,12 @@ function Page4() {
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
+      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue">
+          Reflecting on your own experiences helps you recognize the small
+          actions that strengthen teacher-student relationships.
+        </p>
+      </TOTFeedbackModal>
     </>
   );
 }
