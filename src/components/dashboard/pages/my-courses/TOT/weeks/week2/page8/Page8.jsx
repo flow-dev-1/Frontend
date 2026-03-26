@@ -3,7 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
-import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+import {
+  selectPageData,
+  navigateNext,
+} from "../../../../../../../../redux/reducers/navigationSlice";
+import TOTFeedbackModal from "../../../../TOT-2/components/TOTFeedbackModal";
+
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import {
   userAnswer,
@@ -18,14 +23,19 @@ function WeekTwoPage8() {
   const userAnswers = useSelector(userAnswer);
   const [myAnswer, setMyAnswer] = useState(userAnswers);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showFeedback, setShowFeedback] = useState(false);
+  const handleCloseFeedback = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext()); // Navigate after closing the modal
+  };
 
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers?.activities?.find(
-      (item) => item.page === pageData.id
+      (item) => item.page === pageData.id,
     );
     setMyAnswer(response?.answer ? response.answer : "");
-    return () => { };
+    return () => {};
   }, [userAnswers]);
 
   const saveUserInput = () => {
@@ -41,9 +51,12 @@ function WeekTwoPage8() {
       saveActivity({
         page: pageData.id,
         answer: myAnswer,
-      })
+      }),
     );
-    return true;
+
+    // Show feedback modal instead of navigating immediately
+    setShowFeedback(true);
+    // return true;
   };
 
   const handleInputChange = (e) => {
@@ -66,8 +79,7 @@ function WeekTwoPage8() {
             <h2 className="text-gray fs-1 mb-2">
               Do you think teachers have the same triggers?
             </h2>
-            <h2 className="text-gray fs-1 mb-4"> Why do you think so?
-            </h2>
+            <h2 className="text-gray fs-1 mb-4"> Why do you think so?</h2>
           </div>
         </div>
         <BigTextBox handleChange={handleInputChange} value={myAnswer} />
@@ -77,6 +89,17 @@ function WeekTwoPage8() {
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
+
+      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue mb-3">
+          Recognizing triggers is an important step in emotional awareness.
+        </p>
+        <p className="text-blue">
+          Different teachers may respond differently to the same situation, but
+          understanding what affects you personally helps you prepare healthier
+          responses.
+        </p>
+      </TOTFeedbackModal>
     </>
   );
 }

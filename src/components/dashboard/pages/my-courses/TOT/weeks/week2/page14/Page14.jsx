@@ -1,256 +1,221 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import AssessmentQuestion from "../../../components/AssessmentQuestion";
 import Button from "../../../components/Button";
 import {
-  navigateNext,
+  selectPageData,
   selectCurrentStep,
-  selectCurrentWeek,
-  showReviewPopup,
+  navigateNext,
 } from "../../../../../../../../redux/reducers/navigationSlice";
-import { getWeekAssessment } from "../../../data";
+import TOTFeedbackModal from "../../../../TOT-2/components/TOTFeedbackModal";
+
 import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
-  updateData,
-  saveAssessment,
+  saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-toastify";
-import userService from "../../../../../../../../services/api/user";
-import { calculateResult } from "../../../utility";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import ScenarioFrame from "./components/ScenarioFrame";
+import SonarStaircase from "./components/SonarStaircase";
 
-function WeekTwoAssessment() {
+function Page10() {
   const dispatch = useDispatch();
+  const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
-  const currentWeek = useSelector(selectCurrentWeek);
-  const assessmentData = getWeekAssessment(currentWeek);
-  const totalSteps = assessmentData?.questions?.length || 0;
-  const [answers, setAnswers] = useState([]); // State to hold answers
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const [answers, setAnswers] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
   const userAnswers = useSelector(userAnswer);
-  const isLastQuestion = currentStep === assessmentData.totalQuestions;
   const adminDatas = useSelector(adminData);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const handleCloseFeedback = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext()); // Navigate after closing the modal
+  };
+
+  // Calculate total steps: 1 instruction + scenarios (each has scenario page + sonar page)
+  const totalSteps = pageData?.steps
+    ? 1 + (pageData.steps.length - 1) * 2 // -1 for instruction, *2 for scenario + sonar
+    : 0;
 
   useEffect(() => {
     if (!userAnswers) return;
-    setAnswers(userAnswers?.assessments || []);
-    return () => { };
-  }, [userAnswers]);
+    const response = userAnswers.activities?.find(
+      (item) => item.page === pageData.id,
+    );
 
-  // Mutation for saving user data
-  const mutation = useMutation({
-    mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
-    onSuccess: (data) => {
-      toast.dismiss();
-      toast.success(
-        `You scored ${calculateResult(
-          assessmentData.questions,
-          answers,
-          totalSteps
-        )}% in the quiz`
-      );
-      toast.success(data.message || "Answers saved successfully!"); // Show success toast
-      dispatch(
-        updateData({
-          course: null,
-          courseEnrollmentId: null,
-          week: 1,
-          activities: [],
-          assessments: [],
-        })
-      );
-      dispatch(navigateNext());
-    },
-    onError: (error) => {
-      console.log(error, "errorrrr");
-      toast.dismiss();
-      toast.error(error?.message || error?.error || "Error saving answers"); // Show error toast
-    },
-  });
+    if (response?.answer) {
+      setAnswers(response.answer);
+    }
+  }, [userAnswers, pageData?.id]);
 
-  const handleOptionSelect = (optionKey) => {
-    setErrorMessage("");
-    setAnswers((prevAnswers) => {
-      const updatedAnswers = [...prevAnswers];
-      const stepIndex = updatedAnswers.findIndex(
-        (answer) => answer.id === currentStep
-      );
+  // Helper to determine current view
+  const getCurrentStepInfo = () => {
+    if (currentStep === 1) {
+      return { type: "instruction" };
+    }
 
-      if (stepIndex !== -1) {
-        updatedAnswers[stepIndex] = {
-          ...updatedAnswers[stepIndex],
-          value: optionKey,
-        };
-      } else {
-        updatedAnswers.push({
-          id: currentStep,
-          value: optionKey,
-        });
-      }
+    const adjustedStep = currentStep - 2; // -1 for instruction, -1 for 0-indexing
+    const scenarioIndex = Math.floor(adjustedStep / 2);
+    const isScenarioPage = adjustedStep % 2 === 0;
 
-      return updatedAnswers;
-    });
+    const scenarios =
+      pageData?.steps.filter((s) => s.type === "scenario") || [];
+
+    if (scenarioIndex >= scenarios.length) {
+      return { type: "invalid" };
+    }
+
+    return {
+      type: isScenarioPage ? "scenario" : "sonar",
+      scenario: scenarios[scenarioIndex],
+      scenarioNumber: scenarios[scenarioIndex].scenarioNumber,
+    };
   };
 
-  const saveUserData = () => {
-    if (adminDatas.isAdmin) return true;
-    const stepData = answers.find((item) => item.id === currentStep);
-    if (!stepData) {
-      setErrorMessage("Oops! Please choose an option to proceed.");
-      return false;
-    }
+  const saveUserInput = () => {
+    const stepInfo = getCurrentStepInfo();
 
-    setErrorMessage(""); // Clear error if input is valid
-
-    // If its the last question submit else update answer
-    dispatch(saveAssessment(answers));
-
-    if (isLastQuestion) {
-      const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 6;
-
-      if (hasUnansweredQuestions) {
-        setErrorMessage(
-          "Oops! Some unanswered questions have been detected. Kindly go back and review!"
-        );
-        return false;
-      }
-
-      const userScore = calculateResult(
-        assessmentData.questions,
-        answers,
-        totalSteps
-      );
-
-      mutation.mutate({
-        ...userAnswers,
-        assessments: answers,
-        rating: userScore.toString(),
-      });
-
-      // For nested questions check that all answeres were provided
-
-      // Page 2 has nested questions
-      // const selectedActivity = userAnswers.activities.find(
-      //   (activity) => activity.page === 2
-      // );
-      // const isValidActivity =
-      //   selectedActivity &&
-      //   Array.isArray(selectedActivity.answer) &&
-      //   selectedActivity.answer.length === 3;
-
-      // if (isValidActivity) {
-      //   const userScore = calculateResult(
-      //     assessmentData.questions,
-      //     answers,
-      //     totalSteps
-      //   );
-
-      //   console.log(userScore, "userScore");
-
-      //   mutation.mutate({
-      //     ...userAnswers,
-      //     assessments: answers,
-      //     rating: userScore.toString(),
-      //   });
-
-      //   //*****************This will come in later wen the code begins to break or escape questions ******/
-
-      //   // const isValid = selectedActivity.answer.every(item =>
-      //   //   item.stepId !== undefined &&
-      //   //   item.value &&
-      //   //   Object.keys(item.value).length === 3
-      //   // );
-
-      //   // if (isValid) {
-      //   //   const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
-
-      //   //   console.log(userScore, "userScore")
-
-      //   //   // mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
-      //   // } else {
-
-      //   //   setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-      //   //   return false;
-      //   // }
-      // } else {
-      //   setErrorMessage(
-      //     "Oops! Some unanswered questions have been detected. Kindly go back and review!"
-      //   );
-      //   return false;
-      // }
-    } else {
+    // Skip validation for instruction
+    if (stepInfo.type === "instruction") {
       return true;
     }
+
+    // Skip validation for admins
+    if (adminDatas.isAdmin) return true;
+
+    // For scenario page with input
+    if (stepInfo.type === "scenario") {
+      if (stepInfo.scenario?.scenarioType === "withInput") {
+        const scenarioAnswer = answers[`scenario_${stepInfo.scenarioNumber}`];
+
+        if (!scenarioAnswer) {
+          setErrorMessage("Please describe your scenario before proceeding.");
+          return false;
+        }
+      }
+      setErrorMessage("");
+      return true;
+    }
+
+    // For sonar staircase - check all steps are completed
+    if (stepInfo.type === "sonar") {
+      const sonarSteps = stepInfo.scenario?.sonarSteps || [];
+      const scenarioKey = `scenario_${stepInfo.scenarioNumber}`;
+      const sonarAnswers = answers[scenarioKey]?.sonar || {};
+
+      const allCompleted = sonarSteps.every((step) => {
+        const answer = sonarAnswers[step.id];
+        return answer && answer.trim() !== "";
+      });
+
+      if (!allCompleted) {
+        setErrorMessage("Please complete all SONAR steps before proceeding.");
+        return false;
+      }
+    }
+
+    setErrorMessage("");
+
+    const activityData = {
+      page: pageData.id,
+      answer: answers,
+    };
+    dispatch(saveActivity(activityData));
+
+    if (currentStep !== 7) {
+      return true;
+    }
+
+    setShowFeedback(true);
+    return false;
   };
 
   const renderStep = () => {
-    if (!assessmentData) return <div>Loading assessment...</div>;
+    const stepInfo = getCurrentStepInfo();
 
-    const currentQuestion = assessmentData.questions[currentStep - 1];
-    if (!currentQuestion) return <div>Invalid Step</div>;
+    if (stepInfo.type === "invalid") {
+      return <div>Invalid Step</div>;
+    }
 
-    const formattedOptions = currentQuestion.options.map((option) => ({
-      [option.id]: option.text,
-    }));
+    switch (stepInfo.type) {
+      case "instruction":
+        return (
+          <QuestionBox extraStyle="bg-blue">
+            <div className="text-center mb-5 mt-5 mt-md-4">
+              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction mt-5">
+                Instruction
+              </h1>
+            </div>
 
-    return (
-      <AssessmentQuestion
-        data={{
-          question: currentQuestion.question,
-          options: formattedOptions,
-        }}
-        currentStep={currentStep}
-        selectedOption={answers[currentStep - 1]?.value || ""}
-        onOptionSelect={handleOptionSelect}
-        isPreAssessment={true}
-      />
-    );
+            <div className="mb-5 mt-3 mt-md-0">
+              <h2 className="text-white py-2 px-5 rounded text-start tot-week-2-question-text">
+                Welcome to the <span className="fw-bold">SONAR</span> staircase.
+              </h2>
+              <h2 className="text-white py-2 px-5 rounded text-start tot-week-2-question-text">
+                You will be presented with a 5 step staircase labeled with{" "}
+                <br />
+                the words{" "}
+                <span className="fw-bold">STOP, OBSERVE, NAME, ASK </span> and
+                <span className="fw-bold"> REGULATE.</span>
+              </h2>
+              <h2 className="text-white py-2 px-5 rounded text-start tot-week-2-question-text">
+                You will also be shown 3 scenarios. For each stressful <br />
+                classroom scenario, use the{" "}
+                <span className="fw-bold">SONAR</span> pathway to walk <br />
+                through your response. Reflect on each step by answering <br />
+                the prompts below.
+              </h2>
+            </div>
+          </QuestionBox>
+        );
+
+      case "scenario":
+        return (
+          <ScenarioFrame
+            scenario={stepInfo.scenario}
+            answers={answers}
+            setAnswers={setAnswers}
+            setErrorMessage={setErrorMessage}
+          />
+        );
+
+      case "sonar":
+        return (
+          <SonarStaircase
+            scenario={stepInfo.scenario}
+            answers={answers}
+            setAnswers={setAnswers}
+            setErrorMessage={setErrorMessage}
+          />
+        );
+
+      default:
+        return <div>Unknown step type</div>;
+    }
   };
-
-  if (!assessmentData) return null;
-
-  // If we're on the last question and user has made a selection,
-  // show the review popup instead of the next button
-
-  const hasCurrentSelection = !!answers[currentStep];
-  const shouldShowReviewButton = isLastQuestion && hasCurrentSelection;
 
   return (
     <>
-      <QuestionBox>
-        <div className="text-white p-3 mb-3">
-          <h2 className="fs-1 text-blue text-center tot-week-2-question-text fw-bold ">
-            {assessmentData.title}
-          </h2>
-          <p className="text-center text-blue">{assessmentData.subtitle}</p>
+      {renderStep()}
+      {currentStep !== 1 && errorMessage && (
+        <div className="text-danger text-center mt-3 fw-bold fs-5">
+          {errorMessage}
         </div>
-
-        {renderStep()}
-      </QuestionBox>
-      {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
-      {/* Display error message */}
+      )}
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
-        <Button text="Prev" loading={mutation.isPending} />
-        {shouldShowReviewButton ? (
-          <Button
-            text="Review"
-            customOnClick={() => dispatch(showReviewPopup())}
-          />
-        ) : (
-          <Button
-            text="Next"
-            customOnClick={saveUserData}
-            loading={mutation.isPending}
-          />
-        )}
+        <Button text="Prev" />
+        <Button text="Next" customOnClick={saveUserInput} />
       </div>
+
+      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue">
+          Practicing emotional regulation helps build awareness and improves how
+          teachers respond during challenging classroom moments.
+        </p>
+      </TOTFeedbackModal>
     </>
   );
 }
 
-export default WeekTwoAssessment;
+export default Page10;

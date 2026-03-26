@@ -913,7 +913,7 @@ export const courseContent = {
         id: 2,
         type: "question",
         questionType: "text",
-        question: "Do you remember what we discussed last week?",
+        question: " Type in what you remember from last week.",
         hasImage: false,
         imageSrc: "mindset.png",
         inputType: "bigTextBox",
@@ -1069,6 +1069,106 @@ export const courseContent = {
       },
       {
         id: 10,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "Think of a student you found difficult to connect with. What got in the way?",
+              },
+            ],
+          },
+          {
+            stepId: 2,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "What helped you build a better relationship with them over time?",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "What helped you build a better relationship with them over time?",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 11,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/ToT_2_6.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 12,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question: "How might this affect your teaching?",
+            options: [
+              {
+                id: "1",
+                text: "No effect",
+              },
+              {
+                id: "2",
+                text: "Slight impact",
+              },
+              {
+                id: "3",
+                text: "Moderate impact",
+              },
+              {
+                id: "4",
+                text: "Moderate impact",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 13,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/ToT_2_6.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 14,
         type: "multiStep",
         steps: [
           {
@@ -1261,7 +1361,7 @@ export const courseContent = {
         },
       },
       {
-        id: 11,
+        id: 15,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/ToT_2_6.mp4",
@@ -1271,7 +1371,7 @@ export const courseContent = {
         },
       },
       {
-        id: 12,
+        id: 16,
         type: "multiStep",
         title: "Teacher Response Ranking",
         steps: [
@@ -1420,7 +1520,7 @@ export const courseContent = {
         },
       },
       {
-        id: 13,
+        id: 17,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/ToT_2_7.mp4",

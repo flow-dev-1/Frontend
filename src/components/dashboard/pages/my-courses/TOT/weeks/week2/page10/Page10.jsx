@@ -1,181 +1,84 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import QuestionBox from "../../../components/QuestionBox";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "../../../components/Button";
 import {
   selectPageData,
   selectCurrentStep,
 } from "../../../../../../../../redux/reducers/navigationSlice";
-import StepIndicator from "../../../components/StepIndicator";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-import ScenarioFrame from "./components/ScenarioFrame";
-import SonarStaircase from "./components/SonarStaircase";
+import Frame from "./components/Frame";
+import StepIndicator from "../../../components/StepIndicator";
 
 function Page10() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
-  const [answers, setAnswers] = useState({});
-  const [errorMessage, setErrorMessage] = useState("");
+  const totalSteps = pageData?.steps?.length || 0;
+  const [answers, setAnswers] = useState([]); // State to hold answers
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+
+  const step = pageData?.steps[currentStep - 1]; // Get the current step data
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
 
-  // Calculate total steps: 1 instruction + scenarios (each has scenario page + sonar page)
-  const totalSteps = pageData?.steps
-    ? 1 + (pageData.steps.length - 1) * 2 // -1 for instruction, *2 for scenario + sonar
-    : 0;
+  // console.log(pageData)
 
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
-      (item) => item.page === pageData.id
+      (item) => item.page === pageData.id,
     );
 
-    if (response?.answer) {
-      setAnswers(response.answer);
-    }
-  }, [userAnswers, pageData?.id]);
-
-  // Helper to determine current view
-  const getCurrentStepInfo = () => {
-    if (currentStep === 1) {
-      return { type: "instruction" };
-    }
-
-    const adjustedStep = currentStep - 2; // -1 for instruction, -1 for 0-indexing
-    const scenarioIndex = Math.floor(adjustedStep / 2);
-    const isScenarioPage = adjustedStep % 2 === 0;
-
-    const scenarios =
-      pageData?.steps.filter((s) => s.type === "scenario") || [];
-
-    if (scenarioIndex >= scenarios.length) {
-      return { type: "invalid" };
-    }
-
-    return {
-      type: isScenarioPage ? "scenario" : "sonar",
-      scenario: scenarios[scenarioIndex],
-      scenarioNumber: scenarios[scenarioIndex].scenarioNumber,
-    };
-  };
+    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+  }, [userAnswers]);
 
   const saveUserInput = () => {
-    const stepInfo = getCurrentStepInfo();
-
-    // Skip validation for instruction
-    if (stepInfo.type === "instruction") {
-      return true;
-    }
-
-    // Skip validation for admins
     if (adminDatas.isAdmin) return true;
 
-    // For scenario page with input
-    if (stepInfo.type === "scenario") {
-      if (stepInfo.scenario?.scenarioType === "withInput") {
-        const scenarioAnswer = answers[`scenario_${stepInfo.scenarioNumber}`];
+    const stepData = answers.find((item) => item.stepId === currentStep);
 
-        if (!scenarioAnswer) {
-          setErrorMessage("Please describe your scenario before proceeding.");
-          return false;
-        }
-      }
-      setErrorMessage("");
-      return true;
+    if (!stepData || !stepData.value || stepData.value.trim() === "") {
+      setErrorMessage("Oops! Please enter a valid input!");
+      return false;
     }
-
-    // For sonar staircase - check all steps are completed
-    if (stepInfo.type === "sonar") {
-      const sonarSteps = stepInfo.scenario?.sonarSteps || [];
-      const scenarioKey = `scenario_${stepInfo.scenarioNumber}`;
-      const sonarAnswers = answers[scenarioKey]?.sonar || {};
-
-      const allCompleted = sonarSteps.every((step) => {
-        const answer = sonarAnswers[step.id];
-        return answer && answer.trim() !== "";
-      });
-
-      if (!allCompleted) {
-        setErrorMessage("Please complete all SONAR steps before proceeding.");
-        return false;
-      }
-    }
-
-    setErrorMessage("");
+    setErrorMessage(""); // Clear error if input is valid
 
     const activityData = {
       page: pageData.id,
       answer: answers,
     };
-    dispatch(saveActivity(activityData));
+    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
     return true;
   };
 
+  // console.log(answers, "Answers")
+
   const renderStep = () => {
-    const stepInfo = getCurrentStepInfo();
+    // const step = pageData?.steps[currentStep - 1];
+    // console.log(currentStep, step, "step")
+    if (!step) return <div>Invalid Step</div>;
 
-    if (stepInfo.type === "invalid") {
-      return <div>Invalid Step</div>;
-    }
-
-    switch (stepInfo.type) {
-      case "instruction":
-        return (
-          <QuestionBox extraStyle="bg-blue">
-            <div className="text-center mb-5 mt-5 mt-md-4">
-              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction mt-5">
-                Instruction
-              </h1>
-            </div>
-
-            <div className="mb-5 mt-3 mt-md-0">
-              <h2 className="text-white py-2 px-5 rounded text-start tot-week-2-question-text">
-                Welcome to the <span className="fw-bold">SONAR</span> staircase.
-              </h2>
-              <h2 className="text-white py-2 px-5 rounded text-start tot-week-2-question-text">
-                You will be presented with a 5 step staircase labeled with{" "}
-                <br />
-                the words{" "}
-                <span className="fw-bold">STOP, OBSERVE, NAME, ASK </span> and
-                <span className="fw-bold"> REGULATE.</span>
-              </h2>
-              <h2 className="text-white py-2 px-5 rounded text-start tot-week-2-question-text">
-                You will also be shown 3 scenarios. For each stressful <br />
-                classroom scenario, use the{" "}
-                <span className="fw-bold">SONAR</span> pathway to walk <br />
-                through your response. Reflect on each step by answering <br />
-                the prompts below.
-              </h2>
-            </div>
-          </QuestionBox>
-        );
-
+    switch (step.type) {
       case "scenario":
         return (
-          <ScenarioFrame
-            scenario={stepInfo.scenario}
+          <Frame
+            data={{
+              step: step.stepId,
+              question: step.question,
+              questions: step.questions.map((q) => ({
+                [q.type]: q.question,
+              })),
+            }}
+            setErrorMessage={setErrorMessage}
             answers={answers}
             setAnswers={setAnswers}
-            setErrorMessage={setErrorMessage}
           />
         );
-
-      case "sonar":
-        return (
-          <SonarStaircase
-            scenario={stepInfo.scenario}
-            answers={answers}
-            setAnswers={setAnswers}
-            setErrorMessage={setErrorMessage}
-          />
-        );
-
       default:
         return <div>Unknown step type</div>;
     }
@@ -184,13 +87,10 @@ function Page10() {
   return (
     <>
       {renderStep()}
-      {currentStep !== 1 && errorMessage && (
-        <div className="text-danger text-center mt-3 fw-bold fs-5">
-          {errorMessage}
-        </div>
-      )}
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
+      {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
-      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
+      <div className="d-flex justify-content-center gap-96px gap-4 mt-4 ">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
