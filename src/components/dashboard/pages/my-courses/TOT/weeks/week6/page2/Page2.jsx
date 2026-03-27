@@ -69,13 +69,14 @@ function WeekTwoPage2() {
     <>
       <QuestionBox extraStyle="bg-custom-blue">
         <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-start mt-5">
-          <h2 className="text-blue fs-1 mb-0 flex-shrink-0 tot-question-text">
-            Question:
-          </h2>
-
           <div className="d-flex flex-column flex-grow-1 min-w-0 tot-question-text mb-5">
             <h2 className="text-gray fs-1 mb-2 ">
-              Type in what you remember from last week.
+              Have you ever seen a match stick light up other matchsticks when
+              it is lit?
+              <br />
+              <br />
+              Now, imagine that the match stick goes off, would it still be able
+              to light other matchsticks?
             </h2>
           </div>
         </div>
@@ -87,11 +88,14 @@ function WeekTwoPage2() {
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
       <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
-        <p className="text-blue mb-3">Thank you for reflecting.</p>
+        <p className="text-blue mb-3">
+          {" "}
+          In this scenario, you are like the matchstick that lights your
+          students up.{" "}
+        </p>
         <p className="text-blue">
-          Revisiting what we learned helps strengthen connections between new
-          and previous ideas. As we continue, you will see how the concepts from
-          last week connect directly to today’s focus.
+          However, if you burn out, you will not be able to  bring light both to
+          yourself and to others. Let’s talk more about this
         </p>
       </TOTFeedbackModal>
     </>

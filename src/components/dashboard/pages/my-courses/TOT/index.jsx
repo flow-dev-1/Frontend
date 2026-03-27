@@ -42,8 +42,6 @@ import Page22 from "./weeks/week1/page22/Page22.jsx";
 import Page23 from "./weeks/week1/page23/Page23.jsx";
 import Page24 from "./weeks/week1/page24/Page24";
 import Page25 from "./weeks/week1/page25/Page25.jsx";
-import Page26 from "./weeks/week1/page26/Page26.jsx";
-import Page27 from "./weeks/week1/page27/Page27.jsx";
 
 // Week 2
 import WeekTwoPage1 from "./weeks/week2/page1/Page1";
@@ -292,10 +290,6 @@ const WeekContent = () => {
             return <Page24 />;
           case 25:
             return <Page25 />;
-          case 26:
-            return <Page26 />;
-          case 27:
-            return <Page27 />;
           default:
             return null;
         }

@@ -3,7 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import "./page16.css";
 import Button from "../../../components/Button";
 import QuestionBox from "../../../components/QuestionBox";
-import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+import {
+  selectPageData,
+  navigateNext,
+  selectCurrentStep,
+} from "../../../../../../../../redux/reducers/navigationSlice";
+import TOTFeedbackModal from "../../../../TOT-2/components/TOTFeedbackModal";
 import {
   userAnswer,
   saveActivity,
@@ -19,6 +24,11 @@ function Page15() {
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [isTimeUp, setIsTimeUp] = useState(false);
   const [savedOnTimeout, setSavedOnTimeout] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const handleCloseFeedback = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext()); // Navigate after closing the modal
+  };
 
   const adminDatas = useSelector(adminData);
 
@@ -121,7 +131,9 @@ function Page15() {
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
     // If time is up we've already saved on timeout; allow proceed.
-    if (isTimeUp) return true; // Allow proceeding if time is up
+    if (isTimeUp) {
+      setShowFeedback(true);
+    } // Allow proceeding if time is up
 
     if (answers.length < 5) {
       setErrorMessage("At least 5 values are required!");
@@ -144,7 +156,9 @@ function Page15() {
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
-    return true;
+    // Show feedback modal instead of navigating immediately
+    setShowFeedback(true);
+    // return true;
   };
 
   // Modified handleInputChange to check timer
@@ -228,6 +242,16 @@ function Page15() {
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
+      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue mb-3">How did that activity feel educators?</p>
+        <p className="text-blue">
+          Was it easy or difficult to list your strengths? Many of us find it
+          harder to name our strengths than our weaknesses but why? If we, as
+          adults, struggle with this, imagine how our students feel! Now, let’s
+          explore how we can help students build their strengths through
+          Strengths-Based Teaching, Gratitude, and Well-Being.{" "}
+        </p>
+      </TOTFeedbackModal>
     </>
   );
 }

@@ -1,53 +1,55 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import QuestionBox from "../../../components/QuestionBox";
+import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
-import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
+import {
+  selectPageData,
+  selectCurrentStep,
+  navigateNext,
+} from "../../../../../../../../redux/reducers/navigationSlice";
+import TOTFeedbackModal from "../../../../TOT-2/components/TOTFeedbackModal";
+import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-import QuestionBox from "../../../components/QuestionBox";
-import ColoredTextField from "../../../components/ColoredTextField";
-import "./page20.css";
-import BigTextBox from "../../../components/BigTextBox";
+import Frame from "./components/Frame";
 
 function Page19() {
+  const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
-  const dispatch = useDispatch();
+  const currentStep = useSelector(selectCurrentStep);
+  const totalSteps = pageData?.steps?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
-  const adminDatas = useSelector(adminData);
 
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
+  const adminDatas = useSelector(adminData);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const handleCloseFeedback = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext()); // Navigate after closing the modal
+  };
 
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id,
     );
-    const answerCopy = adminDatas.isAdmin
-      ? []
-      : response?.answer
-        ? [...response.answer]
-        : [];
-    setAnswers(answerCopy);
-    return () => {};
+
+    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
   }, [userAnswers]);
 
   const saveUserInput = () => {
+    if (currentStep === 1) return true;
     if (adminDatas.isAdmin) return true;
 
-    if (answers.length < 2) {
-      setErrorMessage("At least 2 values are required!");
-      return false;
-    }
-
-    const emptyInputs = answers.filter((item) => item?.value?.trim() === "");
-    if (emptyInputs.length > 0) {
-      setErrorMessage(
-        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`,
-      );
+    const stepData = answers.find((item) => item.stepId === currentStep);
+    if (!stepData) {
+      setErrorMessage("Oops! All inputs must be filled out.");
       return false;
     }
 
@@ -59,98 +61,84 @@ function Page19() {
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
-    return true;
+    if (currentStep !== 4) {
+      return true;
+    }
+
+    setShowFeedback(true);
+    return false;
   };
 
-  const handleInputChange = (index, value) => {
+  const handleInputChange = (e) => {
     setErrorMessage("");
-    // Update answers state with the new value
-    setAnswers((prevAnswers) => {
-      // Check if the answer already exists
-      const existingAnswerIndex = prevAnswers.findIndex(
-        (answer) => answer.index === index,
-      );
-      if (existingAnswerIndex > -1) {
-        // Update existing answer
-        const updatedAnswers = [...prevAnswers];
-        updatedAnswers[existingAnswerIndex] = {
-          ...updatedAnswers[existingAnswerIndex],
-          value,
-        };
-        return updatedAnswers;
-      } else {
-        // Add new answer
-        return [...prevAnswers, { index, value }];
-      }
-    });
+    setAnswers(e.target.value);
+  };
+
+  const renderStep = () => {
+    if (!step) return <div>Invalid Step</div>;
+
+    switch (step.type) {
+      case "instruction":
+        return (
+          <QuestionBox extraStyle="bg-blue">
+            <div className="text-center mb-5 mt-5 mt-md-4">
+              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction">
+                Instruction
+              </h1>
+            </div>
+
+            <div className="text-center mb-5 mt-3 mt-md-0">
+              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
+                For this next activity, you will be shown different scenarios.
+              </h2>
+              <br />
+              <br />
+              <br />
+              <h2 className="text-white px-5 d-inline-block text-start tot-week-2-question-text">
+                Type out the strength you feel is present in that scenario.
+              </h2>
+            </div>
+          </QuestionBox>
+        );
+      case "scenario":
+        return (
+          <Frame
+            data={{
+              step: step.stepId,
+              question: step.questions[0].question,
+              questions: step.questions.map((q) => ({
+                [q.type]: q.question,
+              })),
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setAnswers}
+          />
+        );
+      default:
+        return <div>Unknown step type</div>;
+    }
   };
 
   return (
     <>
-      <QuestionBox extraMobileStyle={""} extraStyle={"bg-custom-blue"}>
-        <div className="container">
-          <div className="row justify-content-between align-items-start g-4">
-            {/* Question heading */}
-            <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-start mt-5">
-              <h2 className="text-blue fs-1 mb-0 flex-shrink-0 tot-question-text">
-                Question:
-              </h2>
-
-              <div className="d-flex flex-column flex-grow-1 min-w-0 tot-question-text">
-                <h2 className="text-gray fs-1 mb-3">{pageData.question}</h2>
-              </div>
-            </div>
-
-            {/* Fields stack on mobile, row on desktop */}
-            <div className="d-flex flex-column flex-md-row justify-content-between align-items-start w-100 gap-3">
-              {pageData.fields.map((field, index) => (
-                <div
-                  key={index}
-                  className="px-3 bg-white"
-                  // style={{ minWidth: { md: "150px" } }}
-                >
-                  {/* Label */}
-                  <p className="bg-gray text-white p-1 mt-1 d-inline-block fs-5 rounded-1">
-                    {field.number}.
-                  </p>
-
-                  <BigTextBox
-                    value={
-                      answers.find((answer) => answer.index === index)?.value ||
-                      ""
-                    }
-                    handleChange={(e) =>
-                      handleInputChange(index, e.target.value)
-                    }
-                    // value={myAnswer}
-                  />
-
-                  {/* Expanding Textarea */}
-                  {/* <div className="w-100">
-                    <ColoredTextField
-                      index={index}
-                      color={field.textFieldColor}
-                      value={
-                        answers.find((answer) => answer.index === index)
-                          ?.value || ""
-                      }
-                      handleChange={(e) =>
-                        handleInputChange(index, e.target.value)
-                      }
-                      extraMobileStyles={"week-4-textarea"}
-                    />
-                  </div> */}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </QuestionBox>
-      {errorMessage && <div className="text-danger">{errorMessage}</div>}
+      {renderStep()}
+      {currentStep !== 1 && errorMessage && (
+        <div className="text-danger">{errorMessage}</div>
+      )}{" "}
+      {/* Display error message */}
+      <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
+      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue mb-3">Good one!</p>
+        <p className="text-blue">
+          You can guess how important it is to recognize these strengths and
+          positive qualities in your students also.
+        </p>
+      </TOTFeedbackModal>
     </>
   );
 }

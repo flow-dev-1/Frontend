@@ -127,20 +127,19 @@ function Page8() {
               </h1>
             </div>
 
-            <div className="text-center mb-5 mt-3 mt-md-0">
+            <div className="mb-5 mt-3 mt-md-0">
               <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
-                In this next activity, we are going to recognize different
-                emotional triggers by grouping them into:
+                Drag and drop each item into the circle where it best fits.
+                <br />
+                <br />
+                For example, close colleagues might belong in your Inner Circle,
+                while a school wellness program could go in the Middle Circle.
+                <br />
+                <br />A potential partnership with a community organization
+                would fit into the Outer Circle.
               </h2>
               <br />
               <br />
-            </div>
-            <div className="text-center mb-5 mt-3 mt-md-0">
-              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
-                <span className="fw-bold">Mildly triggering, Frustrating </span>{" "}
-                and
-                <span className="fw-bold">Highly triggering. </span>
-              </h2>
             </div>
           </QuestionBox>
         );

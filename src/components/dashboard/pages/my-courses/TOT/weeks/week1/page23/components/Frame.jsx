@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import QuestionBox from "../../../../components/QuestionBox";
-import CustomDropDown from "./CustomDropDown";
+import BigTextBox from "../../../../components/BigTextBox";
 
 function Frame({ data, answers, setAnswers, setErrorMessage }) {
-  const { step, question, options } = data;
+  const { step, question } = data;
 
-  const handleInputChange = (value) => {
+  const handleInputChange = (index, value) => {
     setErrorMessage("");
+    // Update answers state with the new value
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
       const stepIndex = updatedAnswers.findIndex(
@@ -16,12 +17,13 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
       if (stepIndex !== -1) {
         updatedAnswers[stepIndex] = {
           ...updatedAnswers[stepIndex],
-          value: value, // Store single value directly
+          stepId: step,
+          value,
         };
       } else {
         updatedAnswers.push({
           stepId: step,
-          value: value,
+          value,
         });
       }
 
@@ -29,38 +31,24 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
     });
   };
 
-  const mapStepToLetter = (step) => {
-    switch (step) {
-      case 1:
-        return "A";
-      case 2:
-        return "B";
-    }
-  };
-
   return (
-    <QuestionBox extraStyle={"bg-custom-blue"}>
+    <QuestionBox extraStyle="bg-custom-blue">
       <div className="p-1 p-md-5">
-        {/* <div className="text-center mb-5 mt-4 mt-md-0">
+        <div className="text-center mb-5 mt-4 mt-md-0">
           <h2 className="text-white bg-blue py-2 px-4 fs-2 font-bold rounded-3 d-inline display-4 text-center tot-week-2-question-text">
-            Quick Check-In
+            Statement {step - 1}
           </h2>
-        </div> */}
+        </div>
         <div className="d-flex gap-2 flex-column flex-md-row">
-          <h2 className="text-gray fs-3 fs-md-1 tot-week-2-question-text text-center fw-bold">
+          <h2 className="text-gray fs-4 fs-md-1 tot-week-2-question-text">
             {question}
           </h2>
         </div>
-
-        <div className="mt-2">
-          <CustomDropDown
-            value={
-              answers.find((answer) => answer.stepId === step)?.value || ""
-            }
-            onChange={handleInputChange}
-            options={options} // Pass options here
-          />
-        </div>
+        <BigTextBox
+          value={answers.find((answer) => answer.stepId === step)?.value || ""} // Pass the current answer
+          handleChange={(e) => handleInputChange(step, e.target.value)} // Handle input change
+        />
+        {/* <BigTextBox handleChange={handleInputChange} value={myAnswer} /> */}
       </div>
     </QuestionBox>
   );

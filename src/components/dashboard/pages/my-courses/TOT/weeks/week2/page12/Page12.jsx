@@ -92,21 +92,26 @@ function Page11() {
               </h1>
             </div>
 
-            <div className="text-center mb-5 mt-3 mt-md-0">
-              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
-                Imagine you are teaching a lesson while experiencing the
-                following:
+            <div className="mb-5 mt-3 mt-md-0">
+              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text mb-3 fw-bold">
+                Emotional Escalation Simulation
+              </h2>
+              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text mb-3">
+                {" "}
+                Instruction: Imagine the following classroom situation:
               </h2>
               <ul className="text-white px-5 d-inline-block text-start list-disc">
-                <li className="tot-week-2-question-text">You slept poorly</li>
                 <li className="tot-week-2-question-text">
-                  You are stressed about deadlines
+                  The class is noisy.{" "}
                 </li>
                 <li className="tot-week-2-question-text">
-                  The classroom is noisy
+                  Two students are arguing loudly.
                 </li>
                 <li className="tot-week-2-question-text">
-                  Students are asking multiple questions
+                  A third student is refusing to complete work.
+                </li>
+                <li className="tot-week-2-question-text">
+                  You are already feeling tired.
                 </li>
               </ul>
             </div>
@@ -130,10 +135,14 @@ function Page11() {
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
       <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue mb-3">
+          Many classroom situations involve multiple emotional triggers at once,
+          so practicing and getting used to emotional regulation helps teachers
+          remain calm and make thoughtful decisions.
+        </p>
         <p className="text-blue">
-          Your emotional state as a teacher influences how you respond to
-          students in the classroom, and the dire importance of this is why SEL
-          is a critical part of learning.
+          In the next activity, you will practice a step by step SONAR response
+          to different triggering activities.
         </p>
       </TOTFeedbackModal>
     </>

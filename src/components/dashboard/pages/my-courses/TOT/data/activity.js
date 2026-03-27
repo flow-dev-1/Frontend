@@ -676,40 +676,6 @@ export const courseContent = {
       },
       {
         id: 17,
-        type: "listQuestion",
-        question: "List out two things you are grateful for.",
-        inputCount: 3,
-        fields: [
-          {
-            number: "1",
-            textFieldColor: "green",
-            colorCode: "#4CB748",
-          },
-          {
-            number: "2",
-            textFieldColor: "orange",
-            colorCode: "#FDD8B6",
-          },
-        ],
-        inputType: "text",
-        inputPlaceholder: "Type your answer here",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 18,
-        type: "video",
-        videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_9.mp4",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 19,
         type: "multiStep",
         steps: [
           {
@@ -758,17 +724,17 @@ export const courseContent = {
         },
       },
       {
-        id: 20,
+        id: 18,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_10.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_9.mp4",
         navigation: {
           prev: true,
           next: true,
         },
       },
       {
-        id: 21,
+        id: 19,
         type: "listQuestion",
         question: "List out two things you are grateful for.",
         inputCount: 3,
@@ -792,17 +758,17 @@ export const courseContent = {
         },
       },
       {
-        id: 22,
+        id: 20,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_11.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_10.mp4",
         navigation: {
           prev: true,
           next: true,
         },
       },
       {
-        id: 23,
+        id: 21,
         type: "multiStep",
         steps: [
           {
@@ -840,44 +806,47 @@ export const courseContent = {
         },
       },
       {
-        id: 24,
+        id: 22,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_12.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_11.mp4",
         navigation: {
           prev: true,
           next: true,
         },
       },
       {
-        id: 25,
+        id: 23,
         type: "multiStep",
         steps: [
           {
             stepId: 1,
             type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "For this next activity, you will be shown different statements for you to reframe.",
+            ],
           },
+
           {
             stepId: 2,
-            type: "dropdownScenario",
-            question:
-              "Which of these ways is NOT a way to create balance when it comes to prioritizing your well-being?",
-            options: [
+            type: "scenario",
+            questions: [
               {
-                id: "1",
-                text: "No effect",
+                type: "Question",
+                question:
+                  "I sometimes doubt whether I’m making a real difference in my students’ lives.",
               },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "scenario",
+            questions: [
               {
-                id: "2",
-                text: "Slight impact",
-              },
-              {
-                id: "3",
-                text: "Moderate impact",
-              },
-              {
-                id: "4",
-                text: "Moderate impact",
+                type: "Question",
+                question:
+                  "There’s never enough time to get everything done, and I feel overwhelmed",
               },
             ],
           },
@@ -888,7 +857,7 @@ export const courseContent = {
         },
       },
       {
-        id: 26,
+        id: 24,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_12.mp4",
@@ -1073,15 +1042,11 @@ export const courseContent = {
         steps: [
           {
             stepId: 1,
-            type: "scenario",
-            questions: [
-              {
-                type: "Question",
-                question:
-                  "Think of a student you found difficult to connect with. What got in the way?",
-              },
-            ],
+            type: "instruction",
+            instruction:
+              "Answer the following questions to the best of your ability.",
           },
+
           {
             stepId: 2,
             type: "scenario",
@@ -1089,7 +1054,7 @@ export const courseContent = {
               {
                 type: "Question",
                 question:
-                  "What helped you build a better relationship with them over time?",
+                  "Remember yourself as a student, did you ever feel like one or most of your teachers were like electric kettles waiting to  boil over?",
               },
             ],
           },
@@ -1099,8 +1064,18 @@ export const courseContent = {
             questions: [
               {
                 type: "Question",
+                question: "How did it feel to be in their classrooms?",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
                 question:
-                  "What helped you build a better relationship with them over time?",
+                  "Did you always look forward to being in their classes?",
               },
             ],
           },
@@ -1131,23 +1106,24 @@ export const courseContent = {
           {
             stepId: 2,
             type: "dropdownScenario",
-            question: "How might this affect your teaching?",
+            question:
+              "How might this situation affect your emotional response?",
             options: [
               {
-                id: "1",
-                text: "No effect",
+                id: "A",
+                text: "No emotional change",
               },
               {
-                id: "2",
-                text: "Slight impact",
+                id: "B",
+                text: "Slight frustration",
               },
               {
-                id: "3",
-                text: "Moderate impact",
+                id: "C",
+                text: "Moderate frustration",
               },
               {
-                id: "4",
-                text: "Moderate impact",
+                id: "D",
+                text: "Moderate frustration",
               },
             ],
           },
@@ -2973,13 +2949,12 @@ export const courseContent = {
       },
       {
         id: 6,
-        type: "question",
-        questionType: "text",
+        type: "listQuestion",
         question:
           "Write down three ways you recharge whenever you feel burnout.",
-        hasImage: false,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        inputCount: 3,
+        inputType: "text",
+        inputPlaceholder: "Type your answer here",
         navigation: {
           prev: true,
           next: true,

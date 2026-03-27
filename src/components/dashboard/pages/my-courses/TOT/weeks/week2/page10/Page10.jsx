@@ -1,10 +1,13 @@
+import QuestionBox from "../../../components/QuestionBox";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../../../components/Button";
 import {
   selectPageData,
+  navigateNext,
   selectCurrentStep,
 } from "../../../../../../../../redux/reducers/navigationSlice";
+import TOTFeedbackModal from "../../../../TOT-2/components/TOTFeedbackModal";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import {
   userAnswer,
@@ -20,6 +23,12 @@ function Page10() {
   const totalSteps = pageData?.steps?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
+
+  const [showFeedback, setShowFeedback] = useState(false);
+  const handleCloseFeedback = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext()); // Navigate after closing the modal
+  };
 
   const step = pageData?.steps[currentStep - 1]; // Get the current step data
   const userAnswers = useSelector(userAnswer);
@@ -38,6 +47,7 @@ function Page10() {
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
+    if (currentStep === 1) return true;
 
     const stepData = answers.find((item) => item.stepId === currentStep);
 
@@ -53,7 +63,12 @@ function Page10() {
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
-    return true;
+    if (currentStep !== 4) {
+      return true;
+    }
+
+    setShowFeedback(true);
+    return false;
   };
 
   // console.log(answers, "Answers")
@@ -64,6 +79,22 @@ function Page10() {
     if (!step) return <div>Invalid Step</div>;
 
     switch (step.type) {
+      case "instruction":
+        return (
+          <QuestionBox extraStyle="bg-blue">
+            <div className="text-center mb-5 mt-5 mt-md-4">
+              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction mt-5">
+                Instruction
+              </h1>
+            </div>
+
+            <div className="text-center mb-5 mt-3 mt-md-0">
+              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
+                Answer the following questions to the best of your ability.
+              </h2>
+            </div>
+          </QuestionBox>
+        );
       case "scenario":
         return (
           <Frame
@@ -94,6 +125,16 @@ function Page10() {
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
+      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue mb-3">
+          Your reflection shows how a teacher’s emotional responses can shape
+          the classroom atmosphere and how students feel about learning.
+        </p>
+        <p className="text-blue">
+          As you continue, think about how regulating your emotions can help
+          create a calmer and more supportive classroom for your students.{" "}
+        </p>
+      </TOTFeedbackModal>
     </>
   );
 }
