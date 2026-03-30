@@ -4,12 +4,14 @@ import QuestionBox from "../../../components/QuestionBox";
 import AssessmentQuestion from "../../../components/AssessmentQuestion";
 import Button from "../../../components/Button";
 import {
+  selectPageData,
+  navigateNext,
   selectCurrentStep,
   selectCurrentWeek,
 } from "../../../../../../../../redux/reducers/navigationSlice";
+import TOTFeedbackModal from "../../../../TOT-2/components/TOTFeedbackModal";
 import { getWeekPreAssessment } from "../../../data";
 import StepIndicator from "../../../components/StepIndicator";
-import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 
 import {
   userAnswer,
@@ -27,25 +29,30 @@ function WeekFourPage2() {
   const totalSteps = assessmentData?.questions?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const [showFeedback, setShowFeedback] = useState(false);
+  const handleCloseFeedback = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext()); // Navigate after closing the modal
+  };
+
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
 
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
-      (item) => item.page === pageData.id
+      (item) => item.page === pageData.id,
     );
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
-    return () => { };
+    return () => {};
   }, [userAnswers]);
-
 
   const handleOptionSelect = (optionKey) => {
     setErrorMessage("");
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
       const stepIndex = updatedAnswers.findIndex(
-        (answer) => answer.id === currentStep
+        (answer) => answer.id === currentStep,
       );
 
       if (stepIndex !== -1) {
@@ -79,7 +86,12 @@ function WeekFourPage2() {
       answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
-    return true;
+    if (currentStep !== 10) {
+      return true;
+    }
+
+    setShowFeedback(true);
+    return false;
   };
 
   const renderStep = () => {
@@ -115,18 +127,11 @@ function WeekFourPage2() {
 
   return (
     <>
-
       <div className="text-white px-3 py-1 mb-2 tot-assessment-header">
-        <h2 className="text-blue text-center">
-          {assessmentData.title}
-        </h2>
+        <h2 className="text-blue text-center">{assessmentData.title}</h2>
         <p className="text-center text-blue">{assessmentData.subtitle}</p>
       </div>
-      <QuestionBox
-        extraStyle={"bg-blue"}
-      >
-        {renderStep()}
-      </QuestionBox>
+      <QuestionBox extraStyle={"bg-blue"}>{renderStep()}</QuestionBox>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
       {/* Display error message */}
       <StepIndicator totalSteps={totalSteps} />
@@ -134,6 +139,12 @@ function WeekFourPage2() {
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
+      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue">
+          Great work completing the pre-assessment. These questions help you
+          reflect on how mindset influences teaching and learning.
+        </p>
+      </TOTFeedbackModal>
     </>
   );
 }

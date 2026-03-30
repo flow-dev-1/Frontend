@@ -40,7 +40,8 @@ import Page20 from "./weeks/week1/page20/Page20.jsx";
 import Page21 from "./weeks/week1/page21/Page21.jsx";
 import Page22 from "./weeks/week1/page22/Page22.jsx";
 import Page23 from "./weeks/week1/page23/Page23.jsx";
-import Page24 from "./weeks/week1/page24/Page24.jsx";
+import Page24 from "./weeks/week1/page24/Page24";
+import Page25 from "./weeks/week1/page25/Page25.jsx";
 
 // Week 2
 import WeekTwoPage1 from "./weeks/week2/page1/Page1";
@@ -56,7 +57,11 @@ import WeekTwoPage10 from "./weeks/week2/page10/Page10.jsx";
 import WeekTwoPage11 from "./weeks/week2/page11/Page11.jsx";
 import WeekTwoPage12 from "./weeks/week2/page12/Page12.jsx";
 import WeekTwoPage13 from "./weeks/week2/page13/Page13.jsx";
-import WeekTwoAssessment from "./weeks/week2/page14/Page14.jsx";
+import WeekTwoPage14 from "./weeks/week2/page14/Page14.jsx";
+import WeekTwoPage15 from "./weeks/week2/page15/Page15.jsx";
+import WeekTwoPage16 from "./weeks/week2/page16/Page16.jsx";
+import WeekTwoPage17 from "./weeks/week2/page17/Page17.jsx";
+import WeekTwoAssessment from "./weeks/week2/page18/Page18.jsx";
 
 // Week 3
 import WeekThreePage1 from "./weeks/week3/page1/Page1";
@@ -87,6 +92,10 @@ import WeekFourPage9 from "./weeks/week4/page9/Page9";
 import WeekFourPage10 from "./weeks/week4/page10/Page10";
 import WeekFourPage11 from "./weeks/week4/page11/Page11";
 import WeekFourPage12 from "./weeks/week4/page12/Page12";
+import WeekFourPage13 from "./weeks/week4/page13/Page13";
+import WeekFourPage14 from "./weeks/week4/page14/Page14";
+import WeekFourPage15 from "./weeks/week4/page15/Page15";
+import WeekFourPage16 from "./weeks/week4/page16/Page16";
 
 // Week5
 import WeekFivePage1 from "./weeks/week5/page1/Page1.jsx";
@@ -95,12 +104,14 @@ import WeekFivePage3 from "./weeks/week5/page3/Page3.jsx";
 import WeekFivePage4 from "./weeks/week5/page4/Page4.jsx";
 import WeekFivePage5 from "./weeks/week5/page5/Page5.jsx";
 import WeekFivePage6 from "./weeks/week5/page6/Page6.jsx";
-import WeekFivePage7 from "./weeks/week5/page7/page7.jsx";
-import WeekFivePage8 from "./weeks/week5/page8/page8.jsx";
-import WeekFivePage9 from "./weeks/week5/page9/Page9";
-import WeekFivePage10 from "./weeks/week5/page10/Page10";
-import WeekFivePage11 from "./weeks/week5/page11/Page11";
+import WeekFivePage7 from "./weeks/week5/page7/Page7.jsx";
+import WeekFivePage8 from "./weeks/week5/page8/Page8.jsx";
+import WeekFivePage9 from "./weeks/week5/page9/Page9.jsx";
+import WeekFivePage10 from "./weeks/week5/page10/Page10.jsx";
+import WeekFivePage11 from "./weeks/week5/page11/Page11.jsx";
 import WeekFivePage12 from "./weeks/week5/page12/Page12";
+import WeekFivePage13 from "./weeks/week5/page13/Page13";
+import WeekFivePage14 from "./weeks/week5/page14/Page14";
 
 // Week 6
 import WeekSixPage1 from "./weeks/week6/page1/Page1";
@@ -109,12 +120,14 @@ import WeekSixPage3 from "./weeks/week6/page3/Page3";
 import WeekSixPage4 from "./weeks/week6/page4/Page4";
 import WeekSixPage5 from "./weeks/week6/page5/Page5";
 import WeekSixPage6 from "./weeks/week6/page6/Page6";
-import WeekSixPage7 from "./weeks/week6/page7/page7.jsx";
+import WeekSixPage7 from "./weeks/week6/page7/Page7.jsx";
 import WeekSixPage8 from "./weeks/week6/page8/Page8";
-import WeekSixPage9 from "./weeks/week6/page9/Page9";
+import WeekSixPage9 from "./weeks/week6/page9/Page9.jsx";
 import WeekSixPage10 from "./weeks/week6/page10/Page10";
 import WeekSixPage11 from "./weeks/week6/page11/Page11";
 import WeekSixPage12 from "./weeks/week6/page12/Page12";
+import WeekSixPage13 from "./weeks/week6/page13/Page13";
+import WeekSixPage14 from "./weeks/week6/page14/Page14";
 
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -165,7 +178,7 @@ const WeekContent = () => {
     dispatch(setCurrentPage(currentPage));
     dispatch(setCurrentStep(currentStep));
 
-    return () => { };
+    return () => {};
   }, [dispatch]); // Added dispatch to dependency array
 
   const currentWeek = useSelector(selectCurrentWeek);
@@ -214,7 +227,7 @@ const WeekContent = () => {
       );
     }
 
-    return () => { };
+    return () => {};
   }, [data]);
 
   // If showing hurray, render that instead
@@ -275,6 +288,8 @@ const WeekContent = () => {
             return <Page23 />;
           case 24:
             return <Page24 />;
+          case 25:
+            return <Page25 />;
           default:
             return null;
         }
@@ -307,6 +322,14 @@ const WeekContent = () => {
           case 13:
             return <WeekTwoPage13 />;
           case 14:
+            return <WeekTwoPage14 />;
+          case 15:
+            return <WeekTwoPage15 />;
+          case 16:
+            return <WeekTwoPage16 />;
+          case 17:
+            return <WeekTwoPage17 />;
+          case 18:
             return <WeekTwoAssessment />;
           default:
             return null;
@@ -371,6 +394,14 @@ const WeekContent = () => {
             return <WeekFourPage11 />;
           case 12:
             return <WeekFourPage12 />;
+          case 13:
+            return <WeekFourPage13 />;
+          case 14:
+            return <WeekFourPage14 />;
+          case 15:
+            return <WeekFourPage15 />;
+          case 16:
+            return <WeekFourPage16 />;
           default:
             return null;
         }
@@ -400,6 +431,10 @@ const WeekContent = () => {
             return <WeekFivePage11 />;
           case 12:
             return <WeekFivePage12 />;
+          case 13:
+            return <WeekFivePage13 />;
+          case 14:
+            return <WeekFivePage14 />;
           default:
             return null;
         }
@@ -429,6 +464,10 @@ const WeekContent = () => {
             return <WeekSixPage11 />;
           case 12:
             return <WeekSixPage12 />;
+          case 13:
+            return <WeekSixPage13 />;
+          case 14:
+            return <WeekSixPage14 />;
           default:
             return null;
         }
@@ -487,7 +526,10 @@ const CourseContent = () => {
   useEffect(() => {
     // Prefer live server data; fall back to initial location.state snapshot
     const progress =
-      liveEnrollment?.enrollment?.progress ?? liveEnrollment?.progress ?? enrolmentData?.progress ?? 0;
+      liveEnrollment?.enrollment?.progress ??
+      liveEnrollment?.progress ??
+      enrolmentData?.progress ??
+      0;
 
     setEnrollmentProgress(progress);
 
@@ -651,8 +693,12 @@ const CourseContent = () => {
           </button>
 
           <div className="tot-title">
-            <h2 className="fs-5 fs-md-3 tot-nav-text">SEL for Educators:</h2>
-            <h2 className="compassion fs-5 tot-nav-text">ToT Course 1</h2>
+            <h2 className="fs-5 fs-md-3 tot-nav-text">
+              SEL & Positive Psychology for Educators:
+            </h2>
+            <h2 className="compassion fs-5 tot-nav-text">
+              Feel it. Teach it. Transform lives
+            </h2>
           </div>
 
           <ul className="compassion-list">
@@ -665,8 +711,9 @@ const CourseContent = () => {
               return (
                 <li
                   key={index}
-                  className={`${isActive ? "active-week" : ""} ${isAccessible ? "accessible-week" : "locked-week"
-                    }`}
+                  className={`${isActive ? "active-week" : ""} ${
+                    isAccessible ? "accessible-week" : "locked-week"
+                  }`}
                   onClick={() => handleWeekClick(weekNumber)}
                   style={{
                     cursor: isAccessible ? "pointer" : "not-allowed",

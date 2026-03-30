@@ -1,28 +1,27 @@
 import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
-import MediumTextBox from "../../../week3/page10/components/MediumTextBox";
+import CustomDropDown from "./CustomDropDown";
 
 function Frame({ data, answers, setAnswers, setErrorMessage }) {
-  const { step, questions } = data;
+  const { step, question, options } = data;
 
-  const handleInputChange = (inputType, value) => {
+  const handleInputChange = (value) => {
     setErrorMessage("");
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
       const stepIndex = updatedAnswers.findIndex(
-        (answer) => answer.id === step
+        (answer) => answer.stepId === step
       );
 
       if (stepIndex !== -1) {
         updatedAnswers[stepIndex] = {
           ...updatedAnswers[stepIndex],
-          id: step,
-          [inputType]: value,
+          value: value, // Store single value directly
         };
       } else {
         updatedAnswers.push({
-          id: step,
-          [inputType]: value,
+          stepId: step,
+          value: value,
         });
       }
 
@@ -31,19 +30,28 @@ function Frame({ data, answers, setAnswers, setErrorMessage }) {
   };
 
   return (
-    <QuestionBox extraStyle="bg-custom-blue">
+    <QuestionBox extraStyle={"bg-custom-blue"}>
       <div className="p-1 p-md-5">
-        {questions.map(({ type, question }, index) => (
-          <React.Fragment key={index}>
-            <h2 className="text-gray fs-4 fs-md-1 tot-week-2-question-text mt-3">
-              {question}
-            </h2>
-            <MediumTextBox
-              value={answers.find((answer) => answer.id === step)?.[type] || ""}
-              handleChange={(e) => handleInputChange(type, e.target.value)}
-            />
-          </React.Fragment>
-        ))}
+        <div className="text-center mb-5 mt-4 mt-md-0">
+          <h2 className="text-white bg-blue py-2 px-4 fs-2 font-bold rounded-3 d-inline display-4 text-center tot-week-2-question-text">
+            Statement {step - 1}
+          </h2>
+        </div>
+        <div className="">
+          <h2 className="text-center text-gray fs-3 fs-md-1 tot-week-2-question-text text-center fw-bold">
+            {question}
+          </h2>
+        </div>
+
+        <div className="mt-2">
+          <CustomDropDown
+            value={
+              answers.find((answer) => answer.stepId === step)?.value || ""
+            }
+            onChange={handleInputChange}
+            options={options} // Pass options here
+          />
+        </div>
       </div>
     </QuestionBox>
   );

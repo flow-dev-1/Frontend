@@ -5,8 +5,10 @@ import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
 import {
   selectPageData,
+  navigateNext,
   selectCurrentStep,
 } from "../../../../../../../../redux/reducers/navigationSlice";
+import TOTFeedbackModal from "../../../../TOT-2/components/TOTFeedbackModal";
 import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
@@ -21,6 +23,11 @@ function WeekThreePage10() {
   const currentStep = useSelector(selectCurrentStep);
   const totalSteps = pageData?.steps?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
+  const [showFeedback, setShowFeedback] = useState(false);
+  const handleCloseFeedback = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext()); // Navigate after closing the modal
+  };
 
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const step = pageData?.steps[currentStep - 1];
@@ -30,7 +37,7 @@ function WeekThreePage10() {
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
-      (item) => item.page === pageData.id
+      (item) => item.page === pageData.id,
     );
 
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
@@ -46,7 +53,6 @@ function WeekThreePage10() {
       return false;
     }
 
-
     const values = Object.values(stepData);
     if (values.length < 3) {
       setErrorMessage("At least 2 values are required!");
@@ -60,8 +66,12 @@ function WeekThreePage10() {
       answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    if (currentStep !== 4) {
+      return true;
+    }
 
-    return true;
+    setShowFeedback(true);
+    return false;
   };
 
   const renderStep = () => {
@@ -140,6 +150,12 @@ function WeekThreePage10() {
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
+      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue">
+          {" "}
+          Recognizing strengths helps students build confidence and motivation.
+        </p>
+      </TOTFeedbackModal>
     </>
   );
 }

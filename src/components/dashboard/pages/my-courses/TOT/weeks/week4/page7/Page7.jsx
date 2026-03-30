@@ -3,18 +3,9 @@ import { useSelector } from "react-redux";
 import VideoComponent from "../../../components/Video";
 import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
-import { useDispatch } from "react-redux";
 
-import {
-  selectCurrentStep,
-  selectCurrentWeek,
-  setCurrentPage,
-  showReviewPopup,
-} from "../../../../../../../../redux/reducers/navigationSlice";
-
-function WeekFourPage7() {
+function WeekFourPage3() {
   const pageData = useSelector(selectPageData);
-  const dispatch = useDispatch();
 
   return (
     <>
@@ -27,4 +18,4 @@ function WeekFourPage7() {
   );
 }
 
-export default WeekFourPage7;
+export default WeekFourPage3;

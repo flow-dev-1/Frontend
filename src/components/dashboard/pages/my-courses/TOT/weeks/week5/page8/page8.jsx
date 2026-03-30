@@ -1,130 +1,96 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import QuestionBox from "../../../components/QuestionBox";
-import Frame from "./components/Frame";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "../../../components/Button";
-import {
-  selectPageData,
-  selectCurrentStep,
-} from "../../../../../../../../redux/reducers/navigationSlice";
-import StepIndicator from "../../../components/StepIndicator";
+import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import Frame from "./components/Frame";
 
-function Page8() {
-  const dispatch = useDispatch(); // Initialize dispatch
+function Page6() {
   const pageData = useSelector(selectPageData);
-  const currentStep = useSelector(selectCurrentStep);
-  const totalSteps = pageData?.steps?.length || 0;
-  const [answers, setAnswers] = useState([]); // State to hold answers
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
-  const step = pageData?.steps[currentStep - 1];
-  const userAnswers = useSelector(userAnswer);
+  const dispatch = useDispatch();
+  const [answers, setAnswers] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
   const adminDatas = useSelector(adminData);
-  // console.log(userAnswers)
+  const userAnswers = useSelector(userAnswer);
 
+  // Load user answers (normalize them to always use `id`)
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
-  }, [userAnswers]);
+
+    if (!Array.isArray(response?.answer)) {
+      setAnswers([]);
+      return;
+    }
+
+    // Normalize any legacy data that might use stepId instead of id
+    const normalized = response.answer.map((item) =>
+      item.id
+        ? item
+        : item.stepId
+        ? { ...item, id: item.stepId }
+        : { ...item, id: pageData.id }
+    );
+
+    setAnswers(normalized);
+  }, [userAnswers, pageData.id]);
 
   const saveUserInput = () => {
-    if (currentStep === 1) return true;
-    if (adminDatas.isAdmin) return true;
+    if (adminDatas?.isAdmin) return true;
 
-    const stepData = answers.find((item) => item.stepId === currentStep);
+    // Find answers for the current page
+    const stepData = answers.find((item) => item.id === pageData.id);
+
     if (!stepData) {
       setErrorMessage("Oops! All inputs must be filled out.");
       return false;
     }
 
-    const values = Object.values(stepData.value);
-    if (values.length < 1) {
-      setErrorMessage("At least 1 value are required!");
-      return false;
-    }
+    // Dynamically get all question types for this page
+    const requiredFields = Array.isArray(pageData.questions)
+      ? pageData.questions.map((q) => q.type)
+      : [];
 
-    const emptyInputs = values.filter((value) => value.trim() === "");
-    if (emptyInputs.length > 0) {
+    // Check if all required fields are filled
+    const missingFields = requiredFields.filter(
+      (field) => !stepData[field] || stepData[field].trim() === ""
+    );
+
+    if (missingFields.length > 0) {
       setErrorMessage(
-        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
+        `Please fill out all inputs. Missing: ${missingFields.join(", ")}.`
       );
       return false;
     }
 
-    setErrorMessage(""); // Clear error if input is valid
-
+    setErrorMessage("");
     const activityData = {
       page: pageData.id,
       answer: answers,
     };
-    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
+    dispatch(saveActivity(activityData));
     return true;
-  };
-
-  const renderStep = () => {
-    if (!step) return <div>Invalid Step</div>;
-
-    switch (step.type) {
-      case "instruction":
-        return (
-          <QuestionBox extraStyle="bg-blue">
-            <div className="text-center mb-5 mt-5 mt-md-4">
-              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction">
-                Instruction
-              </h1>
-            </div>
-
-            <div className="text-center mb-5 mt-3 mt-md-0">
-              <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
-                The next activity helps you think about how to intentionally use
-                <br />
-                storytelling to spark meaningful conversations in your
-                <br />
-                classroom.
-                <br />
-                <br />
-                <br />
-                Select the appropriate SEL skills that matches the story.
-              </h2>
-              {/* <h2 className="text-white px-5 d-inline-block text-start tot-week-2-question-text">
-              </h2> */}
-            </div>
-          </QuestionBox>
-        );
-      case "dropdownScenario":
-        return (
-          <Frame
-            data={{
-              step: step.stepId,
-              question: step.question,
-              options: step.options,
-            }}
-            setErrorMessage={setErrorMessage}
-            answers={answers}
-            setAnswers={setAnswers}
-          />
-        );
-      default:
-        return <div>Unknown step type</div>;
-    }
   };
 
   return (
     <>
-      {renderStep()}
-      {currentStep !== 1 && errorMessage && (
-        <div className="text-danger">{errorMessage}</div>
-      )}{" "}
-      {/* Display error message */}
-      <StepIndicator totalSteps={totalSteps} />
+      <Frame
+        data={{
+          step: pageData.id,
+          questions: pageData.questions,
+        }}
+        setErrorMessage={setErrorMessage}
+        answers={answers}
+        setAnswers={setAnswers}
+      />
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
@@ -133,4 +99,4 @@ function Page8() {
   );
 }
 
-export default Page8;
+export default Page6;

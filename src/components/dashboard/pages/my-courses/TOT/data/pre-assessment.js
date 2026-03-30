@@ -4,6 +4,12 @@ export const pre_assessments = {
     subtitle: "Let's test your knowledge",
     questions: [
       {
+        id: "A",
+        type: "instruction",
+        instruction:
+          "Please answer the following questions based on your current understanding. This assessment helps us understand your starting point before we begin the training.",
+      },
+      {
         id: 1,
         question:
           "Why is Social-Emotional Learning (SEL) considered a key part of student development in today's classrooms?",

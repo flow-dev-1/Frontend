@@ -1,259 +1,201 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import AssessmentQuestion from "../../../components/AssessmentQuestion";
 import Button from "../../../components/Button";
 import {
+  selectPageData,
   navigateNext,
   selectCurrentStep,
-  selectCurrentWeek,
-  showReviewPopup,
 } from "../../../../../../../../redux/reducers/navigationSlice";
-import { getWeekAssessment } from "../../../data";
+import TOTFeedbackModal from "../../../../TOT-2/components/TOTFeedbackModal";
+
 import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
-  updateData,
-  saveAssessment,
+  saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-toastify";
-import userService from "../../../../../../../../services/api/user";
-import { calculateResult } from "../../../utility";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import OnboardingFrame from "./components/OnboardingFrame";
+import SectionFrame from "./components/SectionFrame";
 
-function WeekFiveAssessment() {
+function WeekSixPage10() {
   const dispatch = useDispatch();
+  const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
-  const currentWeek = useSelector(selectCurrentWeek);
-  const assessmentData = getWeekAssessment(currentWeek);
-  const totalSteps = assessmentData?.questions?.length || 0;
-  const [answers, setAnswers] = useState([]); // State to hold answers
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const totalSteps = pageData?.steps?.length || 0;
+  const [answers, setAnswers] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showFeedback, setShowFeedback] = useState(false);
+  const handleCloseFeedback = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext()); // Navigate after closing the modal
+  };
+
+  const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
-  const isLastQuestion = currentStep === assessmentData.totalQuestions;
   const adminDatas = useSelector(adminData);
 
   useEffect(() => {
     if (!userAnswers) return;
-    setAnswers(userAnswers?.assessments || []);
-    return () => {};
-  }, [userAnswers]);
+    const response = userAnswers.activities?.find(
+      (item) => item.page === pageData.id,
+    );
 
-  // Mutation for saving user data
-  const mutation = useMutation({
-    mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
-    onSuccess: (data) => {
-      toast.dismiss();
-      toast.success(
-        `You scored ${calculateResult(
-          assessmentData.questions,
-          answers,
-          totalSteps
-        )}% in the quiz`
-      );
-      toast.success(data.message || "Answers saved successfully!"); // Show success toast
-      // dispatch(
-      //   updateData({
-      //     course: null,
-      //     courseEnrollmentId: null,
-      //     week: 1,
-      //     activities: [],
-      //     assessments: [],
-      //   })
-      // );
-      dispatch(navigateNext());
-    },
-    onError: (error) => {
-      console.log(error, "errorrrr");
-      toast.dismiss();
-      toast.error(error?.message || error?.error || "Error saving answers"); // Show error toast
-    },
-  });
+    if (response?.answer) {
+      setAnswers(response.answer);
+    }
+  }, [userAnswers, pageData?.id]);
 
-  const handleOptionSelect = (optionKey) => {
-    setErrorMessage("");
-    setAnswers((prevAnswers) => {
-      const updatedAnswers = [...prevAnswers];
-      const stepIndex = updatedAnswers.findIndex(
-        (answer) => answer.id === currentStep
-      );
-
-      if (stepIndex !== -1) {
-        updatedAnswers[stepIndex] = {
-          ...updatedAnswers[stepIndex],
-          value: optionKey,
-        };
-      } else {
-        updatedAnswers.push({
-          id: currentStep,
-          value: optionKey,
-        });
-      }
-
-      return updatedAnswers;
-    });
-  };
-
-  const saveUserData = () => {
-    if (adminDatas.isAdmin) return true;
-    const stepData = answers.find((item) => item.id === currentStep);
-    if (!stepData) {
-      setErrorMessage("Oops! Please choose an option to proceed.");
-      return false;
+  const saveUserInput = () => {
+    // Skip validation for instruction and onboarding
+    if (step?.type === "instruction" || step?.type === "onboarding") {
+      return true;
     }
 
-    setErrorMessage(""); // Clear error if input is valid
+    // Skip validation for admins
+    if (adminDatas.isAdmin) return true;
 
-    // If its the last question submit else update answer
-    dispatch(saveAssessment(answers));
+    const stepKey = `step_${currentStep}`;
+    const stepData = answers[stepKey];
 
+    // Validate based on input type
+    if (step?.inputType === "bigTextBox") {
+      if (!stepData?.mainInput || stepData.mainInput.trim() === "") {
+        setErrorMessage("Please provide your answer before proceeding.");
+        return false;
+      }
+    }
 
-    if (isLastQuestion) {
-      const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 5;
+    if (step?.inputType === "checkboxWithOther") {
+      const hasSelection =
+        stepData?.checkboxes && Object.keys(stepData.checkboxes).length > 0;
 
-      if (hasUnansweredQuestions) {
-        setErrorMessage(
-          "Oops! Some unanswered questions have been detected. Kindly go back and review!"
-        );
+      if (!hasSelection) {
+        setErrorMessage("Please select at least one option.");
         return false;
       }
 
-      const userScore = calculateResult(
-        assessmentData.questions,
-        answers,
-        totalSteps
-      );
+      // Validate additional fields
+      if (step.additionalFields) {
+        for (let field of step.additionalFields) {
+          const fieldKey = field.label.toLowerCase().replace(/[^a-z0-9]/g, "_");
+          if (!stepData[fieldKey] || stepData[fieldKey].trim() === "") {
+            setErrorMessage(`Please fill out: ${field.label}`);
+            return false;
+          }
+        }
+      }
+    }
 
-      console.log(userScore, "userScore");
+    if (step?.inputType === "twoSmallInputs") {
+      if (!stepData?.input1 || stepData.input1.trim() === "") {
+        setErrorMessage("Please fill out the first action.");
+        return false;
+      }
+      if (!stepData?.input2 || stepData.input2.trim() === "") {
+        setErrorMessage("Please fill out the second action.");
+        return false;
+      }
 
-      mutation.mutate({
-        ...userAnswers,
-        assessments: answers,
-        rating: userScore.toString(),
-      });
+      // Validate collaboration field
+      if (step.additionalFields && step.additionalFields.length > 0) {
+        if (!stepData?.collaboration || stepData.collaboration.trim() === "") {
+          setErrorMessage("Please answer the collaboration question.");
+          return false;
+        }
+      }
+    }
 
-      // For nested questions check that all answeres were provided
+    setErrorMessage("");
 
-      // Page 2 has nested questions
-      // const selectedActivity = userAnswers.activities.find(
-      //   (activity) => activity.page === 2
-      // );
-      // const isValidActivity =
-      //   selectedActivity &&
-      //   Array.isArray(selectedActivity.answer) &&
-      //   selectedActivity.answer.length === 3;
+    const activityData = {
+      page: pageData.id,
+      answer: answers,
+    };
+    dispatch(saveActivity(activityData));
 
-      // if (isValidActivity) {
-      //   const userScore = calculateResult(
-      //     assessmentData.questions,
-      //     answers,
-      //     totalSteps
-      //   );
-
-      //   console.log(userScore, "userScore");
-
-      //   mutation.mutate({
-      //     ...userAnswers,
-      //     assessments: answers,
-      //     rating: userScore.toString(),
-      //   });
-
-      //   //*****************This will come in later wen the code begins to break or escape questions ******/
-
-      //   // const isValid = selectedActivity.answer.every(item =>
-      //   //   item.stepId !== undefined &&
-      //   //   item.value &&
-      //   //   Object.keys(item.value).length === 3
-      //   // );
-
-      //   // if (isValid) {
-      //   //   const userScore = calculateResult(assessmentData.questions, answers, totalSteps)
-
-      //   //   console.log(userScore, "userScore")
-
-      //   //   // mutation.mutate({ ...userAnswers, assessments: answers, rating: userScore.toString() });
-      //   // } else {
-
-      //   //   setErrorMessage("Oops! Some unanswered questions have been detected. Kindly go back and review!");
-      //   //   return false;
-      //   // }
-      // } else {
-      //   setErrorMessage(
-      //     "Oops! Some unanswered questions have been detected. Kindly go back and review!"
-      //   );
-      //   return false;
-      // }
-    } else {
+    if (currentStep !== 9) {
       return true;
     }
+
+    setShowFeedback(true);
+    return false;
   };
 
   const renderStep = () => {
-    if (!assessmentData) return <div>Loading assessment...</div>;
+    if (!step) return <div>Invalid Step</div>;
 
-    const currentQuestion = assessmentData.questions[currentStep - 1];
-    if (!currentQuestion) return <div>Invalid Step</div>;
+    switch (step.type) {
+      case "instruction":
+        return (
+          <QuestionBox extraStyle="bg-blue">
+            <div className="text-center mb-5 mt-5 mt-md-4">
+              <h1 className="text-mute bg-white py-2 px-5 rounded d-inline week-2-question-text tot-text-instruction">
+                Instruction
+              </h1>
+            </div>
 
-    const formattedOptions = currentQuestion.options.map((option) => ({
-      [option.id]: option.text,
-    }));
+            <div className="text-center mb-5 mt-3 mt-md-0">
+              {step.instructions.map((instruction, index) => (
+                <React.Fragment key={index}>
+                  <h2 className="text-white py-2 px-5 rounded d-inline-block text-start tot-week-2-question-text">
+                    {instruction}
+                  </h2>
+                  {index < step.instructions.length - 1 && (
+                    <>
+                      <br />
+                      <br />
+                      <br />
+                    </>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          </QuestionBox>
+        );
 
-    return (
-      <AssessmentQuestion
-        data={{
-          question: currentQuestion.question,
-          options: formattedOptions,
-        }}
-        currentStep={currentStep}
-        selectedOption={answers[currentStep - 1]?.value || ""}
-        onOptionSelect={handleOptionSelect}
-        isPreAssessment={true}
-      />
-    );
+      case "onboarding":
+        return <OnboardingFrame step={step} />;
+
+      case "section":
+        return (
+          <SectionFrame
+            step={step}
+            currentStep={currentStep}
+            answers={answers}
+            setAnswers={setAnswers}
+            setErrorMessage={setErrorMessage}
+          />
+        );
+
+      default:
+        return <div>Unknown step type</div>;
+    }
   };
-
-  if (!assessmentData) return null;
-
-  // If we're on the last question and user has made a selection,
-  // show the review popup instead of the next button
-
-  const hasCurrentSelection = !!answers[currentStep];
-  const shouldShowReviewButton = isLastQuestion && hasCurrentSelection;
 
   return (
     <>
-      <QuestionBox>
-        <div className="text-white p-3 mb-3">
-          <h2 className="fs-1 text-blue text-center tot-week-2-question-text fw-bold ">
-            {assessmentData.title}
-          </h2>
-          <p className="text-center text-blue">{assessmentData.subtitle}</p>
+      {renderStep()}
+      {currentStep !== 1 && errorMessage && (
+        <div className="text-danger text-center mt-3 fw-bold fs-5">
+          {errorMessage}
         </div>
-
-        {renderStep()}
-      </QuestionBox>
-      {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
-      {/* Display error message */}
+      )}
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
-        <Button text="Prev" loading={mutation.isPending} />
-        {shouldShowReviewButton ? (
-          <Button
-            text="Review"
-            customOnClick={() => dispatch(showReviewPopup())}
-          />
-        ) : (
-          <Button
-            text="Next"
-            customOnClick={saveUserData}
-            loading={mutation.isPending}
-          />
-        )}
+        <Button text="Prev" />
+        <Button text="Next" customOnClick={saveUserInput} />
       </div>
+      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue">
+          {" "}
+          Your implementation plan is your personal roadmap for bringing Social
+          and Emotional Learning and Positive Psychology into your classroom in
+          a consistent and meaningful way.
+        </p>
+      </TOTFeedbackModal>
     </>
   );
 }
 
-export default WeekFiveAssessment;
+export default WeekSixPage10;
