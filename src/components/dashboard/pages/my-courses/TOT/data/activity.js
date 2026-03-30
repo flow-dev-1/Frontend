@@ -4,13 +4,6 @@ export const courseContent = {
     pages: [
       {
         id: 1,
-        type: "video",
-        videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/Week+1_1.mp4",
-        hasNextButton: true,
-      },
-      {
-        id: 2,
         type: "multiStep",
         title: "Write a letter to yourself.",
         steps: [
@@ -44,6 +37,9 @@ export const courseContent = {
           {
             stepId: 10,
           },
+          {
+            stepId: 11,
+          },
         ],
         navigation: {
           prev: true,
@@ -51,7 +47,7 @@ export const courseContent = {
         },
       },
       {
-        id: 3,
+        id: 2,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_2.mp4",
@@ -61,7 +57,7 @@ export const courseContent = {
         },
       },
       {
-        id: 4,
+        id: 3,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_3.mp4",
@@ -72,7 +68,7 @@ export const courseContent = {
         },
       },
       {
-        id: 5,
+        id: 4,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_4.mp4",
@@ -82,7 +78,7 @@ export const courseContent = {
         },
       },
       {
-        id: 6,
+        id: 5,
         type: "multiStep",
         title: "Write a letter to yourself.",
         steps: [
@@ -130,7 +126,7 @@ export const courseContent = {
         },
       },
       {
-        id: 7,
+        id: 6,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_4.mp4",
@@ -140,11 +136,11 @@ export const courseContent = {
         },
       },
       {
-        id: 8,
+        id: 7,
         type: "question",
         questionType: "text",
         question:
-          "Imagine a world where emotions don’t matter in education. A world where we only focus on grades and tests. What would that look like?",
+          "Describe what a classroom without emotional awareness might look like.",
         hasImage: false,
         imageSrc: "mindset.png",
         inputType: "bigTextBox",
@@ -154,7 +150,7 @@ export const courseContent = {
         },
       },
       {
-        id: 9,
+        id: 8,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_5.mp4",
@@ -164,7 +160,7 @@ export const courseContent = {
         },
       },
       {
-        id: 10,
+        id: 9,
         type: "multiStep",
         title: "Classroom Decision Making",
         steps: [
@@ -242,7 +238,7 @@ export const courseContent = {
         },
       },
       {
-        id: 11,
+        id: 10,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_6.mp4",
@@ -252,21 +248,44 @@ export const courseContent = {
         },
       },
       {
-        id: 12,
-        type: "question",
-        questionType: "text",
-        question:
-          "From this activity, how do SEL-based responses impact a student's confidence and engagement?",
-        hasImage: true,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        id: 11,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question: "How might this affect your teaching?",
+            options: [
+              {
+                id: "1",
+                text: "No effect",
+              },
+              {
+                id: "2",
+                text: "Slight impact",
+              },
+              {
+                id: "3",
+                text: "Moderate impact",
+              },
+              {
+                id: "4",
+                text: "Moderate impact",
+              },
+            ],
+          },
+        ],
         navigation: {
           prev: true,
           next: true,
         },
       },
       {
-        id: 13,
+        id: 12,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_7.mp4",
@@ -276,7 +295,7 @@ export const courseContent = {
         },
       },
       {
-        id: 14,
+        id: 13,
         type: "multiStep",
         steps: [
           {
@@ -624,7 +643,7 @@ export const courseContent = {
         },
       },
       {
-        id: 15,
+        id: 14,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_8.mp4",
@@ -634,7 +653,7 @@ export const courseContent = {
         },
       },
       {
-        id: 16,
+        id: 15,
         type: "listQuestion",
         question: `“What is Right with Me? (my Strengths)”.`,
         inputCount: 5,
@@ -646,7 +665,7 @@ export const courseContent = {
         },
       },
       {
-        id: 17,
+        id: 16,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_9.mp4",
@@ -656,7 +675,7 @@ export const courseContent = {
         },
       },
       {
-        id: 18,
+        id: 17,
         type: "multiStep",
         steps: [
           {
@@ -705,17 +724,17 @@ export const courseContent = {
         },
       },
       {
-        id: 19,
+        id: 18,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_10.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_9.mp4",
         navigation: {
           prev: true,
           next: true,
         },
       },
       {
-        id: 20,
+        id: 19,
         type: "listQuestion",
         question: "List out two things you are grateful for.",
         inputCount: 3,
@@ -739,7 +758,55 @@ export const courseContent = {
         },
       },
       {
+        id: 20,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_10.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
         id: 21,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "dropdownScenario",
+            question:
+              "Which of these ways is NOT a way to create balance when it comes to prioritizing your well-being?",
+            options: [
+              {
+                id: "A",
+                text: "Setting boundaries.",
+              },
+              {
+                id: "B",
+                text: "Getting enough rest.",
+              },
+              {
+                id: "C",
+                text: "Always covering for your always absent colleague.",
+              },
+              {
+                id: "D",
+                text: "Practicing mindfulness",
+              },
+              {
+                id: "E",
+                text: "Taking a moment to breathe during a busy school day.",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 22,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_11.mp4",
@@ -749,7 +816,7 @@ export const courseContent = {
         },
       },
       {
-        id: 22,
+        id: 23,
         type: "multiStep",
         steps: [
           {
@@ -757,7 +824,7 @@ export const courseContent = {
             type: "instruction",
             title: "Instruction",
             instructions: [
-              "In the next activity, you will be asked to reframe a teacher’s statement to reflect a strength based feedback.",
+              "For this next activity, you will be shown different statements for you to reframe.",
             ],
           },
 
@@ -790,7 +857,7 @@ export const courseContent = {
         },
       },
       {
-        id: 23,
+        id: 24,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_12.mp4",
@@ -815,7 +882,7 @@ export const courseContent = {
         id: 2,
         type: "question",
         questionType: "text",
-        question: "Do you remember what we discussed last week?",
+        question: " Type in what you remember from last week.",
         hasImage: false,
         imageSrc: "mindset.png",
         inputType: "bigTextBox",
@@ -971,6 +1038,113 @@ export const courseContent = {
       },
       {
         id: 10,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            instruction:
+              "Answer the following questions to the best of your ability.",
+          },
+
+          {
+            stepId: 2,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "Remember yourself as a student, did you ever feel like one or most of your teachers were like electric kettles waiting to  boil over?",
+              },
+            ],
+          },
+          {
+            stepId: 3,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "How did it feel to be in their classrooms?",
+              },
+            ],
+          },
+          {
+            stepId: 4,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "Did you always look forward to being in their classes?",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 11,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/ToT_2_6.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 12,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+          },
+          {
+            stepId: 2,
+            type: "dropdownScenario",
+            question:
+              "How might this situation affect your emotional response?",
+            options: [
+              {
+                id: "A",
+                text: "No emotional change",
+              },
+              {
+                id: "B",
+                text: "Slight frustration",
+              },
+              {
+                id: "C",
+                text: "Moderate frustration",
+              },
+              {
+                id: "D",
+                text: "Moderate frustration",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 13,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/ToT_2_6.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 14,
         type: "multiStep",
         steps: [
           {
@@ -1163,7 +1337,7 @@ export const courseContent = {
         },
       },
       {
-        id: 11,
+        id: 15,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/ToT_2_6.mp4",
@@ -1173,7 +1347,7 @@ export const courseContent = {
         },
       },
       {
-        id: 12,
+        id: 16,
         type: "multiStep",
         title: "Teacher Response Ranking",
         steps: [
@@ -1322,7 +1496,7 @@ export const courseContent = {
         },
       },
       {
-        id: 13,
+        id: 17,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+2/ToT_2_7.mp4",
@@ -1856,6 +2030,71 @@ export const courseContent = {
       {
         id: 4,
         type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question: "What does the word, ‘Growth Mindset’ mean to you?",
+              },
+            ],
+          },
+          {
+            stepId: 2,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "Is ‘Resilience’ a word familiar to you? What does it mean?",
+              },
+            ],
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 5,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 6,
+        type: "question",
+        questionType: "text",
+        question:
+          "From what I have explained so far, give an example of a statement that shows a fixed mindset.",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 7,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_2.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 8,
+        type: "multiStep",
         title: "Write a letter to yourself.",
         steps: [
           {
@@ -1907,7 +2146,7 @@ export const courseContent = {
         },
       },
       {
-        id: 5,
+        id: 9,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_3.mp4",
@@ -1917,7 +2156,7 @@ export const courseContent = {
         },
       },
       {
-        id: 6,
+        id: 10,
         type: "multiStep",
         steps: [
           {
@@ -2009,7 +2248,7 @@ export const courseContent = {
                 ],
               },
               {
-                id: 1,
+                id: 3,
                 text: "1. Start of Teaching Career",
                 color: "red",
                 bgColor: "#EE2447",
@@ -2035,7 +2274,7 @@ export const courseContent = {
         },
       },
       {
-        id: 7,
+        id: 11,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_4.mp4",
@@ -2045,7 +2284,7 @@ export const courseContent = {
         },
       },
       {
-        id: 8,
+        id: 12,
         type: "multiStep",
         steps: [
           {
@@ -2115,7 +2354,7 @@ export const courseContent = {
         },
       },
       {
-        id: 9,
+        id: 13,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_5.mp4",
@@ -2125,7 +2364,7 @@ export const courseContent = {
         },
       },
       {
-        id: 10,
+        id: 14,
         type: "multiStep",
         steps: [
           {
@@ -2167,6 +2406,17 @@ export const courseContent = {
               },
             ],
           },
+          {
+            stepId: 5,
+            type: "scenario",
+            questions: [
+              {
+                type: "Question",
+                question:
+                  "What’s one thing you’ve learned that made you a better teacher?",
+              },
+            ],
+          },
         ],
         navigation: {
           prev: true,
@@ -2174,7 +2424,7 @@ export const courseContent = {
         },
       },
       {
-        id: 11,
+        id: 15,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+4/Week+4_6.mp4",
@@ -2243,19 +2493,12 @@ export const courseContent = {
       {
         id: 4,
         type: "question",
-        questions: [
-          {
-            type: "subject",
-            question: "What subject(s) do you teach?",
-          },
-          {
-            type: "skill",
-            question:
-              "Which SEL skill do you think is or can be embedded in it?",
-          },
-        ],
-        inputType: "text",
-        inputPlaceholder: "Type your answer here",
+        questionType: "text",
+        question:
+          "Sincerely, do you think SEL can be incorporated into EVERY single subject?",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
         navigation: {
           prev: true,
           next: true,
@@ -2273,6 +2516,52 @@ export const courseContent = {
       },
       {
         id: 6,
+        type: "multiStep",
+        steps: [
+          {
+            stepId: 1,
+            type: "instruction",
+            title: "Instruction",
+            instructions: [
+              "The next activity helps you think about how to intentionally use storytelling to spark meaningful conversations in your classroom. \nSelect the appropriate SEL skills that matches the story.",
+            ],
+            options:
+              "Competence, Confidence, Coping, Control, Character, Connections, and Contribution.",
+          },
+          {
+            stepId: 2,
+            type: "question",
+            question: [
+              {
+                type: "subject",
+                question: "Subject:",
+              },
+              {
+                type: "skill",
+                question: "SEL Skill:",
+              },
+            ],
+            inputType: "text",
+            inputPlaceholder: "Type your answer here",
+          },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 7,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+5/Week+5_3.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 8,
         type: "question",
         questions: [
           {
@@ -2296,7 +2585,7 @@ export const courseContent = {
         },
       },
       {
-        id: 7,
+        id: 9,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+5/Week+5_4.mp4",
@@ -2306,7 +2595,7 @@ export const courseContent = {
         },
       },
       {
-        id: 8,
+        id: 10,
         type: "multiStep",
         steps: [
           {
@@ -2421,7 +2710,7 @@ export const courseContent = {
         },
       },
       {
-        id: 9,
+        id: 11,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+5/Week+5_5.mp4",
@@ -2431,7 +2720,7 @@ export const courseContent = {
         },
       },
       {
-        id: 10,
+        id: 12,
         type: "question",
         questionType: "text",
         question:
@@ -2445,7 +2734,7 @@ export const courseContent = {
         },
       },
       {
-        id: 11,
+        id: 13,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+5/Week+5_6.mp4",
@@ -2468,6 +2757,30 @@ export const courseContent = {
       },
       {
         id: 2,
+        type: "question",
+        questionType: "text",
+        question:
+          "Have you ever seen a match stick light up other matchsticks when it is lit? \n\nNow, imagine that the match stick goes off, would it still be able to light other matchsticks?",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 3,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_3.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 4,
         type: "multiStep",
         steps: [
           {
@@ -2628,45 +2941,20 @@ export const courseContent = {
         },
       },
       {
-        id: 3,
+        id: 5,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_2.mp4",
         hasNextButton: true,
       },
       {
-        id: 4,
-        type: "question",
-        questionType: "text",
+        id: 6,
+        type: "listQuestion",
         question:
           "Write down three ways you recharge whenever you feel burnout.",
-        hasImage: false,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 5,
-        type: "video",
-        videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_3.mp4",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 6,
-        type: "question",
-        questionType: "text",
-        question:
-          "What is one moment from your recent teaching experience that made you feel grateful?",
-        hasImage: false,
-        imageSrc: "mindset.png",
-        inputType: "bigTextBox",
+        inputCount: 3,
+        inputType: "text",
+        inputPlaceholder: "Type your answer here",
         navigation: {
           prev: true,
           next: true,
@@ -2676,7 +2964,7 @@ export const courseContent = {
         id: 7,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -2684,6 +2972,30 @@ export const courseContent = {
       },
       {
         id: 8,
+        type: "question",
+        questionType: "text",
+        question:
+          "What is one moment from your recent teaching experience that made you feel grateful? It could be a student’s progress, a kind gesture from a colleague, or even something small, like a quiet moment before class started.",
+        hasImage: false,
+        imageSrc: "mindset.png",
+        inputType: "bigTextBox",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 9,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 10,
         type: "multiStep",
         title: "Write a letter to yourself.",
         steps: [
@@ -2738,7 +3050,7 @@ export const courseContent = {
         },
       },
       {
-        id: 9,
+        id: 11,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_5.mp4",
@@ -2748,7 +3060,7 @@ export const courseContent = {
         },
       },
       {
-        id: 10,
+        id: 12,
         type: "multiStep",
         steps: [
           {
@@ -2905,7 +3217,7 @@ export const courseContent = {
         },
       },
       {
-        id: 11,
+        id: 13,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+6/Week+6_6.mp4",

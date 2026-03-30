@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "../../../components/Button";
 import {
   selectPageData,
+  navigateNext,
   selectCurrentStep,
 } from "../../../../../../../../redux/reducers/navigationSlice";
+import TOTFeedbackModal from "../../../../TOT-2/components/TOTFeedbackModal";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import {
   userAnswer,
@@ -20,6 +22,11 @@ function WeekThreePage8() {
   const totalSteps = pageData?.steps?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const [showFeedback, setShowFeedback] = useState(false);
+  const handleCloseFeedback = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext()); // Navigate after closing the modal
+  };
 
   const step = pageData?.steps[currentStep - 1]; // Get the current step data
   const userAnswers = useSelector(userAnswer);
@@ -30,7 +37,7 @@ function WeekThreePage8() {
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
-      (item) => item.page === pageData.id
+      (item) => item.page === pageData.id,
     );
 
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
@@ -53,7 +60,12 @@ function WeekThreePage8() {
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
-    return true;
+    if (currentStep !== 2) {
+      return true;
+    }
+
+    setShowFeedback(true);
+    return false;
   };
 
   // console.log(answers, "Answers")
@@ -94,6 +106,12 @@ function WeekThreePage8() {
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
+      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue">
+          Understanding how students feel when they are heard or ignored helps
+          strengthen empathy in teaching.
+        </p>
+      </TOTFeedbackModal>
     </>
   );
 }

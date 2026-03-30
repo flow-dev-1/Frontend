@@ -5,8 +5,10 @@ import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
 import {
   selectPageData,
+  navigateNext,
   selectCurrentStep,
 } from "../../../../../../../../redux/reducers/navigationSlice";
+import TOTFeedbackModal from "../../../../TOT-2/components/TOTFeedbackModal";
 import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
@@ -22,7 +24,11 @@ function WeekThreePage12() {
   const currentStep = useSelector(selectCurrentStep);
   const totalSteps = pageData?.steps?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
-
+  const [showFeedback, setShowFeedback] = useState(false);
+  const handleCloseFeedback = () => {
+    setShowFeedback(false);
+    dispatch(navigateNext()); // Navigate after closing the modal
+  };
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
@@ -31,7 +37,7 @@ function WeekThreePage12() {
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
-      (item) => item.page === pageData.id
+      (item) => item.page === pageData.id,
     );
 
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
@@ -62,7 +68,7 @@ function WeekThreePage12() {
     const emptyInputs = values.filter((value) => value.trim() === "");
     if (emptyInputs.length > 0) {
       setErrorMessage(
-        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
+        `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`,
       );
       return false;
     }
@@ -75,7 +81,12 @@ function WeekThreePage12() {
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
 
-    return true;
+    if (currentStep !== 5) {
+      return true;
+    }
+
+    setShowFeedback(true);
+    return false;
   };
 
   const handleInputChange = (e) => {
@@ -157,6 +168,12 @@ function WeekThreePage12() {
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />
       </div>
+      <TOTFeedbackModal show={showFeedback} onHide={handleCloseFeedback}>
+        <p className="text-blue">
+          Restorative responses help students reflect, repair harm, and rebuild
+          trust in the classroom community.
+        </p>
+      </TOTFeedbackModal>
     </>
   );
 }

@@ -4,13 +4,13 @@ import VideoComponent from "../../../components/Video";
 import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 
-const WeekTwoPage11 = () => {
+const WeekTwoPage9 = () => {
   const pageData = useSelector(selectPageData);
 
   return (
     <>
       <VideoComponent videoSrc={pageData.videoSrc} />
-      <div className="d-flex justify-content-center mt-4 gap-96px gap-4">
+      <div className="d-flex justify-content-center mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" />
       </div>
@@ -18,4 +18,4 @@ const WeekTwoPage11 = () => {
   );
 };
 
-export default WeekTwoPage11;
+export default WeekTwoPage9;

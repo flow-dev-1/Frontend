@@ -4,7 +4,7 @@ import VideoComponent from "../../../components/Video";
 import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 
-const WeekTwoPage13 = () => {
+const WeekTwoPage9 = () => {
   const pageData = useSelector(selectPageData);
 
   return (
@@ -18,4 +18,4 @@ const WeekTwoPage13 = () => {
   );
 };
 
-export default WeekTwoPage13;
+export default WeekTwoPage9;
