@@ -403,7 +403,7 @@ const CourseContent = () => {
   const weeksTopic = [
     "Understanding Inclusion and Special Needs in the Classroom",
     "The Inclusive Mindset: Empathy and Compassion",
-    "The Inclusive Mindset: Empathy, and Compassion",
+    "Designing Learning for Everyone, Universal Design for Learning and Differentiated Instruction",
     "Practical Strategies for Supporting Students with Common Special Needs",
     "Collaboration, Support Systems, and Inclusive Implementation",
   ];
