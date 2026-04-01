@@ -97,7 +97,7 @@ function TOT2Feedback() {
       ),
     },
     {
-      topic: "The Inclusive Mindset: Empathy, and Compassion",
+      topic: "Designing Learning for Everyone, Universal Design for Learning and Differentiated Instruction",
       component: (
         <Week3
           enrollmentId={enrollmentId}
