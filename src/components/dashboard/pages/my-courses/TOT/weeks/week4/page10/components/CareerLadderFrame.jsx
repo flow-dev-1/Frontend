@@ -11,12 +11,12 @@ function CareerLadderFrame({ boxes, answers, setAnswers, setErrorMessage }) {
 
     // Prevent user from skipping earlier boxes (based on ID)
     const previousIncomplete = boxes.some(
-      (b) => b.id < currentId && !isBoxCompleted(b.id)
+      (b) => b.id < currentId && !isBoxCompleted(b.id),
     );
 
     if (previousIncomplete) {
       const lastIncomplete = Math.min(
-        ...boxes.filter((b) => !isBoxCompleted(b.id)).map((b) => b.id)
+        ...boxes.filter((b) => !isBoxCompleted(b.id)).map((b) => b.id),
       );
       const requiredBox = boxes.find((b) => b.id === lastIncomplete);
       setErrorMessage(`Please complete "${requiredBox.text}" first.`);

@@ -71,7 +71,7 @@ export const courseContent = {
         id: 4,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -274,7 +274,7 @@ export const courseContent = {
               },
               {
                 id: "4",
-                text: "Moderate impact",
+                text: "Severe impact",
               },
             ],
           },
@@ -1123,7 +1123,7 @@ export const courseContent = {
               },
               {
                 id: "D",
-                text: "Moderate frustration",
+                text: "Severe frustration",
               },
             ],
           },
@@ -2113,11 +2113,11 @@ export const courseContent = {
             buckets: [
               {
                 id: "green",
-                title: "Yes",
+                title: "Growth Mindset",
               },
               {
                 id: "red",
-                title: "No",
+                title: "Fixed Mindset",
               },
             ],
             images: [
@@ -2248,7 +2248,7 @@ export const courseContent = {
                 ],
               },
               {
-                id: 3,
+                id: 1,
                 text: "1. Start of Teaching Career",
                 color: "red",
                 bgColor: "#EE2447",

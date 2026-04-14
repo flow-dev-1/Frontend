@@ -64,7 +64,7 @@ function Page3() {
 
   return (
     <>
-      <VideoComponent videoSrc={pageData.videoSrc} />
+      <VideoComponent videoSrc={"pageData.videoSrc"} />
       {/* pass answers and setAnswers so Feeling can read/update selection */}
       {!showFeedback && <Feeling answers={answers} setAnswers={setAnswers} />}
       {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}

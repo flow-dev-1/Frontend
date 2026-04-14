@@ -49,8 +49,8 @@ function WeekFiveAssessment() {
         `You scored ${calculateResult(
           assessmentData.questions,
           answers,
-          totalSteps
-        )}% in the quiz`
+          totalSteps,
+        )}% in the quiz`,
       );
       toast.success(data.message || "Answers saved successfully!"); // Show success toast
       dispatch(
@@ -60,7 +60,7 @@ function WeekFiveAssessment() {
           week: 1,
           activities: [],
           assessments: [],
-        })
+        }),
       );
       dispatch(navigateNext());
     },
@@ -76,7 +76,7 @@ function WeekFiveAssessment() {
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
       const stepIndex = updatedAnswers.findIndex(
-        (answer) => answer.id === currentStep
+        (answer) => answer.id === currentStep,
       );
 
       if (stepIndex !== -1) {
@@ -112,18 +112,17 @@ function WeekFiveAssessment() {
       const hasUnansweredQuestions =
         answers.length !== totalSteps || userAnswers.activities.length !== 5;
 
-      if (hasUnansweredQuestions) {
-        setErrorMessage(
-          "Oops! Some unanswered questions have been detected. Kindly go back and review!"
-        );
-        return false;
-      }
-
+      // if (hasUnansweredQuestions) {
+      //   setErrorMessage(
+      //     "Oops! Some unanswered questions have been detected. Kindly go back and review!"
+      //   );
+      //   return false;
+      // }
 
       const userScore = calculateResult(
         assessmentData.questions,
         answers,
-        totalSteps
+        totalSteps,
       );
 
       mutation.mutate({
