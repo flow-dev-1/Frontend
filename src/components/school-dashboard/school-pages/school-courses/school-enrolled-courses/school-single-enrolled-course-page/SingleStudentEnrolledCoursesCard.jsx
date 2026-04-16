@@ -130,6 +130,11 @@ const SingleStudentEnrolledCoursesCard = ({
         `/school-dashboard/courses/feedback/transition/${encryptURI(userId)}`,
         { state: { enrollmentData: course } }
       )
+    } else if (course?.course.title === "Emotional Regulation") {
+      navigate(
+        `/school-dashboard/courses/feedback/emotional_regulation/${encryptURI(userId)}`,
+        { state: { enrollmentData: course } }
+      )
     } else {
       navigate(`/dashboard/${course?.course.title}/feedback`, { state: { enrollmentData: course } })
     }

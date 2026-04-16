@@ -356,6 +356,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/school-dashboard/courses/feedback/emotional_regulation/:userId"
+            element={
+              <ProtectedRoute>
+                <EmotionalRegulationFeedback />
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/school-dashboard/settings/teams"

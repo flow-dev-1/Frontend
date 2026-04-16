@@ -204,7 +204,7 @@ const SchoolOverview = () => {
             {totalTeachers}
           </h6>
         </div>
-        <div style={{ height: '130px' }} class='stat'>
+        <div style={{ height: '130px' }} className='stat'>
           <p className='total'>Total Enrolled Students</p>
           <h6
             style={{ fontFamily: 'Poppins', fontWeight: '600' }}
