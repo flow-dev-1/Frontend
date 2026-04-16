@@ -119,6 +119,16 @@
   background: url("../../../../../../../../assets/tot-images/no.png") no-repeat;
 }
 
+.growth-box {
+  background: url("../../../../../../../../assets/tot-images/growth-mindset.png")
+    no-repeat;
+}
+
+.fixed-box {
+  background: url("../../../../../../../../assets/tot-images/fixed-mindset.png")
+    no-repeat;
+}
+
 .inner-bucket,
 .outer-bucket,
 .both-bucket,
@@ -126,7 +136,9 @@
 .pink-dark-bucket,
 .yellow-dark-bucket,
 .inner-box,
-.outer-box {
+.outer-box,
+.growth-box,
+.fixed-box {
   color: #fff;
   font-weight: bold;
   display: flex;

@@ -284,7 +284,7 @@ export const courseContent = {
               },
               {
                 id: "4",
-                text: "Moderate impact",
+                text: "Severe impact",
               },
             ],
           },
@@ -1123,7 +1123,7 @@ export const courseContent = {
               },
               {
                 id: "D",
-                text: "Moderate frustration",
+                text: "Severe frustration",
               },
             ],
           },
@@ -2113,11 +2113,11 @@ export const courseContent = {
             buckets: [
               {
                 id: "green",
-                title: "Yes",
+                title: "Growth Mindset",
               },
               {
                 id: "red",
-                title: "No",
+                title: "Fixed Mindset",
               },
             ],
             images: [

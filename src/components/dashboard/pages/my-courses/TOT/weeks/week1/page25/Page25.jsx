@@ -37,7 +37,7 @@ function WeekOneAssessment() {
   useEffect(() => {
     if (!userAnswers) return;
     setAnswers(userAnswers?.assessments || []);
-    return () => { };
+    return () => {};
   }, [userAnswers]);
 
   // Mutation for saving user data
@@ -49,8 +49,8 @@ function WeekOneAssessment() {
         `You scored ${calculateResult(
           assessmentData.questions,
           answers,
-          totalSteps
-        )}% in the quiz`
+          totalSteps,
+        )}% in the quiz`,
       );
       toast.success(data.message || "Answers saved successfully!"); // Show success toast
       // dispatch(
@@ -76,7 +76,7 @@ function WeekOneAssessment() {
     setAnswers((prevAnswers) => {
       const updatedAnswers = [...prevAnswers];
       const stepIndex = updatedAnswers.findIndex(
-        (answer) => answer.id === currentStep
+        (answer) => answer.id === currentStep,
       );
 
       if (stepIndex !== -1) {
@@ -111,20 +111,19 @@ function WeekOneAssessment() {
     if (isLastQuestion) {
 
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 12;
+        answers.length !== totalSteps || userAnswers.activities.length !== 1;
 
-      if (hasUnansweredQuestions) {
-        setErrorMessage(
-          "Oops! Some unanswered questions have been detected. Kindly go back and review!"
-        );
-        return false;
-      }
-
+      // if (hasUnansweredQuestions) {
+      //   setErrorMessage(
+      //     "Oops! Some unanswered questions have been detected. Kindly go back and review!",
+      //   );
+      //   return false;
+      // }
 
       const userScore = calculateResult(
         assessmentData.questions,
         answers,
-        totalSteps
+        totalSteps,
       );
 
       mutation.mutate({
