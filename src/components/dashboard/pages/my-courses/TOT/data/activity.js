@@ -4,6 +4,16 @@ export const courseContent = {
     pages: [
       {
         id: 1,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_1.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 2,
         type: "multiStep",
         title: "Write a letter to yourself.",
         steps: [
@@ -47,7 +57,7 @@ export const courseContent = {
         },
       },
       {
-        id: 2,
+        id: 3,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_2.mp4",
@@ -57,10 +67,10 @@ export const courseContent = {
         },
       },
       {
-        id: 3,
+        id: 4,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_2.mp4",
         type: "showFeelings",
         navigation: {
           prev: true,
@@ -68,17 +78,17 @@ export const courseContent = {
         },
       },
       {
-        id: 4,
+        id: 5,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_3.mp4",
         navigation: {
           prev: true,
           next: true,
         },
       },
       {
-        id: 5,
+        id: 6,
         type: "multiStep",
         title: "Write a letter to yourself.",
         steps: [
@@ -126,7 +136,7 @@ export const courseContent = {
         },
       },
       {
-        id: 6,
+        id: 7,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_4.mp4",
@@ -136,7 +146,7 @@ export const courseContent = {
         },
       },
       {
-        id: 7,
+        id: 8,
         type: "question",
         questionType: "text",
         question:
@@ -150,7 +160,7 @@ export const courseContent = {
         },
       },
       {
-        id: 8,
+        id: 9,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_5.mp4",
@@ -160,7 +170,7 @@ export const courseContent = {
         },
       },
       {
-        id: 9,
+        id: 10,
         type: "multiStep",
         title: "Classroom Decision Making",
         steps: [
@@ -238,7 +248,7 @@ export const courseContent = {
         },
       },
       {
-        id: 10,
+        id: 11,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_6.mp4",
@@ -248,7 +258,7 @@ export const courseContent = {
         },
       },
       {
-        id: 11,
+        id: 12,
         type: "multiStep",
         steps: [
           {
@@ -285,7 +295,7 @@ export const courseContent = {
         },
       },
       {
-        id: 12,
+        id: 13,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_7.mp4",
@@ -295,7 +305,7 @@ export const courseContent = {
         },
       },
       {
-        id: 13,
+        id: 14,
         type: "multiStep",
         steps: [
           {
@@ -643,7 +653,7 @@ export const courseContent = {
         },
       },
       {
-        id: 14,
+        id: 15,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_8.mp4",
@@ -653,7 +663,7 @@ export const courseContent = {
         },
       },
       {
-        id: 15,
+        id: 16,
         type: "listQuestion",
         question: `“What is Right with Me? (my Strengths)”.`,
         inputCount: 5,
@@ -665,7 +675,7 @@ export const courseContent = {
         },
       },
       {
-        id: 16,
+        id: 17,
         type: "video",
         videoSrc:
           "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_9.mp4",
@@ -675,7 +685,7 @@ export const courseContent = {
         },
       },
       {
-        id: 17,
+        id: 18,
         type: "multiStep",
         steps: [
           {
@@ -724,17 +734,17 @@ export const courseContent = {
         },
       },
       {
-        id: 18,
+        id: 19,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_9.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_10.mp4",
         navigation: {
           prev: true,
           next: true,
         },
       },
       {
-        id: 19,
+        id: 20,
         type: "listQuestion",
         question: "List out two things you are grateful for.",
         inputCount: 3,
@@ -758,17 +768,17 @@ export const courseContent = {
         },
       },
       {
-        id: 20,
+        id: 21,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_10.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_11.mp4",
         navigation: {
           prev: true,
           next: true,
         },
       },
       {
-        id: 21,
+        id: 22,
         type: "multiStep",
         steps: [
           {
@@ -800,16 +810,6 @@ export const courseContent = {
             ],
           },
         ],
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 22,
-        type: "video",
-        videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/tot1_videos/Week+1/ToT_1_11.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -2248,7 +2248,7 @@ export const courseContent = {
                 ],
               },
               {
-                id: 3,
+                id: 1,
                 text: "1. Start of Teaching Career",
                 color: "red",
                 bgColor: "#EE2447",

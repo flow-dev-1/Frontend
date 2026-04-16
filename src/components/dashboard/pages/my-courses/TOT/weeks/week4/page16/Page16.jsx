@@ -110,8 +110,9 @@ function WeekFourAssessment() {
 
 
     if (isLastQuestion) {
+
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 5;
+        answers.length !== totalSteps || userAnswers.activities.length !== 7;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(
@@ -125,8 +126,6 @@ function WeekFourAssessment() {
         answers,
         totalSteps
       );
-
-      console.log(userScore, "userScore");
 
       mutation.mutate({
         ...userAnswers,

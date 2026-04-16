@@ -17,7 +17,7 @@ import {
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import Frame from "./components/Frame";
 
-function Page19() {
+function Page23() {
   const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
@@ -121,4 +121,4 @@ function Page19() {
   );
 }
 
-export default Page19;
+export default Page23;

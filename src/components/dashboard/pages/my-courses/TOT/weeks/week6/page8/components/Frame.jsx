@@ -1,6 +1,5 @@
 import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
-import MediumTextBox from "../../../week3/page10/components/MediumTextBox";
 import SmallTextBox from "../../../week3/page10/components/SmallInputTextBox";
 
 function Frame({ data, answers, setAnswers, setErrorMessage }) {

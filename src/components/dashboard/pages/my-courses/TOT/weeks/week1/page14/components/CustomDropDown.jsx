@@ -56,8 +56,9 @@ function CustomDropDown({ value, onChange, options = [] }) {
             top: "100%",
             left: 0,
             zIndex: 1000,
-            maxHeight: "300px",
-            overflowY: "auto",
+            height: "auto",
+            maxHeight: "none",
+            overflowY: "visible",
           }}
         >
           <div
@@ -72,7 +73,7 @@ function CustomDropDown({ value, onChange, options = [] }) {
           </div>
           {options.map((option, index) => (
             <div
-              key={index}
+              key={option.id}
               className="p-3 cursor-pointer"
               onClick={() => handleOptionClick(option.id)}
               style={{

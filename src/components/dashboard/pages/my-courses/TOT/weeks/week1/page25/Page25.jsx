@@ -109,8 +109,9 @@ function WeekOneAssessment() {
     dispatch(saveAssessment(answers));
 
     if (isLastQuestion) {
+
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 11;
+        answers.length !== totalSteps || userAnswers.activities.length !== 12;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(

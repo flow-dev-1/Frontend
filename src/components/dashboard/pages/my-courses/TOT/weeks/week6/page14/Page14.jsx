@@ -110,8 +110,9 @@ function WeekFiveAssessment() {
 
 
     if (isLastQuestion) {
+
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 5;
+        answers.length !== totalSteps || userAnswers.activities.length !== 6;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(

@@ -17,14 +17,14 @@ import PopUp from "./components/ReviewPopUp";
 import Hurray from "./components/Hurray";
 
 // Week 1
-import Page1 from "./weeks/week1/page1/Page1";
-import Page2 from "./weeks/week1/page2/Page2";
-import Page3 from "./weeks/week1/page3/Page3";
-import Page4 from "./weeks/week1/page4/Page4";
-import Page5 from "./weeks/week1/page5/Page5";
-import Page6 from "./weeks/week1/page6/Page6";
-import Page7 from "./weeks/week1/page7/Page7";
-import Page8 from "./weeks/week1/page8/Page8";
+import Page1 from "./weeks/week1/page1/Page1.jsx";
+import Page2 from "./weeks/week1/page2/Page2.jsx";
+import Page3 from "./weeks/week1/page3/Page3.jsx";
+import Page4 from "./weeks/week1/page4/Page4.jsx";
+import Page5 from "./weeks/week1/page5/Page5.jsx";
+import Page6 from "./weeks/week1/page6/Page6.jsx";
+import Page7 from "./weeks/week1/page7/Page7.jsx";
+import Page8 from "./weeks/week1/page8/Page8.jsx";
 import Page9 from "./weeks/week1/page9/Page9";
 import Page10 from "./weeks/week1/page10/Page10";
 import Page11 from "./weeks/week1/page11/Page11";
@@ -40,7 +40,7 @@ import Page20 from "./weeks/week1/page20/Page20.jsx";
 import Page21 from "./weeks/week1/page21/Page21.jsx";
 import Page22 from "./weeks/week1/page22/Page22.jsx";
 import Page23 from "./weeks/week1/page23/Page23.jsx";
-import Page24 from "./weeks/week1/page24/Page24";
+import Page24 from "./weeks/week1/page24/Page24.jsx";
 import Page25 from "./weeks/week1/page25/Page25.jsx";
 
 // Week 2
@@ -104,8 +104,8 @@ import WeekFivePage3 from "./weeks/week5/page3/Page3.jsx";
 import WeekFivePage4 from "./weeks/week5/page4/Page4.jsx";
 import WeekFivePage5 from "./weeks/week5/page5/Page5.jsx";
 import WeekFivePage6 from "./weeks/week5/page6/Page6.jsx";
-import WeekFivePage7 from "./weeks/week5/page7/Page7.jsx";
-import WeekFivePage8 from "./weeks/week5/page8/Page8.jsx";
+import WeekFivePage7 from "./weeks/week5/page7/page7.jsx";
+import WeekFivePage8 from "./weeks/week5/page8/page8.jsx";
 import WeekFivePage9 from "./weeks/week5/page9/Page9.jsx";
 import WeekFivePage10 from "./weeks/week5/page10/Page10.jsx";
 import WeekFivePage11 from "./weeks/week5/page11/Page11.jsx";
@@ -120,7 +120,7 @@ import WeekSixPage3 from "./weeks/week6/page3/Page3";
 import WeekSixPage4 from "./weeks/week6/page4/Page4";
 import WeekSixPage5 from "./weeks/week6/page5/Page5";
 import WeekSixPage6 from "./weeks/week6/page6/Page6";
-import WeekSixPage7 from "./weeks/week6/page7/Page7.jsx";
+import WeekSixPage7 from "./weeks/week6/page7/page7.jsx";
 import WeekSixPage8 from "./weeks/week6/page8/Page8";
 import WeekSixPage9 from "./weeks/week6/page9/Page9.jsx";
 import WeekSixPage10 from "./weeks/week6/page10/Page10";
@@ -178,7 +178,7 @@ const WeekContent = () => {
     dispatch(setCurrentPage(currentPage));
     dispatch(setCurrentStep(currentStep));
 
-    return () => {};
+    return () => { };
   }, [dispatch]); // Added dispatch to dependency array
 
   const currentWeek = useSelector(selectCurrentWeek);
@@ -227,7 +227,7 @@ const WeekContent = () => {
       );
     }
 
-    return () => {};
+    return () => { };
   }, [data]);
 
   // If showing hurray, render that instead
@@ -284,6 +284,7 @@ const WeekContent = () => {
             return <Page21 />;
           case 22:
             return <Page22 />;
+
           case 23:
             return <Page23 />;
           case 24:
@@ -711,9 +712,8 @@ const CourseContent = () => {
               return (
                 <li
                   key={index}
-                  className={`${isActive ? "active-week" : ""} ${
-                    isAccessible ? "accessible-week" : "locked-week"
-                  }`}
+                  className={`${isActive ? "active-week" : ""} ${isAccessible ? "accessible-week" : "locked-week"
+                    }`}
                   onClick={() => handleWeekClick(weekNumber)}
                   style={{
                     cursor: isAccessible ? "pointer" : "not-allowed",
