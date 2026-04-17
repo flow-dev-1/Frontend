@@ -53,15 +53,6 @@ function WeekThreePage12() {
         )}% in the quiz`
       );
       toast.success(data.message || "Answers saved successfully!"); // Show success toast
-      dispatch(
-        updateData({
-          course: null,
-          courseEnrollmentId: null,
-          week: 1,
-          activities: [],
-          assessments: [],
-        })
-      );
       dispatch(navigateNext());
     },
     onError: (error) => {
