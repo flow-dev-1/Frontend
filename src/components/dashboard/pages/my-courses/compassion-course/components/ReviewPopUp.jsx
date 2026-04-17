@@ -55,7 +55,7 @@ export default function PopUp() {
   return (
     <div
       style={{ width: "620px", paddingTop: "30px" }}
-      className="review-popup modal-content position-absolute top-50 start-50 translate-middle"
+      className="review-popup modal-content"
     >
       <div className="">
         <h1 style={{ margin: "0 auto" }} className="review">
