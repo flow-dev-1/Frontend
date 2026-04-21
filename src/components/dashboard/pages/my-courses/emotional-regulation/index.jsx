@@ -132,7 +132,7 @@ const WeekContent = () => {
     queryFn: () => userService.getUserCourseData(enrollmentId, currentWeek),
     enabled: !!enrollmentId && !!currentWeek,
     refetchOnMount: "always",
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: false,
     keepPreviousData: false,
   });
 
@@ -141,13 +141,23 @@ const WeekContent = () => {
     if (!data) return;
 
     if (data.assessment && data.activity) {
+      const serverActivities = data.activity?.activities;
+      const serverAssessments = data.assessment?.assessments;
+
+      // Only overwrite local state if server has actual data — never wipe with empty arrays
       dispatch(
         updateData({
           course: course,
           courseEnrollmentId: enrollmentId,
           week: currentWeek,
-          activities: data.activity?.activities,
-          assessments: data.assessment?.assessments,
+          activities:
+            serverActivities?.length > 0
+              ? serverActivities
+              : userAnswers.activities,
+          assessments:
+            serverAssessments?.length > 0
+              ? serverAssessments
+              : userAnswers.assessments,
         })
       );
     } else {

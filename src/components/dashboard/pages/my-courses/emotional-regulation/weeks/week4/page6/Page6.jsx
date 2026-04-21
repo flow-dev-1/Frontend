@@ -103,8 +103,24 @@ function WeekFourAssessment() {
 
     if (isLastQuestion) {
 
+      const textActivity = userAnswers.activities?.find((a) => a.page === 2);
+      const textComplete = textActivity?.answer && textActivity.answer.trim();
+
+      const emotions = ["Sad", "Excited", "Frustrated", "Bored", "Angry", "Overwhelmed"];
+      const emotionActivity = userAnswers.activities?.find((a) => a.page === 4);
+      const emotionRows = emotionActivity?.answer;
+      const emotionComplete =
+        Array.isArray(emotionRows) &&
+        emotionRows.some((row) =>
+          emotions.every(
+            (e) =>
+              row.value?.[`${e}_whatYouDid`]?.trim() &&
+              row.value?.[`${e}_healthStatus`]?.trim()
+          )
+        );
+
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 2;
+        answers.length !== totalSteps || !textComplete || !emotionComplete;
       if (hasUnansweredQuestions) {
         setErrorMessage(
           "Oops! Some unanswered questions have been detected. Kindly go back and review!"

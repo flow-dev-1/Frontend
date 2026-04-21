@@ -101,8 +101,16 @@ function WeekThreeAssessment() {
 
     if (isLastQuestion) {
 
+      const sonarActivity = userAnswers.activities?.find(
+        (activity) => activity.page === 2
+      );
+      const sonarKeys = ["S1", "O1", "N1", "A1", "R1", "S2", "O2", "N2", "A2", "R2"];
+      const sonarComplete =
+        sonarActivity?.answer &&
+        sonarKeys.every((key) => sonarActivity.answer[key]?.trim());
+
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 1;
+        answers.length !== totalSteps || !sonarComplete;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(

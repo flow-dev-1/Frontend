@@ -112,9 +112,22 @@ function WeekFiveAssessment() {
 
     if (isLastQuestion) {
 
-      console.log(userAnswers.activities.length,"")
+      const dragDropActivity = userAnswers.activities?.find((a) => a.page === 2);
+      const dragDropRows = dragDropActivity?.answer;
+      const dragDropComplete =
+        Array.isArray(dragDropRows) &&
+        dragDropRows.some((row) => {
+          const v = row.value || {};
+          const total =
+            (v.blue?.length || 0) +
+            (v.green?.length || 0) +
+            (v.yellow?.length || 0) +
+            (v.red?.length || 0);
+          return total === 20;
+        });
+
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 1;
+        answers.length !== totalSteps || !dragDropComplete;
       if (hasUnansweredQuestions) {
         setErrorMessage(
           "Oops! Some unanswered questions have been detected. Kindly go back and review!"
