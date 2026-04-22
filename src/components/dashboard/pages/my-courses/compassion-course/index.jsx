@@ -140,17 +140,28 @@ const WeekContent = () => {
         })
       );
     } else {
-      dispatch(
-        updateData({
-          course: course,
-          courseEnrollmentId: enrollmentId
-            ? enrollmentId
-            : userAnswers.courseEnrollmentId,
-          week: currentWeek,
-          activities: userAnswers.activities,
-          assessments: userAnswers.assessments,
-        })
-      );
+      // No DB data for this week yet.
+      // If Redux is also empty (e.g. user refreshed mid-week and lost state),
+      // reset them to page 1 so they can redo the activities rather than being
+      // stuck on the assessment page with nothing to submit.
+      if (!userAnswers.activities?.length && currentPage > 1) {
+        dispatch(setCurrentPage(1));
+        dispatch(setCurrentStep(1));
+        sessionStorage.setItem("flow-currentPage", "1");
+        sessionStorage.setItem("flow-currentStep", "1");
+      } else {
+        dispatch(
+          updateData({
+            course: course,
+            courseEnrollmentId: enrollmentId
+              ? enrollmentId
+              : userAnswers.courseEnrollmentId,
+            week: currentWeek,
+            activities: userAnswers.activities,
+            assessments: userAnswers.assessments,
+          })
+        );
+      }
     }
 
     return () => { };
