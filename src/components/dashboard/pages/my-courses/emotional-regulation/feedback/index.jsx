@@ -12,12 +12,12 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
 
-function EmotionalRegulationFeedback({ studentId }) {
+function EmotionalRegulationFeedback({ isSchool: isSchoolProp, studentId }) {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
-  const [isSchool, setIsSchool] = useState(false);
+  const [isSchool, setIsSchool] = useState(isSchoolProp || false);
 
   // This is used to trigger the report download.
   const [hasPercentile, setHasPercentile] = useState(false);

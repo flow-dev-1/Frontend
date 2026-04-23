@@ -12,12 +12,12 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
 
-function CompassionFeedback({ studentId }) {
+function CompassionFeedback({ isSchool: isSchoolProp, studentId }) {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState("");
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
-  const [isSchool, setIsSchool] = useState(false);
+  const [isSchool, setIsSchool] = useState(isSchoolProp || false);
 
   // This is used to trigger the report download.
   const [hasPercentile, setHasPercentile] = useState(false);
@@ -164,7 +164,7 @@ function CompassionFeedback({ studentId }) {
             disabled={isAdmin?.isAdmin}
             onClick={() =>
               isSchool
-                ? navigate(-1, { replace: true })
+                ? navigate(-1)
                 : navigate("/dashboard/my-courses")
             }
             className="back"
@@ -208,12 +208,12 @@ function CompassionFeedback({ studentId }) {
         <section className="week-content position-relative mb-5 ">
           <Link
             disabled={isAdmin}
-            to={"/dashboard/my-courses"}
+            to={isSchool ? -1 : "/dashboard/my-courses"}
             className="back text-black mb-5 p-3 d-lg-none"
             style={{ cursor: "pointer", border: "none" }}
           >
             <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
-            Back to My Courses
+            {isSchool ? "Go back" : "Back to My Courses"}
           </Link>
           <Accordion
             activeIndex={activeIndex}
