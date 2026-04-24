@@ -194,7 +194,7 @@ function TOTFeedback({ isSchool: isSchoolProp }) {
           </button>
           <div className="tot-title">
             <h2 className="fs-5 fs-md-3 tot-nav-text">SEL for Educators:</h2>
-            <h2 className="compassion fs-5 tot-nav-text">ToT Course 1</h2>
+            <h2 className="compassion fs-5 tot-nav-text">Feel It. Teach It. Transform Lives.</h2>
           </div>
 
           <ul className="compassion-list">

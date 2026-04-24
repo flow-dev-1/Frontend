@@ -41,11 +41,11 @@ const MyCourseCard = ({ course }) => {
     } else if (course?.course.title === "Transition 2") {
       navigate(`/dashboard/transition_2/feedback`, { state: { enrollmentData: course } })
       
-    } else if (course?.course.title === "TOT Course 1") {
+    } else if (course?.course.title === "TOT Course 1" || course?.course.title === "Feel It. Teach It. Transform Lives.") {
       navigate(`/dashboard/tot/feedback`, {
         state: { enrollmentData: course },
       });
-    } else if (course?.course.title === "TOT Course 2") {
+    } else if (course?.course.title === "TOT Course 2" || course?.course.title === "Leaving No Learner Behind") {
       navigate(`/dashboard/tot_2/feedback`, {
         state: { enrollmentData: course },
       });
@@ -79,11 +79,11 @@ const MyCourseCard = ({ course }) => {
     }  else if (course?.course.title === "Transition 2") {
       navigate(`/dashboard/transition_2`, { state: { enrollmentData: course } })
 
-    }else if (course?.course.title === "TOT Course 1") {
+    }else if (course?.course.title === "TOT Course 1" || course?.course.title === "Feel It. Teach It. Transform Lives.") {
       navigate(`/dashboard/tot`, {
         state: { enrollmentData: course },
       });
-    } else if (course?.course.title === "TOT Course 2") {
+    } else if (course?.course.title === "TOT Course 2" || course?.course.title === "Leaving No Learner Behind") {
       navigate(`/dashboard/tot_2`, {
         state: { enrollmentData: course },
       });

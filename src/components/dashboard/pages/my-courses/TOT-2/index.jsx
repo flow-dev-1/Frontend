@@ -601,8 +601,7 @@ const CourseContent = () => {
               Special Needs and Inclusive Education in Classrooms:
             </h2>
             <h2 className="compassion fs-5 tot-nav-text">
-              {" "}
-              Leaving no learner behind.
+              Leaving No Learner Behind
             </h2>
           </div>
 

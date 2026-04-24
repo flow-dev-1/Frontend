@@ -698,7 +698,7 @@ const CourseContent = () => {
               SEL & Positive Psychology for Educators:
             </h2>
             <h2 className="compassion fs-5 tot-nav-text">
-              Feel it. Teach it. Transform lives
+              Feel It. Teach It. Transform Lives.
             </h2>
           </div>
 
