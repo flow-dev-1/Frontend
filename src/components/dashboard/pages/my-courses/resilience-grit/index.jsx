@@ -296,7 +296,24 @@ const WeekContent = () => {
   return (
     <>
       {getComponent()}
-      {showReview && <PopUp />}
+      {showReview && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            zIndex: 1050,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "rgba(0,0,0,0.4)",
+          }}
+        >
+          <PopUp />
+        </div>
+      )}
     </>
   );
 };
@@ -606,4 +623,3 @@ const ResilienceCourse = () => {
 };
 
 export default ResilienceCourse;
-
