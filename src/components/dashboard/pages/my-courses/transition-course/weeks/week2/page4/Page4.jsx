@@ -62,6 +62,12 @@ function WeekTwoPage4() {
       i + 1
     }.png`);
   }
+
+  const bucketImageMap = {
+    green: require("../../../../../../../../assets/Buckets/maleBucket.png"),
+    red: require("../../../../../../../../assets/Buckets/femaleBucket.png"),
+  };
+
   const handleOnDragEnd = (result) => {
     if (!result.destination) {
       return;
@@ -186,15 +192,14 @@ function WeekTwoPage4() {
 
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
-      <div className="d-flex flex-column align-items-center  ">
+      <div className="d-flex flex-column align-items-center transition-course-drag-page">
         <div
-          className="d-flex custom-border-20 flex-column flex-md-row"
-          style={{ width: "" }}
+          className="d-flex custom-border-20 flex-column flex-md-row transition-course-drag-shell"
         >
           <Droppable droppableId="image" className="">
             {(provided, snapshot) => (
               <div
-                className="d-flex p-5 justify-content-center align-items-center w-lg-50"
+                className="d-flex p-5 justify-content-center align-items-center transition-course-drag-panel"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 style={{
@@ -212,12 +217,10 @@ function WeekTwoPage4() {
                   ></span>
                 )}
                 {renderStep()}
-
-                {provided.placeholder}
               </div>
             )}
           </Droppable>
-          <div className="bg-blue w-lg-50">
+          <div className="bg-blue transition-course-drag-panel">
             <div className="d-flex align-items-start justify-content-center mb-2">
               <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
               <div className="text-center text-white pt-2">
@@ -230,7 +233,7 @@ function WeekTwoPage4() {
                 <Droppable key={bucket.id} droppableId={bucket.id}>
                   {(provided, snapshot) => (
                     <div
-                      className="px-1 p-md-2"
+                      className="px-1 p-md-2 transition-course-bucket-dropzone"
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                       style={{
@@ -241,8 +244,6 @@ function WeekTwoPage4() {
                         borderRadius: "8px",
                         minHeight: "100px",
                         height: "300px",
-                        // width: "10px",
-                        width: snapshot.isDraggingOver ? "200px" : "",
                       }}
                     >
                       <h2
@@ -252,14 +253,16 @@ function WeekTwoPage4() {
                       >
                         {bucketResults[bucket.id]?.length}
                       </h2>
-                      <div
-                        className={
-                          bucket.id === "green" ? "inner-bucket" : "both-bucket"
-                        }
-                      >
-                        {bucket.label}
+                      <div className="transition-course-character-bucket">
+                        <img
+                          src={bucketImageMap[bucket.id]}
+                          alt={bucket.label}
+                          className="transition-course-character-bucket-image"
+                        />
                       </div>
-                      {provided.placeholder}
+                      <div className="transition-course-dnd-placeholder">
+                        {provided.placeholder}
+                      </div>
                     </div>
                   )}
                 </Droppable>

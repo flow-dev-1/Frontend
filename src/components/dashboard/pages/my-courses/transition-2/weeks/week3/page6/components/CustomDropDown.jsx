@@ -25,15 +25,24 @@ function CustomDropDown({ value, onChange, options = [] }) {
   };
 
   return (
-    <div className="position-relative mx-auto" ref={dropdownRef}>
+    <div
+      className="position-relative mx-auto"
+      ref={dropdownRef}
+      style={{ width: "min(100%, 720px)" }}
+    >
       <label className="py-1 border-0  px-2 w-100 d-block mx-auto small-input-label">
         <div
           className="border-0 bg-transparent border-outline-0 form-control dropdown-small-input d-flex align-items-center justify-content-between cursor-pointer"
-          style={{ maxWidth: "100%", fontSize: "1.25rem", cursor: "pointer" }}
+          style={{
+            width: "100%",
+            maxWidth: "100%",
+            fontSize: "1.25rem",
+            cursor: "pointer",
+          }}
           onClick={() => setIsOpen(!isOpen)}
         >
           {selectedOption ? (
-            <div>
+            <div style={{ flex: "1 1 auto", paddingRight: "2rem" }}>
               <div className="text-gray">
                 {selectedOption.id}. {selectedOption.text}
               </div>
@@ -44,7 +53,12 @@ function CustomDropDown({ value, onChange, options = [] }) {
               )}
             </div>
           ) : (
-            <span className="text-muted">Choose an answer</span>
+            <span
+              className="text-muted"
+              style={{ flex: "1 1 auto", paddingRight: "2rem" }}
+            >
+              Choose an answer
+            </span>
           )}
         </div>
       </label>

@@ -9,7 +9,7 @@ import {
   selectCurrentWeek,
   showReviewPopup,
 } from "../../../../../../../../redux/reducers/navigationSlice";
-import { getWeekAssessment } from "../../../data";
+import { getWeekAssessment, getWeekContentExcludingVideos } from "../../../data";
 import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
@@ -27,6 +27,8 @@ function WeekTwoAssessment() {
   const currentStep = useSelector(selectCurrentStep);
   const currentWeek = useSelector(selectCurrentWeek);
   const assessmentData = getWeekAssessment(currentWeek);
+  const weekActivities = getWeekContentExcludingVideos(currentWeek);
+  const expectedActivityCount = weekActivities?.pages?.length || 0;
   const totalSteps = assessmentData?.questions?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
@@ -112,7 +114,8 @@ function WeekTwoAssessment() {
 
     if (isLastQuestion) {
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 5;
+        answers.length !== totalSteps ||
+        userAnswers.activities.length !== expectedActivityCount;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(

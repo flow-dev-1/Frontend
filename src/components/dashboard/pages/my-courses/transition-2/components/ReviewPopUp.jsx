@@ -8,7 +8,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { userAnswer, updateData } from "../../../../../../redux/reducers/userAnswersReducer";
 import { toast } from "react-toastify";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
-import user from "../../../../../../services/api/user";
 
 export default function PopUp() {
   const dispatch = useDispatch();
@@ -58,34 +57,32 @@ export default function PopUp() {
 
 
   return (
-    <div
-      style={{ width: "620px", paddingTop: "30px" }}
-      className="review-popup modal-content position-absolute top-50 start-50 translate-middle"
-    >
-      <div className="">
-        <h1 style={{ margin: "0 auto" }} className="review">
-          Review this Course
-        </h1>
-        <p className="text-center my-2">
-          Kindly help us with your feedback. <br /> This will help us make this
-          course better.
-        </p>
-        <div
-          style={{ width: "350px", margin: "1rem auto" }}
-          className="d-flex review-buttons"
-        >
-          <button className="btn sad" onClick={() => handleEmojiClick("dislike")} disabled={mutation.isPending}>
-            <img src={sadEmoji} alt="sadEmoji" />
-            <p className="text-center mt-2">Sad</p>
-          </button>
-          <button className="btn sad" onClick={() => handleEmojiClick("neutral")} disabled={mutation.isPending}>
-            <img src={okayEmoji} alt="okayEmoji" />
-            <p className="text-center mt-2">Okay</p>
-          </button>
-          <button className="btn sad" onClick={() => handleEmojiClick("like")} disabled={mutation.isPending}>
-            <img src={happyEmoji} alt="happyEmoji" />
-            <p className="text-center mt-2">Happy</p>
-          </button>
+    <div className="transition-review-overlay" role="dialog" aria-modal="true">
+      <div className="transition-review-popup review-popup">
+        <div>
+          <h1 className="review">
+            Review this Course
+          </h1>
+          <p className="text-center my-2">
+            Kindly help us with your feedback. <br /> This will help us make this
+            course better.
+          </p>
+          <div
+            className="review-buttons"
+          >
+            <button className="btn sad" onClick={() => handleEmojiClick("dislike")} disabled={mutation.isPending}>
+              <img src={sadEmoji} alt="sadEmoji" />
+              <p className="text-center mt-2">Sad</p>
+            </button>
+            <button className="btn sad" onClick={() => handleEmojiClick("neutral")} disabled={mutation.isPending}>
+              <img src={okayEmoji} alt="okayEmoji" />
+              <p className="text-center mt-2">Okay</p>
+            </button>
+            <button className="btn sad" onClick={() => handleEmojiClick("like")} disabled={mutation.isPending}>
+              <img src={happyEmoji} alt="happyEmoji" />
+              <p className="text-center mt-2">Happy</p>
+            </button>
+          </div>
         </div>
       </div>
     </div>

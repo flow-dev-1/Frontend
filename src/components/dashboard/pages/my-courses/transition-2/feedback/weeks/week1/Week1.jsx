@@ -17,7 +17,6 @@ import { useSelector } from "react-redux";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer.js";
 import Modal from "../../components/Modal.jsx";
 import { useMutation } from "@tanstack/react-query";
-import { act } from "react";
 
 function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
   const [showModal, setShowModal] = useState(false);
@@ -27,6 +26,7 @@ function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
 
   const [
     activity1,
+    activitySlider,
     activity2,
     activity3,
     activity4,
@@ -254,6 +254,61 @@ function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-md-1">Questions:</h2>
+        <p className="text-blue fs-md-4">{activitySlider.question}</p>
+      </div>
+      <div className="d-flex gap-3">
+        <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
+        <p className="fs-md-5 flex-grow-1">
+          {getActivityAnswer(activitySlider.id)}
+        </p>
+        {isAdmin &&
+          !activityData?.find((activity) => activity.page === activitySlider.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activitySlider.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )}
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activitySlider.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {getActivityFeedback(activitySlider.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activitySlider.id));
+                  setActivityFeedbackId({ activityId: activitySlider.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
+      <hr />
+      {/* Activity 3 */}
+      <p className="bg-yellow py-md-3 px-md-5 py-1 px-2 text-gray d-inline-block rounded-5 fs-md-4">
+        Activity 3
+      </p>
+      <hr />
+      <div className="d-flex gap-3">
+        <h2 className="text-blue fs-md-1">Questions:</h2>
         <p className="text-blue fs-md-4">{activity2.steps[0].question}</p>
       </div>
       <div className="d-flex gap-3">
@@ -311,9 +366,9 @@ function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
         )
       }
       <hr />
-      {/* Activity  3*/}
+      {/* Activity 4 */}
       <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
-        Activity 3
+        Activity 4
       </p>
       <hr />
       <div className="d-flex gap-3">
@@ -433,10 +488,71 @@ function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
           </div>
         )
       }
+      <div className="d-flex gap-3">
+        <h2 className="text-blue fs-md-1">Questions:</h2>
+        <p className="text-blue fs-md-4">{activity3.steps[2].question}</p>
+      </div>
+      <div className="d-flex gap-3">
+        <h2 className="text-gray fs-md-1 text-gray">Answer:</h2>
+
+        <div className="fs-md-5 flex-grow-1">
+          <p>
+            <span className="fw-bold">Because: </span>
+            {getActivityAnswer(activity3.id)?.sentenceAnswer?.reason}
+          </p>
+          <p>
+            <span className="fw-bold">Person I want to become: </span>
+            {getActivityAnswer(activity3.id)?.sentenceAnswer?.identity}
+          </p>
+        </div>
+
+        {
+          //This is only Visible for Flow Admins
+          isAdmin &&
+          !activityData?.find((activity) => activity.page === activity3.id)
+            ?.feedback && (
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId: activity3.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          )
+        }
+      </div>
+      {
+        // Show this only id theres a feedback
+        activityData?.find((activity) => activity.page === activity3.id)
+          ?.feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-1 p-md-2 rounded">
+              {getActivityFeedback(activity3.id)}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(getActivityFeedback(activity3.id));
+                  setActivityFeedbackId({ activityId: activity3.id });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )
+      }
       <hr />
-      {/* Activity 4 */}
+      {/* Activity 5 */}
       <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
-        Activity 4
+        Activity 5
       </p>
       <hr />
       <div className="d-flex gap-3">
@@ -495,9 +611,9 @@ function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
         )
       }
       <hr />
-      {/* Activity 5 */}
+      {/* Activity 6 */}
       <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
-        Activity 5
+        Activity 6
       </p>
       <hr />
       <div className="d-flex gap-3">
@@ -556,9 +672,9 @@ function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
         )
       }
       <hr />
-      {/* Activity 6 */}
+      {/* Activity 7 */}
       <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
-        Activity 6
+        Activity 7
       </p>
       <hr />
       <div className="d-flex gap-3">
@@ -617,9 +733,9 @@ function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
         )
       }
       <hr />
-      {/* Activity 7 */}
+      {/* Activity 8 */}
       <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
-        Activity 7
+        Activity 8
       </p>
       <hr />
       <div className="d-flex gap-3">

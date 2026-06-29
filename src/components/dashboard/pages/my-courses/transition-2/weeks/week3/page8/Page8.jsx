@@ -14,6 +14,7 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import "./page8.css";
 
 const InternalStepIndicator = ({ totalSteps, currentStep }) => {
   return (
@@ -61,7 +62,7 @@ function WeekTwoPage8() {
     );
 
     setAnswers(Array.isArray(response?.answer) ? response.answer : []);
-  }, [userAnswers]);
+  }, [userAnswers, pageData.id]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
@@ -140,15 +141,18 @@ function WeekTwoPage8() {
                     }}
                   >
                     <h2
-                      className={
-                        "text-nowrap text-gray" + bucket.id === "pink"
+                      className={`text-nowrap text-gray transition2-week3-budget-count ${
+                        bucket.id === "pink"
                           ? "pink-count"
                           : bucket.id === "orange"
                           ? "orange-count"
                           : "red-count"
-                      }
+                      } transition2-week3-percent-indicator`}
+                      style={{
+                        "--bucket-percent": `${bucket.percent}%`,
+                      }}
                     >
-                      {bucket.percent} %
+                      <span>{bucket.percent} %</span>
                     </h2>
                     <div
                       className={

@@ -21,7 +21,6 @@ import { toast } from "react-toastify";
 import userService from "../../../../../../../../services/api/user";
 import { calculateResult } from "../../../utility";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-import { use } from "react";
 
 function WeekFourAssessment() {
   const dispatch = useDispatch();
@@ -113,7 +112,7 @@ function WeekFourAssessment() {
 
     if (isLastQuestion) {
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 7;
+        answers.length !== totalSteps || userAnswers.activities.length !== 10;
       if (hasUnansweredQuestions) {
         setErrorMessage(
           "Oops! Some unanswered questions have been detected. Kindly go back and review!"

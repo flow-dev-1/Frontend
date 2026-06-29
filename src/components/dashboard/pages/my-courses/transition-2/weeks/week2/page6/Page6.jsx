@@ -8,6 +8,7 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import "./page6.css";
 
 function Page6() {
   const pageData = useSelector(selectPageData);
@@ -187,7 +188,7 @@ function Page6() {
           </h2>
         </div>
 
-        <div className="input-container">
+        <div className="input-container transition2-page10-fit">
           {[...Array(pageData.numberOfInputs || 3)].map((_, index) => (
             <div key={index}>
               <div className="d-flex gap-3 label-input-container">

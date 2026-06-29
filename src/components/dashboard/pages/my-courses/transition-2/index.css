@@ -13,6 +13,60 @@
     border-left: 4px solid #00BCC3;
 }
 
+.transition-review-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.35);
+    overflow-y: auto;
+}
+
+.transition-review-popup {
+    width: min(620px, 100%);
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+    padding: 30px 60px;
+}
+
+.transition-review-popup h1.review {
+    width: min(100%, 420px);
+    margin: 0 auto;
+    background-color: #275dad;
+    color: #fff;
+    border: 8px solid #5ce1e6;
+    border-radius: 50px;
+    text-align: center;
+    padding: 5px 16px;
+    font-size: 40px;
+}
+
+.transition-review-popup .review-buttons {
+    width: min(350px, 100%);
+    margin: 1rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 12px;
+}
+
+.transition-review-popup .review-buttons .btn,
+.transition-review-popup .review-buttons .btn:focus {
+    outline: none;
+    border: none;
+}
+
+.transition-review-popup .review-buttons img {
+    max-width: 72px;
+    height: auto;
+}
+
 @media (max-width: 769px) {
     .resilience-week-content {
         padding: 0 0px !important;
@@ -22,5 +76,24 @@
     .assessment-header {
         padding: 0 !important;
         margin-bottom: 1rem !important;
+    }
+
+    .transition-review-overlay {
+        align-items: flex-start;
+        padding: 16px;
+    }
+
+    .transition-review-popup {
+        max-height: calc(100vh - 32px);
+        padding: 24px 18px;
+    }
+
+    .transition-review-popup h1.review {
+        font-size: 28px;
+        border-width: 6px;
+    }
+
+    .transition-review-popup .review-buttons {
+        flex-wrap: wrap;
     }
 }
