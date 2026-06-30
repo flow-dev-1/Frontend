@@ -23,15 +23,10 @@ import Page3 from "./weeks/week1/page3/Page3.jsx";
 import Page4 from "./weeks/week1/page4-slider/Page4.jsx";
 import Page5 from "./weeks/week1/page5/Page5.jsx";
 import Page6 from "./weeks/week1/page6/Page6.jsx";
-import Page7 from "./weeks/week1/page6/Page6.jsx";
-import Page8 from "./weeks/week1/page8/Page7.jsx";
-import Page9 from "./weeks/week1/page9/Page8.jsx";
-import Page10 from "./weeks/week1/page10/Page9.jsx";
-import Page11 from "./weeks/week1/page11/Page10.jsx";
-import Page12 from "./weeks/week1/page12/Page11.jsx";
-import Page13 from "./weeks/week1/page13/Page12.jsx";
-import Page14 from "./weeks/week1/page14/Page13.jsx";
-import Page15 from "./weeks/week1/page15/Page14.jsx";
+import Page7 from "./weeks/week1/page8/Page7.jsx";
+import Page8 from "./weeks/week1/page6/Page6.jsx";
+import Page9Scenario from "./weeks/week1/page9/Page8.jsx";
+import Page10 from "./weeks/week1/page10-reason-sentence/Page10.jsx";
 import Page16 from "./weeks/week1/page16/Page15.jsx";
 import Page17 from "./weeks/week1/page17/Page16.jsx";
 
@@ -230,22 +225,16 @@ const WeekContent = () => {
           case 8:
             return <Page8 />;
           case 9:
-            return <Page9 />;
+            return <Page7 />;
           case 10:
             return <Page10 />;
           case 11:
-            return <Page11 />;
+            return <Page7 />;
           case 12:
-            return <Page12 />;
+            return <Page9Scenario />;
           case 13:
-            return <Page13 />;
-          case 14:
-            return <Page14 />;
-          case 15:
-            return <Page15 />;
-          case 16:
             return <Page16 />;
-          case 17:
+          case 14:
             return <Page17 />;
           default:
             return null;

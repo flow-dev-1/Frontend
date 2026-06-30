@@ -37,7 +37,7 @@ function WeekOneAssessment() {
   useEffect(() => {
     if (!userAnswers) return;
     setAnswers(userAnswers?.assessments || []);
-    return () => {};
+    return () => { };
   }, [userAnswers]);
 
   // Mutation for saving user data
@@ -111,7 +111,7 @@ function WeekOneAssessment() {
     if (isLastQuestion) {
 
       const hasUnansweredQuestions =
-        answers.length !== totalSteps || userAnswers.activities.length !== 8;
+        answers.length !== totalSteps || userAnswers.activities.length !== 6;
 
       if (hasUnansweredQuestions) {
         setErrorMessage(

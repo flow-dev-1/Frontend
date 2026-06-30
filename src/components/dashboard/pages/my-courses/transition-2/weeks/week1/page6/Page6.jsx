@@ -39,6 +39,24 @@ function Page6() {
   });
   const [errorMessage, setErrorMessage] = useState("");
 
+  const handleCheckboxAnswersChange = (nextAnswers) => {
+    setCheckboxAnswers(nextAnswers);
+    setErrorMessage("");
+
+    if (adminDatas.isAdmin || isWhyPage) return;
+
+    dispatch(
+      saveActivity({
+        page: pageData.id,
+        answer: {
+          checkboxAnswers: nextAnswers,
+          textAnswer,
+          sentenceAnswer,
+        },
+      })
+    );
+  };
+
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers.activities?.find(
@@ -78,9 +96,10 @@ function Page6() {
 
     // Validation for step 1 (checkbox)
     if (currentStep === 1) {
-      const selectedIndex = Object.keys(checkboxAnswers).find(
+      const selectedIndexes = Object.keys(checkboxAnswers).filter(
         (key) => checkboxAnswers[key]
       );
+      const selectedIndex = selectedIndexes[0];
       const selectedOption = step?.options?.[Number(selectedIndex)];
 
       if (selectedIndex === undefined) {
@@ -89,6 +108,11 @@ function Page6() {
             ? "Oops! Please select one option before moving on."
             : "Oops! Please select at least one option."
         );
+        return false;
+      }
+
+      if (!isWhyPage && selectedIndexes.length < 3) {
+        setErrorMessage("Oops! Please select at least 3 choices before moving on.");
         return false;
       }
 
@@ -180,7 +204,7 @@ function Page6() {
           <CheckboxFrame
             step={step}
             checkboxAnswers={checkboxAnswers}
-            setCheckboxAnswers={setCheckboxAnswers}
+            setCheckboxAnswers={handleCheckboxAnswersChange}
             setErrorMessage={setErrorMessage}
             singleSelect={isWhyPage}
           />

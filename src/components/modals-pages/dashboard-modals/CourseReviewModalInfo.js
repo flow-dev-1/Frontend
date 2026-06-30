@@ -1099,6 +1099,96 @@ const CourseReviewModalInfo = ({course, closeModal}) => {
 
         </div>
       )}
+
+      {course?.title === "Transition 2" && (
+        <div style={{ overflowY: "auto" }}>
+          <div
+            className="py-2 px-4 course-objectives"
+            style={{ height: "50vh", overflowY: "auto", marginBottom: "1.5rem" }}
+          >
+            <div
+              className="course-info-modal-header"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between"
+              }}
+            >
+              <h2 className="mb-0" style={{ fontSize: "36px" }}>
+                {course?.title}
+              </h2>
+              <button
+                className="close-btn"
+                onClick={closeModal}
+                style={{ border: "none", background: "none", cursor: "pointer" }}
+              >
+                <Icon width={24} icon="mingcute:close-fill" />
+              </button>
+            </div>
+
+            <hr className="w-100 h-auto mb-2 " />
+
+            <div>
+              <img
+                style={{ width: "100%", height: "160px", objectFit: "cover" }}
+                alt=""
+                src={course.banner}
+              />
+            </div>
+
+            <div className="course-info-modal-body">
+              <p style={{ fontSize: "20px", color: "#275DAD" }}>Course Overview</p>
+              <p style={{ paddingLeft: ".5rem" }}>
+                Stepping into the next chapter of your life after Secondary school is not just exciting,
+                but uncertain too. Whether you are heading to university, starting a new job, learning
+                a skill, or exploring the world, this transition brings new responsibilities, choices,
+                and challenges. The Transition Curriculum is designed to guide you through this shift,
+                helping you step forward with confidence, clarity, and practical skills you can use
+                right away.
+              </p>
+
+              <div className="mt-4">
+                <p style={{ fontSize: "20px", color: "#275DAD" }}>Course Objectives</p>
+                <p style={{ paddingLeft: ".5rem" }}>
+                  This course is not just about academic readiness, it is about understanding yourself,
+                  managing change, and thriving in whatever path you choose. In the course, you will
+                  understand your mindset and learn how to cultivate the mindset for successful people.
+                  You will also learn how to build resilience, set meaningful and smart goals, build
+                  real life applicable coping skills, and learn how to navigate challenges with purpose.
+                </p>
+
+                <p style={{ paddingLeft: ".5rem", marginTop: "1rem" }}>
+                  In summary, you will learn how to:
+                </p>
+
+                <ul style={{ paddingLeft: "1.5rem" }}>
+                  <li className="mt-2">
+                    Bounce back from setbacks and face challenges with confidence.
+                  </li>
+                  <li className="mt-2">
+                    Identify and pursue meaningful goals, no matter your path.
+                  </li>
+                  <li className="mt-2">
+                    Focus on what is in your control and make intentional choices.
+                  </li>
+                  <li className="mt-2">
+                    Build healthy, supportive relationships.
+                  </li>
+                  <li className="mt-2">
+                    Manage your time, priorities, and independence effectively.
+                  </li>
+                </ul>
+
+                <p style={{ paddingLeft: ".5rem", marginTop: "1rem" }}>
+                  By the end of the course, you will understand yourself better, know how to respond
+                  to challenges, and have the tools to take the next step in life with purpose and
+                  confidence, no matter where that step leads.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }

@@ -45,10 +45,10 @@ function CheckboxFrame({
       return;
     }
 
-    setCheckboxAnswers((prevAnswers) => ({
-      ...prevAnswers,
-      [index]: !prevAnswers[index],
-    }));
+    setCheckboxAnswers({
+      ...checkboxAnswers,
+      [index]: !checkboxAnswers[index],
+    });
   };
 
   if (!singleSelect) {

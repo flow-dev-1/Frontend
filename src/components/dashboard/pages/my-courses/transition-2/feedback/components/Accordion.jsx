@@ -36,6 +36,11 @@ function Accordion({
 
     // Vision Board
     if (currentIndex === 5) {
+      if (!allDataLoaded) {
+        setStartDownload(false);
+        return;
+      }
+
       if (!pdfRef.current) return;
 
       setPdfLoading(true);
@@ -152,13 +157,39 @@ function Accordion({
   useEffect(() => {
     if (!first?.data && !second?.data) return;
 
-    const week1Answer = first?.data?.activity?.activities?.[2]?.answer ?? null;
+    const week1Activities = first?.data?.activity?.activities || [];
+    const week2Activities = second?.data?.activity?.activities || [];
 
-    const week2Answer = second?.data?.activity?.activities?.[3]?.answer ?? null;
+    const findActivityAnswer = (activities, pageIds, predicate) => {
+      const byPageId = activities.find((activity) =>
+        pageIds.includes(Number(activity.page))
+      )?.answer;
+
+      if (byPageId) return byPageId;
+
+      return activities.find((activity) => predicate?.(activity.answer))?.answer ?? null;
+    };
+
+    const week1FutureSelfAnswer = findActivityAnswer(
+      week1Activities,
+      [8],
+      (answer) => answer?.checkboxAnswers
+    );
+    const week1VisionAnswer = findActivityAnswer(
+      week1Activities,
+      [10],
+      (answer) => answer?.textAnswer || answer?.sentenceAnswer
+    );
+    const week2ValuesAnswer = findActivityAnswer(
+      week2Activities,
+      [12],
+      (answer) => answer?.rankValues || answer?.selectedValues
+    );
 
     setAnswers({
-      week1Page6: week1Answer,
-      week2page8: week2Answer,
+      week1FutureSelf: week1FutureSelfAnswer,
+      week1Vision: week1VisionAnswer,
+      week2Values: week2ValuesAnswer,
     });
   }, [first?.data, second?.data]);
 
@@ -224,16 +255,26 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
                 </div>
                 {index >= 5 && (
                   <p
-                    className="text-blue"
-                    style={{ zIndex: 100, cursor: "pointer" }}
+                    className={index === 5 && !allDataLoaded ? "text-gray" : "text-blue"}
+                    style={{
+                      zIndex: 100,
+                      cursor: index === 5 && !allDataLoaded ? "not-allowed" : "pointer",
+                    }}
                     onClick={() => {
+                      if (index === 5 && !allDataLoaded) return;
                       handleToggle(index);
                       setCurrentIndex(index);
                       setStartDownload(true);
                     }}
                   >
-                    {pdfLoading ? "Generating PDF..." : "(Download PDF)"}{" "}
-                    <Icon icon="bi:download" />
+                    {index === 5 && !allDataLoaded
+                      ? "(Complete all 5 weeks to download)"
+                      : pdfLoading
+                        ? "Generating PDF..."
+                        : "(Download PDF)"}{" "}
+                    {!(index === 5 && !allDataLoaded) && (
+                      <Icon icon="bi:download" />
+                    )}
                   </p>
                 )}
               </div>
@@ -249,7 +290,7 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
             </div>
             {(activeIndex === index || activeIndex === null) && (
               <div className="accordion-content">
-                <div>{item.content}</div>
+                <div>{index === 5 ? <VisionBoard answers={answers} /> : item.content}</div>
               </div>
             )}
           </div>

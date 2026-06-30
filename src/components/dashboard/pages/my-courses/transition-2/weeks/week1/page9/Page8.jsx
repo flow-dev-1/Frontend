@@ -26,26 +26,32 @@ function Page8() {
   const step = pageData?.steps[currentStep - 1];
 
   const [errorMessage, setErrorMessage] = useState("");
-  const [myAnswer, setMyAnswer] = useState(userAnswers);
+  const [answers, setAnswers] = useState({});
 
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    setMyAnswer(response?.answer ? response.answer : "");
+    setAnswers(
+      response?.answer && typeof response.answer === "object"
+        ? response.answer
+        : {}
+    );
     return () => {};
   }, [userAnswers, pageData.id]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
 
-    if (currentStep === 1) {
+    if (step?.type === "scenario") {
       return true;
     }
 
-    if (currentStep === 2) {
-      if (!adminDatas.isAdmin && !myAnswer) {
+    if (step?.type === "question") {
+      const currentAnswer = answers[step.stepId] || "";
+
+      if (!adminDatas.isAdmin && !currentAnswer.trim()) {
         setErrorMessage("Oops! Please enter a valid input!");
         return false;
       }
@@ -56,7 +62,7 @@ function Page8() {
     dispatch(
       saveActivity({
         page: pageData.id,
-        answer: myAnswer,
+        answer: answers,
       })
     );
 
@@ -65,7 +71,10 @@ function Page8() {
 
   const handleInputChange = (e) => {
     setErrorMessage("");
-    setMyAnswer(e.target.value);
+    setAnswers((prevAnswers) => ({
+      ...prevAnswers,
+      [step.stepId]: e.target.value,
+    }));
   };
 
   const renderStep = () => {
@@ -77,7 +86,7 @@ function Page8() {
           <QuestionBox extraStyle="bg-custom-blue">
             <div className="d-flex justify-content-center ">
               <h2 className="bg-blue text-white text-center rounded-2 px-5 py-1 fs-1 mb-0 flex-shrink-0">
-                Scenraio 1
+                Scenario {step.scenarioNumber || Math.ceil(currentStep / 2)}
               </h2>
             </div>
             <div className="d-flex gap-3 flex-column flex-md-row flex-md-nowrap align-items-start mt-5 text-center">
@@ -100,7 +109,10 @@ function Page8() {
                 <h2 className="text-gray fs-1 mb-2 ">{step.question}</h2>
               </div>
             </div>
-            <BigTextBox handleChange={handleInputChange} value={myAnswer} />
+            <BigTextBox
+              handleChange={handleInputChange}
+              value={answers[step.stepId] || ""}
+            />
           </QuestionBox>
         );
 

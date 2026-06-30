@@ -39,6 +39,42 @@ export const transition2ContentTracker = [
       "Third step added to current Week 1 Page 7; saved as sentenceAnswer.reason and sentenceAnswer.identity.",
   },
   {
+    id: "transition-2-week-1-page-10-reason-sentence",
+    type: CONTENT_TYPES.page,
+    week: 1,
+    page: 10,
+    name: "WeekOnePage10ReasonSentence",
+    path: "./weeks/week1/page10-reason-sentence/Page10.jsx",
+    feedbackStatus: FEEDBACK_STATUS.complete,
+    feedbackPath: "./feedback/weeks/week1/Week1.jsx",
+    notes:
+      "Moved old Week 1 Page 8 steps 2 and 3 into new Page 10; Step 3 renders the vision board from Page 8 selections and the completed sentence.",
+  },
+  {
+    id: "transition-2-week-1-page-11-video-insert",
+    type: CONTENT_TYPES.page,
+    week: 1,
+    page: 11,
+    name: "WeekOnePage11InsertedVideo",
+    path: "./weeks/week1/page8/Page7.jsx",
+    feedbackStatus: FEEDBACK_STATUS.notRequired,
+    feedbackPath: null,
+    notes:
+      "Inserted video after new Week 1 Page 10 reason and sentence activity.",
+  },
+  {
+    id: "transition-2-week-1-page-12-scenario-consolidation",
+    type: CONTENT_TYPES.page,
+    week: 1,
+    page: 12,
+    name: "WeekOnePage12ScenarioConsolidation",
+    path: "./weeks/week1/page9/Page8.jsx",
+    feedbackStatus: FEEDBACK_STATUS.complete,
+    feedbackPath: "./feedback/weeks/week1/Week1.jsx",
+    notes:
+      "Consolidated old Week 1 Pages 12, 14, 16, and 18 into one 8-step Page 12; removed the videos between them and shifted the final video to Page 13.",
+  },
+  {
     id: "transition-2-week-2-page-3-video-duplicate",
     type: CONTENT_TYPES.page,
     week: 2,

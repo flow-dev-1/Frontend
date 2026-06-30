@@ -6,7 +6,7 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+1/Week+1_1.mp4",
         hasNextButton: true,
       },
       {
@@ -26,7 +26,7 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+1/Week+1_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -52,7 +52,7 @@ export const courseContent = {
         id: 5,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+1/Week+1_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -94,12 +94,22 @@ export const courseContent = {
       },
       {
         id: 7,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+1/Week+1_4.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 8,
         type: "multiStep",
         steps: [
           {
             stepId: 1,
             type: "checkbox",
-            question: "Choose 3–4 that best describe your future self.",
+            question: "Choose 3-4 that best describe your future self.",
             options: [
               "Confident",
               "Independent",
@@ -111,24 +121,43 @@ export const courseContent = {
               "Leader",
             ],
           },
+        ],
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 9,
+        type: "video",
+        videoSrc:
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+1/Week+1_5.mp4",
+        navigation: {
+          prev: true,
+          next: true,
+        },
+      },
+      {
+        id: 10,
+        type: "multiStep",
+        steps: [
           {
-            stepId: 2,
+            stepId: 1,
             type: "question",
             questionType: "text",
             question:
-              "Now, in a structured sentence, I want you to write your reason for your next step after secondary school. Why are you making that particular decision? ",
+              "Now, in a structured sentence, I want you to write your reason for your next step after secondary school. Why are you making that particular decision?",
             inputType: "bigTextBox",
-            conditionalOn: {
-              stepId: 1,
-              optionText: "Others",
-              mustBeSelected: true,
-            },
+          },
+          {
+            stepId: 2,
+            type: "sentenceCompletion",
+            question:
+              "Complete this sentence. I am choosing to pursue higher education/further training because ____________, and the person I want to become is someone who ____________.",
           },
           {
             stepId: 3,
-            type: "sentenceCompletion",
-            question:
-              'Complete this sentence. I am choosing to pursue higher education/further training because ____________, and the person I want to become is someone who ____________.',
+            type: "visionBoard",
           },
         ],
         navigation: {
@@ -137,24 +166,25 @@ export const courseContent = {
         },
       },
       {
-        id: 8,
+        id: 11,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+1/Week+1_6.mp4",
         navigation: {
           prev: true,
           next: true,
         },
       },
       {
-        id: 9,
+        id: 12,
         type: "multiStep",
         steps: [
           {
             stepId: 1,
             type: "scenario",
+            scenarioNumber: 1,
             scenarioText:
-              "You got admission into university to study a particular course ,maybe Computer Science, History, or Medicine. You knew it would be challenging, but the first required course turns out to be dull and painfully technical. You dread every lecture, struggle to stay focused, and your grades start to drop. You realise a big part of your first two years will be filled with similar courses.",
+              "You got admission into university to study a particular course, maybe Computer Science, History, or Medicine. You knew it would be challenging, but the first required course turns out to be dull and painfully technical. You dread every lecture, struggle to stay focused, and your grades start to drop. You realise a big part of your first two years will be filled with similar courses.",
           },
           {
             stepId: 2,
@@ -169,34 +199,15 @@ export const courseContent = {
               mustBeSelected: true,
             },
           },
-        ],
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 10,
-        type: "video",
-        videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_5.mp4",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 11,
-        type: "multiStep",
-        steps: [
           {
-            stepId: 1,
+            stepId: 3,
             type: "scenario",
+            scenarioNumber: 2,
             scenarioText:
-              "A few months into your first semester, you receive a once-in-a-lifetime offer ,a fully paid, year-long volunteer or travel opportunity abroad. But it means taking a full year off school. Your friends and family encourage you to go, saying, “School will always be there.”",
+              "A few months into your first semester, you receive a once-in-a-lifetime offer, a fully paid, year-long volunteer or travel opportunity abroad. But it means taking a full year off school. Your friends and family encourage you to go, saying, \"School will always be there.\"",
           },
           {
-            stepId: 2,
+            stepId: 4,
             type: "question",
             questionType: "text",
             question:
@@ -208,34 +219,15 @@ export const courseContent = {
               mustBeSelected: true,
             },
           },
-        ],
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 12,
-        type: "video",
-        videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_6.mp4",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 13,
-        type: "multiStep",
-        steps: [
           {
-            stepId: 1,
+            stepId: 5,
             type: "scenario",
+            scenarioNumber: 3,
             scenarioText:
-              "You meet a well-respected lecturer who reviews your work and bluntly tells you that you don’t have what it takes to succeed in your chosen field. They even suggest switching majors or leaving the program.",
+              "You meet a well-respected lecturer who reviews your work and bluntly tells you that you do not have what it takes to succeed in your chosen field. They even suggest switching majors or leaving the program.",
           },
           {
-            stepId: 2,
+            stepId: 6,
             type: "question",
             questionType: "text",
             question:
@@ -247,34 +239,15 @@ export const courseContent = {
               mustBeSelected: true,
             },
           },
-        ],
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 14,
-        type: "video",
-        videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_7.mp4",
-        navigation: {
-          prev: true,
-          next: true,
-        },
-      },
-      {
-        id: 15,
-        type: "multiStep",
-        steps: [
           {
-            stepId: 1,
+            stepId: 7,
             type: "scenario",
+            scenarioNumber: 4,
             scenarioText:
               "Your best friend gets admitted into a different school, and they try to convince you to transfer or move closer. They say your choice of university is hurting your friendship.",
           },
           {
-            stepId: 2,
+            stepId: 8,
             type: "question",
             questionType: "text",
             question:
@@ -293,10 +266,10 @@ export const courseContent = {
         },
       },
       {
-        id: 16,
+        id: 13,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+1/Week+1_8.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+1/Week+1_7.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -311,7 +284,7 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+2/Week+2_1.mp4",
         hasNextButton: true,
       },
       {
@@ -331,7 +304,7 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+2/Week+2_2.mp4",
         hasNextButton: true,
         navigation: {
           prev: true,
@@ -355,7 +328,7 @@ export const courseContent = {
         id: 5,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+2/Week+2_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -399,7 +372,7 @@ export const courseContent = {
         id: 7,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+2/Week+2_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -428,7 +401,7 @@ export const courseContent = {
         id: 9,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+2/Week+2_5.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -450,7 +423,7 @@ export const courseContent = {
         id: 11,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+2/Week+2_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -551,7 +524,7 @@ export const courseContent = {
         id: 13,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+2/Week+2_7.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -578,7 +551,7 @@ export const courseContent = {
         id: 15,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+2/Week+2_8.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -602,7 +575,7 @@ export const courseContent = {
         id: 17,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_4.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+2/Week+2_9.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -613,7 +586,7 @@ export const courseContent = {
       //   id: 9,
       //   type: "video",
       //   videoSrc:
-      //     "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+2/Week+2_5.mp4",
+      //     "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+2/Week+2_5.mp4",
       //   navigation: {
       //     prev: true,
       //     next: true,
@@ -628,7 +601,7 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+3/Week+3_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+3/Week+3_1.mp4",
         hasNextButton: true,
       },
       {
@@ -650,7 +623,7 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+3/Week+3_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -678,7 +651,7 @@ export const courseContent = {
         id: 5,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+3/Week+3_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -858,7 +831,7 @@ export const courseContent = {
         id: 7,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+3/Week+3_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -882,7 +855,7 @@ export const courseContent = {
         id: 9,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+3/Week+3_5.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -905,7 +878,7 @@ export const courseContent = {
         id: 11,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+3/Week+3_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -988,7 +961,7 @@ export const courseContent = {
         id: 13,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+3/Week+3_7.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1003,7 +976,7 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+4/Week+4_1.mp4",
         hasNextButton: true,
       },
       {
@@ -1036,7 +1009,7 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+4/Week+4_2.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1060,7 +1033,7 @@ export const courseContent = {
         id: 5,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+4/Week+4_3.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1084,7 +1057,7 @@ export const courseContent = {
         id: 7,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+4/Week+4_4.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1108,7 +1081,7 @@ export const courseContent = {
         id: 9,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+4/Week+4_5.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1131,7 +1104,7 @@ export const courseContent = {
         id: 11,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+4/Week+4_6.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1171,7 +1144,7 @@ export const courseContent = {
         id: 13,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+4/Week+4_7.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1199,7 +1172,7 @@ export const courseContent = {
         id: 15,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+4/Week+4_8.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1222,7 +1195,7 @@ export const courseContent = {
         id: 17,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+4/Week+4_9.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1244,7 +1217,7 @@ export const courseContent = {
         id: 19,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+4/Week+4_10.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1302,7 +1275,7 @@ export const courseContent = {
         id: 21,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+4/Week+4_3.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+4/Week+4_11.mp4",
         navigation: {
           prev: true,
           next: true,
@@ -1317,7 +1290,7 @@ export const courseContent = {
         id: 1,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+5/Week+5_1.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+5/Week+5_1.mp4",
         hasNextButton: true,
       },
       {
@@ -1337,7 +1310,7 @@ export const courseContent = {
         id: 3,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+5/Week+5_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+5/Week+5_2.mp4",
         hasNextButton: true,
       },
       {
@@ -1360,7 +1333,7 @@ export const courseContent = {
         id: 5,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+5/Week+5_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+5/Week+5_3.mp4",
         hasNextButton: true,
       },
       {
@@ -1394,7 +1367,7 @@ export const courseContent = {
         id: 7,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+5/Week+5_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+5/Week+5_4.mp4",
         hasNextButton: true,
       },
       {
@@ -1445,10 +1418,11 @@ export const courseContent = {
         id: 9,
         type: "video",
         videoSrc:
-          "https://d3sc34m1n26ele.cloudfront.net/emotional_regulation_videos/Week+5/Week+5_2.mp4",
+          "https://d3sc34m1n26ele.cloudfront.net/Transition_2/Week+5/Week+5_5.mp4",
         hasNextButton: true,
       },
     ],
   },
 };
+
 

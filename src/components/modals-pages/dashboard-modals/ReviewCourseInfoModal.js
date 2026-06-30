@@ -13,6 +13,7 @@ export default function ReviewCourseInfoModal({ course, onClose }) {
   }
   function closeModal() {
     setIsOpen(false)
+    onClose?.()
   }
   // console.log(course?.image)
 
