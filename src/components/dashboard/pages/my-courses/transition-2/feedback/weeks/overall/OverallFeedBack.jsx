@@ -34,15 +34,15 @@ function OverallFeedBack({ enrollmentId, setHasPercentile, isSchool, studentId }
   function getFeedBackMessage(percentile) {
     switch (true) {
       case percentile >= 10 && percentile <= 39:
-        return "You’ve taken an important first step in exploring Social and Emotional Learning and Positive Psychology. You’ve started to understand the value of emotional awareness, relationship skills, and teacher wellbeing. However, it seems you may still be building a full grasp of how SEL connects to classroom practice. Revisit the lessons and take time to reflect on how self-awareness and self-management can shape your approach to teaching. Don’t hesitate to ask questions or discuss ideas with your peers; collaboration is one of the best ways to deepen understanding. Every teacher starts somewhere, and your willingness to learn is already a sign of growth.";
+        return "You've taken your first step toward preparing for university life, and that already matters. You're beginning to understand important ideas like purpose, independence, mindset, and responsibility. However, you may still be building clarity around how these concepts apply directly to your own life. This is a great time to pause and reflect: Why are you really going to university? What kind of person do you want to become in this next chapter? How do your choices today connect to your future goals? Revisit your notes, reflect on your values, and talk through these ideas with someone you trust. Growth doesn't happen overnight, it happens through awareness and intentional effort. You're at the beginning of that journey.";
       case percentile >= 40 && percentile <= 59:
-        return "Good effort! You’re beginning to grasp key SEL and Positive Psychology principles such as self-awareness, empathy, and the importance of wellbeing in the classroom. You have a fair understanding of how emotional intelligence supports both teachers and students, but there’s room to strengthen your practical application. Try focusing on mindfulness and emotional regulation strategies in your daily teaching routine. Reflect after each class, ‘How did your emotional state affect your students' responses?’ The more intentional you are, the more confident and balanced you’ll become in integrating SEL principles effectively.";
+        return "Good effort! You're developing a solid understanding of the transition into university life. You recognize the importance of purpose, growth mindset, financial awareness, and balancing freedom with responsibility. You're beginning to see how your mindset and values shape your decisions. To strengthen your preparation, focus on practical application: How will you manage your time weekly? What systems will help you stay disciplined? Who will be part of your support network? The more intentional you are now, the smoother your transition will be. Keep building awareness and turning insight into action.";
       case percentile >= 60 && percentile <= 79:
-        return "Well done! You’ve shown a strong understanding of SEL and Positive Psychology concepts and are starting to connect them meaningfully to your classroom practice. You recognize how empathy, relationship-building, and emotional regulation influence learning outcomes. To keep improving, aim to apply SEL more consistently, model calm responses to challenges, and build structured moments for reflection or gratitude in your lessons. You’re well on your way to creating a classroom culture rooted in care, connection, and emotional growth.";
+        return "Well done! You've shown a strong understanding of the skills needed to thrive in university. You understand how purpose fuels motivation, how a growth mindset builds resilience, and how financial and social intelligence reduce unnecessary stress. You're beginning to think strategically about your independence. To level up further, focus on consistent practice of managing your time, setting small goals, and making decisions aligned with your values even now. You're building the mindset of someone who doesn't just survive post secondary school life, but thrives in it.";
       case percentile >= 80 && percentile <= 94:
-        return "Excellent work! You’ve demonstrated a clear understanding of SEL and Positive Psychology competencies and how its principles can transform both teaching and learning. You’ve likely developed effective strategies for fostering empathy, self-regulation, and resilience in your students, and you understand the importance of teacher wellbeing in sustaining those practices. Keep refining your skills by mentoring peers or sharing SEL practices in team meetings. Continue to model emotional intelligence in every interaction, and you will build the kind of classroom where students feel safe, motivated, and valued.";
+        return "Excellent work! You demonstrate clear readiness for this next chapter. You understand the balance between freedom and responsibility and are thinking intentionally about your purpose, relationships, finances, and long-term goals. You likely have a strong awareness of your values and how they guide your decisions. Keep refining your Personal Action Plan and practicing resilience strategies. Continue developing leadership in your own life: your independence, discipline, and clarity will shape your success. You're stepping into university prepared, not just academically, but personally.";
       case percentile >= 95:
-        return "Outstanding achievement! You’ve shown exceptional mastery of Social and Emotional Learning. You not only understand the theory but also demonstrate how to live it out in your teaching, balancing self-awareness, empathy, and resilience with skill. Your approach likely fosters deep trust, engagement, and growth in your students. Continue to inspire others by leading discussions on SEL implementation and supporting colleagues who are just beginning their journey. Your dedication to nurturing emotional wellbeing in education sets a powerful example. Keep shining, the ripple effect of your work will last far beyond the classroom.";
+        return "Outstanding achievement! You've demonstrated exceptional clarity, self-awareness, and readiness for university life. You understand your why, embrace growth challenges, think responsibly about finances and relationships, and approach independence with maturity. You're not just preparing for university; you're designing your future intentionally. Continue to reflect, adapt, and lead yourself wisely. Remember, resilience and consistency will carry you further than talent alone. You are entering this next chapter with confidence, direction, and purpose.";
       default:
         return "";
     }
@@ -69,26 +69,30 @@ function OverallFeedBack({ enrollmentId, setHasPercentile, isSchool, studentId }
         </h1>
       </div>
       {/* <p className="fs-md-3 text-gray mt-3">
-        Congratulations on completing the Transition Curriculum!
+        Congratulations on completing the Year 12 Transition Course!
       </p> */}
 
       <p className="fs-md-3 text-gray mt-3">
-        Congratulations on completing the Transition Curriculum!
+        Congratulations on completing the Year 12 Transition Course!
       </p>
       <p className="fs-md-3 text-gray my-3">
-        Over the past ten weeks, you’ve explored essential skills and concepts
-        to prepare you for secondary school. From understanding your “why” to
-        building resilience and setting goals, you’ve laid a strong foundation
-        for success.
+        Over the past five weeks, you've reflected on your purpose, clarified
+        your values, strengthened your mindset, built awareness around social
+        and financial responsibility, and developed resilience strategies for
+        navigating challenges.
       </p>
       <p className="fs-md-3 text-gray">
-        Remember, transition is an ongoing process. The lessons you’ve learned
-        in this course will continue to guide you as you navigate new challenges
-        and opportunities. Stay curious, keep growing, and never stop believing
-        in yourself.
+        University is not just about lectures and exams. It's about
+        independence, character, discipline, relationships, and growth. The
+        skills you've developed here which are: time management, emotional
+        resilience, goal setting, and self-leadership will shape your experience
+        far beyond your first year.
       </p>
       <p className="fs-md-3 text-gray">
-        Good luck on your journey ahead, and always strive to be your best self!
+        Remember: Your purpose keeps you focused. Your values guide your
+        decisions. Your mindset shapes your response to challenges. Your
+        discipline builds your freedom. Your resilience carries you through
+        setbacks. Your next chapter is waiting.
       </p>
       <div className="bg-blue p-1 p-md-3 mt-2 rounded rounded-md-4">
         <h2 className="text-white fs-md-1">Overall Feedback</h2>
