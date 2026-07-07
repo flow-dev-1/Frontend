@@ -10,6 +10,8 @@ import {
   setCurrentWeek,
   setCurrentPage,
   setCurrentStep,
+  setShowHurray,
+  setShowReview,
 } from "../../../../../redux/reducers/navigationSlice.js";
 import "./index.css";
 // Import components
@@ -410,6 +412,34 @@ const CourseContent = () => {
 
   // Get enrollment data from location state
   const enrolmentData = location.state?.enrollmentData;
+  const enrolmentCourseTitle = enrolmentData?.course?.title || "";
+  const isTeaserCourse = enrolmentCourseTitle.includes("(Teaser Course)");
+  const isExplicitPreview = location.state?.isPreview;
+  const isPreview = isExplicitPreview || isTeaserCourse;
+  const backToCoursesPath = isExplicitPreview
+    ? "/school-dashboard/courses/all"
+    : "/dashboard/my-courses";
+  const isNavigationDisabled = isAdmin && !isPreview;
+
+  useEffect(() => {
+    if (!isPreview) return;
+
+    sessionStorage.setItem("flow-course-preview-mode", "true");
+    sessionStorage.setItem("flow-currentWeek", "1");
+    sessionStorage.setItem("flow-currentPage", "1");
+    sessionStorage.setItem("flow-currentStep", "1");
+    dispatch(setCurrentWeek(1));
+    dispatch(setCurrentPage(1));
+    dispatch(setCurrentStep(1));
+    dispatch(setShowHurray(false));
+    dispatch(setShowReview(false));
+    setMaxAccessibleWeek(1);
+
+    return () => {
+      sessionStorage.removeItem("flow-course-preview-mode");
+      dispatch(clearData());
+    };
+  }, [isPreview, dispatch, weeksTopic.length]);
 
   // Capture enrollmentId from location state on mount
   useEffect(() => {
@@ -477,6 +507,7 @@ const CourseContent = () => {
   };
 
   const isWeekAccessible = (weekNumber) => {
+    if (isPreview) return weekNumber === 1;
     return weekNumber <= maxAccessibleWeek;
   };
 
@@ -512,7 +543,7 @@ const CourseContent = () => {
       <nav className="navbar">
         <div className="container">
           <button
-            disabled={isAdmin}
+            disabled={isNavigationDisabled}
             onClick={() => navigate("/dashboard")}
             className="navbar-logo"
             style={{ border: "none", background: "#FFF" }}
@@ -587,8 +618,8 @@ const CourseContent = () => {
       <div className="main-content flex-column-reverse flex-md-row">
         <aside className="d-md-none d-lg-block aside-class">
           <button
-            disabled={isAdmin}
-            onClick={() => navigate("/dashboard/my-courses")}
+            disabled={isNavigationDisabled}
+            onClick={() => navigate(backToCoursesPath)}
             className="back fs-6"
             style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
           >
@@ -676,8 +707,8 @@ const CourseContent = () => {
           }}
         >
           <button
-            disabled={isAdmin}
-            onClick={() => navigate("/dashboard/my-courses")}
+            disabled={isNavigationDisabled}
+            onClick={() => navigate(backToCoursesPath)}
             className="p-3"
             style={{
               cursor: "pointer",

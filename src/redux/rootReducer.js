@@ -11,7 +11,7 @@ import userAnswersReducer from "./reducers/userAnswersReducer";
 const persistConfig = {
   key: "root",
   storage: storage,
-  blacklist: ['navigation'],
+  blacklist: ["navigation", "userAnswer"],
 };
 
 const rootReducer = combineReducers({

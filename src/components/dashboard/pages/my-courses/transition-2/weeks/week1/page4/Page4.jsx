@@ -11,6 +11,11 @@ import {
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import StepIndicator from "../../../components/StepIndicator";
 import Button from "../../../components/Button";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 import CheckboxFrame from "./components/CheckboxFrame";
 import TextInputFrame from "./components/TextInputFrame";
@@ -34,10 +39,14 @@ function Page4() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
 
     if (response?.answer) {
       setCheckboxAnswers(response.answer.checkboxAnswers || {});
       setTextAnswer(response.answer.textAnswer || "");
+    } else if (draftAnswer) {
+      setCheckboxAnswers(draftAnswer.checkboxAnswers || {});
+      setTextAnswer(draftAnswer.textAnswer || "");
     }
   }, [userAnswers, pageData.id]);
 
@@ -72,8 +81,25 @@ function Page4() {
         },
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
+  };
+
+  const handleCheckboxAnswersChange = (nextAnswers) => {
+    setCheckboxAnswers(nextAnswers);
+    saveActivityDraft(userAnswers, pageData.id, {
+      checkboxAnswers: nextAnswers,
+      textAnswer,
+    });
+  };
+
+  const handleTextAnswerChange = (nextAnswer) => {
+    setTextAnswer(nextAnswer);
+    saveActivityDraft(userAnswers, pageData.id, {
+      checkboxAnswers,
+      textAnswer: nextAnswer,
+    });
   };
 
   // Check if "Others" option is selected
@@ -94,7 +120,7 @@ function Page4() {
           <CheckboxFrame
             step={step}
             checkboxAnswers={checkboxAnswers}
-            setCheckboxAnswers={setCheckboxAnswers}
+            setCheckboxAnswers={handleCheckboxAnswersChange}
             setErrorMessage={setErrorMessage}
           />
         );
@@ -104,7 +130,7 @@ function Page4() {
           <TextInputFrame
             step={step}
             textAnswer={textAnswer}
-            setTextAnswer={setTextAnswer}
+            setTextAnswer={handleTextAnswerChange}
             setErrorMessage={setErrorMessage}
           />
         );

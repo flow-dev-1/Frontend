@@ -28,35 +28,39 @@ const MyCourseCard = ({ course }) => {
 
 
   const handleFeedbackNavigation = (course) => {
-    if (course?.course.title === "Self Awareness") {
+    const courseTitle = course?.course?.title || "";
+
+    if (courseTitle === "Self Awareness") {
       navigate(`/dashboard/feedback/self-awareness`, {
         state: { enrollmentData: course },
       });
-    } else if (course?.course.title === "Resilience & Grit") {
+    } else if (courseTitle === "Resilience & Grit") {
       navigate(`/dashboard/resilience_grit/feedback`, {
         state: { enrollmentData: course },
       });
-    } else if (course?.course.title === "Emotional Regulation") {
+    } else if (courseTitle === "Emotional Regulation") {
       navigate(`/dashboard/emotional_regulation/feedback`, { state: { enrollmentData: course } })
-    } else if (course?.course.title === "Transition 2") {
+    } else if (courseTitle === "Transition 2") {
       navigate(`/dashboard/transition_2/feedback`, { state: { enrollmentData: course } })
       
-    } else if (course?.course.title === "TOT Course 1" || course?.course.title === "Feel It. Teach It. Transform Lives.") {
+    } else if (courseTitle === "TOT Course 1" || courseTitle.includes("Feel It. Teach It. Transform Lives")) {
       navigate(`/dashboard/tot/feedback`, {
         state: { enrollmentData: course },
       });
-    } else if (course?.course.title === "TOT Course 2" || course?.course.title === "Leaving No Learner Behind") {
+    } else if (courseTitle === "TOT Course 2" || courseTitle.includes("Leaving No Learner Behind")) {
       navigate(`/dashboard/tot_2/feedback`, {
         state: { enrollmentData: course },
       });
     }else {
-      navigate(`/dashboard/${course?.course.title}/feedback`, {
+      navigate(`/dashboard/${courseTitle}/feedback`, {
         state: { enrollmentData: course },
       });
     }
   };
 
   const handleButtonClick = () => {
+    const courseTitle = course?.course?.title || "";
+
     if (course?.progress === 100) {
       openModal("feedback");
     } else if (course?.schoolCourseEnrollment?.status === "Deactivated") {
@@ -65,30 +69,30 @@ const MyCourseCard = ({ course }) => {
       );
     }
 
-    if (course?.course.title === "Self Awareness") {
+    if (courseTitle === "Self Awareness") {
       navigate(`/dashboard/self-awareness-course`, {
         state: { enrollmentData: course },
       });
       localStorage.setItem(`${course._id}-can-see`, true);
-    } else if (course?.course.title === "Resilience & Grit") {
+    } else if (courseTitle === "Resilience & Grit") {
       navigate(`/dashboard/resilience_grit`, {
         state: { enrollmentData: course },
       });
-    } else if (course?.course.title === "Emotional Regulation") {
+    } else if (courseTitle === "Emotional Regulation") {
       navigate(`/dashboard/emotional_regulation`, { state: { enrollmentData: course } })
-    }  else if (course?.course.title === "Transition 2") {
+    }  else if (courseTitle === "Transition 2") {
       navigate(`/dashboard/transition_2`, { state: { enrollmentData: course } })
 
-    }else if (course?.course.title === "TOT Course 1" || course?.course.title === "Feel It. Teach It. Transform Lives.") {
+    }else if (courseTitle === "TOT Course 1" || courseTitle.includes("Feel It. Teach It. Transform Lives")) {
       navigate(`/dashboard/tot`, {
         state: { enrollmentData: course },
       });
-    } else if (course?.course.title === "TOT Course 2" || course?.course.title === "Leaving No Learner Behind") {
+    } else if (courseTitle === "TOT Course 2" || courseTitle.includes("Leaving No Learner Behind")) {
       navigate(`/dashboard/tot_2`, {
         state: { enrollmentData: course },
       });
     }else {
-      navigate(`/dashboard/${course?.course?.title}`, {
+      navigate(`/dashboard/${courseTitle}`, {
         state: { enrollmentData: course },
       });
     }

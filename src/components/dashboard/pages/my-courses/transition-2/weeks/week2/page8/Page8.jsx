@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "../../../components/Button";
 import QuestionBox from "../../../components/QuestionBox";
+import StepIndicator from "../../../components/StepIndicator";
 
 import {
   selectCurrentStep,
@@ -16,11 +17,19 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import FlipCheckBoxesFrameSingle from "./components/FlipCheckBoxesFrameSingle";
 import checkedImage from "../../../../../../../../assets/checkedbox.png";
 import "./page8.css";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function WeekTwoPage8() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
+  const totalSteps = Array.isArray(pageData?.steps)
+    ? pageData.steps.length
+    : pageData?.steps || 2;
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
 
@@ -35,9 +44,12 @@ function WeekTwoPage8() {
       (item) => item.page === pageData.id
     );
 
-    if (response?.answer) {
-      setSelectedValues(response.answer.selectedValues || {});
-      setRankValues(response.answer.rankValues || {});
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const answer = response?.answer || draftAnswer;
+
+    if (answer) {
+      setSelectedValues(answer.selectedValues || {});
+      setRankValues(answer.rankValues || {});
     }
   }, [userAnswers, pageData.id]);
 
@@ -81,6 +93,7 @@ function WeekTwoPage8() {
         },
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -88,19 +101,33 @@ function WeekTwoPage8() {
   const handleToggle = (index) => {
     setErrorMessage("");
 
-    setSelectedValues((prev) => ({
-      ...prev,
-      [index]: !prev[index],
-    }));
+    setSelectedValues((prev) => {
+      const nextSelectedValues = {
+        ...prev,
+        [index]: !prev[index],
+      };
+      saveActivityDraft(userAnswers, pageData.id, {
+        selectedValues: nextSelectedValues,
+        rankValues,
+      });
+      return nextSelectedValues;
+    });
   };
 
   const handleRankChange = (value, rank) => {
     setErrorMessage("");
     if (rank && !["1", "2", "3", "4", "5"].includes(rank)) return;
-    setRankValues((prev) => ({
-      ...prev,
-      [value]: rank,
-    }));
+    setRankValues((prev) => {
+      const nextRankValues = {
+        ...prev,
+        [value]: rank,
+      };
+      saveActivityDraft(userAnswers, pageData.id, {
+        selectedValues,
+        rankValues: nextRankValues,
+      });
+      return nextRankValues;
+    });
   };
 
   const getSelectedOptions = () =>
@@ -159,6 +186,8 @@ function WeekTwoPage8() {
       </QuestionBox>
 
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
+
+      <StepIndicator totalSteps={totalSteps} />
 
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />

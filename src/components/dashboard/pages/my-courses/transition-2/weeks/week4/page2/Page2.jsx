@@ -13,6 +13,11 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import StepIndicator from "../../../components/StepIndicator";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function WeekFourPage2() {
   const dispatch = useDispatch();
@@ -31,10 +36,13 @@ function WeekFourPage2() {
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
     if (response?.answer && typeof response.answer === "object") {
       setAnswers(response.answer);
     } else if (response?.answer) {
       setAnswers({ 2: response.answer });
+    } else if (draftAnswer && typeof draftAnswer === "object") {
+      setAnswers(draftAnswer);
     } else {
       setAnswers({});
     }
@@ -57,15 +65,20 @@ function WeekFourPage2() {
         answer: answers,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 
   const handleInputChange = (e) => {
     setErrorMessage("");
-    setAnswers((prevAnswers) => ({
-      ...prevAnswers,
-      [currentStep]: e.target.value,
-    }));
+    setAnswers((prevAnswers) => {
+      const nextAnswers = {
+        ...prevAnswers,
+        [currentStep]: e.target.value,
+      };
+      saveActivityDraft(userAnswers, pageData.id, nextAnswers);
+      return nextAnswers;
+    });
   };
 
   return (

@@ -16,6 +16,20 @@
   border: 1px solid #ecedf0;
 }
 
+.feedback-week-locked {
+  opacity: 0.72;
+}
+
+.feedback-week-locked-note {
+  color: #8a9099;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.feedback-week-lock-icon {
+  color: #8a9099;
+}
+
 .bg-yellow {
   background: #ffeebb;
 }

@@ -13,6 +13,11 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import SmartFrame from "./component/SmartFrame";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page6() {
   const dispatch = useDispatch(); // Initialize dispatch
@@ -28,9 +33,27 @@ function Page6() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setAnswers(
+      Array.isArray(response?.answer)
+        ? response.answer
+        : Array.isArray(draftAnswer)
+        ? draftAnswer
+        : []
+    );
     return () => {};
-  }, [userAnswers]);
+  }, [userAnswers, pageData.id]);
+
+  const setDraftedAnswers = (nextAnswersOrUpdater) => {
+    setAnswers((prevAnswers) => {
+      const nextAnswers =
+        typeof nextAnswersOrUpdater === "function"
+          ? nextAnswersOrUpdater(prevAnswers)
+          : nextAnswersOrUpdater;
+      saveActivityDraft(userAnswers, pageData.id, nextAnswers);
+      return nextAnswers;
+    });
+  };
 
   const saveUserInput = () => {
     setErrorMessage(""); // Clear error if input is valid
@@ -59,6 +82,7 @@ function Page6() {
       answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -73,7 +97,7 @@ function Page6() {
         }}
         setErrorMessage={setErrorMessage}
         answers={answers}
-        setAnswers={setAnswers}
+        setAnswers={setDraftedAnswers}
       />
       {errorMessage && <div className="text-danger">{errorMessage}</div>}{" "}
       {/* Display error message */}

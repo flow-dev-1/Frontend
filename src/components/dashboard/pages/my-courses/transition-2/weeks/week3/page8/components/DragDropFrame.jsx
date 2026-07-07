@@ -5,6 +5,15 @@ import CardBoard from "./CardBoard";
 import ArrowTrail from "../../../../../../../../../assets/ArrowTrail.svg";
 import "../page8.css";
 
+const normalizeBucketResults = (results = {}) => ({
+  orange: Array.isArray(results.orange) ? [...new Set(results.orange)] : [],
+  pink: Array.isArray(results.pink) ? [...new Set(results.pink)] : [],
+  red: Array.isArray(results.red) ? [...new Set(results.red)] : [],
+});
+
+const getDroppedCount = (results) =>
+  Object.values(results).reduce((sum, arr) => sum + arr.length, 0);
+
 const DragAndDropFrame = ({
   info,
   setErrorMessage,
@@ -98,26 +107,17 @@ const DragAndDropFrame = ({
 
     const existingAnswer = answers.find((answer) => answer.stepId === 2);
     if (existingAnswer?.value) {
-      setBucketResults({
-        orange: existingAnswer.value.orange || [],
-        pink: existingAnswer.value.pink || [],
-        red: existingAnswer.value.red || [],
-      });
+      const normalizedResults = normalizeBucketResults(existingAnswer.value);
+      setBucketResults(normalizedResults);
 
       // Update currentImageIndex based on total dropped items
-      const totalDropped =
-        (existingAnswer.value.pink?.length || 0) +
-        (existingAnswer.value.red?.length || 0) +
-        (existingAnswer.value.orange?.length || 0);
+      const totalDropped = getDroppedCount(normalizedResults);
       setCurrentImageIndex(totalDropped);
       setCurrentImageIndex1(totalDropped);
     }
   }, [answers, setCurrentImageIndex1]);
 
-  const totalDropped = Object.values(bucketResults).reduce(
-    (sum, arr) => sum + arr.length,
-    0
-  );
+  const totalDropped = getDroppedCount(bucketResults);
   const allImagesDropped = totalDropped >= images.length;
 
   useEffect(() => {
@@ -174,14 +174,16 @@ const DragAndDropFrame = ({
 
     if (source.droppableId === "image") {
       const draggedIndex = currentImageIndex;
+      const normalizedResults = normalizeBucketResults(bucketResults);
 
       // Update bucket results
       const newBucketResults = {
-        ...bucketResults,
-        [destinationBucketId]: [
-          ...(bucketResults[destinationBucketId] || []),
-          draggedIndex,
-        ],
+        ...normalizedResults,
+        [destinationBucketId]: normalizedResults[destinationBucketId].includes(
+          draggedIndex
+        )
+          ? normalizedResults[destinationBucketId]
+          : [...normalizedResults[destinationBucketId], draggedIndex],
       };
       setBucketResults(newBucketResults);
 

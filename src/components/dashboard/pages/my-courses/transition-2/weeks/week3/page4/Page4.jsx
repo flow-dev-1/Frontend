@@ -9,6 +9,11 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import SingleCheckboxFrame from "./components/SingleCheckboxFrame";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page4() {
   const dispatch = useDispatch();
@@ -25,9 +30,12 @@ function Page4() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
 
     if (response?.answer) {
       setSelectedOption(response.answer.selectedOption ?? null);
+    } else if (draftAnswer) {
+      setSelectedOption(draftAnswer.selectedOption ?? null);
     }
   }, [userAnswers, pageData.id]);
 
@@ -49,6 +57,7 @@ function Page4() {
         },
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -56,6 +65,7 @@ function Page4() {
   const handleSelect = (index) => {
     setErrorMessage("");
     setSelectedOption(index);
+    saveActivityDraft(userAnswers, pageData.id, { selectedOption: index });
   };
 
   return (

@@ -19,6 +19,19 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
+
+const getPlacedCount = (results) =>
+  (results?.green?.length || 0) + (results?.red?.length || 0);
+
+const normalizeBucketResults = (results = {}) => ({
+  green: Array.isArray(results.green) ? [...new Set(results.green)] : [],
+  red: Array.isArray(results.red) ? [...new Set(results.red)] : [],
+});
 
 function WeekTwoPage6() {
   const dispatch = useDispatch();
@@ -34,23 +47,47 @@ function WeekTwoPage6() {
     red: [],
   });
 
+  const saveDragDraft = (nextBucketResults, nextStep, nextShowCurrentImage) => {
+    saveActivityDraft(userAnswers, pageData.id, {
+      bucketResults: normalizeBucketResults(nextBucketResults),
+      currentStep: nextStep,
+      showCurrentImage: nextShowCurrentImage,
+    });
+  };
+
   useEffect(() => {
-    if (!userAnswers) return;
+    if (!userAnswers || !totalSteps) return;
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    if (response?.answer) {
-      const answerCopy = { ...response.answer };
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+
+    if (draftAnswer) {
+      const draftBucketResults = normalizeBucketResults(
+        draftAnswer.bucketResults || draftAnswer
+      );
+      const placedCount = getPlacedCount(draftBucketResults);
+      const restoredStep =
+        draftAnswer.currentStep || Math.min(placedCount + 1, totalSteps);
+      const nextStep = Math.max(1, Math.min(restoredStep, totalSteps));
+      const shouldShowCurrentImage =
+        placedCount < totalSteps && (draftAnswer.showCurrentImage ?? true);
+
+      setBucketResults(draftBucketResults);
+      dispatch(setCurrentStep(nextStep));
+      setShowCurrentImage(shouldShowCurrentImage);
+    } else if (response?.answer) {
+      const answerCopy = normalizeBucketResults(response.answer);
 
       setBucketResults(answerCopy);
 
-      if (currentStep == 1) {
+      if (currentStep === 1) {
         dispatch(setCurrentStep(totalSteps));
         setShowCurrentImage(false);
       }
     }
     return () => {};
-  }, [userAnswers, pageData]);
+  }, [currentStep, dispatch, pageData.id, totalSteps, userAnswers]);
 
   // console.log("Page Data Images:", pageData.images);
   const imageMap = {};
@@ -81,19 +118,24 @@ function WeekTwoPage6() {
     if (source.droppableId === "image" && destination.droppableId !== "image") {
       const currentImage = pageData.images[currentStep - 1];
       const draggedIndex = pageData?.images.indexOf(currentImage);
+      const targetBucket = destination.droppableId;
+      const normalizedBucketResults = normalizeBucketResults(bucketResults);
 
       // Ensure each bucket is initialized as an array
       const newBucketResults = {
-        ...bucketResults,
-        green: bucketResults.green || [],
-        red: bucketResults.red || [],
-        [destination.droppableId]: [
-          ...(bucketResults[destination.droppableId] || []),
-          draggedIndex,
-        ],
+        ...normalizedBucketResults,
+        [targetBucket]: normalizedBucketResults[targetBucket].includes(
+          draggedIndex
+        )
+          ? normalizedBucketResults[targetBucket]
+          : [...normalizedBucketResults[targetBucket], draggedIndex],
       };
+      const nextStep =
+        currentStep < totalSteps ? currentStep + 1 : currentStep;
+      const nextShowCurrentImage = currentStep < totalSteps;
 
       setBucketResults(newBucketResults);
+      saveDragDraft(newBucketResults, nextStep, nextShowCurrentImage);
       setShowCurrentImage(false);
 
       if (currentStep < totalSteps) {
@@ -153,12 +195,14 @@ function WeekTwoPage6() {
         answer: bucketResults,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 
   const handlePrevious = () => {
     // console.log(currentStep)
     // console.log(bucketResults,"bucket results")
+    const normalizedBucketResults = normalizeBucketResults(bucketResults);
     // Page coming from
     const afterCurrentImage = pageData.images[currentStep - 1];
     const currentImage = pageData.images[currentStep - 2];
@@ -168,34 +212,38 @@ function WeekTwoPage6() {
     const currentIndex = pageData.images.indexOf(currentImage);
 
     // Check if afterCurrentImage exists in any bucket and remove it
-    Object.keys(bucketResults).forEach((bucket) => {
-      if (bucketResults[bucket].includes(afterCurrentIndex)) {
-        bucketResults[bucket] = bucketResults[bucket].filter(
+    Object.keys(normalizedBucketResults).forEach((bucket) => {
+      if (normalizedBucketResults[bucket].includes(afterCurrentIndex)) {
+        normalizedBucketResults[bucket] = normalizedBucketResults[bucket].filter(
           (index) => index !== afterCurrentIndex
         );
       }
-      if (bucketResults[bucket].includes(currentIndex)) {
-        bucketResults[bucket] = bucketResults[bucket].filter(
+      if (normalizedBucketResults[bucket].includes(currentIndex)) {
+        normalizedBucketResults[bucket] = normalizedBucketResults[bucket].filter(
           (index) => index !== currentIndex
         );
       }
     });
 
     // Update the state with the modified bucket results
-    setBucketResults({
-      ...bucketResults,
+    const nextBucketResults = {
+      ...normalizedBucketResults,
       // Ensure to keep the updated bucket results
-    });
+    };
+    setBucketResults(nextBucketResults);
+    saveDragDraft(nextBucketResults, Math.max(currentStep - 1, 1), true);
 
     setShowCurrentImage(true);
     return true;
   };
 
   const resetDragAndDrop = () => {
-    setBucketResults({
+    const nextBucketResults = {
       green: [],
       red: [],
-    });
+    };
+    setBucketResults(nextBucketResults);
+    saveDragDraft(nextBucketResults, 1, true);
     setShowCurrentImage(true);
     setErrorMessage("");
     dispatch(setCurrentStep(1));

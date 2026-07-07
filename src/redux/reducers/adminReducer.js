@@ -27,5 +27,15 @@ const adminSlice = createSlice({
 export const { setCode, clearCode } = adminSlice.actions;
 export default adminSlice.reducer;
 
-export const adminData = (state) => state.admin;
+export const adminData = (state) => {
+    const isPreviewMode =
+        typeof window !== "undefined" &&
+        window.sessionStorage.getItem("flow-course-preview-mode") === "true";
+
+    return {
+        ...state.admin,
+        isAdmin: state.admin.isAdmin || isPreviewMode,
+        isPreviewMode,
+    };
+};
 

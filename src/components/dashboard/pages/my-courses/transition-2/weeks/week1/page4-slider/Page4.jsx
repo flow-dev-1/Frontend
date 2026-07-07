@@ -9,6 +9,11 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page4() {
   const dispatch = useDispatch();
@@ -25,8 +30,10 @@ function Page4() {
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    if (response?.answer) {
-      setMyAnswer(response.answer);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const savedAnswer = response?.answer ?? draftAnswer;
+    if (savedAnswer) {
+      setMyAnswer(savedAnswer);
       setHasSelectedValue(true);
     }
   }, [userAnswers, pageData.id]);
@@ -44,13 +51,16 @@ function Page4() {
         answer: myAnswer,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 
   const handleInputChange = (e) => {
+    const nextAnswer = e.target.value;
     setErrorMessage("");
     setHasSelectedValue(true);
-    setMyAnswer(e.target.value);
+    setMyAnswer(nextAnswer);
+    saveActivityDraft(userAnswers, pageData.id, nextAnswer);
   };
 
   return (

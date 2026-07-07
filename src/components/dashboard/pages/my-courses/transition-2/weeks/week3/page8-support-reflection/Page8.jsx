@@ -9,6 +9,11 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page8() {
   const dispatch = useDispatch();
@@ -23,12 +28,15 @@ function Page8() {
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    setMyAnswer(response?.answer ? response.answer : "");
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setMyAnswer(response?.answer ?? draftAnswer ?? "");
   }, [userAnswers, pageData.id]);
 
   const handleInputChange = (event) => {
+    const nextAnswer = event.target.value;
     setErrorMessage("");
-    setMyAnswer(event.target.value);
+    setMyAnswer(nextAnswer);
+    saveActivityDraft(userAnswers, pageData.id, nextAnswer);
   };
 
   const saveUserInput = () => {
@@ -46,6 +54,7 @@ function Page8() {
         answer: myAnswer,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 

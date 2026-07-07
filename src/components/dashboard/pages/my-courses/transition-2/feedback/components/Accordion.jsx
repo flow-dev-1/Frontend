@@ -7,6 +7,7 @@ import { ClimbingBoxLoader } from "react-spinners";
 import { useQueries } from "@tanstack/react-query";
 import userService from "../../../../../../../services/api/user.js";
 import adminService from "../../../../../../../services/api/admin.js";
+import schoolService from "../../../../../../../services/api/school.js";
 import { adminData } from "../../../../../../../redux/reducers/adminReducer.js";
 import { useSelector } from "react-redux";
 import VisionBoard from "../VisionBoard.jsx";
@@ -19,6 +20,8 @@ function Accordion({
   hasPercentile,
   setHasPercentile,
   enrollmentId,
+  isSchool,
+  studentId,
 }) {
   const pdfRef = useRef(null);
 
@@ -134,14 +137,18 @@ function Accordion({
     }
   };
 
-  // toDo: Fetch User assessment and Activity Data for week and 2
-  const [first, second] = useQueries({
-    queries: [1, 2].map((step) => ({
+  const weekProgressQueries = useQueries({
+    queries: [1, 2, 3, 4, 5].map((step) => ({
       queryKey: ["dashboard/transition2-feedback", enrollmentId, step],
-      queryFn: () =>
-        isAdmin
-          ? adminService.getUserCourseData(enrollmentId, step, code)
-          : userService.getUserCourseData(enrollmentId, step),
+      queryFn: () => {
+        if (isAdmin) {
+          return adminService.getUserCourseData(enrollmentId, step, code);
+        }
+        if (isSchool) {
+          return schoolService.getStudentCourseData(enrollmentId, step, studentId);
+        }
+        return userService.getUserCourseData(enrollmentId, step);
+      },
       enabled: !!enrollmentId,
       refetchOnMount: "always",
       refetchOnWindowFocus: true,
@@ -149,7 +156,15 @@ function Accordion({
     })),
   });
 
+  const [first, second] = weekProgressQueries;
+
+  const isWeekFeedbackAvailable = (index) => {
+    if (index >= 5) return true;
+    return Boolean(weekProgressQueries[index]?.data?.assessment);
+  };
+
   const handleToggle = (index) => {
+    if (!isWeekFeedbackAvailable(index)) return;
     window.scroll(0, 0);
     setActiveIndex(activeIndex === index ? "" : index);
   };
@@ -212,8 +227,13 @@ function Accordion({
           Feedback for Transition 2
         </h2>
 
-        {items.map((item, index) => (
-          <div key={index} className="accordion-item">
+        {items.map((item, index) => {
+          const isLocked = !isWeekFeedbackAvailable(index);
+          const isDownloadLocked =
+            index >= 5 && !allDataLoaded;
+
+          return (
+          <div key={index} className={`accordion-item ${isLocked ? "feedback-week-locked" : ""}`}>
             <div
               className={`py-4 px-5 d-flex gap-3 align-items-center justify-space-between
 py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
@@ -225,7 +245,7 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
                   <h2
                     className="text-gray text-nowrap fw-bold"
                     onClick={() => handleToggle(index)}
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: isLocked ? "not-allowed" : "pointer" }}
                   >
                     Week {index + 1}:
                   </h2>
@@ -233,7 +253,7 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
                   <h2
                     className="text-gray text-nowrap fw-bold"
                     onClick={() => handleToggle(index)}
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: isLocked ? "not-allowed" : "pointer" }}
                   >
                     My Vision Board
                   </h2>
@@ -241,7 +261,7 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
                   <h2
                     className="text-gray fw-bold"
                     onClick={() => handleToggle(index)}
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: isLocked ? "not-allowed" : "pointer" }}
                   >
                     Final Report:
                   </h2>
@@ -249,30 +269,35 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
                 <div
                   className="text-gray "
                   onClick={() => handleToggle(index)}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: isLocked ? "not-allowed" : "pointer" }}
                 >
                   {item.title}
                 </div>
+                {isLocked && index < 5 && (
+                  <p className="feedback-week-locked-note">
+                    (Submit assessment to unlock)
+                  </p>
+                )}
                 {index >= 5 && (
                   <p
-                    className={index === 5 && !allDataLoaded ? "text-gray" : "text-blue"}
+                    className={isDownloadLocked ? "text-gray" : "text-blue"}
                     style={{
                       zIndex: 100,
-                      cursor: index === 5 && !allDataLoaded ? "not-allowed" : "pointer",
+                      cursor: isDownloadLocked ? "not-allowed" : "pointer",
                     }}
                     onClick={() => {
-                      if (index === 5 && !allDataLoaded) return;
+                      if (isDownloadLocked) return;
                       handleToggle(index);
                       setCurrentIndex(index);
                       setStartDownload(true);
                     }}
                   >
-                    {index === 5 && !allDataLoaded
+                    {isDownloadLocked
                       ? "(Complete all 5 weeks to download)"
                       : pdfLoading
                         ? "Generating PDF..."
                         : "(Download PDF)"}{" "}
-                    {!(index === 5 && !allDataLoaded) && (
+                    {!isDownloadLocked && (
                       <Icon icon="bi:download" />
                     )}
                   </p>
@@ -280,21 +305,24 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
               </div>
               <Icon
                 onClick={() => handleToggle(index)}
+                className={isLocked ? "feedback-week-lock-icon" : ""}
                 icon={
-                  activeIndex === index
+                  isLocked
+                    ? "mdi:lock"
+                    : activeIndex === index
                     ? "simple-line-icons:arrow-up"
                     : "simple-line-icons:arrow-down"
                 }
-                style={{ cursor: "pointer" }}
+                style={{ cursor: isLocked ? "not-allowed" : "pointer" }}
               />
             </div>
-            {(activeIndex === index || activeIndex === null) && (
+            {!isLocked && (activeIndex === index || activeIndex === null) && (
               <div className="accordion-content">
                 <div>{index === 5 ? <VisionBoard answers={answers} /> : item.content}</div>
               </div>
             )}
           </div>
-        ))}
+        )})}
       </div>
       <div
         ref={pdfRef}

@@ -11,6 +11,11 @@ import {
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import StepIndicator from "../../../components/StepIndicator";
 import Button from "../../../components/Button";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 import BigTextBox from "../../../components/BigTextBox";
 import QuestionBox from "../../../components/QuestionBox";
@@ -26,14 +31,15 @@ function Page10() {
   const step = pageData?.steps[currentStep - 1];
 
   const [errorMessage, setErrorMessage] = useState("");
-  const [myAnswer, setMyAnswer] = useState(userAnswers);
+  const [myAnswer, setMyAnswer] = useState("");
 
   useEffect(() => {
     if (!userAnswers) return;
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    setMyAnswer(response?.answer ? response.answer : "");
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setMyAnswer(response?.answer ?? draftAnswer ?? "");
     return () => {};
   }, [userAnswers, pageData.id]);
 
@@ -59,13 +65,16 @@ function Page10() {
         answer: myAnswer,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
 
   const handleInputChange = (e) => {
+    const nextAnswer = e.target.value;
     setErrorMessage("");
-    setMyAnswer(e.target.value);
+    setMyAnswer(nextAnswer);
+    saveActivityDraft(userAnswers, pageData.id, nextAnswer);
   };
 
   const renderStep = () => {

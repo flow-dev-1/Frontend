@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { encryptURI } from '../../../../../utils/encryption'
 import EnrollmentModal from '../../../modals/Enrollment/EnrollmentModal'
@@ -21,10 +21,16 @@ const SchoolCourseCard = ({
 
   const [courseData] = useState(course)
   const navigate = useNavigate()
+  const enrolledCourseRecord = enrolledData?.courses?.find(
+    (item) => item?.course?._id === course?._id
+  );
+  const toggleStorageKey = `toggleState-${course?._id}`;
   const [isOn, setIsOn] = useState(() => {
-    // Initialize state from localStorage if it exists, otherwise default to false
-    const savedState = localStorage.getItem("toggleState");
-    return savedState ? JSON.parse(savedState) : false;
+    const savedState = localStorage.getItem(toggleStorageKey);
+    if (savedState !== null) return JSON.parse(savedState);
+    return enrolledCourseRecord?.status
+      ? enrolledCourseRecord.status === "Active"
+      : true;
   });
 
   const openEnrollementModal = () => {
@@ -46,8 +52,7 @@ const SchoolCourseCard = ({
       const newIsOn = !prevIsOn;
       const data = { status: newIsOn ? "Active" : "Deactivated" };
 
-      // Save the new toggle state in localStorage
-      localStorage.setItem("toggleState", JSON.stringify(newIsOn));
+      localStorage.setItem(toggleStorageKey, JSON.stringify(newIsOn));
 
       // Call the service with the updated status
       schoolService.changeToggle(courseId, data);
@@ -55,6 +60,12 @@ const SchoolCourseCard = ({
       return newIsOn;
     });
   };
+
+  useEffect(() => {
+    const savedState = localStorage.getItem(toggleStorageKey);
+    if (savedState !== null || !enrolledCourseRecord?.status) return;
+    setIsOn(enrolledCourseRecord.status === "Active");
+  }, [enrolledCourseRecord?.status, toggleStorageKey]);
 
 
   // const handleToggle = (courseId) => {
@@ -173,9 +184,8 @@ const SchoolCourseCard = ({
             src={course?.image}
             alt=""
             style={{
-              height: "100%",  // Keep full height
-              width: "auto",   // Maintain aspect ratio
-              minWidth: "100%", // Prevent width from being too small
+              height: "100%",
+              width: "100%",
               objectFit: "cover"
             }}
           />

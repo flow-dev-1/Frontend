@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { encryptURI } from "../../../../../utils/encryption";
@@ -12,10 +12,11 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
   const [course] = useState(courseData.course);
   const navigate = useNavigate();
   const isEnrolled = true;
+  const toggleStorageKey = `toggleState-${courseData?.course?._id}`;
 const [isOn, setIsOn] = useState(() => {
-  // Initialize state from localStorage if it exists, otherwise default to false
-  const savedState = localStorage.getItem("toggleState");
-  return savedState ? JSON.parse(savedState) : false;
+  const savedState = localStorage.getItem(toggleStorageKey);
+  if (savedState !== null) return JSON.parse(savedState);
+  return courseData?.status ? courseData.status === "Active" : true;
 });
 
 const handleToggle = (courseId) => {
@@ -23,8 +24,7 @@ const handleToggle = (courseId) => {
     const newIsOn = !prevIsOn;
     const data = { status: newIsOn ? "Active" : "Deactivated" };
 
-    // Save the new toggle state in localStorage
-    localStorage.setItem("toggleState", JSON.stringify(newIsOn));
+    localStorage.setItem(toggleStorageKey, JSON.stringify(newIsOn));
 
     // Call the service with the updated status
     schoolService.changeToggle(courseId, data);
@@ -32,6 +32,12 @@ const handleToggle = (courseId) => {
     return newIsOn;
   });
 };
+
+useEffect(() => {
+  const savedState = localStorage.getItem(toggleStorageKey);
+  if (savedState !== null || !courseData?.status) return;
+  setIsOn(courseData.status === "Active");
+}, [courseData?.status, toggleStorageKey]);
 
 
   const [openEnrollModal, setOpenEnrollModal] = useState(false);

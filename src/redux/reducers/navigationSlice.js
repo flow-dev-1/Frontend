@@ -126,6 +126,8 @@ const navigationSlice = createSlice({
         state.currentWeek = 1;
         state.currentPage = 1;
         state.currentStep = 1;
+        state.showReview = false;
+        state.showHurray = false;
       }
     },
     updateCourseFromURL: (state) => {

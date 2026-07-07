@@ -39,39 +39,43 @@ const CourseCard = ({
 
 
   const handleFeedbackNavigation = (course) => {
-    if(course?.title === "Self Awareness"){
+    const courseTitle = course?.title || ""
+
+    if(courseTitle === "Self Awareness"){
       navigate(`/dashboard/feedback/self-awareness`, { state: { enrollmentData: isEnrolled } })
-    }else if(course.title === "Resilience & Grit"){
+    }else if(courseTitle === "Resilience & Grit"){
       navigate(`/dashboard/resilience_grit/feedback`, { state: { enrollmentData: isEnrolled } })
-    }else if(course.title === "Emotional Regulation"){
+    }else if(courseTitle === "Emotional Regulation"){
       navigate(`/dashboard/emotional_regulation/feedback`, { state: { enrollmentData: isEnrolled } })
-    }else if(course.title === "Transition 2"){
+    }else if(courseTitle === "Transition 2"){
       navigate(`/dashboard/transition_2/feedback`, { state: { enrollmentData: isEnrolled } })
-    }else if(course?.title === "TOT Course 1" || course?.title === "Feel It. Teach It. Transform Lives."){
+    }else if(courseTitle === "TOT Course 1" || courseTitle.includes("Feel It. Teach It. Transform Lives")){
       navigate(`/dashboard/tot/feedback`, { state: { enrollmentData: isEnrolled } })
-    }else if(course?.title === "TOT Course 2" || course?.title === "Leaving No Learner Behind"){
+    }else if(courseTitle === "TOT Course 2" || courseTitle.includes("Leaving No Learner Behind")){
       navigate(`/dashboard/tot_2/feedback`, { state: { enrollmentData: isEnrolled } })
     }else{
-      navigate(`/dashboard/${course?.title}/feedback`, { state: { enrollmentData: isEnrolled } })
+      navigate(`/dashboard/${courseTitle}/feedback`, { state: { enrollmentData: isEnrolled } })
     }
 
   }
 
   const handleCourseNavigation = (course) => {
-    if(course?.title === "Self Awareness"){
+    const courseTitle = course?.title || ""
+
+    if(courseTitle === "Self Awareness"){
       navigate(`/dashboard/self-awareness-course`, { state: { enrollmentData: isEnrolled } })
-    }else if(course.title === "Resilience & Grit") {
+    }else if(courseTitle === "Resilience & Grit") {
       navigate(`/dashboard/resilience_grit`, { state: { enrollmentData: isEnrolled } })
-    }else if(course.title === "Emotional Regulation") {
+    }else if(courseTitle === "Emotional Regulation") {
       navigate(`/dashboard/emotional_regulation`, { state: { enrollmentData: isEnrolled } })
-    }else if(course.title === "Transition 2") {
+    }else if(courseTitle === "Transition 2") {
       navigate(`/dashboard/transition_2`, { state: { enrollmentData: isEnrolled } })
-    }else if(course?.title === "TOT Course 1" || course?.title === "Feel It. Teach It. Transform Lives."){
+    }else if(courseTitle === "TOT Course 1" || courseTitle.includes("Feel It. Teach It. Transform Lives")){
       navigate(`/dashboard/tot`, { state: { enrollmentData: isEnrolled } })
-    }else if(course?.title === "TOT Course 2" || course?.title === "Leaving No Learner Behind"){
+    }else if(courseTitle === "TOT Course 2" || courseTitle.includes("Leaving No Learner Behind")){
       navigate(`/dashboard/tot_2`, { state: { enrollmentData: isEnrolled } })
     }else {
-      navigate(`/dashboard/${course?.title}`, { state: { enrollmentData: isEnrolled } })
+      navigate(`/dashboard/${courseTitle}`, { state: { enrollmentData: isEnrolled } })
     }
 
   }

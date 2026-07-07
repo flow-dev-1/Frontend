@@ -23,6 +23,11 @@ import curiousImg from "../../../../../../../../assets/transition-2-images/week1
 import resilientImg from "../../../../../../../../assets/transition-2-images/week1/page6/resilient.png";
 import creativeImg from "../../../../../../../../assets/transition-2-images/week1/page6/creative.png";
 import leaderImg from "../../../../../../../../assets/transition-2-images/week1/page6/leader.png";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 import "./page10.css";
 
 function Page10ReasonSentence() {
@@ -61,14 +66,16 @@ function Page10ReasonSentence() {
       (item) => item.page === pageData.id
     );
 
-    if (response?.answer) {
-      setTextAnswer(response.answer.textAnswer || "");
+    const savedAnswer = response?.answer || getActivityDraft(userAnswers, pageData.id);
+
+    if (savedAnswer) {
+      setTextAnswer(savedAnswer.textAnswer || "");
       setSentenceAnswer(
-        response.answer.sentenceAnswer &&
-          typeof response.answer.sentenceAnswer === "object"
+        savedAnswer.sentenceAnswer &&
+          typeof savedAnswer.sentenceAnswer === "object"
           ? {
-              reason: response.answer.sentenceAnswer.reason || "",
-              identity: response.answer.sentenceAnswer.identity || "",
+              reason: savedAnswer.sentenceAnswer.reason || "",
+              identity: savedAnswer.sentenceAnswer.identity || "",
             }
           : {
               reason: "",
@@ -79,16 +86,28 @@ function Page10ReasonSentence() {
   }, [userAnswers, pageData.id]);
 
   const handleTextChange = (event) => {
+    const nextAnswer = event.target.value;
     setErrorMessage("");
-    setTextAnswer(event.target.value);
+    setTextAnswer(nextAnswer);
+    saveActivityDraft(userAnswers, pageData.id, {
+      textAnswer: nextAnswer,
+      sentenceAnswer,
+    });
   };
 
   const handleSentenceChange = (field, value) => {
     setErrorMessage("");
-    setSentenceAnswer((prevAnswer) => ({
-      ...prevAnswer,
-      [field]: value,
-    }));
+    setSentenceAnswer((prevAnswer) => {
+      const nextSentenceAnswer = {
+        ...prevAnswer,
+        [field]: value,
+      };
+      saveActivityDraft(userAnswers, pageData.id, {
+        textAnswer,
+        sentenceAnswer: nextSentenceAnswer,
+      });
+      return nextSentenceAnswer;
+    });
   };
 
   const saveUserInput = () => {
@@ -121,6 +140,7 @@ function Page10ReasonSentence() {
           },
         })
       );
+      clearActivityDraft(userAnswers, pageData.id);
     }
 
     return true;

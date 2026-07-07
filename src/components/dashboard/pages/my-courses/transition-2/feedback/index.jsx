@@ -224,6 +224,8 @@ function Transition2Feedback({ isSchool: isSchoolProp, studentId }) {
             allDataLoaded={allDataLoaded}
             setHasPercentile={setHasPercentile}
             enrollmentId={enrollmentId}
+            isSchool={isSchool}
+            studentId={studentId}
           />
         </section>
       </div>

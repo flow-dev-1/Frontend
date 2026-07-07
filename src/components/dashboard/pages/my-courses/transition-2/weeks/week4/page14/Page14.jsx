@@ -11,6 +11,11 @@ import {
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import StepIndicator from "../../../components/StepIndicator";
 import Button from "../../../components/Button";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 import CheckboxFrame from "./components/CheckboxFrame";
 import TextInputFrame from "./components/TextInputFrame";
@@ -34,10 +39,17 @@ function Page14() {
 
   // Helper to update this step's text answer
   const setCurrentTextAnswer = (value) => {
-    setTextAnswers((prev) => ({
-      ...prev,
-      [currentStep]: value,
-    }));
+    setTextAnswers((prev) => {
+      const nextTextAnswers = {
+        ...prev,
+        [currentStep]: value,
+      };
+      saveActivityDraft(userAnswers, pageData.id, {
+        checkboxAnswers,
+        textAnswers: nextTextAnswers,
+      });
+      return nextTextAnswers;
+    });
   };
 
   useEffect(() => {
@@ -45,10 +57,25 @@ function Page14() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const savedAnswer =
+      response?.answer && typeof response.answer === "object"
+        ? response.answer
+        : {};
+    const mergedAnswer = {
+      checkboxAnswers: {
+        ...(savedAnswer.checkboxAnswers || {}),
+        ...(draftAnswer?.checkboxAnswers || {}),
+      },
+      textAnswers: {
+        ...(savedAnswer.textAnswers || {}),
+        ...(draftAnswer?.textAnswers || {}),
+      },
+    };
 
-    if (response?.answer) {
-      setCheckboxAnswers(response.answer.checkboxAnswers || {});
-      setTextAnswers(response.answer.textAnswers || {});
+    if (response?.answer || draftAnswer) {
+      setCheckboxAnswers(mergedAnswer.checkboxAnswers);
+      setTextAnswers(mergedAnswer.textAnswers);
     }
   }, [userAnswers, pageData.id]);
 
@@ -83,8 +110,23 @@ function Page14() {
         },
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
+  };
+
+  const handleCheckboxAnswersChange = (nextAnswersOrUpdater) => {
+    setCheckboxAnswers((prevAnswers) => {
+      const nextAnswers =
+        typeof nextAnswersOrUpdater === "function"
+          ? nextAnswersOrUpdater(prevAnswers)
+          : nextAnswersOrUpdater;
+      saveActivityDraft(userAnswers, pageData.id, {
+        checkboxAnswers: nextAnswers,
+        textAnswers,
+      });
+      return nextAnswers;
+    });
   };
 
   // Check if "Others" option is selected
@@ -105,7 +147,7 @@ function Page14() {
           <CheckboxFrame
             step={step}
             checkboxAnswers={checkboxAnswers}
-            setCheckboxAnswers={setCheckboxAnswers}
+            setCheckboxAnswers={handleCheckboxAnswersChange}
             setErrorMessage={setErrorMessage}
           />
         );

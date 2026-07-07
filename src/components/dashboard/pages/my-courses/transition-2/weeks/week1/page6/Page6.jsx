@@ -4,7 +4,6 @@ import {
   selectPageData,
   selectCurrentStep,
   setCurrentStep,
-  navigateNext,
 } from "../../../../../../../../redux/reducers/navigationSlice";
 import {
   userAnswer,
@@ -14,6 +13,11 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import StepIndicator from "../../../components/StepIndicator";
 import Button from "../../../components/Button";
 import QuestionBox from "../../../components/QuestionBox";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 import CheckboxFrame from "./components/CheckboxFrame";
 import TextInputFrame from "./components/TextInputFrame";
@@ -39,9 +43,20 @@ function Page6() {
   });
   const [errorMessage, setErrorMessage] = useState("");
 
+  const buildAnswer = ({
+    nextCheckboxAnswers = checkboxAnswers,
+    nextTextAnswer = textAnswer,
+    nextSentenceAnswer = sentenceAnswer,
+  } = {}) => ({
+    checkboxAnswers: nextCheckboxAnswers,
+    textAnswer: nextTextAnswer,
+    sentenceAnswer: nextSentenceAnswer,
+  });
+
   const handleCheckboxAnswersChange = (nextAnswers) => {
     setCheckboxAnswers(nextAnswers);
     setErrorMessage("");
+    saveActivityDraft(userAnswers, pageData.id, buildAnswer({ nextCheckboxAnswers: nextAnswers }));
 
     if (adminDatas.isAdmin || isWhyPage) return;
 
@@ -88,6 +103,33 @@ function Page6() {
               identity: "",
             }
       );
+    } else {
+      const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+      if (draftAnswer) {
+        const savedCheckboxAnswers = draftAnswer.checkboxAnswers || {};
+        if (isWhyPage) {
+          const selectedIndex = Object.keys(savedCheckboxAnswers).find(
+            (key) => savedCheckboxAnswers[key]
+          );
+          setCheckboxAnswers(
+            selectedIndex === undefined ? {} : { [selectedIndex]: true }
+          );
+        } else {
+          setCheckboxAnswers(savedCheckboxAnswers);
+        }
+        setTextAnswer(draftAnswer.textAnswer || "");
+        setSentenceAnswer(
+          draftAnswer.sentenceAnswer && typeof draftAnswer.sentenceAnswer === "object"
+            ? {
+                reason: draftAnswer.sentenceAnswer.reason || "",
+                identity: draftAnswer.sentenceAnswer.identity || "",
+              }
+            : {
+                reason: "",
+                identity: "",
+              }
+        );
+      }
     }
   }, [userAnswers, pageData.id, isWhyPage]);
 
@@ -126,9 +168,9 @@ function Page6() {
             },
           })
         );
+        clearActivityDraft(userAnswers, pageData.id);
         dispatch(setCurrentStep(totalSteps));
-        dispatch(navigateNext());
-        return false;
+        return true;
       }
 
       return true;
@@ -176,13 +218,10 @@ function Page6() {
     dispatch(
       saveActivity({
         page: pageData.id,
-        answer: {
-          checkboxAnswers,
-          textAnswer,
-          sentenceAnswer,
-        },
+        answer: buildAnswer(),
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -191,10 +230,18 @@ function Page6() {
     if (!step) return <div>Invalid Step</div>;
 
     const handleSentenceChange = (field, value) => {
-      setSentenceAnswer((prevAnswer) => ({
-        ...prevAnswer,
-        [field]: value,
-      }));
+      setSentenceAnswer((prevAnswer) => {
+        const nextSentenceAnswer = {
+          ...prevAnswer,
+          [field]: value,
+        };
+        saveActivityDraft(
+          userAnswers,
+          pageData.id,
+          buildAnswer({ nextSentenceAnswer })
+        );
+        return nextSentenceAnswer;
+      });
       setErrorMessage("");
     };
 
@@ -215,7 +262,14 @@ function Page6() {
           <TextInputFrame
             step={step}
             textAnswer={textAnswer}
-            setTextAnswer={setTextAnswer}
+            setTextAnswer={(nextAnswer) => {
+              setTextAnswer(nextAnswer);
+              saveActivityDraft(
+                userAnswers,
+                pageData.id,
+                buildAnswer({ nextTextAnswer: nextAnswer })
+              );
+            }}
             setErrorMessage={setErrorMessage}
           />
         );

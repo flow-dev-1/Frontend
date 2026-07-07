@@ -8,6 +8,11 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 import "./page6.css";
 
 function Page6() {
@@ -33,9 +38,16 @@ function Page6() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setAnswers(
+      Array.isArray(response?.answer)
+        ? response.answer
+        : Array.isArray(draftAnswer)
+        ? draftAnswer
+        : []
+    );
     return () => {};
-  }, [userAnswers]);
+  }, [userAnswers, pageData.id]);
 
   // Start timer on first load if no previous answers
   useEffect(() => {
@@ -91,6 +103,7 @@ function Page6() {
               answer: newAnswers,
             };
             dispatch(saveActivity(activityData));
+            clearActivityDraft(userAnswers, pageData.id);
             setSavedOnTimeout(true);
           }
 
@@ -140,6 +153,7 @@ function Page6() {
       answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -161,10 +175,13 @@ function Page6() {
           ...updatedAnswers[existingAnswerIndex],
           value,
         };
+        saveActivityDraft(userAnswers, pageData.id, updatedAnswers);
         return updatedAnswers;
       } else {
         // Add new answer
-        return [...prevAnswers, { index, value }];
+        const nextAnswers = [...prevAnswers, { index, value }];
+        saveActivityDraft(userAnswers, pageData.id, nextAnswers);
+        return nextAnswers;
       }
     });
   };

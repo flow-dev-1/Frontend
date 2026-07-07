@@ -13,6 +13,7 @@ import { updateData } from "../../redux/reducers/userAnswersReducer";
 import { Icon } from "@iconify/react";
 import { useSelector } from 'react-redux';
 import { clearCode } from "../../redux/reducers/adminReducer";
+import { queryClient } from "../../queryClient";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ export default function Dashboard() {
     // localStorage.removeItem('Flow-Auth-Token');
     localStorage.clear();
     sessionStorage.clear();
+    queryClient.clear();
     dispatch(logoutSuccess());
     dispatch(clearToken());
     dispatch(clearCode());

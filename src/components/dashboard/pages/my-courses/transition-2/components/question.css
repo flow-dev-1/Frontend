@@ -493,6 +493,53 @@ button {
   transition: all 0.3s ease-in-out;
 }
 
+.transition-course-action {
+  min-width: 200px;
+}
+
+.transition-course-action--busy {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.transition-course-action--saving,
+.transition-course-action--saving:hover,
+.transition-course-action--saving:focus,
+.transition-course-action--saving:active {
+  background: #329bd6 !important;
+  border: 0 !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+}
+
+.transition-course-action__saving-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 110px;
+  color: #ffffff;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.transition-course-action__spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  flex: 0 0 18px;
+  animation: transition-course-action-spin 0.75s linear infinite;
+}
+
+@keyframes transition-course-action-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .absolute-center {
   width: 100px !important;
   position: absolute;

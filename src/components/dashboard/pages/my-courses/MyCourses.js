@@ -9,6 +9,8 @@ import { useState } from "react";
 import courseOne from "../../../../assets/course1.png";
 import courseTwo from "../../../../assets/course2.png";
 import courseThree from "../../../../assets/course3.png";
+import { useSelector } from "react-redux";
+import { filterTeaserCoursesForUser } from "../../../../utils/teaserCourses";
 
 const courses = [
   {
@@ -44,12 +46,16 @@ const courses = [
 ];
 
 export default function MyCourses() {
+  const { user } = useSelector((state) => state.user);
   const [searchQuery, setSearchQuery] = useState(""); // State for Search Query
   const [sortOption, setSortOption] = useState(""); // State for Sort Option
   const [filterOption, setFilterOption] = useState(""); // State for Filter Option
   const { data, isLoading, isError } = useQuery({
     queryKey: ["individual-courses-enrolled"],
     queryFn: () => userService.getIndividualCoursesEnrolled(), // Make sure to call the function
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    staleTime: 0,
   });
 
   const handleSort = (a, b) => {
@@ -61,7 +67,9 @@ export default function MyCourses() {
     return 0;
   };
 
-  const filteredCourses = data?.courses
+  const visibleCourses = filterTeaserCoursesForUser(data?.courses || [], user);
+
+  const filteredCourses = visibleCourses
     ?.filter((course) => {
       const searchValue = searchQuery.toLowerCase();
       return (

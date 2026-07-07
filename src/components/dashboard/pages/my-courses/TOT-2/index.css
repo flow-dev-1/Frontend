@@ -5,6 +5,21 @@
     font-weight: 600 !important;
     font-size: 1rem !important;
 }
+
+.main-content {
+    align-items: stretch;
+    min-height: calc(100vh - 59.6px);
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.main-content > .aside-class {
+    align-self: stretch;
+    height: auto;
+    min-height: calc(100vh - 59.6px);
+    background-color: rgb(248, 245, 245);
+}
+
 @media (max-width: 769px) {
     .resilience-week-content {
         padding: 0 0px !important;

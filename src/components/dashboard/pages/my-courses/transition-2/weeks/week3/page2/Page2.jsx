@@ -9,6 +9,11 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function WeekThreePage2() {
   const dispatch = useDispatch();
@@ -23,9 +28,10 @@ function WeekThreePage2() {
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    setMyAnswer(response?.answer ? response.answer : 0);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setMyAnswer(response?.answer ?? draftAnswer ?? 0);
     return () => {};
-  }, [userAnswers]);
+  }, [userAnswers, pageData.id]);
 
   const saveUserInput = () => {
     if (
@@ -45,12 +51,15 @@ function WeekThreePage2() {
         answer: myAnswer,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 
   const handleInputChange = (e) => {
+    const nextAnswer = e.target.value;
     setErrorMessage("");
-    setMyAnswer(e.target.value);
+    setMyAnswer(nextAnswer);
+    saveActivityDraft(userAnswers, pageData.id, nextAnswer);
   };
 
   return (

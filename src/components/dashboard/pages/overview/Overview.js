@@ -9,6 +9,7 @@ import "./overview.css";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../loader/Loader";
 import userService from "../../../../services/api/user";
+import { filterTeaserCoursesForUser } from "../../../../utils/teaserCourses";
 
 import { useSelector } from "react-redux";
 
@@ -40,20 +41,25 @@ export default function IndividualOverview() {
   useEffect(() => {
     if (!data || !enrolledData) return;
 
+    const visibleCourses = filterTeaserCoursesForUser(data.courses || [], user);
+
     if (user?.isEducator) {
       // Show all courses for educators
       // Show only General courses
-      const educatorCourses = data.courses.filter(
+      const educatorCourses = visibleCourses.filter(
         (course) => course.grade === "Educator"
       );
       setDisplayCourses(educatorCourses);
 
     } else if (user?.userType === "School") {
-      const generalCourses = data.courses.filter(
+      const generalCourses = visibleCourses.filter(
         (course) => (course.access !== "School" && course.grade !== "Educator")
       );
       const enrolledDataArray =
-        enrolledData?.courses?.map((item) => item.course) || [];
+        filterTeaserCoursesForUser(
+          enrolledData?.courses?.map((item) => item.course) || [],
+          user
+        );
 
       // Create unique courses array using filter and some
       const uniqueCourses = [
@@ -69,14 +75,14 @@ export default function IndividualOverview() {
       setDisplayCourses(uniqueCourses);
     } else {
       // Show only General courses
-      const generalCourses = data.courses.filter(
+      const generalCourses = visibleCourses.filter(
         (course) => (course.access !== "School" && course.grade !== "Educator")
       );
       setDisplayCourses(generalCourses);
     }
 
     return () => { };
-  }, [data, enrolledData]);
+  }, [data, enrolledData, user]);
 
   // User Type Determines the courses to show
   // If user is school student or school educator He'll see His schools enrolled course and only general courses

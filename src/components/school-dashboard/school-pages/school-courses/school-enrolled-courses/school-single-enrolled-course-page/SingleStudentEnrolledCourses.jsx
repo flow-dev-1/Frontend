@@ -11,6 +11,12 @@ import { decryptId } from '../../../../../../utils/encryption'
 
 Modal.setAppElement('#root') // This is to avoid screen readers issues with React Modal
 
+const TEASER_COURSE_IDS = [
+  '6a4b61506661e58365e9ceb4',
+  '6a4b616d6661e58365e9ceb5',
+]
+const TEASER_ALLOWED_SCHOOL_ID = '673210c0f28242d1d71ba39f'
+
 const SingleStudentEnrolledCourses = () => {
   const { user } = useSelector((state) => state.user)
   const [courses, setCourses] = useState([])
@@ -27,10 +33,14 @@ const SingleStudentEnrolledCourses = () => {
   // ToDO: Do a check if its a school or a user
   if (user?.isSchool) {
     schoolId = user?._id
+  } else {
+    schoolId = user?.school?._id || user?.school
   }
 
+  const canViewTeaserCourses = schoolId === TEASER_ALLOWED_SCHOOL_ID
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['school-courses'],
+    queryKey: ['school-courses', userId, schoolId],
     queryFn: () => schoolService.getIndividualCoursesEnrolled(userId),
     enabled: !!userId,
     refetchOnMount: true,
@@ -38,7 +48,7 @@ const SingleStudentEnrolledCourses = () => {
   })
 
   const { data: enrolledData } = useQuery({
-    queryKey: ['school-enrolled-courses'],
+    queryKey: ['school-enrolled-courses', schoolId],
     queryFn: () => schoolService.getCourses(schoolId, 'Enrolled'),
     enabled: !!schoolId,
     refetchOnMount: false,
@@ -46,12 +56,24 @@ const SingleStudentEnrolledCourses = () => {
   })
 
   const enrolledDataArray =
-    enrolledData?.courses?.map((item) => item?.course?._id) || []
+    enrolledData?.courses
+      ?.filter(
+        (item) =>
+          canViewTeaserCourses ||
+          !TEASER_COURSE_IDS.includes(item?.course?._id)
+      )
+      ?.map((item) => item?.course?._id) || []
 
   useEffect(() => {
     if (!data) return
-    setCourses(data)
-  }, [data])
+    setCourses({
+      ...data,
+      courses: data?.courses?.filter(
+        (course) =>
+          canViewTeaserCourses || !TEASER_COURSE_IDS.includes(course?._id)
+      ),
+    })
+  }, [canViewTeaserCourses, data])
 
   // Open CourseDetailModal
   const openCourseDetailModal = (course) => {

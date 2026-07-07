@@ -13,6 +13,11 @@ import {
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import Frame from "./components/Frame";
 import SmartFrame from "./components/SmartFrame";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page8() {
   const dispatch = useDispatch(); // Initialize dispatch
@@ -31,9 +36,27 @@ function Page8() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setAnswers(
+      Array.isArray(response?.answer)
+        ? response.answer
+        : Array.isArray(draftAnswer)
+        ? draftAnswer
+        : []
+    );
     return () => {};
-  }, [userAnswers]);
+  }, [userAnswers, pageData.id]);
+
+  const setDraftedAnswers = (nextAnswersOrUpdater) => {
+    setAnswers((prevAnswers) => {
+      const nextAnswers =
+        typeof nextAnswersOrUpdater === "function"
+          ? nextAnswersOrUpdater(prevAnswers)
+          : nextAnswersOrUpdater;
+      saveActivityDraft(userAnswers, pageData.id, nextAnswers);
+      return nextAnswers;
+    });
+  };
 
   const saveUserInput = () => {
     setErrorMessage(""); // Clear error if input is valid
@@ -93,6 +116,7 @@ function Page8() {
       answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -118,7 +142,7 @@ function Page8() {
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={setDraftedAnswers}
           />
         );
       case "smart":
@@ -131,7 +155,7 @@ function Page8() {
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={setDraftedAnswers}
           />
         );
       default:

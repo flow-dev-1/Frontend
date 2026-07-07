@@ -11,6 +11,11 @@ import {
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import StepIndicator from "../../../components/StepIndicator";
 import Button from "../../../components/Button";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 import BigTextBox from "../../../components/BigTextBox";
 import QuestionBox from "../../../components/QuestionBox";
@@ -33,9 +38,12 @@ function Page8() {
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
     setAnswers(
       response?.answer && typeof response.answer === "object"
         ? response.answer
+        : draftAnswer && typeof draftAnswer === "object"
+        ? draftAnswer
         : {}
     );
     return () => {};
@@ -65,16 +73,21 @@ function Page8() {
         answer: answers,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
 
   const handleInputChange = (e) => {
     setErrorMessage("");
-    setAnswers((prevAnswers) => ({
-      ...prevAnswers,
-      [step.stepId]: e.target.value,
-    }));
+    setAnswers((prevAnswers) => {
+      const nextAnswers = {
+        ...prevAnswers,
+        [step.stepId]: e.target.value,
+      };
+      saveActivityDraft(userAnswers, pageData.id, nextAnswers);
+      return nextAnswers;
+    });
   };
 
   const renderStep = () => {

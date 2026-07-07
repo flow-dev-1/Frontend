@@ -8,6 +8,11 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 import checkedImage from "../../../../../../../../assets/checkedbox.png";
 import uncheckedImage from "../../../../../../../../assets/uncheckedBox.png";
 import "./page10.css";
@@ -25,12 +30,19 @@ function Page10() {
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    setSelectedOption(response?.answer?.selectedOption ?? null);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setSelectedOption(
+      response?.answer?.selectedOption ?? draftAnswer?.selectedOption ?? null
+    );
   }, [userAnswers, pageData.id]);
 
   const handleSelect = (index) => {
     setErrorMessage("");
     setSelectedOption(index);
+    saveActivityDraft(userAnswers, pageData.id, {
+      selectedOption: index,
+      value: pageData.options?.[index] || "",
+    });
   };
 
   const saveUserInput = () => {
@@ -51,6 +63,7 @@ function Page10() {
         },
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 

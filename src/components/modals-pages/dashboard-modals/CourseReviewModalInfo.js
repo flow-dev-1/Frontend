@@ -3,6 +3,14 @@ import { Icon } from '@iconify/react'
 import dot from '../../../assets/radix-icons--dot-filled.svg'
 
 const CourseReviewModalInfo = ({course, closeModal}) => {
+  const courseTitle = course?.title || "";
+  const isTotCourse1 =
+    courseTitle === "TOT Course 1" ||
+    courseTitle.includes("Feel It. Teach It. Transform Lives");
+  const isTotCourse2 =
+    courseTitle === "TOT Course 2" ||
+    courseTitle.includes("Leaving No Learner Behind");
+
   return (
     <>
             {course?.title === "Emotional Regulation" && (
@@ -958,7 +966,7 @@ const CourseReviewModalInfo = ({course, closeModal}) => {
         )
       }
 
-      {course?.title === "TOT Course 1" && (
+      {isTotCourse1 && (
 
         <div
           className="py-2 px-4 course-objectives"
@@ -1097,6 +1105,88 @@ const CourseReviewModalInfo = ({course, closeModal}) => {
 
           </div>
 
+        </div>
+      )}
+
+      {isTotCourse2 && (
+        <div
+          className="py-2 px-4 course-objectives"
+          style={{ maxHeight: "500px", overflowY: "auto", marginBottom: "1.5rem" }}
+        >
+          <div
+            className="course-info-modal-header"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between"
+            }}
+          >
+            <h2 className="mb-0" style={{ fontSize: "36px" }}>
+              {course?.title}
+            </h2>
+            <button
+              className="close-btn"
+              onClick={closeModal}
+              style={{ border: "none", background: "none", cursor: "pointer" }}
+            >
+              <Icon width={24} icon="mingcute:close-fill" />
+            </button>
+          </div>
+
+          <hr className="w-100 h-auto mb-2 " />
+
+          <div>
+            <img
+              style={{ width: "100%", height: "160px", objectFit: "cover" }}
+              alt=""
+              src={course.banner}
+            />
+          </div>
+
+          <div className="course-info-modal-body">
+            <p style={{ fontSize: "20px", color: "#275DAD" }}>Course Overview</p>
+            <p style={{ paddingLeft: ".5rem" }}>
+              Leaving No Learner Behind prepares teachers to build inclusive classrooms
+              where every learner can participate fully and grow with confidence.
+              The course focuses on understanding learner differences, removing barriers
+              to participation, and using practical strategies that support diverse needs.
+            </p>
+
+            <p style={{ paddingLeft: ".5rem", marginTop: "1rem" }}>
+              Teachers explore how empathy, compassion, collaboration, and reflective
+              practice can shape learning environments that are safe, accessible, and
+              responsive. The course also supports teacher wellbeing, helping educators
+              manage stress and sustain inclusive practice over time.
+            </p>
+
+            <div className="mt-4">
+              <p style={{ fontSize: "20px", color: "#275DAD" }}>Course Objectives</p>
+              <p style={{ paddingLeft: ".5rem" }}>
+                By the end of this course, participants will be able to:
+              </p>
+
+              <ol style={{ paddingLeft: "1rem" }}>
+                <li>
+                  <p>1. Identify common barriers that prevent learners from participating fully in classroom activities.</p>
+                </li>
+                <li className="mt-3">
+                  <p>2. Apply inclusive teaching strategies that support learners with different strengths, needs, and learning profiles.</p>
+                </li>
+                <li className="mt-3">
+                  <p>3. Use empathy and compassion to understand learner behaviour and respond with practical support.</p>
+                </li>
+                <li className="mt-3">
+                  <p>4. Design classroom routines and adaptations that make learning more accessible for all students.</p>
+                </li>
+                <li className="mt-3">
+                  <p>5. Collaborate with families, colleagues, and support systems to strengthen learner outcomes.</p>
+                </li>
+                <li className="mt-3">
+                  <p>6. Recognize signs of teacher stress and use healthy boundaries and self-care practices to sustain inclusive classrooms.</p>
+                </li>
+              </ol>
+            </div>
+          </div>
         </div>
       )}
 

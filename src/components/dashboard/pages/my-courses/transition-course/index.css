@@ -1,14 +1,17 @@
 .main-content {
     display: flex;
+    align-items: stretch;
     margin-top: 59.6px;
     margin-bottom: 50px;
     padding-bottom: 20px;
 }
 
 aside {
+    align-self: stretch;
     flex-basis: 25vw;
     padding: 40px 30px;
-    height: calc(100vh - 59.6px);
+    height: auto;
+    min-height: calc(100vh - 59.6px);
     background-color: rgb(248, 245, 245);
     box-shadow: 0 0 0.3px rgb(21, 4, 4);
     margin: 0 3rem 0 0;

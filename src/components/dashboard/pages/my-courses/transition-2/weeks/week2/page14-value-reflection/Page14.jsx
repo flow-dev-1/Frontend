@@ -11,6 +11,11 @@ import {
 import checkedImage from "../../../../../../../../assets/checkedbox.png";
 import uncheckedImage from "../../../../../../../../assets/uncheckedBox.png";
 import "./page14.css";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page14() {
   const dispatch = useDispatch();
@@ -25,12 +30,14 @@ function Page14() {
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    setMyAnswer(response?.answer ? response.answer : "");
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setMyAnswer(response?.answer ?? draftAnswer ?? "");
   }, [userAnswers, pageData.id]);
 
   const handleSelect = (option) => {
     setErrorMessage("");
     setMyAnswer(option);
+    saveActivityDraft(userAnswers, pageData.id, option);
   };
 
   const saveUserInput = () => {
@@ -48,6 +55,7 @@ function Page14() {
         answer: myAnswer,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 

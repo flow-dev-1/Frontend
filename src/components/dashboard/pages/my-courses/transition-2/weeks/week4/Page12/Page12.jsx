@@ -13,6 +13,11 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 import "./page12.css";
 
 function WeekFourPage12() {
@@ -33,6 +38,7 @@ function WeekFourPage12() {
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
 
     if (response?.answer && typeof response.answer === "object") {
       setTextAnswer(response.answer.textAnswer || response.answer[1] || "");
@@ -40,21 +46,36 @@ function WeekFourPage12() {
     } else if (response?.answer) {
       setTextAnswer(response.answer);
       setRatings({});
+    } else if (draftAnswer && typeof draftAnswer === "object") {
+      setTextAnswer(draftAnswer.textAnswer || draftAnswer[1] || "");
+      setRatings(draftAnswer.ratings || {});
     }
   }, [userAnswers, pageData.id]);
 
   const handleTextChange = (event) => {
+    const nextTextAnswer = event.target.value;
     setErrorMessage("");
-    setTextAnswer(event.target.value);
+    setTextAnswer(nextTextAnswer);
+    saveActivityDraft(userAnswers, pageData.id, {
+      textAnswer: nextTextAnswer,
+      ratings,
+    });
   };
 
   const handleRatingChange = (skill, value) => {
     const numericValue = value.replace(/\D/g, "").slice(0, 1);
     setErrorMessage("");
-    setRatings((prevRatings) => ({
-      ...prevRatings,
-      [skill]: numericValue,
-    }));
+    setRatings((prevRatings) => {
+      const nextRatings = {
+        ...prevRatings,
+        [skill]: numericValue,
+      };
+      saveActivityDraft(userAnswers, pageData.id, {
+        textAnswer,
+        ratings: nextRatings,
+      });
+      return nextRatings;
+    });
   };
 
   const saveUserInput = () => {
@@ -90,6 +111,7 @@ function WeekFourPage12() {
         },
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 
