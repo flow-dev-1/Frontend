@@ -13,7 +13,6 @@ import { getWeekAssessment } from "../../../data";
 import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
-  updateData,
   saveAssessment,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { useMutation } from "@tanstack/react-query";
@@ -21,7 +20,6 @@ import { toast } from "react-toastify";
 import userService from "../../../../../../../../services/api/user";
 import { calculateResult } from "../../../utility";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
-import { use } from "react";
 
 function WeekFiveAssessment() {
   const dispatch = useDispatch();
@@ -54,15 +52,6 @@ function WeekFiveAssessment() {
         )}% in the quiz`
       );
       toast.success(data.message || "Answers saved successfully!"); // Show success toast
-      // dispatch(
-      //   updateData({
-      //     course: null,
-      //     courseEnrollmentId: null,
-      //     week: 1,
-      //     activities: [],
-      //     assessments: [],
-      //   })
-      // );
       dispatch(navigateNext());
     },
     onError: (error) => {

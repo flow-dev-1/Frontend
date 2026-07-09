@@ -13,6 +13,11 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import SONARFrame from "./components/SONARFrame";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function WeekThreePage2() {
   const dispatch = useDispatch();
@@ -32,10 +37,23 @@ function WeekThreePage2() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    if (response?.answer) {
-      setAnswers(response.answer);
-    }
-  }, [userAnswers]);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const savedAnswer = response?.answer || draftAnswer;
+    setAnswers(savedAnswer || {});
+  }, [pageData.id, userAnswers]);
+
+  const updateAnswers = (nextAnswers) => {
+    setAnswers((previousAnswers) => {
+      const resolvedAnswers =
+        typeof nextAnswers === "function"
+          ? nextAnswers(previousAnswers)
+          : nextAnswers;
+
+      saveActivityDraft(userAnswers, pageData.id, resolvedAnswers);
+
+      return resolvedAnswers;
+    });
+  };
 
   const saveUserInput = () => {
     if (currentStep === 1 || adminDatas.isAdmin) return true;
@@ -67,6 +85,7 @@ function WeekThreePage2() {
         answer: answers,
       };
       dispatch(saveActivity(activityData));
+      clearActivityDraft(userAnswers, pageData.id);
       return true;
     }
 
@@ -109,7 +128,7 @@ function WeekThreePage2() {
             scenario={step.scenario}
             letters={step.letters}
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={updateAnswers}
             setErrorMessage={setErrorMessage}
           />
         );

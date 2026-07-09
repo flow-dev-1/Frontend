@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../../../../../../assets/logo.png";
 import { Icon } from "@iconify/react";
 import Accordion from "./components/Accordion";
@@ -221,6 +221,9 @@ function ResilienceFeedback({ isSchool: isSchoolProp, studentId }) {
             hasPercentile={hasPercentile}
             allDataLoaded={allDataLoaded}
             setHasPercentile={setHasPercentile}
+            enrollmentId={enrollmentId}
+            isSchool={isSchool}
+            studentId={studentId}
           />
         </section>
       </div>

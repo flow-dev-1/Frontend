@@ -9,6 +9,11 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page4() {
   const pageData = useSelector(selectPageData);
@@ -24,9 +29,16 @@ function Page4() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setAnswers(
+      Array.isArray(response?.answer)
+        ? response.answer
+        : Array.isArray(draftAnswer)
+          ? draftAnswer
+          : []
+    );
     return () => {};
-  }, [userAnswers]);
+  }, [pageData.id, userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
@@ -50,6 +62,7 @@ function Page4() {
       answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -62,6 +75,7 @@ function Page4() {
       const existingAnswerIndex = prevAnswers.findIndex(
         (answer) => answer.index === index
       );
+      let nextAnswers;
       if (existingAnswerIndex > -1) {
         // Update existing answer
         const updatedAnswers = [...prevAnswers];
@@ -69,11 +83,14 @@ function Page4() {
           ...updatedAnswers[existingAnswerIndex],
           value,
         };
-        return updatedAnswers;
+        nextAnswers = updatedAnswers;
       } else {
         // Add new answer
-        return [...prevAnswers, { index, value }];
+        nextAnswers = [...prevAnswers, { index, value }];
       }
+
+      saveActivityDraft(userAnswers, pageData.id, nextAnswers);
+      return nextAnswers;
     });
   };
 

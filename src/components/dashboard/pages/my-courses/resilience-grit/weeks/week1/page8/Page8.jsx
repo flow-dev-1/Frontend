@@ -8,12 +8,16 @@ import {
   selectPageData,
   selectCurrentStep,
 } from "../../../../../../../../redux/reducers/navigationSlice";
-import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 const InternalStepIndicator = ({ totalSteps, currentStep }) => {
   return (
@@ -21,7 +25,7 @@ const InternalStepIndicator = ({ totalSteps, currentStep }) => {
       {[...Array(totalSteps)].map((_, index) => (
         <div
           key={index}
-          className={`${index + 2 <= currentStep ? "bg-step-active" : "bg-step"}`}
+          className={`${index + 1 <= currentStep ? "bg-step-active" : "bg-step"}`}
           style={{
             // flexBasis: "35px",
             width: "35px",
@@ -39,7 +43,6 @@ function Page8() {
   const dispatch = useDispatch(); // Initialize dispatch
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
-  const totalSteps = pageData?.steps?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const step = pageData?.steps[currentStep - 1];
@@ -47,6 +50,11 @@ function Page8() {
   const adminDatas = useSelector(adminData);
   const [dragDropImageLength, setDragDropImageLength] = useState(4)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const totalIndicatorSteps = 1 + dragDropImageLength;
+  const activeIndicatorStep =
+    currentStep === 1
+      ? 1
+      : Math.min(currentImageIndex + 2, totalIndicatorSteps);
 
   useEffect(() => {
     if (!userAnswers) return;
@@ -55,8 +63,27 @@ function Page8() {
       (item) => item.page === pageData.id
     );
 
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
-  }, [userAnswers]);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setAnswers(
+      Array.isArray(response?.answer)
+        ? response.answer
+        : Array.isArray(draftAnswer)
+          ? draftAnswer
+          : []
+    );
+  }, [pageData.id, userAnswers]);
+
+  const setDraftedAnswers = (nextAnswersOrUpdater) => {
+    setAnswers((prevAnswers) => {
+      const nextAnswers =
+        typeof nextAnswersOrUpdater === "function"
+          ? nextAnswersOrUpdater(prevAnswers)
+          : nextAnswersOrUpdater;
+
+      saveActivityDraft(userAnswers, pageData.id, nextAnswers);
+      return nextAnswers;
+    });
+  };
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
@@ -85,6 +112,7 @@ function Page8() {
       answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -121,7 +149,7 @@ function Page8() {
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={setDraftedAnswers}
             setCurrentImageIndex1={setCurrentImageIndex}
             setDragDropImageLength={setDragDropImageLength}
           />
@@ -139,10 +167,9 @@ function Page8() {
       )}{" "}
       {/* Display error message */}
       <div className="d-flex justify-content-center align-items-center gap-2">
-        <StepIndicator totalSteps={totalSteps} />
         <InternalStepIndicator
-          totalSteps={dragDropImageLength}
-          currentStep={currentImageIndex + 1}
+          totalSteps={totalIndicatorSteps}
+          currentStep={activeIndicatorStep}
         />
 
       </div>

@@ -8,6 +8,11 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page6() {
   const pageData = useSelector(selectPageData);
@@ -32,9 +37,12 @@ function Page6() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const savedAnswer = response?.answer || draftAnswer;
+
+    setAnswers(Array.isArray(savedAnswer) ? savedAnswer : []);
     return () => {};
-  }, [userAnswers]);
+  }, [pageData.id, userAnswers]);
 
   // Start timer on first load if no previous answers
   useEffect(() => {
@@ -90,6 +98,7 @@ function Page6() {
               answer: newAnswers,
             };
             dispatch(saveActivity(activityData));
+            clearActivityDraft(userAnswers, pageData.id);
             setSavedOnTimeout(true);
           }
 
@@ -130,6 +139,7 @@ function Page6() {
       answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -144,18 +154,22 @@ function Page6() {
       const existingAnswerIndex = prevAnswers.findIndex(
         (answer) => answer.index === index
       );
+      let updatedAnswers;
       if (existingAnswerIndex > -1) {
         // Update existing answer
-        const updatedAnswers = [...prevAnswers];
+        updatedAnswers = [...prevAnswers];
         updatedAnswers[existingAnswerIndex] = {
           ...updatedAnswers[existingAnswerIndex],
           value,
         };
-        return updatedAnswers;
       } else {
         // Add new answer
-        return [...prevAnswers, { index, value }];
+        updatedAnswers = [...prevAnswers, { index, value }];
       }
+
+      saveActivityDraft(userAnswers, pageData.id, updatedAnswers);
+
+      return updatedAnswers;
     });
   };
 

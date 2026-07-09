@@ -1,8 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import CardBoard from "./CardBoard";
-import ArrowTrail from "../../../../../../../../../assets/ArrowTrail.svg";
 import "../page2.css";
+
+const createEmptyZoneResults = () => ({
+  blue: [],
+  green: [],
+  yellow: [],
+  red: [],
+});
+
+const normalizeZoneResults = (results) => ({
+  blue: Array.isArray(results?.blue) ? results.blue : [],
+  green: Array.isArray(results?.green) ? results.green : [],
+  yellow: Array.isArray(results?.yellow) ? results.yellow : [],
+  red: Array.isArray(results?.red) ? results.red : [],
+});
 
 const DragAndDropFrame = ({
   info,
@@ -12,37 +25,63 @@ const DragAndDropFrame = ({
   setCurrentImageIndex1,
   setDragDropImageLength,
 }) => {
-  const { skills, zones, instruction } = info;
-  const [zoneResults, setZoneResults] = useState({
-    blue: [],
-    green: [],
-    yellow: [],
-    red: [],
-  });
+  const { skills, zones } = info;
+  const [zoneResults, setZoneResults] = useState(createEmptyZoneResults);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [activeHoverZone, setActiveHoverZone] = useState(null);
+  const pointerPositionRef = useRef({ x: 0, y: 0 });
+  const isDraggingRef = useRef(false);
 
   useEffect(() => {
-    if (!answers?.length) return;
+    const trackPointer = (event) => {
+      const touch = event.touches?.[0] || event.changedTouches?.[0];
+      pointerPositionRef.current = {
+        x: touch ? touch.clientX : event.clientX,
+        y: touch ? touch.clientY : event.clientY,
+      };
+
+      if (!isDraggingRef.current) return;
+
+      setActiveHoverZone((previousZone) => {
+        const hoveredZone = getHoveredZoneId();
+        return previousZone === hoveredZone ? previousZone : hoveredZone;
+      });
+    };
+
+    window.addEventListener("mousemove", trackPointer, { passive: true });
+    window.addEventListener("touchmove", trackPointer, { passive: true });
+    window.addEventListener("touchend", trackPointer, { passive: true });
+
+    return () => {
+      window.removeEventListener("mousemove", trackPointer);
+      window.removeEventListener("touchmove", trackPointer);
+      window.removeEventListener("touchend", trackPointer);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!answers?.length) {
+      setZoneResults(createEmptyZoneResults());
+      setCurrentImageIndex(0);
+      setCurrentImageIndex1(0);
+      return;
+    }
 
     const existingAnswer = answers.find((answer) => answer.stepId === 2);
     if (existingAnswer?.value) {
-      setZoneResults({
-        blue: existingAnswer.value.blue || [],
-        green: existingAnswer.value.green || [],
-        yellow: existingAnswer.value.yellow || [],
-        red: existingAnswer.value.red || [],
-      });
+      const normalizedResults = normalizeZoneResults(existingAnswer.value);
+      setZoneResults(normalizedResults);
 
       // Update currentSkillIndex based on total dropped items
       const totalDropped =
-        (existingAnswer.value.blue?.length || 0) +
-        (existingAnswer.value.green?.length || 0) +
-        (existingAnswer.value.yellow?.length || 0) +
-        (existingAnswer.value.red?.length || 0);
+        normalizedResults.blue.length +
+        normalizedResults.green.length +
+        normalizedResults.yellow.length +
+        normalizedResults.red.length;
       setCurrentImageIndex(totalDropped);
       setCurrentImageIndex1(totalDropped);
     }
-  }, [answers]);
+  }, [answers, setCurrentImageIndex1]);
 
   const totalDropped = Object.values(zoneResults).reduce(
     (sum, arr) => sum + arr.length,
@@ -50,20 +89,41 @@ const DragAndDropFrame = ({
   );
   const allSkillsDropped = totalDropped >= skills.length;
 
-  const handleOnDragEnd = (result) => {
-    if (!result.destination) return;
+  const getHoveredZoneId = () => {
+    const hoveredElement = document.elementFromPoint(
+      pointerPositionRef.current.x,
+      pointerPositionRef.current.y
+    );
 
+    return hoveredElement
+      ?.closest("[data-emotional-drop-zone]")
+      ?.getAttribute("data-emotional-drop-zone");
+  };
+
+  const handleOnDragStart = () => {
+    isDraggingRef.current = true;
+  };
+
+  const handleOnDragEnd = (result) => {
+    isDraggingRef.current = false;
+    setActiveHoverZone(null);
     setErrorMessage("");
     const { source, destination } = result;
 
-    if (source.droppableId === "skill" && destination.droppableId !== "skill") {
+    if (source.droppableId === "skill") {
+      const hoveredZone = getHoveredZoneId();
+      const destinationZone = hoveredZone || destination?.droppableId;
+
+      if (!destinationZone || destinationZone === "skill") return;
+
       const draggedIndex = currentImageIndex;
+      const currentResults = normalizeZoneResults(zoneResults);
 
       // Update zone results
       const newZoneResults = {
-        ...zoneResults,
-        [destination.droppableId]: [
-          ...(zoneResults[destination.droppableId] || []),
+        ...currentResults,
+        [destinationZone]: [
+          ...(currentResults[destinationZone] || []),
           draggedIndex,
         ],
       };
@@ -107,7 +167,7 @@ const DragAndDropFrame = ({
 
   useEffect(() => {
     setDragDropImageLength(skills.length);
-  }, [skills]);
+  }, [setDragDropImageLength, skills]);
 
   const renderDragItem = () => {
     if (currentImageIndex >= skills.length || allSkillsDropped) return null;
@@ -135,9 +195,10 @@ const DragAndDropFrame = ({
                 : "grab",
               opacity: allSkillsDropped ? 0.5 : 1,
               transform: `${provided.draggableProps.style?.transform || ""} ${
-                snapshot.isDragging ? "scale(0.9)" : ""
+                snapshot.isDragging ? "scale(0.8)" : ""
               }`,
               zIndex: snapshot.isDragging ? 9999 : 1,
+              pointerEvents: snapshot.isDragging ? "none" : undefined,
             }}
           >
             <CardBoard imgSrc={imagePath} />
@@ -148,14 +209,14 @@ const DragAndDropFrame = ({
   };
 
   return (
-    <DragDropContext onDragEnd={handleOnDragEnd}>
-      <div className="row custom-border-20 w-100 m-0">
+    <DragDropContext onDragStart={handleOnDragStart} onDragEnd={handleOnDragEnd}>
+      <div className="custom-border-20 emotional-dnd-layout">
         {/* Left Droppable (50%) */}
-        <div className="col-12 col-md-6 d-flex justify-content-center align-items-center p-4">
+        <div className="d-flex justify-content-center align-items-center p-4 emotional-dnd-column emotional-dnd-card-stage">
           <Droppable droppableId="skill">
             {(provided, snapshot) => (
               <div
-                className="w-100 d-flex justify-content-center align-items-center"
+                className="w-100 d-flex justify-content-center align-items-center emotional-dnd-card-drop"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 style={{
@@ -166,21 +227,17 @@ const DragAndDropFrame = ({
                     : "transparent",
                 }}
               >
-                {allSkillsDropped && (
-                  <span
-                    className="d-none d-md-block"
-                    style={{ width: "150px" }}
-                  />
-                )}
-                {renderDragItem()}
-                {provided.placeholder}
+                <div className="emotional-dnd-card-slot">{renderDragItem()}</div>
+                <div className="emotional-dnd-hidden-placeholder">
+                  {provided.placeholder}
+                </div>
               </div>
             )}
           </Droppable>
         </div>
 
         {/* Right Zones (50%) */}
-        <div className="col-12 col-md-6 bg-blue px-4 py-3">
+        <div className="bg-blue px-4 py-3 emotional-dnd-column">
           <div className="zones-grid-container">
             {zones &&
               zones.map((zone) => (
@@ -189,17 +246,15 @@ const DragAndDropFrame = ({
                     <div
                       ref={provided.innerRef}
                       className={`coping-zone-container ${zone.id}`}
+                      data-emotional-drop-zone={zone.id}
                       {...provided.droppableProps}
                       style={{
-                        backgroundColor: snapshot.isDraggingOver
+                        backgroundColor: activeHoverZone === zone.id
                           ? "rgba(255, 255, 255, 0.2)"
                           : "transparent",
-                        boxShadow: snapshot.isDraggingOver
+                        boxShadow: activeHoverZone === zone.id
                           ? "0 0 0 3px rgba(255, 255, 255, 0.5)"
                           : "none",
-                        transform: snapshot.isDraggingOver
-                          ? "scale(1.06)"
-                          : "scale(1)",
                       }}
                     >
                       <h2 className="zone-count" style={{ color: zone.color }}>
@@ -210,7 +265,9 @@ const DragAndDropFrame = ({
                           {zone.title}
                         </h2>
                       </div>
-                      <div style={{ display: 'none' }}>{provided.placeholder}</div>
+                      <div className="emotional-dnd-hidden-placeholder">
+                        {provided.placeholder}
+                      </div>
                     </div>
                   )}
                 </Droppable>

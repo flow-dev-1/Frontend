@@ -1,6 +1,6 @@
 export const courseContent = {
   week1: {
-    title: "Introduction to Resilience and Grit",
+    title: "Introduction to Emotional Regulation",
     pages: [
       {
         id: 1,

@@ -4,6 +4,68 @@
     }
     
 }
+
+.week1-activity4-dnd-layout {
+    align-items: stretch;
+    max-width: 100%;
+    overflow: hidden;
+    width: 100%;
+}
+
+.week1-activity4-dnd-column {
+    flex: 0 0 50%;
+    max-width: 50%;
+    min-width: 0;
+}
+
+.week1-activity4-card-stage {
+    min-height: 360px !important;
+}
+
+.week1-activity4-card-slot {
+    align-items: center;
+    display: flex;
+    height: 240px;
+    justify-content: center;
+    width: 240px;
+}
+
+.week1-activity4-hidden-placeholder {
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+    position: absolute;
+    width: 0;
+}
+
+.week1-activity4-dropzone {
+    flex: 0 0 160px;
+    max-width: 160px;
+    min-width: 160px;
+    transition: background-color 0.2s ease;
+}
+
+.week1-activity4-dropzone .bucket-text {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    max-width: 100%;
+    padding: 0 !important;
+}
+
+.week1-activity4-dropzone .bucket-text p {
+    font-size: 0.8em;
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0;
+    max-width: 100%;
+    overflow: visible;
+    text-align: center;
+    white-space: normal;
+    width: 100%;
+    word-break: keep-all;
+}
+
 @media (max-width: 480px) {
     .bucket-text{
         margin: 0 2.8rem;
@@ -13,4 +75,22 @@
         margin-left: -1.2rem;
     }
     
+}
+
+@media (max-width: 768px) {
+    .week1-activity4-dnd-column {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+
+    .week1-activity4-card-slot {
+        height: 190px;
+        width: 190px;
+    }
+
+    .week1-activity4-dropzone {
+        flex-basis: 120px;
+        max-width: 120px;
+        min-width: 120px;
+    }
 }

@@ -13,7 +13,6 @@ import { getWeekAssessment } from "../../../data";
 import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
-  updateData,
   saveAssessment,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { useMutation } from "@tanstack/react-query";

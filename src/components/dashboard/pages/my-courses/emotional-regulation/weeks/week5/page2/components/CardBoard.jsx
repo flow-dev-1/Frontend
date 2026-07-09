@@ -2,7 +2,7 @@ function CardBoard({ imgSrc, text }) {
   return (
     <div className="d-flex flex-column align-items-center position-relative flex-basis">
       {" "}
-      <img src={imgSrc} className="cardboard-image w-75" />{" "}
+      <img src={imgSrc} className="cardboard-image w-75" alt="" />{" "}
       <div className="w-75 text-center absolute-center mb-4">
         {" "}
         <h2 className="">{text}</h2>{" "}

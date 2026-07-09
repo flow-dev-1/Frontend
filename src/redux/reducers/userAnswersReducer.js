@@ -29,6 +29,12 @@ const userAnswerSlice = createSlice({
         activities: [...updatedActivities, action.payload],
       }
     },
+    removeActivity: (state, action) => {
+      return {
+        ...state,
+        activities: state.activities.filter(activity => activity.page !== action.payload),
+      }
+    },
     saveAssessment: (state, action) => {
       return {
         ...state,
@@ -48,6 +54,7 @@ const userAnswerSlice = createSlice({
 export const {
   updateData,
   saveActivity,
+  removeActivity,
   saveAssessment,
   clearData
 } = userAnswerSlice.actions

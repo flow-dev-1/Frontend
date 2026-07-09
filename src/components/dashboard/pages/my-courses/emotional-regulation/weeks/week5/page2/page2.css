@@ -1,4 +1,72 @@
 /* Zones Grid Container */
+.emotional-dnd-layout {
+  align-items: stretch;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+
+.emotional-dnd-column {
+  flex: 0 0 50%;
+  max-width: 50%;
+  min-width: 0;
+}
+
+.emotional-dnd-card-stage {
+  min-height: 360px;
+}
+
+.emotional-dnd-card-drop {
+  position: relative;
+}
+
+.emotional-dnd-card-slot {
+  align-items: center;
+  display: flex;
+  height: 260px;
+  justify-content: center;
+  width: 260px;
+}
+
+.emotional-dnd-hidden-placeholder {
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  width: 0;
+}
+
+.emotional-dnd-indicators {
+  align-items: flex-start;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 1.5rem;
+  max-width: 100%;
+}
+
+.emotional-dnd-main-indicator > div {
+  margin-top: 0 !important;
+}
+
+.emotional-dnd-progress-strip {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  justify-content: center;
+  max-width: min(100%, 720px);
+  min-width: 0;
+  padding: 0 4px;
+}
+
+.emotional-dnd-progress-strip > div {
+  flex: 0 0 35px;
+  height: 17px;
+  width: 35px;
+}
+
 .zones-grid-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -11,14 +79,17 @@
   position: relative;
   border-radius: 12px;
   min-height: 146.98px;
-  /*width: 188.97px; */
-  /* width: 100%; */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 15px 10px;
-  transition: all 0.3s ease;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+}
+
+.coping-zone-container > :not(.emotional-dnd-hidden-placeholder) {
+  pointer-events: none;
 }
 .coping-zone-container.blue {
   background: url("../../../../../../../../assets/emotional-regulation-images/blue_rectangle.png");
@@ -71,6 +142,16 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .emotional-dnd-column {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+
+  .emotional-dnd-card-slot {
+    height: 210px;
+    width: 210px;
+  }
+
   .coping-skill-card {
     min-width: 200px;
     min-height: 100px;
@@ -93,5 +174,13 @@
     width: 30px;
     height: 30px;
     font-size: 1rem;
+  }
+
+  .emotional-dnd-indicators {
+    gap: 6px;
+  }
+
+  .emotional-dnd-progress-strip {
+    gap: 4px;
   }
 }

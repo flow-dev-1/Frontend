@@ -13,6 +13,11 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function WeekTwoPage4() {
   const dispatch = useDispatch(); // Initialize dispatch
@@ -31,8 +36,27 @@ function WeekTwoPage4() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
-  }, [userAnswers]);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setAnswers(
+      Array.isArray(response?.answer)
+        ? response.answer
+        : Array.isArray(draftAnswer)
+          ? draftAnswer
+          : []
+    );
+  }, [pageData.id, userAnswers]);
+
+  const setDraftedAnswers = (nextAnswersOrUpdater) => {
+    setAnswers((prevAnswers) => {
+      const nextAnswers =
+        typeof nextAnswersOrUpdater === "function"
+          ? nextAnswersOrUpdater(prevAnswers)
+          : nextAnswersOrUpdater;
+
+      saveActivityDraft(userAnswers, pageData.id, nextAnswers);
+      return nextAnswers;
+    });
+  };
 
   const saveUserInput = () => {
     if (currentStep === 1) return true;
@@ -65,6 +89,7 @@ function WeekTwoPage4() {
       answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -103,7 +128,7 @@ function WeekTwoPage4() {
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={setDraftedAnswers}
           />
         );
       default:

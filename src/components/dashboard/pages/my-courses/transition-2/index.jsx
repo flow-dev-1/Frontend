@@ -382,13 +382,17 @@ const WeekContent = () => {
 
     if (data.assessment && data.activity) {
       const backendActivities = data.activity?.activities || [];
+      const activities = mergeActivitiesByPage(
+        backendActivities,
+        canUseCurrentActivities ? userAnswers.activities : []
+      );
       lastSavedActivitiesRef.current = JSON.stringify(backendActivities);
       dispatch(
         updateData({
           course: course,
           courseEnrollmentId: enrollmentId,
           week: currentWeek,
-          activities: backendActivities,
+          activities,
           assessments: data.assessment?.assessments,
         })
       );
@@ -740,6 +744,7 @@ const CourseContent = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [enrollmentProgress, setEnrollmentProgress] = useState(0);
   const [maxAccessibleWeek, setMaxAccessibleWeek] = useState(1);
+  const [optimisticCompletedWeek, setOptimisticCompletedWeek] = useState(0);
   const [maxReachedPages, setMaxReachedPages] = useState(() => {
     try {
       return JSON.parse(
@@ -824,34 +829,83 @@ const CourseContent = () => {
   // Get enrollment data from location state
   const enrolmentData = location.state?.enrollmentData;
 
+  const weekAccessQueries = useQueries({
+    queries: transition2WeekNumbers.map((weekNumber) => ({
+      queryKey: getTransition2CourseDataQueryKey(enrolmentData?._id, weekNumber),
+      queryFn: () => userService.getUserCourseData(enrolmentData?._id, weekNumber),
+      enabled: !!enrolmentData?._id && !isAdmin,
+      refetchOnMount: "always",
+      refetchOnWindowFocus: true,
+      staleTime: 0,
+    })),
+  });
+
+  useEffect(() => {
+    if (showHurray) {
+      setOptimisticCompletedWeek((completedWeek) =>
+        Math.max(completedWeek, currentWeek)
+      );
+    }
+  }, [currentWeek, showHurray]);
+
   useEffect(() => {
     if (enrolmentData?.progress) {
       setEnrollmentProgress(enrolmentData.progress);
-
-      // Calculate max accessible week based on progress
-      // Each week is 20% of the course (100% / 5 weeks = 20% per week)
-      const progressPerWeek = 100 / weeksTopic.length;
-      const completedWeeks = Math.floor(
-        enrolmentData.progress / progressPerWeek
-      );
-
-      // Unlock the next week only after the previous week is complete.
-      // Example: 40% progress = week 2 complete, so week 3 becomes available.
-      const accessibleWeek = Math.max(
-        1,
-        Math.min(completedWeeks + 1, weeksTopic.length)
-      );
-      setMaxAccessibleWeek(accessibleWeek);
     }
   }, [enrolmentData]);
+
+  useEffect(() => {
+    if (isAdmin) {
+      setMaxAccessibleWeek(weeksTopic.length);
+      return;
+    }
+
+    if (!enrolmentData?._id) return;
+    if (weekAccessQueries.some((query) => query.isPending)) return;
+
+    const highestSubmittedAssessmentWeek = weekAccessQueries.reduce(
+      (highestWeek, query, index) =>
+        query.data?.assessment
+          ? Math.max(highestWeek, transition2WeekNumbers[index])
+          : highestWeek,
+      0
+    );
+    const completedWeek = Math.max(
+      highestSubmittedAssessmentWeek,
+      showHurray ? currentWeek : 0,
+      optimisticCompletedWeek
+    );
+    const nextAccessibleWeek = Math.max(
+      1,
+      Math.min(completedWeek + 1, weeksTopic.length)
+    );
+
+    setMaxAccessibleWeek(nextAccessibleWeek);
+
+    if (currentWeek > nextAccessibleWeek) {
+      dispatch(setShowHurray(false));
+      dispatch(setShowReview(false));
+      dispatch(setCurrentWeek(nextAccessibleWeek));
+      dispatch(setCurrentPage(1));
+      dispatch(setCurrentStep(1));
+      sessionStorage.setItem("flow-currentWeek", nextAccessibleWeek.toString());
+      sessionStorage.setItem("flow-currentPage", "1");
+      sessionStorage.setItem("flow-currentStep", "1");
+    }
+  }, [
+    currentWeek,
+    dispatch,
+    enrolmentData?._id,
+    isAdmin,
+    optimisticCompletedWeek,
+    showHurray,
+    weekAccessQueries,
+    weeksTopic.length,
+  ]);
 
   // Update maxAccessibleWeek and enrollmentProgress when currentWeek changes (e.g., after completing a week)
   // This ensures the navigation and progress bar update immediately without requiring a page refresh
   useEffect(() => {
-    if (currentWeek > maxAccessibleWeek) {
-      setMaxAccessibleWeek(currentWeek);
-    }
-
     // Update progress based on the current week
     // When moving to a new week, it means the previous week was completed
     const progressPerWeek = 100 / weeksTopic.length;
@@ -867,7 +921,6 @@ const CourseContent = () => {
   }, [
     currentWeek,
     enrollmentProgress,
-    maxAccessibleWeek,
     showHurray,
     weeksTopic.length,
   ]);
@@ -1025,7 +1078,10 @@ const CourseContent = () => {
   const isWeekCompleted = (weekNumber) => {
     // A week is completed if the user has progressed beyond it
     const progressPerWeek = 100 / weeksTopic.length;
-    return enrollmentProgress >= weekNumber * progressPerWeek;
+    return (
+      weekNumber < maxAccessibleWeek ||
+      enrollmentProgress >= weekNumber * progressPerWeek
+    );
   };
 
   const isMenuItemCompleted = (weekNumber, pageNumber) => {

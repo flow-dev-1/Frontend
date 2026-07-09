@@ -9,6 +9,11 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page2() {
   const dispatch = useDispatch();
@@ -23,9 +28,10 @@ function Page2() {
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    setMyAnswer(response?.answer ? response.answer : "");
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setMyAnswer(response?.answer ?? draftAnswer ?? "");
     return () => {};
-  }, [userAnswers]);
+  }, [pageData.id, userAnswers]);
 
   const saveUserInput = () => {
     if (!adminDatas.isAdmin && !myAnswer) {
@@ -42,12 +48,15 @@ function Page2() {
         answer: myAnswer,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 
   const handleInputChange = (e) => {
     setErrorMessage("");
-    setMyAnswer(e.target.value);
+    const value = e.target.value;
+    setMyAnswer(value);
+    saveActivityDraft(userAnswers, pageData.id, value);
   };
 
   return (

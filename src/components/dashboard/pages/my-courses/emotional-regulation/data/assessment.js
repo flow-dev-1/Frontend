@@ -1,7 +1,7 @@
 export const assessments = {
   week1: {
     title: "Assessment",
-    subtitle: "Let's test your knowledge on Compassionate Communication",
+    subtitle: "Let's test your knowledge on Emotional Regulation",
     questions: [
       {
         id: 1,

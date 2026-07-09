@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Icon } from "@iconify/react";
 import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import DragAndDropFrame from "./components/DragAndDropFrame";
@@ -11,16 +12,19 @@ import {
 import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
+  removeActivity,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 const InternalStepIndicator = ({ totalSteps, currentStep }) => {
   return (
-    <div
-      className="d-flex justify-content-center mt-4 flex-wrap"
-      style={{ gap: "10px" }}
-    >
+    <div className="emotional-dnd-progress-strip">
       {[...Array(totalSteps)].map((_, index) => (
         <div
           key={index}
@@ -28,8 +32,6 @@ const InternalStepIndicator = ({ totalSteps, currentStep }) => {
             index + 2 <= currentStep ? "bg-step-active" : "bg-step"
           }`}
           style={{
-            width: "35px",
-            height: "17px",
             borderRadius: "8px",
             cursor: index <= currentStep ? "pointer" : "default",
           }}
@@ -52,15 +54,30 @@ function WeekFivePage2() {
   const [dragDropImageLength, setDragDropImageLength] = useState(20);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  const updateAnswers = (nextAnswers) => {
+    setAnswers((previousAnswers) => {
+      const resolvedAnswers =
+        typeof nextAnswers === "function"
+          ? nextAnswers(previousAnswers)
+          : nextAnswers;
+
+      saveActivityDraft(userAnswers, pageData.id, resolvedAnswers);
+
+      return resolvedAnswers;
+    });
+  };
+
   useEffect(() => {
     if (!userAnswers) return;
 
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const savedAnswer = response?.answer || draftAnswer;
 
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
-  }, [userAnswers]);
+    setAnswers(Array.isArray(savedAnswer) ? savedAnswer : []);
+  }, [pageData.id, userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
@@ -94,8 +111,17 @@ function WeekFivePage2() {
       answer: answers,
     };
     dispatch(saveActivity(activityData));
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
+  };
+
+  const resetDragAndDrop = () => {
+    setErrorMessage("");
+    updateAnswers([]);
+    clearActivityDraft(userAnswers, pageData.id);
+    dispatch(removeActivity(pageData.id));
+    setCurrentImageIndex(0);
   };
 
   const renderStep = () => {
@@ -128,7 +154,7 @@ function WeekFivePage2() {
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={updateAnswers}
             setCurrentImageIndex1={setCurrentImageIndex}
             setDragDropImageLength={setDragDropImageLength}
           />
@@ -144,13 +170,25 @@ function WeekFivePage2() {
       {currentStep !== 1 && errorMessage && (
         <div className="text-danger text-center mt-3">{errorMessage}</div>
       )}
-      <div className="d-flex justify-content-center align-items-center gap-2">
-        <StepIndicator totalSteps={totalSteps} />
+      <div className="emotional-dnd-indicators">
+        <div className="emotional-dnd-main-indicator">
+          <StepIndicator totalSteps={totalSteps} />
+        </div>
         <InternalStepIndicator
           totalSteps={dragDropImageLength}
           currentStep={currentImageIndex + 1}
         />
       </div>
+      {currentStep !== 1 && (
+        <p
+          className="fs-5 d-flex justify-content-center gap-3 align-items-center mt-3"
+          onClick={resetDragAndDrop}
+          style={{ cursor: "pointer" }}
+        >
+          <Icon className="ml-3" icon="teenyicons:refresh-solid" />
+          Refresh
+        </p>
+      )}
       <div className="d-flex justify-content-center gap-96px mt-3 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />

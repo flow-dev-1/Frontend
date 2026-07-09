@@ -10,6 +10,11 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import grit from "../../../../../../../../assets/resilience-grit-images/grit.png";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page6() {
   const dispatch = useDispatch();
@@ -24,9 +29,10 @@ function Page6() {
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    setMyAnswer(response?.answer ? response.answer : "");
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setMyAnswer(response?.answer ?? draftAnswer ?? "");
     return () => {};
-  }, [userAnswers]);
+  }, [pageData.id, userAnswers]);
 
   const saveUserInput = () => {
     if (!adminDatas.isAdmin && !myAnswer) {
@@ -43,12 +49,15 @@ function Page6() {
         answer: myAnswer,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 
   const handleInputChange = (e) => {
     setErrorMessage("");
-    setMyAnswer(e.target.value);
+    const nextAnswer = e.target.value;
+    setMyAnswer(nextAnswer);
+    saveActivityDraft(userAnswers, pageData.id, nextAnswer);
   };
 
   return (

@@ -11,6 +11,11 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import QuestionBox from "../../../components/QuestionBox";
 import ColoredTextField from "../../../components/ColoredTextField";
 import "./page4.css"
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function WeekFourPage4() {
   const pageData = useSelector(selectPageData);
@@ -28,10 +33,17 @@ function WeekFourPage4() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    const answerCopy =  adminDatas.isAdmin ? [] : response?.answer ? [...response.answer] : [];
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const answerCopy = adminDatas.isAdmin
+      ? []
+      : Array.isArray(response?.answer)
+        ? [...response.answer]
+        : Array.isArray(draftAnswer)
+          ? draftAnswer
+          : [];
     setAnswers(answerCopy);
     return () => { };
-  }, [userAnswers]);
+  }, [adminDatas.isAdmin, pageData.id, userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
@@ -55,6 +67,7 @@ function WeekFourPage4() {
       answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -67,6 +80,7 @@ function WeekFourPage4() {
       const existingAnswerIndex = prevAnswers.findIndex(
         (answer) => answer.index === index
       );
+      let nextAnswers;
       if (existingAnswerIndex > -1) {
         // Update existing answer
         const updatedAnswers = [...prevAnswers];
@@ -74,11 +88,14 @@ function WeekFourPage4() {
           ...updatedAnswers[existingAnswerIndex],
           value,
         };
-        return updatedAnswers;
+        nextAnswers = updatedAnswers;
       } else {
         // Add new answer
-        return [...prevAnswers, { index, value }];
+        nextAnswers = [...prevAnswers, { index, value }];
       }
+
+      saveActivityDraft(userAnswers, pageData.id, nextAnswers);
+      return nextAnswers;
     });
   };
 

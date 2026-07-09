@@ -11,6 +11,11 @@ import {
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import StepIndicator from "../../../components/StepIndicator";
 import Button from "../../../components/Button";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 import FrameTextBox from "./components/FrameTextBox";
 import FrameAnswerPreview from "./components/FrameAnswerPreview";
@@ -33,8 +38,14 @@ function Page4() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setAnswer(response?.answer ?? "");
-  }, [userAnswers]);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setAnswer(response?.answer ?? draftAnswer ?? "");
+  }, [pageData.id, userAnswers]);
+
+  const updateAnswer = (value) => {
+    setAnswer(value);
+    saveActivityDraft(userAnswers, pageData.id, value);
+  };
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
@@ -52,6 +63,7 @@ function Page4() {
         answer,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -65,7 +77,7 @@ function Page4() {
           <FrameTextBox
             step={step}
             answer={answer}
-            setAnswer={setAnswer}
+            setAnswer={updateAnswer}
             setErrorMessage={setErrorMessage}
             errorMessage={errorMessage}
           />

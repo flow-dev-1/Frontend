@@ -13,7 +13,6 @@ import { getWeekAssessment, getWeekContentExcludingVideos } from "../../../data"
 import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
-  updateData,
   saveAssessment,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { useMutation } from "@tanstack/react-query";
@@ -55,15 +54,6 @@ function WeekTwoAssessment() {
         )}% in the quiz`
       );
       toast.success(data.message || "Answers saved successfully!"); // Show success toast
-      dispatch(
-        updateData({
-          course: null,
-          courseEnrollmentId: null,
-          week: 1,
-          activities: [],
-          assessments: [],
-        })
-      );
       dispatch(navigateNext());
     },
     onError: (error) => {

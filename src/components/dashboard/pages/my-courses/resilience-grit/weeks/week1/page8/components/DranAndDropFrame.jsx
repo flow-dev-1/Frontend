@@ -1,34 +1,64 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Icon } from "@iconify/react";
 import CardBoard from "./CardBoard";
 import ArrowTrail from "../../../../../../../../../assets/ArrowTrail.svg";
-import "../page8.css"
+import "../page8.css";
 
+const STEP_ID = 2;
 
+const createEmptyBucketResults = () => ({
+  green: [],
+  red: [],
+});
 
-const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers,setCurrentImageIndex1,setDragDropImageLength }) => {
+const normalizeBucketResults = (answer) => ({
+  green: Array.isArray(answer?.green) ? answer.green : [],
+  red: Array.isArray(answer?.red) ? answer.red : [],
+});
+
+const DragAndDropFrame = ({
+  info,
+  setErrorMessage,
+  answers,
+  setAnswers,
+  setCurrentImageIndex1,
+  setDragDropImageLength,
+}) => {
   const { images, buckets, instruction } = info;
-  const [bucketResults, setBucketResults] = useState({ green: [], red: [] });
+  const [bucketResults, setBucketResults] = useState(createEmptyBucketResults);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isAdvancingCard, setIsAdvancingCard] = useState(false);
+  const advanceTimerRef = useRef(null);
 
   useEffect(() => {
-    if (!answers?.length) return;
-
-    const existingAnswer = answers.find((answer) => answer.stepId === 2);
-    if (existingAnswer?.value) {
-      setBucketResults({
-        green: existingAnswer.value.green || [],
-        red: existingAnswer.value.red || [],
-      });
-
-      // Update currentImageIndex based on total dropped items
-      const totalDropped =
-        (existingAnswer.value.green?.length || 0) +
-        (existingAnswer.value.red?.length || 0);
-      setCurrentImageIndex(totalDropped);
-      setCurrentImageIndex1(totalDropped)
+    if (!answers?.length) {
+      setBucketResults(createEmptyBucketResults());
+      setCurrentImageIndex(0);
+      setCurrentImageIndex1(0);
+      return;
     }
-  }, [answers]);
+
+    const existingAnswer = answers.find((answer) => answer.stepId === STEP_ID);
+    if (existingAnswer?.value) {
+      const nextBucketResults = normalizeBucketResults(existingAnswer.value);
+      setBucketResults(nextBucketResults);
+
+      const totalDropped =
+        nextBucketResults.green.length + nextBucketResults.red.length;
+      const nextImageIndex = Math.min(totalDropped, images.length);
+      setCurrentImageIndex(nextImageIndex);
+      setCurrentImageIndex1(nextImageIndex);
+    }
+  }, [answers, images.length, setCurrentImageIndex1]);
+
+  useEffect(() => {
+    return () => {
+      if (advanceTimerRef.current) {
+        clearTimeout(advanceTimerRef.current);
+      }
+    };
+  }, []);
 
   const totalDropped = Object.values(bucketResults).reduce(
     (sum, arr) => sum + arr.length,
@@ -45,9 +75,8 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers,setCurren
     if (source.droppableId === "image" && destination.droppableId !== "image") {
       const draggedIndex = currentImageIndex;
 
-      // Update bucket results
       const newBucketResults = {
-        ...bucketResults,
+        ...normalizeBucketResults(bucketResults),
         [destination.droppableId]: [
           ...(bucketResults[destination.droppableId] || []),
           draggedIndex,
@@ -55,61 +84,69 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers,setCurren
       };
       setBucketResults(newBucketResults);
 
-      // Update answers state
       setAnswers((prevAnswers) => {
-        const existingAnswerIndex = prevAnswers.findIndex(
-          (answer) => answer.stepId === 2
+        const previousAnswers = Array.isArray(prevAnswers) ? prevAnswers : [];
+        const existingAnswerIndex = previousAnswers.findIndex(
+          (answer) => answer.stepId === STEP_ID
         );
 
         if (existingAnswerIndex !== -1) {
-          // Update existing answer
-          const updatedAnswers = [...prevAnswers];
+          const updatedAnswers = [...previousAnswers];
           updatedAnswers[existingAnswerIndex] = {
             ...updatedAnswers[existingAnswerIndex],
             value: newBucketResults,
           };
           return updatedAnswers;
-        } else {
-          // Create new answer
-          return [
-            ...prevAnswers,
-            {
-              stepId: 2,
-              value: newBucketResults,
-            },
-          ];
         }
+
+        return [
+          ...previousAnswers,
+          {
+            stepId: STEP_ID,
+            value: newBucketResults,
+          },
+        ];
       });
 
-      // Update current image index
-      setCurrentImageIndex((prevIndex) =>
-        prevIndex + 1 < images.length ? prevIndex + 1 : prevIndex
-      );
-      setCurrentImageIndex1((prevIndex) =>  
-        prevIndex + 1 < images.length ? prevIndex + 1 : prevIndex
-      )
+      setIsAdvancingCard(true);
+      if (advanceTimerRef.current) {
+        clearTimeout(advanceTimerRef.current);
+      }
+      advanceTimerRef.current = setTimeout(() => {
+        const nextImageIndex = Math.min(draggedIndex + 1, images.length);
+        setCurrentImageIndex(nextImageIndex);
+        setCurrentImageIndex1(nextImageIndex);
+        setIsAdvancingCard(false);
+      }, 120);
     }
   };
 
-  const goToStep = (index) => {
-    if (index < currentImageIndex) {
-      setCurrentImageIndex(index);
-      setCurrentImageIndex1(index)
-    }
+  const resetDragAndDrop = () => {
+    setBucketResults(createEmptyBucketResults());
+    setCurrentImageIndex(0);
+    setCurrentImageIndex1(0);
+    setIsAdvancingCard(false);
+    setErrorMessage("");
+    setAnswers((prevAnswers) =>
+      Array.isArray(prevAnswers)
+        ? prevAnswers.filter((answer) => answer.stepId !== STEP_ID)
+        : []
+    );
   };
 
   useEffect(() => {
-    setDragDropImageLength(images.length)
-  
-    return () => {}
-  }, [images])
+    setDragDropImageLength(images.length);
+  }, [images.length, setDragDropImageLength]);
   
 
   const renderDragItem = () => {
-    if (currentImageIndex >= images.length || allImagesDropped) return null;
+    if (isAdvancingCard || currentImageIndex >= images.length || allImagesDropped) {
+      return null;
+    }
 
-    const imagePath = require(`../../../../../../../../../assets/drag-images/resilience-drag-images/week1/image${currentImageIndex + 1
-      }.png`);
+    const imagePath = require(`../../../../../../../../../assets/drag-images/resilience-drag-images/week1/image${
+      currentImageIndex + 1
+    }.png`);
 
     return (
       <Draggable
@@ -146,13 +183,11 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers,setCurren
     <>
       {" "}
       <DragDropContext onDragEnd={handleOnDragEnd}>
-        <div className="row custom-border-20 w-100 m-0">
-          {/* Left Droppable (50%) */}
-          <div className="col-12 col-md-6 d-flex justify-content-center align-items-center p-4">
-            <Droppable droppableId="image">
-              {(provided, snapshot) => (
-                <div
-                  className="w-100 d-flex justify-content-center align-items-center"
+        <div className="d-flex custom-border-20 flex-column flex-md-row week1-activity4-dnd-layout">
+          <Droppable droppableId="image">
+            {(provided, snapshot) => (
+              <div
+                  className="d-flex justify-content-center align-items-center week1-activity4-dnd-column week1-activity4-card-stage"
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                   style={{
@@ -163,18 +198,17 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers,setCurren
                       : "transparent",
                   }}
                 >
-                  {allImagesDropped && (
-                    <span className="d-none d-md-block" style={{ width: "150px" }} />
-                  )}
-                  {renderDragItem()}
-                  {provided.placeholder}
+                  <div className="week1-activity4-card-slot">
+                    {renderDragItem()}
+                  </div>
+                  <div className="week1-activity4-hidden-placeholder">
+                    {provided.placeholder}
+                  </div>
                 </div>
               )}
             </Droppable>
-          </div>
 
-          {/* Right Buckets (50%) */}
-          <div className="col-12 col-md-6 bg-blue px-4 py-3">
+          <div className="bg-blue px-4 py-3 week1-activity4-dnd-column">
             <div className="d-flex align-items-start mb-2">
               <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
               <div className="text-center text-white pt-1 flex-grow-1 resilience-drag-instruction">
@@ -190,7 +224,7 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers,setCurren
                     {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
-                        className="pt-1 flex-fill draggable-bucket"
+                        className="pt-1 draggable-bucket week1-activity4-dropzone"
                         {...provided.droppableProps}
                         style={{
                           backgroundColor: snapshot.isDraggingOver
@@ -210,10 +244,7 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers,setCurren
                             bucket.id === "green" ? "inner-bucket bucket-text" : "outer-bucket bucket-text"
                           }
                         >
-                          <p className="text-center">
-                          {bucket.title}
-                          </p>
-                         
+                          <p className="text-center">{bucket.title}</p>
                         </div>
                         {provided.placeholder}
                       </div>
@@ -225,6 +256,14 @@ const DragAndDropFrame = ({ info, setErrorMessage, answers, setAnswers,setCurren
         </div>
 
       </DragDropContext>
+      <p
+        className="fs-5 d-flex justify-content-center gap-3 align-items-center mt-3 fs-2"
+        onClick={resetDragAndDrop}
+        style={{ cursor: "pointer" }}
+      >
+        <Icon className="ml-3" icon="teenyicons:refresh-solid" />
+        Refresh
+      </p>
     </>
   );
 };

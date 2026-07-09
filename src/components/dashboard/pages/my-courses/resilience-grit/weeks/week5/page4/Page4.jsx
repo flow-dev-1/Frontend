@@ -1,9 +1,6 @@
-import SmartTextBox from "../../../components/SmartTextBox";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
-import coping from "../../../../../../../../assets/resilience-grit-images/coping.png";
-import BigTextBox from "../../../components/BigTextBox";
 import Button from "../../../components/Button";
 import { selectPageData } from "../../../../../../../../redux/reducers/navigationSlice";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
@@ -12,6 +9,11 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import MultiInput from "./components/MultiInputs";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function WeekFivePage4() {
   const dispatch = useDispatch();
@@ -26,9 +28,28 @@ function WeekFivePage4() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setAnswers(
+      Array.isArray(response?.answer)
+        ? response.answer
+        : Array.isArray(draftAnswer)
+          ? draftAnswer
+          : []
+    );
     return () => { };
-  }, [userAnswers]);
+  }, [pageData.id, userAnswers]);
+
+  const setDraftedAnswers = (nextAnswersOrUpdater) => {
+    setAnswers((prevAnswers) => {
+      const nextAnswers =
+        typeof nextAnswersOrUpdater === "function"
+          ? nextAnswersOrUpdater(prevAnswers)
+          : nextAnswersOrUpdater;
+
+      saveActivityDraft(userAnswers, pageData.id, nextAnswers);
+      return nextAnswers;
+    });
+  };
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
@@ -52,6 +73,7 @@ function WeekFivePage4() {
       answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -64,7 +86,7 @@ function WeekFivePage4() {
         <MultiInput
           pageData={pageData}
           answers = {answers}
-          setAnswers={setAnswers}
+          setAnswers={setDraftedAnswers}
           setErrorMessage={setErrorMessage}
         />
       </QuestionBox>

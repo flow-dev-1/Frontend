@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import QuestionBox from "../../../components/QuestionBox";
 import Frame from "./components/Frame";
 import Button from "../../../components/Button";
 import {
@@ -13,6 +12,11 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page4() {
   const dispatch = useDispatch(); // Initialize dispatch
@@ -31,8 +35,23 @@ function Page4() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
-  }, [userAnswers]);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const savedAnswer = response?.answer || draftAnswer;
+    setAnswers(Array.isArray(savedAnswer) ? savedAnswer : []);
+  }, [pageData.id, userAnswers]);
+
+  const updateAnswers = (nextAnswers) => {
+    setAnswers((previousAnswers) => {
+      const resolvedAnswers =
+        typeof nextAnswers === "function"
+          ? nextAnswers(previousAnswers)
+          : nextAnswers;
+
+      saveActivityDraft(userAnswers, pageData.id, resolvedAnswers);
+
+      return resolvedAnswers;
+    });
+  };
 
   const saveUserInput = () => {
     // if (currentStep === 1) return true;
@@ -65,6 +84,7 @@ function Page4() {
       answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -83,7 +103,7 @@ function Page4() {
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={updateAnswers}
           />
         );
       default:

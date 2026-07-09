@@ -10,13 +10,17 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page2() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
   const userAnswers = useSelector(userAnswer);
-  const [myAnswer, setMyAnswer] = useState(userAnswers);
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedOption, setSelectedOption] = useState(null);
 
@@ -25,16 +29,16 @@ function Page2() {
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    const savedAnswer = response?.answer ? response.answer : "";
-    setMyAnswer(savedAnswer);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const savedAnswer = response?.answer ?? draftAnswer ?? "";
     setSelectedOption(savedAnswer); // Also set the selected option
-  }, [userAnswers]);
+  }, [pageData.id, userAnswers]);
 
   const handleOptionChange = (e) => {
     setErrorMessage("");
     const value = e.target.value;
     setSelectedOption(value);
-    setMyAnswer(value); // Set myAnswer when option changes
+    saveActivityDraft(userAnswers, pageData.id, value);
   };
 
   const saveUserInput = () => {
@@ -50,6 +54,7 @@ function Page2() {
         answer: selectedOption,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 
@@ -119,6 +124,7 @@ function Page2() {
                       onClick={() => {
                         setErrorMessage("");
                         setSelectedOption(optionID);
+                        saveActivityDraft(userAnswers, pageData.id, optionID);
                       }}
                       style={{ cursor: "pointer" }}
                     >

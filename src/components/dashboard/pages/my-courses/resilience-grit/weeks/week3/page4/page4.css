@@ -1,0 +1,57 @@
+.week3-activity2-dnd-layout {
+  align-items: stretch;
+  max-width: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+
+.week3-activity2-dnd-column {
+  flex: 0 0 50%;
+  max-width: 50%;
+  min-width: 0;
+}
+
+.week3-activity2-card-stage {
+  min-height: 360px !important;
+}
+
+.week3-activity2-card-slot {
+  align-items: center;
+  display: flex;
+  height: 240px;
+  justify-content: center;
+  width: 240px;
+}
+
+.week3-activity2-hidden-placeholder {
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  width: 0;
+}
+
+.week3-activity2-dropzone {
+  flex: 0 0 160px;
+  max-width: 160px;
+  min-width: 160px;
+  transition: background-color 0.2s ease;
+}
+
+@media (max-width: 768px) {
+  .week3-activity2-dnd-column {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+
+  .week3-activity2-card-slot {
+    height: 190px;
+    width: 190px;
+  }
+
+  .week3-activity2-dropzone {
+    flex-basis: 120px;
+    max-width: 120px;
+    min-width: 120px;
+  }
+}
