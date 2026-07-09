@@ -23,7 +23,6 @@ function MuitiFlipCheckBoxesFrame({
   const [selectedOptions, setSelectedOptions] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
 
   const colorToBackgroundMap = {
     maroon: {
@@ -80,12 +79,6 @@ function MuitiFlipCheckBoxesFrame({
   };
 
   const openModal = (option, event) => {
-    const rect = event.target.getBoundingClientRect();
-    setModalPosition({
-      top: rect.bottom + window.scrollY,
-      left: rect.left + window.scrollX,
-    });
-
     setSelectedOption(option);
     setShowModal(true);
   };

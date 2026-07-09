@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
 import SmallTextBox from "../../../../components/SmallTextBox";
 import SmallSelectBox from "../../../../components/SmallSelectBox";
 
 function Frame({ data, answers, setAnswers, setErrorMessage }) {
   const { step, title, questions } = data;
-
-  console.log(questions, "questions");
 
   const handleInputChange = (index, value) => {
     setErrorMessage("");

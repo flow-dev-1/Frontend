@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import Frame from "./components/Frame";
@@ -6,6 +6,11 @@ import SmartFrame from "./components/SmartFrame";
 import MultiStarFrame from "./components/MultiStarFrame";
 import SingleWhiteStarFrame from "./components/SingleWhiteStarFrame";
 import Button from "../../../components/Button";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 import {
   selectPageData,
   selectCurrentStep,
@@ -23,26 +28,46 @@ function WeekEightPage6() {
   const currentStep = useSelector(selectCurrentStep);
   const totalSteps = pageData?.steps?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
+  const answersRef = useRef(answers);
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
   // console.log(userAnswers)
 
+  const updateAnswers = (nextAnswersOrUpdater) => {
+    const nextAnswers =
+      typeof nextAnswersOrUpdater === "function"
+        ? nextAnswersOrUpdater(answersRef.current)
+        : nextAnswersOrUpdater;
+
+    answersRef.current = nextAnswers;
+    setAnswers(nextAnswers);
+    saveActivityDraft(userAnswers, pageData.id, nextAnswers);
+  };
+
   useEffect(() => {
-    if (!userAnswers) return;
+    if (!userAnswers || !pageData?.id) return;
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setAnswers(response?.answer ? response.answer : []);
-    return () => {};
-  }, [userAnswers]);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const nextAnswers = Array.isArray(response?.answer)
+      ? response.answer
+      : Array.isArray(draftAnswer)
+        ? draftAnswer
+        : [];
+
+    answersRef.current = nextAnswers;
+    setAnswers(nextAnswers);
+  }, [pageData?.id, userAnswers]);
 
   const saveUserInput = () => {
     setErrorMessage(""); // Clear error if input is valid
     if (adminDatas.isAdmin) return true;
 
-    const stepData = answers.find((item) => item.stepId === currentStep);
+    const latestAnswers = answersRef.current;
+    const stepData = latestAnswers.find((item) => item.stepId === currentStep);
 
     if (!stepData) {
       setErrorMessage("Oops! All inputs must be filled out.");
@@ -69,9 +94,10 @@ function WeekEightPage6() {
     setErrorMessage(""); // Clear error if input is valid
     const activityData = {
       page: pageData.id,
-      answer: answers,
+      answer: latestAnswers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -82,8 +108,6 @@ function WeekEightPage6() {
     // const step = pageData?.steps[currentStep - 1];
     // console.log(currentStep, step, "step")
     if (!step) return <div>Invalid Step</div>;
-
-    console.log(step, "Step here o");
 
     switch (step.type) {
       case "instruction":
@@ -111,7 +135,7 @@ function WeekEightPage6() {
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={updateAnswers}
           />
         );
       case "star":
@@ -125,7 +149,7 @@ function WeekEightPage6() {
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={updateAnswers}
           />
         );
       case "singleStar":
@@ -137,7 +161,7 @@ function WeekEightPage6() {
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={updateAnswers}
           />
         );
       case "smart":
@@ -150,7 +174,7 @@ function WeekEightPage6() {
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={updateAnswers}
           />
         );
       default:

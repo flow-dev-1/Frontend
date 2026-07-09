@@ -12,6 +12,7 @@ import {
   setCurrentPage,
   setCurrentStep,
   setShowHurray,
+  setShowReview,
 } from "../../../../../redux/reducers/navigationSlice.js";
 import "./index.css";
 // Import components
@@ -930,6 +931,7 @@ const CourseContent = () => {
       // Clear previous week data before switching
       dispatch(clearData());
       dispatch(setShowHurray(false));
+      dispatch(setShowReview(false));
 
       dispatch(setCurrentWeek(weekNumber));
       dispatch(setCurrentPage(1));
@@ -966,6 +968,7 @@ const CourseContent = () => {
       dispatch(clearData());
     }
     dispatch(setShowHurray(false));
+    dispatch(setShowReview(false));
     setExpandedWeeks([weekNumber]);
     dispatch(setCurrentWeek(weekNumber));
     dispatch(setCurrentPage(pageNumber));

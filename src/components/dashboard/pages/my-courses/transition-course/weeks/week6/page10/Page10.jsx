@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Icon } from "@iconify/react";
 import ArrowTrail from "../../../../../../../../assets/ArrowTrail.svg";
 import "./page10.css";
 import Button from "../../../components/Button";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 import {
   selectPageData,
   selectCurrentStep,
@@ -13,46 +19,68 @@ import {
 import CardBoard from "./components/CardBoard";
 import StepIndicator from "../../../components/StepIndicator";
 import { useDispatch } from "react-redux";
-import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 
+const EMPTY_BUCKET_RESULTS = {
+  green: [],
+  red: [],
+};
+
+const normalizeBucketResults = (answer) => ({
+  green: Array.isArray(answer?.green) ? answer.green : [],
+  red: Array.isArray(answer?.red) ? answer.red : [],
+});
+
 function WeekTwoPage4() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const currentStep = useSelector(selectCurrentStep);
   const totalSteps = pageData.images.length;
-  const adminDatas = useSelector(adminData);
   const userAnswers = useSelector(userAnswer);
   const [errorMessage, setErrorMessage] = useState("");
   const [showCurrentImage, setShowCurrentImage] = useState(true);
-  const [bucketResults, setBucketResults] = useState({
-    green: [],
-    red: [],
-  });
+  const [bucketResults, setBucketResults] = useState(EMPTY_BUCKET_RESULTS);
+  const bucketResultsRef = useRef(bucketResults);
+
+  const updateBucketResults = (nextResults) => {
+    const normalizedResults = normalizeBucketResults(nextResults);
+    bucketResultsRef.current = normalizedResults;
+    setBucketResults(normalizedResults);
+    saveActivityDraft(userAnswers, pageData.id, normalizedResults);
+  };
 
   // useEffect(() => {
   //   setShowCurrentImage(true);
   // }, [currentStep])
 
   useEffect(() => {
-    if (!userAnswers) return;
+    if (!userAnswers || !pageData?.id) return;
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    if (response?.answer) {
-      const answerCopy = { ...response.answer };
-      setBucketResults(answerCopy);
-      if (currentStep === 1) {
-        dispatch(setCurrentStep(totalSteps));
-        setShowCurrentImage(false);
-      }
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const nextBucketResults = response?.answer
+      ? normalizeBucketResults(response.answer)
+      : normalizeBucketResults(draftAnswer);
+    const placedCards =
+      nextBucketResults.green.length + nextBucketResults.red.length;
+
+    bucketResultsRef.current = nextBucketResults;
+    setBucketResults(nextBucketResults);
+
+    if (placedCards >= totalSteps) {
+      dispatch(setCurrentStep(totalSteps));
+      setShowCurrentImage(false);
+    } else if (placedCards > 0 && currentStep === 1) {
+      dispatch(setCurrentStep(placedCards + 1));
+      setShowCurrentImage(true);
     }
     return () => {};
-  }, [userAnswers, pageData]);
+  }, [currentStep, dispatch, pageData, totalSteps, userAnswers]);
 
   // console.log("Page Data Images:", pageData.images);
   const imageMap = {};
@@ -80,16 +108,16 @@ function WeekTwoPage4() {
 
       // Ensure each bucket is initialized as an array
       const newBucketResults = {
-        ...bucketResults,
-        green: bucketResults.green || [],
-        red: bucketResults.red || [],
+        ...bucketResultsRef.current,
+        green: bucketResultsRef.current.green || [],
+        red: bucketResultsRef.current.red || [],
         [destination.droppableId]: [
-          ...(bucketResults[destination.droppableId] || []),
+          ...(bucketResultsRef.current[destination.droppableId] || []),
           draggedIndex,
         ],
       };
 
-      setBucketResults(newBucketResults);
+      updateBucketResults(newBucketResults);
       setShowCurrentImage(false);
 
       if (currentStep < totalSteps) {
@@ -130,7 +158,8 @@ function WeekTwoPage4() {
     //   return false;
     // }
     if (
-      bucketResults.green.length + bucketResults.red.length !==
+      (bucketResultsRef.current.green || []).length +
+        (bucketResultsRef.current.red || []).length !==
       pageData.images.length
     ) {
       setErrorMessage("Please make sure to fill all the buckets.");
@@ -143,9 +172,10 @@ function WeekTwoPage4() {
     dispatch(
       saveActivity({
         page: pageData.id,
-        answer: bucketResults,
+        answer: normalizeBucketResults(bucketResultsRef.current),
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 
@@ -161,37 +191,45 @@ function WeekTwoPage4() {
     const currentIndex = pageData.images.indexOf(currentImage);
 
     // Check if afterCurrentImage exists in any bucket and remove it
-    Object.keys(bucketResults).forEach((bucket) => {
-      if (bucketResults[bucket].includes(afterCurrentIndex)) {
-        bucketResults[bucket] = bucketResults[bucket].filter(
+    const nextBucketResults = {
+      green: [...(bucketResultsRef.current.green || [])],
+      red: [...(bucketResultsRef.current.red || [])],
+    };
+
+    Object.keys(nextBucketResults).forEach((bucket) => {
+      if (nextBucketResults[bucket].includes(afterCurrentIndex)) {
+        nextBucketResults[bucket] = nextBucketResults[bucket].filter(
           (index) => index !== afterCurrentIndex
         );
       }
-      if (bucketResults[bucket].includes(currentIndex)) {
-        bucketResults[bucket] = bucketResults[bucket].filter(
+      if (nextBucketResults[bucket].includes(currentIndex)) {
+        nextBucketResults[bucket] = nextBucketResults[bucket].filter(
           (index) => index !== currentIndex
         );
       }
     });
 
-    // Update the state with the modified bucket results
-    setBucketResults({
-      ...bucketResults,
-      // Ensure to keep the updated bucket results
-    });
+    updateBucketResults(nextBucketResults);
 
     setShowCurrentImage(true);
     return true;
   };
 
+  const resetDragAndDrop = () => {
+    updateBucketResults(EMPTY_BUCKET_RESULTS);
+    setShowCurrentImage(true);
+    setErrorMessage("");
+    dispatch(setCurrentStep(1));
+  };
+
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
       <div className="d-flex flex-column align-items-center pt-2">
-        <div className="d-flex custom-border-20 flex-column flex-md-row">
+        <div className="d-flex custom-border-20 flex-column flex-md-row week6-activity5-dnd-layout">
           <Droppable droppableId="image">
             {(provided, snapshot) => (
               <div
-                className="d-flex p-5 justify-content-center align-items-center w-lg-50"
+                className="d-flex p-5 justify-content-center align-items-center week6-activity5-dnd-column"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 style={{
@@ -213,7 +251,7 @@ function WeekTwoPage4() {
               </div>
             )}
           </Droppable>
-          <div className="bg-blue w-lg-50">
+          <div className="bg-blue week6-activity5-dnd-column">
             <div className="d-flex align-items-start mb-2">
               <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
               <div className="text-center text-white pt-2">
@@ -227,7 +265,7 @@ function WeekTwoPage4() {
                   {(provided, snapshot) => (
                     <div
                       ref={provided.innerRef}
-                      className="p-0 p-md-2"
+                      className="p-0 p-md-2 week6-activity5-dropzone"
                       {...provided.droppableProps}
                       style={{
                         backgroundColor: snapshot.isDraggingOver
@@ -237,8 +275,6 @@ function WeekTwoPage4() {
                         borderRadius: "8px",
                         minHeight: "100px",
                         height: "300px",
-                        width: snapshot.isDraggingOver ? "200px" : "",
-                        // width: "200px",
                       }}
                     >
                       <h2
@@ -246,14 +282,30 @@ function WeekTwoPage4() {
                           bucket.id === "green" ? "inner-count" : "both-count"
                         }
                       >
-                        {bucketResults[bucket.id]?.length}
+                        {(bucketResults[bucket.id] || []).length}
                       </h2>
                       <div
-                        className={
+                        className={`week6-activity5-bucket-label ${
                           bucket.id === "green" ? "inner-bucket" : "both-bucket"
-                        }
+                        }`}
                       >
-                        {bucket.label}
+                        <span className="week6-activity5-bucket-text">
+                          {bucket.id === "green" ? (
+                            <>
+                              Effective
+                              <br />
+                              Communication
+                            </>
+                          ) : bucket.id === "red" ? (
+                            <>
+                              Clear
+                              <br />
+                              Boundaries
+                            </>
+                          ) : (
+                            bucket.label
+                          )}
+                        </span>
                       </div>
                       {provided.placeholder}
                     </div>
@@ -264,6 +316,14 @@ function WeekTwoPage4() {
           </div>
         </div>
       </div>
+      <p
+        className="fs-5 d-flex justify-content-center gap-3 align-items-center mt-3 fs-2"
+        onClick={resetDragAndDrop}
+        style={{ cursor: "pointer" }}
+      >
+        <Icon className="ml-3" icon="teenyicons:refresh-solid" />
+        Refresh
+      </p>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">

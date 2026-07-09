@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
 import SmallTextBox from "../../../../components/SmallTextBox";
 import ColoredSmallSquaredTextBox from "../../../../components/ColoredSmallSquaredTextBox";

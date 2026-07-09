@@ -1,5 +1,6 @@
 import React from "react";
 import QuestionBox from "../../../../components/QuestionBox";
+import "./ListQuestionFrame.css";
 
 function ListQuestionFrame({ data, answers, setAnswers, setErrorMessage }) {
   const { stepId, question, numberOfInputs } = data;
@@ -37,11 +38,12 @@ function ListQuestionFrame({ data, answers, setAnswers, setErrorMessage }) {
         <h2 className="text-gray fs-1">{question}</h2>
       </div>
 
-      <div className="input-container py-5 px-5">
+      <div className="week9-list-input-container">
         {[...Array(numberOfInputs || 5)].map((_, index) => (
-          <div key={index} className="d-flex gap-3 label-input-container">
-            <p className="input-label">{index + 1}.</p>
+          <div key={index} className="week9-list-input-row">
+            <p className="week9-list-input-label">{index + 1}.</p>
             <input
+              className="week9-list-input"
               type="text"
               placeholder={"Type your answer here"}
               value={

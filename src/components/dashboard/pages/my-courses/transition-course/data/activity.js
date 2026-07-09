@@ -382,7 +382,7 @@ export const courseContent = {
             count: 2,
           },
         ],
-        steps: 18,
+        steps: 17,
         navigation: {
           prev: true,
           next: true,

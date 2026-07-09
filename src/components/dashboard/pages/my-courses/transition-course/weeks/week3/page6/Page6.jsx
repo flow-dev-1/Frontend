@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import QuestionBox from "../../../components/QuestionBox";
 import Frame from "./components/Frame";
@@ -13,6 +13,11 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page6() {
   const dispatch = useDispatch(); // Initialize dispatch
@@ -20,25 +25,46 @@ function Page6() {
   const currentStep = useSelector(selectCurrentStep);
   const totalSteps = pageData?.steps?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
+  const answersRef = useRef(answers);
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
   // console.log(userAnswers)
 
+  const updateAnswers = (nextAnswersOrUpdater) => {
+    const nextAnswers =
+      typeof nextAnswersOrUpdater === "function"
+        ? nextAnswersOrUpdater(answersRef.current)
+        : nextAnswersOrUpdater;
+
+    answersRef.current = nextAnswers;
+    setAnswers(nextAnswers);
+    saveActivityDraft(userAnswers, pageData.id, nextAnswers);
+  };
+
   useEffect(() => {
-    if (!userAnswers) return;
+    if (!userAnswers || !pageData?.id) return;
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setAnswers(response?.answer ? response.answer : []);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const nextAnswers = Array.isArray(response?.answer)
+      ? response.answer
+      : Array.isArray(draftAnswer)
+        ? draftAnswer
+        : [];
+
+    answersRef.current = nextAnswers;
+    setAnswers(nextAnswers);
     return () => {};
-  }, [userAnswers]);
+  }, [pageData?.id, userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
 
-    const stepData = answers.find((item) => item.stepId === currentStep);
+    const latestAnswers = answersRef.current;
+    const stepData = latestAnswers.find((item) => item.stepId === currentStep);
     if (!stepData) {
       setErrorMessage("Oops! All inputs must be filled out.");
       return false;
@@ -62,9 +88,10 @@ function Page6() {
 
     const activityData = {
       page: pageData.id,
-      answer: answers,
+      answer: latestAnswers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -105,7 +132,7 @@ function Page6() {
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={updateAnswers}
           />
         );
       default:

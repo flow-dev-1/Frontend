@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Icon } from "@iconify/react";
 import ArrowTrail from "../../../../../../../../assets/ArrowTrail.svg";
 import "./page4.css";
 import Button from "../../../components/Button";
@@ -32,6 +33,12 @@ function WeekTwoPage4() {
     green: [],
     red: [],
   });
+  const bucketResultsRef = useRef(bucketResults);
+
+  const updateBucketResults = (nextResults) => {
+    bucketResultsRef.current = nextResults;
+    setBucketResults(nextResults);
+  };
 
   useEffect(() => {
     if (!userAnswers) return;
@@ -41,9 +48,9 @@ function WeekTwoPage4() {
     if (response?.answer) {
       const answerCopy = { ...response.answer };
 
-      setBucketResults(answerCopy);
+      updateBucketResults(answerCopy);
 
-      if (currentStep == 1) {
+      if (currentStep === 1) {
         dispatch(setCurrentStep(totalSteps));
         setShowCurrentImage(false);
       }
@@ -83,16 +90,16 @@ function WeekTwoPage4() {
 
       // Ensure each bucket is initialized as an array
       const newBucketResults = {
-        ...bucketResults,
-        green: bucketResults.green || [],
-        red: bucketResults.red || [],
+        ...bucketResultsRef.current,
+        green: bucketResultsRef.current.green || [],
+        red: bucketResultsRef.current.red || [],
         [destination.droppableId]: [
-          ...(bucketResults[destination.droppableId] || []),
+          ...(bucketResultsRef.current[destination.droppableId] || []),
           draggedIndex,
         ],
       };
 
-      setBucketResults(newBucketResults);
+      updateBucketResults(newBucketResults);
       setShowCurrentImage(false);
 
       if (currentStep < totalSteps) {
@@ -136,7 +143,7 @@ function WeekTwoPage4() {
     if (adminDatas.isAdmin) return true;
 
     if (
-      bucketResults.green.length + bucketResults.red.length !==
+      bucketResultsRef.current.green.length + bucketResultsRef.current.red.length !==
       pageData.images.length
     ) {
       setErrorMessage("Please make sure to fill all the buckets.");
@@ -149,7 +156,7 @@ function WeekTwoPage4() {
     dispatch(
       saveActivity({
         page: pageData.id,
-        answer: bucketResults,
+        answer: bucketResultsRef.current,
       })
     );
     return true;
@@ -167,27 +174,38 @@ function WeekTwoPage4() {
     const currentIndex = pageData.images.indexOf(currentImage);
 
     // Check if afterCurrentImage exists in any bucket and remove it
-    Object.keys(bucketResults).forEach((bucket) => {
-      if (bucketResults[bucket].includes(afterCurrentIndex)) {
-        bucketResults[bucket] = bucketResults[bucket].filter(
+    const nextBucketResults = {
+      green: [...(bucketResultsRef.current.green || [])],
+      red: [...(bucketResultsRef.current.red || [])],
+    };
+
+    Object.keys(nextBucketResults).forEach((bucket) => {
+      if (nextBucketResults[bucket].includes(afterCurrentIndex)) {
+        nextBucketResults[bucket] = nextBucketResults[bucket].filter(
           (index) => index !== afterCurrentIndex
         );
       }
-      if (bucketResults[bucket].includes(currentIndex)) {
-        bucketResults[bucket] = bucketResults[bucket].filter(
+      if (nextBucketResults[bucket].includes(currentIndex)) {
+        nextBucketResults[bucket] = nextBucketResults[bucket].filter(
           (index) => index !== currentIndex
         );
       }
     });
 
-    // Update the state with the modified bucket results
-    setBucketResults({
-      ...bucketResults,
-      // Ensure to keep the updated bucket results
-    });
+    updateBucketResults(nextBucketResults);
 
     setShowCurrentImage(true);
     return true;
+  };
+
+  const resetDragAndDrop = () => {
+    updateBucketResults({
+      green: [],
+      red: [],
+    });
+    setShowCurrentImage(true);
+    setErrorMessage("");
+    dispatch(setCurrentStep(1));
   };
 
   return (
@@ -271,6 +289,14 @@ function WeekTwoPage4() {
           </div>
         </div>
       </div>
+      <p
+        className="fs-5 d-flex justify-content-center gap-3 align-items-center mt-3 fs-2"
+        onClick={resetDragAndDrop}
+        style={{ cursor: "pointer" }}
+      >
+        <Icon className="ml-3" icon="teenyicons:refresh-solid" />
+        Refresh
+      </p>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">

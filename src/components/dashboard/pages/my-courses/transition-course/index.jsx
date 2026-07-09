@@ -10,6 +10,8 @@ import {
   setCurrentWeek,
   setCurrentPage,
   setCurrentStep,
+  setShowHurray,
+  setShowReview,
 } from "../../../../../redux/reducers/navigationSlice.js";
 import "./index.css";
 
@@ -118,8 +120,8 @@ import WeekTenPage2 from "./weeks/week10/page2/Page2.jsx";
 import WeekTenPage3 from "./weeks/week10/page3/Page3.jsx";
 import WeekTenPage4 from "./weeks/week10/page4/Page4.jsx";
 
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import userService from "../../../../../services/api/user.js";
 import {
   updateData,
@@ -131,6 +133,235 @@ import { adminData } from "../../../../../redux/reducers/adminReducer.js";
 import { setCourse } from "../../../../../redux/reducers/navigationSlice.js";
 import { logoutSuccess } from "../../../../../redux/reducers/userReducer.js";
 import { clearToken } from "../../../../../redux/reducers/jwtReducer.js";
+import { queryClient } from "../../../../../queryClient.js";
+
+const transitionCourseWeeks = [
+  {
+    week: 1,
+    title:
+      "Introduction to Transition. Also talk about 'Your Why' (Why are you going to a Secondary School?)",
+    items: [
+      { id: "week-1-video-1", type: "video", label: "Video 1: Introduction Video", page: 1 },
+      { id: "week-1-activity-1", type: "activity", label: "Activity 1", page: 2, steps: 3 },
+      { id: "week-1-video-2", type: "video", label: "Video 2: Why?", page: 3 },
+      { id: "week-1-activity-2", type: "activity", label: "Activity 2", page: 4 },
+      { id: "week-1-video-3", type: "video", label: 'Video 3: Your "Why" for Transition', page: 5 },
+      { id: "week-1-activity-3", type: "activity", label: "Activity 3", page: 6 },
+      { id: "week-1-video-4", type: "video", label: "Video 4: To Transition", page: 7 },
+      { id: "week-1-activity-4", type: "activity", label: "Activity 4", page: 8 },
+      { id: "week-1-video-5", type: "video", label: "Video 5: To Transition (Cont.)", page: 9 },
+      { id: "week-1-activity-5", type: "activity", label: "Activity 5", page: 10 },
+      { id: "week-1-video-6", type: "video", label: "Video 6: Preparation for Transition", page: 11 },
+      { id: "week-1-activity-6", type: "activity", label: "Activity 6", page: 12, steps: 2 },
+      { id: "week-1-video-7", type: "video", label: "Video 7: Recap for the week", page: 13 },
+      { id: "week-1-assessment", type: "assessment", label: "Week 1 Assessment", page: 14 },
+    ],
+  },
+  {
+    week: 2,
+    title: "Growth and Fixed Mindset",
+    items: [
+      { id: "week-2-video-1", type: "video", label: "Video 1: Mindset", page: 1 },
+      { id: "week-2-activity-1", type: "activity", label: "Activity 1", page: 2 },
+      { id: "week-2-video-2", type: "video", label: "Video 2: Growth & Fixed Mindset", page: 3 },
+      {
+        id: "week-2-activity-2",
+        type: "activity",
+        label: "Activity 2",
+        page: 4,
+        steps: 24,
+      },
+      { id: "week-2-video-3", type: "video", label: "Video 3: Recap for the week", page: 5 },
+      { id: "week-2-assessment", type: "assessment", label: "Week 2 Assessment", page: 6 },
+    ],
+  },
+  {
+    week: 3,
+    title: "Understanding what is in your control",
+    items: [
+      { id: "week-3-video-1", type: "video", label: "Video 1: Recap of Last Week", page: 1 },
+      { id: "week-3-activity-1", type: "activity", label: "Activity 1", page: 2 },
+      { id: "week-3-video-2", type: "video", label: "Video 2: Concept of Control", page: 3 },
+      { id: "week-3-activity-2", type: "activity", label: "Activity 2", page: 4, steps: 18 },
+      { id: "week-3-video-3", type: "video", label: "Video 3: Circle of Control", page: 5 },
+      { id: "week-3-activity-3", type: "activity", label: "Activity 3", page: 6, steps: 5 },
+      { id: "week-3-video-4", type: "video", label: "Video 4: Recap for the week", page: 7 },
+      { id: "week-3-assessment", type: "assessment", label: "Week 3 Assessment", page: 8 },
+    ],
+  },
+  {
+    week: 4,
+    title: "Understanding Values",
+    items: [
+      { id: "week-4-video-1", type: "video", label: "Video 1: Values", page: 1 },
+      { id: "week-4-activity-1", type: "activity", label: "Activity 1", page: 2 },
+      { id: "week-4-video-2", type: "video", label: "Video 2: Values (Cont.)", page: 3 },
+      { id: "week-4-activity-2", type: "activity", label: "Activity 2", page: 4, steps: 3 },
+      { id: "week-4-video-3", type: "video", label: "Video 3: Meditation", page: 5 },
+      { id: "week-4-activity-3", type: "activity", label: "Activity 3", page: 6, steps: 3 },
+      { id: "week-4-video-4", type: "video", label: "Video 4: Recap for the week", page: 7 },
+      { id: "week-4-assessment", type: "assessment", label: "Week 4 Assessment", page: 8 },
+    ],
+  },
+  {
+    week: 5,
+    title: "Core Values and how they matter",
+    items: [
+      { id: "week-5-video-1", type: "video", label: "Video 1: Emotions", page: 1 },
+      { id: "week-5-activity-1", type: "activity", label: "Activity 1", page: 2 },
+      { id: "week-5-video-2", type: "video", label: "Video 2: Emotional Intelligence", page: 3 },
+      { id: "week-5-activity-2", type: "activity", label: "Activity 2", page: 4, steps: 5 },
+      { id: "week-5-video-3", type: "video", label: "Video 3: Recap for the week", page: 5 },
+      { id: "week-5-assessment", type: "assessment", label: "Week 5 Assessment", page: 6 },
+    ],
+  },
+  {
+    week: 6,
+    title: "Social Skills (Navigating Relationships)",
+    items: [
+      { id: "week-6-video-1", type: "video", label: "Video 1: Social Skills", page: 1 },
+      { id: "week-6-activity-1", type: "activity", label: "Activity 1", page: 2 },
+      { id: "week-6-video-2", type: "video", label: "Video 2: Social Skills (Cont.)", page: 3 },
+      { id: "week-6-activity-2", type: "activity", label: "Activity 2", page: 4 },
+      { id: "week-6-video-3", type: "video", label: "Video 3: Communication Skills", page: 5 },
+      { id: "week-6-activity-3", type: "activity", label: "Activity 3", page: 6 },
+      { id: "week-6-video-4", type: "video", label: "Video 4: Communication Skills (Cont.)", page: 7 },
+      { id: "week-6-activity-4", type: "activity", label: "Activity 4", page: 8 },
+      { id: "week-6-video-5", type: "video", label: "Video 5: Boundary Setting", page: 9 },
+      { id: "week-6-activity-5", type: "activity", label: "Activity 5", page: 10, steps: 12 },
+      { id: "week-6-activity-6", type: "activity", label: "Activity 6: Communication and Boundaries", page: 11, steps: 6 },
+      { id: "week-6-video-6", type: "video", label: "Video 6: Recap for the week", page: 12 },
+      { id: "week-6-assessment", type: "assessment", label: "Week 6 Assessment", page: 13 },
+    ],
+  },
+  {
+    week: 7,
+    title: "Time Management",
+    items: [
+      { id: "week-7-video-1", type: "video", label: "Video 1: Balancing Activities in School", page: 1 },
+      { id: "week-7-activity-1", type: "activity", label: "Activity 1", page: 2 },
+      { id: "week-7-video-2", type: "video", label: "Video 2: Time Management", page: 3 },
+      { id: "week-7-activity-2", type: "activity", label: "Activity 2", page: 4, steps: 6 },
+      { id: "week-7-video-3", type: "video", label: "Video 3: Recap for the week", page: 5 },
+      { id: "week-7-assessment", type: "assessment", label: "Week 7 Assessment", page: 6 },
+    ],
+  },
+  {
+    week: 8,
+    title: "Goal Setting",
+    items: [
+      { id: "week-8-video-1", type: "video", label: "Video 1: Scoring Goals", page: 1 },
+      { id: "week-8-activity-1", type: "activity", label: "Activity 1", page: 2 },
+      { id: "week-8-video-2", type: "video", label: "Video 2: Goal Settings", page: 3 },
+      { id: "week-8-activity-2", type: "activity", label: "Activity 2", page: 4 },
+      { id: "week-8-video-3", type: "video", label: "Video 3: Goal Settings (Cont.)", page: 5 },
+      { id: "week-8-activity-3", type: "activity", label: "Activity 3", page: 6, steps: 4 },
+      { id: "week-8-video-4", type: "video", label: "Video 4: Recap for the week", page: 7 },
+      { id: "week-8-assessment", type: "assessment", label: "Week 8 Assessment", page: 8 },
+    ],
+  },
+  {
+    week: 9,
+    title: "Resilience and Introduction to Coping Skills",
+    items: [
+      { id: "week-9-video-1", type: "video", label: "Video 1: The Concept of Resilience", page: 1 },
+      { id: "week-9-activity-1", type: "activity", label: "Activity 1", page: 2 },
+      { id: "week-9-video-2", type: "video", label: "Video 2: Resilience", page: 3 },
+      { id: "week-9-activity-2", type: "activity", label: "Activity 2", page: 4, steps: 2 },
+      { id: "week-9-video-3", type: "video", label: "Video 3: Coping Skills", page: 5 },
+      { id: "week-9-activity-3", type: "activity", label: "Activity 3", page: 6, steps: 6 },
+      { id: "week-9-video-4", type: "video", label: "Video 4: Recap for the week", page: 7 },
+      { id: "week-9-assessment", type: "assessment", label: "Week 9 Assessment", page: 8 },
+    ],
+  },
+  {
+    week: 10,
+    title: "Looking Ahead",
+    items: [
+      { id: "week-10-video-1", type: "video", label: "Video 1: Moving to Secondary School", page: 1 },
+      { id: "week-10-activity-1", type: "activity", label: "Activity 1", page: 2, steps: 12 },
+      { id: "week-10-video-2", type: "video", label: "Video 2: Recap for the week", page: 3 },
+      { id: "week-10-assessment", type: "assessment", label: "Week 10 Assessment", page: 4 },
+    ],
+  },
+];
+
+const getTransitionCourseDataQueryKey = (enrollmentId, week) => [
+  "dashboard-transition-course",
+  enrollmentId,
+  week,
+];
+
+const transitionCourseWeekNumbers = transitionCourseWeeks.map(
+  (week) => week.week
+);
+
+const getTransitionWeekTotalPages = (weekNumber) =>
+  transitionCourseWeeks.find((week) => week.week === weekNumber)?.items
+    ?.length || 1;
+
+const clampTransitionPageNumber = (pageNumber, totalPages) =>
+  Math.max(1, Math.min(pageNumber, totalPages));
+
+const mergeActivitiesByPage = (backendActivities = [], localActivities = []) => {
+  const activitiesByPage = new Map();
+
+  backendActivities.forEach((activity) => {
+    activitiesByPage.set(Number(activity.page), activity);
+  });
+
+  localActivities.forEach((activity) => {
+    activitiesByPage.set(Number(activity.page), activity);
+  });
+
+  return Array.from(activitiesByPage.values());
+};
+
+const getTransitionResumePageFromActivity = (activity, weekNumber) => {
+  const totalPages = getTransitionWeekTotalPages(weekNumber);
+  const activities = activity?.activities || [];
+  const hasSavedLastActivityIndex = Object.prototype.hasOwnProperty.call(
+    activity || {},
+    "lastActivityIndex"
+  );
+  const savedLastActivityIndex = Number(activity?.lastActivityIndex || 0);
+  const answeredPages = new Set(
+    activities
+      .map((currentActivity) => Number(currentActivity.page || 0))
+      .filter(Boolean)
+  );
+  const lastAnsweredPage = activities.reduce(
+    (highestPage, currentActivity) =>
+      Math.max(highestPage, Number(currentActivity.page || 0)),
+    0
+  );
+  const requiredActivityPages =
+    transitionCourseWeeks
+      .find((week) => week.week === weekNumber)
+      ?.items.filter((item) => item.type === "activity")
+      .map((item) => Number(item.page)) || [];
+  const hasAnsweredAllActivities =
+    requiredActivityPages.length > 0 &&
+    requiredActivityPages.every((pageNumber) => answeredPages.has(pageNumber));
+
+  if (savedLastActivityIndex > 1) {
+    return clampTransitionPageNumber(savedLastActivityIndex, totalPages);
+  }
+
+  if (hasAnsweredAllActivities) {
+    return clampTransitionPageNumber(totalPages, totalPages);
+  }
+
+  if (hasSavedLastActivityIndex && savedLastActivityIndex >= 1) {
+    return clampTransitionPageNumber(savedLastActivityIndex, totalPages);
+  }
+
+  if (lastAnsweredPage > 0) {
+    return clampTransitionPageNumber(lastAnsweredPage + 1, totalPages);
+  }
+
+  return null;
+};
 
 const WeekContent = () => {
   const dispatch = useDispatch();
@@ -139,6 +370,9 @@ const WeekContent = () => {
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
   const [course, setCourse] = useState(null);
+  const [hasResolvedBackendResume, setHasResolvedBackendResume] = useState(false);
+  const appliedBackendResumeWeekRef = useRef(null);
+  const lastSavedActivitiesRef = useRef("[]");
   const { isAdmin } = useSelector(adminData);
 
   // Access data from location.state
@@ -147,6 +381,9 @@ const WeekContent = () => {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
     if (!enrolmentData && !isAdmin) return navigate("/sign-in");
+    appliedBackendResumeWeekRef.current = null;
+    lastSavedActivitiesRef.current = "[]";
+    setHasResolvedBackendResume(false);
     setEnrollmentId(enrolmentData?._id);
     setCourse(enrolmentData?.course?._id);
   }, []);
@@ -177,11 +414,7 @@ const WeekContent = () => {
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isLoading, status, isError } = useQuery({
-    queryKey: [
-      `dashboard-transition-course-${currentWeek}`,
-      enrollmentId,
-      currentWeek,
-    ],
+    queryKey: getTransitionCourseDataQueryKey(enrollmentId, currentWeek),
     queryFn: () => userService.getUserCourseData(enrollmentId, currentWeek),
     enabled: !!enrollmentId && !!currentWeek,
     refetchOnMount: "always",
@@ -189,22 +422,108 @@ const WeekContent = () => {
     keepPreviousData: false,
   });
 
+  const resumePositionQueries = useQueries({
+    queries: transitionCourseWeekNumbers.map((weekNumber) => ({
+      queryKey: getTransitionCourseDataQueryKey(enrollmentId, weekNumber),
+      queryFn: () => userService.getUserCourseData(enrollmentId, weekNumber),
+      enabled: !!enrollmentId && !isAdmin,
+      refetchOnMount: "always",
+      refetchOnWindowFocus: true,
+      staleTime: 0,
+      gcTime: 0,
+    })),
+  });
+
+  useEffect(() => {
+    if (!enrollmentId) return;
+    if (isAdmin) {
+      setHasResolvedBackendResume(true);
+      return;
+    }
+    if (appliedBackendResumeWeekRef.current) {
+      setHasResolvedBackendResume(true);
+      return;
+    }
+    if (resumePositionQueries.some((query) => query.isPending)) return;
+
+    const resumeCandidates = resumePositionQueries
+      .map((query, index) => {
+        const weekNumber = transitionCourseWeekNumbers[index];
+        const activity = query.data?.activity;
+        if (!activity) return null;
+
+        const pageNumber = getTransitionResumePageFromActivity(
+          activity,
+          weekNumber
+        );
+
+        if (!pageNumber) return null;
+
+        return {
+          weekNumber,
+          pageNumber,
+          updatedAt: activity.updatedAt
+            ? new Date(activity.updatedAt).getTime()
+            : 0,
+        };
+      })
+      .filter(Boolean)
+      .sort((firstCandidate, secondCandidate) => {
+        if (secondCandidate.updatedAt !== firstCandidate.updatedAt) {
+          return secondCandidate.updatedAt - firstCandidate.updatedAt;
+        }
+
+        if (secondCandidate.weekNumber !== firstCandidate.weekNumber) {
+          return secondCandidate.weekNumber - firstCandidate.weekNumber;
+        }
+
+        return secondCandidate.pageNumber - firstCandidate.pageNumber;
+      });
+
+    const resumeTarget = resumeCandidates[0];
+    if (!resumeTarget) {
+      setHasResolvedBackendResume(true);
+      return;
+    }
+
+    appliedBackendResumeWeekRef.current = resumeTarget.weekNumber;
+    dispatch(setCurrentWeek(resumeTarget.weekNumber));
+    dispatch(setCurrentPage(resumeTarget.pageNumber));
+    dispatch(setCurrentStep(1));
+    sessionStorage.setItem("flow-currentWeek", resumeTarget.weekNumber.toString());
+    sessionStorage.setItem("flow-currentPage", resumeTarget.pageNumber.toString());
+    sessionStorage.setItem("flow-currentStep", "1");
+    setHasResolvedBackendResume(true);
+  }, [dispatch, enrollmentId, isAdmin, resumePositionQueries]);
+
   // console.log(data,"Course data here")
 
   useEffect(() => {
     if (!data) return;
 
+    const canUseCurrentActivities =
+      userAnswers.week === currentWeek &&
+      userAnswers.courseEnrollmentId === enrollmentId;
+
     if (data.assessment && data.activity) {
+      const backendActivities = data.activity?.activities || [];
+      lastSavedActivitiesRef.current = JSON.stringify(backendActivities);
       dispatch(
         updateData({
           course: course,
           courseEnrollmentId: enrollmentId,
           week: currentWeek,
-          activities: data.activity?.activities,
+          activities: backendActivities,
           assessments: data.assessment?.assessments,
         })
       );
-    } else {
+    } else if (data.activity) {
+      const backendActivities = data.activity?.activities || [];
+      const activities = mergeActivitiesByPage(
+        backendActivities,
+        canUseCurrentActivities ? userAnswers.activities : []
+      );
+      lastSavedActivitiesRef.current = JSON.stringify(backendActivities);
       dispatch(
         updateData({
           course: course,
@@ -212,14 +531,111 @@ const WeekContent = () => {
             ? enrollmentId
             : userAnswers.courseEnrollmentId,
           week: currentWeek,
-          activities: userAnswers.activities,
-          assessments: userAnswers.assessments,
+          activities,
+          assessments: [],
+        })
+      );
+    } else {
+      const activities = canUseCurrentActivities ? userAnswers.activities : [];
+      lastSavedActivitiesRef.current = JSON.stringify([]);
+      dispatch(
+        updateData({
+          course: course,
+          courseEnrollmentId: enrollmentId
+            ? enrollmentId
+            : userAnswers.courseEnrollmentId,
+          week: currentWeek,
+          activities,
+          assessments: [],
         })
       );
     }
 
     return () => { };
   }, [data]);
+
+  useEffect(() => {
+    if (!hasResolvedBackendResume) return;
+    if (!enrollmentId || !course || !currentWeek) return;
+    if (data?.assessment) return;
+    if (userAnswers.week !== currentWeek) return;
+    if (userAnswers.courseEnrollmentId !== enrollmentId) return;
+    if (!userAnswers.activities?.length) return;
+
+    const activitiesJson = JSON.stringify(userAnswers.activities);
+    if (activitiesJson === lastSavedActivitiesRef.current) return;
+
+    const saveTimer = setTimeout(async () => {
+      try {
+        const result = await userService.postMyActivity(enrollmentId, {
+          course,
+          courseEnrollmentId: enrollmentId,
+          week: currentWeek,
+          activities: userAnswers.activities,
+          lastActivityIndex: currentPage,
+        });
+
+        if (result?.success !== false) {
+          lastSavedActivitiesRef.current = activitiesJson;
+        }
+      } catch (error) {
+        console.error("Failed to save Transition activity progress", error);
+      }
+    }, 600);
+
+    return () => clearTimeout(saveTimer);
+  }, [
+    course,
+    currentPage,
+    currentWeek,
+    data?.assessment,
+    enrollmentId,
+    hasResolvedBackendResume,
+    userAnswers.activities,
+    userAnswers.courseEnrollmentId,
+    userAnswers.week,
+  ]);
+
+  useEffect(() => {
+    if (!hasResolvedBackendResume) return;
+    if (!enrollmentId || !course || !currentWeek || !currentPage) return;
+    if (data?.assessment) return;
+
+    const saveTimer = setTimeout(async () => {
+      try {
+        const payload = {
+          course,
+          courseEnrollmentId: enrollmentId,
+          week: currentWeek,
+          lastActivityIndex: currentPage,
+        };
+
+        if (
+          userAnswers.week === currentWeek &&
+          userAnswers.courseEnrollmentId === enrollmentId &&
+          userAnswers.activities?.length
+        ) {
+          payload.activities = userAnswers.activities;
+        }
+
+        await userService.postMyActivity(enrollmentId, payload);
+      } catch (error) {
+        console.error("Failed to save Transition resume position", error);
+      }
+    }, 350);
+
+    return () => clearTimeout(saveTimer);
+  }, [
+    course,
+    currentPage,
+    currentWeek,
+    data?.assessment,
+    enrollmentId,
+    hasResolvedBackendResume,
+    userAnswers.activities,
+    userAnswers.courseEnrollmentId,
+    userAnswers.week,
+  ]);
 
   // If showing hurray, render that instead
   if (showHurray) {
@@ -461,12 +877,14 @@ const WeekContent = () => {
 const CourseContent = () => {
   const { isAdmin } = useSelector(adminData);
   const currentWeek = useSelector(selectCurrentWeek);
+  const currentPage = useSelector(selectCurrentPage);
+  const activeMenuItemRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const [menuVisible, setMenuVisible] = useState(false);
 
-  const weeksTopic = [
+  const legacyWeeksTopic = [
     "Introduction To Transition. Also Talk About ‘Your Why’",
     "Growth And Fixed Mindset",
     "Understanding What Is In Your Control",
@@ -478,9 +896,23 @@ const CourseContent = () => {
     "Resilience And Introduction To Coping Skills",
     "Looking Ahead",
   ];
+  const weeksTopic = transitionCourseWeeks.length
+    ? transitionCourseWeeks.map((week) => week.title)
+    : legacyWeeksTopic;
 
   const [enrollmentProgress, setEnrollmentProgress] = useState(0);
   const [maxAccessibleWeek, setMaxAccessibleWeek] = useState(1);
+  const [expandedWeeks, setExpandedWeeks] = useState([currentWeek || 1]);
+  const [maxReachedPages, setMaxReachedPages] = useState(() => {
+    try {
+      return (
+        JSON.parse(sessionStorage.getItem("flow-transition-maxReachedPages")) ||
+        {}
+      );
+    } catch {
+      return {};
+    }
+  });
 
   // Access data from location.state
   const enrolmentData = location.state?.enrollmentData;
@@ -496,9 +928,44 @@ const CourseContent = () => {
 
       // Allow access to current incomplete week + next week
       const accessibleWeek = Math.max(1, Math.min(calculatedMaxWeek + 1, weeksTopic.length));
-      setMaxAccessibleWeek(accessibleWeek);
+      setMaxAccessibleWeek(Math.max(accessibleWeek, currentWeek || 1));
     }
-  }, [enrolmentData]);
+  }, [currentWeek, enrolmentData, weeksTopic.length]);
+
+  useEffect(() => {
+    if (!currentWeek || !currentPage) return;
+
+    setMaxReachedPages((pages) => {
+      const weekKey = `week${currentWeek}`;
+      const nextPages = {
+        ...pages,
+        [weekKey]: Math.max(pages[weekKey] || 1, currentPage),
+      };
+
+      sessionStorage.setItem(
+        "flow-transition-maxReachedPages",
+        JSON.stringify(nextPages)
+      );
+
+      return nextPages;
+    });
+  }, [currentWeek, currentPage]);
+
+  useEffect(() => {
+    if (!currentWeek || !currentPage) return;
+
+    setExpandedWeeks([currentWeek]);
+
+    const scrollTimer = setTimeout(() => {
+      activeMenuItemRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest",
+      });
+    }, 120);
+
+    return () => clearTimeout(scrollTimer);
+  }, [currentWeek, currentPage]);
 
   useEffect(() => {
     const segments = location.pathname.split("/").filter(Boolean);
@@ -513,6 +980,7 @@ const CourseContent = () => {
     // localStorage.removeItem('Flow-Auth-Token');
     localStorage.clear();
     sessionStorage.clear();
+    queryClient.clear();
     dispatch(logoutSuccess());
     dispatch(clearToken());
     dispatch(
@@ -539,12 +1007,56 @@ const CourseContent = () => {
       dispatch(setCurrentWeek(weekNumber));
       dispatch(setCurrentPage(1));
       dispatch(setCurrentStep(1));
+      dispatch(setShowHurray(false));
+      dispatch(setShowReview(false));
 
       // Update session storage
       sessionStorage.setItem("flow-currentWeek", weekNumber.toString());
       sessionStorage.setItem("flow-currentPage", "1");
       sessionStorage.setItem("flow-currentStep", "1");
     }
+  };
+
+  const toggleWeekMenu = (weekNumber) => {
+    if (!isWeekAccessible(weekNumber)) return;
+
+    setExpandedWeeks((weeks) => (weeks.includes(weekNumber) ? [] : [weekNumber]));
+  };
+
+  const handleWeekHeaderClick = (weekNumber) => {
+    toggleWeekMenu(weekNumber);
+    if (weekNumber !== currentWeek) {
+      handleWeekClick(weekNumber);
+    }
+  };
+
+  const handleMenuItemClick = (weekNumber, pageNumber) => {
+    if (!isMenuItemUnlocked(weekNumber, pageNumber)) return;
+
+    if (weekNumber !== currentWeek) {
+      dispatch(clearData());
+    }
+
+    setExpandedWeeks([weekNumber]);
+    dispatch(setCurrentWeek(weekNumber));
+    dispatch(setCurrentPage(pageNumber));
+    dispatch(setCurrentStep(1));
+    dispatch(setShowHurray(false));
+    dispatch(setShowReview(false));
+
+    sessionStorage.setItem("flow-currentWeek", weekNumber.toString());
+    sessionStorage.setItem("flow-currentPage", pageNumber.toString());
+    sessionStorage.setItem("flow-currentStep", "1");
+  };
+
+  const buildWeekMenuItems = (weekNumber) => {
+    return (
+      transitionCourseWeeks.find((week) => week.week === weekNumber)?.items ||
+      []
+    ).map((item) => ({
+      ...item,
+      pageNumber: item.page,
+    }));
   };
 
   const isWeekAccessible = (weekNumber) => {
@@ -555,6 +1067,34 @@ const CourseContent = () => {
     // A week is completed if the user has progressed beyond it
     const progressPerWeek = 100 / weeksTopic.length;
     return enrollmentProgress >= (weekNumber * progressPerWeek);
+  };
+
+  const isMenuItemCompleted = (weekNumber, pageNumber) => {
+    if (isWeekCompleted(weekNumber)) return true;
+    if (weekNumber < currentWeek) return true;
+
+    const weekKey = `week${weekNumber}`;
+    const maxReachedPage = Math.max(
+      maxReachedPages[weekKey] || 1,
+      weekNumber === currentWeek ? currentPage : 1
+    );
+
+    return pageNumber < maxReachedPage;
+  };
+
+  const isMenuItemUnlocked = (weekNumber, pageNumber) => {
+    if (!isWeekAccessible(weekNumber)) return false;
+    if (isWeekCompleted(weekNumber)) return true;
+    if (weekNumber < currentWeek) return true;
+    if (weekNumber > currentWeek) return pageNumber === 1;
+
+    const weekKey = `week${weekNumber}`;
+    const maxReachedPage = Math.max(
+      maxReachedPages[weekKey] || 1,
+      weekNumber === currentWeek ? currentPage : 1
+    );
+
+    return pageNumber <= maxReachedPage;
   };
 
   return (
@@ -571,7 +1111,7 @@ const CourseContent = () => {
           </button>
           <div
             className="navbar-logo d-none d-lg-block"
-            onClick={() => { }}
+            onClick={logOut}
             style={{ cursor: "pointer" }}
           >
             Logout
@@ -635,7 +1175,7 @@ const CourseContent = () => {
       </nav>
 
       <div className="main-content flex-column-reverse flex-md-row">
-        <aside className="d-md-none d-lg-block m-4">
+        <aside className="d-md-none d-lg-block aside-class">
           <button
             disabled={isAdmin}
             onClick={() => navigate("/dashboard/my-courses")}
@@ -653,46 +1193,80 @@ const CourseContent = () => {
             <h2 className="compassion fs-5">Transition</h2>
           </div>
 
-          <ul className="compassion-list">
+          <div className="transition-week-menu">
             {weeksTopic.map((item, index) => {
               const weekNumber = index + 1;
               const isAccessible = isWeekAccessible(weekNumber);
               const isCompleted = isWeekCompleted(weekNumber);
               const isActive = weekNumber === currentWeek;
+              const isExpanded = expandedWeeks.includes(weekNumber);
+              const menuItems = buildWeekMenuItems(weekNumber);
 
               return (
-                <li
+                <div
                   key={index}
-                  className={`${isActive ? "active-week" : ""} ${isAccessible ? "accessible-week" : "locked-week"
+                  className={`transition-week-group ${isActive ? "active-week" : ""} ${isAccessible ? "accessible-week" : "locked-week"
                     }`}
-                  onClick={() => handleWeekClick(weekNumber)}
-                  style={{
-                    cursor: isAccessible ? "pointer" : "not-allowed",
-                    opacity: isAccessible ? 1 : 0.5,
-                    transition: "all 0.3s ease",
-                  }}
                 >
-                  <div className="icon">
+                  <button
+                    type="button"
+                    className="transition-week-header"
+                    onClick={() => handleWeekHeaderClick(weekNumber)}
+                    disabled={!isAccessible}
+                  >
+                    <span className={`transition-status-icon ${isCompleted ? "completed" : isActive ? "active" : ""}`}>
+                      <Icon icon={isAccessible ? "mdi:check" : "mdi:lock"} />
+                    </span>
+                    <span className="transition-week-heading">
+                      <span className="transition-week-main">Week {weekNumber}</span>
+                      <span className="transition-week-subtitle">{item}</span>
+                    </span>
                     <Icon
-                      icon={
-                        isCompleted
-                          ? "icon-park-solid:check-one"
-                          : isAccessible
-                            ? "icon-park-outline:check-one"
-                            : "mdi:lock"
-                      }
-                      className="course-list-icon "
+                      icon="mdi:chevron-down"
+                      className={`transition-week-chevron ${isExpanded ? "expanded" : ""}`}
                     />
+                  </button>
+
+                  <div className={`transition-week-items ${isExpanded ? "expanded" : ""}`}>
+                    {menuItems.map((menuItem) => {
+                      const itemActive =
+                        currentWeek === weekNumber &&
+                        currentPage === menuItem.pageNumber;
+                      const itemCompleted = isMenuItemCompleted(
+                        weekNumber,
+                        menuItem.pageNumber
+                      );
+                      const itemUnlocked = isMenuItemUnlocked(
+                        weekNumber,
+                        menuItem.pageNumber
+                      );
+
+                      return (
+                        <button
+                          type="button"
+                          key={menuItem.id}
+                          ref={itemActive ? activeMenuItemRef : null}
+                          className={`transition-week-item ${itemActive ? "selected" : ""} ${itemUnlocked ? "" : "locked"}`}
+                          onClick={() =>
+                            handleMenuItemClick(
+                              weekNumber,
+                              menuItem.pageNumber
+                            )
+                          }
+                          disabled={!itemUnlocked || !isExpanded}
+                        >
+                          <span className={`transition-status-icon small ${itemCompleted ? "completed" : ""}`}>
+                            <Icon icon={itemUnlocked ? "mdi:check" : "mdi:lock"} />
+                          </span>
+                          <span>{menuItem.label}</span>
+                        </button>
+                      );
+                    })}
                   </div>
-                  <span className="">
-                    Week
-                    {weekNumber}
-                  </span>
-                  <span className="">{item} </span>
-                </li>
+                </div>
               );
             })}
-          </ul>
+          </div>
 
           {/* Progress indicator */}
           <div className="mt-4 px-3">

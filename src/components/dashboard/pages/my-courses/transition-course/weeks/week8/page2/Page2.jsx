@@ -11,29 +11,36 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function WeekEightPage2() {
   const dispatch = useDispatch();
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
   const userAnswers = useSelector(userAnswer);
-  const [myAnswer, setMyAnswer] = useState(userAnswers);
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedOption, setSelectedOption] = useState(null);
 
   useEffect(() => {
-    if (!userAnswers) return;
+    if (!userAnswers || !pageData?.id) return;
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    setMyAnswer(response?.answer ? response.answer : "");
-    setSelectedOption(response?.answer ? response.answer : "");
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const savedAnswer = response?.answer ?? draftAnswer ?? "";
+    setSelectedOption(savedAnswer);
     return () => {};
-  }, [userAnswers]);
+  }, [pageData?.id, userAnswers]);
 
   const handleOptionChange = (e) => {
+    const nextAnswer = e.target.value;
     setErrorMessage("");
-    setSelectedOption(e.target.value);
+    setSelectedOption(nextAnswer);
+    saveActivityDraft(userAnswers, pageData.id, nextAnswer);
   };
 
   const saveUserInput = () => {
@@ -51,6 +58,7 @@ function WeekEightPage2() {
         answer: selectedOption,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 
@@ -90,6 +98,7 @@ function WeekEightPage2() {
                         onClick={() => {
                           setErrorMessage("");
                           setSelectedOption(optionID);
+                          saveActivityDraft(userAnswers, pageData.id, optionID);
                         }}
                       />
                       <label htmlFor={optionID} className="fs-4 fs-md-2">

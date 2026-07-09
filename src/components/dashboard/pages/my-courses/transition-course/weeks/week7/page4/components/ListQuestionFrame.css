@@ -1,0 +1,62 @@
+.week7-list-input-container {
+  background: url("../../../../../../../../../assets/big-rect.png") no-repeat;
+  background-size: 100% 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 285px;
+  justify-content: center;
+  margin: 8px auto 0;
+  max-width: 830px;
+  padding: 30px 46px 34px;
+  width: 100%;
+}
+
+.week7-list-input-row {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+  min-height: 38px;
+}
+
+.week7-list-input-label {
+  background-color: #ffeebb;
+  border-radius: 4px;
+  flex: 0 0 24px;
+  font-size: 14px;
+  line-height: 24px;
+  margin: 0;
+  text-align: center;
+}
+
+.week7-list-input {
+  border: none;
+  border-bottom: 1px solid grey;
+  flex: 1 1 auto;
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 0;
+  padding: 8px 12px;
+}
+
+.week7-list-input::placeholder {
+  font-size: 14px;
+}
+
+.week7-list-input:focus {
+  border: none !important;
+  border-bottom: 1px solid grey !important;
+  box-shadow: none;
+  outline: none;
+}
+
+@media (max-width: 768px) {
+  .week7-list-input-container {
+    height: 300px;
+    padding: 28px 22px 32px;
+  }
+
+  .week7-list-input-row {
+    gap: 10px;
+  }
+}

@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import QuestionBox from "../../../components/QuestionBox";
 import Frame from "./components/Frame";
 import Button from "../../../components/Button";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 import {
   selectPageData,
   selectCurrentStep,
@@ -24,24 +28,45 @@ function WeekSevenPage4() {
   const currentStep = useSelector(selectCurrentStep);
   const totalSteps = pageData?.steps?.length || 0;
   const [answers, setAnswers] = useState([]); // State to hold answers
+  const answersRef = useRef(answers);
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const step = pageData?.steps[currentStep - 1];
   const userAnswers = useSelector(userAnswer);
   const adminDatas = useSelector(adminData);
   // console.log(userAnswers)
 
+  const updateAnswers = (nextAnswersOrUpdater) => {
+    const nextAnswers =
+      typeof nextAnswersOrUpdater === "function"
+        ? nextAnswersOrUpdater(answersRef.current)
+        : nextAnswersOrUpdater;
+
+    answersRef.current = nextAnswers;
+    setAnswers(nextAnswers);
+    saveActivityDraft(userAnswers, pageData.id, nextAnswers);
+  };
+
   useEffect(() => {
-    if (!userAnswers) return;
+    if (!userAnswers || !pageData?.id) return;
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
-  }, [userAnswers]);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const nextAnswers = Array.isArray(response?.answer)
+      ? response.answer
+      : Array.isArray(draftAnswer)
+        ? draftAnswer
+        : [];
+
+    answersRef.current = nextAnswers;
+    setAnswers(nextAnswers);
+  }, [pageData?.id, userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
 
-    const stepData = answers.find((item) => item.stepId === currentStep);
+    const latestAnswers = answersRef.current;
+    const stepData = latestAnswers.find((item) => item.stepId === currentStep);
 
     if (!stepData || !stepData.value) {
       setErrorMessage("Oops! All inputs must be filled out.");
@@ -52,9 +77,10 @@ function WeekSevenPage4() {
       dispatch(
         saveActivity({
           page: pageData.id,
-          answer: answers,
+          answer: latestAnswers,
         })
       );
+      clearActivityDraft(userAnswers, pageData.id);
       return true;
     }
 
@@ -91,9 +117,10 @@ function WeekSevenPage4() {
     dispatch(
       saveActivity({
         page: pageData.id,
-        answer: answers,
+        answer: latestAnswers,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 
@@ -115,7 +142,7 @@ function WeekSevenPage4() {
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={updateAnswers}
           />
         );
       case "multiColoredQuestionBoxes":
@@ -128,7 +155,7 @@ function WeekSevenPage4() {
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={updateAnswers}
           />
         );
       case "multiMultiColoredQuestionBoxes":
@@ -141,7 +168,7 @@ function WeekSevenPage4() {
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={updateAnswers}
           />
         );
       case "checkBoxesWithImageAndTitle":
@@ -154,7 +181,7 @@ function WeekSevenPage4() {
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={updateAnswers}
           />
         );
       case "bigTextBox":
@@ -167,7 +194,7 @@ function WeekSevenPage4() {
             }}
             setErrorMessage={setErrorMessage}
             answers={answers}
-            setAnswers={setAnswers}
+            setAnswers={updateAnswers}
           />
         );
 

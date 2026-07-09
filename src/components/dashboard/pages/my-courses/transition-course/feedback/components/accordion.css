@@ -2,6 +2,20 @@
   background-color: #5ce1e6;
 }
 
+.feedback-week-locked {
+  opacity: 0.65;
+}
+
+.feedback-week-locked-note {
+  color: #7b7f88;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.feedback-week-lock-icon {
+  color: #7b7f88;
+}
+
 .accordion {
   margin: 0 10px;
 }

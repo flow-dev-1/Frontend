@@ -1,0 +1,66 @@
+.week6-activity5-dnd-layout {
+  align-items: stretch;
+  width: 100%;
+}
+
+.week6-activity5-dnd-column {
+  flex: 0 0 50%;
+  max-width: 50%;
+  min-width: 0;
+}
+
+.week6-activity5-dropzone {
+  flex: 0 0 160px;
+  max-width: 160px;
+  min-width: 160px;
+  transition: background-color 0.2s ease;
+}
+
+.week6-activity5-bucket-label {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  max-width: 100%;
+  padding: 0 !important;
+  text-align: center;
+}
+
+.week6-activity5-bucket-label.inner-bucket,
+.week6-activity5-bucket-label.both-bucket {
+  padding: 0 !important;
+}
+
+.week6-activity5-bucket-text {
+  display: block;
+  font-size: 0.62em;
+  font-weight: 700;
+  line-height: 1.15;
+  max-width: 100%;
+  overflow: visible;
+  overflow-wrap: normal;
+  white-space: normal;
+  width: 100%;
+  word-break: keep-all;
+}
+
+@media (max-width: 768px) {
+  .week6-activity5-dnd-column {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+
+  .week6-activity5-dropzone {
+    flex-basis: 120px;
+    max-width: 120px;
+    min-width: 120px;
+  }
+
+  .week6-activity5-bucket-label {
+    padding: 0;
+  }
+
+  .week6-activity5-bucket-text {
+    font-size: 8px;
+  }
+}

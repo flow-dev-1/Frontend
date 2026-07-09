@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./page2.css";
 import Button from "../../../components/Button";
@@ -9,34 +9,60 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function WeekFivePage2() {
   const pageData = useSelector(selectPageData);
   const dispatch = useDispatch();
   const [answers, setAnswers] = useState([]); // State to hold answers
+  const answersRef = useRef(answers);
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const adminDatas = useSelector(adminData);
 
   const userAnswers = useSelector(userAnswer);
 
+  const updateAnswers = (nextAnswersOrUpdater) => {
+    const nextAnswers =
+      typeof nextAnswersOrUpdater === "function"
+        ? nextAnswersOrUpdater(answersRef.current)
+        : nextAnswersOrUpdater;
+
+    answersRef.current = nextAnswers;
+    setAnswers(nextAnswers);
+    saveActivityDraft(userAnswers, pageData.id, nextAnswers);
+  };
+
   useEffect(() => {
-    if (!userAnswers) return;
+    if (!userAnswers || !pageData?.id) return;
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    const answerCopy = response?.answer ? [...response.answer] : [];
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const answerCopy = Array.isArray(response?.answer)
+      ? [...response.answer]
+      : Array.isArray(draftAnswer)
+        ? draftAnswer
+        : [];
+
+    answersRef.current = answerCopy;
     setAnswers(answerCopy);
     return () => {};
-  }, [userAnswers]);
+  }, [pageData?.id, userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
-    if (answers.length < 5) {
+    const latestAnswers = answersRef.current;
+
+    if (latestAnswers.length < 5) {
       setErrorMessage("At least 5 values are required!");
       return false;
     }
 
-    const emptyInputs = answers.filter((item) => item?.value?.trim() === "");
+    const emptyInputs = latestAnswers.filter((item) => item?.value?.trim() === "");
     if (emptyInputs.length > 0) {
       setErrorMessage(
         `Please fill out all inputs. ${emptyInputs.length} input(s) are missing.`
@@ -48,9 +74,10 @@ function WeekFivePage2() {
 
     const activityData = {
       page: pageData.id,
-      answer: answers,
+      answer: latestAnswers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -58,7 +85,7 @@ function WeekFivePage2() {
   const handleInputChange = (index, value) => {
     setErrorMessage("");
     // Update answers state with the new value
-    setAnswers((prevAnswers) => {
+    updateAnswers((prevAnswers) => {
       // Check if the answer already exists
       const existingAnswerIndex = prevAnswers.findIndex(
         (answer) => answer.index === index

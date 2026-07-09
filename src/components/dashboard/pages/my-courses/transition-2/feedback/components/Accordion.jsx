@@ -32,6 +32,34 @@ function Accordion({
   const [answers, setAnswers] = useState(null);
   const { isAdmin, code } = useSelector(adminData);
 
+  const weekProgressQueries = useQueries({
+    queries: [1, 2, 3, 4, 5].map((step) => ({
+      queryKey: ["dashboard/transition2-feedback", enrollmentId, step],
+      queryFn: () => {
+        if (isAdmin) {
+          return adminService.getUserCourseData(enrollmentId, step, code);
+        }
+        if (isSchool) {
+          return schoolService.getStudentCourseData(
+            enrollmentId,
+            step,
+            studentId
+          );
+        }
+        return userService.getUserCourseData(enrollmentId, step);
+      },
+      enabled: !!enrollmentId,
+      refetchOnMount: "always",
+      refetchOnWindowFocus: true,
+      keepPreviousData: false,
+    })),
+  });
+
+  const [first, second] = weekProgressQueries;
+  const isCourseComplete = weekProgressQueries.every((query) =>
+    Boolean(query.data?.assessment)
+  );
+
   useEffect(() => {
     if (!startDownload) return;
 
@@ -39,7 +67,7 @@ function Accordion({
 
     // Vision Board
     if (currentIndex === 5) {
-      if (!allDataLoaded) {
+      if (!isCourseComplete) {
         setStartDownload(false);
         return;
       }
@@ -88,11 +116,22 @@ function Accordion({
 
     // Final course PDF (index 6)
     if (currentIndex === 6) {
+      if (!isCourseComplete) {
+        setStartDownload(false);
+        return;
+      }
+
       generatePDF();
 
       return;
     }
-  }, [hasPercentile, allDataLoaded, startDownload, currentIndex]);
+  }, [
+    hasPercentile,
+    allDataLoaded,
+    isCourseComplete,
+    startDownload,
+    currentIndex,
+  ]);
 
   const generatePDF = async () => {
     const originalState = activeIndex;
@@ -137,29 +176,8 @@ function Accordion({
     }
   };
 
-  const weekProgressQueries = useQueries({
-    queries: [1, 2, 3, 4, 5].map((step) => ({
-      queryKey: ["dashboard/transition2-feedback", enrollmentId, step],
-      queryFn: () => {
-        if (isAdmin) {
-          return adminService.getUserCourseData(enrollmentId, step, code);
-        }
-        if (isSchool) {
-          return schoolService.getStudentCourseData(enrollmentId, step, studentId);
-        }
-        return userService.getUserCourseData(enrollmentId, step);
-      },
-      enabled: !!enrollmentId,
-      refetchOnMount: "always",
-      refetchOnWindowFocus: true,
-      keepPreviousData: false,
-    })),
-  });
-
-  const [first, second] = weekProgressQueries;
-
   const isWeekFeedbackAvailable = (index) => {
-    if (index >= 5) return true;
+    if (index >= 5) return isCourseComplete;
     return Boolean(weekProgressQueries[index]?.data?.assessment);
   };
 
@@ -230,7 +248,7 @@ function Accordion({
         {items.map((item, index) => {
           const isLocked = !isWeekFeedbackAvailable(index);
           const isDownloadLocked =
-            index >= 5 && !allDataLoaded;
+            index >= 5 && !isCourseComplete;
 
           return (
           <div key={index} className={`accordion-item ${isLocked ? "feedback-week-locked" : ""}`}>
@@ -276,6 +294,11 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
                 {isLocked && index < 5 && (
                   <p className="feedback-week-locked-note">
                     (Submit assessment to unlock)
+                  </p>
+                )}
+                {isLocked && index >= 5 && (
+                  <p className="feedback-week-locked-note">
+                    (Complete all 5 weeks to unlock)
                   </p>
                 )}
                 {index >= 5 && (

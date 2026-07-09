@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Icon } from "@iconify/react";
 import ArrowTrail from "../../../../../../../../assets/ArrowTrail.svg";
 import "./page4.css";
 import Button from "../../../components/Button";
@@ -32,6 +33,12 @@ function WeekThreePage4() {
     green: [],
     red: [],
   });
+  const bucketResultsRef = useRef(bucketResults);
+
+  const updateBucketResults = (nextResults) => {
+    bucketResultsRef.current = nextResults;
+    setBucketResults(nextResults);
+  };
 
   // useEffect(() => {
   //   setShowCurrentImage(true);
@@ -44,7 +51,7 @@ function WeekThreePage4() {
     );
     if (response?.answer) {
       const answerCopy = { ...response.answer };
-      setBucketResults(answerCopy);
+      updateBucketResults(answerCopy);
       if (currentStep === 1) {
         dispatch(setCurrentStep(totalSteps));
         setShowCurrentImage(false);
@@ -88,7 +95,7 @@ function WeekThreePage4() {
         ],
       };
 
-      setBucketResults(newBucketResults);
+      updateBucketResults(newBucketResults);
       setShowCurrentImage(false);
 
       if (currentStep < totalSteps) {
@@ -127,7 +134,7 @@ function WeekThreePage4() {
     if (adminDatas.isAdmin) return true;
 
     if (
-      bucketResults.green.length + bucketResults.red.length !==
+      bucketResultsRef.current.green.length + bucketResultsRef.current.red.length !==
       pageData.images.length
     ) {
       setErrorMessage("Please make sure to fill all the buckets.");
@@ -140,7 +147,7 @@ function WeekThreePage4() {
     dispatch(
       saveActivity({
         page: pageData.id,
-        answer: bucketResults,
+        answer: bucketResultsRef.current,
       })
     );
     return true;
@@ -158,37 +165,49 @@ function WeekThreePage4() {
     const currentIndex = pageData.images.indexOf(currentImage);
 
     // Check if afterCurrentImage exists in any bucket and remove it
-    Object.keys(bucketResults).forEach((bucket) => {
-      if (bucketResults[bucket].includes(afterCurrentIndex)) {
-        bucketResults[bucket] = bucketResults[bucket].filter(
+    const nextBucketResults = {
+      green: [...(bucketResultsRef.current.green || [])],
+      red: [...(bucketResultsRef.current.red || [])],
+    };
+
+    Object.keys(nextBucketResults).forEach((bucket) => {
+      if (nextBucketResults[bucket].includes(afterCurrentIndex)) {
+        nextBucketResults[bucket] = nextBucketResults[bucket].filter(
           (index) => index !== afterCurrentIndex
         );
       }
-      if (bucketResults[bucket].includes(currentIndex)) {
-        bucketResults[bucket] = bucketResults[bucket].filter(
+      if (nextBucketResults[bucket].includes(currentIndex)) {
+        nextBucketResults[bucket] = nextBucketResults[bucket].filter(
           (index) => index !== currentIndex
         );
       }
     });
 
     // Update the state with the modified bucket results
-    setBucketResults({
-      ...bucketResults,
-      // Ensure to keep the updated bucket results
-    });
+    updateBucketResults(nextBucketResults);
 
     setShowCurrentImage(true);
     return true;
   };
 
+  const resetDragAndDrop = () => {
+    updateBucketResults({
+      green: [],
+      red: [],
+    });
+    setShowCurrentImage(true);
+    setErrorMessage("");
+    dispatch(setCurrentStep(1));
+  };
+
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
-      <div className="d-flex flex-column align-items-center pt-2 ">
-        <div className="d-flex custom-border-20 flex-column flex-md-row">
+      <div className="d-flex flex-column align-items-center pt-2 transition-course-drag-page">
+        <div className="d-flex custom-border-20 flex-column flex-md-row transition-course-drag-shell">
           <Droppable droppableId="image">
             {(provided, snapshot) => (
               <div
-                className="d-flex p-5 justify-content-center align-items-center w-lg-50"
+                className="d-flex p-5 justify-content-center align-items-center transition-course-drag-panel"
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 style={{
@@ -206,11 +225,10 @@ function WeekThreePage4() {
                   ></span>
                 )}
                 {renderStep()}
-                {provided.placeholder}
               </div>
             )}
           </Droppable>
-          <div className="bg-blue w-lg-50">
+          <div className="bg-blue transition-course-drag-panel">
             <div className="d-flex align-items-start mb-2">
               <img src={ArrowTrail} alt="arrow trail" className="arrow-head" />
               <div className="text-center text-white pt-2">
@@ -225,7 +243,7 @@ function WeekThreePage4() {
                     <div
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                      className="p-0 p-md-2"
+                      className="p-0 p-md-2 transition-course-bucket-dropzone"
                       style={{
                         backgroundColor: snapshot.isDraggingOver
                           ? "rgba(255, 255, 255, 0.1)"
@@ -234,8 +252,6 @@ function WeekThreePage4() {
                         borderRadius: "8px",
                         minHeight: "100px",
                         height: "300px",
-                        width: snapshot.isDraggingOver ? "200px" : "",
-                        // width: "200px",
                       }}
                     >
                       <h2
@@ -252,7 +268,9 @@ function WeekThreePage4() {
                       >
                         {bucket.label}
                       </div>
-                      {provided.placeholder}
+                      <div className="transition-course-dnd-placeholder">
+                        {provided.placeholder}
+                      </div>
                     </div>
                   )}
                 </Droppable>
@@ -261,6 +279,14 @@ function WeekThreePage4() {
           </div>
         </div>
       </div>
+      <p
+        className="fs-5 d-flex justify-content-center gap-3 align-items-center mt-3 fs-2"
+        onClick={resetDragAndDrop}
+        style={{ cursor: "pointer" }}
+      >
+        <Icon className="ml-3" icon="teenyicons:refresh-solid" />
+        Refresh
+      </p>
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
