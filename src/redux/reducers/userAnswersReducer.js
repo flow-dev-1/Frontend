@@ -1,0 +1,63 @@
+import { createSlice } from '@reduxjs/toolkit'
+
+const userAnswerSlice = createSlice({
+  name: 'userAnswer',
+  initialState: {
+    course:null,
+    courseEnrollmentId: null,
+    week: 1,
+    activities: [],
+    assessments: [],
+    // isSidebarOpen: false,
+  },
+  reducers: {
+    updateData: (state, action) => {
+      const {course, courseEnrollmentId, week, activities, assessments } = action.payload;
+      return {
+        ...state,
+        course,
+        courseEnrollmentId,
+        week,
+        activities,
+        assessments,
+      }
+    },
+    saveActivity: (state, action) => {
+      const updatedActivities = state.activities.filter(activity => activity.page !== action.payload.page);
+      return {
+        ...state,
+        activities: [...updatedActivities, action.payload],
+      }
+    },
+    removeActivity: (state, action) => {
+      return {
+        ...state,
+        activities: state.activities.filter(activity => activity.page !== action.payload),
+      }
+    },
+    saveAssessment: (state, action) => {
+      return {
+        ...state,
+        assessments: action.payload,
+      }
+    },
+    clearData: (state) => {
+      state.course = null;
+      state.courseEnrollmentId = null;
+      state.week = null;
+      state.activities = [];
+      state.assessments = [];
+    },
+  },
+})
+
+export const {
+  updateData,
+  saveActivity,
+  removeActivity,
+  saveAssessment,
+  clearData
+} = userAnswerSlice.actions
+export default userAnswerSlice.reducer
+
+export const userAnswer = (state) => state.userAnswer;

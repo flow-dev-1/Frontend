@@ -3,17 +3,9 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { Icon } from '@iconify/react'
-import { useMutation } from '@tanstack/react-query'
-import userService from '../../../../services/api/user'
 import { RotatingLines } from 'react-loader-spinner'
-import EmailVerificationSuccessful from '../../../modals-pages/onboarding-modals/EmailVerificationSuccessful'
-import StudentOtpModal from '../../../modals-pages/onboarding-modals/StudentOtpModal'
-import Modal from 'react-modal'
-import { useDispatch } from 'react-redux'
-import { setToken } from '../../../../redux/reducers/jwtReducer'
-import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
-import { logoutSuccess } from '../../../../redux/reducers/userReducer'
+
 
 // Schema definition
 const studentSchema = yup.object().shape({
@@ -52,13 +44,11 @@ const studentSchema = yup.object().shape({
 export default function InvitedStudentDetailsForm({
   onSubmit,
   setStep,
-  parentFormData,
   students,
-  t,
+  isPending,
+  setStudentFormData
+
 }) {
-  const [formCount, setFormCount] = useState(0) // Start with the first student
-  const [modalIsOpen, setIsOpen] = useState(false)
-  const [openSuccessModal, setOpenSuccessModal] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
 
@@ -71,110 +61,32 @@ export default function InvitedStudentDetailsForm({
   } = useForm({
     resolver: yupResolver(studentSchema),
     defaultValues: {
-      ...students[formCount],
-      userId: undefined, // Ensure userId is not part of the default values
+      ...students,
+      DOB: students.DOB
+        ? new Date(students.DOB).toISOString().split('T')[0]
+        : '', // Format the DOB to 'YYYY-MM-DD'
+      userId: students.userId, // Ensure userId is not part of the default values
     },
   })
-
-  const dispatch = useDispatch()
-
-  const mutation = useMutation({
-    mutationFn: (data) => userService.registerInvitedUser(t, data),
-    onSuccess: (data) => {
-      console.log('Form submitted successfully', data)
-      toast.success(data.message)
-      dispatch(setToken(data?.token))
-      localStorage.setItem('Flow-Auth-Token', data?.token)
-      openModal()
-      setStep(2)
-      dispatch(logoutSuccess())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-      console.log('Error submitting form', error)
-    },
-  })
-
-  const continueHandler = async (studentData) => {
-    try {
-      // Check if any field contains "N/A"
-      const hasNAField = Object.values(studentData).some(
-        (value) => value === 'N/A'
-      )
-
-      if (hasNAField) {
-        toast.error(
-          'Please fill all fields. Fields with "N/A" must be corrected.'
-        )
-        return
-      }
-
-      // Update the current student's data in the array
-      const updatedStudents = students.map((student, index) => {
-        if (index === formCount) {
-          return {
-            ...student,
-            fullName: studentData.fullName,
-            grade: studentData.grade,
-            gender: studentData.gender,
-            DOB: studentData.DOB,
-            password: studentData.password,
-          }
-        }
-        return student
-      })
-
-      if (formCount < students.length - 1) {
-        setFormCount((prevCount) => prevCount + 1)
-        reset(updatedStudents[formCount + 1])
-      } else {
-        const completeFormData = {
-          ...parentFormData,
-          students: updatedStudents.map(
-            ({
-              _id,
-              email,
-              isDeleted,
-              isSchoolAdmin,
-              isVerified,
-              newCourseInvite,
-              resetPassword,
-              updatedAt,
-              deletedAt,
-              createdAt,
-              guardianFullName,
-              userType,
-              DOB,
-              __v,
-              ...rest
-            }) => ({
-              ...rest, // Include all remaining properties, including userId
-              DOB: DOB ? new Date(DOB).toISOString() : undefined,
-              // guardianFullName: parentFormData.guardianFullName,
-            })
-          ),
-        }
-        console.log('Submitting form data:', completeFormData)
-        mutation.mutate(completeFormData)
-      }
-    } catch (error) {
-      console.error('Error adding student:', error)
-      toast.error('Failed to add student. Please try again.')
-    }
-  }
-
-  function openModal() {
-    setIsOpen(true)
-  }
-
-  function closeModal() {
-    setIsOpen(false)
-  }
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text)
     alert('Student ID copied to clipboard!')
   }
+
+  // Handle change event for DOB field
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    // Update the value in react-hook-form
+    setValue(name, value);
+
+    // Update the value in the parent form data (if needed)
+    setStudentFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   return (
     <div
@@ -184,7 +96,7 @@ export default function InvitedStudentDetailsForm({
       <div className='form-container'>
         <div className='top-section mt-2'>
           <h2 className='d-flex justify-content-between align-center'>
-            Student Details - {formCount + 1} {/* Display form number */}
+            Student Details
             <Icon
               icon='radix-icons:cross-1'
               onClick={() => navigate('/', { replace: true })}
@@ -200,7 +112,7 @@ export default function InvitedStudentDetailsForm({
             </span>
           </p>
         </div>
-        <form onSubmit={handleSubmit(continueHandler)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className='form-section'>
             <div className='form-group'>
               <label>Student's Full Name *</label>
@@ -208,6 +120,7 @@ export default function InvitedStudentDetailsForm({
                 type='text'
                 placeholder='Type here...'
                 {...register('fullName')}
+                onChange={handleChange}
               />
               {errors.fullName && (
                 <p className='error-message'>{errors.fullName.message}</p>
@@ -218,7 +131,7 @@ export default function InvitedStudentDetailsForm({
               <div className='d-flex align-items-center input-with-icon'>
                 <input
                   type='text'
-                  value={students[formCount].userId || 'N/A'}
+                  value={students.userId || 'N/A'}
                   readOnly
                   placeholder='CIS442'
                 />
@@ -226,14 +139,14 @@ export default function InvitedStudentDetailsForm({
                   icon={'cil:copy'}
                   className='eye-icon'
                   width={20}
-                  onClick={() => copyToClipboard(students[formCount].userId)}
+                  onClick={() => copyToClipboard(students.userId)}
                   style={{ cursor: 'pointer' }}
                 />
               </div>
             </div>
             <div className='form-group'>
               <label>School Grade *</label>
-              <select {...register('grade')}>
+              <select {...register('grade')} onChange={handleChange} >
                 <option value=''>Select grade</option>
                 <option value='Primary'>Primary</option>
                 <option value='Secondary'>Secondary</option>
@@ -244,7 +157,7 @@ export default function InvitedStudentDetailsForm({
             </div>
             <div className='form-group'>
               <label>Gender *</label>
-              <select {...register('gender')}>
+              <select {...register('gender')} onChange={handleChange}>
                 <option value=''>Select gender</option>
                 <option value='male'>Male</option>
                 <option value='female'>Female</option>
@@ -255,7 +168,7 @@ export default function InvitedStudentDetailsForm({
             </div>
             <div className='form-group'>
               <label>D.O.B *</label>
-              <input type='date' {...register('DOB')} />
+              <input type='date' {...register('DOB')} onChange={handleChange} />
               {errors.DOB && (
                 <p className='error-message'>{errors.DOB.message}</p>
               )}
@@ -265,14 +178,17 @@ export default function InvitedStudentDetailsForm({
               <div className='d-flex align-items-center input-with-icon'>
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder='Type here...'
+                  placeholder={
+                    students.isVerified === true ? '************' : 'Type here...'
+                  }
                   {...register('password')}
+                  onChange={handleChange}
                   disabled={
-                    students[formCount].isVerified === true ? true : false
+                    students.isVerified === true ? true : false
                   } // Disable if verified
                 />
 
-                {students[formCount].isVerified === true ? (
+                {students.isVerified === true ? (
                   ''
                 ) : (
                   <Icon
@@ -296,10 +212,12 @@ export default function InvitedStudentDetailsForm({
                 borderRadius: '5px',
               }}
               onClick={() => setStep(1)}
+              disabled={isPending}
             >
               Back
             </button>
             <button
+              disabled={isPending}
               style={{
                 backgroundColor: '#275DAD',
                 color: '#fff',
@@ -307,46 +225,20 @@ export default function InvitedStudentDetailsForm({
               }}
               type='submit'
             >
-              {mutation.isPending ? (
+              {isPending ? (
                 <RotatingLines
                   type='Oval'
                   style={{ color: '#FFF' }}
                   height={20}
                   width={20}
                 />
-              ) : formCount < students.length - 1 ? (
-                'Continue'
-              ) : (
+              ) :
                 'Submit'
-              )}
+              }
             </button>
           </div>
         </form>
 
-        <Modal
-          isOpen={modalIsOpen}
-          contentLabel='Registration Modal'
-          className='custom-modal-otp'
-          overlayClassName='custom-overlay'
-          shouldCloseOnOverlayClick={false}
-        >
-          <StudentOtpModal
-            resendOTP={handleSubmit(onSubmit)}
-            email={parentFormData.email}
-            setOpenSuccessModal={setOpenSuccessModal}
-            closeModal={closeModal}
-          />
-        </Modal>
-
-        <Modal
-          isOpen={openSuccessModal}
-          contentLabel='Example Modal'
-          className='custom-modal-success-two'
-          overlayClassName='custom-overlay'
-          shouldCloseOnOverlayClick={false}
-        >
-          <EmailVerificationSuccessful from='otp' />
-        </Modal>
       </div>
     </div>
   )

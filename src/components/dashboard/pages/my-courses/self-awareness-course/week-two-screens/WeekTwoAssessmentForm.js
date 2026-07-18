@@ -1,319 +1,383 @@
-import React, { useEffect, useState } from 'react'
-import '../newcourse.css'
-import Modal from 'react-modal'
-import checkedImage from '../../../../../../assets/selfawareness-images/checked.png'
-import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
-import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModal'
-import userService from '../../../../../../services/api/user.js'
-import { toast } from 'react-toastify'
+import React, { useEffect, useState } from 'react';
+import Modal from 'react-modal';
+import checkedImage from '../../../../../../assets/selfawareness-images/checked.png';
+import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png';
+import ReviewPopUp from '../../../../../modals-pages/dashboard-modals/ReviewModal';
+import userService from '../../../../../../services/api/user.js';
+import { toast } from 'react-toastify';
+import { isDisabled } from '@testing-library/user-event/dist/utils/index.js';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useSelector, useDispatch } from 'react-redux';
+import { userAnswer, updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
+import { RotatingLines } from 'react-loader-spinner';
+import { writeSelfAwarenessStorage } from '../utils/storage';
 
-export default function WeekTwoAssessmentForm({ onBack, onNext }) {
-  const [currentIndex, setCurrentIndex] = useState(1)
-  const [reviewPopUp, setReviewPopUp] = React.useState(false)
-  const [assessment, setAssessment] = useState(() => {
-    // Initialize assessment from localStorage if it exists
-    const storedAssessment = localStorage.getItem('week-two-assesment')
-    return storedAssessment
-      ? JSON.parse(storedAssessment)
-      : { week: 2, assessment: { answers: [] } }
-  })
+export default function WeekTwoAssessmentForm({ onBack, onNext, course, activityData, savedAssessment, isCompleted }) {
+	const dispatch = useDispatch();
+	const userAnswers = useSelector(userAnswer);
+	const [currentIndex, setCurrentIndex] = useState(1);
+	const [reviewPopUp, setReviewPopUp] = React.useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const [disableButton, setDisableButton] = useState(false);
+	const [errorMessage, setErrorMessage] = useState('');
+	const [assessment, setAssessment] = useState({
+		assessment: {
+			answers: [],
+		},
+	});
 
-  const questionsArray = [
-    {
-      title:
-        'Which quality would help you best manage your chores and responsibilities at home well?',
-      questionList: [
-        'Empathy',
-        'Good Listener',
-        'Detail-oriented',
-        'Responsible',
-      ],
-    },
-    {
-      title:
-        'You’ve identified that your weakness is impatience and your classmate asked you to wait for him so you can get lunch together while he uses the toilet. What will you do as someone trying to improve on their weakness?',
-      questionList: [
-        'Do Nothing',
-        'Wait for him to get lunch together.',
-        'Wait for only 1 minute and leave if he doesn’t show up.',
-        'Tell him you’re hungry and cannot wait.',
-      ],
-    },
-    {
-      title:
-        'You’ve identified your strength is honesty and your class teacher is asking who was making noise. You know it is Adetola, your best friend that was making noise because he is your seatmate. What will you do next?',
-      questionList: [
-        'Choose not to say anything',
-        'Tell the teacher that Adetola was making noise',
-        'Tell Adetola to report himself or else you would.',
-        'Ask to go to the toilet because you don’t want to talk about it',
-      ],
-    },
-    {
-      title:
-        "You're trying to solve a difficult puzzle. Which quality would be most helpful in this situation?",
-      questionList: ['patience', 'self-critical', 'optimistic', 'brave'],
-    },
-    {
-      title:
-        'You realized your best friend, John, has a weakness and you are interested in helping him work on this weakness. What would you do?',
-      questionList: [
-        'Ignore it to protect your friendship.',
-        'Tell him about the strengths you have noticed he has and identify how to manage his weakness.',
-        'Tell your other friends about this weakness.',
-        'Tell him about your own weakness in hopes that it will get him to share as well.',
-      ],
-    },
-    {
-      title:
-        'What activity do you enjoy the most, and why do you think you are good at it?',
-    },
-    {
-      title:
-        'When working in a group, what role do you naturally take on (e.g., leader, planner, helper)? Can you give an example?',
-    },
-    {
-      title:
-        'Is there a task or subject that you avoid because you find it difficult? Why do you think it’s challenging for you?',
-    },
-  ]
+	useEffect(() => {
+		if (savedAssessment?.assessments?.length) {
+			setAssessment(savedAssessment.assessments[0]);
+			return;
+		}
 
-  const handleStepClick = () => {
-    if (currentIndex < questionsArray.length) {
-      if (assessment.assessment.answers[currentIndex - 1] !== undefined) {
-        setCurrentIndex(currentIndex + 1)
-      } else {
-        toast.error('Please answer the question before proceeding.')
-      }
-    } else {
-      // Optionally handle submission or final step
-      onNext()
-    }
+		const storedAssessment = localStorage.getItem('weekTwoAssessmentData');
 
-    if (currentIndex === 8) {
-      saveWeekTwoAssessment()
-      setTimeout(() => {
-        setReviewPopUp(true)
-        setTimeout(() => {
-          setReviewPopUp(false)
-        }, 10000)
-      }, 1000)
-    }
-  }
+		if (storedAssessment) {
+			const parsedData = JSON.parse(storedAssessment);
 
-  const handlePreviousStepClick = () => {
-    if (currentIndex > 1) {
-      setCurrentIndex(currentIndex - 1)
-    } else {
-      onBack()
-    }
-  }
+			if (parsedData && parsedData.formattedData) {
+				console.log(parsedData.formattedData.assessments[0], 'formattedData');
+				setAssessment(parsedData.formattedData.assessments[0]);
+			}
+		}
+	}, [savedAssessment]);
 
-  const closeReviewPopUp = () => {
-    setReviewPopUp(false)
-  }
+	const questionsArray = [
+		{
+			title: 'Which quality would help you best manage your chores and responsibilities at home well?',
+			questionList: ['Empathy', 'Good Listener', 'Detail-oriented', 'Responsible'],
+		},
+		{
+			title: 'You’ve identified that your weakness is impatience and your classmate asked you to wait for him so you can get lunch together while he uses the toilet. What will you do as someone trying to improve on their weakness?',
+			questionList: [
+				'Do Nothing',
+				'Wait for him to get lunch together.',
+				'Wait for only 1 minute and leave if he doesn’t show up.',
+				'Tell him you’re hungry and cannot wait.',
+			],
+		},
+		{
+			title: 'You’ve identified your strength is honesty and your class teacher is asking who was making noise. You know it is Adetola, your best friend that was making noise because he is your seatmate. What will you do next?',
+			questionList: [
+				'Choose not to say anything',
+				'Tell the teacher that Adetola was making noise',
+				'Tell Adetola to report himself or else you would.',
+				'Ask to go to the toilet because you don’t want to talk about it',
+			],
+		},
+		{
+			title: "You're trying to solve a difficult puzzle. Which quality would be most helpful in this situation?",
+			questionList: ['patience', 'self-critical', 'optimistic', 'brave'],
+		},
+		{
+			title: 'You realized your best friend, John, has a weakness and you are interested in helping him work on this weakness. What would you do?',
+			questionList: [
+				'Ignore it to protect your friendship.',
+				'Tell him about the strengths you have noticed he has and identify how to manage his weakness.',
+				'Tell your other friends about this weakness.',
+				'Tell him about your own weakness in hopes that it will get him to share as well.',
+			],
+		},
+		{
+			title: 'What activity do you enjoy the most, and why do you think you are good at it?',
+		},
+		{
+			title: 'When working in a group, what role do you naturally take on (e.g., leader, planner, helper)? Can you give an example?',
+		},
+		{
+			title: 'Is there a task or subject that you avoid because you find it difficult? Why do you think it’s challenging for you?',
+		},
+	];
 
-  const handleQuestionCheck = (questionIndex, optionIndex) => {
-    // Prevent editing if answers are already saved
-    if (assessment.assessment.answers[questionIndex] !== undefined) {
-      toast.info('You have already answered this question.')
-      return
-    }
+	const handleStepClick = () => {
+		// Validate current question before moving forward or submitting
+		const currentAnswer = assessment?.assessment?.answers[currentIndex - 1];
+		const isAnswered = currentAnswer !== undefined && currentAnswer !== '';
 
-    const updatedAnswers = [...assessment.assessment.answers]
-    updatedAnswers[questionIndex] = optionIndex // Store index instead of text
+		if (!isCompleted && !isAnswered) {
+			setErrorMessage('Please answer the question before proceeding.');
+			return;
+		}
 
-    const updatedAssessment = {
-      ...assessment,
-      assessment: { ...assessment.assessment, answers: updatedAnswers },
-    }
+		setErrorMessage('');
+		if (currentIndex < questionsArray.length) {
+			setCurrentIndex(currentIndex + 1);
+		} else {
+			if (isCompleted) {
+				onNext();
+			} else {
+				saveWeekTwoAssessment();
+			}
+		}
+	};
 
-    setAssessment(updatedAssessment)
-    localStorage.setItem(
-      'week-two-assessment',
-      JSON.stringify(updatedAssessment)
-    )
-    console.log('Assessment updated:', updatedAssessment)
-  }
-  const transformAssessmentData = () => {
-    return assessment.assessment.answers.map((answerIndex) => answerIndex)
-  }
+	const handlePreviousStepClick = () => {
+		if (currentIndex > 1) {
+			setCurrentIndex(currentIndex - 1);
+		} else {
+			onBack();
+		}
+	};
 
-  // Example usage:
-  // After handling question check, you might want to calculate the score:
-  const transformedData = transformAssessmentData()
+	const closeReviewPopUp = () => {
+		setReviewPopUp(false);
+	};
 
-  const saveWeekTwoAssessment = () => {
-    const transformedData = transformAssessmentData()
-    const valuesToCheck = transformedData.slice(0, 5)
-    const correctAnswers = [3, 1, 1, 0, 2]
-    const totalQuestions = valuesToCheck.length
-    const correctCount = valuesToCheck.reduce((count, current, index) => {
-      return current === correctAnswers[index] ? count + 1 : count
-    }, 0)
+	const handleQuestionCheck = (questionIndex, optionIndex) => {
+		// Prevent editing if answers are already saved or week is completed
+		if (isCompleted || assessment.assessment.answers[questionIndex] !== undefined) {
+			toast.info('You have already answered this question.');
+			return;
+		}
 
-    const percentage = Math.round((correctCount / totalQuestions) * 100)
-    toast.success(`You scored ${percentage}% in the quiz`)
-    const courseId = '66853bf50118e2e0a02b6a5a'
-    const dataToSend = {
-      rating: percentage,
-      assessments: assessment,
-      week: 2,
-    }
-    userService
-      .postMyAssessment(courseId, dataToSend)
-      .then((response) => {
-        if (response.message === 'You have already taken the assessment') {
-          toast.error('You have already taken the assessment') // Show error toast with the message
-        } else {
-          console.log('Submission successful:', response)
-          toast.success('Submitted your asessment score') // Optional: Show success message
-        }
-      })
-      .catch((error) => {
-        console.error('Submission failed:', error)
-        // toast.error("Submission failed. Please try again later."); // General error message
-      })
-  }
+		setErrorMessage('');
+		const updatedAnswers = [...assessment.assessment.answers];
+		updatedAnswers[questionIndex] = optionIndex; // Store index instead of text
 
-  const renderQuestion = () => {
-    const questionIndex = currentIndex - 1
-    const questionData = questionsArray[questionIndex]
+		const updatedAssessment = {
+			...assessment,
+			assessment: { ...assessment.assessment, answers: updatedAnswers },
+		};
 
-    if (questionData.questionList) {
-      return (
-        <div className='week-two'>
-          <div style={{ height: '550px' }} className='assessment question-box'>
-            {currentIndex <= 1 && (
-              <div className='assessment-box'>
-                <h2 style={{ color: '#FAFAFA' }}>Assessment</h2>
-                <p style={{ color: '#FAFAFA' }} className='text-center'>
-                  Scenario around your values.
-                </p>
-              </div>
-            )}
-            <div className='d-flex align-items-start mt-3'>
-              <h1 style={{ color: '#5B616A' }}>{currentIndex}.</h1>
-              <h2
-                style={{ color: '#5B616A' }}
-                className='text-start mb-0 fs-1 ms-3'
-              >
-                {questionData.title}
-              </h2>
-            </div>
-            <div
-              style={{ marginLeft: '3rem' }}
-              className='text-center checkbox-questions'
-            >
-              <ul
-                style={{ display: 'flex', flexDirection: 'column', gap: '0' }}
-                className='p-0 mt-4'
-              >
-                {questionData.questionList.map((item, index) => (
-                  <li key={index} className='d-flex align-items-center my-2'>
-                    <img
-                      onClick={() => handleQuestionCheck(questionIndex, index)}
-                      className={`cursor-pointer mt-2 ${
-                        assessment.assessment.answers[questionIndex] !==
-                        undefined
-                          ? 'disabled'
-                          : ''
-                      }`}
-                      src={
-                        assessment.assessment.answers[questionIndex] === index
-                          ? checkedImage
-                          : unCheckedImage
-                      }
-                      alt=''
-                    />
-                    <p className='question-p ms-3 align-items-center mt-2'>{item}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      )
-    } else {
-      return (
-        <div className='week-two'>
-          <div className='assessment question-box py-4'>
-            <div className='d-flex align-items-start mt-3'>
-              <h1 style={{ color: '#5B616A' }}>{currentIndex}.</h1>
-              <h2
-                style={{ color: '#5B616A' }}
-                className='text-center mb-0 fs-1 ms-3'
-              >
-                {questionData.title}
-              </h2>
-            </div>
-            <div className='text-area-box px-5 mt-4'>
-              <textarea
-                className='px-3 pt-2'
-                placeholder='Type your answer here...'
-                rows='7'
-                value={assessment.assessment.answers[questionIndex] || ''}
-                onChange={(e) => {
-                  const updatedAnswers = [...assessment.assessment.answers]
-                  updatedAnswers[questionIndex] = e.target.value // Capture the full text input
+		setAssessment(updatedAssessment);
+		writeSelfAwarenessStorage('week-two-assessment', updatedAssessment);
+	};
+	const transformAssessmentData = () => {
+		return assessment?.assessment?.answers.map((answerIndex) => answerIndex);
+	};
 
-                  const updatedAssessment = {
-                    ...assessment,
-                    assessment: {
-                      ...assessment.assessment,
-                      answers: updatedAnswers,
-                    },
-                  }
+	const queryClient = useQueryClient();
+	// Mutation for saving user data
+	const mutation = useMutation({
+		mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
+		onSuccess: (data) => {
+			setDisableButton(false);
+			setErrorMessage('');
+			toast.dismiss();
+			toast.success(data.message || 'Answers saved successfully!'); // Show success toast
 
-                  setAssessment(updatedAssessment)
-                  localStorage.setItem(
-                    'week-two-assessment',
-                    JSON.stringify(updatedAssessment)
-                  )
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      )
-    }
-  }
+			// Invalidate enrollment query to trigger real-time progress update
+			queryClient.invalidateQueries(['enrollment', userAnswers?.courseEnrollmentId]);
 
-  useEffect(() => {
-    // Fetch the initial state or restore the assessment from localStorage
-    const storedAssessment = localStorage.getItem('week-two-assessment')
-    if (storedAssessment) {
-      setAssessment(JSON.parse(storedAssessment))
-    }
-  }, [])
-  return (
-    <div>
-      {renderQuestion()}
+			dispatch(
+				updateData({
+					course: null,
+					courseEnrollmentId: null,
+					week: 2,
+					activities: [],
+					assessments: [],
+				})
+			);
+			localStorage.removeItem('weekTwoAssessmentData');
+			onNext();
+		},
+		onError: (error) => {
+			console.log(error, 'errorrrr');
+			toast.dismiss();
+			setErrorMessage(error?.message || error?.error || 'Error saving answers');
+		},
+	});
 
-      <div className='slider-indicator'>
-        <ul className='p-0 mt-5'>
-          {Array.from({ length: questionsArray.length }, (_, index) => (
-            <li
-              key={index + 1}
-              className={currentIndex >= index + 1 ? 'answered' : ''}
-            ></li>
-          ))}
-        </ul>
-      </div>
+	const saveWeekTwoAssessment = async () => {
+		if (disableButton || isCompleted) return;
 
-      <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-        <button
-          className='btn progress-btn btn-light'
-          onClick={handlePreviousStepClick}
-        >
-          {'<<<'} Back
-        </button>
-        <button className='btn progress-btn btn-dark' onClick={handleStepClick}>
-          Next {'>>>'}
-        </button>
-      </div>
+		try {
+			if (!activityData?.activities || activityData?.activities?.length !== 8) {
+				setErrorMessage('Please complete all activities before submitting the assessment.');
+				return;
+			}
 
-      {/* {reviewPopUp && (
+			// Final check for all 8 assessment answers
+			const transformedData = transformAssessmentData();
+			if (transformedData.length !== 8 || transformedData.some(ans => ans === undefined || ans === '')) {
+				setErrorMessage('Please ensure all 8 assessment questions are answered.');
+				return;
+			}
+			setErrorMessage('');
+			const valuesToCheck = transformedData.slice(0, 5);
+			const correctAnswers = [3, 1, 1, 0, 2];
+			const totalQuestions = valuesToCheck.length;
+			const correctCount = valuesToCheck.reduce((count, current, index) => {
+				return current === correctAnswers[index] ? count + 1 : count;
+			}, 0);
+
+			const percentage = Math.round((correctCount / totalQuestions) * 100);
+			toast.success(`You scored ${percentage}% in the quiz`);
+
+			const mutationData = {
+				...userAnswers,
+				assessments: [assessment],
+				activities: activityData?.activities,
+				rating: percentage.toString(),
+			};
+
+			mutation.mutate(mutationData);
+		} catch (error) {
+			console.log(error);
+			setIsLoading(false);
+			setErrorMessage('Something went wrong. Please contact flow admin for support!');
+		}
+	};
+
+	const renderQuestion = () => {
+		const questionIndex = currentIndex - 1;
+		const questionData = questionsArray[questionIndex];
+
+		if (questionData.questionList) {
+			return (
+				<div className="week-two">
+					<div className="assessment question-box">
+						{currentIndex <= 1 && (
+							<div className="assessment-box">
+								<h2 style={{ color: '#FAFAFA', textAlign: 'center' }}>
+									Assessment
+								</h2>
+								<p style={{ color: '#FAFAFA' }} className="text-center">
+									Scenario around your values.
+								</p>
+							</div>
+						)}
+						<div className="d-flex align-items-start mt-3">
+							<h1 style={{ color: '#5B616A' }}>{currentIndex}.</h1>
+							<h2 style={{ color: '#5B616A' }} className="text-start mb-0 fs-1 ms-3">
+								{questionData.title}
+							</h2>
+						</div>
+						<div
+							style={{ marginLeft: '3rem' }}
+							className="text-center checkbox-questions"
+						>
+							<ul
+								style={{ display: 'flex', flexDirection: 'column', gap: '0' }}
+								className="p-0 mt-4"
+							>
+								{questionData.questionList.map((item, index) => (
+									<li key={index} className="d-flex align-items-center my-2">
+										<img
+											onClick={() =>
+												handleQuestionCheck(questionIndex, index)
+											}
+											className={`cursor-pointer mt-2 ${assessment?.assessment?.answers[questionIndex] !==
+												undefined
+												? 'disabled'
+												: ''
+												}`}
+											src={
+												assessment?.assessment?.answers[questionIndex] ===
+													index
+													? checkedImage
+													: unCheckedImage
+											}
+											alt=""
+										/>
+										<p className="question-p ms-3 align-items-center mt-2">
+											{item}
+										</p>
+									</li>
+								))}
+							</ul>
+						</div>
+					</div>
+				</div>
+			);
+		} else {
+			return (
+				<div className="week-two">
+					<div className="assessment question-box py-4">
+						<div className="d-flex align-items-start mt-3">
+							<h1 style={{ color: '#5B616A' }}>{currentIndex}.</h1>
+							<h2 style={{ color: '#5B616A' }} className="text-center mb-0 fs-1 ms-3">
+								{questionData.title}
+							</h2>
+						</div>
+						<div className="text-area-box px-5 mt-4">
+							<textarea
+								className="px-3 pt-2"
+								placeholder="Type your answer here..."
+								rows="7"
+								disabled={isCompleted}
+								value={assessment.assessment.answers[questionIndex] || ''}
+								onChange={(e) => {
+									const updatedAnswers = [...assessment.assessment.answers];
+									updatedAnswers[questionIndex] = e.target.value; // Capture the full text input
+
+									const updatedAssessment = {
+										...assessment,
+										assessment: {
+											...assessment.assessment,
+											answers: updatedAnswers,
+										},
+									};
+
+									setAssessment(updatedAssessment);
+									setErrorMessage('');
+									writeSelfAwarenessStorage(
+										'week-two-assessment',
+										updatedAssessment
+									);
+								}}
+							/>
+						</div>
+					</div>
+				</div>
+			);
+		}
+	};
+
+	return (
+		<div>
+			{renderQuestion()}
+
+			<div className="slider-indicator">
+				<ul className="p-0 mt-3">
+					{Array.from({ length: questionsArray.length }, (_, index) => (
+						<li
+							key={index + 1}
+							className={currentIndex >= index + 1 ? 'answered' : ''}
+						></li>
+					))}
+				</ul>
+			</div>
+			{errorMessage && <div className="text-danger mt-3">{errorMessage}</div>}
+
+			<div className="progression-btns mt-3">
+				<button
+					className="btn prev light"
+					onClick={handlePreviousStepClick}
+					disabled={disableButton || mutation.isPending}
+				>
+					{'<<< Back'}
+				</button>
+				<button
+					className="btn next dark"
+					disabled={disableButton || mutation.isPending}
+					onClick={handleStepClick}
+				>
+					{mutation.isPending ? (
+						<RotatingLines
+							className="me-2 text-white"
+							type="Oval"
+							strokeColor="white"
+							height={20}
+							width={20}
+						/>
+					) : (
+						<>
+							{isCompleted
+								? currentIndex === questionsArray.length
+									? 'Continue'
+									: 'Next >>>'
+								: currentIndex === questionsArray.length
+									? 'Submit'
+									: 'Next >>>'}
+						</>
+					)}
+				</button>
+			</div>
+
+			{/* {reviewPopUp && (
         <Modal
           isOpen={reviewPopUp}
           onRequestClose={closeReviewPopUp}
@@ -325,6 +389,6 @@ export default function WeekTwoAssessmentForm({ onBack, onNext }) {
           <ReviewPopUp />
         </Modal>
       )} */}
-    </div>
-  )
+		</div>
+	);
 }

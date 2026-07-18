@@ -8,9 +8,14 @@ import { useQuery } from "@tanstack/react-query";
 import schoolService from "../../../../services/api/school";
 import { useSelector } from "react-redux";
 import Loading from "../../../loader/Loader";
-import ViewDetailsModal from "../../modals/vew details/ViewDetailsModal";
 
 Modal.setAppElement("#root"); // This is to avoid screen readers issues with React Modal
+
+const TEASER_COURSE_IDS = [
+  "6a4b61506661e58365e9ceb4",
+  "6a4b616d6661e58365e9ceb5",
+];
+const TEASER_ALLOWED_SCHOOL_ID = "673210c0f28242d1d71ba39f";
 
 const SchoolAllCourses = () => {
   const { user } = useSelector((state) => state.user);
@@ -23,14 +28,17 @@ const SchoolAllCourses = () => {
   const [filterOption, setFilterOption] = useState(""); // State for Filter Option
   let schoolId;
 
-  // ToDO: Do a check if its a school or a user
+  // ToDO: Do a check if its a school or a user(Educator)
   if (user?.isSchool) {
     schoolId = user?._id;
+  }else{
+    schoolId = user?.school?._id || user?.school;
   }
 
+  const canViewTeaserCourses = schoolId === TEASER_ALLOWED_SCHOOL_ID;
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["courses"],
+    queryKey: ["courses", schoolId],
     queryFn: () => schoolService.getCourses(schoolId, "All"),
     enabled: !!schoolId,
     refetchOnMount: false,
@@ -38,7 +46,7 @@ const SchoolAllCourses = () => {
   });
 
   const { data: enrolledData } = useQuery({
-    queryKey: ["school-enrolled-courses"],
+    queryKey: ["school-enrolled-courses", schoolId],
     queryFn: () => schoolService.getCourses(schoolId, "Enrolled"),
     enabled: !!schoolId,
     refetchOnMount: false,
@@ -50,8 +58,14 @@ const SchoolAllCourses = () => {
 
   useEffect(() => {
     if (!data) return;
-    setCourses(data);
-  }, [data]);
+    setCourses({
+      ...data,
+      courses: data.courses?.filter(
+        (course) =>
+          canViewTeaserCourses || !TEASER_COURSE_IDS.includes(course?._id)
+      ),
+    });
+  }, [data, canViewTeaserCourses]);
 
   // Open CourseDetailModal
   const openCourseDetailModal = (course) => {
@@ -211,10 +225,10 @@ const SchoolAllCourses = () => {
         className="custom-modal-otp-variant"
         overlayClassName="custom-overlay"
       >
-        <ViewDetailsModal
+        {/* <ViewDetailsModal
           closeModal={closeViewDetailsModal}
           // courseid={course?._id}
-        />
+        /> */}
       </Modal>
     </div>
   );

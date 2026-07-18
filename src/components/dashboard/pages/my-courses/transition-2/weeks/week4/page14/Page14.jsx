@@ -1,0 +1,185 @@
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  selectPageData,
+  selectCurrentStep,
+} from "../../../../../../../../redux/reducers/navigationSlice";
+import {
+  userAnswer,
+  saveActivity,
+} from "../../../../../../../../redux/reducers/userAnswersReducer";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import StepIndicator from "../../../components/StepIndicator";
+import Button from "../../../components/Button";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
+
+import CheckboxFrame from "./components/CheckboxFrame";
+import TextInputFrame from "./components/TextInputFrame";
+
+function Page14() {
+  const dispatch = useDispatch();
+  const pageData = useSelector(selectPageData);
+  const currentStep = useSelector(selectCurrentStep);
+  const userAnswers = useSelector(userAnswer);
+  const adminDatas = useSelector(adminData);
+
+  const totalSteps = pageData?.steps?.length || 0;
+  const step = pageData?.steps[currentStep - 1];
+
+  const [checkboxAnswers, setCheckboxAnswers] = useState({});
+  const [textAnswers, setTextAnswers] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // Get the current step's text answer
+  const currentTextAnswer = textAnswers[currentStep] || "";
+
+  // Helper to update this step's text answer
+  const setCurrentTextAnswer = (value) => {
+    setTextAnswers((prev) => {
+      const nextTextAnswers = {
+        ...prev,
+        [currentStep]: value,
+      };
+      saveActivityDraft(userAnswers, pageData.id, {
+        checkboxAnswers,
+        textAnswers: nextTextAnswers,
+      });
+      return nextTextAnswers;
+    });
+  };
+
+  useEffect(() => {
+    if (!userAnswers) return;
+    const response = userAnswers.activities?.find(
+      (item) => item.page === pageData.id
+    );
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const savedAnswer =
+      response?.answer && typeof response.answer === "object"
+        ? response.answer
+        : {};
+    const mergedAnswer = {
+      checkboxAnswers: {
+        ...(savedAnswer.checkboxAnswers || {}),
+        ...(draftAnswer?.checkboxAnswers || {}),
+      },
+      textAnswers: {
+        ...(savedAnswer.textAnswers || {}),
+        ...(draftAnswer?.textAnswers || {}),
+      },
+    };
+
+    if (response?.answer || draftAnswer) {
+      setCheckboxAnswers(mergedAnswer.checkboxAnswers);
+      setTextAnswers(mergedAnswer.textAnswers);
+    }
+  }, [userAnswers, pageData.id]);
+
+  const saveUserInput = () => {
+    if (adminDatas.isAdmin) return true;
+
+    // Validation for step 2 (checkbox)
+    if (currentStep === 2) {
+      const hasSelection = Object.values(checkboxAnswers).some((val) => val);
+      if (!hasSelection) {
+        setErrorMessage("Oops! Please select at least one option!");
+        return false;
+      }
+    }
+
+    // Validation for step 1 and step 3 (text input)
+    if (currentStep === 1 || currentStep === 3) {
+      if (!currentTextAnswer.trim()) {
+        setErrorMessage("Oops! Please enter a valid input!");
+        return false;
+      }
+    }
+
+    setErrorMessage("");
+
+    dispatch(
+      saveActivity({
+        page: pageData.id,
+        answer: {
+          checkboxAnswers,
+          textAnswers,
+        },
+      })
+    );
+    clearActivityDraft(userAnswers, pageData.id);
+
+    return true;
+  };
+
+  const handleCheckboxAnswersChange = (nextAnswersOrUpdater) => {
+    setCheckboxAnswers((prevAnswers) => {
+      const nextAnswers =
+        typeof nextAnswersOrUpdater === "function"
+          ? nextAnswersOrUpdater(prevAnswers)
+          : nextAnswersOrUpdater;
+      saveActivityDraft(userAnswers, pageData.id, {
+        checkboxAnswers: nextAnswers,
+        textAnswers,
+      });
+      return nextAnswers;
+    });
+  };
+
+  // Check if "Others" option is selected
+  // const isOthersSelected = () => {
+  //   if (currentStep !== 1) return false;
+  //   const othersIndex = step?.options?.findIndex(
+  //     (option) => option.toLowerCase() === "others"
+  //   );
+  //   return othersIndex !== -1 && checkboxAnswers[othersIndex];
+  // };
+
+  const renderStep = () => {
+    if (!step) return <div>Invalid Step</div>;
+
+    switch (step.type) {
+      case "checkbox":
+        return (
+          <CheckboxFrame
+            step={step}
+            checkboxAnswers={checkboxAnswers}
+            setCheckboxAnswers={handleCheckboxAnswersChange}
+            setErrorMessage={setErrorMessage}
+          />
+        );
+
+      case "question":
+        return (
+          <TextInputFrame
+            step={step}
+            textAnswer={currentTextAnswer}
+            setTextAnswer={setCurrentTextAnswer}
+            setErrorMessage={setErrorMessage}
+          />
+        );
+
+      default:
+        return <div>Unknown step type</div>;
+    }
+  };
+
+  return (
+    <>
+      {renderStep()}
+      {errorMessage && <div className="text-danger mt-3">{errorMessage}</div>}
+
+      <StepIndicator totalSteps={totalSteps} />
+
+      <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
+        <Button text="Prev" />
+        <Button text="Next" customOnClick={saveUserInput} />
+      </div>
+    </>
+  );
+}
+
+export default Page14;

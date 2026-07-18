@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { toast } from 'react-toastify'
 
 const PersonalityDescriptionComponent = ({
   onBack,
@@ -8,6 +7,7 @@ const PersonalityDescriptionComponent = ({
   friendshipHand,
   analyticHand,
   formData,
+  onUpdate,
   actionHand,
 }) => {
   // Find the form data for activity 8 (or whichever activity this is)
@@ -21,21 +21,43 @@ const PersonalityDescriptionComponent = ({
   const [selectedPersonality, setSelectedPersonality] =
     useState(initialPersonality)
   const [explanation, setExplanation] = useState(initialExplanation) // Initialize with initialExplanation
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handlePersonalitySelect = (type) => {
     setSelectedPersonality(type)
+    setErrorMessage('')
+    onUpdate?.({
+      answer: {
+        selectedPersonality: type,
+        explanation,
+      },
+    })
   }
 
   const handleExplanationChange = (event) => {
-    setExplanation(event.target.value)
+    const nextExplanation = event.target.value
+    setExplanation(nextExplanation)
+    setErrorMessage('')
+    onUpdate?.({
+      answer: {
+        selectedPersonality,
+        explanation: nextExplanation,
+      },
+    })
   }
 
   const handleNext = () => {
-    if (explanation.trim()) {
-      onNext({ selectedPersonality, explanation })
-    } else {
-      toast.error('Please provide an explanation.')
+    if (!selectedPersonality) {
+      setErrorMessage('Please select a personality color.')
+      return
     }
+
+    if (!explanation.trim()) {
+      setErrorMessage('Please provide an explanation.')
+      return
+    }
+
+    onNext({ selectedPersonality, explanation })
   }
 
   return (
@@ -104,14 +126,16 @@ const PersonalityDescriptionComponent = ({
         </div>
       </div>
 
-      <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
-        <button className='btn progress-btn btn-light' onClick={onBack}>
-          {'<<<'} Back
-        </button>
-        <button className='btn progress-btn btn-dark' onClick={handleNext}>
-          Next {'>>>'}
-        </button>
-      </div>
+      {errorMessage && <div className='text-danger'>{errorMessage}</div>}
+
+			<div className="progression-btns mt-3">
+					<button className="btn prev light" onClick={onBack}>
+						{'<<< Back'}
+					</button>
+				<button className="btn next dark" onClick={handleNext}>
+					{'Next >>>'}
+				</button>
+			</div>
     </div>
   )
 }

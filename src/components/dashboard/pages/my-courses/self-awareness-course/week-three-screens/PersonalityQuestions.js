@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { toast } from 'react-toastify'
+import { writeSelfAwarenessStorage } from '../utils/storage'
 
 const PersonalityQuestionComponent = ({
   onBack,
@@ -14,6 +14,7 @@ const PersonalityQuestionComponent = ({
       answer: answer || '',
     }))
   )
+  const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
     // Load the saved state from localStorage when the component mounts
@@ -26,9 +27,9 @@ const PersonalityQuestionComponent = ({
 
   useEffect(() => {
     // Save the state to localStorage whenever answers change
-    localStorage.setItem(
+    writeSelfAwarenessStorage(
       'personalityQuestion3State',
-      JSON.stringify(localAnswers)
+      localAnswers
     )
   }, [localAnswers])
 
@@ -36,13 +37,14 @@ const PersonalityQuestionComponent = ({
     const newAnswers = [...localAnswers]
     newAnswers[index].answer = event.target.value
     setLocalAnswers(newAnswers)
+    setErrorMessage('')
   }
 
   const handleNext = () => {
     if (localAnswers.every((item) => item.answer.trim() !== '')) {
       onNext(localAnswers) // Send the entire array of objects
     } else {
-      toast.error('Please answer all the questions before proceeding.')
+      setErrorMessage('Please answer all the questions before proceeding.')
     }
   }
 
@@ -69,6 +71,8 @@ const PersonalityQuestionComponent = ({
           </div>
         ))}
       </div>
+
+      {errorMessage && <div className='text-danger'>{errorMessage}</div>}
 
       <div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
         <button className='btn progress-btn btn-light' onClick={onBack}>

@@ -1,0 +1,319 @@
+/* Clickable week styles */
+.accessible-week:hover {
+    transform: translateX(2px);
+}
+
+.locked-week {
+    pointer-events: none;
+}
+
+.active-week {
+    font-weight: 600;
+}
+
+.main-content>.aside-class {
+    max-height: calc(100vh - 78px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #c7d1dd transparent;
+}
+
+.main-content>.aside-class::-webkit-scrollbar {
+    width: 6px;
+}
+
+.main-content>.aside-class::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.main-content>.aside-class::-webkit-scrollbar-thumb {
+    background: #c7d1dd;
+    border-radius: 999px;
+}
+
+.main-content>.aside-class::-webkit-scrollbar-thumb:hover {
+    background: #9eadbf;
+}
+
+.transition-week-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    width: 100%;
+    margin-top: 22px;
+}
+
+.transition-week-group {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid rgba(20, 93, 182, 0.08);
+    box-shadow: 0 2px 8px rgba(18, 34, 66, 0.06);
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.transition-week-group.accessible-week:hover {
+    border-color: rgba(20, 93, 182, 0.18);
+    box-shadow: 0 8px 18px rgba(18, 34, 66, 0.09);
+}
+
+.transition-week-group.locked-week {
+    opacity: 0.45;
+}
+
+.transition-week-header,
+.transition-week-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    border: 0;
+    background: #fff;
+    color: #5b616a;
+    text-align: left;
+    letter-spacing: normal;
+}
+
+.transition-week-header {
+    min-height: 50px;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 0;
+    box-shadow: none;
+    transition: background-color 0.2s ease;
+}
+
+.transition-week-header:hover {
+    background: #fbfcff;
+}
+
+.transition-week-header:disabled,
+.transition-week-item:disabled {
+    cursor: not-allowed;
+}
+
+.transition-week-heading {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    align-items: center;
+    color: #1f2937;
+    font-size: 12px;
+    line-height: 1.25;
+}
+
+.locked-week .transition-week-heading {
+    color: #b3b7bd;
+}
+
+.transition-week-main {
+    width: 100%;
+    color: #145db6;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.transition-week-subtitle {
+    width: 100%;
+    color: #637083;
+    font-size: 11px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.transition-week-chevron {
+    flex: 0 0 auto;
+    color: #5b616a;
+    font-size: 20px;
+    transition: transform 0.24s ease, color 0.2s ease;
+}
+
+.transition-week-chevron.expanded {
+    color: #145db6;
+    transform: rotate(180deg);
+}
+
+.transition-status-icon {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #cfd5dc;
+    border-radius: 50%;
+    color: #cfd5dc;
+    background: #fff;
+}
+
+.transition-status-icon .iconify {
+    font-size: 14px;
+}
+
+.transition-status-icon.active {
+    border-color: #2b7de9;
+    color: #2b7de9;
+}
+
+.transition-status-icon.completed {
+    border-color: #45b65a;
+    color: #45b65a;
+}
+
+.transition-status-icon.small {
+    width: 20px;
+    height: 20px;
+}
+
+.transition-status-icon.small .iconify {
+    font-size: 13px;
+}
+
+.transition-week-items {
+    overflow: hidden;
+    background: #fff;
+    border-radius: 0 0 8px 8px;
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: max-height 0.32s ease, opacity 0.22s ease, transform 0.28s ease;
+}
+
+.transition-week-items.expanded {
+    max-height: 760px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.transition-week-item {
+    min-height: 42px;
+    gap: 16px;
+    padding: 9px 14px 9px 28px;
+    font-size: 12px;
+    line-height: 1.2;
+    border-top: 1px solid #f0f2f5;
+    transition: background-color 0.18s ease, color 0.18s ease, padding-left 0.18s ease;
+}
+
+.transition-week-item:hover,
+.transition-week-item.selected {
+    background: #f3f5f8;
+    color: #1f2937;
+}
+
+.transition-week-item:hover {
+    padding-left: 32px;
+}
+
+.transition-week-item.selected {
+    font-weight: 700;
+}
+
+.transition-week-item.locked {
+    color: #a9b1bd;
+    cursor: not-allowed;
+}
+
+.transition-week-item.locked:hover {
+    background: #fff;
+    padding-left: 28px;
+}
+
+.transition-week-item.locked .transition-status-icon {
+    border-color: #d8dde4;
+    color: #b8c0cc;
+    background: #fafafa;
+}
+
+.transition-week-item span:last-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.transition-review-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.35);
+    overflow-y: auto;
+}
+
+.transition-review-popup {
+    width: min(620px, 100%);
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+    padding: 30px 60px;
+}
+
+.transition-review-popup h1.review {
+    width: min(100%, 420px);
+    margin: 0 auto;
+    background-color: #275dad;
+    color: #fff;
+    border: 8px solid #5ce1e6;
+    border-radius: 50px;
+    text-align: center;
+    padding: 5px 16px;
+    font-size: 40px;
+}
+
+.transition-review-popup .review-buttons {
+    width: min(350px, 100%);
+    margin: 1rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 12px;
+}
+
+.transition-review-popup .review-buttons .btn,
+.transition-review-popup .review-buttons .btn:focus {
+    outline: none;
+    border: none;
+}
+
+.transition-review-popup .review-buttons img {
+    max-width: 72px;
+    height: auto;
+}
+
+@media (max-width: 769px) {
+    .resilience-week-content {
+        padding: 0 0px !important;
+        margin: 1rem 5px 0 0 !important;
+    }
+
+    .assessment-header {
+        padding: 0 !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .transition-review-overlay {
+        align-items: flex-start;
+        padding: 16px;
+    }
+
+    .transition-review-popup {
+        max-height: calc(100vh - 32px);
+        padding: 24px 18px;
+    }
+
+    .transition-review-popup h1.review {
+        font-size: 28px;
+        border-width: 6px;
+    }
+
+    .transition-review-popup .review-buttons {
+        flex-wrap: wrap;
+    }
+}

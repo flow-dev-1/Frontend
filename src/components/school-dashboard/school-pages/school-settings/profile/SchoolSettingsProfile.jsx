@@ -16,11 +16,15 @@ const SchoolSettingsProfile = () => {
 
   const { user } = useSelector((state) => state.user)
 
+  console.log(user,"This is the user data in school profile")
+
   let schoolId
 
   // ToDO: Do a check if its a school or a user
   if (user?.isSchool) {
     schoolId = user?._id
+  } else {
+    schoolId = user?.school
   }
 
   const { data, isLoading, isError } = useQuery({
@@ -30,8 +34,9 @@ const SchoolSettingsProfile = () => {
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   })
+  
 
-  console.log(data)
+
 
   const openModal = () => {
     setModalIsOpen(true)
@@ -77,14 +82,19 @@ const SchoolSettingsProfile = () => {
             </p>
           </div>
         </div>
-        <button
-          style={{ backgroundColor: '#329BD6', color: '#fff' }}
-          className='edit-btn'
-          onClick={openModal}
-        >
-          <span></span>
-          Edit Profile
-        </button>
+
+        {
+          (user?.isSchool || user?.schoolAdminPermission === "Admin") &&
+          <button
+            style={{ backgroundColor: '#329BD6', color: '#fff' }}
+            className='edit-btn'
+            onClick={openModal}
+          >
+            <span></span>
+            Edit Profile
+          </button>
+        }
+
       </div>
 
       <div

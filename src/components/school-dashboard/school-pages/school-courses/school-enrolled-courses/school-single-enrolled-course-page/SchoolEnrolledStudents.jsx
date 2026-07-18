@@ -44,6 +44,7 @@ const SchoolEnrolledStudents = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [classlist, setClasslist] = useState(false);
+  const [classTag, setClassTag] = useState("");
 
 
   const [deleteUserCredentials, setDeleteUser] = useState({
@@ -65,12 +66,7 @@ const SchoolEnrolledStudents = () => {
     setShowDeleteModal(false);
   };
 
-  let schoolId;
-
-  // ToDO: Do a check if its a school or a user
-  if (user?.isSchool) {
-    schoolId = user?._id;
-  }
+  const schoolId = user?.isSchool ? user?._id : user?.school;
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -82,13 +78,13 @@ const SchoolEnrolledStudents = () => {
     // refetchOnWindowFocus: false,
   });
 
-  console.log("Enrolled data ", data);
-
   useEffect(() => {
     if (!data) return;
     setData(data?.course);
+    console.log(data?.course, "Student data here!")
     setClasslist(data?.course?.stdClass)
-    return () => {};
+    setClassTag(data?.course?.classTag)
+    return () => { };
   }, [data]);
 
   const formatDate = (isoString) => {
@@ -99,9 +95,9 @@ const SchoolEnrolledStudents = () => {
   const genderCount = (item) => {
     if (!item) return;
     const male =
-      item.filter((data) => data.user.gender === "male")?.length || 0;
+      item.filter((data) => data?.user?.gender === "male")?.length || 0;
     const female =
-      item.filter((data) => data.user.gender === "female")?.length || 0;
+      item.filter((data) => data?.user?.gender === "female")?.length || 0;
     return {
       male,
       female
@@ -214,7 +210,6 @@ const SchoolEnrolledStudents = () => {
         deleteUserCredentials.enrollId
       ),
     onSuccess: (data) => {
-      console.log("Mutation success:", data);
       toast.success("User UnEnrolled successfully!");
       queryClient.invalidateQueries(["school-single-courses"]);
       reset();
@@ -238,13 +233,14 @@ const SchoolEnrolledStudents = () => {
   }
 
 
+
   return (
     <div className="enrolled-course-student">
       <div className="header">
         <button className="back-button" onClick={() => navigate(-1)}>
           <Icon icon="mingcute:arrow-left-line" width={20} /> Back
         </button>
-        <p>Self Awareness</p>
+        <p>{data?.course?.course?.title}</p>
         <button className="add-student-button" onClick={handleCreateClick}>
           + Add New Student
         </button>
@@ -252,7 +248,7 @@ const SchoolEnrolledStudents = () => {
 
       <div className="image-container">
         <img
-          src={backgroundImage}
+          src={data?.course?.course?.banner || backgroundImage}
           alt="Background"
           className="background-image"
         />
@@ -260,7 +256,7 @@ const SchoolEnrolledStudents = () => {
       <div className="info-bar">
         <div className="info-item">
           <p className="info-p">Class Enrolled:</p>
-          <p>{enrollmentData.stdClass}</p>
+          <p>{enrollmentData.stdClass} {enrollmentData?.classTag}</p>
         </div>
         <div className="info-item">
           <p className="info-p">Enrollment Date:</p>
@@ -405,6 +401,7 @@ const SchoolEnrolledStudents = () => {
                     className="action-icon arrow-icon"
                     width={22}
                     style={{ color: "#000000" }}
+                    onClick={() => navigate(`users/${data?.user?._id}`)}
                   />
                 </td>
               </tr>
@@ -431,6 +428,7 @@ const SchoolEnrolledStudents = () => {
       >
         <AddStudentModal
           classOfficial={classlist}
+          classTag={classTag}
           onRequestClose={closeModals}
         />
       </Modal>

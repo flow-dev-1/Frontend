@@ -1,203 +1,203 @@
-import React, { useState } from 'react'
-import femaleprofileImage from '../../../../assets/user-profile-image.png'
-import maleprofileImage from '../../../../assets/male-profile-image.png'
-import flag from '../../../../assets/Flag_of_Nigeria.png'
-import './profile.css'
-import Modal from 'react-modal'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import StudentRegistrationProfile from '../../../modals-pages/dashboard-modals/profile/StudentRegistrationProfile'
-import { useQuery } from '@tanstack/react-query'
-import userService from '../../../../services/api/user'
-import EducatorProfileModal from './EducatorProfileModal'
-import StudentUpdateProfileModal from './StudentUpdateProfileModal'
-import Loading from '../../../loader/Loader'
-import { Icon } from '@iconify/react'
+import React, { useEffect, useState } from "react";
+import femaleprofileImage from "../../../../assets/user-profile-image.png";
+import maleprofileImage from "../../../../assets/male-profile-image.png";
+import flag from "../../../../assets/Flag_of_Nigeria.png";
+import "./profile.css";
+import Modal from "react-modal";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import StudentRegistrationProfile from "../../../modals-pages/dashboard-modals/profile/StudentRegistrationProfile";
+import { useQuery } from "@tanstack/react-query";
+import userService from "../../../../services/api/user";
+import EducatorProfileModal from "./EducatorProfileModal";
+import StudentUpdateProfileModal from "./StudentUpdateProfileModal";
+import Loading from "../../../loader/Loader";
+import { Icon } from "@iconify/react";
+import schoolService from "../../../../services/api/school";
 
 export default function IndividualProfile({ onClose }) {
-  const [modalIsOpen, setIsOpen] = useState(false)
-  const { userType } = useSelector((state) => state.user)
-  const navigate = useNavigate()
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const { userType } = useSelector((state) => state.user);
+  const { userId } = useParams();
+  const navigate = useNavigate();
 
-  const fetchProfile = () => {
-    if (userType?.accountType === 'Educator') {
-      return userService.getMyProfileEducator()
+  const user_id = userId ? userId : userType?.user?._id;
+
+  const fetchProfile = (id) => {
+    if (userType?.accountType === "Educator") {
+      return userService.getMyProfileEducator(id);
     } else {
-      console.log(userService.getMyProfileIndividual(),"Woww")
-      return userService.getMyProfileIndividual()
+      return schoolService.getStudentProfileIndividual(id);
     }
-  }
+  };
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['individual-profile'],
-    queryFn: fetchProfile,
-    refetchOnMount: true,
-    refetchOnWindowFocus: false,
-  })
-
-  console.log(data,"data ooooooo")
+    queryKey: ["individual-profile", user_id],
+    queryFn: () => fetchProfile(user_id),
+    enabled: !!user_id,
+  });
 
   const openModal = () => {
-    setIsOpen(true)
-  }
+    setIsOpen(true);
+  };
 
   const closeModal = () => {
-    setIsOpen(false)
-  }
+    setIsOpen(false);
+  };
 
   if (isLoading) {
-    return <Loading />
+    return <Loading />;
   }
   if (isError) {
-    return <div>An error occured while loading...</div>
+    return <div>An error occured while loading...</div>;
   }
 
   const user =
-    userType?.accountType === 'Educator' ? data?.educator : data?.user || {}
-
-    console.log(user,"User oooooo")
+    userType?.accountType === "Educator" ? data?.educator : data?.user || {};
   // Format the date
   const formatDate = (dateString) => {
-    const date = new Date(dateString)
-    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
-  }
+    const date = new Date(dateString);
+    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+  };
 
   function toTitleCase(str) {
-    console.log(str,"Na here o")
     return str?.replace(/\w\S*/g, function (txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-    })
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
   }
 
   const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text)
-    alert('Student ID copied to clipboard!')
-  }
+    navigator.clipboard.writeText(text);
+    alert("Student ID copied to clipboard!");
+  };
 
   return (
     <>
-      <div className='individual-profile container-fluid'>
-        <div className='user-basic-info' style={{ padding: '1rem' }}>
-          <div className='about-user'>
-            <div className='profile-img'>
-              {user?.gender === 'male' ? (
+      <div className="individual-profile container-fluid">
+        <div
+          className="user-basic-info flex-column flex-lg-row"
+          style={{ padding: "1rem" }}
+        >
+          <div className="about-user flex-column flex-lg-row align-content-center justify-content-center">
+            <div className="profile-img">
+              {user?.gender === "male" ? (
                 <img
-                  style={{ display: 'block', width: '100%' }}
+                  style={{ display: "block", width: "100%" }}
                   src={maleprofileImage}
-                  alt='user Profile image'
+                  alt="user Profile image"
                 />
               ) : (
                 <img
-                  style={{ display: 'block', width: '100%' }}
+                  style={{ display: "block", width: "100%" }}
                   src={femaleprofileImage}
-                  alt='user Profile image'
+                  alt="user Profile image"
                 />
               )}
             </div>
 
-            <div className='about-user-info mx-4'>
-              <h2>{user?.fullName || 'Add Info'}</h2>
-              <div className='user-details'>
-                <div className='green-spring-div primary'>
-                  {userType?.accountType === 'Educator'
-                    ? 'Educator'
+            <div className="about-user-info mx-4">
+              <h2 className="text-center">{user?.fullName || "Add Info"}</h2>
+              <div className="user-details justify-content-center justify-content-lg-start">
+                <div className="green-spring-div primary">
+                  {userType?.accountType === "Educator"
+                    ? "Educator"
                     : user?.grade}
                 </div>
               </div>
 
-              <div className='user-details'>
-                <div className='green-spring-div school'>
-                  {user?.userType || 'Individual'}
+              <div className="user-details">
+                <div className="green-spring-div school">
+                  {user?.school?.school_name || "Individual"}
                 </div>
                 <div
-                  style={{ color: '#5B616A' }}
-                  className='green-spring-div student'
+                  style={{ color: "#5B616A" }}
+                  className="green-spring-div student"
                 >
-                  {userType?.accountType === 'Educator'
-                    ? 'Educator'
-                    : 'Student'}
+                  {userType?.accountType === "Educator"
+                    ? "Educator"
+                    : "Student"}
                 </div>
               </div>
 
-              <p>
-                {user?.lga?.toUpperCase() || 'Add Info'} |{' '}
-                {user?.state?.toUpperCase() || 'Add Info'}{' '}
+              <p className="text-nowrap">
+                {user?.lga?.toUpperCase() || "Add Info"} |{" "}
+                {user?.state?.toUpperCase() || "Add Info"}{" "}
               </p>
-              <p></p>
-              <p>
+              {/* <p></p> */}
+              <p className="text-nowrap text-center">
                 {user?.country?.toUpperCase()}
                 <img
                   src={flag}
-                  alt='Nigeria Flag'
-                  style={{ borderRadius: '2px', width: '30px' }}
-                  className='flag-img'
+                  alt="Nigeria Flag"
+                  style={{ borderRadius: "2px", width: "30px" }}
+                  className="flag-img"
                 />
               </p>
             </div>
           </div>
 
-          <button className='edit-profile-btn' onClick={openModal}>
+          <button className="edit-profile-btn" onClick={openModal}>
             Edit Profile
           </button>
         </div>
 
-        <div className='user-other-info'>
+        <div className="user-other-info flex-column flex-lg-row">
           {/* Conditionally render Student ID and Email based on account type */}
-          {userType?.accountType !== 'Educator' && (
+          {userType?.accountType !== "Educator" && (
             <p>
-              <span className='label'>Student ID: </span>
+              <span className="label">Student ID: </span>
               <span>
-                {user?.userId}{' '}
+                {user?.userId}{" "}
                 <Icon
-                  icon={'cil:copy'}
-                  className='eye-icon'
+                  icon={"cil:copy"}
+                  className="eye-icon"
                   width={20}
                   onClick={() => copyToClipboard(user?.userId)}
-                  style={{ cursor: 'pointer' }}
-                />{' '}
+                  style={{ cursor: "pointer" }}
+                />{" "}
               </span>
             </p>
           )}
 
-          {userType?.accountType === 'Educator' && (
+          {userType?.accountType === "Educator" && (
             <p>
-              <span className='label'>Email:</span>
-              <span>{user?.email || 'Add Info'} </span>
+              <span className="label">Email:</span>
+              <span>{user?.email || "Add Info"} </span>
             </p>
           )}
 
           <p>
-            <span className='label'>D.O.B: </span>
-            <span>{(user?.DOB && formatDate(user.DOB)) || 'Add Info'} </span>
+            <span className="label">D.O.B: </span>
+            <span>{(user?.DOB && formatDate(user.DOB)) || "Add Info"} </span>
           </p>
           {/* <p>
             <span className='label'>Phone: </span>
             <span>{user?.phone || 'Add Info'} </span>
           </p> */}
           <p>
-            <span className='label'>Gender: </span>
-            <span>{toTitleCase(user?.gender) || 'Add Info'} </span>
+            <span className="label">Gender: </span>
+            <span>{toTitleCase(user?.gender) || "Add Info"} </span>
           </p>
         </div>
-        {userType?.accountType === 'Individual' ? (
-          <div className='user-parent-info'>
-            <h3 style={{ fontSize: '40px' }}>Parent/Guardian Information</h3>
-            <hr className='my-1' />
+        {userType?.accountType === "Individual" ? (
+          <div className="user-parent-info">
+            <h3 style={{ fontSize: "40px" }}>Parent/Guardian Information</h3>
+            <hr className="my-1" />
             <p>
-              <span className='label'>Full Name: </span>
-              <span>{user?.guardianFullName || 'Add Info'} </span>
+              <span className="label">Full Name: </span>
+              <span>{user?.guardianFullName || "Add Info"} </span>
             </p>
             <p>
-              <span className='label'>Email Address: </span>
-              <span>{user?.email || 'Add Info'}</span>
+              <span className="label">Email Address: </span>
+              <span>{user?.email || "Add Info"}</span>
             </p>
             <p>
-              <span className='label'>Phone Number: </span>
-              <span>{user?.phone || 'Add Info'}</span>
+              <span className="label">Phone Number: </span>
+              <span>{user?.phone || "Add Info"}</span>
             </p>
           </div>
         ) : (
-          ''
+          ""
         )}
 
         <hr />
@@ -206,17 +206,17 @@ export default function IndividualProfile({ onClose }) {
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
-        className='custom-modal'
-        overlayClassName='custom-overlay'
-        contentLabel='Edit Profile Modal'
+        className="custom-modal"
+        overlayClassName="custom-overlay"
+        contentLabel="Edit Profile Modal"
         shouldCloseOnOverlayClick={closeModal}
       >
-        {userType?.accountType !== 'Educator' ? (
+        {userType?.accountType !== "Educator" ? (
           <StudentUpdateProfileModal user={user} onClose={closeModal} />
         ) : (
           <EducatorProfileModal user={user} onClose={closeModal} />
         )}
       </Modal>
     </>
-  )
+  );
 }

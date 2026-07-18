@@ -1,11 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&display=swap");
 
-@import url('https://fonts.cdnfonts.com/css/good-unicorn');
+@import url("https://fonts.cdnfonts.com/css/good-unicorn");
 
-@import url('https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
 :root {
-  --paragraph-font-family: 'ABeeZee', sans-serif;
-  --headings-font-family: 'ABeeZee', sans-serif;
+  --paragraph-font-family: "ABeeZee", sans-serif;
+  --headings-font-family: "ABeeZee", sans-serif;
+  --headings1-font-family: "Good Unicorn", sans-serif;
 }
 
 /* Global styles for all elements */
@@ -35,12 +37,13 @@ ul,
 li,
 table,
 button {
-  font-family: 'ABeeZee', sans-serif !important;
+  font-family: "ABeeZee", sans-serif !important;
 }
 
 table {
   font-size: 14px !important;
 }
+
 /* HTML styles */
 html {
   scroll-behavior: smooth;
@@ -113,11 +116,12 @@ input:-webkit-autofill:active {
 }
 
 .root-layout {
-  background-image: url('./assets/Hero.png');
+  width: 100%;
+  background-image: url("./assets/Hero.png");
   background-position: center;
-  background-size: cover;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -130,7 +134,8 @@ input:-webkit-autofill:active {
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 20px;
-  width: fit-content;
+  /* width: fit-content; */
+  width: 100%;
   border-radius: 22px;
   z-index: 4000;
 }
@@ -149,7 +154,7 @@ input:-webkit-autofill:active {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.8) !important;
   /* transition: all .3s ease-out; */
-  z-index: 999;
+  z-index: 5000;
   border: none;
 }
 
@@ -161,7 +166,7 @@ input:-webkit-autofill:active {
 }
 
 .modal-content {
-  width: max-content;
+  /* width: fit-content; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -200,11 +205,12 @@ li {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #fefefe;
+  /* background-color: #fefefe; */
   margin: 0 auto;
   border-radius: 20px;
   padding: 30px 60px;
 }
+
 .custom-modal-otp-variant {
   width: 70%;
   display: flex;
@@ -216,6 +222,7 @@ li {
   padding: 0;
   overflow: hidden;
 }
+
 .custom-modal-otp-varian- {
   width: 70%;
   display: flex;
@@ -227,6 +234,7 @@ li {
   padding: 0;
   overflow: hidden;
 }
+
 .custom-modal-otp-variant-2 {
   width: 80%;
   display: flex;
@@ -249,12 +257,17 @@ li {
 }
 
 .custom-modal-otp-three {
-  width: 991px;
+  width: 95% !important;
+  max-width: 991px !important;
+  max-height: 95vh !important;
+  overflow-y: auto !important;
+  overflow-x: auto !important;
   justify-content: center;
   background-color: #fefefe;
   margin: 0 auto;
   border-radius: 10px;
   padding: 20px 40px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .send-invite-modal {
@@ -292,6 +305,7 @@ p.head-p {
   border-radius: 10px;
   padding: 10px 10px;
 }
+
 .custom-modal-dashboard {
   width: 502px;
   height: 540px;
@@ -301,17 +315,19 @@ p.head-p {
   border-radius: 10px;
   padding: 10px 10px;
 }
+
 .custom-modal-success-email {
   width: 730px;
-  height: 250px;
+  /* height: 250px; */
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #fefefe;
-  margin: 0 auto;
+  margin: 0 50px;
   border-radius: 10px;
   padding: 10px 10px;
 }
+
 .custom-modal-success-two {
   width: 610px;
   height: 250px;
@@ -385,65 +401,80 @@ input {
 
 /* For WebKit browsers (Chrome, Safari) */
 .custom-modal-dashboard::-webkit-scrollbar {
-  width: 10px; /* Set the scrollbar width */
+  width: 10px;
+  /* Set the scrollbar width */
 }
 
 .custom-modal-dashboard::-webkit-scrollbar-thumb {
-  background-color: #ccc; /* Set the thumb color to a light gray */
+  background-color: #ccc;
+  /* Set the thumb color to a light gray */
   border-radius: 10px;
 }
 
 .custom-modal-dashboard::-webkit-scrollbar-thumb:hover {
-  background-color: #bbb; /* Darken the thumb color on hover */
+  background-color: #bbb;
+  /* Darken the thumb color on hover */
 }
 
 .custom-modal-dashboard::-webkit-scrollbar-track {
-  background-color: #fff; /* Set the scrollbar background color to white */
+  background-color: #fff;
+  /* Set the scrollbar background color to white */
 }
 
 .custom-modal-dashboard::-webkit-scrollbar-button {
-  display: none; /* Hide the scrollbar arrows */
+  display: none;
+  /* Hide the scrollbar arrows */
 }
 
 /* For Firefox */
 .custom-modal-dashboard {
-  scrollbar-width: thin; /* Options: auto, thin, none */
-  scrollbar-color: #ccc #fff; /* Set the thumb color to light gray and track color to white */
+  scrollbar-width: thin;
+  /* Options: auto, thin, none */
+  scrollbar-color: #ccc #fff;
+  /* Set the thumb color to light gray and track color to white */
 }
 
 /* Hide scrollbar buttons for Firefox */
 .custom-modal-dashboard::-moz-scrollbar-button {
-  display: none; /* Hide the scrollbar arrows */
+  display: none;
+  /* Hide the scrollbar arrows */
 }
 
 /* For Internet Explorer and Edge */
 .custom-modal-dashboard {
-  -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+  -ms-overflow-style: none;
+  /* Hide scrollbar for IE and Edge */
 }
 
 .custom-modal-dashboard::-ms-scrollbar {
-  width: 10px; /* Set the scrollbar width */
+  width: 10px;
+  /* Set the scrollbar width */
 }
 
 .custom-modal-dashboard::-ms-scrollbar-thumb {
-  background-color: #ccc; /* Set the thumb color to a light gray */
+  background-color: #ccc;
+  /* Set the thumb color to a light gray */
 }
 
 .custom-modal-dashboard::-ms-scrollbar-thumb:hover {
-  background-color: #bbb; /* Darken the thumb color on hover */
+  background-color: #bbb;
+  /* Darken the thumb color on hover */
 }
 
 .custom-modal-dashboard::-ms-scrollbar-track {
-  background-color: #fff; /* Set the scrollbar background color to white */
+  background-color: #fff;
+  /* Set the scrollbar background color to white */
 }
 
 .custom-modal-dashboard::-ms-scrollbar-button {
-  display: none; /* Hide the scrollbar arrows */
+  display: none;
+  /* Hide the scrollbar arrows */
 }
 
 /* General styles for other browsers (fallback) */
 .custom-modal-dashboard::-webkit-scrollbar-corner {
-  background-color: transparent; /* Transparent background for the corner */
+  background-color: transparent;
+  /* Transparent background for the corner */
 }
 
 .add-student {
@@ -473,3 +504,17 @@ input {
   opacity: 0.5;
 }
 
+@media (min-width: 480px) {
+  .back-btn {
+    margin-left: 0rem;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 769px) {
+  .root-layout {
+    height: fit-content;
+    margin-top: 1rem;
+    padding: 2rem;
+  }
+}

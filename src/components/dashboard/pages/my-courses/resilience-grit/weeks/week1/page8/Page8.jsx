@@ -1,0 +1,185 @@
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import QuestionBox from "../../../components/QuestionBox";
+import DragAndDropFrame from "./components/DranAndDropFrame";
+import Button from "../../../components/Button";
+
+import {
+  selectPageData,
+  selectCurrentStep,
+} from "../../../../../../../../redux/reducers/navigationSlice";
+import {
+  userAnswer,
+  saveActivity,
+} from "../../../../../../../../redux/reducers/userAnswersReducer";
+import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
+
+const InternalStepIndicator = ({ totalSteps, currentStep }) => {
+  return (
+    <div className="d-flex justify-content-center mt-4" style={{ gap: "10px" }}>
+      {[...Array(totalSteps)].map((_, index) => (
+        <div
+          key={index}
+          className={`${index + 1 <= currentStep ? "bg-step-active" : "bg-step"}`}
+          style={{
+            // flexBasis: "35px",
+            width: "35px",
+            height: "17px",
+            borderRadius: "8px",
+            cursor: index <= currentStep ? "pointer" : "default",
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+function Page8() {
+  const dispatch = useDispatch(); // Initialize dispatch
+  const pageData = useSelector(selectPageData);
+  const currentStep = useSelector(selectCurrentStep);
+  const [answers, setAnswers] = useState([]); // State to hold answers
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const step = pageData?.steps[currentStep - 1];
+  const userAnswers = useSelector(userAnswer);
+  const adminDatas = useSelector(adminData);
+  const [dragDropImageLength, setDragDropImageLength] = useState(4)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const totalIndicatorSteps = 1 + dragDropImageLength;
+  const activeIndicatorStep =
+    currentStep === 1
+      ? 1
+      : Math.min(currentImageIndex + 2, totalIndicatorSteps);
+
+  useEffect(() => {
+    if (!userAnswers) return;
+
+    const response = userAnswers.activities?.find(
+      (item) => item.page === pageData.id
+    );
+
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setAnswers(
+      Array.isArray(response?.answer)
+        ? response.answer
+        : Array.isArray(draftAnswer)
+          ? draftAnswer
+          : []
+    );
+  }, [pageData.id, userAnswers]);
+
+  const setDraftedAnswers = (nextAnswersOrUpdater) => {
+    setAnswers((prevAnswers) => {
+      const nextAnswers =
+        typeof nextAnswersOrUpdater === "function"
+          ? nextAnswersOrUpdater(prevAnswers)
+          : nextAnswersOrUpdater;
+
+      saveActivityDraft(userAnswers, pageData.id, nextAnswers);
+      return nextAnswers;
+    });
+  };
+
+  const saveUserInput = () => {
+    if (adminDatas.isAdmin) return true;
+    if (currentStep === 1) return true;
+
+    const stepData = answers.find((item) => item.stepId === currentStep);
+
+    if (!stepData) {
+      setErrorMessage("Oops! All Images must be placed in the buckects.");
+      return false;
+    }
+
+    // Check total images dropped
+    const totalDropped = (stepData.value.green?.length || 0) +
+      (stepData.value.red?.length || 0);
+
+    if (totalDropped !== dragDropImageLength) {
+      setErrorMessage(`Please place all ${dragDropImageLength} images in the buckets.`);
+      return false;
+    }
+
+    setErrorMessage(""); // Clear error if input is valid
+  
+    const activityData = {
+      page: pageData.id,
+      answer: answers,
+    };
+    dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    clearActivityDraft(userAnswers, pageData.id);
+
+    return true;
+  };
+
+  // console.log(answers, "Answers")
+
+  const renderStep = () => {
+    if (!step) return <div>Invalid Step</div>;
+
+    switch (step.type) {
+      case "instruction":
+        return (
+          <QuestionBox>
+            <div className="text-center mb-5 mt-5 mt-md-4">
+              <h1 className="text-white bg-blue py-2 px-5 rounded d-inline week-2-question-text">
+                Instruction
+              </h1>
+            </div>
+
+            <div className="text-center mb-5 mt-3 mt-md-0">
+              <h2 className="text-gray py-2 px-5 rounded d-inline week-2-question-text">
+                You will be presented with four (4) scenarios and you are expected to drag and drop the scenarios to either resilience or grit.
+              </h2>
+            </div>
+          </QuestionBox>
+        );
+      case "imageDragAndDrop":
+        return (
+          <DragAndDropFrame
+            info={{
+              images: step.images,
+              buckets: step.buckets,
+              instruction: step.instruction,
+            }}
+            setErrorMessage={setErrorMessage}
+            answers={answers}
+            setAnswers={setDraftedAnswers}
+            setCurrentImageIndex1={setCurrentImageIndex}
+            setDragDropImageLength={setDragDropImageLength}
+          />
+        );
+      default:
+        return <div>Unknown step type</div>;
+    }
+  };
+
+  return (
+    <>
+      {renderStep()}
+      {currentStep !== 1 && errorMessage && (
+        <div className="text-danger">{errorMessage}</div>
+      )}{" "}
+      {/* Display error message */}
+      <div className="d-flex justify-content-center align-items-center gap-2">
+        <InternalStepIndicator
+          totalSteps={totalIndicatorSteps}
+          currentStep={activeIndicatorStep}
+        />
+
+      </div>
+
+      <div className="d-flex justify-content-center gap-96px mt-3 gap-4">
+        <Button text="Prev" />
+        <Button text="Next" customOnClick={saveUserInput} />
+      </div>
+    </>
+  );
+}
+
+export default Page8;

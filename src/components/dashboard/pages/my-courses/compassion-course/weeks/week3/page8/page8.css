@@ -1,0 +1,59 @@
+.compassion-week3-activity4-inputs {
+  width: min(100%, 924px);
+  min-height: 325px;
+  margin: 0 auto;
+  padding: 44px 48px;
+  box-sizing: border-box;
+  background: url("../../../../../../../../assets/big-rect.png") no-repeat;
+  background-size: 100% 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.compassion-week3-activity4-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+}
+
+.compassion-week3-activity4-label {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  border-radius: 4px;
+  background-color: #ffeebb;
+  text-align: center;
+  line-height: 24px;
+}
+
+.compassion-week3-activity4-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  border-bottom: 1px solid grey;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 10px;
+}
+
+.compassion-week3-activity4-input::placeholder {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.compassion-week3-activity4-input:focus {
+  outline: none;
+  border-bottom: 1px solid grey;
+}
+
+@media (max-width: 767px) {
+  .compassion-week3-activity4-inputs {
+    padding: 34px 24px;
+  }
+}

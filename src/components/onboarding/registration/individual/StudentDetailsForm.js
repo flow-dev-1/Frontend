@@ -13,6 +13,8 @@ import { useDispatch } from 'react-redux'
 import { setToken } from '../../../../redux/reducers/jwtReducer'
 import { toast } from 'react-toastify'
 import { Navigate, useNavigate } from 'react-router-dom'
+import "./studentDetailsForm.css"; // Import the CSS file for styling
+
 
 // Schema definition
 const studentSchema = yup.object().shape({
@@ -25,6 +27,7 @@ const studentSchema = yup.object().shape({
       (value) => value && value.trim().split(/\s+/).length <= 3
     )
     .trim(),
+  stdEmail: yup.string().email('Invalid email format').required('Email is required'),
   grade: yup.string().required('School Grade is required'),
   gender: yup.string().required('Gender is required'),
   DOB: yup.date().required('Date of Birth is required'),
@@ -45,15 +48,19 @@ export default function StudentDetailsForm({
   const [modalIsOpen, setIsOpen] = useState(false)
   const [openSuccessModal, setOpenSuccessModal] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+
+  const [forgotPasswordData, setForgotPasswordData] = useState(null)
   const navigate = useNavigate()
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
+    watch
   } = useForm({
     resolver: yupResolver(studentSchema),
   })
+  const email = watch('stdEmail'); // Add this line to track email value
 
   const dispatch = useDispatch()
 
@@ -76,7 +83,7 @@ export default function StudentDetailsForm({
   const mutation = useMutation({
     mutationFn: (data) => userService.individualRegister(data),
     onSuccess: (data) => {
-      console.log('Form submitted successfully', data)
+      toast.dismiss()
       toast.success(data.message)
       dispatch(setToken(data?.token))
       localStorage.setItem('Flow-Auth-Token', data?.token)
@@ -85,6 +92,12 @@ export default function StudentDetailsForm({
     },
     onError: (error) => {
       console.log('Error submitting form', error)
+      toast.dismiss()
+      toast.error(
+        typeof error === "string"
+          ? error
+          : error?.message || error?.error || JSON.stringify(error) || "An error occurred. Please try again."
+      );
     },
   })
 
@@ -147,8 +160,8 @@ export default function StudentDetailsForm({
           ...parentFormData,
           student: updatedStudents,
         }
+        setForgotPasswordData(completeFormData)
 
-        console.log('Submitting form data:', completeFormData)
         mutation.mutate(completeFormData)
       } catch (error) {
         console.error('Error adding student:', error)
@@ -164,21 +177,17 @@ export default function StudentDetailsForm({
     setIsOpen(false)
   }
 
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text)
-    alert('Student ID copied to clipboard!')
-  }
 
   return (
     <div
       className='registration-page add-student overflow-hidden'
-      style={{ height: '450px', position: 'relative' }}
+      style={{ height: 'fit-content', position: 'relative' }}
     >
       {isLoading && (
         <div className='loading-overlay'>
           <RotatingLines
             type='Oval'
-            style={{ color: '#FFF' }}
+            style={{ color: '#FFFFFF' }}
             height={50}
             width={50}
           />
@@ -188,7 +197,7 @@ export default function StudentDetailsForm({
       <div className={`form-container ${isLoading ? 'disabled' : ''}`}>
         <div className='top-section mt-2'>
           <h2 className='d-flex justify-content-between align-center'>
-            Student Details {students.length + 1} {/* Display student number */}
+            Child Details
             <Icon
               icon='radix-icons:cross-1'
               onClick={() => navigate('/', { replace: true })}
@@ -199,7 +208,7 @@ export default function StudentDetailsForm({
           <span>*Indicates Required</span>
           <p>
             <span>
-              Kindly take note of the Student ID and Password created as it will
+              Kindly take note of the Password created as it will
               be used as sign-In details.
             </span>
           </p>
@@ -219,10 +228,10 @@ export default function StudentDetailsForm({
               )}
             </div>
             <div className='form-group'>
-              <label>Student ID *</label>
-              <div className='d-flex align-items-center input-with-icon'>
+              <label>Student Email *</label>
+              {/* <div className='d-flex align-items-center input-with-icon'>
                 <input
-                  type='text'
+                  type='email'
                   value={currentStudentId}
                   readOnly
                   placeholder='CIS442'
@@ -234,7 +243,19 @@ export default function StudentDetailsForm({
                   onClick={() => copyToClipboard(currentStudentId)}
                   style={{ cursor: 'pointer' }}
                 />
-              </div>
+              </div> */}
+              <input
+                type='email'
+                placeholder='Type here...'
+                disabled={isLoading}
+                {...register('stdEmail')}
+
+              // value={email} // Set the value to the email prop
+              // disabled // Disable the input field
+              />
+              {errors.email && (
+                <p className='error-message'>{errors.email.message}</p>
+              )}
             </div>
             <div className='form-group'>
               <label>School Grade *</label>
@@ -286,7 +307,7 @@ export default function StudentDetailsForm({
               )}
             </div>
           </div>
-          <div className='add-more-student'>
+          {/* <div className='add-more-student'>
             <button
               style={{ marginTop: '0' }}
               type='submit'
@@ -297,40 +318,31 @@ export default function StudentDetailsForm({
                 Add Student <Icon icon='majesticons:plus-line' width={24} />
               </span>
             </button>
-          </div>
+          </div> */}
         </form>
-        <div className='action-btns'>
+        <div className="student-details-action-btns action-btns">
           <button
-            style={{
-              backgroundColor: '#fff',
-              color: '#275DAD',
-              border: '1px solid #275DAD',
-              borderRadius: '5px',
-            }}
+            className="back-button"
             onClick={() => setStep(1)}
             disabled={isLoading}
           >
             Back
           </button>
           <button
-            style={{
-              backgroundColor: '#275DAD',
-              color: '#fff',
-              borderRadius: '5px',
-            }}
-            type='button'
+            className="submit-button"
+            type="button"
             onClick={submitHandler}
             disabled={isLoading}
           >
             {mutation.isPending ? (
               <RotatingLines
-                type='Oval'
-                style={{ color: '#FFF' }}
+                type="Oval"
+                style={{ color: "#FFF" }}
                 height={20}
                 width={20}
               />
             ) : (
-              'Submit'
+              "Submit"
             )}
           </button>
         </div>
@@ -342,8 +354,8 @@ export default function StudentDetailsForm({
           shouldCloseOnOverlayClick={false}
         >
           <StudentOtpModal
-            resendOTP={handleSubmit(onSubmit)}
-            email={parentFormData.email}
+            resendOTP={() => mutation.mutate(forgotPasswordData)}
+            email={email || ''}
             setOpenSuccessModal={setOpenSuccessModal}
             closeModal={closeModal}
           />

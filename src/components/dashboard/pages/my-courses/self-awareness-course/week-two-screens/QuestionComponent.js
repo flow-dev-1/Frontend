@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { toast, ToastContainer } from 'react-toastify'
 
 const QuestionComponent = ({
   questionText,
@@ -7,11 +6,13 @@ const QuestionComponent = ({
   altText,
   formData,
   onBack,
+  onUpdate,
   onNext,
   activityIndex, // Pass this as a prop to identify the activity
 }) => {
   // State to manage the user's answer
   const [answers, setAnswers] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
     // Find the data for the current activity
@@ -31,16 +32,19 @@ const QuestionComponent = ({
 
   // Function to handle input change
   const handleInputChange = (event) => {
-    setAnswers(event.target.value)
+    const nextAnswer = event.target.value
+    setAnswers(nextAnswer)
+    setErrorMessage('')
+    onUpdate?.({ answers: [nextAnswer] })
   }
 
   // Function to handle Next button click
   const handleNextClick = () => {
     if (!answers) {
-      // Show a toast message if the answer is empty
-      toast.error('Please provide an answer before continuing.')
+      setErrorMessage('Please provide an answer before continuing.')
       return
     }
+    setErrorMessage('')
     // Pass the answer data back to the parent component
     onNext([answers])
   }
@@ -56,7 +60,7 @@ const QuestionComponent = ({
           >
             {questionText}
           </h2>
-          {imageSrc && <img src={imageSrc} alt={altText} className='mx-2' />}
+          {imageSrc && <img src={imageSrc} alt={altText} className='question-box-img mx-2' />}
           <h2 style={{ fontSize: '35px', color: '#5B616A' }} className=''>
             {altText}
           </h2>
@@ -70,16 +74,16 @@ const QuestionComponent = ({
           />
         </div>
 
-        <ToastContainer />
+        {errorMessage && <div className="text-danger px-4 mt-3">{errorMessage}</div>}
       </div>
-      <div className='d-flex align-items-center justify-content-around mt-5'>
+      <div className="progression-btns mt-3">
         {onBack && (
-          <button className='btn progress-btn btn-light' onClick={onBack}>
-            {'<<<'} Back
+          <button className="btn prev light" onClick={onBack}>
+            {'<<< Back'}
           </button>
         )}
-        <button className='btn progress-btn btn-dark' onClick={handleNextClick}>
-          Next {'>>>'}
+        <button className="btn next dark" onClick={handleNextClick}>
+          {'Next >>>'}
         </button>
       </div>
     </div>

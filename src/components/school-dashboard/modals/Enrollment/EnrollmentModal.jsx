@@ -12,6 +12,7 @@ import excelDoc from '../../../../assets/Flowtemp.xlsx'
 import userService from '../../../../services/api/school'
 import { RotatingLines } from 'react-loader-spinner'
 import { isPending } from '@reduxjs/toolkit'
+
 const generateTimeOptions = () => {
   const times = []
   for (let hour = 6; hour <= 18; hour++) {
@@ -28,8 +29,9 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   const [fileError, setFileError] = useState('')
   const [isFileUploaded, setIsFileUploaded] = useState(false)
   const [parsedStudents, setParsedStudents] = useState([])
-  const schemaWithFile = yup.object().shape({
+  const schema = yup.object().shape({
     stdClass: yup.string().required('Class is required'),
+    classTag: yup.string(), // Optional string field
     dayOfWeek: yup.string().required('Day of the Week is required'),
     startTime: yup.string().required('Start Time is required'),
     endTime: yup.string().required('End Time is required'),
@@ -37,21 +39,6 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
 
   const [showMessage, setShowMessage] = useState(false)
 
-  const schemaWithoutFile = schemaWithFile.shape({
-    students: yup
-      .array()
-      .of(
-        yup.object().shape({
-          email: yup
-            .string()
-            .email('Invalid email')
-            .required('Email is required'),
-          fullName: yup.string().required('Student Name is required'),
-          guardianFullName: yup.string().required('Guardian Name is required'),
-        })
-      )
-      .required('At least one student is required'),
-  })
 
   // Dynamically determine which schema to use based on the file upload status
   const {
@@ -59,9 +46,9 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(isFileUploaded ? schemaWithFile : schemaWithoutFile),
+    resolver: yupResolver(schema),
     defaultValues: {
-      students: [{ email: '', fullName: '', guardianFullName: '' }],
+
     },
   })
 
@@ -90,8 +77,8 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   const mutation = useMutation({
     mutationFn: (value) =>
       userService.enrolledStudents(params1, params2, value),
-    onSuccess: () => {
-      toast.success('Enrollment successful')
+    onSuccess: (data) => {
+      toast.success(data.message)
       queryClient.invalidateQueries(['school-enrolled-courses'])
       onRequestClose()
     },
@@ -102,18 +89,8 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
   })
 
   const onSubmit = (data) => {
-    if (
-      !window.confirm(
-        'Are you sure you want to enroll the students for this course?'
-      )
-    )
-      return
+    if (!window.confirm('Are you sure you want to enroll this class for this course?')) return
 
-    // If a file was uploaded, override the students array with parsed data
-    if (isFileUploaded) {
-      data.students = parsedStudents
-    }
-    console.log(data)
     mutation.mutate(data)
     // Ensure the data is submitted
   }
@@ -179,6 +156,7 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
       // Reset form fields
       reset({
         stdClass: '',
+        classTag: '',
         dayOfWeek: '',
         startTime: '',
         endTime: '',
@@ -207,13 +185,21 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
       onRequestClose={onRequestClose}
       className="custom-modal-otp-three"
       overlayClassName="custom-overlay"
+      style={{
+        content: {
+          zIndex: 9999
+        },
+        overlay: {
+          zIndex: 9998
+        }
+      }}
     >
       <div>
         <h2
           className="enroll-heading-flex"
           style={{ margin: "0", color: "#5B616A" }}
         >
-          Enroll Students
+          Enroll Class
           <span
             onClick={onRequestClose}
             style={{ color: "#5B616A", cursor: "pointer" }}
@@ -223,28 +209,49 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
         </h2>
         <hr style={{ margin: "5px" }} />
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="class-input">
-            <label
-              htmlFor="stdClass"
-              style={{ border: "none", paddingLeft: "0" }}
-            >
-              Class *
-            </label>
-            <select
-              style={{ border: "1px solid #5b616a" }}
-              name="stdClass"
-              {...register("stdClass")}
-            >
-              <option value="">Choose</option>
-              {classOptions.map((className, index) => (
-                <option key={index} value={className}>
-                  {className}
-                </option>
-              ))}
-            </select>
-            {errors.stdClass && (
-              <p className="error-message">{errors.stdClass.message}</p>
-            )}
+          <div className="select-flex">
+            <div className="class-input">
+              <label
+                htmlFor="stdClass"
+                style={{ border: "none", paddingLeft: "0" }}
+              >
+                Class *
+              </label>
+              <select
+                style={{ border: "1px solid #5b616a" }}
+                name="stdClass"
+                {...register("stdClass")}
+              >
+                <option value="">Choose</option>
+                {classOptions.map((className, index) => (
+                  <option key={index} value={className}>
+                    {className}
+                  </option>
+                ))}
+              </select>
+              {errors.stdClass && (
+                <p className="error-message">{errors.stdClass.message}</p>
+              )}
+            </div>
+
+            <div className="class-input">
+              <label
+                htmlFor="classTag"
+                style={{ border: "none", paddingLeft: "0" }}
+              >
+                Class Tag
+              </label>
+              <input
+                type="text"
+                style={{ border: "none" }}
+                name="classTag"
+                placeholder="e.g: A, Golden Eagles"
+                {...register("classTag")}
+              />
+              {errors.classTag && (
+                <p className="error-message">{errors.classTag.message}</p>
+              )}
+            </div>
           </div>
 
           <div className="select-flex">
@@ -319,146 +326,6 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
             </div>
           </div>
 
-          {/* Render student input fields without the ability to add or remove */}
-          {!isFileUploaded && (
-            <div>
-              <p style={{ fontSize: "14px", color: "#329BD6" }}>
-                For single invite, kindly use the fields below.
-              </p>
-              <div>
-                <div className="select-flex">
-                  <div>
-                    <label>Parent/Guardian First & Last Name *</label>
-                    <input
-                      id="stdClass"
-                      style={{
-                        display: "block",
-                        width: "100%",
-                        padding: ".5rem"
-                      }}
-                      name="students[0].guardianFullName"
-                      {...register("students.0.guardianFullName")}
-                    />
-                    {errors.students?.[0]?.guardianFullName && (
-                      <p className="error-message">
-                        {errors.students[0].guardianFullName.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label>Parent/Guardian Email Address *</label>
-                    <input
-                      id="stdClass"
-                      style={{
-                        display: "block",
-                        width: "100%",
-                        padding: ".5rem"
-                      }}
-                      name="students[0].email"
-                      {...register("students.0.email")}
-                    />
-                    {errors.students?.[0]?.email && (
-                      <p className="error-message">
-                        {errors.students[0].email.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label>Student’s First & Last Name *</label>
-                    <input
-                      id="stdClass"
-                      style={{
-                        display: "block",
-                        width: "100%",
-                        padding: ".5rem"
-                      }}
-                      name="students[0].fullName"
-                      {...register("students.0.fullName")}
-                    />
-                    {errors.students?.[0]?.fullName && (
-                      <p className="error-message">
-                        {errors.students[0].fullName.message}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-          <p style={{ fontSize: "14px", color: "#329BD6" }}>
-            For multiple students, kindly upload file using the sheet (Excel)
-            attached below.
-          </p>
-          <div>
-            <div>
-              <div
-                style={{
-                  position: "relative",
-                  width: "100%",
-                  border: "1px solid #ECEDF0"
-                }}
-                className="file-upload-wrapper"
-              >
-                <input
-                  type="file"
-                  id="file-upload"
-                  onChange={handleFileUpload}
-                  className="file-upload-input"
-                />
-                <label
-                  style={{
-                    border: 'none',
-                    paddingLeft: '0',
-                    color: '#41444c',
-                  }}
-                  htmlFor="file-upload"
-                  className="file-upload-label"
-                >
-                  {isFileUploaded ? "File ready for upload" : "Choose file"}
-                  <Icon
-                    icon="ant-design:upload-outlined"
-                    width="24"
-                    height="24"
-                    style={{
-                      position: "absolute",
-                      right: "1rem",
-                      color: "#329BD6"
-                    }}
-                  />
-                </label>
-                {fileError && (
-                  <p
-                    style={{
-                      color: "red",
-                      marginTop: "10px",
-                      textAlign: "right"
-                    }}
-                  >
-                    {fileError}
-                  </p>
-                )}
-              </div>
-              <span
-                onClick={handleExcelDownload}
-                style={{ fontSize: "12px", cursor: "pointer" }}
-              >
-                Kindly use this Excel template
-                <span>
-                  <Icon icon="vscode-icons:file-type-excel" width={20} />
-                  <Icon
-                    icon="ant-design:download-outlined"
-                    width="24"
-                    height="24"
-                    style={{
-                      right: "1rem",
-                      color: "#329BD6"
-                    }}
-                  />
-                </span>
-              </span>
-            </div>
-          </div>
-
           <hr />
           <button
             className="modal-button"
@@ -475,15 +342,10 @@ const EnrollmentModal = ({ isOpen, onRequestClose, daysOfWeek, course }) => {
                 visible={true}
               />
             ) : (
-              "Send invite"
+              "Submit"
             )}
           </button>
-          {isFileUploaded && mutation.isPending && (
-            <p style={{ fontSize: '10px', color: 'red', textAlign: 'right' }}>
-              Depending on the number of students, this process may take <br />{' '}
-              a while. Please wait and do not close this page. Thank you.
-            </p>
-          )}
+
         </form>
       </div>
     </Modal>

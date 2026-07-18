@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import React, { useEffect, useState } from "react";
+import React, { useState, useMemo } from "react";
 import "./view.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -12,26 +12,15 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
   const { user } = useSelector((state) => state.user);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deleteUserCredentials, setDeleteUser] = useState({
-    user: null,
-    enrollId: null
-  });
   const [openEnrollModal, setOpenEnrollModal] = useState(false);
-  const [openViewModal, setOpenViewModal] = useState(false);
-  const [openEnrollModalEducator, setOpenEnrollModalEducator] = useState(false);
 
   const openEnrollementModal = () => {
-    if (course.grade === "Educator") {
-      setOpenEnrollModalEducator(true);
-    } else {
-      setOpenEnrollModal(true);
-    }
+    setOpenEnrollModal(true);
   };
 
   const handleDeleteClick = () => {
     setShowDeleteModal(true);
   };
-  console.log(courseId);
 
   const [enrollmentData, setData] = useState([]);
   const [groupedData, setGroupedData] = useState([]);
@@ -40,69 +29,102 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
     setShowCreateModal(true);
   };
 
-
   const lightGreen = "#D4FFBE";
   const darkGreen = "#4B7E31";
   const lightTertiary = "#FAFAFA";
   const darkTertiary = "#329BD6";
   const lightEducator = "#5CE1E6";
   const darkEducator = "#275DAD";
-      const daysOfWeek = [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday"
-      ];
-      const timeOptions = Array.from(
-        { length: 10 },
-        (_, i) => `${String(i + 8).padStart(2, "0")}:00`
-      );
+  const daysOfWeek = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ];
+  const timeOptions = Array.from(
+    { length: 10 },
+    (_, i) => `${String(i + 8).padStart(2, "0")}:00`
+  );
 
   const closeModals = () => {
     setShowCreateModal(false);
     setShowDeleteModal(false);
   };
-    function convertTo12HourFormat(time) {
-      if (!time) return;
-      // Split the time string into hours and minutes
-      const [hour, minute] = time.split(":").map(Number);
 
-      // Determine if it's AM or PM
-      const period = hour >= 12 ? "PM" : "AM";
-
-      // Convert hour from 24-hour to 12-hour format
-      const twelveHour = hour % 12 || 12; // Converts "0" hour to "12"
-
-      // Return the formatted time
-      return `${twelveHour}:${minute.toString().padStart(2, "0")} ${period}`;
-    }
-  const selectModal = (id) => {
-    navigate(`/school-dashboard/courses/enrolled/${encryptURI(id)}`);
-  };
-  const closeEnrollementModal = () => {
-    setOpenEnrollModal(false);
-    setOpenEnrollModalEducator(false);
-  };
-
-  let schoolId;
-  // ToDO: Do a check if its a school or a user
-  if (user?.isSchool) {
-    schoolId = user?._id;
+  function convertTo12HourFormat(time) {
+    if (!time) return;
+    const [hour, minute] = time.split(":").map(Number);
+    const period = hour >= 12 ? "PM" : "AM";
+    const twelveHour = hour % 12 || 12;
+    return `${twelveHour}:${minute.toString().padStart(2, "0")} ${period}`;
   }
-  const navigate = useNavigate();
-  const { id } = useParams();
+
+  const selectModal = (id) => {
+    if (course.grade === 'Educator') {
+      navigate(`/school-dashboard/courses/enrolled/educators/${encryptURI(id)}`)
+    } else {
+      navigate(`/school-dashboard/courses/enrolled/${encryptURI(id)}`)
+    }
+  }
+
+  const closeEnrollementModal = () => {
+    setOpenEnrollModal(false)
+  }
+
+  let schoolId
+  if (user?.isSchool) {
+    schoolId = user?._id
+  } else {
+    schoolId = user?.school
+  }
+
+  const navigate = useNavigate()
+  const { id } = useParams()
   const { data, isLoading, isError } = useQuery({
     queryKey: ["school-dashboard"],
     queryFn: () => schoolService.getEnrolledDetails(schoolId, courseId)
   });
-  console.log(data?.courses);
+
+  // Filter courses based on user's classAssigned
+  const filteredCourses = useMemo(() => {
+    if (!data?.courses) return [];
+
+    // If user is a school, show all courses
+    if (user?.isSchool || user?.schoolAdminPermission === "Admin") {
+      return data.courses;
+    }
+
+    // If user is not a school, filter by classAssigned
+    if (user?.classAssigned && user.classAssigned.length > 0) {
+      return data.courses.filter(course => {
+        // Check if the course matches any of the user's assigned classes
+        return user.classAssigned.some(assignedClass =>
+          assignedClass.stdClass === course.stdClass &&
+          assignedClass.classTag === course.classTag
+        );
+      });
+    }
+
+    return [];
+  }, [data?.courses, user?.isSchool, user?.classAssigned]);
+
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
+      <div className="modal-content" style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        padding: '15px',
+        width: '95%',
+        maxWidth: '990px',
+        maxHeight: '90vh',
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+      }}>
         <div className="hediee">
           <div className="modal-header">
             <h2>Enrolled Classes</h2>
@@ -111,14 +133,28 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
             X
           </button>
         </div>
-        <div className="modal-body">
-          <div className="table-container">
+        <div className="modal-body" style={{
+          width: '100%',
+          flex: 1,
+          minHeight: 0,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          WebkitOverflowScrolling: 'touch',
+          display: 'block',
+          padding: '5px 0',
+        }}>
+          <div className="table-container" style={{
+            width: '100%',
+            overflowX: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            display: 'block',
+          }}>
             <table id="my-table" className="students-table">
               <thead>
-                <tr>
+                <tr id="view">
                   <th>S/N</th>
                   <th>Enrolled Classes</th>
-                  <th>No. of Students</th>
+                  <th>No. of {course.grade === 'Educator' ? 'Educators' : 'Students'}</th>
                   <th>Enrollment Date</th>
                   <th>Day of the Week</th>
                   <th>Start Time</th>
@@ -127,13 +163,12 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
                 </tr>
               </thead>
               <tbody>
-                {data && data.courses?.length > 0 ? (
-                  data.courses.map((group, index) => (
+                {filteredCourses.length > 0 ? (
+                  filteredCourses.map((group, index) => (
                     <tr key={index}>
                       <td>{index + 1}</td>
-                      <td>{group.stdClass}</td>
-                      <td>{group.studentEnrollments?.length || 0}</td>{" "}
-                      {/* Ensure studentEnrollments is defined */}
+                      <td>{group.stdClass} {course.grade !== 'Educator' ? group?.classTag : ''}</td>
+                      <td>{group.studentEnrollments?.length || 0}</td>
                       <td>
                         {new Date(group.createdAt).getUTCDate()} -{" "}
                         {new Date(group.createdAt).getUTCMonth() + 1} -{" "}
@@ -158,29 +193,31 @@ const ViewDetailsModal = ({ onClose, encryptURI, courseId, course }) => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="7">No data available</td>
+                    <td colSpan="8">No data available</td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
-          {/* Cart Button */}
         </div>
-        <button
-          id="cartBtn"
-          onClick={openEnrollementModal}
-          style={{
-            backgroundColor: darkTertiary,
-            color: "white",
-            border: "1px solid #329bd6",
-            padding: "5px",
-            borderRadius: "5px",
-            marginLeft: "auto",
-            marginRight: "50px"
-          }}
-        >
-          <span>+</span> Add A New Class
-        </button>
+        {user?.isSchool && course.grade !== 'Educator' && (
+          <button
+            id="cartBtn"
+            onClick={openEnrollementModal}
+            style={{
+              backgroundColor: darkTertiary,
+              color: "white",
+              border: "1px solid #329bd6",
+              padding: "5px",
+              borderRadius: "5px",
+              marginLeft: "auto",
+              marginRight: "50px",
+              marginTop: "10px"
+            }}
+          >
+            <span>+</span> Add A New Class
+          </button>
+        )}
       </div>
       <EnrollmentModal
         isOpen={openEnrollModal}

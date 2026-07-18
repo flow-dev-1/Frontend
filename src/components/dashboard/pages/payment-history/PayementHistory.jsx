@@ -1,51 +1,52 @@
-import React from 'react'
-import './payement-history.css'
-import { Icon } from '@iconify/react'
-import userService from '../../../../services/api/user'
-import { useQuery } from '@tanstack/react-query'
-import Loading from '../../../loader/Loader'
+import React from "react";
+import "./payement-history.css";
+import { Icon } from "@iconify/react";
+import userService from "../../../../services/api/user";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../../loader/Loader";
 
 const PayementHistory = () => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['individual-courses-enrolled'],
+    queryKey: ["individual-courses-enrolled"],
     queryFn: () => userService.getMyPayments(),
-  })
+  });
 
-  console.log(data)
+  console.log(data);
 
-  if (isLoading) return <Loading />
-  if (isError) return <p>Error loading courses. Please try again later.</p>
+  if (isLoading) return <Loading />;
+  if (isError) return <p>Error loading courses. Please try again later.</p>;
 
   return (
-    <div className='payment-history'>
-      <h2 style={{ color: '#18181B', fontSize: '24px' }}>Payment History</h2>
+    <div className="payment-history">
+      <h2 style={{ color: "#18181B", fontSize: "24px" }}>Payment History</h2>
       <p>
         You can browse through all payments made on this platform over time.
       </p>
-      <div className='search-filter-sort'>
+      <div className="search-filter-sort flex-wrap gap-3">
         <input
-          style={{ backgroundColor: 'rgba(94, 45, 189, 0.05)' }}
-          type='text'
-          placeholder='Search by time, date, order ID or Payment Type'
+          className="flex-grow-1"
+          style={{ backgroundColor: "rgba(94, 45, 189, 0.05)" }}
+          type="text"
+          placeholder="Search by time, date, order ID or Payment Type"
         />
-        <div className='filters'>
+        <div className="filters d-flex justify-content-between flex-grow-1">
           <button>
             <span>
-              <Icon icon='octicon:filter-16' />
+              <Icon icon="octicon:filter-16" />
             </span>
-            <select style={{ cursor: 'pointer' }}>
-              <option value='all'>Filter by</option>
-              <option value='published'>Published</option>
-              <option value='draft'>Draft</option>
+            <select style={{ cursor: "pointer" }}>
+              <option value="all">Filter by</option>
+              <option value="published">Published</option>
+              <option value="draft">Draft</option>
             </select>
           </button>
           <button>
             <span>
-              <Icon icon='mingcute:az-sort-ascending-letters-line' />
+              <Icon icon="mingcute:az-sort-ascending-letters-line" />
             </span>
-            <select style={{ cursor: 'pointer' }}>
-              <option value='a-z'>Sort by A-Z</option>
-              <option value='z-a'>Sort by Z-A</option>
+            <select style={{ cursor: "pointer" }}>
+              <option value="a-z">Sort by A-Z</option>
+              <option value="z-a">Sort by Z-A</option>
             </select>
           </button>
         </div>
@@ -65,22 +66,22 @@ const PayementHistory = () => {
             <tr key={payment.reference}>
               <td>{index + 1}</td>
               <td>{payment.reference}</td>
-              <td>{(payment?.amount)}</td>
+              <td>{payment?.amount}</td>
               <td>{new Date(payment.createdAt).toLocaleDateString()}</td>
               <td>{new Date(payment.createdAt).toLocaleTimeString()}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div className='nav-btn'>
+      <div className="nav-btn">
         <p>{`1 - ${data?.payments?.length} of ${data?.payments?.length}`}</p>
         <div>
-          <Icon icon='iconamoon:arrow-left-2-light' width={25} />
-          <Icon icon='iconamoon:arrow-right-2-light' width={25} />
+          <Icon icon="iconamoon:arrow-left-2-light" width={25} />
+          <Icon icon="iconamoon:arrow-right-2-light" width={25} />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PayementHistory
+export default PayementHistory;

@@ -1,304 +1,355 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import MyFireWorks from '../Fireworks'
-import strengthweakness from '../../../../../../assets/selfawareness-images/strengthweakness.png'
-import StrengthIdentification from './StrengthIdentification'
-import WeaknessIdentification from './WeaknessIdentification'
-import ScenarioQuestions from './ScenarioQuestions'
-import WeekTwoAssessmentForm from './WeekTwoAssessmentForm'
-import VideoComponent from './VideoComponent'
-import QuestionComponent from './QuestionComponent'
-import NavigationButtons from './NavigationButtons'
-import userService from '../../../../../../services/api/user.js'
-import { toast, ToastContainer } from 'react-toastify'
-import EndOfCourseComponent from './EndOfCourseComponent.js'
-import { useQuery } from '@tanstack/react-query'
+import React, { useEffect, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import strengthweakness from '../../../../../../assets/selfawareness-images/strengthweakness.png';
+import StrengthIdentification from './StrengthIdentification';
+import WeaknessIdentification from './WeaknessIdentification';
+import ScenarioQuestions from './ScenarioQuestions';
+import WeekTwoAssessmentForm from './WeekTwoAssessmentForm';
+import QuestionComponent from './QuestionComponent';
+import userService from '../../../../../../services/api/user.js';
+import EndOfCourseComponent from './EndOfCourseComponent.js';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useDispatch } from 'react-redux';
+import { updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
+
+import ProgressionButtons from '../components/ProgressionButtons.jsx';
+import VideoComponent from '../components/VideoComponent.jsx';
+import {
+	getLegacySelfAwarenessActivityDataKey,
+	getLegacySelfAwarenessActivityProgressKey,
+	getSelfAwarenessActivityDataKey,
+	getSelfAwarenessActivityProgressKey,
+	mergeSelfAwarenessActivityDrafts,
+	readSelfAwarenessStorage,
+	writeSelfAwarenessStorage,
+} from '../utils/storage';
 
 export default function WeekTwoLearning({
-  course,
-  courseId,
-  onClose,
-  currentWeekIndex,
-  handleLinkClick,
+	course,
+	courseId,
+	onClose,
+	currentWeekIndex,
+	handleLinkClick,
+	requestedActivity,
+	onActivityChange,
 }) {
-  const [showPopup, setShowPopup] = useState(false)
-  const [currentActivity, setCurrentActivity] = useState(() => {
-    const savedState = localStorage.getItem(
-      `week-${currentWeekIndex}-currentActivity`
-    )
-    return savedState ? JSON.parse(savedState) : 1
-  })
-  const week = 2;
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["dashboard/self-awareness-course", course?.course?._id, week],
-    queryFn: () => userService.getMyActivites(course?.course?._id, week)
-  });
-   const [assessmentData, setAssessmentData] = useState(null);
-   const [assessmentLoading, setAssessmentLoading] = useState(true);
-   const [assessmentError, setAssessmentError] = useState(null);
-    useEffect(() => {
-      const fetchAssessmentData = async () => {
-        setAssessmentLoading(true);
-        try {
-          const data = await userService.getMyAssessment(courseId, week);
-          setAssessmentData(data);
-        } catch (error) {
-          setAssessmentError(error);
-        } finally {
-          setAssessmentLoading(false);
-        }
-      };
+	const dispatch = useDispatch();
+	const [currentActivity, setCurrentActivity] = useState(() => {
+		return readSelfAwarenessStorage(
+			getSelfAwarenessActivityProgressKey(courseId, currentWeekIndex),
+			getLegacySelfAwarenessActivityProgressKey(currentWeekIndex),
+			1
+		);
+	});
+	const [formData, setFormData] = useState(() => {
+		return readSelfAwarenessStorage(
+			getSelfAwarenessActivityDataKey(courseId, 2),
+			getLegacySelfAwarenessActivityDataKey(2),
+			{ week: 2, activities: [] }
+		);
+	});
+	const week = 2;
 
-      fetchAssessmentData();
-    }, [courseId, week]);
+	const { data: courseData, isLoading, status, isError } = useQuery({
+		queryKey: ['self-awareness-course-2', courseId, week],
+		queryFn: () => userService.getUserCourseData(courseId, week),
+		refetchOnMount: 'always',
+		refetchOnWindowFocus: true,
+		keepPreviousData: false,
+	});
 
-    const assessments = assessmentData?.existingAssessment.assessments;
-    const percent = assessmentData?.existingAssessment.rating;
-    const color = assessmentData?.existingAssessment?.personalityColor;
-// console.log(assessments)
-  // Check if data.activity exists and save it under one key 'activity1' in local storage
-  if (data?.activity && assessments) {
-    const activities = data.activity.activities;
+	useEffect(() => {
+		if (!courseData) return;
 
-    // Create an object with week and activities
-    const activityData = {
-      week: week,
-      activities: activities
-    };
-      const assessmentData = {
-    week:week,
-    percentage:percent,
-    assessments:assessments,
-    personalityColor:color
-  }
+		if (courseData.activity) {
+			const activities = courseData.activity.activities || [];
+
+			// Remote State Restoration: Jump to last saved page if it exists and week is NOT completed
+			if (courseData.activity.lastActivityIndex && !isCompleted) {
+				setCurrentActivity(courseData.activity.lastActivityIndex);
+			}
 
 
-    // Store the object in local storage under the key 'activity1'
-    localStorage.setItem("week-2-activityData", JSON.stringify(activityData));
-      localStorage.setItem(
-    "weekTwoAssessmentData",
-    JSON.stringify({ formData: assessmentData })
-  );
+			setFormData((prevData) => {
+				const draftActivities = prevData?.activities || [];
+				return {
+					...prevData,
+					week,
+					activities: mergeSelfAwarenessActivityDrafts(activities, draftActivities),
+				};
+			});
 
-    console.log("Week and activities saved to localStorage under 'activity1'");
-  }
+			dispatch(
+				updateData({
+					course: course?.course?._id,
+					courseEnrollmentId: courseId,
+					week,
+					activities: activities,
+					assessments: courseData.assessment?.assessments || [],
+				})
+			);
+		}
 
-  const [formData, setFormData] = useState(() => {
-    const savedState = localStorage.getItem(
-      `week-${currentWeekIndex}-activityData`
-    )
-    return savedState
-      ? JSON.parse(savedState)
-      : { week: currentWeekIndex, activities: [] }
-  })
+		if (courseData.assessment) {
+			const assessments = courseData.assessment.assessments || [];
+			const percent = courseData.assessment.rating;
 
-  const [videoPlaying, setVideoPlaying] = useState(false)
-  const [reviewPopUp, setReviewPopUp] = useState(false)
-  const navigate = useNavigate()
+			const assessment_data = {
+				week: week,
+				percentage: percent,
+				assessments: assessments,
+				personalityColor: courseData.assessment.personalityColor || 'Yellow',
+			};
 
-  useEffect(() => {
-    localStorage.setItem(
-      `week-${currentWeekIndex}-currentActivity`,
-      JSON.stringify(currentActivity)
-    )
-  }, [currentActivity, currentWeekIndex])
+			writeSelfAwarenessStorage(
+				'weekTwoAssessmentData',
+				{ formattedData: assessment_data }
+			);
+		}
+	}, [courseData]);
 
-  useEffect(() => {
-    localStorage.setItem(
-      `week-${currentWeekIndex}-activityData`,
-      JSON.stringify(formData)
-    )
-  }, [formData, currentWeekIndex])
-//  console.log(course.course._id)
-  const handleNext = async (data = {}) => {
-    setFormData((prevData) => {
-      const updatedActivities = prevData.activities.map((item) =>
-        item.activity === currentActivity ? { ...item, ...data } : item
-      )
-      if (
-        !updatedActivities.find((item) => item.activity === currentActivity)
-      ) {
-        updatedActivities.push({ activity: currentActivity, ...data })
-      }
-      return { ...prevData, activities: updatedActivities }
-    })
+	const [videoPlaying, setVideoPlaying] = useState(false);
+	const [reviewPopUp, setReviewPopUp] = useState(false);
+	const navigate = useNavigate();
 
-    const isLastActivity = currentActivity >= 9
-    if (isLastActivity) {
-      setCurrentActivity(10)
-      handleSubmit()
-    } else {
-      setCurrentActivity((prev) => prev + 1)
-    }
-  }
+	useEffect(() => {
+		writeSelfAwarenessStorage(
+			getSelfAwarenessActivityProgressKey(courseId, currentWeekIndex),
+			currentActivity
+		);
+		onActivityChange?.(currentWeekIndex, currentActivity);
+	}, [courseId, currentActivity, currentWeekIndex, onActivityChange]);
 
-  const handlePrevious = () => {
-    setCurrentActivity((prev) => prev - 1)
-  }
-  const handleSubmit = async () => {
-    try {
-      // Your submit logic here
-      const stringifiedFormData = JSON.stringify(formData)
-      userService
-        .postMyActivity(course.course._id, stringifiedFormData)
-        .then((response) => {
-          console.log("Submission successful:", response);
-        })
-        .catch((error) => {
-          console.error("Submission failed:", error);
-        });
-    } catch (error) {
-      console.error('Submission failed:', error)
-      toast.error('Submission failed. Please try again later.')
-    }
-  }
+	useEffect(() => {
+		if (requestedActivity?.week !== currentWeekIndex) return;
+		if (!requestedActivity?.activity) return;
+		setCurrentActivity(requestedActivity.activity);
+	}, [currentWeekIndex, requestedActivity]);
 
-  const closeReviewPopUp = () => setReviewPopUp(false)
+	useEffect(() => {
+		writeSelfAwarenessStorage(
+			getSelfAwarenessActivityDataKey(courseId, 2),
+			formData
+		);
+	}, [courseId, formData]);
+	//  console.log(course.course._id)
+	const isCompleted = !!courseData?.assessment;
 
-  const handleNextWeekCourse = () => {
-    const nextWeekIndex = currentWeekIndex + 1
-    navigate(`/dashboard/self-awareness-course/${course._id}`, {
-      state: { course, weekIndex: nextWeekIndex },
-    })
-  }
+	const queryClient = useQueryClient();
 
-  // console.log(formData)
-  const renderActivityContent = () => {
-    switch (currentActivity) {
-      case 1:
-        return (
-          <>
-            <VideoComponent
-              videoPlaying={videoPlaying}
-              setVideoPlaying={setVideoPlaying}
-              videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-2/FLOW-2_1.mp4'
-            />
-            <NavigationButtons onNext={() => handleNext()} isBackDisabled />
-          </>
-        )
-      case 2:
-        return (
-          <QuestionComponent
-            activityIndex={currentActivity}
-            questionText={'What do you understand'}
-            imageSrc={strengthweakness}
-            formData={formData}
-            altText='by?'
-            onBack={handlePrevious}
-            onNext={(answers) =>
-              handleNext({
-                answers,
-              })
-            }
-          />
-        )
-      case 3:
-        return (
-          <>
-            <VideoComponent
-              videoPlaying={videoPlaying}
-              setVideoPlaying={setVideoPlaying}
-              videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-2/FLOW-2_2.mp4'
-            />
-            <NavigationButtons
-              onBack={handlePrevious}
-              onNext={() => handleNext()}
-            />
-          </>
-        )
-      case 4:
-        return (
-          <StrengthIdentification
-            activityIndex={currentActivity}
-            formData={formData}
-            onBack={handlePrevious}
-            onNext={(answers) =>
-              handleNext({
-                answers,
-              })
-            }
-          />
-        )
-      case 5:
-        return (
-          <WeaknessIdentification
-            activityIndex={currentActivity}
-            formData={formData}
-            onBack={handlePrevious}
-            onNext={(answers) =>
-              handleNext({
-                answers,
-              })
-            }
-          />
-        )
-      case 6:
-        return (
-          <>
-            <VideoComponent
-              videoPlaying={videoPlaying}
-              setVideoPlaying={setVideoPlaying}
-              videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-2/FLOW-2_3.mp4'
-            />
-            <NavigationButtons
-              onBack={handlePrevious}
-              onNext={() => handleNext()}
-            />
-          </>
-        )
-      case 7:
-        return (
-          <ScenarioQuestions
-            activityIndex={currentActivity}
-            formData={formData}
-            onBack={handlePrevious}
-            onNext={(answers) =>
-              handleNext({
-                answers,
-              })
-            }
-          />
-        )
-      case 8:
-        return (
-          <>
-            <VideoComponent
-              videoPlaying={videoPlaying}
-              setVideoPlaying={setVideoPlaying}
-              videoSrc='https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-2/FLOW-2_4.mp4'
-            />
-            <NavigationButtons
-              onBack={handlePrevious}
-              onNext={() => handleNext()}
-            />
-          </>
-        )
+	const onLocalUpdate = useCallback((incomingData) => {
+		setFormData((prevData) => {
+			const currentActivities = prevData?.activities || courseData?.activity?.activities || [];
+			const updatedActivities = currentActivities.map((item) =>
+				item.activity === currentActivity ? { ...item, ...incomingData } : item
+			);
 
-      case 9:
-        return (
-          <WeekTwoAssessmentForm
-            onBack={handlePrevious}
-            handleNextWeekCourse={handleNextWeekCourse}
-            onNext={handleNext}
-          />
-        )
-      default:
-        return (
-          <EndOfCourseComponent
-            onNextWeekCourse={handleNextWeekCourse}
-            onClose={onClose}
-            handleLinkClick={handleLinkClick}
-            setCurrentActivity={setCurrentActivity}
-            openReviewPopUp={() => setReviewPopUp(true)}
-          />
-        )
-    }
-  }
+			if (!updatedActivities.find((item) => item.activity === currentActivity)) {
+				updatedActivities.push({ activity: currentActivity, ...incomingData });
+			}
 
-  return (
-    <div>
-      <ToastContainer />
-      <div className='content-container'>{renderActivityContent()}</div>
-    </div>
-  )
+			return { ...prevData, activities: updatedActivities };
+		});
+	}, [currentActivity, courseData?.activity?.activities]);
+
+	const handleNext = useCallback(async (incomingData = {}) => {
+		const currentActivities = formData?.activities || courseData?.activity?.activities || [];
+		const updatedActivities = currentActivities.map((item) =>
+			item.activity === currentActivity ? { ...item, ...incomingData } : item
+		);
+
+		if (!updatedActivities.find((item) => item.activity === currentActivity)) {
+			updatedActivities.push({ activity: currentActivity, ...incomingData });
+		}
+
+		setFormData((prevData) => ({ ...prevData, activities: updatedActivities }));
+
+		const nextActivity = currentActivity >= 9 ? 10 : currentActivity + 1;
+
+		if (!isCompleted && !isLoading) {
+			const payload = {
+				week: week,
+				activities: updatedActivities,
+				lastActivityIndex: nextActivity // Save where they are going
+			};
+
+			try {
+				const result = await userService.postMyActivity(courseId, payload);
+				queryClient.setQueryData(
+					['self-awareness-course-2', courseId, week],
+					(previousData) => ({
+						...(previousData || {}),
+						activity: result?.newActivity || {
+							...(previousData?.activity || {}),
+							...payload,
+						},
+					})
+				);
+				await queryClient.invalidateQueries({ queryKey: ['enrollment', courseId] });
+			} catch (err) {
+				console.error("Failed to auto-save activity:", err);
+				return false;
+			}
+		}
+		setCurrentActivity(nextActivity);
+		return true;
+	}, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted, isLoading, queryClient]);
+
+	const handlePrevious = () => {
+		setCurrentActivity((prev) => prev - 1);
+	};
+
+	const handleNextWeekCourse = () => {
+		const nextWeekIndex = currentWeekIndex + 1;
+		if (handleLinkClick) {
+			handleLinkClick(nextWeekIndex - 1, 1);
+			return;
+		}
+		navigate(`/dashboard/self-awareness-course`, {
+			state: { enrollmentData: course, weekIndex: nextWeekIndex },
+		});
+	};
+
+	// console.log(formData)
+	const renderActivityContent = () => {
+		switch (currentActivity) {
+			case 1:
+				return (
+					<>
+						<VideoComponent
+							videoPlaying={videoPlaying}
+							setVideoPlaying={setVideoPlaying}
+							videoSrc="https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-2/FLOW-2_1.mp4"
+						/>
+						<div className="mt-3">
+							<ProgressionButtons variant={'next'} onClickNext={handleNext} />
+						</div>
+					</>
+				);
+			case 2:
+				return (
+					<QuestionComponent
+						activityIndex={currentActivity}
+						questionText={'What do you understand'}
+						imageSrc={strengthweakness}
+						formData={formData}
+						altText="by?"
+						onBack={handlePrevious}
+						onUpdate={onLocalUpdate}
+						onNext={(answers) =>
+							handleNext({
+								answers,
+							})
+						}
+					/>
+				);
+			case 3:
+				return (
+					<>
+						<VideoComponent
+							videoPlaying={videoPlaying}
+							setVideoPlaying={setVideoPlaying}
+							videoSrc="https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-2/FLOW-2_2.mp4"
+						/>
+						<div className="mt-3">
+							<ProgressionButtons variant={'both'} onClickNext={handleNext} onClickPrev={handlePrevious} />
+						</div>
+					</>
+				);
+			case 4:
+				return (
+					<StrengthIdentification
+						activityIndex={currentActivity}
+						formData={formData}
+						onBack={handlePrevious}
+						onNext={(answers) =>
+							handleNext({
+								answers,
+							})
+						}
+					/>
+				);
+			case 5:
+				return (
+					<WeaknessIdentification
+						activityIndex={currentActivity}
+						formData={formData}
+						onBack={handlePrevious}
+						onNext={(answers) =>
+							handleNext({
+								answers,
+							})
+						}
+					/>
+				);
+			case 6:
+				return (
+					<>
+						<VideoComponent
+							videoPlaying={videoPlaying}
+							setVideoPlaying={setVideoPlaying}
+							videoSrc="https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-2/FLOW-2_3.mp4"
+						/>
+						<div className="mt-3">
+							<ProgressionButtons variant={'both'} onClickNext={handleNext} onClickPrev={handlePrevious} />
+						</div>
+					</>
+				);
+			case 7:
+				return (
+					<ScenarioQuestions
+						activityIndex={currentActivity}
+						formData={formData}
+						onBack={handlePrevious}
+						onNext={(answers) =>
+							handleNext({
+								answers,
+							})
+						}
+					/>
+				);
+			case 8:
+				return (
+					<>
+						<VideoComponent
+							videoPlaying={videoPlaying}
+							setVideoPlaying={setVideoPlaying}
+							videoSrc="https://d3sc34m1n26ele.cloudfront.net/self-awareness-week-2/FLOW-2_4.mp4"
+						/>
+						<div className="mt-3">
+							<ProgressionButtons variant={'both'} onClickNext={handleNext} onClickPrev={handlePrevious} />
+						</div>
+					</>
+				);
+
+			case 9:
+				return (
+					<WeekTwoAssessmentForm
+						onBack={handlePrevious}
+						handleNextWeekCourse={handleNextWeekCourse}
+						onNext={handleNext}
+						course={course}
+						activityData={courseData?.activity || formData}
+						savedAssessment={courseData?.assessment}
+						isCompleted={isCompleted}
+					/>
+				);
+			default:
+				return (
+					<EndOfCourseComponent
+						onNextWeekCourse={handleNextWeekCourse}
+						onClose={onClose}
+						handleLinkClick={handleLinkClick}
+						setCurrentActivity={setCurrentActivity}
+						openReviewPopUp={() => setReviewPopUp(true)}
+					/>
+				);
+		}
+	};
+
+	return (
+		<div className='week-learning'>
+			<div className="content-container">{renderActivityContent()}</div>
+		</div>
+	);
 }

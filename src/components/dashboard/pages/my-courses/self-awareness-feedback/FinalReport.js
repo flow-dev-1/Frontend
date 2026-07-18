@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./FinalReport.css";
 
 const FinalReport = ({ rate }) => {
+
   const [expanded, setExpanded] = useState(false);
 
   const toggleWeek = () => {

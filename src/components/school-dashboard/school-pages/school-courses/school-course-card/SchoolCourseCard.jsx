@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { encryptURI } from '../../../../../utils/encryption'
 import EnrollmentModal from '../../../modals/Enrollment/EnrollmentModal'
@@ -18,13 +18,19 @@ const SchoolCourseCard = ({
   const [openEnrollModal, setOpenEnrollModal] = useState(false)
   const [openViewModal, setOpenViewModal] = useState(false);
   const [openEnrollModalEducator, setOpenEnrollModalEducator] = useState(false)
-  console.log(enrolledData);
+
   const [courseData] = useState(course)
   const navigate = useNavigate()
+  const enrolledCourseRecord = enrolledData?.courses?.find(
+    (item) => item?.course?._id === course?._id
+  );
+  const toggleStorageKey = `toggleState-${course?._id}`;
   const [isOn, setIsOn] = useState(() => {
-    // Initialize state from localStorage if it exists, otherwise default to false
-    const savedState = localStorage.getItem("toggleState");
-    return savedState ? JSON.parse(savedState) : false;
+    const savedState = localStorage.getItem(toggleStorageKey);
+    if (savedState !== null) return JSON.parse(savedState);
+    return enrolledCourseRecord?.status
+      ? enrolledCourseRecord.status === "Active"
+      : true;
   });
 
   const openEnrollementModal = () => {
@@ -40,23 +46,42 @@ const SchoolCourseCard = ({
     setOpenEnrollModalEducator(false)
   }
 
-  console.log('Enrolled Array', enrolledData)
+
+  const handleToggle = (courseId) => {
+    setIsOn((prevIsOn) => {
+      const newIsOn = !prevIsOn;
+      const data = { status: newIsOn ? "Active" : "Deactivated" };
+
+      localStorage.setItem(toggleStorageKey, JSON.stringify(newIsOn));
+
+      // Call the service with the updated status
+      schoolService.changeToggle(courseId, data);
+
+      return newIsOn;
+    });
+  };
+
+  useEffect(() => {
+    const savedState = localStorage.getItem(toggleStorageKey);
+    if (savedState !== null || !enrolledCourseRecord?.status) return;
+    setIsOn(enrolledCourseRecord.status === "Active");
+  }, [enrolledCourseRecord?.status, toggleStorageKey]);
 
 
-const handleToggle = (courseId) => {
-  setIsOn((prevIsOn) => {
-    const newIsOn = !prevIsOn;
-    const data = { status: newIsOn ? "Confirmed" : "Deactivated" };
+  // const handleToggle = (courseId) => {
+  //   setIsOn((prevIsOn) => {
+  //     const newIsOn = !prevIsOn;
+  //     const data = { status: newIsOn ? "Confirmed" : "Deactivated" };
 
-    // Save the new toggle state in localStorage
-    localStorage.setItem("toggleState", JSON.stringify(newIsOn));
+  //     // Save the new toggle state in localStorage
+  //     localStorage.setItem("toggleState", JSON.stringify(newIsOn));
 
-    // Call the service with the updated status
-    schoolService.changeToggle(courseId, data);
+  //     // Call the service with the updated status
+  //     schoolService.changeToggle(courseId, data);
 
-    return newIsOn;
-  });
-};
+  //     return newIsOn;
+  //   });
+  // };
 
 
   const daysOfWeek = [
@@ -94,7 +119,6 @@ const handleToggle = (courseId) => {
 
   // Check if the course is in the enrolled array
   const isEnrolled = enrolled.includes(course._id)
-  console.log(isEnrolled)
 
   if (isEnrolled) {
     reviewBtnColor = darkGreen
@@ -102,57 +126,33 @@ const handleToggle = (courseId) => {
     reviewBtnClass = 'enrolled'
     detailsBtnClass = 'enrolled'
   } else {
-    // Handle the case for non-enrolled courses
-    // You can uncomment the logic below if necessary
-    // reviewBtnColor =
-    //   course.category.toLowerCase() == 'students' ? darkTertiary : darkEducator
-    // detailsBtnColor =
-    //   course.category.toLowerCase() == 'students'
-    //     ? lightTertiary
-    //     : lightEducator
-    // reviewBtnClass =
-    //   course.category.toLowerCase() == 'students' ? 'not-enrolled' : 'educator'
-    // detailsBtnClass =
-    //   course.category.toLowerCase() == 'students' ? 'not-enrolled' : 'educator'
-  }
-  const [coursedarta, setCourseDarta] = useState("")
 
-  console.log(coursedarta);
-  console.log(enrolledData)
+  }
+  const [coursedarta, setCourseData] = useState("")
+
   const courseIndex = coursesArray?.courses.findIndex(
     (c) => c._id === course._id
   )
-  console.log(courseIndex)
-  const handleDetailsClick = () => {
-    // Find the index of the current course in the coursesArray
-    const courseIndex = coursesArray?.courses.findIndex(
-      (c) => c._id === course._id
-    )
-    console.log(courseIndex)
 
+  const handleDetailsClick = () => {
+
+    console.log(isEnrolled)
     // Use this index to get the corresponding enrolledData course
-    if (isEnrolled && enrolledData?.courses[courseIndex]) {
-     setOpenViewModal(true);
-     setCourseDarta(enrolledData?.courses[courseIndex]._id);
-    //  console.log(enrolledData?.courses[courseIndex]._id);
-      // navigate(
-      //   `/school-dashboard/courses/enrolled/${encryptURI(
-      //     enrolledData.courses[courseIndex]._id
-      //   )}`
-      // )
-      //  openEnrollementModal();
+    if (isEnrolled) {
+      setOpenViewModal(true);
+
     } else {
       openEnrollementModal()
     }
   }
-    
+
   const closeViewModal = () => {
-      setOpenViewModal(false);
-    };
+    setOpenViewModal(false);
+  };
 
   const likesPercent = (likes, courseEnrollment) => {
     if (likes === 0) return 0
-    return (likes / courseEnrollment) * 100
+    return ((likes / courseEnrollment) * 100).toFixed(1)
   }
 
   const viewSingleCourse = (url) => {
@@ -171,15 +171,31 @@ const handleToggle = (courseId) => {
   return (
     <div>
       <div className="course-card" style={{ height: "480px" }}>
-        <div className="course-card-img" style={{ height: "230px" }}>
-          <img src={course.image} alt="" />
+        <div className="course-card-img" style={{
+          height: "230px",
+          position: "relative",
+          backgroundColor: "#f5f5f5",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden"
+        }}>
+          <img
+            src={course?.image}
+            alt=""
+            style={{
+              height: "100%",
+              width: "100%",
+              objectFit: "cover"
+            }}
+          />
           <div className="course-card-category">
-            {course.grade !== "Educators" ? "Students" : "Educators"}
+            {course.grade !== "Educator" ? "Students" : "Educators"}
           </div>
         </div>
         <div className="course-card-title" style={{ marginBottom: "0" }}>
           <h3 style={{ color: "#329BD6", fontSize: "24px" }}>
-            Knowing Yourself Better
+            {course?.course?.topic}
           </h3>
           <h3 style={isEnrolled ? { color: "#555" } : { color: "#329BD6" }}>
             {course.title}:
@@ -200,7 +216,7 @@ const handleToggle = (courseId) => {
             style={{ margin: "1rem 0", width: "40%" }}
             className="users-review"
           >
-            <div
+            {/* <div
               style={
                 course.status === "published"
                   ? { color: "#329BD6" }
@@ -212,7 +228,7 @@ const handleToggle = (courseId) => {
                 <Icon icon="fluent:people-24-regular" width={20} />{" "}
               </span>
               {course?.courseEnrollment?.length}
-            </div>
+            </div> */}
             <div
               style={
                 course.status === "published"
@@ -234,7 +250,7 @@ const handleToggle = (courseId) => {
           {isEnrolled ? (
             <div
               className={`toggle-switch ${isOn ? "on" : "off"}`}
-              onClick={()=>handleToggle(course._id)}
+              onClick={() => handleToggle(course._id)}
             >
               <div className={isOn ? "onKnob" : "offKnob"}></div>
             </div>
@@ -249,17 +265,17 @@ const handleToggle = (courseId) => {
               style={
                 isEnrolled
                   ? {
-                      backgroundColor: "#fff",
-                      color: "#329BD6",
-                      border: "1px solid #329bd6"
-                    }
+                    backgroundColor: "#fff",
+                    color: "#329BD6",
+                    border: "1px solid #329bd6"
+                  }
                   : course.grade !== "Educators"
-                  ? {
+                    ? {
                       backgroundColor: "#fff",
                       color: "#329BD6",
                       border: "1px solid #329bd6"
                     }
-                  : { backgroundColor: lightEducator, color: darkEducator }
+                    : { backgroundColor: lightEducator, color: darkEducator }
               }
               className={`reviewBtn ${reviewBtnClass}`}
             >
@@ -341,6 +357,7 @@ const handleToggle = (courseId) => {
           onClose={() => setOpenViewModal(false)}
         />
       )}
+
       <EnrollmentModal
         isOpen={openEnrollModal}
         onRequestClose={closeEnrollementModal}
@@ -348,10 +365,12 @@ const handleToggle = (courseId) => {
         timeOptions={timeOptions}
         course={course}
       />
+
       <AddEducator
         isOpen={openEnrollModalEducator}
         course={course}
         onRequestClose={closeEnrollementModal}
+        daysOfWeek={daysOfWeek}
       />
     </div>
   );

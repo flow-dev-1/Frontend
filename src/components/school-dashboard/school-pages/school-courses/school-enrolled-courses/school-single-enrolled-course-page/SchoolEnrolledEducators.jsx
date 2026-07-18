@@ -17,25 +17,12 @@ import excelDoc from '../../../../../../assets/flow-doc.xlsx'
 import schoolService from '../../../../../../services/api/school'
 import { RotatingLines } from 'react-loader-spinner'
 import Loading from '../../../../../loader/Loader'
-import AddEducator from '../../school-course-card/AddEducator'
-
-const schema = yup.object().shape({
-  students: yup
-    .string()
-    .test('emails', 'Invalid email(s)', (value) => {
-      const emails = value.split(',').map((email) => email.trim())
-      // Check if there is at least one email and all emails are valid
-      return (
-        emails.length > 0 &&
-        emails.every((email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-      )
-    })
-    .required('At least one email is required'),
-})
+import AddEducatorIndividualModal from './AddEducatorIndividualModal'
 
 const SchoolEnrolledEducators = () => {
   const queryClient = useQueryClient()
   const { user } = useSelector((state) => state.user)
+  const schoolId = user?.isSchool ? user?._id : user?.school
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
@@ -49,6 +36,7 @@ const SchoolEnrolledEducators = () => {
   }
 
   const [enrollmentData, setData] = useState({})
+
   const handleCreateClick = () => {
     setShowCreateModal(true)
   }
@@ -57,31 +45,18 @@ const SchoolEnrolledEducators = () => {
     setShowCreateModal(false)
     setShowDeleteModal(false)
   }
-
-  let schoolId
-
-  // ToDO: Do a check if its a school or a user
-  if (user.isSchool) {
-    schoolId = user._id
-  }
   const navigate = useNavigate()
   const { id } = useParams()
-  console.log(schoolId, decryptId(id))
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['school-single-courses'],
     queryFn: () => schoolService.getEnrolledCourseData(schoolId, decryptId(id)),
     enabled: !!id,
-    // refetchOnMount: false,
-    // refetchOnWindowFocus: false,
   })
-
-  console.log(data)
 
   useEffect(() => {
     if (!data) return
     setData(data?.course)
-    return () => {}
   }, [data])
 
   const formatDate = (isoString) => {
@@ -90,92 +65,20 @@ const SchoolEnrolledEducators = () => {
   }
 
   const genderCount = (item) => {
-    if (!item) return
-    const male = item.filter((data) => data.user.gender === 'male')?.length || 0
+    if (!item) return { male: 0, female: 0 }
+    const male =
+      item.filter((data) => data?.user?.gender === 'male')?.length || 0
     const female =
-      item.filter((data) => data.user.gender === 'female')?.length || 0
-    return {
-      male,
-      female,
-    }
+      item.filter((data) => data?.user?.gender === 'female')?.length || 0
+    return { male, female }
   }
 
   function convertTo12HourFormat(time) {
     if (!time) return
-    // Split the time string into hours and minutes
     const [hour, minute] = time.split(':').map(Number)
-
-    // Determine if it's AM or PM
     const period = hour >= 12 ? 'PM' : 'AM'
-
-    // Convert hour from 24-hour to 12-hour format
-    const twelveHour = hour % 12 || 12 // Converts "0" hour to "12"
-
-    // Return the formatted time
+    const twelveHour = hour % 12 || 12
     return `${twelveHour}:${minute.toString().padStart(2, '0')} ${period}`
-  }
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    getValues,
-    reset,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  })
-
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        const data = new Uint8Array(event.target.result)
-        const workbook = XLSX.read(data, { type: 'array' })
-        const sheetName = workbook.SheetNames[0]
-        const worksheet = workbook.Sheets[sheetName]
-        const emails = XLSX.utils
-          .sheet_to_json(worksheet, { header: 1 })
-          .flat()
-          .filter((email) => typeof email === 'string' && validateEmail(email))
-        const currentEmails = getValues('students').trim()
-        const currentEmailsArray = currentEmails
-          ? currentEmails.split(',').map((email) => email.trim())
-          : []
-        const mergedEmails = [...new Set([...currentEmailsArray, ...emails])]
-        setValue('students', mergedEmails.join(', '))
-      }
-      reader.readAsArrayBuffer(file)
-    }
-  }
-
-  const mutation = useMutation({
-    mutationFn: (data) =>
-      schoolService.enrollStudentsIntoCourse(schoolId, decryptId(id), data),
-    onSuccess: (data) => {
-      console.log('Mutation success:', data)
-      toast.success('Enrollment successful')
-      queryClient.invalidateQueries(['school-single-courses'])
-      reset()
-      closeModals()
-    },
-    onError: (error) => {
-      console.error('Mutation error:', error)
-      toast.error(error?.message || 'Enrollment failed')
-    },
-  })
-
-  const validateEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return re.test(String(email).toLowerCase())
-  }
-  const handleExcelDownload = () => {
-    const link = document.createElement('a')
-    link.href = excelDoc
-    link.download = 'Flowtemp.xlsx'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
   }
 
   const deleteMutation = useMutation({
@@ -185,16 +88,13 @@ const SchoolEnrolledEducators = () => {
         deleteUserCredentials.user,
         deleteUserCredentials.enrollId
       ),
-    onSuccess: (data) => {
-      console.log('Mutation success:', data)
-      toast.success('User UnEnrolled successfully!')
+    onSuccess: () => {
+      toast.success('Educator UnEnrolled successfully!')
       queryClient.invalidateQueries(['school-single-courses'])
-      reset()
       closeModals()
     },
     onError: (error) => {
-      console.error('Mutation error:', error)
-      toast.error(error?.message || 'Enrollment failed')
+      toast.error(error?.message || 'UnEnrollment failed')
     },
   })
 
@@ -206,7 +106,7 @@ const SchoolEnrolledEducators = () => {
     return <Loading />
   }
   if (isError) {
-    return <div>An error occured while loading...</div>
+    return <div>An error occurred while loading...</div>
   }
 
   return (
@@ -215,15 +115,15 @@ const SchoolEnrolledEducators = () => {
         <button className='back-button' onClick={() => navigate(-1)}>
           <Icon icon='mingcute:arrow-left-line' width={20} /> Back
         </button>
-        <p>Self Awareness</p>
+        <p>{data?.course?.course?.title}</p>
         <button className='add-student-button' onClick={handleCreateClick}>
-          + Add New Student
+          + Add New Educator
         </button>
       </div>
 
       <div className='image-container'>
         <img
-          src={backgroundImage}
+          src={data?.course?.course?.banner || backgroundImage}
           alt='Background'
           className='background-image'
         />
@@ -238,7 +138,7 @@ const SchoolEnrolledEducators = () => {
           <p>{formatDate(enrollmentData?.createdAt || Date.now())}</p>
         </div>
         <div className='info-item'>
-          <p>No. of Students:</p>
+          <p>No. of Educators:</p>
           <p>{enrollmentData?.studentEnrollments?.length}</p>
         </div>
         <div className='info-item'>
@@ -274,7 +174,7 @@ const SchoolEnrolledEducators = () => {
             <input
               type='text'
               id='search-input'
-              placeholder='Search by Name, Age, Email, Phone Number'
+              placeholder='Search by Name, Email, Phone Number'
             />
           </div>
 
@@ -320,7 +220,6 @@ const SchoolEnrolledEducators = () => {
               <th>Email Address</th>
               <th>Phone Number</th>
               <th>Gender</th>
-              <th>Age</th>
               <th>Progress</th>
               <th></th>
             </tr>
@@ -333,15 +232,11 @@ const SchoolEnrolledEducators = () => {
                   style={{ cursor: 'pointer' }}
                   onClick={() => navigate(`users/${data?.user?._id}`)}
                 >
-                  {data?.user?.first_name} {data?.user?.last_name}
+                  {data?.user?.fullName}
                 </td>
                 <td>{data?.user?.email}</td>
                 <td>{data?.user?.phone}</td>
                 <td>{data?.user?.gender === 'male' ? 'M' : 'F'}</td>
-                <td>
-                  {new Date().getFullYear() -
-                    new Date(data?.user?.DOB).getFullYear()}
-                </td>
                 <td>{data?.progress}%</td>
                 <td style={{ width: '205px' }}>
                   <Icon
@@ -354,7 +249,10 @@ const SchoolEnrolledEducators = () => {
                     }}
                     width={22}
                     onClick={() => {
-                      setDeleteUser({ user: data.user._id, enrollId: data._id })
+                      setDeleteUser({
+                        user: data?.user?._id,
+                        enrollId: data._id,
+                      })
                       handleDeleteClick()
                     }}
                   />
@@ -385,7 +283,10 @@ const SchoolEnrolledEducators = () => {
         className='custom-modal-otp-three'
         overlayClassName='custom-overlay'
       >
-        <AddEducator onRequestClose={closeModals} />
+        <AddEducatorIndividualModal
+          onRequestClose={closeModals}
+          classOfficial={enrollmentData.stdClass}
+        />
       </Modal>
 
       <Modal

@@ -26,29 +26,27 @@ export default function ParentGuardianFormUpdate({
   const [availableLGAs, setAvailableLGAs] = useState([]);
   const navigate = useNavigate();
 
-const schema = yup.object().shape({
-  guardianFullName: yup
-    .string()
-    .test(
-      "is-three-words-or-less",
-      "Full Name must contain between 1 and 3 words",
-      (value) => value && value.trim().split(/\s+/).length <= 3
-    )
-    .trim(),
-  email: yup.string().email("Invalid Email"),
-  phone: yup
-    .string()
-    .test(
-      "isValidPhoneNumber",
-      "Invalid phone number",
-      (value) => value && isValidPhoneNumber(value)
-    ),
-  country: yup.string(),
-  state: yup.string(),
-  lga: yup.string(),
-});
-
-
+  const schema = yup.object().shape({
+    guardianFullName: yup
+      .string()
+      .test(
+        "is-three-words-or-less",
+        "Full Name must contain between 1 and 3 words",
+        (value) => value && value.trim().split(/\s+/).length <= 3
+      )
+      .trim(),
+    email: yup.string().email("Invalid Email"),
+    phone: yup
+      .string()
+      .test(
+        "isValidPhoneNumber",
+        "Invalid phone number",
+        (value) => value && isValidPhoneNumber(value)
+      ),
+    country: yup.string(),
+    state: yup.string(),
+    lga: yup.string(),
+  });
 
   const {
     register,
@@ -103,7 +101,7 @@ const schema = yup.object().shape({
   return (
     <div
       className="registration-page overflow-hidden"
-      style={{ height: "400px" }}
+      style={{ height: "fit-content" }}
     >
       <div className="top-section mt-2">
         <h2 className="d-flex justify-content-between align-center">

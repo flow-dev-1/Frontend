@@ -4,19 +4,25 @@ import storage from "redux-persist/lib/storage";
 import userReducer from "./reducers/userReducer";
 import jwtReducer from "./reducers/jwtReducer";
 import adminReducer from "./reducers/adminReducer";
+import navigationSlice from "./reducers/navigationSlice";
+import feedbackSlice from "./reducers/feedbackSlice";
+import userAnswersReducer from "./reducers/userAnswersReducer";
 
 const persistConfig = {
   key: "root",
   storage: storage,
+  blacklist: ["navigation", "userAnswer"],
 };
 
 const rootReducer = combineReducers({
   user: userReducer,
   auth: jwtReducer,
-  admin: adminReducer
+  admin: adminReducer,
+  navigation: navigationSlice,
+  feedback: feedbackSlice,
+  userAnswer: userAnswersReducer
 });
 
-// export default rootReducer;
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export default persistedReducer;

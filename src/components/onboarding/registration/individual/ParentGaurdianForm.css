@@ -1,0 +1,16 @@
+.sign-up-responsive-button {
+  background-color: #275dad;
+  border-radius: 5px;
+  color: #fff;
+  border: none;
+  padding: 0.3rem;
+  display: block;
+  width: 100%;
+}
+
+@media (max-width: 480px) {
+  .sign-up-responsive-button {
+    width: 110% !important; /* Adjust width for smaller screens */
+    font-size: 0.9rem !important; /* Optional: Adjust font size */
+  }
+}

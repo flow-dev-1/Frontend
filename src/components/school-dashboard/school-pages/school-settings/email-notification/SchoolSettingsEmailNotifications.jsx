@@ -28,6 +28,8 @@ const SchooolSettingsEmailNotifications = () => {
 
   if (user.isSchool) {
     schoolId = user._id
+  } else {
+    schoolId = user.school
   }
 
   const { data, isLoading, isError } = useQuery({
@@ -52,7 +54,8 @@ const SchooolSettingsEmailNotifications = () => {
   }
 
   const handleActionClick = (index) => {
-    setShowDropdown(showDropdown === index ? null : index)
+    if (user?.isSchool || user?.schoolAdminPermission === "Admin")
+      setShowDropdown(showDropdown === index ? null : index)
   }
 
   const mutation = useMutation({
@@ -92,8 +95,6 @@ const SchooolSettingsEmailNotifications = () => {
 
   const teamMembers = data?.teams?.email_notification || []
 
-  console.log(teamMembers)
-
   if (isLoading) {
     return <Loading />
   }
@@ -114,12 +115,17 @@ const SchooolSettingsEmailNotifications = () => {
             account.
           </p>
         </div>
-        <button className='edit-btn' onClick={() => setModalIsOpen(true)}>
-          Add Email
-          <span>
-            <Icon icon='ic:round-plus' />
-          </span>
-        </button>
+
+        {
+          (user?.isSchool || user?.schoolAdminPermission === 'Admin') &&
+          <button className='edit-btn' onClick={() => setModalIsOpen(true)}>
+            Add Email
+            <span>
+              <Icon icon='ic:round-plus' />
+            </span>
+          </button>
+        }
+
       </div>
       <table>
         <thead className='thead'>

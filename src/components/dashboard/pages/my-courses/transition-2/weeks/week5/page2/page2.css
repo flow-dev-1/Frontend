@@ -1,0 +1,97 @@
+/* Zones Grid Container */
+.zones-grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  width: 100%;
+}
+
+/* Zone Container */
+.coping-zone-container {
+  position: relative;
+  border-radius: 12px;
+  min-height: 146.98px;
+  /*width: 188.97px; */
+  /* width: 100%; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 10px;
+  transition: all 0.3s ease;
+}
+.coping-zone-container.blue {
+  background: url("../../../../../../../../assets/emotional-regulation-images/blue_rectangle.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.coping-zone-container.green {
+  background: url("../../../../../../../../assets/emotional-regulation-images/green_rectangle.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.coping-zone-container.yellow {
+  background: url("../../../../../../../../assets/emotional-regulation-images/yellow_rectangle.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.coping-zone-container.red {
+  background: url("../../../../../../../../assets/emotional-regulation-images/red_rectangle.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Zone Count Badge */
+.zone-count {
+  position: absolute;
+  top: -10px;
+  right: 50%;
+  background: #ffffff;
+  color: #333;
+  font-weight: bold;
+  font-size: 1.2rem;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+/* Zone Title */
+.zone-title {
+  margin-top: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .coping-skill-card {
+    min-width: 200px;
+    min-height: 100px;
+  }
+
+  .skill-text {
+    font-size: 0.9rem;
+  }
+
+  .zones-grid-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .coping-zone-container {
+    min-height: 80px;
+  }
+
+  .zone-count {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+  }
+}

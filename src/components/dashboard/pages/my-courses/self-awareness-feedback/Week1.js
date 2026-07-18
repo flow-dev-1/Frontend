@@ -6,7 +6,13 @@ import unCheckedImage from "../../../../../assets/selfawareness-images/not-check
 import { Icon } from "@iconify/react";
 import FinalReport from "./FinalReport";
 import userService from "../../../../../services/api/user";
-import { useQuery } from "@tanstack/react-query";
+import schoolService from "../../../../../services/api/school";
+import adminService from "../../../../../services/api/admin";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
+import { adminData } from "../../../../../redux/reducers/adminReducer";
+import FeedbackModal from "../../../../school-dashboard/school-pages/school-courses/single-individual-course-feedback/self-awareness-feedback/FeedbackModal";
+
 // rgba(253, 72, 61, 0.2);
 let questions = [
   {
@@ -17,27 +23,27 @@ let questions = [
         label:
           "A. You immediately take charge, assigning tasks to ensure everything is done efficiently.",
         color: "Red",
-        checked: false
+        checked: false,
       },
       {
         label:
           "B. You suggest a detailed plan, making sure everyone understands their responsibilities and feels comfortable.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label:
           "C. You prefer to discuss everyone's strengths and weaknesses first, ensuring tasks are assigned according to individual abilities.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label:
           "D. You focus on making the process enjoyable, suggesting creative ideas and encouraging a fun atmosphere.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question:
@@ -47,27 +53,27 @@ let questions = [
         label:
           "A. Ensuring that tasks are delegated effectively and deadlines are met.",
         color: "Red",
-        checked: false
+        checked: false,
       },
       {
         label:
           "B. Making sure everyone feels included and their opinions are considered.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label:
           "C. Analyzing the team’s skills and assigning tasks accordingly to maximize productivity.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label:
           "D. Encouraging a creative approach and fostering a positive team environment.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question:
@@ -77,27 +83,27 @@ let questions = [
         label:
           "A. You jump straight in and start tackling the problem with a clear plan.",
         color: "Red",
-        checked: false
+        checked: false,
       },
       {
         label:
           "B. You gather information and consult with others before taking action.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label:
           "C. You take time to understand the problem thoroughly and consider different solutions.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label:
           "D. You brainstorm with others to come up with innovative and unconventional solutions.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question: "I like to:",
@@ -105,24 +111,24 @@ let questions = [
       {
         label: "A. Act on a moment’s notice; do risky things.",
         color: "Red",
-        checked: true
+        checked: true,
       },
       {
         label: "B. Provide answers or give thought to people’s questions.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label: "C. Help maintain a sense of harmony and togetherness.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label: "D. Be responsible, dependable, and helpful to others.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question: "One thing I am really good at is:",
@@ -130,24 +136,24 @@ let questions = [
       {
         label: "A. Acting courageously.",
         color: "Red",
-        checked: true
+        checked: true,
       },
       {
         label: "B. Thinking.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label: "C. Being sensitive.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label: "D. Organizing.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question: "Friends who know me best would say that I am:",
@@ -155,24 +161,24 @@ let questions = [
       {
         label: "A. Competitive.",
         color: "Red",
-        checked: true
+        checked: true,
       },
       {
         label: "B. Reserved, thoughtful.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label: "C. Emotional, friendly.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label: "D. Neat, prepared.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question: "My basic approach to life is:",
@@ -180,24 +186,24 @@ let questions = [
       {
         label: "A. To take one day at a time and have fun.",
         color: "Red",
-        checked: true
+        checked: true,
       },
       {
         label: "B. To figure out what life is all about.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label: "C. To help others and be happy and succeed.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label: "D. To plan for the future and make it as good as possible.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question: "When I am feeling discouraged or “down in the dumps”:",
@@ -205,26 +211,26 @@ let questions = [
       {
         label: "A. I often become rude, mad, or sometimes even mean.",
         color: "Red",
-        checked: true
+        checked: true,
       },
       {
         label:
           "B. I withdraw, don’t talk very much, and try to think my way out of the problem.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label:
           "C. I feel emotional, am sad, and usually like to talk it over with someone close to me.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label: "D. I try to figure out what’s causing the problem and fix it.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question: "I feel good about myself when:",
@@ -232,24 +238,24 @@ let questions = [
       {
         label: "A. I can do things that are difficult.",
         color: "Red",
-        checked: true
+        checked: true,
       },
       {
         label: "B. I can solve problems or figure things out.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label: "C. I can help other people.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label: "D. I am appreciated or rewarded for things I do.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question:
@@ -259,27 +265,27 @@ let questions = [
         label:
           "A. Charming, a natural leader, clever, someone who is fun to have around.",
         color: "Red",
-        checked: false
+        checked: false,
       },
       {
         label:
           "B. Thoughtful, someone who has good answers, someone who likes to figure out problems.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label:
           "C. Nice, friendly, someone who gets along with other students and is helpful to the teacher and others.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label:
           "D. Neat, organized, prepared, someone who does assignments and is a good student.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question:
@@ -288,24 +294,24 @@ let questions = [
       {
         label: "A. Rowdy or a little wild.",
         color: "Red",
-        checked: true
+        checked: true,
       },
       {
         label: "B. Arrogant.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label: "C. Talkative.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label: "D. Someone who wants things my way; dominant; worrying.",
         color: "Yellow",
-        checked: false
-      }
-    ]
+        checked: false,
+      },
+    ],
   },
   {
     question: "When I am faced with a challenge:",
@@ -313,26 +319,26 @@ let questions = [
       {
         label: "A. I dive in headfirst and take immediate action.",
         color: "Red",
-        checked: true
+        checked: true,
       },
       {
         label: "B. I analyze the situation and come up with a strategy.",
         color: "Green",
-        checked: false
+        checked: false,
       },
       {
         label:
           "C. I consider how it will impact the people involved and try to keep everyone calm.",
         color: "Blue",
-        checked: false
+        checked: false,
       },
       {
         label: "D. I make a detailed plan and follow it step by step.",
         color: "Yellow",
-        checked: false
-      }
-    ]
-  }
+        checked: false,
+      },
+    ],
+  },
 ];
 
 let personalityFeedback = {
@@ -340,7 +346,7 @@ let personalityFeedback = {
     red: 25,
     green: 25,
     blue: 25,
-    yellow: 25
+    yellow: 25,
   },
   colors: {
     red: {
@@ -352,7 +358,7 @@ let personalityFeedback = {
       challenges:
         "May be impulsive, impatient, and can sometimes overlook details in favor of quick decisions.",
       challengesExp:
-        "People who align more with the Red personality often thrive in dynamic situations where quick thinking and decisive action are needed. However, they may need to be mindful of their tendency to act before fully considering all consequences."
+        "People who align more with the Red personality often thrive in dynamic situations where quick thinking and decisive action are needed. However, they may need to be mindful of their tendency to act before fully considering all consequences.",
     },
     green: {
       title: "Green",
@@ -362,7 +368,7 @@ let personalityFeedback = {
       challenges:
         "May overthink or become indecisive, can be perceived as distant or overly critical.",
       challengesExp:
-        "If you dominantly have a Green personality, you likely excel in situations that require careful thought and analysis. Your logical approach is a valuable asset, but balancing it with consideration for emotional and social factors is important."
+        "If you dominantly have a Green personality, you likely excel in situations that require careful thought and analysis. Your logical approach is a valuable asset, but balancing it with consideration for emotional and social factors is important.",
     },
     blue: {
       title: "Blue",
@@ -372,7 +378,7 @@ let personalityFeedback = {
       challenges:
         "May struggle with setting boundaries, can be overly sensitive or avoid conflict.",
       challengesExp:
-        "If your results aligned more with the Blue personality are often the glue that holds groups together, providing support and fostering harmony. However, it’s essential to establish boundaries to avoid becoming overwhelmed by others’ needs."
+        "If your results aligned more with the Blue personality are often the glue that holds groups together, providing support and fostering harmony. However, it’s essential to establish boundaries to avoid becoming overwhelmed by others’ needs.",
     },
     yellow: {
       title: "Yellow",
@@ -382,9 +388,9 @@ let personalityFeedback = {
       challenges:
         "May avoid serious tasks or become easily distracted, struggles with long-term focus.",
       challengesExp:
-        "If your results aligned more with the Yellow personality, your strength lies in your ability to create order and maintain stability. You are the person others rely on for consistency and thoroughness, though it’s beneficial to remain open to new ideas and changes."
-    }
-  }
+        "If your results aligned more with the Yellow personality, your strength lies in your ability to create order and maintain stability. You are the person others rely on for consistency and thoroughness, though it’s beneficial to remain open to new ideas and changes.",
+    },
+  },
 };
 
 const questionsArrayRedFormatted = [
@@ -397,30 +403,30 @@ const questionsArrayRedFormatted = [
           "A. You immediately take charge, assigning tasks to ensure everything is done efficiently.",
         color: "Red",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label:
           "B. You suggest a detailed plan, making sure everyone understands their responsibilities and feels comfortable.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label:
           "C. You prefer to discuss everyone's strengths and weaknesses first, ensuring tasks are assigned according to individual abilities.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label:
           "D. You focus on making the process enjoyable, suggesting creative ideas and encouraging a fun atmosphere.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "How do you approach situations that involve risk?",
@@ -429,27 +435,27 @@ const questionsArrayRedFormatted = [
         label: "A. I embrace risks, seeing them as opportunities.",
         color: "Red",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. I weigh the pros and cons but am open to taking risks.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. I prefer to minimize risks and proceed with caution.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. I avoid risks whenever possible.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "In a competitive situation, how do you typically feel?",
@@ -458,27 +464,27 @@ const questionsArrayRedFormatted = [
         label: "A. I like competition and aim to win.",
         color: "Red",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. I enjoy competition but also focus on fair play.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. I participate, but winning isn’t my main goal.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. I avoid competition and prefer cooperative situations.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question:
@@ -488,28 +494,28 @@ const questionsArrayRedFormatted = [
         label: "A. I dive in immediately and start tackling it head-on.",
         color: "Red",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. I quickly assess the situation and then take action.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label:
           "C. I take time to analyze before deciding on a course of action.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. I feel hesitant and may delay starting.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question:
@@ -520,29 +526,29 @@ const questionsArrayRedFormatted = [
           "A. I suggest adventurous or spontaneous ideas to keep things exciting.",
         color: "Red",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label:
           "B. I propose activities that are fun but also consider everyone's preferences.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. I prefer to go along with others’ suggestions.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. I stick to well-planned and familiar activities.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
-  }
+        isCorrect: false,
+      },
+    ],
+  },
   // Add more questions if needed
 ];
 
@@ -555,28 +561,28 @@ const questionsArrayBlueFormatted = [
         label: "A. I focus on ensuring everyone feels included and valued.",
         color: "Blue",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. I bring up new ideas and focus on just the planning aspect.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. I take charge and make decisions for the group.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label:
           "D. I prefer to focus on the technical aspects and problem-solving.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question:
@@ -586,27 +592,27 @@ const questionsArrayBlueFormatted = [
         label: "A. I focus on ensuring everyone feels included and valued.",
         color: "Blue",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. I suggest practical solutions to help them feel better.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. I give them space to process their emotions alone.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. I focus on getting them to move past it and carry on.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "In a conflict, what is your usual response?",
@@ -616,28 +622,28 @@ const questionsArrayBlueFormatted = [
           "A. I try to mediate and find a solution that keeps everyone happy.",
         color: "Blue",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label:
           "B. I discuss the issues openly and try to resolve them logically.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. I assert my position and work to get my point across.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. I avoid the conflict and hope it resolves itself.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "When making decisions, what do you consider most?",
@@ -646,27 +652,27 @@ const questionsArrayBlueFormatted = [
         label: "A. How it will affect the people involved and their feelings.",
         color: "Blue",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. The logical outcomes and possible consequences.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. How quickly I can implement the decision.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. The rules and guidelines that should be followed.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "How do you typically show you care about someone?",
@@ -675,28 +681,28 @@ const questionsArrayBlueFormatted = [
         label: "A. I spend quality time with them and offer emotional support.",
         color: "Blue",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. I give them thoughtful advice or help them solve problems.",
         color: "Green",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. I involve them in fun and exciting activities.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. I do things for them or help with their responsibilities.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
-  }
+        isCorrect: false,
+      },
+    ],
+  },
   // Add more questions if needed
 ];
 
@@ -709,27 +715,27 @@ const questionsArrayYellowFormatted = [
           "A. Ensure everything is organized and everyone knows their tasks.",
         color: "Yellow",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Lead the group and make quick decisions.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. Provide emotional support and encourage everyone.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. Offer innovative ideas and solutions.",
         color: "Green",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "How do you handle unexpected changes or challenges?",
@@ -738,28 +744,28 @@ const questionsArrayYellowFormatted = [
         label: "A. Make a detailed plan to address the changes.",
         color: "Yellow",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Adapt quickly and go with the flow.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. Seek support from others and talk through the issues.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label:
           "D. Avoid the challenge if possible and focus on something else.",
         color: "Green",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "In a social setting, how do you usually behave?",
@@ -768,27 +774,27 @@ const questionsArrayYellowFormatted = [
         label: "A. Keep everything organized and ensure everyone is on track.",
         color: "Yellow",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Engage in conversations and make new connections.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. Take charge and organize the event or activity.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. Support and help others feel included and valued.",
         color: "Green",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "When making decisions, what is your primary focus?",
@@ -798,27 +804,27 @@ const questionsArrayYellowFormatted = [
           "A. Making sure the decision aligns with long-term goals and values.",
         color: "Yellow",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Quickly resolving the issue to move on to other tasks.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. Considering how the decision will affect everyone involved.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. Following a detailed plan and ensuring accuracy.",
         color: "Green",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "How do you feel about setting and achieving goals?",
@@ -828,30 +834,30 @@ const questionsArrayYellowFormatted = [
           "A. Setting clear goals and making sure they are achieved is very important.",
         color: "Yellow",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label:
           "B. Achieving goals is less important than having fun and enjoying the process.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. There is no need to set goals.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label:
           "D. Prefer to set goals but not worry too much about following through.",
         color: "Green",
         checked: false,
-        isCorrect: false
-      }
-    ]
-  }
+        isCorrect: false,
+      },
+    ],
+  },
   // Add more questions if needed
 ];
 
@@ -863,27 +869,27 @@ const questionsArrayGreenFormatted = [
         label: "A. Analyze the situation thoroughly before acting.",
         color: "Green",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Act based on my first thought.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. Seek advice from others before making a decision.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. Ignore the problem and hope it resolves itself.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "How do you prefer to spend your free time?",
@@ -893,27 +899,27 @@ const questionsArrayGreenFormatted = [
           "A. Engaging in intellectual activities, like reading or puzzles.",
         color: "Green",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Socializing with friends and family.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. Participating in adventurous or spontaneous activities.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. Watching movies.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "When working on a group project, how do you contribute?",
@@ -922,27 +928,27 @@ const questionsArrayGreenFormatted = [
         label: "A. Provide logical analysis and critical thinking.",
         color: "Green",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Offer emotional support and encourage teamwork.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. Take the lead and make quick decisions.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. Just do my allocated part.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question:
@@ -952,27 +958,27 @@ const questionsArrayGreenFormatted = [
         label: "A. Gathering and evaluating all the relevant information.",
         color: "Green",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Considering how the decision will impact others.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "C. Making a decision quickly to keep things moving.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. I focus on my feelings.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
+        isCorrect: false,
+      },
+    ],
   },
   {
     question: "When you encounter a new concept or idea, how do you react?",
@@ -981,64 +987,115 @@ const questionsArrayGreenFormatted = [
         label: "A. Research and seek to understand it deeply.",
         color: "Green",
         checked: false,
-        isCorrect: true
+        isCorrect: true,
       },
       {
         label: "B. Embrace it enthusiastically and share it with others.",
         color: "Red",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label:
           "C. I immediately reject it if it does not align with my values.",
         color: "Blue",
         checked: false,
-        isCorrect: false
+        isCorrect: false,
       },
       {
         label: "D. Implement it immediately.",
         color: "Yellow",
         checked: false,
-        isCorrect: false
-      }
-    ]
-  }
+        isCorrect: false,
+      },
+    ],
+  },
   // Add more questions if needed
 ];
 
-const Week1 = () => {
-  const week = 1;
-  const courseId = "66853bf50118e2e0a02b6a5a";
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["dashboard/feedback/self-awareness", courseId, week],
-    queryFn: () => userService.getMyActivites(courseId, week)
+const Week1 = ({ enrollmentId, isSchool, studentId }) => {
+  const { isAdmin, code } = useSelector(adminData);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState("");
+  const [activeActivity, setActiveActivity] = useState(null);
+
+  const [feedbackIndex, setFeedbackIndex] = useState(null);
+
+  const openModal = (activity, feedback = "", index = null) => {
+    setActiveActivity(activity);
+    setModalData(feedback);
+    setFeedbackIndex(index);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setActiveActivity(null);
+    setModalData("");
+    setFeedbackIndex(null);
+  };
+
+  const [assessments, setAssessmentData] = useState([]);
+  const [percent, setPercent] = useState(0);
+  const [color, setColor] = useState(null);
+  const [quizQuestions, setQuizQuestions] = useState([]);
+
+  const { data, isPending, status, isError, refetch } = useQuery({
+    queryKey: ["dashboard/self-awereness-feedback-1", enrollmentId, studentId, isAdmin, 1],
+    queryFn: () => {
+      if (isAdmin) return adminService.getUserCourseData(enrollmentId, 1, code);
+      if (isSchool) return schoolService.getStudentCourseData(enrollmentId, 1, studentId);
+      return userService.getUserCourseData(enrollmentId, 1);
+    },
+    enabled: !!enrollmentId || (!isSchool && !isAdmin),
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    keepPreviousData: false,
   });
 
-  const [assessmentData, setAssessmentData] = useState(null);
-  const [assessmentLoading, setAssessmentLoading] = useState(true);
-  const [assessmentError, setAssessmentError] = useState(null);
-  const [quizQuestions, setQuizQuestions] = useState([]);
-  console.log(data);
-  useEffect(() => {
-    const fetchAssessmentData = async () => {
-      setAssessmentLoading(true);
-      try {
-        const data = await userService.getMyAssessment(courseId, week);
-        setAssessmentData(data);
-      } catch (error) {
-        setAssessmentError(error);
-      } finally {
-        setAssessmentLoading(false);
+  const mutation = useMutation({
+    mutationFn: (feedbackData) =>
+      adminService.submitAdminFeedback(
+        feedbackData,
+        enrollmentId,
+        1,
+        data?.activity?.user,
+        code
+      ),
+    onSuccess: () => {
+      closeModal();
+      refetch();
+    },
+    onError: (error) => {
+      console.error("Feedback error:", error);
+    },
+  });
+
+  const handleFeedbackSubmit = (activityNumber, feedback) => {
+    const currentActivities = data?.activity?.activities || [];
+    const updatedActivities = currentActivities.map((act) => {
+      if (act.activity === activityNumber) {
+        let newFeedback = Array.isArray(act.feedback) ? [...act.feedback] : [act.feedback];
+        if (feedbackIndex !== null) {
+          newFeedback[feedbackIndex] = feedback;
+        } else {
+          newFeedback[0] = feedback;
+        }
+        return { ...act, feedback: newFeedback };
       }
-    };
+      return act;
+    });
 
-    fetchAssessmentData();
-  }, [courseId, week]);
+    mutation.mutate(updatedActivities);
+  };
 
-  const assessments = assessmentData?.existingAssessment.assessments;
-  const percent = assessmentData?.existingAssessment.rating;
-  const color = assessmentData?.existingAssessment?.personalityColor;
+  useEffect(() => {
+    if (!data) return;
+    setAssessmentData(data?.assessment?.assessments);
+    setPercent(data?.assessment?.rating || 0);
+    setColor(data?.assessment?.personalityColor);
+  }, [data]);
+
   // console.log(percent)
   function getQuestionsByColor(color) {
     switch (color) {
@@ -1083,23 +1140,26 @@ const Week1 = () => {
     }
   }, [color, assessments]);
 
-  if (isLoading || assessmentLoading) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
-  if (isError || assessmentError) {
-    return <div>Take Activity to see feedback.</div>;
+  if (isError || data?.status === "failed") {
+    return <div>{data?.message}.</div>;
   }
 
-  const buckets = data?.activity?.activities[5].buckets;
+  const activityList = data?.activity?.activities || [];
+  const activity6 = activityList.find(a => a.activity === 6);
+  const buckets = activity6?.buckets;
 
   const mappedContent = {
-    yes: buckets?.yes?.map((item) => item.content),
-    no: buckets?.no?.map((item) => item.content),
-    sometimes: buckets?.sometimes.map((item) => item.content)
+    yes: buckets?.yes?.map((item) => item.content) || [],
+    no: buckets?.no?.map((item) => item.content) || [],
+    sometimes: buckets?.sometimes?.map((item) => item.content) || [],
   };
 
-  const backendAnswers = data?.activity?.activities[9].questionChecked;
+  const activity10 = activityList.find(a => a.activity === 10);
+  const backendAnswers = activity10?.questionChecked || {};
   // console.log(backendAnswers)
   const selectedAnswers = Object.values(backendAnswers).map(
     (item) => item.text
@@ -1108,64 +1168,69 @@ const Week1 = () => {
 
   // console.log(questions);
 
+  const act2 = activityList.find(a => a.activity === 2);
+  const act4 = activityList.find(a => a.activity === 4);
+
   const activities = [
     {
-      activity: 1,
-      question: 'What do you think "Self Awareness" is?',
-      answer: data?.activity?.activities?.[1].answers[0],
-      feedback: ""
-    },
-    {
       activity: 2,
-      question: "What do you understand by the word “Personality”?",
-      answer: data?.activity?.activities?.[3].answers[0],
-      feedback: ""
+      question: 'What do you think "Self Awareness" is?',
+      answer: act2?.answers?.[0] || "",
+      feedback: act2?.feedback?.[0] || "",
     },
     {
-      activity: 3,
+      activity: 4,
+      question: "What do you understand by the word “Personality”?",
+      answer: act4?.answers?.[0] || "",
+      feedback: act4?.feedback?.[0] || "",
+    },
+    {
+      activity: 6,
       question:
         "Drag-and-drop the statements on the left into any of these bowls.",
       answer: mappedContent,
-      feedback:
-        ""
-    }
+      feedback: activity6?.feedback?.[0] || "",
+    },
   ];
+
+  const act8 = activityList.find(a => a.activity === 8);
   const activityFour = [
     {
-      activity: 4,
+      activity: 8,
       question:
         "Think about yourself, which of these personality colors describe you? Why do you think so?",
-      selectedPersonality:
-        data?.activity?.activities?.[7].answer?.selectedPersonality,
-      explanation: data?.activity?.activities?.[7].answer?.explanation,
-      feedback: ""
-    }
+      selectedPersonality: act8?.answer?.selectedPersonality || "",
+      explanation: act8?.answer?.explanation || "",
+      feedback: act8?.feedback?.[0] || "",
+    },
   ];
-  const activityAnswers = data?.activity?.activities?.[12]?.answers || [];
-  // console.log(activityAnswers);
-  // Map through answers to create restActivities
+
+  const act12 = activityList.find(a => a.activity === 12);
+  const activityAnswers = act12?.answers || [];
+
+  const act14 = activityList.find(a => a.activity === 14);
   const restActivities = [
     {
-      activity: 4,
+      activity: 14,
       question: "Do you agree with this new result?",
-      answer: data?.activity?.activities?.[13].answers[2].answer,
-      feedback: ""
+      answer: act14?.answers?.[2]?.answer || "",
+      feedback: act14?.feedback?.[0] || "",
     },
     {
-      activity: 4,
+      activity: 14,
       question:
         "Did you get the same color as the color you identified for yourself earlier?",
-      answer: data?.activity?.activities?.[13].answers[0].answer,
+      answer: act14?.answers?.[0]?.answer || "",
 
-      feedback: ""
+      feedback: act14?.feedback?.[1] || "",
     },
     {
-      activity: 4,
+      activity: 14,
       question: "What was different? Why do you think this was different?",
-      answer: data?.activity?.activities?.[13].answers[1].answer,
+      answer: act14?.answers?.[1]?.answer || "",
 
-      feedback: ""
-    }
+      feedback: act14?.feedback?.[2] || "",
+    },
   ];
 
   // console.log(data?.activity?.activities?.[7].answer.selectedPersonality);
@@ -1176,9 +1241,9 @@ const Week1 = () => {
       options: question.options.map((option) => {
         return {
           ...option,
-          checked: selectedAnswers.includes(option.label) // Check if the selected answer matches the option label
+          checked: selectedAnswers.includes(option.label), // Check if the selected answer matches the option label
         };
-      })
+      }),
     };
   });
 
@@ -1204,7 +1269,7 @@ const Week1 = () => {
     0: { name: "Red", color: "#FF0500" },
     1: { name: "Green", color: "#2CCF4F" },
     2: { name: "Blue", color: "#0093FF" },
-    3: { name: "Yellow", color: "#FEF900" }
+    3: { name: "Yellow", color: "#FEF900" },
   };
 
   // Prepare pie chart data
@@ -1217,155 +1282,171 @@ const Week1 = () => {
     return {
       name,
       value: percentage, // Set percentage value
-      color
+      color,
     };
   });
 
   // console.log(pieChart);
 
   return (
-    <div className="week-content">
+    <div className="week-content w-auto">
       {activities?.map((activity, index) => (
         <div style={{ border: "none" }} className="activity" key={index}>
-          <p className="activity-badge">Activity {activity?.activity}</p>
-          <p className="question d-flex align-items-center gap-2">
-            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
-            <span> {activity?.question}</span>
-          </p>
+          <p className="activity-badge">Activity {index + 1}</p>
+          <div className="d-flex align-items-center justify-content-between mb-2">
+            <div className="d-flex gap-3">
+              <h4 className="text-blue" style={{ marginTop: ".3rem", fontSize: "18px" }}>Question:</h4>
+              <span style={{ fontSize: "16px" }}> {activity?.question}</span>
+            </div>
+            {isAdmin && !activity.feedback && (
+              <Icon
+                onClick={() => openModal(activity.activity, "", 0)}
+                style={{ color: "#D6D6D6", cursor: "pointer" }}
+                width={35}
+                icon="hugeicons:comment-01"
+              />
+            )}
+          </div>
 
           {activity?.answer.yes ? (
             <div
-              style={{ width: "90%", margin: "1rem auto" }}
-              className="drag-drop-activity gap-2"
+              style={{ width: "95%", margin: "1rem 0" }}
+              className="drag-drop-activity gap-4"
             >
-              <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>
-              {"   "}
-              <div className="drag-drop-section">
-                <h5 id="yes">YES</h5>
-                <ul>
-                  {activity?.answer.yes.map((item, idx) => (
-                    <strong>
-                      <li key={idx}>
-                        {" "}
-                        {idx + 1} {item}
-                      </li>
-                    </strong>
-                  ))}
-                </ul>
-              </div>
-              <div className="drag-drop-section">
-                <h5 id="no">NO</h5>
-                <ul>
-                  {activity?.answer.no.map((item, idx) => (
-                    <strong>
-                      <li key={idx}>
-                        {" "}
-                        {idx + 1} {item}
-                      </li>
-                    </strong>
-                  ))}
-                </ul>
-              </div>
-              <div className="drag-drop-section">
-                <h5 id="sometimes">SOMETIMES</h5>
-                <ul>
-                  {activity?.answer.sometimes.map((item, idx) => (
-                    <strong>
-                      <li key={idx}>
-                        {" "}
-                        {idx + 1} {item}
-                      </li>
-                    </strong>
-                  ))}
-                </ul>
+              <div className="d-flex gap-3 align-items-start">
+                <h4 className="text-gray" style={{ marginTop: ".3rem", fontSize: "18px" }}>Answer:</h4>
+                <div className="flex-grow-1 d-flex gap-2">
+                  <div className="drag-drop-section">
+                    <h5 id="yes">YES</h5>
+                    <ul>
+                      {activity?.answer.yes.map((item, idx) => (
+                        <li key={idx} style={{ fontSize: "14px", fontWeight: "600" }}>
+                          {idx + 1}. {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="drag-drop-section">
+                    <h5 id="no">NO</h5>
+                    <ul>
+                      {activity?.answer.no.map((item, idx) => (
+                        <li key={idx} style={{ fontSize: "14px", fontWeight: "600" }}>
+                          {idx + 1}. {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="drag-drop-section">
+                    <h5 id="sometimes">SOMETIMES</h5>
+                    <ul>
+                      {activity?.answer.sometimes.map((item, idx) => (
+                        <li key={idx} style={{ fontSize: "14px", fontWeight: "600" }}>
+                          {idx + 1}. {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
           ) : (
-            <p className="d-flex align-items-center justify-content-between">
-              <div className="answer d-flex align-items-center gap-2">
-                <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>{" "}
-                <p style={{ fontSize: "14px" }}>{activity?.answer}</p>
+            <div className="d-flex align-items-center justify-content-between mb-3">
+              <div className="d-flex align-items-center gap-3">
+                <h4 className="text-gray" style={{ marginTop: ".3rem", fontSize: "18px" }}>Answer:</h4>
+                <p style={{ fontSize: "16px", marginBottom: 0 }}>{activity?.answer}</p>
               </div>
-              {/* <Icon
-                style={{ color: "#D6D6D6" }}
-                width={20}
-                icon="hugeicons:comment-01"
-              /> */}
-            </p>
+            </div>
           )}
 
-          <p className="feedback">
-            <div id="badge">Feedback:</div>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem"
-              }}
-            >
-              <div className="feedback-card">{activity?.feedback}</div>
-              {/* <Icon
-                style={{ color: "#275DAD" }}
-                width={20}
-                icon="lucide:edit"
-              /> */}
+          {activity?.feedback?.length > 0 && (
+            <div className="d-flex gap-3 mb-4">
+              <div className="feedback-badge">Feedback</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem",
+                }}
+              >
+                <div className="feedback-card">{activity.feedback}</div>
+                {isAdmin && (
+                  <Icon
+                    onClick={() => openModal(activity.activity, activity.feedback, 0)}
+                    style={{ color: "#275DAD", cursor: "pointer" }}
+                    width={35}
+                    icon="lucide:edit"
+                  />
+                )}
+              </div>
             </div>
-          </p>
+          )}
         </div>
       ))}
+
       {activityFour?.map((activity, index) => (
         <div style={{ border: "none" }} className="activity" key={index}>
-          <p className="activity-badge">Activity {activity?.activity}</p>
-          <p className="question d-flex align-items-center gap-2">
-            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
-            <span>{activity?.question}</span>
-          </p>
+          <p className="activity-badge">Activity {activities.length + index + 1}</p>
+          <div className="d-flex align-items-center justify-content-between mb-2">
+            <div className="d-flex gap-3">
+              <h4 className="text-blue" style={{ marginTop: ".3rem", fontSize: "18px" }}>Question:</h4>
+              <span style={{ fontSize: "16px" }}>{activity?.question}</span>
+            </div>
+            {isAdmin && !activity.feedback && (
+              <Icon
+                onClick={() => openModal(activity.activity, "", 0)}
+                style={{ color: "#D6D6D6", cursor: "pointer" }}
+                width={35}
+                icon="hugeicons:comment-01"
+              />
+            )}
+          </div>
 
-          <p className="d-flex align-items-center justify-content-between">
-            <div className="answer d-flex align-items-center gap-2">
-              <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>
-              <p style={{ fontSize: "14px" }}>
-                {activity?.selectedPersonality} <br />
+          <div className="d-flex align-items-center justify-content-between mb-3">
+            <div className="d-flex gap-3 align-items-start">
+              <h4 className="text-gray" style={{ marginTop: ".3rem", fontSize: "18px" }}>Answer:</h4>
+              <p style={{ fontSize: "16px" }}>
+                <strong>{activity?.selectedPersonality}</strong> <br />
                 {activity?.explanation}
               </p>
             </div>
-            {/* <Icon
-              style={{ color: "#D6D6D6" }}
-              width={20}
-              icon="hugeicons:comment-01"
-            /> */}
-          </p>
+          </div>
 
-          <p className="feedback">
-            <div id="badge">Feedback:</div>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem"
-              }}
-            >
-              <div className="feedback-card">{activity?.feedback}</div>
-              {/* <Icon
-                style={{ color: "#275DAD" }}
-                width={20}
-                icon="lucide:edit"
-              /> */}
+          {activity?.feedback?.length > 0 && (
+            <div className="d-flex gap-3 mb-4">
+              <div className="feedback-badge">Feedback</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem",
+                }}
+              >
+                <div className="feedback-card">{activity.feedback}</div>
+                {isAdmin && (
+                  <Icon
+                    onClick={() => openModal(activity.activity, activity.feedback, 0)}
+                    style={{ color: "#275DAD", cursor: "pointer" }}
+                    width={35}
+                    icon="lucide:edit"
+                  />
+                )}
+              </div>
             </div>
-          </p>
+          )}
         </div>
       ))}
-      <p className="activity-badge">Activity 5</p>
+
+      <p className="activity-badge">Activity {activities.length + activityFour.length + 1}</p>
       {questions.map((q, index) => (
         <div className="question-block" key={index}>
-          <p className="question d-flex align-items-center gap-2">
-            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
+          <div className="d-flex gap-3 mb-2">
+            <h4 className="text-blue" style={{ marginTop: ".3rem", fontSize: "18px" }}>
               Question: {index + 1}{" "}
             </h4>
-            <span> {q.question}</span>
-          </p>
+            <span style={{ fontSize: "16px" }}> {q.question}</span>
+          </div>
           <div className="options">
             {q.options.map((option, idx) => (
               <div className="option" key={idx}>
@@ -1374,7 +1455,14 @@ const Week1 = () => {
                   alt={option.checked ? "Checked" : "Unchecked"}
                   style={{ width: "20px", marginRight: "10px" }}
                 />
-                <span style={{ fontSize: "14px" }} className="option-label">
+                <span
+                  style={{
+                    fontSize: "14px",
+                    textAlign: "left",
+                    display: "block",
+                  }}
+                  className="option-label"
+                >
                   {option.label}
                 </span>
                 <span className={`color-label ${option.color.toLowerCase()}`}>
@@ -1385,56 +1473,94 @@ const Week1 = () => {
           </div>
         </div>
       ))}
+
       <PersonalityFeedback
         feedback={personalityFeedback}
         chartData={pieChart}
       />
-      <p className="activity-badge">Activity 6</p>
-      {restActivities.map((activity, index) => (
-        <div style={{ border: "none" }} className="activity" key={index}>
-          <p className="question d-flex align-items-center gap-2">
-            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>Question:</h4>
-            <span>{activity.question}</span>
-          </p>
-          <p className="d-flex align-items-center justify-content-between">
-            <div className="answer d-flex align-items-center gap-2">
-              <h4 style={{ color: "#555", marginTop: ".3rem" }}>Answer:</h4>
-              <p style={{ fontSize: "14px" }}>{activity.answer}</p>
+
+      <div style={{ border: "none" }} className="activity">
+        <p className="activity-badge">Activity 6</p>
+        {restActivities.map((activity, index) => (
+          <div
+            key={index}
+            style={{
+              marginBottom: index === restActivities.length - 1 ? 0 : "2.5rem",
+              paddingBottom: index === restActivities.length - 1 ? 0 : "1.5rem",
+              borderBottom: index === restActivities.length - 1 ? "none" : "1px solid #f0f0f0"
+            }}
+          >
+            <div className="d-flex align-items-center justify-content-between mb-2">
+              <div className="d-flex gap-3">
+                <h4
+                  className="text-blue"
+                  style={{ marginTop: ".3rem", fontSize: "18px" }}
+                >
+                  Question {index + 1}:
+                </h4>
+                <span style={{ fontSize: "16px" }}>{activity.question}</span>
+              </div>
+              {isAdmin && !activity.feedback && (
+                <Icon
+                  onClick={() =>
+                    openModal(activity.activity, "", index)
+                  }
+                  style={{
+                    color: "#D6D6D6",
+                    cursor: "pointer",
+                  }}
+                  width={35}
+                  icon="hugeicons:comment-01"
+                />
+              )}
             </div>
-            {/* <Icon
-              style={{ color: "#D6D6D6" }}
-              width={20}
-              icon="hugeicons:comment-01"
-            /> */}
-          </p>
-          <p className="feedback">
-            <div id="badge">Feedback:</div>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem"
-              }}
-            >
-              <div className="feedback-card">{activity.feedback}</div>
-              {/* <Icon
-                style={{ color: "#275DAD" }}
-                width={20}
-                icon="lucide:edit"
-              /> */}
+            <div className="d-flex align-items-center gap-3 mb-3">
+              <h4
+                className="text-gray"
+                style={{ marginTop: ".3rem", fontSize: "18px" }}
+              >
+                Answer:
+              </h4>
+              <p style={{ fontSize: "16px", marginBottom: 0 }}>
+                {activity.answer}
+              </p>
             </div>
-          </p>
-        </div>
-      ))}
+
+            {activity?.feedback?.length > 0 && (
+              <div className="d-flex gap-3 mb-4">
+                <div className="feedback-badge">Feedback</div>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1rem",
+                  }}
+                >
+                  <div className="feedback-card">{activity.feedback}</div>
+                  {isAdmin && (
+                    <Icon
+                      onClick={() => openModal(activity.activity, activity.feedback, index)}
+                      style={{ color: "#275DAD", cursor: "pointer" }}
+                      width={35}
+                      icon="lucide:edit"
+                    />
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
       <p className="activity-badge">Assessment 1</p>
       {quizQuestions.map((q, index) => (
         <div className="question-block" key={index}>
-          <div className="question d-flex align-items-center gap-2">
-            <h4 style={{ color: "#275DAD", marginTop: ".3rem" }}>
+          <div className="d-flex gap-3 mb-2">
+            <h4 className="text-blue" style={{ marginTop: ".3rem", fontSize: "18px" }}>
               Question: {index + 1}{" "}
             </h4>
-            <span>{q.question}</span>
+            <span style={{ fontSize: "16px" }}>{q.question}</span>
           </div>
           <div className="options">
             {q.options.map((option, idx) => (
@@ -1444,10 +1570,17 @@ const Week1 = () => {
                   alt={option.isCorrect ? "Checked" : "Unchecked"}
                   style={{ width: "20px", marginRight: "10px" }}
                 />
-                <span style={{ fontSize: "14px" }} className="option-label">
+                <span
+                  style={{
+                    fontSize: "14px",
+                    textAlign: "left",
+                    display: "block",
+                  }}
+                  className="option-label"
+                >
                   {option.label}
                 </span>
-                <p style={{ width: "120px", textAlign: "center" }}>
+                <p style={{ width: "120px", textAlign: "center", marginBottom: 0 }}>
                   {option.isCorrect ? (
                     <span
                       style={{ color: "#50AA50" }}
@@ -1471,7 +1604,14 @@ const Week1 = () => {
           </div>
         </div>
       ))}
-      <FinalReport rate={percent} />{" "}
+      <FinalReport rate={data?.assessment?.rating || percent} />
+      {showModal && (
+        <FeedbackModal
+          initialFeedback={modalData}
+          onClose={closeModal}
+          onSubmit={(feedback) => handleFeedbackSubmit(activeActivity, feedback)}
+        />
+      )}
     </div>
   );
 };

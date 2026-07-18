@@ -1,5 +1,5 @@
 .course-info-modal {
-  width: 1100px;
+  /* width: 1100px; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -29,15 +29,20 @@
 .overflow-y-modal {
   overflow-y: auto;
 }
+
 .overflow-y-modal {
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* For smooth scrolling */
-  scrollbar-width: none; /* For Firefox */
+  -webkit-overflow-scrolling: touch;
+  /* For smooth scrolling */
+  scrollbar-width: none;
+  /* For Firefox */
 }
 
 .overflow-y-modal::-webkit-scrollbar {
-  display: none; /* Hides scrollbar in Chrome, Safari */
+  display: none;
+  /* Hides scrollbar in Chrome, Safari */
 }
+
 .course-info-modal-body {
   margin-top: 10px;
   font-size: 14px;
@@ -186,11 +191,15 @@
 
 .registration-page.edit-profile .prefilled,
 .registration-page.edit-profile select.prefilled option {
-  color: #808080; /* Grey color */
+  color: #808080;
+  /* Grey color */
 }
 
-.review-popup.modal-content {
+.review-popup {
   width: fit-content;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
 .review-popup h1.review {
@@ -213,3 +222,14 @@
   outline: none;
   border: none;
 }
+
+/* @media (max-width: 768px) {
+  .course-info-modal {
+    width: 500px;
+  }
+}
+@media (max-width: 480px) {
+  .course-info-modal {
+    width: 380px;
+  }
+} */

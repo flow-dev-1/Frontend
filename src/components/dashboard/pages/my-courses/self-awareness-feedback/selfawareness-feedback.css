@@ -1,5 +1,114 @@
 .feedback-container {
-  font-family: 'ABeeZee', sans-serif;
+  font-family: "ABeeZee", sans-serif;
+  margin: 0 10px;
+}
+
+.self-awareness-feedback-shell {
+  width: 100%;
+  background: #fff;
+}
+
+.self-awareness-feedback-main {
+  display: flex;
+  align-items: stretch;
+  margin-top: 59.6px;
+  margin-bottom: 50px;
+  padding-bottom: 20px;
+}
+
+.self-awareness-feedback-aside {
+  align-self: stretch;
+  flex: 0 0 25vw;
+  padding: 40px 30px;
+  min-height: calc(100vh - 59.6px);
+  max-height: calc(100vh - 78px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background-color: rgb(248, 245, 245);
+  box-shadow: 0 0 0.3px rgb(21, 4, 4);
+  margin: 0 3rem 0 0;
+  scrollbar-width: thin;
+  scrollbar-color: #c7d1dd transparent;
+}
+
+.self-awareness-feedback-aside::-webkit-scrollbar {
+  width: 6px;
+}
+
+.self-awareness-feedback-aside::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.self-awareness-feedback-aside::-webkit-scrollbar-thumb {
+  background: #c7d1dd;
+  border-radius: 999px;
+}
+
+.self-awareness-feedback-aside .back {
+  margin-left: 30px;
+  font-size: 1.2em;
+  color: #5b616a;
+}
+
+.self-awareness-feedback-title {
+  background: url(../../../../../assets/selfawareness-images/course-title-bg.png);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  padding: 20px 30px;
+  margin: 25px 0;
+}
+
+.self-awareness-feedback-title h2 {
+  color: white;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.self-awareness-feedback-title .course-name {
+  color: aquamarine;
+  margin-top: 0.25rem;
+}
+
+.self-awareness-feedback-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 0 20px;
+  margin: 0;
+}
+
+.self-awareness-feedback-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #5b616a;
+}
+
+.self-awareness-feedback-list li .icon {
+  flex-shrink: 0;
+}
+
+.self-awareness-feedback-list li.active-week {
+  color: #275dad;
+  font-weight: bold;
+  opacity: 1;
+  border-left: 4px solid #00bcc3;
+  padding-left: 8px;
+}
+
+.self-awareness-feedback-list li.locked-week {
+  opacity: 0.5;
+}
+
+.self-awareness-feedback-content {
+  flex: 1 1 70vw;
+  border-radius: 10px;
+  margin: 40px 100px 0 40px;
+  min-width: 0;
+}
+
+.bg-blue-feedback {
+  background-color: #5ce1e6;
 }
 
 .final-report-title {
@@ -15,12 +124,14 @@
 
 .week-title-container,
 .final-report-container {
-  padding: 15px 20px;
+  border: 1px solid #ecedf0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: start;
   cursor: pointer;
   width: 100%;
+  background: #fff;
 }
 
 .week-title {
@@ -28,6 +139,8 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  padding: 1.5rem 3rem;
+  gap: 1rem;
 }
 
 .week-title,
@@ -106,7 +219,78 @@
   background-color: #333;
 }
 
-h2{
+h2 {
   color: #333;
+}
 
+.week-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.week-left h2 {
+  margin: 0;
+  color: #5B616A;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.week-left h2 span {
+  color: #5B616A;
+  font-weight: 400;
+  white-space: normal;
+}
+
+.accordion-content {
+  width: 100%;
+  padding: 30px 80px;
+  border-top: 1px solid #ecedf0;
+  background: #fff;
+}
+
+.feedback-week-locked {
+  opacity: 0.65;
+}
+
+.feedback-week-locked-note {
+  color: #7b7f88;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.feedback-week-lock-icon {
+  color: #7b7f88;
+}
+
+@media (max-width: 768px) {
+  .self-awareness-feedback-main {
+    display: block;
+    margin-top: 59.6px;
+  }
+
+  .self-awareness-feedback-content {
+    margin: 20px 10px 0;
+  }
+
+  .week-title {
+    padding: 1rem;
+    align-items: flex-start;
+  }
+
+  .week-left {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .week-left h2 {
+    white-space: normal;
+  }
+
+  .accordion-content {
+    padding: 10px;
+  }
 }

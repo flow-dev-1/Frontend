@@ -89,19 +89,17 @@ export default function StudentDetailsFormProfile({
       userType,
       __v,
       _id,
+      school,
       ...sanitizedParentFormData
     } = parentFormData;
 
-    console.log(sanitizedParentFormData);
     // Combine sanitizedParentFormData and studentData into a single object
     const completeFormData = {
       ...sanitizedParentFormData,
-      ...studentData
+      ...studentData,
       // Psanarent form data
       // Student data directly included, no nesting under "student"
     };
-
-    console.log("Submitting form data:", completeFormData);
 
     mutation.mutate(completeFormData); // Submitting the combined data
   });
@@ -114,7 +112,7 @@ export default function StudentDetailsFormProfile({
   return (
     <div
       className="registration-page add-student overflow-hidden"
-      style={{ height: "450px", position: "relative" }}
+      style={{ minHeight: "fit-content", position: "relative" }}
     >
       <div className="form-container">
         <div className="top-section mt-2">

@@ -1,0 +1,325 @@
+.week-content {
+  margin: 0 auto;
+  font-family: 'ABeeZee', sans-serif;
+}
+
+.activity {
+  margin-bottom: 16px;
+}
+
+.question {
+  font-weight: bold;
+  color: #5b616a;
+  font-size: 14px;
+  width: fit-content;
+}
+
+.answer {
+  color: #555;
+  margin-bottom: 8px;
+  display: flex;
+}
+
+.feedback-card {
+  background-color: #5ce1e6;
+  padding: 0.4rem;
+
+  color: #555;
+  width: 100%;
+  border-radius: 8px;
+}
+
+div#badge {
+  font-size: 12px !important;
+  color: #fff;
+  border-radius: 10px !important;
+  background-color: '#000';
+  padding: 0.1rem 0.5rem;
+}
+
+.activity-badge {
+  padding: 0.2rem 0.5rem;
+  color: #5b616a;
+  font-size: 14px;
+  border-radius: 35px;
+  width: 120px;
+  text-align: center;
+  background-color: #ffeebb;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+}
+
+.feedback {
+  padding-top: 8px;
+  color: #888;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.question-block {
+  margin: 16px 0;
+  /* width: 100%; */
+}
+
+.question-text {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.options {
+  margin-top: 8px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.option input {
+  margin-right: 8px;
+}
+
+.option-label {
+  flex: 1;
+  color: #555;
+}
+
+.color-label {
+  padding: 2px 4px;
+  text-align: center;
+  width: 70px;
+  border-radius: 27px;
+  font-size: 13px;
+  text-align: left !important;
+}
+
+.color-label.red {
+  background-color: rgba(253, 72, 61, 0.2);
+  color: #FD483D;
+
+}
+
+.color-label.green {
+  background-color: #27AE6033;
+  color: #27AE60;
+}
+
+.color-label.blue {
+  background-color: #0093FF33;
+  color: #0093FF;
+}
+
+.color-label.yellow {
+  background-color: #FEF90033;
+  color: #FDC028;
+}
+
+.personality-feedback {
+  margin-top: 40px;
+}
+
+.personalityBanner {
+  width: 40%;
+  margin: 1rem auto;
+}
+
+.personalityBanner img {
+  display: block;
+  width: 100%;
+}
+
+.personality-feedback h2 {
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+}
+
+.chart {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.feedback-details {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: space-around;
+}
+
+.color-feedback {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 16px;
+}
+
+.color-feedback h3 {
+  color: #333;
+  font-size: 18px;
+}
+
+.color-feedback p {
+  color: #555;
+  margin: 4px 0;
+}
+
+.color-feedback.red {
+  background-color: rgba(253, 72, 61, 0.2);
+  color: #fd483d;
+  padding: 0.2rem;
+  width: 60px;
+  border-radius: 15px;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.color-feedback.green {
+  background-color: #27ae6033;
+  color: #27ae60;
+  padding: 0.1rem;
+  width: 60px;
+  border-radius: 15px;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.color-feedback.blue {
+  background-color: #0093ff33;
+  color: #0093ff;
+  padding: 0.1rem;
+  width: 60px;
+  border-radius: 15px;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.color-feedback.yellow {
+  background-color: #fef90033;
+  color: #fdc028;
+  padding: 0.1rem;
+  width: 60px;
+  border-radius: 15px;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.personality-test-image,
+.quiz-result-image {
+  width: 100%;
+  height: auto;
+  margin-top: 16px;
+  border-radius: 8px;
+}
+
+.drag-drop-activity {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.drag-drop-section {
+  flex: 1;
+}
+
+.drag-drop-section h5 {
+  color: #fff;
+  background-color: #275dad;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.drag-drop-section ul {
+  padding: 0;
+  margin: 0;
+}
+
+.drag-drop-section li {
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border-radius: 5px;
+  color: #000;
+}
+
+#yes {
+  background-color: #50aa50;
+}
+
+#no {
+  background-color: #fd483d;
+}
+
+#sometimes {
+  background-color: #faaa74;
+}
+.pie{
+  margin: auto;
+}
+
+.answers-container {
+  display: flex;
+  justify-content: space-between; /* Ensures two columns */
+  gap: 10px; /* Adds space between the two columns */
+}
+
+.correct-options,
+.your-answers {
+  display: flex;
+  flex-direction: column; /* Stack emojis vertically */
+  flex: 1;
+}
+
+.emoji-container {
+  margin-bottom: 15px; /* Adds space between each emoji */
+}
+
+.box {
+  display: flex;
+  align-items: center; /* Aligns the emoji and label vertically */
+  padding: 10px;
+  border: 1px solid #ccc; 
+  border-radius: 8px;
+}
+
+
+
+.correct-font {
+  text-align: center; /* Center the headers */
+  margin-bottom: 20px;
+  background-color: #50AA50;
+  color: white;
+  padding: 12px;
+  width: 170px;
+}
+
+.answer-font{
+  text-align: center; /* Center the headers */
+  margin-bottom: 20px;
+  color: #275DAD;
+  background-color: #5CE1E6;
+  padding: 12px;
+  width: 170px;
+}
+
+.dropdown-select-section {
+  width: 400px;
+}
+
+.dropdown-div{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.activity-emoji{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}

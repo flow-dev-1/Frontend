@@ -1,63 +1,102 @@
-import React, { useState } from 'react'
-import { Icon } from '@iconify/react'
-import './reusable.css'
-import Modal from 'react-modal'
-import ReviewCourseInfoModal from '../../modals-pages/dashboard-modals/ReviewCourseInfoModal'
-import { useNavigate } from 'react-router-dom'
-import { encryptURI } from '../../../utils/encryption'
+import React, { useState } from "react";
+import { Icon } from "@iconify/react";
+import "./reusable.css";
+import Modal from "react-modal";
+import ReviewCourseInfoModal from "../../modals-pages/dashboard-modals/ReviewCourseInfoModal";
+import { useNavigate } from "react-router-dom";
+import { encryptURI } from "../../../utils/encryption";
+import { toast } from "react-toastify";
 
 const MyCourseCard = ({ course }) => {
-  const navigate = useNavigate()
-  const [modalIsOpen, setIsOpen] = useState(false)
-  const [modalType, setModalType] = useState('')
+  const navigate = useNavigate();
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [modalType, setModalType] = useState("");
 
   const openModal = (modalType) => {
-    setIsOpen(true)
-    setModalType(modalType)
-  }
+    setIsOpen(true);
+    setModalType(modalType);
+  };
 
   function closeModal() {
-    setIsOpen(false)
+    setIsOpen(false);
   }
 
   const likesPercent = (likes, courseEnrollment) => {
-    if (likes === 0) return 0
-    return (likes / courseEnrollment) * 100
-  }
+    if (likes === 0) return 0.0;
+    return ((likes / courseEnrollment) * 100).toFixed(1);
+  };
 
-  const truncateText = (text, maxLength) => {
-    if (text?.length > maxLength) {
-      return text.slice(0, maxLength) + '...'
+
+  const handleFeedbackNavigation = (course) => {
+    const courseTitle = course?.course?.title || "";
+
+    if (courseTitle === "Self Awareness") {
+      navigate(`/dashboard/feedback/self-awareness`, {
+        state: { enrollmentData: course },
+      });
+    } else if (courseTitle === "Resilience & Grit") {
+      navigate(`/dashboard/resilience_grit/feedback`, {
+        state: { enrollmentData: course },
+      });
+    } else if (courseTitle === "Emotional Regulation") {
+      navigate(`/dashboard/emotional_regulation/feedback`, { state: { enrollmentData: course } })
+    } else if (courseTitle === "Transition 2") {
+      navigate(`/dashboard/transition_2/feedback`, { state: { enrollmentData: course } })
+      
+    } else if (courseTitle === "TOT Course 1" || courseTitle.includes("Feel It. Teach It. Transform Lives")) {
+      navigate(`/dashboard/tot/feedback`, {
+        state: { enrollmentData: course },
+      });
+    } else if (courseTitle === "TOT Course 2" || courseTitle.includes("Leaving No Learner Behind")) {
+      navigate(`/dashboard/tot_2/feedback`, {
+        state: { enrollmentData: course },
+      });
+    }else {
+      navigate(`/dashboard/${courseTitle}/feedback`, {
+        state: { enrollmentData: course },
+      });
     }
-    return text
-  }
-
-  console.log(course)
+  };
 
   const handleButtonClick = () => {
+    const courseTitle = course?.course?.title || "";
+
     if (course?.progress === 100) {
-      openModal('feedback')
-    } else if (!course) {
-    alert('Wait for the course to be activated by your School')
-    } else {
-      // Code to start the course
-      navigate(`/dashboard/my-courses/${course.id}`, { state: { course } })
+      openModal("feedback");
+    } else if (course?.schoolCourseEnrollment?.status === "Deactivated") {
+      return toast.info(
+        "Course Deavtivated! Please contact admin for support."
+      );
     }
 
-    console.log(course)
-    const id = course?.course._id
+    if (courseTitle === "Self Awareness") {
+      navigate(`/dashboard/self-awareness-course`, {
+        state: { enrollmentData: course },
+      });
+      localStorage.setItem(`${course._id}-can-see`, true);
+    } else if (courseTitle === "Resilience & Grit") {
+      navigate(`/dashboard/resilience_grit`, {
+        state: { enrollmentData: course },
+      });
+    } else if (courseTitle === "Emotional Regulation") {
+      navigate(`/dashboard/emotional_regulation`, { state: { enrollmentData: course } })
+    }  else if (courseTitle === "Transition 2") {
+      navigate(`/dashboard/transition_2`, { state: { enrollmentData: course } })
 
-    if (course?.course.title === 'Self Awareness') {
-      navigate(`/dashboard/self-awareness-course/${encryptURI(id)}`, {
-        state: { course },
-      })
-      localStorage.setItem(`${course._id}-can-see`, true)
-    } else {
-      navigate(`/dashboard/my-courses/${encryptURI(id)}`, {
-        state: { course },
-      })
+    }else if (courseTitle === "TOT Course 1" || courseTitle.includes("Feel It. Teach It. Transform Lives")) {
+      navigate(`/dashboard/tot`, {
+        state: { enrollmentData: course },
+      });
+    } else if (courseTitle === "TOT Course 2" || courseTitle.includes("Leaving No Learner Behind")) {
+      navigate(`/dashboard/tot_2`, {
+        state: { enrollmentData: course },
+      });
+    }else {
+      navigate(`/dashboard/${courseTitle}`, {
+        state: { enrollmentData: course },
+      });
     }
-  }
+  };
 
   return (
     <div style={{ backgroundColor: "#fff" }} className="reusable-course-card">
@@ -69,7 +108,7 @@ const MyCourseCard = ({ course }) => {
                 display: "block",
                 width: "100%",
                 height: "100%",
-                objectFit: "cover"
+                objectFit: "cover",
               }}
               src={course?.course.image}
               alt=""
@@ -83,19 +122,19 @@ const MyCourseCard = ({ course }) => {
 
           <div className="px-3 py-2">
             <h3 style={{ color: "#329BD6", fontSize: "24px" }}>
-              Knowing Yourself Better
+              {course?.course?.topic}
             </h3>
             <h3 style={{ color: "#555", fontSize: "24px" }}>
               {course?.course.title}
             </h3>
             <p style={{ height: "70px" }}>
-              {truncateText(course?.course.description, 100)}
+              {course?.course.description}
             </p>
             <div className="d-flex icons">
-              <span>
+              {/* <span>
                 <Icon icon="solar:user-linear" />
                 {course?.course.courseEnrollment?.length}
-              </span>
+              </span> */}
               <span>
                 <Icon icon="mingcute:thumb-up-line" />{" "}
                 {likesPercent(
@@ -113,7 +152,7 @@ const MyCourseCard = ({ course }) => {
         </div>
         <div className="course-card-btn d-flex">
           {/* Review/Feedback Button */}
-          {course.progress === 100 ? (
+          {course.progress >= 100 ? (
             <button
               style={{
                 backgroundColor: "#fff",
@@ -122,10 +161,10 @@ const MyCourseCard = ({ course }) => {
                 justifyContent: "center",
                 gap: ".4rem",
                 padding: ".5rem 8px",
-                border: "1px solid #329bd6"
+                border: "1px solid #329bd6",
               }}
               className="btn card-btn feedback"
-              onClick={() => navigate(`/dashboard/feedback/self-awareness`)}
+              onClick={() => handleFeedbackNavigation(course)}
             >
               <Icon icon="hugeicons:comment-01" /> Feedback
             </button>
@@ -139,7 +178,7 @@ const MyCourseCard = ({ course }) => {
                 justifyContent: "center",
                 gap: ".4rem",
                 width: "120px",
-                padding: ".5rem 8px"
+                padding: ".5rem 8px",
               }}
               className="btn card-btn preview"
               onClick={() => openModal("review")}
@@ -157,7 +196,7 @@ const MyCourseCard = ({ course }) => {
               justifyContent: "center",
               gap: ".4rem",
               width: "120px",
-              padding: ".5rem 8px"
+              padding: ".5rem 8px",
             }}
             className="btn card-btn start-resume"
             onClick={handleButtonClick}
@@ -170,12 +209,12 @@ const MyCourseCard = ({ course }) => {
             {course?.progress === 100
               ? "Completed"
               : course.progress === 0
-              ? "Start"
-              : "Resume"}
+                ? "Start"
+                : "Resume"}
           </button>
           {course?.progress > 0 && course?.progress < 100 && (
             <Icon
-              onClick={() => navigate(`/dashboard/feedback/self-awareness`)}
+              onClick={() => handleFeedbackNavigation(course)}
               style={{ color: "#329BD6" }}
               width={40}
               icon="hugeicons:comment-01"
@@ -193,7 +232,7 @@ const MyCourseCard = ({ course }) => {
         shouldCloseOnOverlayClick={true}
       >
         {modalType === "review" && (
-          <ReviewCourseInfoModal course={course} onClose={closeModal} />
+          <ReviewCourseInfoModal course={course?.course} onClose={closeModal} />
         )}
         {modalType === "feedback" && (
           <div>
@@ -205,6 +244,6 @@ const MyCourseCard = ({ course }) => {
       </Modal>
     </div>
   );
-}
+};
 
-export default MyCourseCard
+export default MyCourseCard;

@@ -14,7 +14,7 @@ import schoolService from '../../../../../../services/api/school'
 import { RotatingLines } from 'react-loader-spinner'
 import { decryptId } from '../../../../../../utils/encryption'
 
-const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
+const AddStudentModal = ({ isOpen, onRequestClose, classOfficial, classTag }) => {
   const queryClient = useQueryClient()
   const [fileError, setFileError] = useState('')
   const [isFileUploaded, setIsFileUploaded] = useState(false)
@@ -83,21 +83,14 @@ const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
   })
 
   const { user } = useSelector((state) => state.user)
-  let schoolId
-
-  // ToDO: Do a check if its a school or a user
-  if (user?.isSchool) {
-    schoolId = user?._id
-  }
+  const schoolId = user?.isSchool ? user?._id : user?.school
   const { id } = useParams()
-  console.log(decryptId(id), schoolId)
 
   const mutation = useMutation({
     mutationFn: (data) =>
       schoolService.enrollStudentsIntoCourse(schoolId, decryptId(id), data),
     onSuccess: (data) => {
-      console.log('Mutation success:', data)
-      toast.success('Enrollment successful')
+      toast.success(data.message)
       queryClient.invalidateQueries(['school-single-courses'])
       reset()
       onRequestClose()
@@ -109,6 +102,7 @@ const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
   })
 
   const onSubmit = (data) => {
+
     if (
       !window.confirm(
         'Are you sure you want to enroll the students for this course?'
@@ -116,11 +110,16 @@ const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
     )
       return
 
+    const submissionData = {
+      ...data,
+      classTag: classTag, // Add classTag here
+    };
+
     if (isFileUploaded) {
-      data.students = parsedStudents
+      submissionData.students = parsedStudents
     }
-    console.log(data)
-    mutation.mutate(data)
+
+    mutation.mutate(submissionData)
   }
 
   const handleExcelDownload = () => {
@@ -227,11 +226,11 @@ const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
             name="stdClass"
             {...register("stdClass")}
           >
-           <option value={""}>Choose</option>
+            <option value={""}>Choose</option>
 
             {classOptions.map((className, index) => (
               <option key={index} value={className}>
-                {className}
+                {className} {classTag}
               </option>
             ))}
           </select>
@@ -382,6 +381,7 @@ const AddStudentModal = ({ isOpen, onRequestClose, classOfficial }) => {
           className="modal-button"
           type="submit"
           style={{ backgroundColor: "#329BD6" }}
+          disabled={mutation.isPending}
         >
           {mutation.isPending ? (
             <RotatingLines

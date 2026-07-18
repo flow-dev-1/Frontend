@@ -1,5 +1,5 @@
 // src/components/EndOfCourseComponent.js
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import MyFireWorks from '../Fireworks'
 import celebrate from '../../../../../../assets/celebrate.png'
 
@@ -8,9 +8,21 @@ const EndOfCourseComponent = ({
   handleNextWeekCourse,
   handleLinkClick,
   setCurrentActivity,
+  openReviewPopUp,
 }) => {
   currentWeekIndex = 1
-  console.log(currentWeekIndex)
+
+  const [showFireWork, setShowFireWork] = useState(true)
+  const [hasTriggeredReview, setHasTriggeredReview] = useState(false);
+
+  // Trigger the feedback modal when the component mounts
+  useEffect(() => {
+    if (openReviewPopUp && !hasTriggeredReview) {
+      openReviewPopUp();
+      setHasTriggeredReview(true);
+    }
+  }, [openReviewPopUp, hasTriggeredReview]);
+
   return (
     <div className="end-of-course-page">
       <div className="congrats">
@@ -20,8 +32,13 @@ const EndOfCourseComponent = ({
           You have made it to the end of <br /> Week {currentWeekIndex}
         </p>
       </div>
-      <MyFireWorks />
-      <div className="d-flex align-items-center justify-content-around mx-auto mt-5">
+      {
+        showFireWork && <MyFireWorks
+          setFirework={setShowFireWork}
+        />
+      }
+
+      <div className="progression-btns mt-3">
         {/* <button
           className='btn progress-btn btn-light'
           onClick={() => setCurrentActivity(1)}
@@ -29,7 +46,7 @@ const EndOfCourseComponent = ({
           {'<<<'} Retake Lesson
         </button> */}
         <button
-          className="btn progress-btn btn-dark rounded-3 "
+          className="btn next dark"
           onClick={() => handleLinkClick(1)}
         >
           Proceed to Week {currentWeekIndex + 1} {">>>"}

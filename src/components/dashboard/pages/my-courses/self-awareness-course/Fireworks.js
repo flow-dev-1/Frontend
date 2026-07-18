@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Fireworks from 'fireworks-js';
 
-const MyFireWorks = ({currentWeekIndex}) => {
+const MyFireWorks = ({currentWeekIndex,setFirework}) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -19,6 +19,7 @@ const MyFireWorks = ({currentWeekIndex}) => {
       // Stop fireworks after 5 seconds (5000 milliseconds)
       const timer = setTimeout(() => {
         fireworks.stop();
+        setFirework(false)
       }, 5000);
 
       // Cleanup function to stop fireworks if the component unmounts
@@ -31,7 +32,7 @@ const MyFireWorks = ({currentWeekIndex}) => {
 
   return (
     <div>
-      <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, right: 60, height: '75%', width: '70%' }} />
+      <canvas ref={canvasRef} style={{ position: 'fixed', top: 0, right: 60, height: '60%', width: '70%' }} />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { encryptURI } from "../../../../../utils/encryption";
@@ -12,19 +12,19 @@ const SchoolCourseCardEnrolled = ({ openModal, courseData }) => {
   const [course] = useState(courseData.course);
   const navigate = useNavigate();
   const isEnrolled = true;
+  const toggleStorageKey = `toggleState-${courseData?.course?._id}`;
 const [isOn, setIsOn] = useState(() => {
-  // Initialize state from localStorage if it exists, otherwise default to false
-  const savedState = localStorage.getItem("toggleState");
-  return savedState ? JSON.parse(savedState) : false;
+  const savedState = localStorage.getItem(toggleStorageKey);
+  if (savedState !== null) return JSON.parse(savedState);
+  return courseData?.status ? courseData.status === "Active" : true;
 });
 
 const handleToggle = (courseId) => {
   setIsOn((prevIsOn) => {
     const newIsOn = !prevIsOn;
-    const data = { status: newIsOn ? "Confirmed" : "Deactivated" };
+    const data = { status: newIsOn ? "Active" : "Deactivated" };
 
-    // Save the new toggle state in localStorage
-    localStorage.setItem("toggleState", JSON.stringify(newIsOn));
+    localStorage.setItem(toggleStorageKey, JSON.stringify(newIsOn));
 
     // Call the service with the updated status
     schoolService.changeToggle(courseId, data);
@@ -32,6 +32,12 @@ const handleToggle = (courseId) => {
     return newIsOn;
   });
 };
+
+useEffect(() => {
+  const savedState = localStorage.getItem(toggleStorageKey);
+  if (savedState !== null || !courseData?.status) return;
+  setIsOn(courseData.status === "Active");
+}, [courseData?.status, toggleStorageKey]);
 
 
   const [openEnrollModal, setOpenEnrollModal] = useState(false);
@@ -61,7 +67,7 @@ const handleToggle = (courseId) => {
 
   const likesPercent = (likes, courseEnrollment) => {
     if (likes === 0) return 0;
-    return (likes / courseEnrollment) * 100;
+    return ((likes / courseEnrollment) * 100).toFixed(1)
   };
 
   const handleDetailsClick = () => {
@@ -115,15 +121,15 @@ const handleToggle = (courseId) => {
         </div>
         <div className="course-card-title" style={{ margin: "0" }}>
           <h3 style={{ color: "#329BD6", fontSize: "24px" }}>
-            Knowing Yourself Better
+          {course?.course?.topic}
           </h3>
           <h3 style={isEnrolled ? { color: "#555" } : { color: "#329BD6" }}>
-            {course.title}:
+            {course?.title}:
           </h3>
           {/* <h3>{course.subtitle}</h3> */}
         </div>
         <p style={{ fontSize: "12px", height: "60px", marginBottom: "1rem" }}>
-          {truncateText(course.description, 100)}
+          {truncateText(course?.description, 100)}
         </p>
 
         <div className="users-review">
@@ -135,12 +141,12 @@ const handleToggle = (courseId) => {
               justifyContent: "space-between"
             }}
           >
-            <div style={{ color: "#329bd6" }} className="users-count">
+            {/* <div style={{ color: "#329bd6" }} className="users-count">
               <span>
                 <Icon icon="fluent:people-24-regular" width={20} />{" "}
               </span>
               {course?.courseEnrollment?.length}
-            </div>
+            </div> */}
             <div style={{ color: "#329bd6" }} className="likes-count">
               <span>
                 <Icon icon="mingcute:thumb-up-line" width={18} />{" "}

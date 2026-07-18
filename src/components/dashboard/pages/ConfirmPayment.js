@@ -15,6 +15,7 @@ const ConfirmPayment = () => {
   const queryClient = useQueryClient() // Initialize the queryClient
   const urlParams = new URLSearchParams(window.location.search)
   const reference = urlParams.get('reference')
+  
   const mutation = useMutation({
     mutationFn: () => userService.validatePayment(token, reference),
     onSuccess: (data) => {
@@ -36,7 +37,6 @@ const ConfirmPayment = () => {
       mutation.mutate()
       setIsOpen(true)
     } else {
-      console.log('Reference not found in URL')
       // Handle the case where the reference is not present in the URL
     }
   }, [reference])

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png'
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
-import '../newcourse.css'
-import NavigationButtons from './NavigationButtons'
-import { toast } from 'react-toastify'
+
+import ProgressionButtons from '../components/ProgressionButtons';
 
 export default function WeaknessIdentification({
   formData,
@@ -47,23 +46,35 @@ export default function WeaknessIdentification({
   // Extract saved answers if they exist
   const savedAnswers =
     currentActivityData &&
-    currentActivityData.answers &&
-    currentActivityData.answers.weakness
+      currentActivityData.answers &&
+      currentActivityData.answers.weakness
       ? currentActivityData.answers.weakness
       : []
 
   // Initialize state for checked questions based on savedAnswers
-  const [questionChecked, setQuestionChecked] = useState(() =>
-    questionsArray.reduce(
-      (acc, question, index) => ({
-        ...acc,
-        [index]: savedAnswers.includes(question),
-      }),
-      {}
-    )
-  )
+  const [questionChecked, setQuestionChecked] = useState({})
 
-  const [selectedAnswers, setSelectedAnswers] = useState(savedAnswers)
+  const [selectedAnswers, setSelectedAnswers] = useState([])
+  const [errorMessage, setErrorMessage] = useState('')
+
+  useEffect(() => {
+    if (currentActivityData && currentActivityData.answers && currentActivityData.answers.weakness) {
+      const saved = currentActivityData.answers.weakness;
+      setQuestionChecked(
+        questionsArray.reduce(
+          (acc, question, index) => ({
+            ...acc,
+            [index]: saved.includes(question),
+          }),
+          {}
+        )
+      );
+      setSelectedAnswers(saved);
+    } else {
+      setQuestionChecked({});
+      setSelectedAnswers([]);
+    }
+  }, [formData, activityIndex]);
 
   useEffect(() => {
     // Update selected answers whenever questionChecked state changes
@@ -75,6 +86,7 @@ export default function WeaknessIdentification({
   }, [questionChecked])
 
   const handleQuestionCheck = (questionIndex) => {
+    setErrorMessage('')
     setQuestionChecked((prevState) => ({
       ...prevState,
       [questionIndex]: !prevState[questionIndex], // Toggle the checked state
@@ -83,11 +95,11 @@ export default function WeaknessIdentification({
 
   const handleSubmit = () => {
     if (selectedAnswers.length === 0) {
-      // Show an alert if no answers are selected
-      toast.error('Please select at least one strength.')
-      return
+      setErrorMessage('Please select at least one weakness.')
+      return false
     }
 
+    setErrorMessage('')
     onNext({ weakness: selectedAnswers }) // Proceed to the next step
   }
 
@@ -117,8 +129,15 @@ export default function WeaknessIdentification({
             ))}
           </ul>
         </div>
+        {errorMessage && <div className='text-danger mt-3'>{errorMessage}</div>}
       </div>
-      <NavigationButtons onBack={onBack} onNext={handleSubmit} />
+      <div className="mt-3">
+        <ProgressionButtons
+          variant={'both'}
+          onClickNext={handleSubmit}
+          onClickPrev={onBack}
+        />
+      </div>
     </div>
   )
 }
