@@ -53,14 +53,24 @@ export const mergeSelfAwarenessActivityDrafts = (
   draftActivities = []
 ) => {
   const mergedActivities = [...remoteActivities];
-  const remoteActivityIds = new Set(
-    remoteActivities.map((activity) => Number(activity.activity))
+  const remoteActivityIndexes = new Map(
+    remoteActivities.map((activity, index) => [Number(activity.activity), index])
   );
 
   draftActivities.forEach((draftActivity) => {
-    if (!remoteActivityIds.has(Number(draftActivity.activity))) {
+    const activityId = Number(draftActivity.activity);
+    const remoteIndex = remoteActivityIndexes.get(activityId);
+    if (remoteIndex === undefined) {
       mergedActivities.push(draftActivity);
+      return;
     }
+
+    const remoteActivity = mergedActivities[remoteIndex];
+    mergedActivities[remoteIndex] = {
+      ...remoteActivity,
+      ...draftActivity,
+      feedback: remoteActivity?.feedback ?? draftActivity?.feedback,
+    };
   });
 
   return mergedActivities;

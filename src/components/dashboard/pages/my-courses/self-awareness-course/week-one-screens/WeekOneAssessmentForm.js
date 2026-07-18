@@ -9,8 +9,9 @@ import { userAnswer, updateData } from '../../../../../../redux/reducers/userAns
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { RotatingLines } from 'react-loader-spinner';
 import { writeSelfAwarenessStorage } from '../utils/storage';
+import { hasRequiredActivityIds } from '../utils/activityCompletion';
 
-const REQUIRED_WEEK_ONE_ACTIVITY_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14];
+const REQUIRED_WEEK_ONE_ACTIVITY_IDS = [2, 4, 6, 8, 10, 14];
 
 export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course, activityData, savedAssessment, isCompleted }) {
 	const dispatch = useDispatch();
@@ -329,14 +330,7 @@ export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course
 	const saveAssessmentData = async () => {
 		if (isLoading || isCompleted) return;
 
-		const completedActivityIds = new Set(
-			(activityData?.activities || []).map((activity) => Number(activity.activity))
-		);
-		const hasCompletedRequiredActivities = REQUIRED_WEEK_ONE_ACTIVITY_IDS.every(
-			(activityId) => completedActivityIds.has(activityId)
-		);
-
-		if (!hasCompletedRequiredActivities) {
+		if (!hasRequiredActivityIds(activityData?.activities, REQUIRED_WEEK_ONE_ACTIVITY_IDS)) {
 			setErrorMessage('Please complete all activities before submitting the assessment.');
 			return;
 		}

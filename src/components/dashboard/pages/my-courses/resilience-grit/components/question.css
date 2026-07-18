@@ -478,6 +478,40 @@
   height: auto;
 }
 
+.custom-border-20.week4-activity1-question-box,
+.custom-border-20.week5-activity1-question-box {
+  box-sizing: border-box;
+  container-type: inline-size;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.week4-activity1-question-row,
+.week4-activity1-question-row > div,
+.week4-activity1-question-copy,
+.week5-activity1-question-row,
+.week5-activity1-question-row > div,
+.week5-activity1-question-copy {
+  max-width: 100%;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .week4-activity1-question-copy .resilience-question-image,
+  .week5-activity1-question-copy .resilience-question-image {
+    max-width: 100%;
+    width: clamp(8rem, 24cqw, 20rem);
+  }
+}
+
+@media (min-width: 768px) {
+  .resilience-inline-question {
+    white-space: nowrap;
+  }
+}
+
 label {
   font-size: 1.2em;
 }
@@ -567,6 +601,10 @@ button {
 
   .resilience-question-image {
     max-width: 10rem;
+  }
+
+  .resilience-inline-question {
+    white-space: normal;
   }
 
   .arrow-head {

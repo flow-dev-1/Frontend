@@ -8,7 +8,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { userAnswer, updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { RotatingLines } from 'react-loader-spinner';
+import { hasRequiredActivityIds } from '../utils/activityCompletion';
 import { writeSelfAwarenessStorage } from '../utils/storage';
+
+const REQUIRED_WEEK_FOUR_ACTIVITY_IDS = [2, 4, 6, 8];
 
 export default function WeekFourAssessmentForm({ onNext, onBack, course, activityData, savedAssessment, isCompleted }) {
 	const dispatch = useDispatch();
@@ -286,7 +289,7 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 		if (disableButton || isCompleted) return;
 
 		try {
-			if (!activityData?.activities || activityData?.activities?.length !== 9) {
+			if (!hasRequiredActivityIds(activityData?.activities, REQUIRED_WEEK_FOUR_ACTIVITY_IDS)) {
 				setErrorMessage('Please complete all activities before submitting the assessment.');
 				return;
 			}

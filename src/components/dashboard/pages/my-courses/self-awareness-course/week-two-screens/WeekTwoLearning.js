@@ -230,10 +230,10 @@ export default function WeekTwoLearning({
 				return (
 					<QuestionComponent
 						activityIndex={currentActivity}
-						questionText={'What do you understand'}
+						questionText={'What do you understand by'}
 						imageSrc={strengthweakness}
 						formData={formData}
-						altText="by?"
+						altText="?"
 						onBack={handlePrevious}
 						onUpdate={onLocalUpdate}
 						onNext={(answers) =>
@@ -329,7 +329,7 @@ export default function WeekTwoLearning({
 						handleNextWeekCourse={handleNextWeekCourse}
 						onNext={handleNext}
 						course={course}
-						activityData={courseData?.activity || formData}
+						activityData={formData}
 						savedAssessment={courseData?.assessment}
 						isCompleted={isCompleted}
 					/>

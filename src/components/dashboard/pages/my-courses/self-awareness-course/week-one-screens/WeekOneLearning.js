@@ -478,7 +478,7 @@ export default function WeekOneLearning({
 						handleNextWeekCourse={handleNextWeekCourse}
 						onNext={handleNext}
 						course={course}
-						activityData={courseData?.activity || formData}
+						activityData={formData}
 						savedAssessment={courseData?.assessment}
 						isCompleted={isCompleted}
 					/>

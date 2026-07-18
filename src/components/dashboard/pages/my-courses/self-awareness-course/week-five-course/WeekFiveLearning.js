@@ -384,7 +384,7 @@ export default function WeekFiveLearning({
             onNext={handleNext}
             course={course}
             handleActivitySubmit={handleSubmit}
-            activityData={courseData?.activity || formData}
+            activityData={formData}
             savedAssessment={courseData?.assessment}
             isCompleted={isCompleted}
           />

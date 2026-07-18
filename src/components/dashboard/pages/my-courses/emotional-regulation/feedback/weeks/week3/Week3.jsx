@@ -154,17 +154,6 @@ function Week3({ enrollmentId, setWeekThreeData }) {
             <p className="fs-md-5 flex-grow-1">
               {answer}
             </p>
-            {isAdmin && !getActivityFeedback(activityId, stepId, index) && (
-              <Icon
-                onClick={() => {
-                  setActivityFeedbackId({ activityId, itemId: stepId, index });
-                  handleModalOpen();
-                }}
-                style={{ color: "#D6D6D6" }}
-                width={35}
-                icon="tabler:message-2"
-              />
-            )}
           </div>
         </div>
       );
@@ -202,6 +191,41 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         <p className="text-blue fs-md-4">You feel super excited and can’t sit still during a fun class project.</p>
       </div>
       {renderQuestions(activity1.id, q2.letters, 0)}
+      {getActivityFeedback(activity1.id) && (
+        <div className="d-flex gap-3">
+          <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+            Feedback
+          </p>
+          <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+            {getActivityFeedback(activity1.id)}
+          </p>
+          {isAdmin && (
+            <Icon
+              onClick={() => {
+                setModalData(getActivityFeedback(activity1.id));
+                setActivityFeedbackId({ activityId: activity1.id });
+                handleModalOpen();
+              }}
+              style={{ color: "#275DAD" }}
+              width={35}
+              icon="lucide:edit"
+            />
+          )}
+        </div>
+      )}
+      {isAdmin && !getActivityFeedback(activity1.id) && (
+        <div className="d-flex justify-content-end">
+          <Icon
+            onClick={() => {
+              setActivityFeedbackId({ activityId: activity1.id });
+              handleModalOpen();
+            }}
+            style={{ color: "#D6D6D6" }}
+            width={35}
+            icon="tabler:message-2"
+          />
+        </div>
+      )}
       <hr />
 
       {/* Assesment 1 */}
