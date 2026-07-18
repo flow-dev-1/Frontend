@@ -13,6 +13,11 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page4() {
   const dispatch = useDispatch();
@@ -33,9 +38,10 @@ function Page4() {
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    setMyAnswer(response?.answer ? response.answer : "");
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setMyAnswer(response?.answer ?? draftAnswer ?? "");
     return () => {};
-  }, [userAnswers]);
+  }, [userAnswers, pageData.id]);
 
   const saveUserInput = () => {
     if (!adminDatas.isAdmin && !myAnswer) {
@@ -52,6 +58,7 @@ function Page4() {
         answer: myAnswer,
       }),
     );
+    clearActivityDraft(userAnswers, pageData.id);
 
     // Show feedback modal instead of navigating immediately
     setShowFeedback(true);
@@ -61,6 +68,7 @@ function Page4() {
   const handleInputChange = (e) => {
     setErrorMessage("");
     setMyAnswer(e.target.value);
+    saveActivityDraft(userAnswers, pageData.id, e.target.value);
   };
 
   return (

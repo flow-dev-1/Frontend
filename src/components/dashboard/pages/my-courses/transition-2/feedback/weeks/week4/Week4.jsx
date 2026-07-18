@@ -113,7 +113,7 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
       )?.feedback;
       const answerObject = answersList?.find(
         (activity) => activity.stepId === itemId
-      ).value;
+      )?.value;
 
       // return answerObject ? answerObject[index] : null;
       return answerObject ? answerObject : null;
@@ -133,8 +133,10 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
   const getActivityRecord = (activityId) =>
     activityData?.find((activity) => activity.page === activityId);
 
-  const renderFeedbackControls = (activity) => {
-    const feedback = getActivityRecord(activity.id)?.feedback;
+  const renderFeedbackControls = (activity, itemId) => {
+    const feedback = itemId
+      ? getActivityFeedback(activity.id, itemId)
+      : getActivityRecord(activity.id)?.feedback;
 
     if (!isAdmin && !feedback) return null;
 
@@ -146,7 +148,7 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity.id)}
+              {feedback}
             </p>
           </>
         )}
@@ -154,7 +156,7 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
           <Icon
             onClick={() => {
               setModalData(feedback || "");
-              setActivityFeedbackId({ activityId: activity.id });
+              setActivityFeedbackId({ activityId: activity.id, itemId });
               handleModalOpen();
             }}
             style={{ color: feedback ? "#275DAD" : "#D6D6D6" }}
@@ -166,7 +168,13 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
     );
   };
 
-  const renderQuestionAnswer = (question, answer, key) => (
+  const renderQuestionAnswer = (
+    question,
+    answer,
+    key,
+    feedbackActivity,
+    feedbackStepId
+  ) => (
     <React.Fragment key={key}>
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-md-1">Questions:</h2>
@@ -176,6 +184,8 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
         <p className="fs-md-5 flex-grow-1">{answer || ""}</p>
       </div>
+      {feedbackActivity &&
+        renderFeedbackControls(feedbackActivity, feedbackStepId)}
     </React.Fragment>
   );
 
@@ -187,7 +197,7 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
     return renderQuestionAnswer(activity.question, selectedValue, activity.id);
   };
 
-  const renderRatingsAnswer = (step, ratings = {}) => (
+  const renderRatingsAnswer = (activity, step, ratings = {}) => (
     <>
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-md-1">Questions:</h2>
@@ -203,6 +213,7 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
           ))}
         </ul>
       </div>
+      {renderFeedbackControls(activity, step.stepId)}
     </>
   );
 
@@ -223,9 +234,11 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
           {renderQuestionAnswer(
             activity.steps[0].question,
             answer?.textAnswer || answer?.[1] || "",
-            `${activity.id}-1`
+            `${activity.id}-1`,
+            activity,
+            1
           )}
-          {renderRatingsAnswer(activity.steps[1], answer?.ratings)}
+          {renderRatingsAnswer(activity, activity.steps[1], answer?.ratings)}
         </>
       );
     }
@@ -235,7 +248,9 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
         {renderQuestionAnswer(
           activity.steps[0].question,
           answer?.textAnswers?.["1"] || "",
-          `${activity.id}-1`
+          `${activity.id}-1`,
+          activity,
+          1
         )}
         <div className="d-flex gap-3">
           <h2 className="text-blue fs-md-1">Questions:</h2>
@@ -254,10 +269,13 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
             ))}
           </ul>
         </div>
+        {renderFeedbackControls(activity, 2)}
         {renderQuestionAnswer(
           activity.steps[2].question,
           answer?.textAnswers?.["3"] || "",
-          `${activity.id}-3`
+          `${activity.id}-3`,
+          activity,
+          3
         )}
       </>
     );
@@ -284,7 +302,7 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
       </p>
       <hr />
       {renderActivityAnswer(activity)}
-      {renderFeedbackControls(activity)}
+      {![12, 20].includes(activity.id) && renderFeedbackControls(activity)}
       <hr />
     </React.Fragment>
   );

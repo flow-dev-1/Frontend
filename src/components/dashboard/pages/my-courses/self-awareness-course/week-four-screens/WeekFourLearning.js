@@ -9,7 +9,6 @@ import QuestionAboutPeople from './QuestionAboutPeople'
 import CoreValuesQuestion from './CoreValuesQuestion'
 import QuestionComponent from './QuestionComponent'
 import userService from '../../../../../../services/api/user.js'
-import { toast, ToastContainer } from 'react-toastify'
 import EndOfCourseComponent from './EndOfCourseComponent'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useDispatch } from "react-redux";
@@ -19,6 +18,15 @@ import {
 
 import ProgressionButtons from '../components/ProgressionButtons.jsx';
 import VideoComponent from '../components/VideoComponent.jsx';
+import {
+  getLegacySelfAwarenessActivityDataKey,
+  getLegacySelfAwarenessActivityProgressKey,
+  getSelfAwarenessActivityDataKey,
+  getSelfAwarenessActivityProgressKey,
+  mergeSelfAwarenessActivityDrafts,
+  readSelfAwarenessStorage,
+  writeSelfAwarenessStorage,
+} from '../utils/storage';
 
 export default function WeekFourLearning({
   course,
@@ -26,19 +34,25 @@ export default function WeekFourLearning({
   currentWeekIndex,
   courseId,
   handleLinkClick,
+  requestedActivity,
+  onActivityChange,
 }) {
   const dispatch = useDispatch();
   const [showPopup, setShowPopup] = useState(false)
   const [currentActivity, setCurrentActivity] = useState(() => {
-    const savedState = localStorage.getItem(
-      `week-${currentWeekIndex}-currentActivity`
+    return readSelfAwarenessStorage(
+      getSelfAwarenessActivityProgressKey(courseId, currentWeekIndex),
+      getLegacySelfAwarenessActivityProgressKey(currentWeekIndex),
+      1
     )
-    return savedState ? JSON.parse(savedState) : 1
   })
   const week = 4;
   const [formData, setFormData] = useState(() => {
-    const savedData = localStorage.getItem(`week-4-activityData`);
-    return savedData ? JSON.parse(savedData) : { week: 4, activities: [] };
+    return readSelfAwarenessStorage(
+      getSelfAwarenessActivityDataKey(courseId, 4),
+      getLegacySelfAwarenessActivityDataKey(4),
+      { week: 4, activities: [] }
+    );
   });
 
   const { data: courseData, isLoading, status, isError } = useQuery({
@@ -60,14 +74,13 @@ export default function WeekFourLearning({
         setCurrentActivity(courseData.activity.lastActivityIndex);
       }
 
-      // Robust Merge: Only use remote activities if they are more comprehensive or if local is empty
       setFormData((prevData) => {
-        const localActivities = prevData?.activities || [];
-        if (localActivities.length > 0 && activities.length <= localActivities.length) {
-          // Keep local data as it might be fresher
-          return prevData;
-        }
-        return { ...prevData, activities: activities };
+        const draftActivities = prevData?.activities || [];
+        return {
+          ...prevData,
+          week,
+          activities: mergeSelfAwarenessActivityDrafts(activities, draftActivities),
+        };
       });
 
       dispatch(
@@ -92,9 +105,9 @@ export default function WeekFourLearning({
         assessments: assessments,
       };
 
-      localStorage.setItem(
+      writeSelfAwarenessStorage(
         'weekFourAssessmentData',
-        JSON.stringify({ formattedData: assessment_data })
+        { formattedData: assessment_data }
       );
     }
   }, [courseData]);
@@ -104,19 +117,44 @@ export default function WeekFourLearning({
   const navigate = useNavigate();
 
   useEffect(() => {
-    localStorage.setItem(
-      `week-${currentWeekIndex}-currentActivity`,
-      JSON.stringify(currentActivity)
+    writeSelfAwarenessStorage(
+      getSelfAwarenessActivityProgressKey(courseId, currentWeekIndex),
+      currentActivity
     );
-  }, [currentActivity, currentWeekIndex]);
+    onActivityChange?.(currentWeekIndex, currentActivity);
+  }, [courseId, currentActivity, currentWeekIndex, onActivityChange]);
 
   useEffect(() => {
-    localStorage.setItem(`week-4-activityData`, JSON.stringify(formData));
-  }, [formData]);
+    if (requestedActivity?.week !== currentWeekIndex) return;
+    if (!requestedActivity?.activity) return;
+    setCurrentActivity(requestedActivity.activity);
+  }, [currentWeekIndex, requestedActivity]);
+
+  useEffect(() => {
+    writeSelfAwarenessStorage(
+      getSelfAwarenessActivityDataKey(courseId, 4),
+      formData
+    );
+  }, [courseId, formData]);
 
   const isCompleted = !!courseData?.assessment;
 
   const queryClient = useQueryClient();
+
+  const onLocalUpdate = useCallback((incomingData) => {
+    setFormData((prevData) => {
+      const currentActivities = prevData?.activities || courseData?.activity?.activities || [];
+      const updatedActivities = currentActivities.map((item) =>
+        item.activity === currentActivity ? { ...item, ...incomingData } : item
+      );
+
+      if (!updatedActivities.find((item) => item.activity === currentActivity)) {
+        updatedActivities.push({ activity: currentActivity, ...incomingData });
+      }
+
+      return { ...prevData, activities: updatedActivities };
+    });
+  }, [currentActivity, courseData?.activity?.activities]);
 
   const handleNext = useCallback(async (incomingData = {}) => {
     const currentActivities = formData?.activities || courseData?.activity?.activities || [];
@@ -131,26 +169,35 @@ export default function WeekFourLearning({
     setFormData((prevData) => ({ ...prevData, activities: updatedActivities }));
 
     const nextActivity = currentActivity >= 10 ? 11 : currentActivity + 1;
-    setCurrentActivity(nextActivity);
 
     if (!isCompleted && !isLoading) {
-      // Fire and Forget: Save progress to background
       const payload = {
         week: week,
         activities: updatedActivities,
         lastActivityIndex: nextActivity // Save where they are going
       };
 
-      userService.postMyActivity(courseId, payload)
-        .then(() => {
-          // Invalidate enrollment query to reflect any backend updates
-          queryClient.invalidateQueries(['enrollment', courseId]);
-        })
-        .catch(err => {
-          console.error("Failed to auto-save activity:", err);
-        });
+      try {
+        const result = await userService.postMyActivity(courseId, payload);
+        queryClient.setQueryData(
+          ['self-awareness-course-4', courseId, week],
+          (previousData) => ({
+            ...(previousData || {}),
+            activity: result?.newActivity || {
+              ...(previousData?.activity || {}),
+              ...payload,
+            },
+          })
+        );
+        await queryClient.invalidateQueries({ queryKey: ['enrollment', courseId] });
+      } catch (err) {
+        console.error("Failed to auto-save activity:", err);
+        return false;
+      }
     }
-  }, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted, isLoading]);
+    setCurrentActivity(nextActivity);
+    return true;
+  }, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted, isLoading, queryClient]);
 
   const handlePrevious = () => {
     setCurrentActivity((prev) => prev - 1)
@@ -160,6 +207,10 @@ export default function WeekFourLearning({
 
   const handleNextWeekCourse = () => {
     const nextWeekIndex = currentWeekIndex + 1
+    if (handleLinkClick) {
+      handleLinkClick(nextWeekIndex - 1, 1)
+      return
+    }
     navigate(`/dashboard/self-awareness-course`, {
       state: { enrollmentData: course, weekIndex: nextWeekIndex },
     })
@@ -190,6 +241,7 @@ export default function WeekFourLearning({
             formData={formData}
             altText=''
             onBack={handlePrevious}
+            onUpdate={onLocalUpdate}
             onNext={(answers) =>
               handleNext({
                 answers,
@@ -305,7 +357,8 @@ export default function WeekFourLearning({
             handleNextWeekCourse={handleNextWeekCourse}
             onNext={handleNext}
             course={course}
-            activityData={formData}
+            activityData={courseData?.activity || formData}
+            savedAssessment={courseData?.assessment}
             isCompleted={isCompleted}
           />
         )
@@ -324,7 +377,6 @@ export default function WeekFourLearning({
 
   return (
     <div className='week-learning'>
-      <ToastContainer />
       <div className='content-container'>{renderActivityContent()}</div>
     </div>
   )

@@ -18,6 +18,7 @@ import { adminData } from "../../../../../../../../redux/reducers/adminReducer.j
 import Modal from "../../components/Modal.jsx";
 import { useMutation } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
+import "../../feedback-layout.css";
 
 function Week2({ enrollmentId, setWeekTwoData, isSchool, studentId }) {
   const { pages } = getWeekContentExcludingVideos(2);
@@ -35,7 +36,7 @@ function Week2({ enrollmentId, setWeekTwoData, isSchool, studentId }) {
   const { questions: assessments } = getWeekAssessment(2);
 
   // toDo: Fetch User assessment and Activity Data
-  const { data, isPending, status, isError } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ["dashboard/compassion-feedback-1", enrollmentId, 2],
     queryFn: () => {
       if (isAdmin) return adminService.getUserCourseData(enrollmentId, 2, code);
@@ -88,7 +89,7 @@ function Week2({ enrollmentId, setWeekTwoData, isSchool, studentId }) {
     setWeekTwoData(true);
 
     return () => { };
-  }, [data]);
+  }, [data, setWeekTwoData]);
 
   function getActivityAnswer(activityId, itemId) {
     if (!itemId) {
@@ -162,7 +163,7 @@ function Week2({ enrollmentId, setWeekTwoData, isSchool, studentId }) {
   };
 
   return (
-    <>
+    <div className="course-feedback-layout">
       {/* Activity 1 */}
       <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
         Activity 1
@@ -433,7 +434,7 @@ function Week2({ enrollmentId, setWeekTwoData, isSchool, studentId }) {
           handleSubmit={submitFeedback}
         />
       </div>
-    </>
+    </div>
   );
 }
 

@@ -11,6 +11,11 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function WeekFourPage4() {
   const dispatch = useDispatch();
@@ -33,9 +38,24 @@ function WeekFourPage4() {
     if (response?.answer) {
       setBowls(response.answer);
       setOptions([]);
+    } else {
+      const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+      if (draftAnswer?.bowls && draftAnswer?.options) {
+        setBowls(draftAnswer.bowls);
+        setOptions(draftAnswer.options);
+      }
     }
     return () => {};
-  }, [userAnswers]);
+  }, [pageData.id, userAnswers]);
+
+  const updateDragState = (nextOptions, nextBowls) => {
+    setOptions(nextOptions);
+    setBowls(nextBowls);
+    saveActivityDraft(userAnswers, pageData.id, {
+      options: nextOptions,
+      bowls: nextBowls,
+    });
+  };
 
   const handleOnDragEnd = (result) => {
     setErrorMessage("");
@@ -62,8 +82,7 @@ function WeekFourPage4() {
         ],
       };
 
-      setOptions(newOptions);
-      setBowls(newBowls);
+      updateDragState(newOptions, newBowls);
     }
   };
 
@@ -86,12 +105,15 @@ function WeekFourPage4() {
         answer: bowls,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 
   const resetDragAndDrop = () => {
-    setBowls({ inner: [], outer: [] }); // Reset bowls
+    const emptyBowls = { inner: [], outer: [] };
+    setBowls(emptyBowls); // Reset bowls
     setOptions(pageData.options); // Reset options to initial state
+    clearActivityDraft(userAnswers, pageData.id);
     setErrorMessage(""); // Clear any error messages
   };
 
@@ -105,18 +127,18 @@ function WeekFourPage4() {
 
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
-      <div className="custom-border-20 question-box-container d-flex flex-column flex-md-row">
+      <div className="custom-border-20 question-box-container compassion-week4-activity3-board">
         <Droppable droppableId="options">
           {(provided) => (
             <div
-              className="p-1 p-lg-5 gap-1 drag-flex-basis"
+              className="compassion-week4-activity3-options drag-flex-basis"
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
               {options.map((option, index) => (
                 <Draggable
-                  key={`option-${index}`}
-                  draggableId={`option-${index}`}
+                  key={`option-${pageData.options.indexOf(option)}`}
+                  draggableId={`option-${pageData.options.indexOf(option)}`}
                   index={index}
                 >
                   {(provided, snapshot) => (
@@ -141,20 +163,20 @@ function WeekFourPage4() {
             </div>
           )}
         </Droppable>
-        <div className="col bg-blue">
-          <div className="d-flex align-items-start mb-md-5 justify-content-center mb-2">
+        <div className="compassion-week4-activity3-drop-panel bg-blue">
+          <div className="d-flex align-items-start justify-content-center mb-2">
             <img src={ArrowTrail} alt="arrow tail" className="arrow-head" />
             <div className="text-center text-white pt-2">
               <h1>{pageData.instruction}</h1>
             </div>
             <img src={ArrowTrail} alt="arrow tail" className="arrow-head" />
           </div>
-          <div className="d-flex justify-content-around p-2 px-md-4">
+          <div className="compassion-week4-activity3-bowls">
             {pageData.bowls.map((bowl, index) => (
               <Droppable key={bowl.id} droppableId={bowl.id}>
                 {(provided, snapshot) => (
                   <div
-                    className="my-2"
+                    className="compassion-week4-activity3-dropzone"
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                     style={{
@@ -163,8 +185,7 @@ function WeekFourPage4() {
                         : "transparent",
                       // padding: "1.25rem",
                       borderRadius: "0.5rem",
-                      minHeight: "6.25rem",
-                      height: "18.75rem",
+                      minHeight: "10.5rem",
                     }}
                   >
                     <h2

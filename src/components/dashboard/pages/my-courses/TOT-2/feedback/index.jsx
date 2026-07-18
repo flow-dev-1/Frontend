@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../../../../../../assets/logo.png";
 import { Icon } from "@iconify/react";
 import Accordion from "./components/Accordion";
@@ -11,6 +11,9 @@ import OverallFeedBack from "./weeks/overall/OverallFeedBack";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { adminData } from "../../../../../../redux/reducers/adminReducer";
 import { useSelector } from "react-redux";
+import { useQueries } from "@tanstack/react-query";
+import userService from "../../../../../../services/api/user";
+import adminService from "../../../../../../services/api/admin";
 
 function TOT2Feedback({ isSchool: isSchoolProp }) {
   const navigate = useNavigate();
@@ -56,8 +59,6 @@ function TOT2Feedback({ isSchool: isSchoolProp }) {
     isWeekFourLoaded,
     isWeekFiveLoaded,
   ]);
-
-  const currentWeek = activeIndex + 1;
 
   // Access data from location.state
   const enrolmentData = location.state?.enrollmentData; // Assuming enrollData is passed in state
@@ -140,6 +141,36 @@ function TOT2Feedback({ isSchool: isSchoolProp }) {
     content: week.component,
   }));
 
+  const feedbackLockQueries = useQueries({
+    queries: Array.from({ length: 5 }, (_, index) => {
+      const weekNumber = index + 1;
+
+      return {
+        queryKey: ["dashboard/tot2-feedback-lock", enrollmentId, weekNumber],
+        queryFn: () =>
+          isAdmin?.isAdmin
+            ? adminService.getUserCourseData(
+                enrollmentId,
+                weekNumber,
+                isAdmin?.code,
+              )
+            : userService.getUserCourseData(enrollmentId, weekNumber),
+        enabled: isAdmin?.isAdmin
+          ? Boolean(enrollmentId && isAdmin?.code)
+          : Boolean(enrollmentId),
+        refetchOnMount: "always",
+        refetchOnWindowFocus: true,
+        keepPreviousData: false,
+      };
+    }),
+  });
+
+  const isFeedbackAvailable = (index) =>
+    Boolean(feedbackLockQueries[index]?.data?.assessment);
+
+  const activeFeedbackWeek =
+    typeof activeIndex === "number" && activeIndex < 5 ? activeIndex + 1 : 1;
+
   return (
     <>
       <nav className="navbar">
@@ -186,30 +217,37 @@ function TOT2Feedback({ isSchool: isSchoolProp }) {
           </div>
 
           <ul className="compassion-list">
-            {weeksTopic.map((item, index) => (
-              <li
-                key={index}
-                className={
-                  index + 1 <= currentWeek
-                    ? "active-week"
-                    : index >= 6
-                      ? "d-none"
-                      : ""
-                }
-              >
-                <div className="icon">
-                  <Icon
-                    icon="icon-park-outline:check-one"
-                    className="course-list-icon"
-                  />
-                </div>
-                <span className={index >= 5 ? "d-none" : ""}>
-                  Week
-                  {index + 1}
-                </span>
-                <span>{item} </span>
-              </li>
-            ))}
+            {weeksTopic.map((item, index) => {
+              const isAvailable = isFeedbackAvailable(index);
+
+              return (
+                <li
+                  key={index}
+                  className={`${index + 1 <= activeFeedbackWeek ? "active-week" : ""} ${
+                    isAvailable ? "" : "locked-week"
+                  }`}
+                  onClick={() => {
+                    if (!isAvailable) return;
+                    setActiveIndex(index);
+                  }}
+                  style={{ cursor: isAvailable ? "pointer" : "not-allowed" }}
+                >
+                  <div className="icon">
+                    <Icon
+                      icon={
+                        isAvailable ? "icon-park-outline:check-one" : "mdi:lock"
+                      }
+                      className="course-list-icon"
+                    />
+                  </div>
+                  <span>
+                    Week
+                    {index + 1}
+                  </span>
+                  <span>{item} </span>
+                </li>
+              );
+            })}
           </ul>
         </aside>
         <section className="week-content position-relative mb-5 ">

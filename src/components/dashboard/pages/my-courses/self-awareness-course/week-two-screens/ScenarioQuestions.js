@@ -3,7 +3,6 @@ import checkedImage from '../../../../../../assets/selfawareness-images/checked.
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png';
 import strengthImg from '../../../../../../assets/selfawareness-images/strength.png';
 import weeknessImg from '../../../../../../assets/selfawareness-images/weakness.png';
-import { toast } from 'react-toastify';
 
 export default function ScenarioQuestions({ onBack, onNext, formData, activityIndex }) {
 	const questionsArray = [
@@ -91,8 +90,10 @@ export default function ScenarioQuestions({ onBack, onNext, formData, activityIn
 
 	const [currentIndex, setCurrentIndex] = useState(1);
 	const [reviewPopUp, setReviewPopUp] = useState(false);
+	const [errorMessage, setErrorMessage] = useState('');
 
 	const handleQuestionCheck = (questionIndex, optionIndex, isStrength) => {
+		setErrorMessage('');
 		if (isStrength) {
 			setStrengthChecked((prevState) => {
 				const updated = { ...prevState };
@@ -128,10 +129,11 @@ export default function ScenarioQuestions({ onBack, onNext, formData, activityIn
 		const currentQuestionWeaknesses = weaknessChecked[currentIndex - 1] || [];
 
 		if (currentQuestionStrengths.length === 0 || currentQuestionWeaknesses.length === 0) {
-			toast.error('Please select at least one strength and one weakness before proceeding.');
+			setErrorMessage('Please select at least one strength and one weakness before proceeding.');
 			return;
 		}
 
+		setErrorMessage('');
 		if (currentIndex < questionsArray.length) {
 			setCurrentIndex(currentIndex + 1);
 		} else {
@@ -231,6 +233,7 @@ export default function ScenarioQuestions({ onBack, onNext, formData, activityIn
 	return (
 		<div>
 			{renderQuestion()}
+			{errorMessage && <div className="text-danger mt-3">{errorMessage}</div>}
 
 			<div className="slider-indicator">
 				<ul className="p-0 mt-2">

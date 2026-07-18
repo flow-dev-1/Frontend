@@ -10,6 +10,11 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page4() {
   const dispatch = useDispatch();
@@ -24,9 +29,11 @@ function Page4() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    setMyAnswer(response?.answer ? response.answer : "");
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const savedAnswer = response?.answer || draftAnswer || "";
+    setMyAnswer(savedAnswer);
     return () => {};
-  }, [userAnswers]);
+  }, [pageData.id, userAnswers]);
 
   const saveUserInput = () => {
     if (!adminDatas.isAdmin && !myAnswer) {
@@ -43,12 +50,15 @@ function Page4() {
         answer: myAnswer,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 
   const handleInputChange = (e) => {
     setErrorMessage("");
-    setMyAnswer(e.target.value);
+    const nextAnswer = e.target.value;
+    setMyAnswer(nextAnswer);
+    saveActivityDraft(userAnswers, pageData.id, nextAnswer);
   };
 
   return (
@@ -56,7 +66,7 @@ function Page4() {
       <QuestionBox>
         <div className="d-flex gap-2 align-center-lg-custom flex-column flex-md-row">
           <h2 className="text-blue fs-1">Question: </h2>
-          <h2 className="text-gray fs-1">
+          <h2 className="text-gray fs-1 compassion-definition-question">
             {pageData.question}{" "}
             {pageData.hasImage && (
               <img src={theory} alt="theory" className="question-image" />

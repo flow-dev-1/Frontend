@@ -17,6 +17,10 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import VideoComponent from "../../../components/Video";
+import {
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page14() {
   const dispatch = useDispatch(); // Initialize dispatch
@@ -51,8 +55,20 @@ function Page14() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id,
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setAnswers(
+      Array.isArray(response?.answer)
+        ? response.answer
+        : Array.isArray(draftAnswer)
+          ? draftAnswer
+          : [],
+    );
   }, [userAnswers, pageData.id]);
+
+  useEffect(() => {
+    if (!userAnswers || !pageData?.id) return;
+    saveActivityDraft(userAnswers, pageData.id, answers);
+  }, [answers, pageData?.id, userAnswers]);
 
   // Reset Step 7 state when navigating away or to Step 7
   useEffect(() => {

@@ -11,6 +11,10 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import VideoComponent from "../../../components/Video";
 import Feeling from "./components/feeling";
@@ -35,10 +39,21 @@ function Page4() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id,
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setAnswers(
+      Array.isArray(response?.answer)
+        ? response.answer
+        : Array.isArray(draftAnswer)
+          ? draftAnswer
+          : [],
+    );
     return () => {};
   }, [userAnswers]);
 
+  useEffect(() => {
+    if (!userAnswers || !pageData?.id) return;
+    saveActivityDraft(userAnswers, pageData.id, answers);
+  }, [answers, pageData?.id, userAnswers]);
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
 

@@ -53,7 +53,7 @@ export default function ReviewPopUpModal({closeModal}) {
 
 
   return (
-    <div style={{width:"620px", paddingTop:"30px"}} className='review-popup modal-content'>
+    <div className='review-popup modal-content'>
       <div className=''>
         <h1 style={{ margin: '0 auto' }} className='review'>
           Review this Course
@@ -63,7 +63,6 @@ export default function ReviewPopUpModal({closeModal}) {
           course better.
         </p>
         <div
-          style={{ width: '350px', margin: '1rem auto' }}
           className='d-flex  review-buttons'
         >
           <button className='btn sad' onClick={() => handleEmojiClick("dislike")} disabled={mutation.isPending}>

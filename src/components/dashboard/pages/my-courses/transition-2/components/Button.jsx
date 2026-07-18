@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   navigateNext,
   navigatePrev,
@@ -8,6 +8,7 @@ import {
 import { store } from "../../../../../../redux/store";
 import userService from "../../../../../../services/api/user";
 import { queryClient } from "../../../../../../queryClient";
+import { queueTransition2ActivitySave } from "../utils/activitySaveQueue";
 
 const getTransition2CourseDataQueryKey = (enrollmentId, week) => [
   "dashboard-transition-2-course",
@@ -65,13 +66,15 @@ const persistCurrentActivityProgress = async () => {
 
   const lastActivityIndex = navigation.currentPage;
 
-  const result = await userService.postMyActivity(userAnswers.courseEnrollmentId, {
-    course: userAnswers.course,
-    courseEnrollmentId: userAnswers.courseEnrollmentId,
-    week: userAnswers.week,
-    activities: userAnswers.activities,
-    lastActivityIndex,
-  });
+  const result = await queueTransition2ActivitySave(() =>
+    userService.postMyActivity(userAnswers.courseEnrollmentId, {
+      course: userAnswers.course,
+      courseEnrollmentId: userAnswers.courseEnrollmentId,
+      week: userAnswers.week,
+      activities: userAnswers.activities,
+      lastActivityIndex,
+    })
+  );
 
   if (result?.success === false) return false;
 
@@ -109,9 +112,8 @@ const persistCurrentResumePosition = async () => {
     lastActivityIndex: navigation.currentPage,
   };
 
-  const result = await userService.postMyActivity(
-    userAnswers.courseEnrollmentId,
-    payload
+  const result = await queueTransition2ActivitySave(() =>
+    userService.postMyActivity(userAnswers.courseEnrollmentId, payload)
   );
 
   if (result?.success === false) return false;
@@ -141,9 +143,6 @@ const Button = ({ loading, text, customOnClick }) => {
   const [isAnyButtonSaving, setIsAnyButtonSaving] = useState(
     transition2ButtonSaving
   );
-  const navigationState = useSelector(selectNavigationState);
-  const { isFirstPage, isFirstStep, isFirstWeek } = navigationState;
-
   useEffect(() => subscribeToTransition2ButtonSaving(setIsAnyButtonSaving), []);
 
   const handleClick = async (e) => {
@@ -191,7 +190,8 @@ const Button = ({ loading, text, customOnClick }) => {
   const isNextButton = text === "Next";
   const isPrevButton = text === "Prev";
   const buttonBusy = loading || isAnyButtonSaving;
-  const isVisuallyBusy = buttonBusy && isNextButton;
+  const isVisuallyBusy =
+    buttonBusy && (isNextButton || text === "Submit");
 
   return (
     <button

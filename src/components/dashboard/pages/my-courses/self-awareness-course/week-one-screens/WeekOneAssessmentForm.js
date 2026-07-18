@@ -8,8 +8,11 @@ import { userAnswer, updateData } from '../../../../../../redux/reducers/userAns
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { RotatingLines } from 'react-loader-spinner';
+import { writeSelfAwarenessStorage } from '../utils/storage';
 
-export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course, activityData, isCompleted }) {
+const REQUIRED_WEEK_ONE_ACTIVITY_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14];
+
+export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course, activityData, savedAssessment, isCompleted }) {
 	const dispatch = useDispatch();
 	const userAnswers = useSelector(userAnswer);
 	const [currentIndex, setCurrentIndex] = useState(1);
@@ -17,9 +20,15 @@ export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course
 	const [personalityColor, setPersonalityColor] = useState('');
 	const [questionChecked, setQuestionChecked] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const [errorMessage, setErrorMessage] = useState('');
 
 	useEffect(() => {
-		// Check if the assessment data is already in localStorage
+		if (savedAssessment?.assessments?.length) {
+			setPersonalityColor(savedAssessment.personalityColor || 'Yellow');
+			setQuestionChecked(savedAssessment.assessments.map((a) => a.answer));
+			return;
+		}
+
 		const storedData = localStorage.getItem('weekOneAssessmentData');
 
 		if (storedData) {
@@ -30,7 +39,7 @@ export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course
 				setQuestionChecked(parsedData.formattedData.assessments.map((a) => a.answer));
 			}
 		}
-	}, []);
+	}, [savedAssessment]);
 
 	const questionsArrayRed = [
 		{
@@ -251,10 +260,11 @@ export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course
 			questionIndex < questionsArray.length &&
 			questionChecked[questionIndex] === undefined
 		) {
-			toast.error('Please select an answer before proceeding.');
+			setErrorMessage('Please select an answer before proceeding.');
 			return;
 		}
 
+		setErrorMessage('');
 		// Proceed to the next step if valid
 		if (currentIndex < questionsArray.length + 1) {
 			setCurrentIndex(currentIndex + 1);
@@ -277,6 +287,7 @@ export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course
 
 	const handleQuestionCheck = (questionIndex, optionIndex) => {
 		if (isCompleted) return;
+		setErrorMessage('');
 		setQuestionChecked((prevState) => {
 			const newState = [...prevState];
 			newState[questionIndex] = optionIndex;
@@ -318,9 +329,15 @@ export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course
 	const saveAssessmentData = async () => {
 		if (isLoading || isCompleted) return;
 
-		//For week 1 there ought to be 14 activities
-		if (!activityData?.activities || activityData?.activities?.length !== 14) {
-			toast.error('Please complete all activities before submitting the assessment.');
+		const completedActivityIds = new Set(
+			(activityData?.activities || []).map((activity) => Number(activity.activity))
+		);
+		const hasCompletedRequiredActivities = REQUIRED_WEEK_ONE_ACTIVITY_IDS.every(
+			(activityId) => completedActivityIds.has(activityId)
+		);
+
+		if (!hasCompletedRequiredActivities) {
+			setErrorMessage('Please complete all activities before submitting the assessment.');
 			return;
 		}
 		setIsLoading(true);
@@ -349,9 +366,9 @@ export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course
 			toast.success(`You scored ${percentage}% in the quiz`);
 
 			// Save data to local storage
-			localStorage.setItem(
+			writeSelfAwarenessStorage(
 				'weekOneAssessmentData',
-				JSON.stringify({ formattedData, percentage })
+				{ formattedData, percentage }
 			);
 
 			const mutationData = {
@@ -389,7 +406,10 @@ export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course
 							<select
 								style={{ padding: '16px' }}
 								value={personalityColor}
-								onChange={(e) => setPersonalityColor(e.target.value)}
+								onChange={(e) => {
+									setPersonalityColor(e.target.value);
+									setErrorMessage('');
+								}}
 							>
 								<option value="">Choose from the options </option>
 								<option value="Green">Green</option>
@@ -442,6 +462,8 @@ export default function WeekOneAssessmentForm({ onSubmit, onNext, onBack, course
 	return (
 		<div>
 			{renderQuestion()}
+
+			{errorMessage && <div className="text-danger">{errorMessage}</div>}
 
 			<div className="slider-indicator">
 				<ul className="p-0 mt-3 mb-3">

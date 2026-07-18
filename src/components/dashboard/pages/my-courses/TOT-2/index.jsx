@@ -14,6 +14,7 @@ import {
   setShowReview,
 } from "../../../../../redux/reducers/navigationSlice.js";
 import "./index.css";
+import { assessments, courseContent } from "./data";
 // Import components
 import PopUp from "./components/ReviewPopUp";
 import Hurray from "./components/Hurray";
@@ -100,8 +101,8 @@ import WeekFivePage12 from "./weeks/week5/page12/Page12.jsx";
 import WeekFivePage13 from "./weeks/week5/page13/Page13.jsx";
 import WeekFivePage14 from "./weeks/week5/page14/Page14.jsx";
 
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import userService from "../../../../../services/api/user.js";
 import {
   updateData,
@@ -114,6 +115,86 @@ import { setCourse } from "../../../../../redux/reducers/navigationSlice.js";
 import { logoutSuccess } from "../../../../../redux/reducers/userReducer.js";
 import { clearToken } from "../../../../../redux/reducers/jwtReducer.js";
 
+const tot2WeekNumbers = Object.keys(courseContent).map((weekKey) =>
+  Number(weekKey.replace("week", "")),
+);
+
+const getTot2CourseDataQueryKey = (enrollmentId, week) => [
+  "dashboard-tot2-course",
+  enrollmentId,
+  week,
+];
+
+const getTot2WeekTotalPages = (weekNumber) => {
+  const weekKey = `week${weekNumber}`;
+  const contentPages = courseContent[weekKey]?.pages?.length || 0;
+  const hasAssessment = assessments[weekKey]?.questions?.length > 0;
+
+  return Math.max(1, contentPages + (hasAssessment ? 1 : 0));
+};
+
+const clampTot2PageNumber = (pageNumber, totalPages) =>
+  Math.max(1, Math.min(pageNumber, totalPages));
+
+const mergeActivitiesByPage = (backendActivities = [], localActivities = []) => {
+  const activitiesByPage = new Map();
+
+  backendActivities.forEach((activity) => {
+    activitiesByPage.set(Number(activity.page), activity);
+  });
+
+  localActivities.forEach((activity) => {
+    activitiesByPage.set(Number(activity.page), activity);
+  });
+
+  return Array.from(activitiesByPage.values());
+};
+
+const getTot2ResumePageFromActivity = (activity, weekNumber) => {
+  const totalPages = getTot2WeekTotalPages(weekNumber);
+  const activities = activity?.activities || [];
+  const hasSavedLastActivityIndex = Object.prototype.hasOwnProperty.call(
+    activity || {},
+    "lastActivityIndex",
+  );
+  const savedLastActivityIndex = Number(activity?.lastActivityIndex || 0);
+  const answeredPages = new Set(
+    activities
+      .map((currentActivity) => Number(currentActivity.page || 0))
+      .filter(Boolean),
+  );
+  const lastAnsweredPage = activities.reduce(
+    (highestPage, currentActivity) =>
+      Math.max(highestPage, Number(currentActivity.page || 0)),
+    0,
+  );
+  const requiredActivityPages =
+    courseContent[`week${weekNumber}`]?.pages
+      ?.filter((page) => page.type !== "video")
+      .map((page) => Number(page.id)) || [];
+  const hasAnsweredAllActivities =
+    requiredActivityPages.length > 0 &&
+    requiredActivityPages.every((pageNumber) => answeredPages.has(pageNumber));
+
+  if (savedLastActivityIndex > 1) {
+    return clampTot2PageNumber(savedLastActivityIndex, totalPages);
+  }
+
+  if (hasAnsweredAllActivities) {
+    return clampTot2PageNumber(totalPages, totalPages);
+  }
+
+  if (hasSavedLastActivityIndex && savedLastActivityIndex >= 1) {
+    return clampTot2PageNumber(savedLastActivityIndex, totalPages);
+  }
+
+  if (lastAnsweredPage > 0) {
+    return clampTot2PageNumber(lastAnsweredPage + 1, totalPages);
+  }
+
+  return null;
+};
+
 const WeekContent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -121,6 +202,10 @@ const WeekContent = () => {
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
   const [course, setCourse] = useState(null);
+  const [hasResolvedBackendResume, setHasResolvedBackendResume] =
+    useState(false);
+  const appliedBackendResumeWeekRef = useRef(null);
+  const lastSavedActivitiesRef = useRef("[]");
   const { isAdmin } = useSelector(adminData);
 
   // Access data from location.state
@@ -129,6 +214,9 @@ const WeekContent = () => {
   useEffect(() => {
     //toDo: Only Enrolled Users or Admin can access this course
     if (!enrolmentData && !isAdmin) return navigate("/sign-in");
+    appliedBackendResumeWeekRef.current = null;
+    lastSavedActivitiesRef.current = "[]";
+    setHasResolvedBackendResume(false);
     setEnrollmentId(enrolmentData?._id);
     setCourse(enrolmentData?.course?._id);
   }, []);
@@ -159,11 +247,7 @@ const WeekContent = () => {
 
   // toDo: Fetch User assessment and Activity Data
   const { data, isLoading, status, isError } = useQuery({
-    queryKey: [
-      `dashboard-tot-course-2-${currentWeek}`,
-      enrollmentId,
-      currentWeek,
-    ],
+    queryKey: getTot2CourseDataQueryKey(enrollmentId, currentWeek),
     queryFn: () => userService.getUserCourseData(enrollmentId, currentWeek),
     enabled: !!enrollmentId && !!currentWeek,
     refetchOnMount: "always",
@@ -171,20 +255,115 @@ const WeekContent = () => {
     keepPreviousData: false,
   });
 
+  const resumePositionQueries = useQueries({
+    queries: tot2WeekNumbers.map((weekNumber) => ({
+      queryKey: getTot2CourseDataQueryKey(enrollmentId, weekNumber),
+      queryFn: () => userService.getUserCourseData(enrollmentId, weekNumber),
+      enabled: !!enrollmentId && !isAdmin,
+      refetchOnMount: "always",
+      refetchOnWindowFocus: true,
+      staleTime: 0,
+      gcTime: 0,
+    })),
+  });
+
+  useEffect(() => {
+    if (!enrollmentId) return;
+    if (isAdmin) {
+      setHasResolvedBackendResume(true);
+      return;
+    }
+    if (appliedBackendResumeWeekRef.current) {
+      setHasResolvedBackendResume(true);
+      return;
+    }
+    if (resumePositionQueries.some((query) => query.isPending)) return;
+
+    const resumeCandidates = resumePositionQueries
+      .map((query, index) => {
+        const weekNumber = tot2WeekNumbers[index];
+        const activity = query.data?.activity;
+        if (!activity) return null;
+
+        const pageNumber = getTot2ResumePageFromActivity(
+          activity,
+          weekNumber,
+        );
+        if (!pageNumber) return null;
+
+        return {
+          weekNumber,
+          pageNumber,
+          updatedAt: activity.updatedAt
+            ? new Date(activity.updatedAt).getTime()
+            : 0,
+        };
+      })
+      .filter(Boolean)
+      .sort((firstCandidate, secondCandidate) => {
+        if (secondCandidate.updatedAt !== firstCandidate.updatedAt) {
+          return secondCandidate.updatedAt - firstCandidate.updatedAt;
+        }
+
+        if (secondCandidate.weekNumber !== firstCandidate.weekNumber) {
+          return secondCandidate.weekNumber - firstCandidate.weekNumber;
+        }
+
+        return secondCandidate.pageNumber - firstCandidate.pageNumber;
+      });
+
+    const resumeTarget = resumeCandidates[0];
+    if (!resumeTarget) {
+      setHasResolvedBackendResume(true);
+      return;
+    }
+
+    appliedBackendResumeWeekRef.current = resumeTarget.weekNumber;
+    dispatch(setCurrentWeek(resumeTarget.weekNumber));
+    dispatch(setCurrentPage(resumeTarget.pageNumber));
+    dispatch(setCurrentStep(1));
+    sessionStorage.setItem(
+      "flow-currentWeek",
+      resumeTarget.weekNumber.toString(),
+    );
+    sessionStorage.setItem(
+      "flow-currentPage",
+      resumeTarget.pageNumber.toString(),
+    );
+    sessionStorage.setItem("flow-currentStep", "1");
+    setHasResolvedBackendResume(true);
+  }, [dispatch, enrollmentId, isAdmin, resumePositionQueries]);
+
   useEffect(() => {
     if (!data) return;
 
+    const canUseCurrentActivities =
+      userAnswers.week === currentWeek &&
+      userAnswers.courseEnrollmentId === enrollmentId;
+
     if (data.assessment && data.activity) {
+      const backendActivities = data.activity?.activities || [];
+      const activities = mergeActivitiesByPage(
+        backendActivities,
+        canUseCurrentActivities ? userAnswers.activities : [],
+      );
+      lastSavedActivitiesRef.current = JSON.stringify(backendActivities);
       dispatch(
         updateData({
           course: course,
           courseEnrollmentId: enrollmentId,
           week: currentWeek,
-          activities: data.activity?.activities,
+          activities,
           assessments: data.assessment?.assessments,
         }),
       );
-    } else {
+    } else if (data.activity) {
+      const backendActivities = data.activity?.activities || [];
+      const activities = mergeActivitiesByPage(
+        backendActivities,
+        canUseCurrentActivities ? userAnswers.activities : [],
+      );
+      lastSavedActivitiesRef.current = JSON.stringify(backendActivities);
       dispatch(
         updateData({
           course: course,
@@ -192,14 +371,111 @@ const WeekContent = () => {
             ? enrollmentId
             : userAnswers.courseEnrollmentId,
           week: currentWeek,
-          activities: userAnswers.activities,
-          assessments: userAnswers.assessments,
+          activities,
+          assessments: [],
+        }),
+      );
+    } else {
+      const activities = canUseCurrentActivities ? userAnswers.activities : [];
+      lastSavedActivitiesRef.current = JSON.stringify([]);
+      dispatch(
+        updateData({
+          course: course,
+          courseEnrollmentId: enrollmentId
+            ? enrollmentId
+            : userAnswers.courseEnrollmentId,
+          week: currentWeek,
+          activities,
+          assessments: [],
         }),
       );
     }
 
     return () => {};
   }, [data]);
+
+  useEffect(() => {
+    if (!hasResolvedBackendResume) return;
+    if (!enrollmentId || !course || !currentWeek) return;
+    if (data?.assessment) return;
+    if (userAnswers.week !== currentWeek) return;
+    if (userAnswers.courseEnrollmentId !== enrollmentId) return;
+    if (!userAnswers.activities?.length) return;
+
+    const activitiesJson = JSON.stringify(userAnswers.activities);
+    if (activitiesJson === lastSavedActivitiesRef.current) return;
+
+    const saveTimer = setTimeout(async () => {
+      try {
+        const result = await userService.postMyActivity(enrollmentId, {
+          course,
+          courseEnrollmentId: enrollmentId,
+          week: currentWeek,
+          activities: userAnswers.activities,
+          lastActivityIndex: currentPage,
+        });
+
+        if (result?.success !== false) {
+          lastSavedActivitiesRef.current = activitiesJson;
+        }
+      } catch (error) {
+        console.error("Failed to save TOT2 activity progress", error);
+      }
+    }, 600);
+
+    return () => clearTimeout(saveTimer);
+  }, [
+    course,
+    currentPage,
+    currentWeek,
+    data?.assessment,
+    enrollmentId,
+    hasResolvedBackendResume,
+    userAnswers.activities,
+    userAnswers.courseEnrollmentId,
+    userAnswers.week,
+  ]);
+
+  useEffect(() => {
+    if (!hasResolvedBackendResume) return;
+    if (!enrollmentId || !course || !currentWeek || !currentPage) return;
+    if (data?.assessment) return;
+
+    const saveTimer = setTimeout(async () => {
+      try {
+        const payload = {
+          course,
+          courseEnrollmentId: enrollmentId,
+          week: currentWeek,
+          lastActivityIndex: currentPage,
+        };
+
+        if (
+          userAnswers.week === currentWeek &&
+          userAnswers.courseEnrollmentId === enrollmentId &&
+          userAnswers.activities?.length
+        ) {
+          payload.activities = userAnswers.activities;
+        }
+
+        await userService.postMyActivity(enrollmentId, payload);
+      } catch (error) {
+        console.error("Failed to save TOT2 resume position", error);
+      }
+    }, 800);
+
+    return () => clearTimeout(saveTimer);
+  }, [
+    course,
+    currentPage,
+    currentWeek,
+    data?.assessment,
+    enrollmentId,
+    hasResolvedBackendResume,
+    userAnswers.activities,
+    userAnswers.courseEnrollmentId,
+    userAnswers.week,
+  ]);
 
   // If showing hurray, render that instead
   if (showHurray) {
@@ -394,13 +670,25 @@ const WeekContent = () => {
 const CourseContent = () => {
   const { isAdmin } = useSelector(adminData);
   const currentWeek = useSelector(selectCurrentWeek);
+  const currentPage = useSelector(selectCurrentPage);
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const activeMenuItemRef = useRef(null);
   const [menuVisible, setMenuVisible] = useState(false);
   const [enrollmentProgress, setEnrollmentProgress] = useState(0);
   const [maxAccessibleWeek, setMaxAccessibleWeek] = useState(1);
   const [enrollmentId, setEnrollmentId] = useState(null);
+  const [expandedWeeks, setExpandedWeeks] = useState([currentWeek || 1]);
+  const [maxReachedPages, setMaxReachedPages] = useState(() => {
+    try {
+      return (
+        JSON.parse(sessionStorage.getItem("flow-tot2-maxReachedPages")) || {}
+      );
+    } catch {
+      return {};
+    }
+  });
 
   const weeksTopic = [
     "Understanding Inclusion and Special Needs in the Classroom",
@@ -409,6 +697,74 @@ const CourseContent = () => {
     "Practical Strategies for Supporting Students with Common Special Needs",
     "Collaboration, Support Systems, and Inclusive Implementation",
   ];
+
+  const tot2MenuLabels = {
+    week1: {
+      videos: [
+        "Introduction Video",
+        "Ideal Classroom",
+        "Inclusive Classroom",
+        "Segregation, Integration, Inclusion",
+        "SEND",
+        "Identify SEND Learners",
+        "Empathy For SEND Learners",
+        "Fairness in the Classroom",
+        "Recap for the week",
+      ],
+      activitiesByPage: {
+        1: "Pre-Assessment",
+        3: "Activity 1",
+        5: "Activity 2",
+        7: "Activity 3",
+        9: "Activity 4",
+        11: "Activity 5",
+        13: "Activity 6",
+        15: "Activity 7",
+        17: "Activity 8",
+      },
+    },
+    week2: {
+      videos: [
+        "Focus for the Week",
+        "Bias",
+        "Teachers Awareness",
+        "Strength-Based Thinking",
+        "Empathy & Compassion",
+        "Recap for the week",
+      ],
+    },
+    week3: {
+      videos: [
+        "Focus for the Week",
+        "UDL",
+        "Engagement",
+        "Representation",
+        "Expression",
+        "Recap for the week",
+      ],
+    },
+    week4: {
+      videos: [
+        "Focus for the Week",
+        "Intellectual Disability",
+        "ASD",
+        "ADHD",
+        "Dyslexia",
+        "Dysgraphia",
+      ],
+    },
+    week5: {
+      videos: [
+        "Focus for the Week",
+        "Collaboration",
+        "How to Collaborate",
+        "How to Collaborate (Cont.)",
+        "IEP",
+        "Teachers Wellbeing",
+        "Dealing with Burnout",
+      ],
+    },
+  };
 
   // Get enrollment data from location state
   const enrolmentData = location.state?.enrollmentData;
@@ -480,6 +836,41 @@ const CourseContent = () => {
   }, [liveEnrollment, enrolmentData]);
 
   useEffect(() => {
+    if (!currentWeek || !currentPage) return;
+
+    setMaxReachedPages((pages) => {
+      const weekKey = `week${currentWeek}`;
+      const nextPages = {
+        ...pages,
+        [weekKey]: Math.max(pages[weekKey] || 1, currentPage),
+      };
+
+      sessionStorage.setItem(
+        "flow-tot2-maxReachedPages",
+        JSON.stringify(nextPages),
+      );
+
+      return nextPages;
+    });
+  }, [currentWeek, currentPage]);
+
+  useEffect(() => {
+    if (!currentWeek || !currentPage) return;
+
+    setExpandedWeeks([currentWeek]);
+
+    const scrollTimer = setTimeout(() => {
+      activeMenuItemRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest",
+      });
+    }, 120);
+
+    return () => clearTimeout(scrollTimer);
+  }, [currentWeek, currentPage]);
+
+  useEffect(() => {
     const segments = location.pathname.split("/").filter(Boolean);
     const lastSegment = segments[segments.length - 1];
 
@@ -493,7 +884,11 @@ const CourseContent = () => {
     // Only allow navigation to completed weeks or the current week in progress
     if (weekNumber <= maxAccessibleWeek) {
       // Clear previous week data before switching
-      dispatch(clearData());
+      if (weekNumber !== currentWeek) {
+        dispatch(clearData());
+      }
+      dispatch(setShowHurray(false));
+      dispatch(setShowReview(false));
 
       dispatch(setCurrentWeek(weekNumber));
       dispatch(setCurrentPage(1));
@@ -515,6 +910,110 @@ const CourseContent = () => {
     // A week is completed if the user has progressed beyond it
     const progressPerWeek = 100 / weeksTopic.length;
     return enrollmentProgress >= weekNumber * progressPerWeek;
+  };
+
+  const toggleWeekMenu = (weekNumber) => {
+    if (!isWeekAccessible(weekNumber)) return;
+
+    setExpandedWeeks((weeks) =>
+      weeks.includes(weekNumber) ? [] : [weekNumber],
+    );
+  };
+
+  const handleWeekHeaderClick = (weekNumber) => {
+    toggleWeekMenu(weekNumber);
+    if (weekNumber !== currentWeek) {
+      handleWeekClick(weekNumber);
+    }
+  };
+
+  const handleMenuItemClick = (weekNumber, pageNumber) => {
+    if (!isMenuItemUnlocked(weekNumber, pageNumber)) return;
+
+    if (weekNumber !== currentWeek) {
+      dispatch(clearData());
+    }
+
+    dispatch(setShowHurray(false));
+    dispatch(setShowReview(false));
+    setExpandedWeeks([weekNumber]);
+    dispatch(setCurrentWeek(weekNumber));
+    dispatch(setCurrentPage(pageNumber));
+    dispatch(setCurrentStep(1));
+
+    sessionStorage.setItem("flow-currentWeek", weekNumber.toString());
+    sessionStorage.setItem("flow-currentPage", pageNumber.toString());
+    sessionStorage.setItem("flow-currentStep", "1");
+  };
+
+  const buildWeekMenuItems = (weekNumber) => {
+    const weekKey = `week${weekNumber}`;
+    const pages = courseContent[weekKey]?.pages || [];
+    const labels = tot2MenuLabels[weekKey] || {};
+    let videoCount = 0;
+    let activityCount = 0;
+
+    const items = pages.map((page) => {
+      if (page.type === "video") {
+        videoCount += 1;
+        return {
+          id: `${weekKey}-page-${page.id}`,
+          pageNumber: page.id,
+          type: "video",
+          label: `Video ${videoCount}: ${
+            labels.videos?.[videoCount - 1] || "Lesson"
+          }`,
+        };
+      }
+
+      activityCount += 1;
+      return {
+        id: `${weekKey}-page-${page.id}`,
+        pageNumber: page.id,
+        type: "activity",
+        label:
+          labels.activitiesByPage?.[page.id] || `Activity ${activityCount}`,
+      };
+    });
+
+    if (assessments[weekKey]?.questions?.length) {
+      items.push({
+        id: `${weekKey}-assessment`,
+        pageNumber: pages.length + 1,
+        type: "assessment",
+        label: `Week ${weekNumber} Assessment`,
+      });
+    }
+
+    return items;
+  };
+
+  const isMenuItemCompleted = (weekNumber, pageNumber) => {
+    if (isWeekCompleted(weekNumber)) return true;
+    if (weekNumber < currentWeek) return true;
+
+    const weekKey = `week${weekNumber}`;
+    const maxReachedPage = Math.max(
+      maxReachedPages[weekKey] || 1,
+      weekNumber === currentWeek ? currentPage : 1,
+    );
+
+    return pageNumber < maxReachedPage;
+  };
+
+  const isMenuItemUnlocked = (weekNumber, pageNumber) => {
+    if (!isWeekAccessible(weekNumber)) return false;
+    if (isWeekCompleted(weekNumber)) return true;
+    if (weekNumber < currentWeek) return true;
+    if (weekNumber > currentWeek) return pageNumber === 1;
+
+    const weekKey = `week${weekNumber}`;
+    const maxReachedPage = Math.max(
+      maxReachedPages[weekKey] || 1,
+      weekNumber === currentWeek ? currentPage : 1,
+    );
+
+    return pageNumber <= maxReachedPage;
   };
 
   const logOut = () => {
@@ -636,46 +1135,101 @@ const CourseContent = () => {
             </h2>
           </div>
 
-          <ul className="compassion-list">
+          <div className="transition-week-menu tot-week-menu">
             {weeksTopic.map((item, index) => {
               const weekNumber = index + 1;
               const isAccessible = isWeekAccessible(weekNumber);
               const isCompleted = isWeekCompleted(weekNumber);
               const isActive = weekNumber === currentWeek;
+              const isExpanded = expandedWeeks.includes(weekNumber);
+              const menuItems = buildWeekMenuItems(weekNumber);
 
               return (
-                <li
+                <div
                   key={index}
-                  className={`${isActive ? "active-week" : ""} ${
-                    isAccessible ? "accessible-week" : "locked-week"
-                  }`}
-                  onClick={() => handleWeekClick(weekNumber)}
-                  style={{
-                    cursor: isAccessible ? "pointer" : "not-allowed",
-                    opacity: isAccessible ? 1 : 0.5,
-                    transition: "all 0.3s ease",
-                  }}
+                  className={`transition-week-group ${
+                    isActive ? "active-week" : ""
+                  } ${isAccessible ? "accessible-week" : "locked-week"}`}
                 >
-                  <div className="icon">
+                  <button
+                    type="button"
+                    className="transition-week-header"
+                    onClick={() => handleWeekHeaderClick(weekNumber)}
+                    disabled={!isAccessible}
+                  >
+                    <span
+                      className={`transition-status-icon ${
+                        isCompleted ? "completed" : isActive ? "active" : ""
+                      }`}
+                    >
+                      <Icon icon={isAccessible ? "mdi:check" : "mdi:lock"} />
+                    </span>
+                    <span className="transition-week-heading">
+                      <span className="transition-week-main">
+                        Week {weekNumber}
+                      </span>
+                      <span className="transition-week-subtitle">{item}</span>
+                    </span>
                     <Icon
-                      icon={
-                        isCompleted
-                          ? "icon-park-solid:check-one"
-                          : isAccessible
-                            ? "icon-park-outline:check-one"
-                            : "mdi:lock"
-                      }
-                      className="course-list-icon"
+                      icon="mdi:chevron-down"
+                      className={`transition-week-chevron ${
+                        isExpanded ? "expanded" : ""
+                      }`}
                     />
+                  </button>
+
+                  <div
+                    className={`transition-week-items ${
+                      isExpanded ? "expanded" : ""
+                    }`}
+                  >
+                    {menuItems.map((menuItem) => {
+                      const itemActive =
+                        currentWeek === weekNumber &&
+                        currentPage === menuItem.pageNumber;
+                      const itemCompleted = isMenuItemCompleted(
+                        weekNumber,
+                        menuItem.pageNumber,
+                      );
+                      const itemUnlocked = isMenuItemUnlocked(
+                        weekNumber,
+                        menuItem.pageNumber,
+                      );
+
+                      return (
+                        <button
+                          type="button"
+                          key={menuItem.id}
+                          ref={itemActive ? activeMenuItemRef : null}
+                          className={`transition-week-item ${
+                            itemActive ? "selected" : ""
+                          } ${itemUnlocked ? "" : "locked"}`}
+                          onClick={() =>
+                            handleMenuItemClick(
+                              weekNumber,
+                              menuItem.pageNumber,
+                            )
+                          }
+                          disabled={!itemUnlocked || !isExpanded}
+                        >
+                          <span
+                            className={`transition-status-icon small ${
+                              itemCompleted ? "completed" : ""
+                            }`}
+                          >
+                            <Icon
+                              icon={itemUnlocked ? "mdi:check" : "mdi:lock"}
+                            />
+                          </span>
+                          <span>{menuItem.label}</span>
+                        </button>
+                      );
+                    })}
                   </div>
-                  <span style={{ whiteSpace: "nowrap" }}>
-                    Week {weekNumber}
-                  </span>
-                  <span className="">{item}</span>
-                </li>
+                </div>
               );
             })}
-          </ul>
+          </div>
 
           {/* Progress indicator */}
           <div className="mt-4 px-3">

@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
 
 const PersonalityQuestionComponent = ({
 	onBack,
 	onNext,
+	onUpdate,
 	questions,
 	formData,
 	activityIndex, // Pass this as a prop to identify the activity
 }) => {
 	// Initialize state with answers from formData or an empty array
 	const [answers, setAnswers] = useState([]);
+	const [errorMessage, setErrorMessage] = useState('');
 
 	useEffect(() => {
 		// Find the data for the current activity
@@ -44,13 +45,19 @@ const PersonalityQuestionComponent = ({
 		const newAnswers = [...answers];
 		newAnswers[index].answer = event.target.value;
 		setAnswers(newAnswers);
+		setErrorMessage('');
+		onUpdate?.({
+			answers: newAnswers.map((item) => ({
+				questionText: item.questionText,
+				answer: item.answer,
+			})),
+		});
 	};
 
 	// Handle Next button click
 	const handleNext = () => {
 		if (answers.some((item) => !item.answer.trim())) {
-			// Show a toast message if any answer is empty
-			toast.error('Please answer all the questions before continuing.');
+			setErrorMessage('Please answer all the questions before continuing.');
 			return;
 		}
 
@@ -95,6 +102,8 @@ const PersonalityQuestionComponent = ({
 				))}
 			</div>
 
+			{errorMessage && <div className="text-danger">{errorMessage}</div>}
+
 			<div className="progression-btns mt-3">
 				<button className="btn prev light" onClick={onBack}>
 					{'<<< Back'}
@@ -103,7 +112,6 @@ const PersonalityQuestionComponent = ({
 					{'Next >>>'}
 				</button>
 			</div>
-			<ToastContainer />
 		</div>
 	);
 };

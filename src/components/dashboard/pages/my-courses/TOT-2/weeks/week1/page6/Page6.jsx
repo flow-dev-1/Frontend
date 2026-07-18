@@ -8,6 +8,11 @@ import {
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import Frame from "./components/Frame";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page6() {
   const pageData = useSelector(selectPageData);
@@ -23,14 +28,21 @@ function Page6() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
 
-    if (!Array.isArray(response?.answer)) {
+    const savedAnswer = Array.isArray(response?.answer)
+      ? response.answer
+      : Array.isArray(draftAnswer)
+        ? draftAnswer
+        : null;
+
+    if (!savedAnswer) {
       setAnswers([]);
       return;
     }
 
     // Normalize any legacy data that might use stepId instead of id
-    const normalized = response.answer.map((item) =>
+    const normalized = savedAnswer.map((item) =>
       item.id
         ? item
         : item.stepId
@@ -40,6 +52,11 @@ function Page6() {
 
     setAnswers(normalized);
   }, [userAnswers, pageData.id]);
+
+  useEffect(() => {
+    if (!answers.length) return;
+    saveActivityDraft(userAnswers, pageData.id, answers);
+  }, [answers, pageData.id, userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas?.isAdmin) return true;
@@ -76,6 +93,7 @@ function Page6() {
     };
 
     dispatch(saveActivity(activityData));
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 

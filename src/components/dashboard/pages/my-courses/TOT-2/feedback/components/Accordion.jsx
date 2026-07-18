@@ -1,9 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./accordion.css";
 import { Icon } from "@iconify/react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { ClimbingBoxLoader } from "react-spinners";
+import { useQueries } from "@tanstack/react-query";
+import userService from "../../../../../../../services/api/user.js";
+import adminService from "../../../../../../../services/api/admin.js";
+import { adminData } from "../../../../../../../redux/reducers/adminReducer.js";
+import { useSelector } from "react-redux";
 
 function Accordion({
   activeIndex,
@@ -18,38 +23,36 @@ function Accordion({
   const [pdfLoading, setPdfLoading] = useState(false);
   const [startDownload, setStartDownload] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { isAdmin, code } = useSelector(adminData);
 
-  useEffect(() => {
-    if (!startDownload) return;
+  const weekProgressQueries = useQueries({
+    queries: Array.from({ length: 5 }, (_, index) => {
+      const weekNumber = index + 1;
 
-    if (currentIndex === 5) {
-      const originalState = activeIndex;
-      setPdfLoading(true);
-      setActiveIndex(null);
+      return {
+        queryKey: ["dashboard/tot2-feedback-lock", enrollmentId, weekNumber],
+        queryFn: () =>
+          isAdmin
+            ? adminService.getUserCourseData(enrollmentId, weekNumber, code)
+            : userService.getUserCourseData(enrollmentId, weekNumber),
+        enabled: !!enrollmentId,
+        refetchOnMount: "always",
+        refetchOnWindowFocus: true,
+        keepPreviousData: false,
+      };
+    }),
+  });
 
-      console.log("downloading course pdf");
+  const isCourseComplete = weekProgressQueries.every((query) =>
+    Boolean(query.data?.assessment),
+  );
 
-      // replace this with the actual pdf template
-      const link = document.createElement("a");
-      link.href = "/Teacher Resources.pdf";
-      link.download = "Teacher Resources.pdf";
-      link.click();
-
-      setStartDownload(false);
-      setActiveIndex("");
-      setPdfLoading(false);
-
-      return;
-    }
-    generatePDF();
-  }, [hasPercentile, allDataLoaded, startDownload, currentIndex]);
-
-  const handleToggle = (index) => {
-    window.scroll(0, 0);
-    setActiveIndex(activeIndex === index ? "" : index);
+  const isFeedbackAvailable = (index) => {
+    if (index >= 5) return isCourseComplete;
+    return Boolean(weekProgressQueries[index]?.data?.assessment);
   };
 
-  const generatePDF = async () => {
+  const generatePDF = useCallback(async () => {
     const originalState = activeIndex;
     setPdfLoading(true);
     setActiveIndex(null);
@@ -90,6 +93,52 @@ function Accordion({
         });
       }, 1000);
     }
+  }, [
+    activeIndex,
+    allDataLoaded,
+    hasPercentile,
+    setActiveIndex,
+    setHasPercentile,
+  ]);
+
+  useEffect(() => {
+    if (!startDownload) return;
+    if (!isCourseComplete) {
+      setStartDownload(false);
+      return;
+    }
+
+    if (currentIndex === 5) {
+      setPdfLoading(true);
+      setActiveIndex(null);
+
+      console.log("downloading course pdf");
+
+      // replace this with the actual pdf template
+      const link = document.createElement("a");
+      link.href = "/Teacher Resources.pdf";
+      link.download = "Teacher Resources.pdf";
+      link.click();
+
+      setStartDownload(false);
+      setActiveIndex("");
+      setPdfLoading(false);
+
+      return;
+    }
+    generatePDF();
+  }, [
+    startDownload,
+    currentIndex,
+    isCourseComplete,
+    generatePDF,
+    setActiveIndex,
+  ]);
+
+  const handleToggle = (index) => {
+    if (!isFeedbackAvailable(index)) return;
+    window.scroll(0, 0);
+    setActiveIndex(activeIndex === index ? "" : index);
   };
 
   return (
@@ -104,36 +153,43 @@ function Accordion({
           Feedback for Special Needs and Inclusive Education in Classrooms.
         </h2>
 
-        {items.map((item, index) => (
-          <div key={index} className="accordion-item">
+        {items.map((item, index) => {
+          const isAvailable = isFeedbackAvailable(index);
+
+          return (
             <div
-              className={`py-4 px-5 d-flex gap-3 align-items-center justify-space-between
-py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
-                index > 5 ? "bg-blue-feedback" : ""
+              key={index}
+              className={`accordion-item ${
+                isAvailable ? "" : "feedback-locked"
               }`}
             >
+              <div
+                className={`py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
+                  index > 5 ? "bg-blue-feedback" : ""
+                }`}
+              >
               <div className="d-flex align-items-center gap-3 flex-grow-1">
                 {index < 5 ? (
                   <p
-                    className="text-gray text-nowrap fw-bold"
+                    className="text-gray text-nowrap fw-bold mb-0"
                     onClick={() => handleToggle(index)}
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: isAvailable ? "pointer" : "not-allowed" }}
                   >
                     Week {index + 1}:
                   </p>
                 ) : index >= 6 && index < 7 ? (
                   <p
-                    className="text-gray text-nowrap fw-bold"
+                    className="text-gray text-nowrap fw-bold mb-0"
                     onClick={() => handleToggle(index)}
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: isAvailable ? "pointer" : "not-allowed" }}
                   >
                     Summary
                   </p>
                 ) : (
                   <p
-                    className="text-gray fw-bold"
+                    className="text-gray fw-bold mb-0"
                     onClick={() => handleToggle(index)}
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: isAvailable ? "pointer" : "not-allowed" }}
                   >
                     Resource:
                   </p>
@@ -141,42 +197,53 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
                 <div
                   className="text-gray "
                   onClick={() => handleToggle(index)}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: isAvailable ? "pointer" : "not-allowed" }}
                 >
                   {item.title}
                 </div>
                 {index >= 5 && (
                   <p
-                    className="text-blue"
-                    style={{ zIndex: 100, cursor: "pointer" }}
+                    className={isAvailable ? "text-blue" : "text-muted"}
+                    style={{
+                      zIndex: 100,
+                      cursor: isAvailable ? "pointer" : "not-allowed",
+                    }}
                     onClick={() => {
+                      if (!isAvailable) return;
                       // handleToggle(index);
                       setCurrentIndex(index);
                       setStartDownload(true);
                     }}
                   >
-                    {pdfLoading ? "Generating PDF..." : "(Download PDF)"}{" "}
-                    <Icon icon="bi:download" />
+                    {isAvailable
+                      ? pdfLoading
+                        ? "Generating PDF..."
+                        : "(Download PDF)"
+                      : "(Locked)"}{" "}
+                    <Icon icon={isAvailable ? "bi:download" : "mdi:lock"} />
                   </p>
                 )}
               </div>
               <Icon
                 onClick={() => handleToggle(index)}
                 icon={
-                  activeIndex === index
+                  !isAvailable
+                    ? "mdi:lock"
+                    : activeIndex === index
                     ? "simple-line-icons:arrow-up"
                     : "simple-line-icons:arrow-down"
                 }
-                style={{ cursor: "pointer" }}
+                style={{ cursor: isAvailable ? "pointer" : "not-allowed" }}
               />
             </div>
-            {(activeIndex === index || activeIndex === null) && (
+            {isAvailable && (activeIndex === index || activeIndex === null) && (
               <div className="accordion-content">
                 <div>{item.content}</div>
               </div>
             )}
           </div>
-        ))}
+          );
+        })}
       </div>
     </>
   );

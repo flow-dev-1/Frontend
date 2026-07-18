@@ -7,7 +7,6 @@ import '../newcourse.css';
 import personalityTest from '../../../../../../assets/selfawareness-images/colorTest.png';
 import personalityHeader from '../../../../../../assets/selfawareness-images/personality-header.png';
 import { Icon } from '@iconify/react';
-import { toast } from 'react-toastify';
 
 // Set the app element for accessibility
 Modal.setAppElement('#root');
@@ -139,6 +138,7 @@ export default function PersonalityTest({ onNext, onBack, formData, activityInde
 	);
 
 	const [showModal, setShowModal] = useState(false);
+	const [errorMessage, setErrorMessage] = useState('');
 
 	// Pushing state to parent only when it actually changes due to user action
 	const pushToParent = (updatedIndex, updatedChecked) => {
@@ -160,10 +160,11 @@ export default function PersonalityTest({ onNext, onBack, formData, activityInde
 	const handleNextStepClick = () => {
 		const questionIndex = currentIndex - 2;
 		if (questionIndex >= 0 && questionChecked[questionIndex] === null) {
-			toast.error('Please select an answer before proceeding.');
+			setErrorMessage('Please select an answer before proceeding.');
 			return;
 		}
 
+		setErrorMessage('');
 		if (currentIndex < answers.length + 1) {
 			const nextIndex = currentIndex + 1;
 			setCurrentIndex(nextIndex);
@@ -224,6 +225,7 @@ export default function PersonalityTest({ onNext, onBack, formData, activityInde
 			[questionIndex]: { index: optionIndex, text: selectedText },
 		};
 		setQuestionChecked(updatedChecked);
+		setErrorMessage('');
 		pushToParent(currentIndex, updatedChecked);
 	};
 
@@ -301,6 +303,8 @@ export default function PersonalityTest({ onNext, onBack, formData, activityInde
 	return (
 		<div>
 			{renderQuestion()}
+
+			{errorMessage && <div className="text-danger">{errorMessage}</div>}
 
 			<div className="slider-indicator">
 				<ul className="p-0 mt-3 mb-4">

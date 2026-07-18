@@ -61,7 +61,11 @@ function Week6({ enrollmentId, setWeekSixData }) {
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState("");
 
-  const [activity1, activity2, activity3, activity4, activity5] = pages;
+  const activity1 = pages.find((page) => page.id === 4);
+  const activity2 = pages.find((page) => page.id === 6);
+  const activity3 = pages.find((page) => page.id === 8);
+  const activity4 = pages.find((page) => page.id === 10);
+  const activity5 = pages.find((page) => page.id === 12);
 
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([]);
@@ -104,8 +108,14 @@ function Week6({ enrollmentId, setWeekSixData }) {
   useEffect(() => {
     if (!data) return;
 
-    setActivityData(data.activity?.activities);
-    setAssessmentData(data.assessment?.assessments);
+    setActivityData(
+      Array.isArray(data.activity?.activities) ? data.activity.activities : []
+    );
+    setAssessmentData(
+      Array.isArray(data.assessment?.assessments)
+        ? data.assessment.assessments
+        : []
+    );
     setWeekSixData(true);
 
     return () => { };
@@ -115,6 +125,24 @@ function Week6({ enrollmentId, setWeekSixData }) {
     return activityData?.find((activity) => activity.page === activityId)
       ?.answer;
   }
+
+  const renderAnswerText = (answer) => {
+    if (answer == null) return "";
+    if (typeof answer === "string" || typeof answer === "number")
+      return String(answer);
+    if (Array.isArray(answer)) {
+      return answer
+        .map((item) => renderAnswerText(item))
+        .filter(Boolean)
+        .join(", ");
+    }
+    if (typeof answer === "object") {
+      if ("value" in answer) return renderAnswerText(answer.value);
+      if ("answer" in answer) return renderAnswerText(answer.answer);
+      return "";
+    }
+    return "";
+  };
 
   function getActivityFeedback(activityId, itemId, index) {
     if (!itemId) {
@@ -166,15 +194,15 @@ function Week6({ enrollmentId, setWeekSixData }) {
   }
 
   function drag1(type) {
-    console.log(activityData, "Activity Data");
-    if (!activityData || !activityData[3] || !activityData[3].answer) return [];
+    const dragAnswer = getActivityAnswer(activity4.id)?.[0]?.value;
+    if (!dragAnswer) return [];
 
     const indices =
       type === "inner"
-        ? activityData[3]?.answer?.[0]?.value?.green
+        ? dragAnswer.green
         : type === "middle"
-          ? activityData[3]?.answer?.[0]?.value?.orange
-          : activityData[3]?.answer?.[0]?.value?.red;
+          ? dragAnswer.orange
+          : dragAnswer.red;
     return indices?.map((index) => activity4?.steps?.[1].images[index]) || [];
   }
   if (isPending) {
@@ -787,7 +815,9 @@ function Week6({ enrollmentId, setWeekSixData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity2.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {renderAnswerText(getActivityAnswer(activity2.id))}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity2.id)
             ?.feedback && (
@@ -857,7 +887,9 @@ function Week6({ enrollmentId, setWeekSixData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity3.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {renderAnswerText(getActivityAnswer(activity3.id))}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity3.id)
             ?.feedback && (
@@ -949,7 +981,7 @@ function Week6({ enrollmentId, setWeekSixData }) {
             <div className="px-2 py-1 px-md-5 py-md-3">
               {drag1("inner")?.map((item, idx) => (
                 <p className="fs-md-4">
-                  {idx + 1}. {item}
+                  {idx + 1}. {renderAnswerText(item)}
                 </p>
               ))}
             </div>
@@ -964,7 +996,7 @@ function Week6({ enrollmentId, setWeekSixData }) {
             <div className="px-2 py-1 px-md-5 py-md-3">
               {drag1("middle")?.map((item, idx) => (
                 <p className="fs-md-4">
-                  {idx + 1}. {item}
+                  {idx + 1}. {renderAnswerText(item)}
                 </p>
               ))}
             </div>
@@ -979,7 +1011,7 @@ function Week6({ enrollmentId, setWeekSixData }) {
             <div className="px-2 py-1 px-md-5 py-md-3">
               {drag1("outer")?.map((item, idx) => (
                 <p className="fs-md-4">
-                  {idx + 1}. {item}
+                  {idx + 1}. {renderAnswerText(item)}
                 </p>
               ))}
             </div>

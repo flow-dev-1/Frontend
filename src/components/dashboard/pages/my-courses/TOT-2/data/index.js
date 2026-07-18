@@ -96,5 +96,12 @@ const getWeekContentExcludingVideos = (weekNumber) => {
   };
 };
 
-export { getPageContent, getWeekAssessment, getWeekContentExcludingVideos, getWeekPreAssessment };
+export {
+  assessments,
+  courseContent,
+  getPageContent,
+  getWeekAssessment,
+  getWeekContentExcludingVideos,
+  getWeekPreAssessment,
+};
 export default getPageContent;

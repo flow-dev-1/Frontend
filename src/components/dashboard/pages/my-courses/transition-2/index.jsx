@@ -20,6 +20,7 @@ import PopUp from "./components/ReviewPopUp.jsx";
 import Hurray from "./components/Hurray.jsx";
 import { courseContent } from "./data/activity";
 import { assessments } from "./data/assessment";
+import { queueTransition2ActivitySave } from "./utils/activitySaveQueue";
 
 // Week 1
 import Page1 from "./weeks/week1/page1/Page1.jsx";
@@ -203,6 +204,8 @@ const WeekContent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userAnswers = useSelector(userAnswer);
+  const userAnswersRef = useRef(userAnswers);
+  userAnswersRef.current = userAnswers;
   const location = useLocation(); // Get location object
   const [enrollmentId, setEnrollmentId] = useState(null);
   const [course, setCourse] = useState(null);
@@ -252,15 +255,20 @@ const WeekContent = () => {
     );
   };
 
+  const enrollmentLastWeekIndex = effectiveEnrollment?.lastWeekIndex;
+  const enrollmentProgress = effectiveEnrollment?.progress;
+  const hasBackendResume =
+    Boolean(enrollmentLastWeekIndex) || Boolean(enrollmentProgress);
+  const backendResumeWeek = getResumeWeekFromEnrollment({
+    lastWeekIndex: enrollmentLastWeekIndex,
+    progress: enrollmentProgress,
+  });
+
   useEffect(() => {
     if (appliedBackendResumeWeekRef.current) return;
 
-    const hasBackendResume =
-      Boolean(effectiveEnrollment?.lastWeekIndex) ||
-      Boolean(effectiveEnrollment?.progress);
-
     const currentWeek = hasBackendResume
-      ? getResumeWeekFromEnrollment(effectiveEnrollment)
+      ? backendResumeWeek
       : sessionStorage.getItem("flow-currentWeek")
         ? Number(sessionStorage.getItem("flow-currentWeek"))
         : 1;
@@ -280,9 +288,9 @@ const WeekContent = () => {
 
     return () => { };
   }, [
+    backendResumeWeek,
     dispatch,
-    effectiveEnrollment?.lastWeekIndex,
-    effectiveEnrollment?.progress,
+    hasBackendResume,
   ]);
 
   const currentWeek = useSelector(selectCurrentWeek);
@@ -292,7 +300,7 @@ const WeekContent = () => {
   const showHurray = useSelector(selectShowHurray);
 
   // toDo: Fetch User assessment and Activity Data
-  const { data, isLoading, status, isError } = useQuery({
+  const { data } = useQuery({
     queryKey: getTransition2CourseDataQueryKey(enrollmentId, currentWeek),
     queryFn: () => userService.getUserCourseData(enrollmentId, currentWeek),
     enabled: !!enrollmentId && !!currentWeek,
@@ -375,16 +383,17 @@ const WeekContent = () => {
 
   useEffect(() => {
     if (!data) return;
+    const currentUserAnswers = userAnswersRef.current;
 
     const canUseCurrentActivities =
-      userAnswers.week === currentWeek &&
-      userAnswers.courseEnrollmentId === enrollmentId;
+      currentUserAnswers.week === currentWeek &&
+      currentUserAnswers.courseEnrollmentId === enrollmentId;
 
     if (data.assessment && data.activity) {
       const backendActivities = data.activity?.activities || [];
       const activities = mergeActivitiesByPage(
         backendActivities,
-        canUseCurrentActivities ? userAnswers.activities : []
+        canUseCurrentActivities ? currentUserAnswers.activities : []
       );
       lastSavedActivitiesRef.current = JSON.stringify(backendActivities);
       dispatch(
@@ -400,7 +409,7 @@ const WeekContent = () => {
       const backendActivities = data.activity?.activities || [];
       const activities = mergeActivitiesByPage(
         backendActivities,
-        canUseCurrentActivities ? userAnswers.activities : []
+        canUseCurrentActivities ? currentUserAnswers.activities : []
       );
       const resumePage = getResumePageFromActivity(
         { ...data.activity, activities },
@@ -413,7 +422,7 @@ const WeekContent = () => {
           course: course,
           courseEnrollmentId: enrollmentId
             ? enrollmentId
-            : userAnswers.courseEnrollmentId,
+            : currentUserAnswers.courseEnrollmentId,
           week: currentWeek,
           activities,
           assessments: [],
@@ -430,14 +439,16 @@ const WeekContent = () => {
         setHasResolvedBackendResume(true);
       }
     } else {
-      const activities = canUseCurrentActivities ? userAnswers.activities : [];
+      const activities = canUseCurrentActivities
+        ? currentUserAnswers.activities
+        : [];
       lastSavedActivitiesRef.current = JSON.stringify([]);
       dispatch(
         updateData({
           course: course,
           courseEnrollmentId: enrollmentId
             ? enrollmentId
-            : userAnswers.courseEnrollmentId,
+            : currentUserAnswers.courseEnrollmentId,
           week: currentWeek,
           activities,
           assessments: [],
@@ -446,7 +457,7 @@ const WeekContent = () => {
     }
 
     return () => { };
-  }, [data, currentWeek, dispatch, enrollmentId, course, userAnswers.courseEnrollmentId]);
+  }, [data, currentWeek, dispatch, enrollmentId, course]);
 
   useEffect(() => {
     if (!hasResolvedBackendResume) return;
@@ -463,13 +474,15 @@ const WeekContent = () => {
 
     const saveTimer = setTimeout(async () => {
       try {
-        const result = await userService.postMyActivity(enrollmentId, {
-          course,
-          courseEnrollmentId: enrollmentId,
-          week: currentWeek,
-          activities: userAnswers.activities,
-          lastActivityIndex: currentPage,
-        });
+        const result = await queueTransition2ActivitySave(() =>
+          userService.postMyActivity(enrollmentId, {
+            course,
+            courseEnrollmentId: enrollmentId,
+            week: currentWeek,
+            activities: userAnswers.activities,
+            lastActivityIndex: currentPage,
+          })
+        );
 
         if (result?.success !== false) {
           lastSavedActivitiesRef.current = activitiesJson;
@@ -489,7 +502,10 @@ const WeekContent = () => {
     navigationState.isAssessmentPage,
     navigationState.isLastStep,
     navigationState.totalSteps,
+    currentPage,
     userAnswers.activities,
+    userAnswers.courseEnrollmentId,
+    userAnswers.week,
   ]);
 
   useEffect(() => {
@@ -506,15 +522,9 @@ const WeekContent = () => {
           lastActivityIndex: currentPage,
         };
 
-        if (
-          userAnswers.week === currentWeek &&
-          userAnswers.courseEnrollmentId === enrollmentId &&
-          userAnswers.activities?.length
-        ) {
-          payload.activities = userAnswers.activities;
-        }
-
-        await userService.postMyActivity(enrollmentId, payload);
+        await queueTransition2ActivitySave(() =>
+          userService.postMyActivity(enrollmentId, payload)
+        );
       } catch (error) {
         console.error("Failed to save Transition 2 resume position", error);
       }
@@ -741,6 +751,9 @@ const CourseContent = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const enrolmentData = location.state?.enrollmentData;
+  const maxReachedPagesStorageKey =
+    `flow-transition2-maxReachedPages:${enrolmentData?._id || "admin"}`;
   const [menuVisible, setMenuVisible] = useState(false);
   const [enrollmentProgress, setEnrollmentProgress] = useState(0);
   const [maxAccessibleWeek, setMaxAccessibleWeek] = useState(1);
@@ -748,7 +761,7 @@ const CourseContent = () => {
   const [maxReachedPages, setMaxReachedPages] = useState(() => {
     try {
       return JSON.parse(
-        sessionStorage.getItem("flow-transition2-maxReachedPages")
+        sessionStorage.getItem(maxReachedPagesStorageKey)
       ) || {};
     } catch {
       return {};
@@ -826,9 +839,6 @@ const CourseContent = () => {
     },
   };
 
-  // Get enrollment data from location state
-  const enrolmentData = location.state?.enrollmentData;
-
   const weekAccessQueries = useQueries({
     queries: transition2WeekNumbers.map((weekNumber) => ({
       queryKey: getTransition2CourseDataQueryKey(enrolmentData?._id, weekNumber),
@@ -839,6 +849,17 @@ const CourseContent = () => {
       staleTime: 0,
     })),
   });
+
+  useEffect(() => {
+    try {
+      setMaxReachedPages(
+        JSON.parse(sessionStorage.getItem(maxReachedPagesStorageKey)) || {}
+      );
+      sessionStorage.removeItem("flow-transition2-maxReachedPages");
+    } catch {
+      setMaxReachedPages({});
+    }
+  }, [maxReachedPagesStorageKey]);
 
   useEffect(() => {
     if (showHurray) {
@@ -936,13 +957,13 @@ const CourseContent = () => {
       };
 
       sessionStorage.setItem(
-        "flow-transition2-maxReachedPages",
+        maxReachedPagesStorageKey,
         JSON.stringify(nextPages)
       );
 
       return nextPages;
     });
-  }, [currentWeek, currentPage]);
+  }, [currentWeek, currentPage, maxReachedPagesStorageKey]);
 
   useEffect(() => {
     if (!currentWeek || !currentPage) return;

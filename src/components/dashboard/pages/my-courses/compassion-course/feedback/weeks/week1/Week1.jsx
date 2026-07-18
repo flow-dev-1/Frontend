@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer.js";
 import Modal from "../../components/Modal.jsx";
 import { useMutation } from "@tanstack/react-query";
+import "../../feedback-layout.css";
 
 function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
   const [showModal, setShowModal] = useState(false);
@@ -32,7 +33,7 @@ function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
 
   const { questions: assessments } = getWeekAssessment(1);
   // toDo: Fetch User assessment and Activity Data
-  const { data, isPending, status, isError } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ["dashboard/compassion-feedback-1", enrollmentId, 1],
     queryFn: () => {
       if (isAdmin) return adminService.getUserCourseData(enrollmentId, 1, code);
@@ -85,7 +86,7 @@ function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
     setWeekOneData(true);
 
     return () => { };
-  }, [data]);
+  }, [data, setWeekOneData]);
 
   function getActivityAnswer(activityId, itemId, index) {
     if (!itemId) {
@@ -119,13 +120,13 @@ function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
 
   function renderQuestions(activityId, questions, stepId) {
     return questions.map((question, index) => (
-      <div key={index}>
-        <p className="d-inline-block bg-blue text-white rounded-4 px-2 px-md-3">
+      <div key={index} className="course-feedback-scenario-item">
+        <p className="course-feedback-scenario-question d-inline-block bg-blue text-white rounded-4 px-2 px-md-3">
           {`${question.type}: ${question.question}`}
         </p>
-        <div className="d-flex gap-3">
-          <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-          <p className="fs-md-5 flex-grow-1">
+        <div className="course-feedback-row">
+          <h2 className="course-feedback-label text-gray fs-md-1">Answers:</h2>
+          <p className="course-feedback-content fs-md-5">
             {getActivityAnswer(activityId, stepId, index)}
           </p>
           {isAdmin && !getActivityFeedback(activityId, stepId, index) && (
@@ -141,11 +142,11 @@ function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
           )}
         </div>
         {getActivityFeedback(activityId, stepId, index) && (
-          <div className="d-flex gap-3">
-            <p className="text-bg-secondary rounded-4 px-2 px-md-3 fs-md-5 align-self-start">
+          <div className="course-feedback-row course-feedback-text-row">
+            <p className="course-feedback-label text-bg-secondary rounded-4 px-2 px-md-3 fs-md-5">
               Feedback
             </p>
-            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-2 rounded">
+            <p className="course-feedback-content bg-step-active text-gray fs-md-5 p-2 rounded">
               {getActivityFeedback(activityId, stepId, index)}
             </p>
             {isAdmin && (
@@ -212,13 +213,13 @@ function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
         Activity 1
       </p>
       <hr />
-      <div className="d-flex gap-3">
-        <h2 className="text-blue fs-md-1">Questions:</h2>
-        <p className="text-blue fs-md-4">{activity1.question} "Compassion"?</p>
+      <div className="course-feedback-row course-feedback-question-row">
+        <h2 className="course-feedback-label text-blue fs-md-1">Question:</h2>
+        <p className="course-feedback-content text-blue fs-md-4">{activity1.question} "Compassion"?</p>
       </div>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
+      <div className="course-feedback-row">
+        <h2 className="course-feedback-label text-gray fs-md-1">Answers:</h2>
+        <p className="course-feedback-content fs-md-5">{getActivityAnswer(activity1.id)}</p>
 
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity1.id)
@@ -239,11 +240,11 @@ function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
         // Show this only id theres a feedback
         activityData?.find((activity) => activity.page === activity1.id)
           ?.feedback && (
-          <div className="d-flex gap-3">
-            <p className="text-bg-secondary rounded-4 px-2 px-md-3 fs-md-5 align-self-start">
+          <div className="course-feedback-row course-feedback-text-row">
+            <p className="course-feedback-label text-bg-secondary rounded-4 px-2 px-md-3 fs-md-5">
               Feedback
             </p>
-            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-2 rounded">
+            <p className="course-feedback-content bg-step-active text-gray fs-md-5 p-2 rounded">
               {getActivityFeedback(activity1.id)}
             </p>
             {isAdmin && (
@@ -262,19 +263,19 @@ function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
         )
       }
 
-      <hr />
+      <hr className="course-feedback-divider" />
       {/* Activity 2 */}
       <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
         Activity 2
       </p>
       <hr />
-      <div className="d-flex gap-3">
-        <h2 className="text-blue fs-md-1">Questions:</h2>
-        <p className="text-blue fs-md-4">{activity2.question} "Theory"?</p>
+      <div className="course-feedback-row course-feedback-question-row">
+        <h2 className="course-feedback-label text-blue fs-md-1">Question:</h2>
+        <p className="course-feedback-content text-blue fs-md-4">{activity2.question} "Theory"?</p>
       </div>
-      <div className="d-flex gap-3">
-        <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity2.id)}</p>
+      <div className="course-feedback-row">
+        <h2 className="course-feedback-label text-gray fs-md-1">Answers:</h2>
+        <p className="course-feedback-content fs-md-5">{getActivityAnswer(activity2.id)}</p>
 
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity2.id)
@@ -295,11 +296,11 @@ function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
         // Show this only id theres a feedback
         activityData?.find((activity) => activity.page === activity2.id)
           ?.feedback && (
-          <div className="d-flex gap-3">
-            <p className="text-bg-secondary rounded-4 px-2 px-md-3 fs-md-5 align-self-start">
+          <div className="course-feedback-row course-feedback-text-row">
+            <p className="course-feedback-label text-bg-secondary rounded-4 px-2 px-md-3 fs-md-5">
               Feedback
             </p>
-            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-2 rounded">
+            <p className="course-feedback-content bg-step-active text-gray fs-md-5 p-2 rounded">
               {getActivityFeedback(activity2.id)}
             </p>
             {isAdmin && (
@@ -318,39 +319,39 @@ function Week1({ enrollmentId, setWeekOneData, isSchool, studentId }) {
         )
       }
 
-      <hr />
+      <hr className="course-feedback-divider" />
       {/* Activity 3 */}
       <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
         Activity 3
       </p>
       <hr />
-      <div className="d-flex gap-3">
-        <h2 className="text-blue fs-md-1">Questions:</h2>
-        <p className="text-blue fs-md-4">{q1.title}</p>
+      <div className="course-feedback-row course-feedback-question-row">
+        <h2 className="course-feedback-label text-blue fs-md-1">Question:</h2>
+        <p className="course-feedback-content text-blue fs-md-4">{q1.title}</p>
       </div>
       {renderQuestions(activity3.id, q1.questions, q1.stepId)}
-      <hr />
-      <div className="d-flex gap-3">
-        <h2 className="text-blue fs-md-1">Questions:</h2>
-        <p className="text-blue fs-md-4">{q2.title}</p>
+      <hr className="course-feedback-divider" />
+      <div className="course-feedback-row course-feedback-question-row">
+        <h2 className="course-feedback-label text-blue fs-md-1">Question:</h2>
+        <p className="course-feedback-content text-blue fs-md-4">{q2.title}</p>
       </div>
       {renderQuestions(activity3.id, q2.questions, q2.stepId)}
-      <hr />
-      <div className="d-flex gap-3">
-        <h2 className="text-blue fs-md-1">Questions:</h2>
-        <p className="text-blue fs-md-4">{q3.title}</p>
+      <hr className="course-feedback-divider" />
+      <div className="course-feedback-row course-feedback-question-row">
+        <h2 className="course-feedback-label text-blue fs-md-1">Question:</h2>
+        <p className="course-feedback-content text-blue fs-md-4">{q3.title}</p>
       </div>
       {renderQuestions(activity3.id, q3.questions, q3.stepId)}
-      <hr />
-      <div className="d-flex gap-3">
-        <h2 className="text-blue fs-md-1">Questions:</h2>
-        <p className="text-blue fs-md-4">{q4.title}</p>
+      <hr className="course-feedback-divider" />
+      <div className="course-feedback-row course-feedback-question-row">
+        <h2 className="course-feedback-label text-blue fs-md-1">Question:</h2>
+        <p className="course-feedback-content text-blue fs-md-4">{q4.title}</p>
       </div>
       {renderQuestions(activity3.id, q4.questions, q4.stepId)}
-      <hr />
-      <div className="d-flex gap-3">
-        <h2 className="text-blue fs-md-1">Questions:</h2>
-        <p className="text-blue fs-md-4">{q5.title}</p>
+      <hr className="course-feedback-divider" />
+      <div className="course-feedback-row course-feedback-question-row">
+        <h2 className="course-feedback-label text-blue fs-md-1">Question:</h2>
+        <p className="course-feedback-content text-blue fs-md-4">{q5.title}</p>
       </div>
       {renderQuestions(activity3.id, q5.questions, q5.stepId)}
 

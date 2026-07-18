@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png';
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png';
-import { toast } from 'react-toastify';
 import ProgressionButtons from '../components/ProgressionButtons';
 
 export default function CoreValuesQuestion({ onBack, onNext, formData, activityIndex }) {
 	// Retrieve answers from formData for the current activity index
 	const [selectedValues, setSelectedValues] = useState([]);
+	const [errorMessage, setErrorMessage] = useState('');
 
 	useEffect(() => {
 		const saved = formData?.activities?.find(
@@ -32,6 +32,7 @@ export default function CoreValuesQuestion({ onBack, onNext, formData, activityI
 
 	// Toggle the selection of a question
 	const handleQuestionCheck = (item) => {
+		setErrorMessage('');
 		setSelectedValues((prevState) => {
 			if (prevState.includes(item)) {
 				return prevState.filter((value) => value !== item);
@@ -45,7 +46,7 @@ export default function CoreValuesQuestion({ onBack, onNext, formData, activityI
 	const handleNext = () => {
 		// Ensure at least 4 values are selected
 		if (selectedValues.length < 4) {
-			toast.error('Please select at least four core values before proceeding.');
+			setErrorMessage('Please select at least four core values before proceeding.');
 			return;
 		}
 		// Submit the selected values
@@ -90,6 +91,7 @@ export default function CoreValuesQuestion({ onBack, onNext, formData, activityI
 	return (
 		<div>
 			{renderQuestions()}
+			{errorMessage && <div className="text-danger">{errorMessage}</div>}
 			<div className="mt-3">
 				<ProgressionButtons onClickPrev={onBack} onClickNext={handleNext} />
 			</div>

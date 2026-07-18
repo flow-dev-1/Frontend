@@ -20,7 +20,10 @@ import { useMutation } from "@tanstack/react-query";
 
 function Week4({ enrollmentId, setWeekFourData }) {
   const { pages } = getWeekContentExcludingVideos(4);
-  const [_, activity1, activity2, activity3, activity4] = pages;
+  const activity1 = pages.find((page) => page.id === 8);
+  const activity2 = pages.find((page) => page.id === 10);
+  const activity3 = pages.find((page) => page.id === 12);
+  const activity4 = pages.find((page) => page.id === 14);
   const [activityData, setActivityData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState("");
@@ -71,10 +74,17 @@ function Week4({ enrollmentId, setWeekFourData }) {
   useEffect(() => {
     if (!data) return;
 
-    setActivityData(data.activity?.activities);
-    setAssessmentData(data.assessment?.assessments);
+    const activities = Array.isArray(data.activity?.activities)
+      ? data.activity.activities
+      : [];
+    setActivityData(activities);
+    setAssessmentData(
+      Array.isArray(data.assessment?.assessments)
+        ? data.assessment.assessments
+        : []
+    );
     setPreAssessmentData(
-      data.activity?.activities.find((p) => p.page == 2).answer
+      activities.find((p) => Number(p.page) === 2)?.answer || []
     );
     setWeekFourData(true);
 
@@ -94,6 +104,24 @@ function Week4({ enrollmentId, setWeekFourData }) {
     return activityData?.find((activity) => activity.page === activityId)
       ?.answer;
   }
+
+  const renderAnswerText = (answer) => {
+    if (answer == null) return "";
+    if (typeof answer === "string" || typeof answer === "number")
+      return String(answer);
+    if (Array.isArray(answer)) {
+      return answer
+        .map((item) => renderAnswerText(item))
+        .filter(Boolean)
+        .join(", ");
+    }
+    if (typeof answer === "object") {
+      if ("value" in answer) return renderAnswerText(answer.value);
+      if ("answer" in answer) return renderAnswerText(answer.answer);
+      return "";
+    }
+    return "";
+  };
 
   function getActivityFeedback(activityId, itemId, index) {
     if (!itemId) {
@@ -123,15 +151,15 @@ function Week4({ enrollmentId, setWeekFourData }) {
   function drag1(type) {
     console.log(activityData, "Activity Data");
 
-    if (
-      !activityData ||
-      !Array.isArray(activityData) ||
-      !activityData[1]?.answer?.[0]?.value
-    ) {
+    const activityAnswer = activityData?.find(
+      (activity) => activity.page === activity1.id
+    )?.answer;
+
+    if (!Array.isArray(activityAnswer) || !activityAnswer[0]?.value) {
       return [];
     }
 
-    const values = activityData[1].answer[0].value;
+    const values = activityAnswer[0].value;
     const indices = type === "growth" ? values.green : values.red;
 
     if (!Array.isArray(indices) || !activity1?.steps?.[1]?.images) return [];
@@ -310,7 +338,7 @@ function Week4({ enrollmentId, setWeekFourData }) {
             <div className="px-2 py-1 px-md-5 py-md-3">
               {drag1("growth")?.map((item, idx) => (
                 <p className="fs-md-4">
-                  {idx + 1}. {item}
+                  {idx + 1}. {renderAnswerText(item)}
                 </p>
               ))}
             </div>
@@ -325,7 +353,7 @@ function Week4({ enrollmentId, setWeekFourData }) {
             <div className="px-2 py-1 px-md-5 py-md-3">
               {drag1("fixed")?.map((item, idx) => (
                 <p className="fs-md-4">
-                  {idx + 1}. {item}
+                  {idx + 1}. {renderAnswerText(item)}
                 </p>
               ))}
             </div>

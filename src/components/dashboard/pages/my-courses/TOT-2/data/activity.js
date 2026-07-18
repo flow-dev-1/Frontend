@@ -1,6 +1,6 @@
 export const courseContent = {
   week1: {
-    title: "Introduction to Resilience and Grit",
+    title: "Understanding Inclusion and Special Needs in the Classroom",
     pages: [
       {
         id: 1,
@@ -621,7 +621,7 @@ export const courseContent = {
     ],
   },
   week2: {
-    title: "Developing Resilience",
+    title: "The Inclusive Mindset: Empathy and Compassion",
     pages: [
       {
         id: 1,
@@ -1077,7 +1077,8 @@ export const courseContent = {
     ],
   },
   week3: {
-    title: "Understanding the Concept of Adaptability and Its Application",
+    title:
+      "Designing Learning for Everyone, Universal Design for Learning and Differentiated Instruction",
     pages: [
       {
         id: 1,
@@ -1649,7 +1650,7 @@ export const courseContent = {
     ],
   },
   week4: {
-    title: "The Role of Support Systems",
+    title: "Practical Strategies for Supporting Students with Common Special Needs",
     pages: [
       {
         id: 1,
@@ -2133,7 +2134,7 @@ export const courseContent = {
     ],
   },
   week5: {
-    title: "Coping Skills",
+    title: "Collaboration, Support Systems, and Inclusive Implementation",
     pages: [
       {
         id: 1,

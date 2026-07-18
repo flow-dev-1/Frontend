@@ -9,13 +9,17 @@ import QuestionBox from "../../../components/QuestionBox";
 import Button from "../../../components/Button";
 import {
   selectPageData,
-  selectCurrentStep,
 } from "../../../../../../../../redux/reducers/navigationSlice";
 import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function WeekTwoPage6() {
   const dispatch = useDispatch();
@@ -30,10 +34,15 @@ function WeekTwoPage6() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    const answerCopy = response?.answer ? [...response.answer] : [];
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const answerCopy = Array.isArray(response?.answer)
+      ? [...response.answer]
+      : Array.isArray(draftAnswer)
+        ? [...draftAnswer]
+        : [];
     setAnswers(answerCopy);
     return () => {};
-  }, [userAnswers]);
+  }, [pageData.id, userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
@@ -57,6 +66,7 @@ function WeekTwoPage6() {
       answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -76,10 +86,13 @@ function WeekTwoPage6() {
           ...updatedAnswers[existingAnswerIndex],
           value,
         }; // Create a new object
+        saveActivityDraft(userAnswers, pageData.id, updatedAnswers);
         return updatedAnswers;
       } else {
         // Add new answer
-        return [...prevAnswers, { id, value }];
+        const updatedAnswers = [...prevAnswers, { id, value }];
+        saveActivityDraft(userAnswers, pageData.id, updatedAnswers);
+        return updatedAnswers;
       }
     });
   };

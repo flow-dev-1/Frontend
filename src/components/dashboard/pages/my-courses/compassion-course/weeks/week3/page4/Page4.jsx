@@ -14,6 +14,11 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function WeekThreePage4() {
   const dispatch = useDispatch();
@@ -30,13 +35,15 @@ function WeekThreePage4() {
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    setSelectedOption(response?.answer ? response.answer : "");
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setSelectedOption(response?.answer || draftAnswer || "");
     return () => {};
-  }, [userAnswers]);
+  }, [pageData.id, userAnswers]);
 
   const handleOptionChange = (e) => {
     setErrorMessage("");
     setSelectedOption(e.target.value);
+    saveActivityDraft(userAnswers, pageData.id, e.target.value);
   };
 
   const saveUserInput = () => {
@@ -61,6 +68,7 @@ function WeekThreePage4() {
         answer: selectedOption,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 
@@ -104,6 +112,7 @@ function WeekThreePage4() {
                         onClick={() => {
                           setErrorMessage("");
                           setSelectedOption(optionID);
+                          saveActivityDraft(userAnswers, pageData.id, optionID);
                         }}
                       />
                       <label

@@ -9,11 +9,102 @@
   /* flex: 1 1 calc(33.33% - 20px); */
 }
 
+.compassion-week4-activity3-board {
+  display: grid;
+  grid-template-columns: minmax(0, 50%) minmax(0, 50%);
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  align-items: stretch;
+  isolation: isolate;
+}
+
+.compassion-week4-activity3-options {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  flex-basis: auto;
+  padding: 10px 14px;
+  gap: 8px;
+  align-content: start;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+.compassion-week4-activity3-options > [data-rbd-placeholder-context-id] {
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+.compassion-week4-activity3-options .options {
+  width: 100%;
+  min-height: 32px;
+  margin: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 17px 3px;
+  font-size: 1.5rem !important;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+  line-height: 1.15;
+  user-select: none;
+}
+
+.compassion-week4-activity3-options .options.dragging {
+  width: min(220px, 42vw);
+  max-width: 220px;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.compassion-week4-activity3-drop-panel {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 330px;
+  padding-bottom: 14px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.compassion-week4-activity3-drop-panel h1 {
+  margin: 0;
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+.compassion-week4-activity3-bowls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 4px 24px;
+  align-items: start;
+}
+
+.compassion-week4-activity3-dropzone {
+  width: 100%;
+  min-width: 0;
+  height: 10.5rem;
+  min-height: 10.5rem;
+  position: relative;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+.compassion-week4-activity3-dropzone > [data-rbd-placeholder-context-id] {
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+}
+
 .drag-flex-basis {
   /* flex-grow: 1; */
   flex-basis: 50%;
   display: grid;
-  /* grid-template-columns: 1fr 1fr 1fr; */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-auto-rows: max-content;
 }
 
@@ -25,14 +116,17 @@
 .red-count {
   background-color: white;
   text-align: center;
-  width: 45.65px;
+  width: 38px;
   aspect-ratio: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  margin: auto;
-  margin-bottom: 30px;
+  margin: 0 auto 8px;
+  padding: 0;
+  box-sizing: border-box;
+  line-height: 1;
+  flex: 0 0 auto;
 }
 
 .inner-count {
@@ -67,7 +161,7 @@
 
 .inner-bowl,
 .outer-bowl {
-  width: clamp(100px, 15vw, 147px);
+  width: clamp(88px, 10vw, 105px);
   aspect-ratio: 1;
   color: white;
   border-radius: 50%;
@@ -75,7 +169,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 15px;
+  margin: 4px auto 0;
 }
 
 .inner-bowl {
@@ -161,6 +255,27 @@
 }
 
 @media (max-width: 575.98px) {
+  .compassion-week4-activity3-drop-panel h1 {
+    font-size: 1.1rem;
+  }
+
+  .compassion-week4-activity3-board {
+    grid-template-columns: 1fr;
+  }
+
+  .compassion-week4-activity3-drop-panel {
+    min-height: auto;
+  }
+
+  .compassion-week4-activity3-options {
+    padding: 10px;
+  }
+
+  .compassion-week4-activity3-options .options {
+    padding: 9px 3px;
+    font-size: 1rem !important;
+  }
+
   .drag-flex-basis {
     grid-template-columns: 1fr 1fr;
   }
@@ -168,6 +283,11 @@
 
 /* Small devices (tablets, 576px and up) */
 @media (min-width: 576px) and (max-width: 767.98px) {
+  .compassion-week4-activity3-options .options {
+    padding: 11px 3px;
+    font-size: 1.1rem !important;
+  }
+
   .drag-flex-basis {
     /* grid-template-columns: 1fr 1fr; */
   }
@@ -175,6 +295,11 @@
 
 /* Medium devices (desktops, 768px and up) */
 @media (min-width: 768px) and (max-width: 991.98px) {
+  .compassion-week4-activity3-options .options {
+    padding: 13px 3px;
+    font-size: 1.2rem !important;
+  }
+
   .drag-flex-basis {
     grid-template-columns: 1fr 1fr 1fr;
   }

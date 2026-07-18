@@ -16,6 +16,7 @@ import { calculateResult } from "../../../utility.js";
 import { useSelector } from "react-redux";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer.js";
 import Modal from "../../components/Modal.jsx";
+import "../../feedback-layout.css";
 
 function Week3({ enrollmentId, setWeekThreeData, isSchool, studentId }) {
   const { pages } = getWeekContentExcludingVideos(3);
@@ -30,7 +31,7 @@ function Week3({ enrollmentId, setWeekThreeData, isSchool, studentId }) {
   const { questions: assessments } = getWeekAssessment(3);
 
   // toDo: Fetch User assessment and Activity Data
-  const { data, isPending, status, isError } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ["dashboard/compassion-feedback-3", enrollmentId, 3],
     queryFn: () => {
       if (isAdmin) return adminService.getUserCourseData(enrollmentId, 3, code);
@@ -51,7 +52,7 @@ function Week3({ enrollmentId, setWeekThreeData, isSchool, studentId }) {
     setWeekThreeData(true);
 
     return () => { };
-  }, [data]);
+  }, [data, setWeekThreeData]);
 
   function getActivityAnswer(activityId) {
     return activityData?.find((activity) => activity.page === activityId)
@@ -113,7 +114,7 @@ function Week3({ enrollmentId, setWeekThreeData, isSchool, studentId }) {
     calculateResult(assessments, assessmentData, assessments?.length) || 0;
 
   return (
-    <>
+    <div className="course-feedback-layout">
       {/* Activity 1 */}
       <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
         Activity 1
@@ -176,8 +177,9 @@ function Week3({ enrollmentId, setWeekThreeData, isSchool, studentId }) {
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
         <p className="fs-md-5 flex-grow-1">
-          {/* This is a static answer for everyone */}
-          {activity2?.steps[0]?.options[0]?.text}
+          {activity2?.steps[0]?.options.find(
+            (option) => option.id === getActivityAnswer(activity2.id)
+          )?.text || getActivityAnswer(activity2.id)}
         </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity2.id)
@@ -484,7 +486,7 @@ function Week3({ enrollmentId, setWeekThreeData, isSchool, studentId }) {
         data={modalData}
         handleSubmit={submitFeedback}
       />
-    </>
+    </div>
   );
 }
 

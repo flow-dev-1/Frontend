@@ -9,6 +9,11 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function WeekThreePage8() {
   const pageData = useSelector(selectPageData);
@@ -24,10 +29,15 @@ function WeekThreePage8() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id
     );
-    const answerCopy = response?.answer ? [...response.answer] : [];
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const answerCopy = response?.answer
+      ? [...response.answer]
+      : Array.isArray(draftAnswer)
+      ? draftAnswer
+      : [];
     setAnswers(answerCopy);
     return () => {};
-  }, [userAnswers]);
+  }, [pageData.id, userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
@@ -51,6 +61,7 @@ function WeekThreePage8() {
       answer: answers,
     };
     dispatch(saveActivity(activityData)); // Dispatch the saveActivity action
+    clearActivityDraft(userAnswers, pageData.id);
 
     return true;
   };
@@ -70,10 +81,13 @@ function WeekThreePage8() {
           ...updatedAnswers[existingAnswerIndex],
           value,
         };
+        saveActivityDraft(userAnswers, pageData.id, updatedAnswers);
         return updatedAnswers;
       } else {
         // Add new answer
-        return [...prevAnswers, { index, value }];
+        const updatedAnswers = [...prevAnswers, { index, value }];
+        saveActivityDraft(userAnswers, pageData.id, updatedAnswers);
+        return updatedAnswers;
       }
     });
   };
@@ -86,12 +100,15 @@ function WeekThreePage8() {
           <h2 className="text-gray fs-1">{pageData.question}</h2>
         </div>
 
-        <div className="input-container py-4 px-3 py-md-5 px-md-5">
+        <div className="compassion-week3-activity4-inputs">
           {[...Array(pageData.numberOfInputs || 5)].map((_, index) => (
             <div key={index}>
-              <div className="d-flex gap-3 label-input-container">
-                <p className="input-label">{index + 1}.</p>
+              <div className="compassion-week3-activity4-row">
+                <p className="compassion-week3-activity4-label">
+                  {index + 1}.
+                </p>
                 <input
+                  className="compassion-week3-activity4-input"
                   type="text"
                   placeholder={
                     pageData.inputPlaceholder || "Type your answer here"

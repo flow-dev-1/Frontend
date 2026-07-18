@@ -7,7 +7,6 @@ import {
   navigateNext,
   selectCurrentStep,
   selectCurrentWeek,
-  showReviewPopup,
 } from "../../../../../../../../redux/reducers/navigationSlice";
 import { getWeekAssessment } from "../../../data";
 import StepIndicator from "../../../components/StepIndicator";
@@ -20,6 +19,12 @@ import { toast } from "react-toastify";
 import userService from "../../../../../../../../services/api/user";
 import { calculateResult } from "../../../utility";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  clearAssessmentDraft,
+  getAssessmentDraft,
+  saveAssessmentDraft,
+} from "../../../utils/assessmentDrafts";
+import { syncTransition2AssessmentSubmission } from "../../../utils/assessmentSubmission";
 
 function WeekFourAssessment() {
   const dispatch = useDispatch();
@@ -35,14 +40,23 @@ function WeekFourAssessment() {
 
   useEffect(() => {
     if (!userAnswers) return;
-    setAnswers(userAnswers?.assessments || []);
-    return () => {};
-  }, [userAnswers]);
+    const draftAnswers = getAssessmentDraft(userAnswers, currentWeek);
+    setAnswers(
+      Array.isArray(draftAnswers)
+        ? draftAnswers
+        : userAnswers?.assessments || []
+    );
+  }, [currentWeek, userAnswers]);
 
   // Mutation for saving user data
   const mutation = useMutation({
     mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
+      await syncTransition2AssessmentSubmission({
+        enrollmentId: userAnswers.courseEnrollmentId,
+        week: currentWeek,
+        assessment: data?.newAssessment,
+      });
       toast.dismiss();
       toast.success(
         `You scored ${calculateResult(
@@ -52,6 +66,7 @@ function WeekFourAssessment() {
         )}% in the quiz`
       );
       toast.success(data.message || "Answers saved successfully!"); // Show success toast
+      clearAssessmentDraft(userAnswers, currentWeek);
       dispatch(navigateNext());
     },
     onError: (error) => {
@@ -63,30 +78,24 @@ function WeekFourAssessment() {
 
   const handleOptionSelect = (optionKey) => {
     setErrorMessage("");
-    setAnswers((prevAnswers) => {
-      const updatedAnswers = [...prevAnswers];
-      const stepIndex = updatedAnswers.findIndex(
-        (answer) => answer.id === currentStep
-      );
+    const updatedAnswers = answers.filter(
+      (answer) => answer.id !== currentStep
+    );
+    updatedAnswers.push({ id: currentStep, value: optionKey });
 
-      if (stepIndex !== -1) {
-        updatedAnswers[stepIndex] = {
-          ...updatedAnswers[stepIndex],
-          value: optionKey,
-        };
-      } else {
-        updatedAnswers.push({
-          id: currentStep,
-          value: optionKey,
-        });
-      }
-
-      return updatedAnswers;
-    });
+    setAnswers(updatedAnswers);
+    saveAssessmentDraft(userAnswers, currentWeek, updatedAnswers);
+    dispatch(saveAssessment(updatedAnswers));
   };
 
   const saveUserData = () => {
-    if (adminDatas.isAdmin) return true;
+    if (adminDatas.isAdmin) {
+      if (isLastQuestion) {
+        dispatch(navigateNext());
+        return false;
+      }
+      return true;
+    }
 
     const stepData = answers.find((item) => item.id === currentStep);
     if (!stepData) {
@@ -121,6 +130,7 @@ function WeekFourAssessment() {
         assessments: answers,
         rating: userScore.toString(),
       });
+      return true;
 
       //   const selectedActivity = userAnswers.activities.find(activity => activity.page === 6);
       //   const isValidActivity = selectedActivity && Array.isArray(selectedActivity.answer) && selectedActivity.answer.length === 5;
@@ -168,7 +178,9 @@ function WeekFourAssessment() {
           options: formattedOptions,
         }}
         currentStep={currentStep}
-        selectedOption={answers[currentStep - 1]?.value || ""}
+        selectedOption={
+          answers.find((answer) => answer.id === currentStep)?.value || ""
+        }
         onOptionSelect={handleOptionSelect}
       />
     );
@@ -179,8 +191,10 @@ function WeekFourAssessment() {
   // If we're on the last question and user has made a selection,
   // show the review popup instead of the next button
 
-  const hasCurrentSelection = !!answers[currentStep];
-  const shouldShowReviewButton = isLastQuestion && hasCurrentSelection;
+  const hasCurrentSelection = answers.some(
+    (answer) => answer.id === currentStep && answer.value
+  );
+  const shouldShowSubmitButton = isLastQuestion && hasCurrentSelection;
 
   return (
     <>
@@ -199,10 +213,11 @@ function WeekFourAssessment() {
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" loading={mutation.isPending} />
-        {shouldShowReviewButton ? (
+        {shouldShowSubmitButton ? (
           <Button
-            text="Review"
-            customOnClick={() => dispatch(showReviewPopup())}
+            text="Submit"
+            customOnClick={saveUserData}
+            loading={mutation.isPending}
           />
         ) : (
           <Button

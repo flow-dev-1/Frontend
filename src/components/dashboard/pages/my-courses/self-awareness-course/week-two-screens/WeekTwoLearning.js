@@ -7,7 +7,6 @@ import ScenarioQuestions from './ScenarioQuestions';
 import WeekTwoAssessmentForm from './WeekTwoAssessmentForm';
 import QuestionComponent from './QuestionComponent';
 import userService from '../../../../../../services/api/user.js';
-import { toast, ToastContainer } from 'react-toastify';
 import EndOfCourseComponent from './EndOfCourseComponent.js';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
@@ -15,6 +14,15 @@ import { updateData } from '../../../../../../redux/reducers/userAnswersReducer.
 
 import ProgressionButtons from '../components/ProgressionButtons.jsx';
 import VideoComponent from '../components/VideoComponent.jsx';
+import {
+	getLegacySelfAwarenessActivityDataKey,
+	getLegacySelfAwarenessActivityProgressKey,
+	getSelfAwarenessActivityDataKey,
+	getSelfAwarenessActivityProgressKey,
+	mergeSelfAwarenessActivityDrafts,
+	readSelfAwarenessStorage,
+	writeSelfAwarenessStorage,
+} from '../utils/storage';
 
 export default function WeekTwoLearning({
 	course,
@@ -22,15 +30,23 @@ export default function WeekTwoLearning({
 	onClose,
 	currentWeekIndex,
 	handleLinkClick,
+	requestedActivity,
+	onActivityChange,
 }) {
 	const dispatch = useDispatch();
 	const [currentActivity, setCurrentActivity] = useState(() => {
-		const savedState = localStorage.getItem(`week-${currentWeekIndex}-currentActivity`);
-		return savedState ? JSON.parse(savedState) : 1;
+		return readSelfAwarenessStorage(
+			getSelfAwarenessActivityProgressKey(courseId, currentWeekIndex),
+			getLegacySelfAwarenessActivityProgressKey(currentWeekIndex),
+			1
+		);
 	});
 	const [formData, setFormData] = useState(() => {
-		const savedData = localStorage.getItem(`week-2-activityData`);
-		return savedData ? JSON.parse(savedData) : { week: 2, activities: [] };
+		return readSelfAwarenessStorage(
+			getSelfAwarenessActivityDataKey(courseId, 2),
+			getLegacySelfAwarenessActivityDataKey(2),
+			{ week: 2, activities: [] }
+		);
 	});
 	const week = 2;
 
@@ -54,14 +70,13 @@ export default function WeekTwoLearning({
 			}
 
 
-			// Robust Merge: Only use remote activities if they are more comprehensive or if local is empty
 			setFormData((prevData) => {
-				const localActivities = prevData?.activities || [];
-				if (localActivities.length > 0 && activities.length <= localActivities.length) {
-					// Keep local data as it might be fresher
-					return prevData;
-				}
-				return { ...prevData, activities: activities };
+				const draftActivities = prevData?.activities || [];
+				return {
+					...prevData,
+					week,
+					activities: mergeSelfAwarenessActivityDrafts(activities, draftActivities),
+				};
 			});
 
 			dispatch(
@@ -86,9 +101,9 @@ export default function WeekTwoLearning({
 				personalityColor: courseData.assessment.personalityColor || 'Yellow',
 			};
 
-			localStorage.setItem(
+			writeSelfAwarenessStorage(
 				'weekTwoAssessmentData',
-				JSON.stringify({ formattedData: assessment_data })
+				{ formattedData: assessment_data }
 			);
 		}
 	}, [courseData]);
@@ -98,19 +113,44 @@ export default function WeekTwoLearning({
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		localStorage.setItem(
-			`week-${currentWeekIndex}-currentActivity`,
-			JSON.stringify(currentActivity)
+		writeSelfAwarenessStorage(
+			getSelfAwarenessActivityProgressKey(courseId, currentWeekIndex),
+			currentActivity
 		);
-	}, [currentActivity, currentWeekIndex]);
+		onActivityChange?.(currentWeekIndex, currentActivity);
+	}, [courseId, currentActivity, currentWeekIndex, onActivityChange]);
 
 	useEffect(() => {
-		localStorage.setItem(`week-2-activityData`, JSON.stringify(formData));
-	}, [formData]);
+		if (requestedActivity?.week !== currentWeekIndex) return;
+		if (!requestedActivity?.activity) return;
+		setCurrentActivity(requestedActivity.activity);
+	}, [currentWeekIndex, requestedActivity]);
+
+	useEffect(() => {
+		writeSelfAwarenessStorage(
+			getSelfAwarenessActivityDataKey(courseId, 2),
+			formData
+		);
+	}, [courseId, formData]);
 	//  console.log(course.course._id)
 	const isCompleted = !!courseData?.assessment;
 
 	const queryClient = useQueryClient();
+
+	const onLocalUpdate = useCallback((incomingData) => {
+		setFormData((prevData) => {
+			const currentActivities = prevData?.activities || courseData?.activity?.activities || [];
+			const updatedActivities = currentActivities.map((item) =>
+				item.activity === currentActivity ? { ...item, ...incomingData } : item
+			);
+
+			if (!updatedActivities.find((item) => item.activity === currentActivity)) {
+				updatedActivities.push({ activity: currentActivity, ...incomingData });
+			}
+
+			return { ...prevData, activities: updatedActivities };
+		});
+	}, [currentActivity, courseData?.activity?.activities]);
 
 	const handleNext = useCallback(async (incomingData = {}) => {
 		const currentActivities = formData?.activities || courseData?.activity?.activities || [];
@@ -125,26 +165,35 @@ export default function WeekTwoLearning({
 		setFormData((prevData) => ({ ...prevData, activities: updatedActivities }));
 
 		const nextActivity = currentActivity >= 9 ? 10 : currentActivity + 1;
-		setCurrentActivity(nextActivity);
 
 		if (!isCompleted && !isLoading) {
-			// Fire and Forget: Save progress to background
 			const payload = {
 				week: week,
 				activities: updatedActivities,
 				lastActivityIndex: nextActivity // Save where they are going
 			};
 
-			userService.postMyActivity(courseId, payload)
-				.then(() => {
-					// Invalidate enrollment query to reflect any backend updates
-					queryClient.invalidateQueries(['enrollment', courseId]);
-				})
-				.catch(err => {
-					console.error("Failed to auto-save activity:", err);
-				});
+			try {
+				const result = await userService.postMyActivity(courseId, payload);
+				queryClient.setQueryData(
+					['self-awareness-course-2', courseId, week],
+					(previousData) => ({
+						...(previousData || {}),
+						activity: result?.newActivity || {
+							...(previousData?.activity || {}),
+							...payload,
+						},
+					})
+				);
+				await queryClient.invalidateQueries({ queryKey: ['enrollment', courseId] });
+			} catch (err) {
+				console.error("Failed to auto-save activity:", err);
+				return false;
+			}
 		}
-	}, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted, isLoading]);
+		setCurrentActivity(nextActivity);
+		return true;
+	}, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted, isLoading, queryClient]);
 
 	const handlePrevious = () => {
 		setCurrentActivity((prev) => prev - 1);
@@ -152,6 +201,10 @@ export default function WeekTwoLearning({
 
 	const handleNextWeekCourse = () => {
 		const nextWeekIndex = currentWeekIndex + 1;
+		if (handleLinkClick) {
+			handleLinkClick(nextWeekIndex - 1, 1);
+			return;
+		}
 		navigate(`/dashboard/self-awareness-course`, {
 			state: { enrollmentData: course, weekIndex: nextWeekIndex },
 		});
@@ -182,6 +235,7 @@ export default function WeekTwoLearning({
 						formData={formData}
 						altText="by?"
 						onBack={handlePrevious}
+						onUpdate={onLocalUpdate}
 						onNext={(answers) =>
 							handleNext({
 								answers,
@@ -275,7 +329,8 @@ export default function WeekTwoLearning({
 						handleNextWeekCourse={handleNextWeekCourse}
 						onNext={handleNext}
 						course={course}
-						activityData={formData}
+						activityData={courseData?.activity || formData}
+						savedAssessment={courseData?.assessment}
 						isCompleted={isCompleted}
 					/>
 				);
@@ -294,7 +349,6 @@ export default function WeekTwoLearning({
 
 	return (
 		<div className='week-learning'>
-			<ToastContainer />
 			<div className="content-container">{renderActivityContent()}</div>
 		</div>
 	);

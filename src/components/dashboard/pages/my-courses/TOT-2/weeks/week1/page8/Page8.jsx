@@ -19,6 +19,10 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 const InternalStepIndicator = ({ totalSteps, currentStep }) => {
   return (
@@ -73,8 +77,20 @@ function Page8() {
       (item) => item.page === pageData.id,
     );
 
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
-  }, [userAnswers]);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setAnswers(
+      Array.isArray(response?.answer)
+        ? response.answer
+        : Array.isArray(draftAnswer)
+          ? draftAnswer
+          : [],
+    );
+  }, [userAnswers, pageData.id]);
+
+  useEffect(() => {
+    if (!userAnswers || !pageData?.id) return;
+    saveActivityDraft(userAnswers, pageData.id, answers);
+  }, [answers, pageData?.id, userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;

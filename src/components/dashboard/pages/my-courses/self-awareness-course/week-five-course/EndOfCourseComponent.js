@@ -45,6 +45,8 @@ const EndOfCourseComponent = ({ currentWeekIndex, handleNextWeekCourse }) => {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: '24px 16px',
+    overflowY: 'auto',
     zIndex: 9999,
   }
 

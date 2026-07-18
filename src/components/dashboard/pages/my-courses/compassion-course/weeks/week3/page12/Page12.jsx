@@ -7,18 +7,17 @@ import {
   navigateNext,
   selectCurrentStep,
   selectCurrentWeek,
-  showReviewPopup,
 } from "../../../../../../../../redux/reducers/navigationSlice";
 import { getWeekAssessment } from "../../data";
 import StepIndicator from "../../../components/StepIndicator";
 import {
   userAnswer,
-  updateData,
   saveAssessment,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import userService from "../../../../../../../../services/api/user";
+import { queryClient } from "../../../../../../../../queryClient";
 import { calculateResult } from "../../../utility";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
@@ -31,20 +30,37 @@ function WeekThreePage12() {
   const [answers, setAnswers] = useState([]); // State to hold answers
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const userAnswers = useSelector(userAnswer);
+  const savedAssessments = userAnswers?.assessments;
   const isLastQuestion = currentStep === assessmentData.totalQuestions;
   const adminDatas = useSelector(adminData);
 
   useEffect(() => {
-    if (!userAnswers) return;
-    setAnswers(userAnswers?.assessments || []);
+    setAnswers(savedAssessments || []);
     return () => {};
-  }, [userAnswers]);
+  }, [savedAssessments]);
 
   // Mutation for saving user data
   const mutation = useMutation({
     mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
-    onSuccess: (data) => {
+    onSuccess: async (data, submittedData) => {
       toast.dismiss();
+      const queryKey = [
+        "dashboard-compassion-course",
+        submittedData.courseEnrollmentId,
+        submittedData.week,
+      ];
+      queryClient.setQueryData(queryKey, (previousData) => ({
+        ...(previousData || {}),
+        assessment: {
+          ...(previousData?.assessment || {}),
+          course: submittedData.course,
+          courseEnrollmentId: submittedData.courseEnrollmentId,
+          week: submittedData.week,
+          assessments: submittedData.assessments,
+          rating: submittedData.rating,
+        },
+      }));
+      await queryClient.invalidateQueries({ queryKey, exact: true });
       toast.success(
         `You scored ${calculateResult(
           assessmentData.questions,
@@ -100,8 +116,22 @@ function WeekThreePage12() {
     dispatch(saveAssessment(answers));
 
     if (isLastQuestion) {
-      // Check if all answers were provided bothe for assessment and activity
-      if (answers.length !== totalSteps || userAnswers.activities.length < 3) {
+      const answeredQuestionIds = new Set(
+        answers
+          .filter((answer) => answer?.value !== undefined && answer?.value !== "")
+          .map((answer) => Number(answer.id))
+      );
+      const savedActivityPages = new Set(
+        (userAnswers.activities || []).map((activity) => Number(activity.page))
+      );
+      const requiredActivityPages = [2, 4, 6, 8, 10];
+      const hasMissingAnswer =
+        assessmentData.questions.some(
+          (question) => !answeredQuestionIds.has(Number(question.id))
+        ) ||
+        requiredActivityPages.some((page) => !savedActivityPages.has(page));
+
+      if (hasMissingAnswer) {
         setErrorMessage(
           "Oops! Some answers are missing. Please ensure all questions are answered."
         );
@@ -141,7 +171,7 @@ function WeekThreePage12() {
           options: formattedOptions,
         }}
         currentStep={currentStep}
-        selectedOption={answers[currentStep - 1]?.value || ""}
+        selectedOption={answers.find((answer) => answer.id === currentStep)?.value || ""}
         onOptionSelect={handleOptionSelect}
       />
     );
@@ -151,11 +181,7 @@ function WeekThreePage12() {
 
   // If we're on the last question and user has made a selection,
   // show the review popup instead of the next button
-
-  const hasCurrentSelection = !!answers[currentStep];
-  const shouldShowReviewButton = isLastQuestion && hasCurrentSelection;
-
-  return (
+return (
     <>
       <QuestionBox>
         <div className="bg-blue text-white p-3 mb-3">
@@ -172,18 +198,7 @@ function WeekThreePage12() {
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" loading={mutation.isPending} />
-        {shouldShowReviewButton ? (
-          <Button
-            text="Review"
-            customOnClick={() => dispatch(showReviewPopup())}
-          />
-        ) : (
-          <Button
-            text="Next"
-            customOnClick={saveUserData}
-            loading={mutation.isPending}
-          />
-        )}
+        <Button text="Next" customOnClick={saveUserData} loading={mutation.isPending} />
       </div>
     </>
   );

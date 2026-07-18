@@ -4,7 +4,6 @@ import Button from "../../../components/Button";
 import {
   selectPageData,
   selectCurrentStep,
-  setCurrentStep,
 } from "../../../../../../../../redux/reducers/navigationSlice";
 import QuestionBox from "../../../components/QuestionBox";
 import StepIndicator from "../../../components/StepIndicator";
@@ -15,6 +14,21 @@ import {
 import checkedImage from "../../../../../../../../assets/checkedbox.png";
 import uncheckedImage from "../../../../../../../../assets/uncheckedBox.png";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
+
+const getScenarioOptionIds = (scenario) =>
+  scenario?.options?.map((option) => option.id) || [];
+
+const hasValidAnswerForScenario = (scenario, answers) => {
+  const optionIds = getScenarioOptionIds(scenario);
+  const answer = answers.find((option) => option.id === scenario?.id);
+
+  return Boolean(answer && optionIds.includes(answer.value));
+};
 
 function WeekFivePage2() {
   const dispatch = useDispatch();
@@ -33,16 +47,30 @@ function WeekFivePage2() {
       (item) => item.page === pageData.id
     );
     if (response?.answer) {
-      const answerCopy = [...response.answer];
+      const answerCopy = response.answer.filter((answer) => {
+        const scenario = pageData?.scenarios?.find(
+          (item) => item.id === answer.id && item.type === "question"
+        );
+
+        return hasValidAnswerForScenario(scenario, response.answer);
+      });
       setSelectedOption(answerCopy);
-      if (currentStep === 1) {
-        dispatch(setCurrentStep(totalSteps));
-      }
     } else {
-      dispatch(setCurrentStep(1));
+      const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+      if (Array.isArray(draftAnswer)) {
+        const validDraftAnswer = draftAnswer.filter((answer) => {
+          const scenario = pageData?.scenarios?.find(
+            (item) => item.id === answer.id && item.type === "question"
+          );
+
+          return hasValidAnswerForScenario(scenario, draftAnswer);
+        });
+        setSelectedOption(validDraftAnswer);
+        return;
+      }
     }
     return () => {};
-  }, [userAnswers]);
+  }, [pageData?.scenarios, pageData.id, userAnswers]);
 
   const handleOptionChange = (id, value) => {
     setErrorMessage("");
@@ -53,9 +81,12 @@ function WeekFivePage2() {
       if (existingOptionIndex > -1) {
         const updatedOptions = [...prevOptions];
         updatedOptions[existingOptionIndex].value = value;
+        saveActivityDraft(userAnswers, pageData.id, updatedOptions);
         return updatedOptions;
       } else {
-        return [...prevOptions, { id, value }];
+        const updatedOptions = [...prevOptions, { id, value }];
+        saveActivityDraft(userAnswers, pageData.id, updatedOptions);
+        return updatedOptions;
       }
     });
   };
@@ -66,27 +97,43 @@ function WeekFivePage2() {
     //   return false;
     // }
     if (adminDatas.isAdmin) return true;
-    if ([2, 4, 6, 8].includes(currentStep)) {
-      const currentSelectedOption = selectedOption.find(
-        (option) => option.id === currentStep - 1
-      );
-      if (!currentSelectedOption || !currentSelectedOption.value) {
+    const currentScenario = pageData?.scenarios?.[currentStep - 1];
+    const questionScenarios =
+      pageData?.scenarios?.filter((scenario) => scenario.type === "question") ||
+      [];
+
+    if (currentScenario?.type === "feedback") {
+      const previousQuestionScenario = pageData?.scenarios
+        ?.slice(0, currentStep - 1)
+        .reverse()
+        .find((scenario) => scenario.type === "question");
+
+      if (!hasValidAnswerForScenario(previousQuestionScenario, selectedOption)) {
         setErrorMessage("Please make sure to select an option!");
         return false;
-      } else {
-        setErrorMessage("");
-        // Allow flow admin to proceed without input but do not dispatch answer
-        if (adminDatas.isAdmin) return true;
-        if (currentStep === totalSteps) {
-          dispatch(
-            saveActivity({
-              page: pageData.id,
-              answer: selectedOption,
-            })
-          );
-        }
       }
     }
+
+    if (currentStep === totalSteps) {
+      const hasAllAnswers = questionScenarios.every((scenario) =>
+        hasValidAnswerForScenario(scenario, selectedOption)
+      );
+
+      if (!hasAllAnswers) {
+        setErrorMessage("Please make sure to select an option!");
+        return false;
+      }
+
+      dispatch(
+        saveActivity({
+          page: pageData.id,
+          answer: selectedOption,
+        })
+      );
+      clearActivityDraft(userAnswers, pageData.id);
+    }
+
+    setErrorMessage("");
     return true;
   };
 
@@ -106,9 +153,9 @@ function WeekFivePage2() {
               <div className="">
                 <h3 className="fs-1">{scenario.question}</h3>
                 {scenario.options.map((option, index) => {
-                  const optionKey = Object.keys(option)[0];
                   const optionText = option.text;
                   const optionID = option.id;
+                  const optionKey = `${scenario.id}-${optionID}`;
                   const isChecked = selectedOption?.some(
                     (selected) =>
                       selected.id === scenario.id && selected.value === optionID
@@ -123,7 +170,7 @@ function WeekFivePage2() {
                         type="radio"
                         id={optionKey}
                         name="options"
-                        value={optionKey}
+                        value={optionID}
                         checked={isChecked}
                         onChange={(e) =>
                           handleOptionChange(scenario.id, e.target.value)

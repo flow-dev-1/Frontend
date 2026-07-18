@@ -8,14 +8,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { userAnswer, updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { RotatingLines } from 'react-loader-spinner';
+import { writeSelfAwarenessStorage } from '../utils/storage';
 
-export default function WeekFourAssessmentForm({ onNext, onBack, course, activityData, isCompleted }) {
+export default function WeekFourAssessmentForm({ onNext, onBack, course, activityData, savedAssessment, isCompleted }) {
 	const dispatch = useDispatch();
 	const userAnswers = useSelector(userAnswer);
 	const [arrows, setArrows] = useState([]); // State for managing arrows
 	const [arrows2, setArrows2] = useState([]); // State for managing arrows
 	const [disableButton, setDisableButton] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [errorMessage, setErrorMessage] = useState('');
 	const [matchesSet1, setMatchesSet1] = useState([]);
 	const [matchesSet2, setMatchesSet2] = useState([]);
 	// Sample items for matching
@@ -131,7 +133,16 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 	});
 
 	useEffect(() => {
-		// Load saved answers from localStorage on component mount
+		const backendAssessment =
+			savedAssessment?.assessments?.[0] || savedAssessment?.assessments;
+
+		if (backendAssessment) {
+			setAnswers(backendAssessment?.answers || []);
+			setMatchesSet1(backendAssessment?.matchesSet1 || []);
+			setMatchesSet2(backendAssessment?.matchesSet2 || []);
+			return;
+		}
+
 		const savedAnswers = localStorage.getItem('weekFourAssessmentData');
 		if (savedAnswers) {
 			const parsedAnswers = JSON.parse(savedAnswers);
@@ -142,17 +153,18 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 				setMatchesSet2(assessmentData?.matchesSet2 || []);
 			}
 		}
-	}, []);
+	}, [savedAssessment]);
 
 	useEffect(() => {
+		if (isCompleted || savedAssessment) return;
 		const assessmentData = {
 			week: 4,
 			answers, // Keep flat for now to match component usage
 			matchesSet1,
 			matchesSet2,
 		};
-		localStorage.setItem('weekFourAssessmentData', JSON.stringify(assessmentData));
-	}, [answers, matchesSet1, matchesSet2]);
+		writeSelfAwarenessStorage('weekFourAssessmentData', assessmentData);
+	}, [answers, isCompleted, matchesSet1, matchesSet2, savedAssessment]);
 
 	const handleMatch = (leftIndex, rightIndex) => {
 		if (rightIndex === null) {
@@ -189,9 +201,10 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 	const handleQuestionCheck = (optionIndex) => {
 		// Check if the answer for the current question has already been selected and persisted or if week is completed
 		if (isCompleted || answers[currentIndex - 1] !== undefined) {
-			toast.error('You cannot change your answer once selected.');
+			setErrorMessage('You cannot change your answer once selected.');
 			return;
 		}
+		setErrorMessage('');
 
 		// Allow the user to select an answer only if it's not already saved
 		setAnswers((prevState) => {
@@ -204,17 +217,17 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 	const handleNextStepClick = () => {
 		// Validate matching questions
 		if (currentIndex === 9 && matchesSet1.length !== leftItemsArray.length) {
-			toast.error('Please complete the matching before proceeding.');
+			setErrorMessage('Please complete the matching before proceeding.');
 			return;
 		}
 		if (currentIndex === 10 && matchesSet2.length !== leftItemsArray2.length) {
-			toast.error('Please complete the matching before proceeding.');
+			setErrorMessage('Please complete the matching before proceeding.');
 			return;
 		}
 
 		// Validate multiple choice questions
 		if (!isCompleted && currentIndex <= 8 && answers[currentIndex - 1] === undefined) {
-			toast.error('Please select an answer before proceeding.');
+			setErrorMessage('Please select an answer before proceeding.');
 			return;
 		}
 
@@ -265,7 +278,7 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 		onError: (error) => {
 			console.log(error, 'errorrrr');
 			toast.dismiss();
-			toast.error(error?.message || error?.error || 'Error saving answers'); // Show error toast
+			setErrorMessage(error?.message || error?.error || 'Error saving answers');
 		},
 	});
 
@@ -274,7 +287,7 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 
 		try {
 			if (!activityData?.activities || activityData?.activities?.length !== 9) {
-				toast.error('Please complete all activities before submitting the assessment.');
+				setErrorMessage('Please complete all activities before submitting the assessment.');
 				return;
 			}
 
@@ -285,7 +298,7 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 				matchesSet1.length !== leftItemsArray.length ||
 				matchesSet2.length !== leftItemsArray2.length
 			) {
-				toast.error('Please ensure all 10 assessment items are completed.');
+				setErrorMessage('Please ensure all 10 assessment items are completed.');
 				return;
 			}
 
@@ -341,7 +354,7 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 		} catch (error) {
 			console.log(error);
 			setIsLoading(false);
-			toast.error('Something went wrong. Please contact flow admin for support!');
+			setErrorMessage('Something went wrong. Please contact flow admin for support!');
 		}
 	};
 
@@ -442,6 +455,8 @@ export default function WeekFourAssessmentForm({ onNext, onBack, course, activit
 					))}
 				</ul>
 			</div>
+
+			{errorMessage && <div className="text-danger">{errorMessage}</div>}
 
 			<div className="progression-btns mt-3">
 				<button

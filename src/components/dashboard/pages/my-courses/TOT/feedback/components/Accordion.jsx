@@ -8,7 +8,7 @@ import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import { saveAs } from "file-saver";
 import { mapSelectedOptions } from "../weeks/week6/Week6";
 import pdfTemplate from "../../../../../../../assets/tot-images/pdf/template.pdf";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import userService from "../../../../../../../services/api/user.js";
 import adminService from "../../../../../../../services/api/admin.js";
 import { adminData } from "../../../../../../../redux/reducers/adminReducer.js";
@@ -30,9 +30,39 @@ function Accordion({
   const { isAdmin, code } = useSelector(adminData);
 
   const [answers, setAnswers] = useState(null);
+  const weekProgressQueries = useQueries({
+    queries: Array.from({ length: 6 }, (_, index) => {
+      const weekNumber = index + 1;
+
+      return {
+        queryKey: ["dashboard/tot-feedback-lock", enrollmentId, weekNumber],
+        queryFn: () =>
+          isAdmin
+            ? adminService.getUserCourseData(enrollmentId, weekNumber, code)
+            : userService.getUserCourseData(enrollmentId, weekNumber),
+        enabled: !!enrollmentId,
+        refetchOnMount: "always",
+        refetchOnWindowFocus: true,
+        keepPreviousData: false,
+      };
+    }),
+  });
+
+  const isCourseComplete = weekProgressQueries.every((query) =>
+    Boolean(query.data?.assessment),
+  );
+
+  const isFeedbackAvailable = (index) => {
+    if (index >= 6) return isCourseComplete;
+    return Boolean(weekProgressQueries[index]?.data?.assessment);
+  };
 
   useEffect(() => {
     if (!startDownload) return;
+    if (!isCourseComplete) {
+      setStartDownload(false);
+      return;
+    }
 
     // download pdf, based on index, we will just check if the index is the one we want to downlaod, and serve the pdf we want, then return
 
@@ -70,9 +100,15 @@ function Accordion({
       return;
     }
     generatePDF();
-  }, [hasPercentile, allDataLoaded, startDownload, currentIndex]);
+  }, [
+    hasPercentile,
+    allDataLoaded,
+    startDownload,
+    currentIndex,
+    isCourseComplete,
+  ]);
   // toDo: Fetch User assessment and Activity Data
-  const { data, isPending, status, isError } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ["dashboard/tot-feedback-6", enrollmentId, 6],
     queryFn: () =>
       isAdmin
@@ -84,6 +120,7 @@ function Accordion({
     keepPreviousData: false,
   });
   const handleToggle = (index) => {
+    if (!isFeedbackAvailable(index)) return;
     window.scroll(0, 0);
     setActiveIndex(activeIndex === index ? "" : index);
   };
@@ -352,8 +389,18 @@ function Accordion({
           Feedback for ToT Course 1
         </h2>
 
-        {items.map((item, index) => (
-          <div key={index} className="accordion-item">
+        {items.map((item, index) => {
+          const isLocked = !isFeedbackAvailable(index);
+          const lockNote =
+            index < 6
+              ? "(Submit assessment to unlock)"
+              : "(Complete all 6 weeks to unlock)";
+
+          return (
+          <div
+            key={index}
+            className={`accordion-item ${isLocked ? "feedback-week-locked" : ""}`}
+          >
             <div
               className={`py-4 px-5 d-flex gap-3 align-items-center justify-space-between
 py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
@@ -365,7 +412,7 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
                   <p
                     className="text-gray text-nowrap fw-bold"
                     onClick={() => handleToggle(index)}
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: isLocked ? "not-allowed" : "pointer" }}
                   >
                     Week {index + 1}:
                   </p>
@@ -373,7 +420,7 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
                   <p
                     className="text-gray text-nowrap fw-bold"
                     onClick={() => handleToggle(index)}
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: isLocked ? "not-allowed" : "pointer" }}
                   >
                     Summary
                   </p>
@@ -381,7 +428,7 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
                   <p
                     className="text-gray fw-bold"
                     onClick={() => handleToggle(index)}
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: isLocked ? "not-allowed" : "pointer" }}
                   >
                     Final Report:
                   </p>
@@ -389,42 +436,56 @@ py-4 px-5 d-flex gap-3 align-items-center justify-space-between ${
                 <div
                   className="text-gray "
                   onClick={() => handleToggle(index)}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: isLocked ? "not-allowed" : "pointer" }}
                 >
                   {item.title}
                 </div>
+                {isLocked && (
+                  <p className="feedback-week-locked-note">{lockNote}</p>
+                )}
                 {index >= 6 && (
                   <p
-                    className="text-blue"
-                    style={{ zIndex: 100, cursor: "pointer" }}
+                    className={isLocked ? "text-gray" : "text-blue"}
+                    style={{
+                      zIndex: 100,
+                      cursor: isLocked ? "not-allowed" : "pointer",
+                    }}
                     onClick={() => {
+                      if (isLocked) return;
                       handleToggle(index);
                       setCurrentIndex(index);
                       setStartDownload(true);
                     }}
                   >
-                    {pdfLoading ? "Generating PDF..." : "(Download PDF)"}{" "}
-                    <Icon icon="bi:download" />
+                    {isLocked
+                      ? "(Complete all 6 weeks to download)"
+                      : pdfLoading
+                        ? "Generating PDF..."
+                        : "(Download PDF)"}{" "}
+                    {!isLocked && <Icon icon="bi:download" />}
                   </p>
                 )}
               </div>
               <Icon
                 onClick={() => handleToggle(index)}
+                className={isLocked ? "feedback-week-lock-icon" : ""}
                 icon={
-                  activeIndex === index
+                  isLocked
+                    ? "mdi:lock"
+                    : activeIndex === index
                     ? "simple-line-icons:arrow-up"
                     : "simple-line-icons:arrow-down"
                 }
-                style={{ cursor: "pointer" }}
+                style={{ cursor: isLocked ? "not-allowed" : "pointer" }}
               />
             </div>
-            {(activeIndex === index || activeIndex === null) && (
+            {!isLocked && (activeIndex === index || activeIndex === null) && (
               <div className="accordion-content">
                 <div>{item.content}</div>
               </div>
             )}
           </div>
-        ))}
+        )})}
       </div>
     </>
   );

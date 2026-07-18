@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Icon } from '@iconify/react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 import emojiSad from '../../../../../../assets/selfawareness-images/emocom-images/sad.png';
 import emojiAngry from '../../../../../../assets/selfawareness-images/emocom-images/angry.png';
@@ -18,6 +16,7 @@ import ProgressionButtons from '../components/ProgressionButtons';
 export default function EmojiRespond({ onNext, onBack, formData, activityIndex }) {
 	const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
 	const [selectedOptions, setSelectedOptions] = useState({});
+	const [errorMessage, setErrorMessage] = useState('');
 	const dropdownRefs = useRef([]);
 
 	// Emoji data
@@ -87,6 +86,7 @@ export default function EmojiRespond({ onNext, onBack, formData, activityIndex }
 
 	const handleOptionClick = (index, option) => {
 		setSelectedOptions((prev) => ({ ...prev, [index]: option.label }));
+		setErrorMessage('');
 		setOpenDropdownIndex(null); // Close dropdown after selection
 	};
 
@@ -111,16 +111,15 @@ export default function EmojiRespond({ onNext, onBack, formData, activityIndex }
 		const allSelected = emojis.every((_, index) => selectedOptions[index]);
 
 		if (!allSelected) {
-			toast.error('Please select an option for each emoji before proceeding.');
-			return;
+			setErrorMessage('Please select an option for each emoji before proceeding.');
+			return false;
 		}
 
-		onNext(selectedOptions);
+		return onNext(selectedOptions);
 	};
 
 	return (
 		<div>
-			<ToastContainer />
 			<div className="week-two question-box py-4">
 				<div className="align-items-start">
 					<div className="question-box-header mx-auto align-items-start">
@@ -188,6 +187,7 @@ export default function EmojiRespond({ onNext, onBack, formData, activityIndex }
 					</div>
 				</div>
 			</div>
+			{errorMessage && <div className="text-danger">{errorMessage}</div>}
 
 			<div className="mt-3">
 				<ProgressionButtons

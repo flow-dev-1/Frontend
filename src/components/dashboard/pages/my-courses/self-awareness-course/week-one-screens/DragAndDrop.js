@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import dragdropArrow from '../../../../../../assets/selfawareness-images/dragdrop-arrowl.png';
 import bucketYes from '../../../../../../assets/selfawareness-images/bucket-yes.png';
@@ -15,6 +15,7 @@ import cardSeven from '../../../../../../assets/selfawareness-images/card-seven.
 import cardEight from '../../../../../../assets/selfawareness-images/card-eight.png';
 import cardNine from '../../../../../../assets/selfawareness-images/card-nine.png';
 import cardTen from '../../../../../../assets/selfawareness-images/card-ten.png';
+import ProgressionButtons from '../components/ProgressionButtons';
 
 const cardImages = [
 	cardOne,
@@ -62,18 +63,43 @@ const initialCards = [
 	},
 ];
 
-const initialBuckets = {
+const createInitialBuckets = () => ({
 	yes: [],
 	no: [],
 	sometimes: [],
+});
+
+const normalizeBuckets = (buckets) => ({
+	yes: Array.isArray(buckets?.yes) ? buckets.yes : [],
+	no: Array.isArray(buckets?.no) ? buckets.no : [],
+	sometimes: Array.isArray(buckets?.sometimes) ? buckets.sometimes : [],
+});
+
+const normalizeSavedState = (savedState) => {
+	const nextCards = Array.isArray(savedState?.cards) ? savedState.cards : initialCards;
+	const nextBuckets = normalizeBuckets(savedState?.buckets);
+	const inferredIndex = initialCards.length - nextCards.length;
+	const nextIndex = Number.isFinite(savedState?.currentIndex)
+		? savedState.currentIndex
+		: inferredIndex;
+
+	return {
+		cards: nextCards,
+		buckets: nextBuckets,
+		currentIndex: Math.max(0, Math.min(nextIndex, initialCards.length)),
+	};
 };
 
 function DragDropComponent({ onBack, onNext, formData, onUpdate, activityIndex }) {
 	const initialState = formData?.activities?.find((act) => act.activity === activityIndex) || {};
+	const savedState = normalizeSavedState(initialState);
 
-	const [cards, setCards] = useState(initialState.cards || initialCards);
-	const [buckets, setBuckets] = useState(initialState.buckets || initialBuckets);
-	const [currentIndex, setCurrentIndex] = useState(initialState.currentIndex || 0);
+	const [cards, setCards] = useState(savedState.cards);
+	const [buckets, setBuckets] = useState(savedState.buckets);
+	const [currentIndex, setCurrentIndex] = useState(savedState.currentIndex);
+	const [isDragging, setIsDragging] = useState(false);
+	const [activeBucket, setActiveBucket] = useState(null);
+	const bucketRefs = useRef({});
 
 	// Pushing state to parent only when it actually changes due to user action
 	const pushToParent = (updatedCards, updatedBuckets, updatedIndex) => {
@@ -88,63 +114,120 @@ function DragDropComponent({ onBack, onNext, formData, onUpdate, activityIndex }
 
 	// Remote/Parent change restoration (only if internal state is still initial)
 	useEffect(() => {
-		if (formData?.activities) {
-			const saved = formData.activities.find((act) => act.activity === activityIndex);
-			// Only restore if we don't have active local progress or if we're on the very first card
-			if (saved && currentIndex === 0 && buckets === initialBuckets) {
-				setCards(saved.cards || initialCards);
-				setBuckets(saved.buckets || initialBuckets);
-				setCurrentIndex(saved.currentIndex || 0);
-			}
-		}
+		const saved = formData?.activities?.find((act) => act.activity === activityIndex);
+		if (!saved) return;
+
+		const nextState = normalizeSavedState(saved);
+		setCards(nextState.cards);
+		setBuckets(nextState.buckets);
+		setCurrentIndex(nextState.currentIndex);
 	}, [formData, activityIndex]);
+
+	const getBucketAtPoint = (clientX, clientY) => {
+		const bucketEntry = Object.entries(bucketRefs.current).find(([, node]) => {
+			if (!node) return false;
+			const rect = node.getBoundingClientRect();
+			return (
+				clientX >= rect.left &&
+				clientX <= rect.right &&
+				clientY >= rect.top &&
+				clientY <= rect.bottom
+			);
+		});
+
+		return bucketEntry?.[0] || null;
+	};
+
+	useEffect(() => {
+		if (!isDragging) return undefined;
+
+		const updateActiveBucket = (event) => {
+			const point = event.touches?.[0] || event;
+			setActiveBucket(getBucketAtPoint(point.clientX, point.clientY));
+		};
+
+		window.addEventListener('mousemove', updateActiveBucket);
+		window.addEventListener('touchmove', updateActiveBucket);
+
+		return () => {
+			window.removeEventListener('mousemove', updateActiveBucket);
+			window.removeEventListener('touchmove', updateActiveBucket);
+		};
+	}, [isDragging]);
 	// console.log(formData.activities[5].buckets)
 	const handleOnDragEnd = (result) => {
-		if (!result.destination) return;
+		setIsDragging(false);
+		const hoveredBucket = activeBucket;
+		setActiveBucket(null);
 
 		const { source, destination } = result;
+		const destinationBucket = hoveredBucket || destination?.droppableId;
 
-		if (source.droppableId === 'cards' && destination.droppableId !== 'cards') {
+		if (source.droppableId === 'cards' && destinationBucket !== 'cards') {
+			if (!cards?.length) return;
+
+			if (!['yes', 'no', 'sometimes'].includes(destinationBucket)) return;
+
 			const droppedCard = cards[0];
+			const updatedCards = cards.slice(1);
+			const updatedIndex = currentIndex + 1;
 			const newBuckets = {
 				...buckets,
-				[destination.droppableId]: [...buckets[destination.droppableId], droppedCard],
+				[destinationBucket]: [
+					...(buckets[destinationBucket] || []),
+					droppedCard,
+				],
 			};
 
 			setBuckets(newBuckets);
-			setCards((prevCards) => prevCards.slice(1)); // Move to the next card
-			setCurrentIndex(currentIndex + 1);
+			setCards(updatedCards);
+			setCurrentIndex(updatedIndex);
 
-			// Explicitly push update to parent
-			pushToParent(cards.slice(1), newBuckets, currentIndex + 1);
+			pushToParent(updatedCards, newBuckets, updatedIndex);
 		}
 	};
 
 	const handleBack = () => {
 		if (currentIndex > 0) {
-			const updatedCards = [initialCards[currentIndex - 1], ...cards];
+			const previousCard = initialCards[currentIndex - 1];
+			const updatedCards = [
+				previousCard,
+				...cards.filter((card) => card.id !== previousCard.id),
+			];
+			const updatedBuckets = Object.fromEntries(
+				Object.entries(normalizeBuckets(buckets)).map(([bucketType, bucketCards]) => [
+					bucketType,
+					bucketCards.filter((card) => card.id !== previousCard.id),
+				])
+			);
 			const updatedIndex = currentIndex - 1;
+
 			setCards(updatedCards);
+			setBuckets(updatedBuckets);
 			setCurrentIndex(updatedIndex);
-			pushToParent(updatedCards, buckets, updatedIndex);
+			pushToParent(updatedCards, updatedBuckets, updatedIndex);
 		} else {
 			onBack();
 		}
 	};
 
 	const handleReset = () => {
+		const emptyBuckets = createInitialBuckets();
 		setCards(initialCards);
-		setBuckets(initialBuckets);
+		setBuckets(emptyBuckets);
 		setCurrentIndex(0);
-		pushToParent(initialCards, initialBuckets, 0);
+		pushToParent(initialCards, emptyBuckets, 0);
 	};
 
 	const areAllCardsPlaced = () => {
-		return cards?.length === 0;
+		return currentIndex >= initialCards.length || cards?.length === 0;
 	};
 
 	return (
-		<DragDropContext onDragEnd={handleOnDragEnd}>
+		<DragDropContext
+			onDragStart={() => setIsDragging(true)}
+			onDragEnd={handleOnDragEnd}
+		>
 			<div>
 				<div className="drag-drop">
 					<Droppable droppableId="cards">
@@ -165,15 +248,17 @@ function DragDropComponent({ onBack, onNext, formData, onUpdate, activityIndex }
 												ref={provided.innerRef}
 												{...provided.draggableProps}
 												{...provided.dragHandleProps}
-												className={`card-item d-flex align-items-center justify-content-center ${snapshot.isDragging ? 'draging' : ''
-													}`}
+												className="card-item d-flex align-items-center justify-content-center"
 												style={{
+													...provided.draggableProps.style,
 													cursor: snapshot.isDragging
 														? 'grabbing'
 														: 'grab',
-													opacity: snapshot.isDragging ? '0.1' : '1',
-													transform: 'none', // Prevent any change in transform
-													...provided.draggableProps.style,
+													opacity: snapshot.isDragging ? '0.95' : '1',
+													filter: snapshot.isDragging
+														? 'drop-shadow(0 12px 18px rgba(0, 0, 0, 0.25))'
+														: 'none',
+													zIndex: snapshot.isDragging ? 9999 : 1,
 												}}
 											>
 												<img
@@ -202,16 +287,23 @@ function DragDropComponent({ onBack, onNext, formData, onUpdate, activityIndex }
 						<div className="bucket-section mt-4 py-2">
 							{['yes', 'no', 'sometimes'].map((bucketType) => (
 								<Droppable key={bucketType} droppableId={bucketType}>
-									{(provided, snapshot) => (
+									{(provided) => (
 										<div
-											ref={provided.innerRef}
+											ref={(node) => {
+												provided.innerRef(node);
+												bucketRefs.current[bucketType] = node;
+											}}
 											{...provided.droppableProps}
-											className={`bucket bucket-${bucketType} ${snapshot.isDraggingOver ? 'dragging-over' : ''
+											className={`bucket bucket-${bucketType} ${activeBucket === bucketType ? 'dragging-over' : ''
 												}`}
 											style={{
-												backgroundColor: snapshot.isDraggingOver
+												backgroundColor: activeBucket === bucketType
 													? 'rgba(0, 0, 0, 0.1)'
 													: '',
+												outline: activeBucket === bucketType
+													? '3px solid rgba(255, 255, 255, 0.85)'
+													: '3px solid transparent',
+												borderRadius: '12px',
 												width: '150px',
 												height: '150px',
 												display: 'flex',
@@ -238,13 +330,8 @@ function DragDropComponent({ onBack, onNext, formData, onUpdate, activityIndex }
 													width: '100%',
 													maxWidth: '100px',
 													height: 'auto',
-													transition: 'transform 0.3s ease',
-													transform: snapshot.isDraggingOver
-														? 'scale(1.4)'
-														: 'scale(1)',
 												}}
 											/>
-											{provided.placeholder}
 										</div>
 									)}
 								</Droppable>
@@ -255,12 +342,12 @@ function DragDropComponent({ onBack, onNext, formData, onUpdate, activityIndex }
 
 				<div className="d-flex flex-column mt-3">
 					<div
-						className="d-flex justify-content-end align-items-center gap-2 px- mb-2 text-muted"
+						className="self-awareness-dnd-refresh fs-5 d-flex justify-content-center gap-3 align-items-center mt-3 mb-2"
 						onClick={handleReset}
-						style={{ cursor: 'pointer', marginLeft: '4rem' }}
+						style={{ cursor: 'pointer' }}
 					>
 						<Icon className="ml-3" icon="teenyicons:refresh-solid" />
-						<p className="text-3xl mr-2">Refresh </p>
+						<span>Refresh</span>
 					</div>
 
 					<div className="slider-indicator">
@@ -268,7 +355,7 @@ function DragDropComponent({ onBack, onNext, formData, onUpdate, activityIndex }
 							{Array.from({ length: initialCards.length }).map((_, index) => (
 								<li
 									key={index}
-									style={{ width: '20px', height: '-10px' }}
+									style={{ width: '20px' }}
 									className={index < currentIndex ? 'answered-drop' : 'p-0'}
 								></li>
 							))}
@@ -276,18 +363,13 @@ function DragDropComponent({ onBack, onNext, formData, onUpdate, activityIndex }
 					</div>
 				</div>
 
-				<div className="progression-btns mt-3">
-					<button className="btn prev light" onClick={handleBack}>
-						{'<<< Back'}
-					</button>
-					<button
-						className="btn next dark"
-						onClick={() => onNext({ cards, buckets })}
-						disabled={!areAllCardsPlaced()}
-					// Disable if not all cards are placed
-					>
-						{'Next >>>'}
-					</button>
+				<div className="mt-3">
+					<ProgressionButtons
+						variant="both"
+						onClickPrev={handleBack}
+						onClickNext={() => onNext({ cards, buckets, currentIndex })}
+						nextDisabled={!areAllCardsPlaced()}
+					/>
 				</div>
 			</div>
 		</DragDropContext>

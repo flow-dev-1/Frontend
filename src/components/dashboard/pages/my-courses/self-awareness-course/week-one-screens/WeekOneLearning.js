@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import QuestionComponent from './QuestionComponent';
 import DragDropComponent from './DragAndDrop';
 import EndOfCourseComponent from './EndOfCourseComponent';
@@ -23,6 +23,39 @@ import { updateData } from '../../../../../../redux/reducers/userAnswersReducer.
 
 import ProgressionButtons from '../components/ProgressionButtons.jsx';
 import VideoComponent from '../components/VideoComponent.jsx';
+import {
+	getLegacySelfAwarenessActivityDataKey,
+	getLegacySelfAwarenessActivityProgressKey,
+	getSelfAwarenessActivityDataKey,
+	getSelfAwarenessActivityProgressKey,
+	mergeSelfAwarenessActivityDrafts,
+	readSelfAwarenessStorage,
+	writeSelfAwarenessStorage,
+} from '../utils/storage';
+
+const WEEK_ONE_VISIBLE_FLOW = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 13, 15];
+const LEGACY_REMOVED_ACTIVITY = 12;
+const REAL_ACTIVITY_SIX = 14;
+
+const normalizeWeekOneActivity = (activity) => {
+	const activityNumber = Number(activity) || 1;
+	if (activityNumber === LEGACY_REMOVED_ACTIVITY) return REAL_ACTIVITY_SIX;
+	if (WEEK_ONE_VISIBLE_FLOW.includes(activityNumber)) return activityNumber;
+	if (activityNumber > Math.max(...WEEK_ONE_VISIBLE_FLOW)) return activityNumber;
+	return 1;
+};
+
+const getNextWeekOneActivity = (activity) => {
+	const normalizedActivity = normalizeWeekOneActivity(activity);
+	const currentIndex = WEEK_ONE_VISIBLE_FLOW.indexOf(normalizedActivity);
+	return WEEK_ONE_VISIBLE_FLOW[currentIndex + 1] || 16;
+};
+
+const getPreviousWeekOneActivity = (activity) => {
+	const normalizedActivity = normalizeWeekOneActivity(activity);
+	const currentIndex = WEEK_ONE_VISIBLE_FLOW.indexOf(normalizedActivity);
+	return WEEK_ONE_VISIBLE_FLOW[currentIndex - 1] || 1;
+};
 
 export default function WeekOneLearning({
 	course,
@@ -30,17 +63,24 @@ export default function WeekOneLearning({
 	currentWeekIndex,
 	courseId,
 	handleLinkClick,
+	requestedActivity,
+	onActivityChange,
 }) {
 	const dispatch = useDispatch();
 	const [showPopup, setShowPopup] = useState(false);
 	const [currentActivity, setCurrentActivity] = useState(() => {
-		const savedState = localStorage.getItem(`week-${currentWeekIndex}-currentActivity`);
-
-		return savedState ? JSON.parse(savedState) : 1;
+		return normalizeWeekOneActivity(readSelfAwarenessStorage(
+			getSelfAwarenessActivityProgressKey(courseId, currentWeekIndex),
+			getLegacySelfAwarenessActivityProgressKey(currentWeekIndex),
+			1
+		));
 	});
 	const [formData, setFormData] = useState(() => {
-		const savedData = localStorage.getItem(`week-1-activityData`);
-		return savedData ? JSON.parse(savedData) : { week: 1, activities: [] };
+		return readSelfAwarenessStorage(
+			getSelfAwarenessActivityDataKey(courseId, 1),
+			getLegacySelfAwarenessActivityDataKey(1),
+			{ week: 1, activities: [] }
+		);
 	});
 
 	const week = 1;
@@ -60,17 +100,16 @@ export default function WeekOneLearning({
 
 			// Remote State Restoration: Jump to last saved page if it exists and week is NOT completed
 			if (courseData.activity.lastActivityIndex && !isCompleted) {
-				setCurrentActivity(courseData.activity.lastActivityIndex);
+				setCurrentActivity(normalizeWeekOneActivity(courseData.activity.lastActivityIndex));
 			}
 
-			// Robust Merge: Only use remote activities if they are more comprehensive or if local is empty
 			setFormData((prevData) => {
-				const localActivities = prevData?.activities || [];
-				if (localActivities.length > 0 && activities.length <= localActivities.length) {
-					// Keep local data as it might be fresher (mid-activity saves)
-					return prevData;
-				}
-				return { ...prevData, activities: activities };
+				const draftActivities = prevData?.activities || [];
+				return {
+					...prevData,
+					week,
+					activities: mergeSelfAwarenessActivityDrafts(activities, draftActivities),
+				};
 			});
 
 			dispatch(
@@ -95,9 +134,9 @@ export default function WeekOneLearning({
 				personalityColor: courseData.assessment.personalityColor || 'Yellow',
 			};
 
-			localStorage.setItem(
+			writeSelfAwarenessStorage(
 				'weekOneAssessmentData',
-				JSON.stringify({ formattedData: assessment_data })
+				{ formattedData: assessment_data }
 			);
 		}
 	}, [courseData]);
@@ -119,15 +158,32 @@ export default function WeekOneLearning({
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		localStorage.setItem(
-			`week-${currentWeekIndex}-currentActivity`,
-			JSON.stringify(currentActivity)
+		writeSelfAwarenessStorage(
+			getSelfAwarenessActivityProgressKey(courseId, currentWeekIndex),
+			currentActivity
 		);
-	}, [currentActivity, currentWeekIndex]);
+		onActivityChange?.(currentWeekIndex, currentActivity);
+	}, [courseId, currentActivity, currentWeekIndex, onActivityChange]);
 
 	useEffect(() => {
-		localStorage.setItem(`week-1-activityData`, JSON.stringify(formData));
-	}, [formData]);
+		if (requestedActivity?.week !== currentWeekIndex) return;
+		if (!requestedActivity?.activity) return;
+		setCurrentActivity(normalizeWeekOneActivity(requestedActivity.activity));
+	}, [currentWeekIndex, requestedActivity]);
+
+	useEffect(() => {
+		const normalizedActivity = normalizeWeekOneActivity(currentActivity);
+		if (normalizedActivity !== currentActivity) {
+			setCurrentActivity(normalizedActivity);
+		}
+	}, [currentActivity]);
+
+	useEffect(() => {
+		writeSelfAwarenessStorage(
+			getSelfAwarenessActivityDataKey(courseId, 1),
+			formData
+		);
+	}, [courseId, formData]);
 
 	const isCompleted = !!courseData?.assessment;
 
@@ -160,30 +216,39 @@ export default function WeekOneLearning({
 
 		setFormData((prevData) => ({ ...prevData, activities: updatedActivities }));
 
-		const nextActivity = currentActivity >= 15 ? 16 : currentActivity + 1;
-		setCurrentActivity(nextActivity);
+		const nextActivity = getNextWeekOneActivity(currentActivity);
 
 		if (!isCompleted && !isLoading) {
-			// Fire and Forget: Save progress to background
 			const payload = {
 				week: week,
 				activities: updatedActivities,
 				lastActivityIndex: nextActivity // Save where they are going
 			};
 
-			userService.postMyActivity(courseId, payload)
-				.then(() => {
-					// Invalidate enrollment query to reflect any backend updates (e.g. lastWeekIndex)
-					queryClient.invalidateQueries(['enrollment', courseId]);
-				})
-				.catch(err => {
-					console.error("Failed to auto-save activity:", err);
-				});
+			try {
+				const result = await userService.postMyActivity(courseId, payload);
+				queryClient.setQueryData(
+					['self-awareness-course-1', courseId, week],
+					(previousData) => ({
+						...(previousData || {}),
+						activity: result?.newActivity || {
+							...(previousData?.activity || {}),
+							...payload,
+						},
+					})
+				);
+				await queryClient.invalidateQueries({ queryKey: ['enrollment', courseId] });
+			} catch (err) {
+				console.error("Failed to auto-save activity:", err);
+				return false;
+			}
 		}
-	}, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted, isLoading]);
+		setCurrentActivity(nextActivity);
+		return true;
+	}, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted, isLoading, queryClient]);
 
 	const handlePrevious = () => {
-		const prevActivity = currentActivity - 1;
+		const prevActivity = getPreviousWeekOneActivity(currentActivity);
 		setCurrentActivity(prevActivity);
 	};
 
@@ -191,6 +256,10 @@ export default function WeekOneLearning({
 
 	const handleNextWeekCourse = () => {
 		const nextWeekIndex = currentWeekIndex + 1;
+		if (handleLinkClick) {
+			handleLinkClick(nextWeekIndex - 1, 1);
+			return;
+		}
 		navigate(`/dashboard/self-awareness-course`, {
 			state: { enrollmentData: course, weekIndex: nextWeekIndex },
 		});
@@ -221,6 +290,7 @@ export default function WeekOneLearning({
 						formData={formData}
 						altText="is?"
 						onBack={handlePrevious}
+						onUpdate={onLocalUpdate}
 						onNext={(answers) => handleNext({ answers })}
 					/>
 				);
@@ -248,6 +318,7 @@ export default function WeekOneLearning({
 						formData={formData}
 						altText="is?"
 						onBack={handlePrevious}
+						onUpdate={onLocalUpdate}
 						onNext={(answers) => handleNext({ answers })}
 					/>
 				);
@@ -306,6 +377,7 @@ export default function WeekOneLearning({
 						altText="?"
 						formData={formData}
 						onBack={handlePrevious}
+						onUpdate={onLocalUpdate}
 						onNext={(answer) => handleNext({ answer })}
 					/>
 				);
@@ -358,6 +430,7 @@ export default function WeekOneLearning({
 						formData={formData}
 						altText=""
 						onBack={handlePrevious}
+						onUpdate={onLocalUpdate}
 						onNext={(answers) => handleNext({ answers })}
 					/>
 				);
@@ -394,6 +467,7 @@ export default function WeekOneLearning({
 							},
 						]}
 						formData={formData}
+						onUpdate={onLocalUpdate}
 					/>
 				);
 
@@ -404,7 +478,8 @@ export default function WeekOneLearning({
 						handleNextWeekCourse={handleNextWeekCourse}
 						onNext={handleNext}
 						course={course}
-						activityData={formData}
+						activityData={courseData?.activity || formData}
+						savedAssessment={courseData?.assessment}
 						isCompleted={isCompleted}
 					/>
 				);

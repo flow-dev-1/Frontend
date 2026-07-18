@@ -16,6 +16,10 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function Page2() {
   const dispatch = useDispatch();
@@ -34,13 +38,46 @@ function Page2() {
       (item) => item.page === pageData.id,
     );
 
-    if (response?.answer && Array.isArray(response.answer)) {
-      const stepAnswer = response.answer.find((a) => a.stepId === currentStep);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const existingAnswers = Array.isArray(response?.answer)
+      ? response.answer
+      : Array.isArray(draftAnswer)
+        ? draftAnswer
+        : [];
+
+    if (existingAnswers.length) {
+      const stepAnswer = existingAnswers.find((a) => a.stepId === currentStep);
       setMyAnswer(stepAnswer ? stepAnswer.value : "");
     } else {
       setMyAnswer("");
     }
   }, [userAnswers, pageData, currentStep]);
+
+  const saveStepDraft = (value) => {
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const response = userAnswers?.activities?.find(
+      (item) => item.page === pageData.id,
+    );
+    const updatedAnswers = Array.isArray(response?.answer)
+      ? [...response.answer]
+      : Array.isArray(draftAnswer)
+        ? [...draftAnswer]
+        : [];
+    const existingStepIndex = updatedAnswers.findIndex(
+      (a) => a.stepId === currentStep,
+    );
+
+    if (existingStepIndex !== -1) {
+      updatedAnswers[existingStepIndex] = {
+        ...updatedAnswers[existingStepIndex],
+        value,
+      };
+    } else {
+      updatedAnswers.push({ stepId: currentStep, value });
+    }
+
+    saveActivityDraft(userAnswers, pageData.id, updatedAnswers);
+  };
 
   const saveUserInput = () => {
     if (!adminDatas.isAdmin && !myAnswer) {
@@ -70,7 +107,12 @@ Inclusive teaching begins when we pause and reflect on how our mindset influence
     const response = currentActivities.find(
       (item) => item.page === pageData.id,
     );
-    let updatedAnswers = response?.answer ? [...response.answer] : [];
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    let updatedAnswers = Array.isArray(response?.answer)
+      ? [...response.answer]
+      : Array.isArray(draftAnswer)
+        ? [...draftAnswer]
+        : [];
 
     const existingStepIndex = updatedAnswers.findIndex(
       (a) => a.stepId === currentStep,
@@ -117,7 +159,9 @@ Inclusive teaching begins when we pause and reflect on how our mindset influence
           <BigTextBox
             handleChange={(e) => {
               setErrorMessage("");
-              setMyAnswer(e.target.value);
+              const value = e.target.value;
+              setMyAnswer(value);
+              saveStepDraft(value);
             }}
             value={myAnswer}
           />
@@ -145,6 +189,7 @@ Inclusive teaching begins when we pause and reflect on how our mindset influence
               onChange={(val) => {
                 setErrorMessage("");
                 setMyAnswer(val);
+                saveStepDraft(val);
               }}
             />
           </div>

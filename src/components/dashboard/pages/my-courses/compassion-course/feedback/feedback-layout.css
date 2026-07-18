@@ -1,0 +1,108 @@
+.course-feedback-row {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr) auto;
+  column-gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.course-feedback-label,
+.course-feedback-content {
+  min-width: 0;
+  margin: 0;
+}
+
+.course-feedback-label {
+  width: auto;
+  line-height: 1.35;
+}
+
+.course-feedback-label.text-bg-secondary {
+  justify-self: start;
+  text-align: center;
+}
+
+.course-feedback-content {
+  line-height: 1.45;
+}
+
+.course-feedback-row > svg {
+  align-self: start;
+}
+
+.course-feedback-question-row {
+  align-items: center;
+}
+
+.course-feedback-text-row {
+  align-items: start;
+}
+
+.course-feedback-scenario-question {
+  margin: 4px 0 10px;
+}
+
+.course-feedback-scenario-item {
+  margin-bottom: 12px;
+}
+
+.course-feedback-divider {
+  margin: 16px 0;
+}
+
+.course-feedback-layout .d-flex.gap-3:has(> h2.text-blue:first-child),
+.course-feedback-layout .d-flex.gap-3:has(> h2.text-gray:first-child) {
+  display: grid !important;
+  grid-template-columns: max-content minmax(0, 1fr) auto;
+  column-gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.course-feedback-layout .d-flex.gap-3:has(> p.text-bg-secondary:first-child) {
+  display: grid !important;
+  grid-template-columns: max-content minmax(0, 1fr) auto;
+  column-gap: 12px;
+  align-items: start;
+  margin-bottom: 12px;
+}
+
+.course-feedback-layout .d-flex.gap-3 > h2:first-child,
+.course-feedback-layout .d-flex.gap-3 > p:first-child,
+.course-feedback-layout .d-flex.gap-3 > h2:first-child + p,
+.course-feedback-layout .d-flex.gap-3 > p:first-child + p {
+  min-width: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+@media (max-width: 575.98px) {
+  .course-feedback-row {
+    grid-template-columns: 1fr auto;
+    gap: 6px 10px;
+  }
+
+  .course-feedback-label {
+    grid-column: 1 / -1;
+  }
+
+  .course-feedback-content {
+    grid-column: 1;
+  }
+
+  .course-feedback-scenario-question {
+    margin-left: 0;
+  }
+
+  .course-feedback-layout .d-flex.gap-3:has(> h2.text-blue:first-child),
+  .course-feedback-layout .d-flex.gap-3:has(> h2.text-gray:first-child),
+  .course-feedback-layout .d-flex.gap-3:has(> p.text-bg-secondary:first-child) {
+    grid-template-columns: 1fr auto;
+    gap: 6px 10px;
+  }
+
+  .course-feedback-layout .d-flex.gap-3 > h2:first-child,
+  .course-feedback-layout .d-flex.gap-3 > p:first-child {
+    grid-column: 1 / -1;
+  }
+}

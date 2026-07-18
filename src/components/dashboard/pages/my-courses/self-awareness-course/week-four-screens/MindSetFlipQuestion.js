@@ -3,7 +3,6 @@ import Modal from 'react-modal';
 import checkedImage from '../../../../../../assets/selfawareness-images/checked.png';
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png';
 import imageMap from './imageMapping';
-import { toast } from 'react-toastify';
 import ProgressionButtons from '../components/ProgressionButtons';
 
 Modal.setAppElement('#root');
@@ -12,6 +11,7 @@ export default function MindSetFlipQuestion({ onSubmit, onBack, onNext, activity
 	const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
 	const [valueDescription, setValueDescription] = useState(null);
 	const [answers, setAnswers] = useState([]);
+	const [errorMessage, setErrorMessage] = useState('');
 
 	const questionsArray = [
 		[
@@ -122,6 +122,7 @@ export default function MindSetFlipQuestion({ onSubmit, onBack, onNext, activity
 	}, [questionChecked, currentChunkIndex]);
 
 	const handleQuestionCheck = (chunkIndex, optionIndex) => {
+		setErrorMessage('');
 		setQuestionChecked((prevState) => {
 			const updated = { ...prevState };
 			const current = updated[chunkIndex] || [];
@@ -191,7 +192,7 @@ export default function MindSetFlipQuestion({ onSubmit, onBack, onNext, activity
 	const handleNextChunk = () => {
 		const checkedItems = questionChecked[currentChunkIndex] || [];
 		if (checkedItems.length === 0) {
-			toast.error('Please select at least one item before proceeding.');
+			setErrorMessage('Please select at least one item before proceeding.');
 			return;
 		}
 
@@ -210,7 +211,7 @@ export default function MindSetFlipQuestion({ onSubmit, onBack, onNext, activity
 				// Submit the form after updating the answers state with the last chunk's answers
 				onNext(updatedAnswers);
 			} else {
-				alert('Please complete all chunks before submitting.');
+				setErrorMessage('Please complete all chunks before submitting.');
 			}
 		}
 	};
@@ -259,6 +260,8 @@ export default function MindSetFlipQuestion({ onSubmit, onBack, onNext, activity
 					))}
 				</ul>
 			</div>
+
+			{errorMessage && <div className="text-danger">{errorMessage}</div>}
 
 			<ProgressionButtons onClickPrev={handlePreviousChunk} onClickNext={handleNextChunk} />
 		</>

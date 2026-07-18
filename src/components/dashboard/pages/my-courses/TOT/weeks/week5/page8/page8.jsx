@@ -6,6 +6,10 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import Frame from "./components/Frame";
 
@@ -24,13 +28,20 @@ function Page6() {
       (item) => item.page === pageData.id
     );
 
-    if (!Array.isArray(response?.answer)) {
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const answerSource = Array.isArray(response?.answer)
+      ? response.answer
+      : Array.isArray(draftAnswer)
+        ? draftAnswer
+        : null;
+
+    if (!answerSource) {
       setAnswers([]);
       return;
     }
 
     // Normalize any legacy data that might use stepId instead of id
-    const normalized = response.answer.map((item) =>
+    const normalized = answerSource.map((item) =>
       item.id
         ? item
         : item.stepId
@@ -40,6 +51,11 @@ function Page6() {
 
     setAnswers(normalized);
   }, [userAnswers, pageData.id]);
+
+  useEffect(() => {
+    if (!userAnswers || !pageData?.id) return;
+    saveActivityDraft(userAnswers, pageData.id, answers);
+  }, [answers, pageData?.id, userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas?.isAdmin) return true;

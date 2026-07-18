@@ -10,14 +10,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSelector, useDispatch } from 'react-redux';
 import { userAnswer, updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
 import { RotatingLines } from 'react-loader-spinner';
+import { writeSelfAwarenessStorage } from '../utils/storage';
 
-export default function WeekTwoAssessmentForm({ onBack, onNext, course, activityData, isCompleted }) {
+export default function WeekTwoAssessmentForm({ onBack, onNext, course, activityData, savedAssessment, isCompleted }) {
 	const dispatch = useDispatch();
 	const userAnswers = useSelector(userAnswer);
 	const [currentIndex, setCurrentIndex] = useState(1);
 	const [reviewPopUp, setReviewPopUp] = React.useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [disableButton, setDisableButton] = useState(false);
+	const [errorMessage, setErrorMessage] = useState('');
 	const [assessment, setAssessment] = useState({
 		assessment: {
 			answers: [],
@@ -25,7 +27,11 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 	});
 
 	useEffect(() => {
-		// Fetch the initial state or restore the assessment from localStorage
+		if (savedAssessment?.assessments?.length) {
+			setAssessment(savedAssessment.assessments[0]);
+			return;
+		}
+
 		const storedAssessment = localStorage.getItem('weekTwoAssessmentData');
 
 		if (storedAssessment) {
@@ -36,7 +42,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 				setAssessment(parsedData.formattedData.assessments[0]);
 			}
 		}
-	}, []);
+	}, [savedAssessment]);
 
 	const questionsArray = [
 		{
@@ -91,10 +97,11 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 		const isAnswered = currentAnswer !== undefined && currentAnswer !== '';
 
 		if (!isCompleted && !isAnswered) {
-			toast.error('Please answer the question before proceeding.');
+			setErrorMessage('Please answer the question before proceeding.');
 			return;
 		}
 
+		setErrorMessage('');
 		if (currentIndex < questionsArray.length) {
 			setCurrentIndex(currentIndex + 1);
 		} else {
@@ -125,6 +132,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 			return;
 		}
 
+		setErrorMessage('');
 		const updatedAnswers = [...assessment.assessment.answers];
 		updatedAnswers[questionIndex] = optionIndex; // Store index instead of text
 
@@ -134,7 +142,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 		};
 
 		setAssessment(updatedAssessment);
-		localStorage.setItem('week-two-assessment', JSON.stringify(updatedAssessment));
+		writeSelfAwarenessStorage('week-two-assessment', updatedAssessment);
 	};
 	const transformAssessmentData = () => {
 		return assessment?.assessment?.answers.map((answerIndex) => answerIndex);
@@ -146,6 +154,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 		mutationFn: (data) => userService.submitCourseData(data), // Dispatch saveAssessment action
 		onSuccess: (data) => {
 			setDisableButton(false);
+			setErrorMessage('');
 			toast.dismiss();
 			toast.success(data.message || 'Answers saved successfully!'); // Show success toast
 
@@ -167,7 +176,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 		onError: (error) => {
 			console.log(error, 'errorrrr');
 			toast.dismiss();
-			toast.error(error?.message || error?.error || 'Error saving answers'); // Show error toast
+			setErrorMessage(error?.message || error?.error || 'Error saving answers');
 		},
 	});
 
@@ -176,16 +185,17 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 
 		try {
 			if (!activityData?.activities || activityData?.activities?.length !== 8) {
-				toast.error('Please complete all activities before submitting the assessment.');
+				setErrorMessage('Please complete all activities before submitting the assessment.');
 				return;
 			}
 
 			// Final check for all 8 assessment answers
 			const transformedData = transformAssessmentData();
 			if (transformedData.length !== 8 || transformedData.some(ans => ans === undefined || ans === '')) {
-				toast.error('Please ensure all 8 assessment questions are answered.');
+				setErrorMessage('Please ensure all 8 assessment questions are answered.');
 				return;
 			}
+			setErrorMessage('');
 			const valuesToCheck = transformedData.slice(0, 5);
 			const correctAnswers = [3, 1, 1, 0, 2];
 			const totalQuestions = valuesToCheck.length;
@@ -207,7 +217,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 		} catch (error) {
 			console.log(error);
 			setIsLoading(false);
-			toast.error('Something went wrong. Please contact flow admin for support!');
+			setErrorMessage('Something went wrong. Please contact flow admin for support!');
 		}
 	};
 
@@ -302,9 +312,10 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 									};
 
 									setAssessment(updatedAssessment);
-									localStorage.setItem(
+									setErrorMessage('');
+									writeSelfAwarenessStorage(
 										'week-two-assessment',
-										JSON.stringify(updatedAssessment)
+										updatedAssessment
 									);
 								}}
 							/>
@@ -329,6 +340,7 @@ export default function WeekTwoAssessmentForm({ onBack, onNext, course, activity
 					))}
 				</ul>
 			</div>
+			{errorMessage && <div className="text-danger mt-3">{errorMessage}</div>}
 
 			<div className="progression-btns mt-3">
 				<button

@@ -3,7 +3,6 @@ import checkedImage from '../../../../../../assets/selfawareness-images/checked.
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png'
 
 import ProgressionButtons from '../components/ProgressionButtons';
-import { toast } from 'react-toastify'
 
 export default function WeaknessIdentification({
   formData,
@@ -56,6 +55,7 @@ export default function WeaknessIdentification({
   const [questionChecked, setQuestionChecked] = useState({})
 
   const [selectedAnswers, setSelectedAnswers] = useState([])
+  const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
     if (currentActivityData && currentActivityData.answers && currentActivityData.answers.weakness) {
@@ -86,6 +86,7 @@ export default function WeaknessIdentification({
   }, [questionChecked])
 
   const handleQuestionCheck = (questionIndex) => {
+    setErrorMessage('')
     setQuestionChecked((prevState) => ({
       ...prevState,
       [questionIndex]: !prevState[questionIndex], // Toggle the checked state
@@ -94,11 +95,11 @@ export default function WeaknessIdentification({
 
   const handleSubmit = () => {
     if (selectedAnswers.length === 0) {
-      // Show an alert if no answers are selected
-      toast.error('Please select at least one weakness.')
-      return
+      setErrorMessage('Please select at least one weakness.')
+      return false
     }
 
+    setErrorMessage('')
     onNext({ weakness: selectedAnswers }) // Proceed to the next step
   }
 
@@ -128,6 +129,7 @@ export default function WeaknessIdentification({
             ))}
           </ul>
         </div>
+        {errorMessage && <div className='text-danger mt-3'>{errorMessage}</div>}
       </div>
       <div className="mt-3">
         <ProgressionButtons

@@ -10,6 +10,11 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function WeekThreePage2() {
   const dispatch = useDispatch();
@@ -24,9 +29,10 @@ function WeekThreePage2() {
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    setMyAnswer(response?.answer ? response.answer : "");
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setMyAnswer(response?.answer || draftAnswer || "");
     return () => {};
-  }, [userAnswers]);
+  }, [pageData.id, userAnswers]);
 
   const saveUserInput = () => {
     if (!adminDatas.isAdmin && !myAnswer) {
@@ -43,20 +49,23 @@ function WeekThreePage2() {
         answer: myAnswer,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 
   const handleInputChange = (e) => {
     setErrorMessage("");
-    setMyAnswer(e.target.value);
+    const nextAnswer = e.target.value;
+    setMyAnswer(nextAnswer);
+    saveActivityDraft(userAnswers, pageData.id, nextAnswer);
   };
 
   return (
     <>
       <QuestionBox>
-        <div className="d-flex gap-2 flex-column flex-md-row align-center-lg-custom">
-          <h2 className="text-blue fs-1">Question: </h2>
-          <h2 className="text-gray fs-1">
+        <div className="compassion-week3-activity1-question align-center-lg-custom">
+          <h2 className="text-blue fs-1 mb-0">Question: </h2>
+          <h2 className="text-gray fs-1 mb-0">
             {pageData.question.substring(0, 20)}{" "}
             {pageData.hasImage && (
               <img
@@ -70,6 +79,7 @@ function WeekThreePage2() {
         </div>
         <BigTextBox handleChange={handleInputChange} value={myAnswer} />
       </QuestionBox>
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
         <Button text="Next" customOnClick={saveUserInput} />

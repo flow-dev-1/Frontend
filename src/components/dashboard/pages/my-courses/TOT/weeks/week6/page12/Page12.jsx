@@ -14,6 +14,10 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import OnboardingFrame from "./components/OnboardingFrame";
 import SectionFrame from "./components/SectionFrame";
@@ -41,10 +45,14 @@ function WeekSixPage10() {
       (item) => item.page === pageData.id,
     );
 
-    if (response?.answer) {
-      setAnswers(response.answer);
-    }
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setAnswers(response?.answer || draftAnswer || {});
   }, [userAnswers, pageData?.id]);
+
+  useEffect(() => {
+    if (!userAnswers || !pageData?.id) return;
+    saveActivityDraft(userAnswers, pageData.id, answers);
+  }, [answers, pageData?.id, userAnswers]);
 
   const saveUserInput = () => {
     // Skip validation for instruction and onboarding

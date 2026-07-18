@@ -14,6 +14,10 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 import adaptability from "../../../../../../../../assets/resilience-grit-images/adaptability.png";
 
 function WeekTwoPage8() {
@@ -21,7 +25,7 @@ function WeekTwoPage8() {
   const pageData = useSelector(selectPageData);
   const adminDatas = useSelector(adminData);
   const userAnswers = useSelector(userAnswer);
-  const [myAnswer, setMyAnswer] = useState(userAnswers);
+  const [myAnswer, setMyAnswer] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showFeedback, setShowFeedback] = useState(false);
   const handleCloseFeedback = () => {
@@ -34,7 +38,8 @@ function WeekTwoPage8() {
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id,
     );
-    setMyAnswer(response?.answer ? response.answer : "");
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setMyAnswer(response?.answer ?? draftAnswer ?? "");
     return () => {};
   }, [userAnswers]);
 
@@ -61,7 +66,9 @@ function WeekTwoPage8() {
 
   const handleInputChange = (e) => {
     setErrorMessage("");
-    setMyAnswer(e.target.value);
+    const nextAnswer = e.target.value;
+    setMyAnswer(nextAnswer);
+    saveActivityDraft(userAnswers, pageData.id, nextAnswer);
   };
 
   return (

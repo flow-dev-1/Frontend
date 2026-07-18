@@ -14,22 +14,19 @@ import schoolService from "../../../../../services/api/school";
 import adminService from "../../../../../services/api/admin";
 import { useSelector } from "react-redux";
 import { adminData } from "../../../../../redux/reducers/adminReducer";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ClimbingBoxLoader } from "react-spinners";
 import HurrayComponent from "./Hurray";
-import AIConfirmationModal from "./AIConfirmationModal";
+import logo from "../../../../../assets/logo.png";
 
 const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId: enrollmentIdProp }) => {
   const weeks = [1, 2, 3, 4, 5]; // List of weeks
-  const courseId = "66853bf50118e2e0a02b6a5a";
   const location = useLocation(); // Get location object
+  const navigate = useNavigate();
   const [assessmentData, setAssessmentData] = useState({});
   const [assessmentLoading, setAssessmentLoading] = useState(true);
   const [expandedWeek, setExpandedWeek] = useState(null);
   const [pdfLoading, setPdfLoading] = useState(false); // NEW STATE FOR PDF LOADING
-  const [isAIModalOpen, setIsAIModalOpen] = useState(false);
-  const [selectedAIWeek, setSelectedAIWeek] = useState(null);
-  const [isAIGenerating, setIsAIGenerating] = useState(false);
   const contentRef = useRef();
 
   const { isAdmin, code } = useSelector(adminData);
@@ -54,22 +51,33 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
     }
   }, [enrollmentIdProp, isAdmin, location.state]);
 
+  useEffect(() => {
+    if (isAdmin || isSchool) return;
+    if (enrollmentId) return;
+    if (location.state?.enrollmentData?._id) return;
+    navigate("/dashboard/my-courses", { replace: true });
+  }, [enrollmentId, isAdmin, isSchool, location.state, navigate]);
+
   // Fetch data for all weeks
   const { data, isLoading: queryLoading } = useQuery({
-    queryKey: ["dashboard/feedback/self-awareness", courseId, enrollmentId, studentId, isAdmin],
+    queryKey: ["dashboard/feedback/self-awareness", enrollmentId, studentId, isAdmin, isSchool],
     queryFn: () =>
       Promise.all(
         weeks.map((week) => {
           if (isAdmin) return adminService.getUserCourseData(enrollmentId, week, code);
           if (isSchool) return schoolService.getStudentCourseData(enrollmentId, week, studentId);
-          return userService.getMyActivites(courseId, week);
+          return userService.getUserCourseData(enrollmentId, week);
         })
       ),
-    enabled: isAdmin ? (!!enrollmentId && !!code) : (isSchool ? (!!enrollmentId && !!studentId) : true),
+    enabled: isAdmin ? (!!enrollmentId && !!code) : (isSchool ? (!!enrollmentId && !!studentId) : !!enrollmentId),
   });
 
   useEffect(() => {
     const fetchAssessmentData = async () => {
+      if (!enrollmentId && !isSchool && !isAdmin) {
+        setAssessmentLoading(false);
+        return;
+      }
       if (!enrollmentId && (isSchool || isAdmin)) return;
       if (isAdmin && !code) return; // Wait for admin code
 
@@ -86,7 +94,7 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
               const res = await schoolService.getStudentCourseData(enrollmentId, week, studentId);
               data = res.assessment;
             } else {
-              data = await userService.getMyAssessment(courseId, week);
+              data = await userService.getMyAssessment(enrollmentId, week);
             }
             return { week, data };
           })
@@ -107,84 +115,48 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
     };
 
     fetchAssessmentData();
-  }, [courseId, enrollmentId, studentId, isAdmin, isSchool, code]);
+  }, [enrollmentId, studentId, isAdmin, isSchool, code]);
+
+  const hasSubmittedAssessment = (assessment) => {
+    if (!assessment) return false;
+    if (Array.isArray(assessment)) return assessment.length > 0;
+    if (typeof assessment !== "object") return false;
+    if (assessment.assessment) return hasSubmittedAssessment(assessment.assessment);
+    if (assessment.existingAssessment) return hasSubmittedAssessment(assessment.existingAssessment);
+    if (assessment.newAssessment) return hasSubmittedAssessment(assessment.newAssessment);
+    if (Array.isArray(assessment.assessments)) return assessment.assessments.length > 0;
+    if (Array.isArray(assessment.answers)) return assessment.answers.length > 0;
+    if (assessment.rating !== undefined && assessment.rating !== null) return true;
+    if (assessment._id) return true;
+    return false;
+  };
+
+  const getWeekAssessment = (weekNumber) => {
+    const directAssessment = assessmentData?.[weekNumber];
+    if (hasSubmittedAssessment(directAssessment)) return directAssessment;
+    return data?.[weekNumber - 1]?.assessment;
+  };
+
+  const isWeekFeedbackAvailable = (weekNumber) =>
+    hasSubmittedAssessment(getWeekAssessment(weekNumber));
+
+  const isFinalReportAvailable = () =>
+    weeks.every((week) => isWeekFeedbackAvailable(week));
 
   const toggleWeek = (weekNumber) => {
-    setExpandedWeek(expandedWeek === weekNumber ? null : weekNumber);
-  };
-
-  const handleOpenAIModal = (weekNumber) => {
-    setSelectedAIWeek(weekNumber);
-    setIsAIModalOpen(true);
-  };
-
-  const handleConfirmAIGeneration = async () => {
-    setIsAIModalOpen(false);
-    setIsAIGenerating(true);
-    console.log(`Generating AI feedback for week ${selectedAIWeek}`);
-
-    // Find the data for the selected week
-    const weekData = data?.[selectedAIWeek - 1];
-    if (!weekData || !weekData.activity) {
-      console.error("No data found for this week");
+    if (weekNumber === 6 || weekNumber === "all") {
+      if (!isFinalReportAvailable()) return;
+      setExpandedWeek(expandedWeek === weekNumber ? null : weekNumber);
       return;
     }
 
-    // Format the payload to match user's Postman example
-    const payload = [
-      {
-        payload: {
-          activity: weekData.activity.activities,
-          id: weekData.activity._id
-        }
-      }
-    ];
-
-    console.log("Sending payload to AI webhook via backend proxy:", JSON.stringify(payload, null, 2));
-
-    try {
-      const result = await adminService.generateAIFeedback(payload, code);
-      console.log("---------------- AI WEBHOOK RESPONSE START ----------------");
-      console.log(JSON.stringify(result, null, 2));
-      console.log("---------------- AI WEBHOOK RESPONSE END ------------------");
-
-      // Check if the webhook returned activity data to merge
-      const aiActivities = Array.isArray(result)
-        ? (result[0]?.activity || result[0]?.activities || result)
-        : (result?.activity || result?.activities || null);
-
-      if (aiActivities && Array.isArray(aiActivities) && aiActivities.length > 0) {
-        // Webhook returned data — merge only feedback into original activities
-        const originalActivities = weekData.activity.activities;
-        const mergedActivities = originalActivities.map((original, index) => {
-          const aiItem = aiActivities.find(ai => ai.activity === original.activity) || aiActivities[index];
-          if (aiItem && aiItem.feedback) {
-            return { ...original, feedback: aiItem.feedback };
-          }
-          return original;
-        });
-
-        const userId = weekData.activity.user;
-        await adminService.submitAdminFeedback(mergedActivities, enrollmentId, selectedAIWeek, userId, code);
-        console.log("AI feedback merged and saved.");
-      } else {
-        // Webhook returned no data — it likely saved directly to DB
-        console.log("Webhook returned no activity data. It may have saved directly. Reloading...");
-      }
-
-      alert("AI feedback generated successfully!");
-      // window.location.reload();
-    } catch (error) {
-      console.error("Error calling AI webhook:", error);
-      alert("Failed to generate AI feedback. Please try again.");
-    } finally {
-      setIsAIGenerating(false);
-    }
+    if (!isWeekFeedbackAvailable(weekNumber)) return;
+    setExpandedWeek(expandedWeek === weekNumber ? null : weekNumber);
   };
 
   // Function to temporarily expand all weeks, generate the PDF, then restore the original state
   const generatePDF = () => {
-    if (!isDataLoaded) {
+    if (!isDataLoaded || !isFinalReportAvailable()) {
       return;
     }
     const originalState = expandedWeek;
@@ -221,8 +193,31 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
 
   const isDataLoaded = !queryLoading && !assessmentLoading; // Check if both the query data and assessment data have loaded
 
+  const renderWeekLockNote = (weekNumber) =>
+    !isWeekFeedbackAvailable(weekNumber) && (
+      <p className="feedback-week-locked-note">(Submit assessment to unlock)</p>
+    );
+
+  const getWeekToggleIcon = (weekNumber) =>
+    isWeekFeedbackAvailable(weekNumber)
+      ? expandedWeek === weekNumber || expandedWeek === "all"
+        ? "simple-line-icons:arrow-up"
+        : "simple-line-icons:arrow-down"
+      : "mdi:lock";
+
+  const isFinalLocked = !isFinalReportAvailable();
+  const weekTopics = [
+    "Introduction to Self-Awareness",
+    "Strengths and Weaknesses",
+    "Mindset",
+    "Values",
+    "Emotions and Emotional Intelligence",
+  ];
+  const activeFeedbackWeek =
+    expandedWeek === "all" || expandedWeek === 6 ? 5 : Number(expandedWeek) || 1;
+
   return (
-    <>
+    <div className="self-awareness-feedback-shell">
       {/* Loader Overlay */}
       {(pdfLoading) && ( // SHOW LOADER WHEN PDF IS LOADING
         <div className="loader-overlay">
@@ -230,245 +225,301 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
         </div>
       )}
 
-      <div ref={contentRef} className="feedback-container ">
+      <nav className="navbar">
+        <div className="container">
+          <button
+            disabled={isAdmin}
+            onClick={() => (isSchool ? navigate("/school-dashboard") : navigate("/dashboard"))}
+            className="navbar-logo"
+            style={{ border: "none", background: "#FFF" }}
+          >
+            <img src={logo} alt="" />
+          </button>
+          <div className="navbar-logo" style={{ cursor: "pointer" }}>
+            Logout
+          </div>
+        </div>
+      </nav>
+
+      <div className="self-awareness-feedback-main">
+        <aside className="self-awareness-feedback-aside d-none d-lg-block">
+          <button
+            disabled={isAdmin}
+            onClick={() => (isSchool ? navigate(-1) : navigate("/dashboard/my-courses"))}
+            className="back"
+            style={{ cursor: "pointer", border: "none", background: "#f8f5f5" }}
+          >
+            <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
+            {isSchool ? "Go back" : "Back to My Courses"}
+          </button>
+
+          <div className="self-awareness-feedback-title">
+            <h2>Discovering Me:</h2>
+            <h2 className="course-name">Self Awareness</h2>
+          </div>
+
+          <ul className="self-awareness-feedback-list">
+            {weekTopics.map((topic, index) => {
+              const weekNumber = index + 1;
+              const isAvailable = isWeekFeedbackAvailable(weekNumber);
+
+              return (
+                <li
+                  key={topic}
+                  className={`${weekNumber <= activeFeedbackWeek ? "active-week" : ""} ${!isAvailable ? "locked-week" : ""}`}
+                >
+                  <div className="icon">
+                    <Icon
+                      icon={isAvailable ? "icon-park-outline:check-one" : "mdi:lock"}
+                      className="course-list-icon"
+                    />
+                  </div>
+                  <span>Week {weekNumber}</span>
+                  <span>{topic}</span>
+                </li>
+              );
+            })}
+          </ul>
+        </aside>
+
+        <section className="self-awareness-feedback-content position-relative mb-5">
+          <button
+            disabled={isAdmin}
+            onClick={() => (isSchool ? navigate(-1) : navigate("/dashboard/my-courses"))}
+            className="back text-black mb-5 p-3 d-lg-none"
+            style={{ cursor: "pointer", border: "none", background: "transparent" }}
+          >
+            <Icon icon="fa6-solid:arrow-left-long" className="me-2" />
+            {isSchool ? "Go back" : "Back to My Courses"}
+          </button>
+
+      <div ref={contentRef} className="feedback-container accordion">
         <h2 className="accordion-header p-4 fs-1 bg-blue text-center text-white">
           Feedback for Self-Awareness
         </h2>
         {/* Week 1 */}
-        <div className="week-title-container">
+        <div className={`week-title-container accordion-item ${!isWeekFeedbackAvailable(1) ? "feedback-week-locked" : ""}`}>
           <div className="week-title">
             <div className="week-left">
-              <h2 onClick={() => toggleWeek(1)} style={{ fontSize: "24px" }}>
+              <h2
+                onClick={() => toggleWeek(1)}
+                style={{
+                  fontSize: "24px",
+                  cursor: isWeekFeedbackAvailable(1) ? "pointer" : "not-allowed",
+                }}
+              >
                 Week 1:{" "}
                 <span style={{ fontSize: "14px" }}>
                   Introduction to Self-Awareness
                 </span>
               </h2>
-              {isAdmin && isDataLoaded && (expandedWeek === 1 || expandedWeek === "all") && data?.[0]?.activity && (
-                <button
-                  className="ai-generate-cta"
-                  disabled={isAIGenerating}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleOpenAIModal(1);
-                  }}
-                >
-                  <Icon icon={isAIGenerating && selectedAIWeek === 1 ? "eos-icons:loading" : "solar:magic-stick-3-bold-duotone"} className="icon" />
-                  {isAIGenerating && selectedAIWeek === 1 ? "Generating..." : "Generate with AI"}
-                </button>
-              )}
+              {renderWeekLockNote(1)}
             </div>
             <Icon
-              icon={
-                expandedWeek === 1 || expandedWeek === "all"
-                  ? "simple-line-icons:arrow-up"
-                  : "simple-line-icons:arrow-down"
-              }
+              icon={getWeekToggleIcon(1)}
+              className={!isWeekFeedbackAvailable(1) ? "feedback-week-lock-icon" : ""}
               onClick={() => toggleWeek(1)}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: isWeekFeedbackAvailable(1) ? "pointer" : "not-allowed" }}
             />
           </div>
-          {(expandedWeek === 1 || expandedWeek === "all") && <Week1
-            enrollmentId={enrollmentId}
-            isSchool={isSchool}
-            studentId={studentId}
-          />}
+          {isWeekFeedbackAvailable(1) && (expandedWeek === 1 || expandedWeek === "all") && (
+            <div className="accordion-content">
+              <Week1
+                enrollmentId={enrollmentId}
+                isSchool={isSchool}
+                studentId={studentId}
+              />
+            </div>
+          )}
         </div>
 
         {/* Week 2 */}
-        <div className="week-title-container">
+        <div className={`week-title-container accordion-item ${!isWeekFeedbackAvailable(2) ? "feedback-week-locked" : ""}`}>
           <div className="week-title">
             <div className="week-left">
-              <h2 onClick={() => toggleWeek(2)} style={{ fontSize: "24px" }}>
+              <h2
+                onClick={() => toggleWeek(2)}
+                style={{
+                  fontSize: "24px",
+                  cursor: isWeekFeedbackAvailable(2) ? "pointer" : "not-allowed",
+                }}
+              >
                 Week 2:{" "}
                 <span style={{ fontSize: "14px" }}>
-                  Identifying Strengths and Weaknesses
+                  Strengths and Weaknesses
                 </span>
               </h2>
-              {isAdmin && isDataLoaded && (expandedWeek === 2 || expandedWeek === "all") && data?.[1]?.activity && (
-                <button
-                  className="ai-generate-cta"
-                  disabled={isAIGenerating}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleOpenAIModal(2);
-                  }}
-                >
-                  <Icon icon={isAIGenerating && selectedAIWeek === 2 ? "eos-icons:loading" : "solar:magic-stick-3-bold-duotone"} className="icon" />
-                  {isAIGenerating && selectedAIWeek === 2 ? "Generating..." : "Generate with AI"}
-                </button>
-              )}
+              {renderWeekLockNote(2)}
             </div>
             <Icon
-              icon={
-                expandedWeek === 2 || expandedWeek === "all"
-                  ? "simple-line-icons:arrow-up"
-                  : "simple-line-icons:arrow-down"
-              }
+              icon={getWeekToggleIcon(2)}
+              className={!isWeekFeedbackAvailable(2) ? "feedback-week-lock-icon" : ""}
               onClick={() => toggleWeek(2)}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: isWeekFeedbackAvailable(2) ? "pointer" : "not-allowed" }}
             />
           </div>
-          {(expandedWeek === 2 || expandedWeek === "all") && <Week2
-            enrollmentId={enrollmentId}
-            isSchool={isSchool}
-            studentId={studentId}
-          />}
+          {isWeekFeedbackAvailable(2) && (expandedWeek === 2 || expandedWeek === "all") && (
+            <div className="accordion-content">
+              <Week2
+                enrollmentId={enrollmentId}
+                isSchool={isSchool}
+                studentId={studentId}
+              />
+            </div>
+          )}
         </div>
 
         {/* Week 3 */}
-        <div className="week-title-container">
+        <div className={`week-title-container accordion-item ${!isWeekFeedbackAvailable(3) ? "feedback-week-locked" : ""}`}>
           <div className="week-title">
             <div className="week-left">
-              <h2 onClick={() => toggleWeek(3)} style={{ fontSize: "24px" }}>
+              <h2
+                onClick={() => toggleWeek(3)}
+                style={{
+                  fontSize: "24px",
+                  cursor: isWeekFeedbackAvailable(3) ? "pointer" : "not-allowed",
+                }}
+              >
                 Week 3:{" "}
-                <span style={{ fontSize: "14px" }}>Understanding Mindset</span>
+                <span style={{ fontSize: "14px" }}>Mindset</span>
               </h2>
-              {isAdmin && isDataLoaded && (expandedWeek === 3 || expandedWeek === "all") && data?.[2]?.activity && (
-                <button
-                  className="ai-generate-cta"
-                  disabled={isAIGenerating}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleOpenAIModal(3);
-                  }}
-                >
-                  <Icon icon={isAIGenerating && selectedAIWeek === 3 ? "eos-icons:loading" : "solar:magic-stick-3-bold-duotone"} className="icon" />
-                  {isAIGenerating && selectedAIWeek === 3 ? "Generating..." : "Generate with AI"}
-                </button>
-              )}
+              {renderWeekLockNote(3)}
             </div>
             <Icon
-              icon={
-                expandedWeek === 3 || expandedWeek === "all"
-                  ? "simple-line-icons:arrow-up"
-                  : "simple-line-icons:arrow-down"
-              }
+              icon={getWeekToggleIcon(3)}
+              className={!isWeekFeedbackAvailable(3) ? "feedback-week-lock-icon" : ""}
               onClick={() => toggleWeek(3)}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: isWeekFeedbackAvailable(3) ? "pointer" : "not-allowed" }}
             />
           </div>
-          {(expandedWeek === 3 || expandedWeek === "all") && <Week3
-            enrollmentId={enrollmentId}
-            isSchool={isSchool}
-            studentId={studentId}
-          />}
+          {isWeekFeedbackAvailable(3) && (expandedWeek === 3 || expandedWeek === "all") && (
+            <div className="accordion-content">
+              <Week3
+                enrollmentId={enrollmentId}
+                isSchool={isSchool}
+                studentId={studentId}
+              />
+            </div>
+          )}
         </div>
 
         {/* Week 4 */}
-        <div className="week-title-container">
+        <div className={`week-title-container accordion-item ${!isWeekFeedbackAvailable(4) ? "feedback-week-locked" : ""}`}>
           <div className="week-title">
             <div className="week-left">
-              <h2 onClick={() => toggleWeek(4)} style={{ fontSize: "24px" }}>
+              <h2
+                onClick={() => toggleWeek(4)}
+                style={{
+                  fontSize: "24px",
+                  cursor: isWeekFeedbackAvailable(4) ? "pointer" : "not-allowed",
+                }}
+              >
                 Week 4:{" "}
-                <span style={{ fontSize: "14px" }}>Identifying Values</span>
+                <span style={{ fontSize: "14px" }}>Values</span>
               </h2>
-              {isAdmin && isDataLoaded && (expandedWeek === 4 || expandedWeek === "all") && data?.[3]?.activity && (
-                <button
-                  className="ai-generate-cta"
-                  disabled={isAIGenerating}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleOpenAIModal(4);
-                  }}
-                >
-                  <Icon icon={isAIGenerating && selectedAIWeek === 4 ? "eos-icons:loading" : "solar:magic-stick-3-bold-duotone"} className="icon" />
-                  {isAIGenerating && selectedAIWeek === 4 ? "Generating..." : "Generate with AI"}
-                </button>
-              )}
+              {renderWeekLockNote(4)}
             </div>
             <Icon
-              icon={
-                expandedWeek === 4 || expandedWeek === "all"
-                  ? "simple-line-icons:arrow-up"
-                  : "simple-line-icons:arrow-down"
-              }
+              icon={getWeekToggleIcon(4)}
+              className={!isWeekFeedbackAvailable(4) ? "feedback-week-lock-icon" : ""}
               onClick={() => toggleWeek(4)}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: isWeekFeedbackAvailable(4) ? "pointer" : "not-allowed" }}
             />
           </div>
-          {(expandedWeek === 4 || expandedWeek === "all") && <Week4
-            enrollmentId={enrollmentId}
-            isSchool={isSchool}
-            studentId={studentId}
-          />}
+          {isWeekFeedbackAvailable(4) && (expandedWeek === 4 || expandedWeek === "all") && (
+            <div className="accordion-content">
+              <Week4
+                enrollmentId={enrollmentId}
+                isSchool={isSchool}
+                studentId={studentId}
+              />
+            </div>
+          )}
         </div>
 
         {/* Week 5 */}
-        <div className="week-title-container">
+        <div className={`week-title-container accordion-item ${!isWeekFeedbackAvailable(5) ? "feedback-week-locked" : ""}`}>
           <div className="week-title">
             <div className="week-left">
-              <h2 onClick={() => toggleWeek(5)} style={{ fontSize: "24px" }}>
+              <h2
+                onClick={() => toggleWeek(5)}
+                style={{
+                  fontSize: "24px",
+                  cursor: isWeekFeedbackAvailable(5) ? "pointer" : "not-allowed",
+                }}
+              >
                 Week 5:{" "}
                 <span style={{ fontSize: "14px" }}>
-                  Emotional Intelligence and Communication Skills
+                  Emotions and Emotional Intelligence
                 </span>
               </h2>
-              {isAdmin && isDataLoaded && (expandedWeek === 5 || expandedWeek === "all") && data?.[4]?.activity && (
-                <button
-                  className="ai-generate-cta"
-                  disabled={isAIGenerating}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleOpenAIModal(5);
-                  }}
-                >
-                  <Icon icon={isAIGenerating && selectedAIWeek === 5 ? "eos-icons:loading" : "solar:magic-stick-3-bold-duotone"} className="icon" />
-                  {isAIGenerating && selectedAIWeek === 5 ? "Generating..." : "Generate with AI"}
-                </button>
-              )}
+              {renderWeekLockNote(5)}
             </div>
             <Icon
-              icon={
-                expandedWeek === 5 || expandedWeek === "all"
-                  ? "simple-line-icons:arrow-up"
-                  : "simple-line-icons:arrow-down"
-              }
+              icon={getWeekToggleIcon(5)}
+              className={!isWeekFeedbackAvailable(5) ? "feedback-week-lock-icon" : ""}
               onClick={() => toggleWeek(5)}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: isWeekFeedbackAvailable(5) ? "pointer" : "not-allowed" }}
             />
           </div>
-          {(expandedWeek === 5 || expandedWeek === "all") && <Week5
-            enrollmentId={enrollmentId}
-            isSchool={isSchool}
-            studentId={studentId}
-          />}
+          {isWeekFeedbackAvailable(5) && (expandedWeek === 5 || expandedWeek === "all") && (
+            <div className="accordion-content">
+              <Week5
+                enrollmentId={enrollmentId}
+                isSchool={isSchool}
+                studentId={studentId}
+              />
+            </div>
+          )}
         </div>
 
         {/* Final Report Section */}
 
         <div
-          className="week-title-container"
+          className={`week-title-container accordion-item bg-blue-feedback ${isFinalLocked ? "feedback-week-locked" : ""}`}
           style={{ backgroundColor: "#5CE1E6" }}
         >
           <div className="week-title">
-            <h2 onClick={() => toggleWeek(6)} style={{ fontSize: "24px" }}>
-              Final Report:{" "}
-              <span style={{ fontSize: "14px" }}>
-                Summary of your journey through Self Awareness
-              </span>
-
-            </h2>
+            <div className="week-left">
+              <h2
+                onClick={() => toggleWeek(6)}
+                style={{
+                  fontSize: "24px",
+                  cursor: isFinalLocked ? "not-allowed" : "pointer",
+                }}
+              >
+                Final Report:{" "}
+                <span style={{ fontSize: "14px" }}>
+                  Summary of your journey through Self Awareness
+                </span>
+              </h2>
+              {isFinalLocked && (
+                <p className="feedback-week-locked-note">
+                  (Complete all 5 weeks to unlock)
+                </p>
+              )}
+            </div>
 
             {/* Disable download if data is still loading */}
             <p
               style={{
                 zIndex: 100,
-                cursor: "pointer",
+                cursor: isFinalLocked || !isDataLoaded ? "not-allowed" : "pointer",
                 fontSize: 16,
-                color: "#007ACC"
+                color: isFinalLocked ? "#7b7f88" : "#007ACC"
               }}
               download="SelfAwarenessSummary.pdf"
-              className={`download-link text-blue${!isDataLoaded ? "disabled" : ""
+              className={`download-link text-blue${!isDataLoaded || isFinalLocked ? "disabled" : ""
                 }`}
-              onClick={isDataLoaded ? generatePDF : null}
+              onClick={isDataLoaded && !isFinalLocked ? generatePDF : null}
             // onClick={(e) => !isDataLoaded && e.preventDefault()}
             >
-              (Download PDF)
+              {isFinalLocked ? "(Complete all 5 weeks to download)" : "(Download PDF)"}
               <Icon
 
-                icon="bi:download"
-                style={{ cursor: isDataLoaded ? "pointer" : "not-allowed" }}
+                icon={isFinalLocked ? "mdi:lock" : "bi:download"}
+                className={isFinalLocked ? "feedback-week-lock-icon" : ""}
+                style={{ cursor: isDataLoaded && !isFinalLocked ? "pointer" : "not-allowed" }}
               />
             </p>
             {/* <Icon
@@ -482,21 +533,20 @@ const SelfAwarenessFeedback = ({ isSchool: isSchoolProp, studentId, enrollmentId
             /> */}
           </div>
         </div>
-        {(expandedWeek === 6 || expandedWeek === "all") && <HurrayComponent
-          enrollmentId={enrollmentId}
-          isSchool={isSchool}
-          studentId={studentId}
-        />}
-
-        <AIConfirmationModal
-          isOpen={isAIModalOpen}
-          onClose={() => setIsAIModalOpen(false)}
-          onConfirm={handleConfirmAIGeneration}
-          weekNumber={selectedAIWeek}
-        />
+        {!isFinalLocked && (expandedWeek === 6 || expandedWeek === "all") && (
+          <div className="accordion-content">
+            <HurrayComponent
+              enrollmentId={enrollmentId}
+              isSchool={isSchool}
+              studentId={studentId}
+            />
+          </div>
+        )}
 
       </div>
-    </>
+        </section>
+      </div>
+    </div>
   );
 };
 

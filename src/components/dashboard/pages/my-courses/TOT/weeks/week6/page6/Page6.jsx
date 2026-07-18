@@ -14,6 +14,10 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 import adaptability from "../../../../../../../../assets/resilience-grit-images/adaptability.png";
 
 function Page4() {
@@ -35,10 +39,21 @@ function Page4() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id,
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setAnswers(
+      Array.isArray(response?.answer)
+        ? response.answer
+        : Array.isArray(draftAnswer)
+          ? draftAnswer
+          : [],
+    );
     return () => {};
   }, [userAnswers]);
 
+  useEffect(() => {
+    if (!userAnswers || !pageData?.id) return;
+    saveActivityDraft(userAnswers, pageData.id, answers);
+  }, [answers, pageData?.id, userAnswers]);
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
     if (answers.length < 3) {

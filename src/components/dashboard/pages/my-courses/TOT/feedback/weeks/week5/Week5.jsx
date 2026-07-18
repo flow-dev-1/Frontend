@@ -67,10 +67,17 @@ function Week5({ enrollmentId, setWeekFiveData }) {
   useEffect(() => {
     if (!data) return;
 
-    setActivityData(data.activity?.activities);
-    setAssessmentData(data.assessment?.assessments);
+    const activities = Array.isArray(data.activity?.activities)
+      ? data.activity.activities
+      : [];
+    setActivityData(activities);
+    setAssessmentData(
+      Array.isArray(data.assessment?.assessments)
+        ? data.assessment.assessments
+        : []
+    );
     setPreAssessmentData(
-      data.activity?.activities.find((p) => p.page == 2).answer
+      activities.find((p) => Number(p.page) === 2)?.answer || []
     );
     setWeekFiveData(true);
 
@@ -81,6 +88,24 @@ function Week5({ enrollmentId, setWeekFiveData }) {
     return activityData?.find((activity) => activity.page === activityId)
       ?.answer;
   }
+
+  const renderAnswerText = (answer) => {
+    if (answer == null) return "";
+    if (typeof answer === "string" || typeof answer === "number")
+      return String(answer);
+    if (Array.isArray(answer)) {
+      return answer
+        .map((item) => renderAnswerText(item))
+        .filter(Boolean)
+        .join(", ");
+    }
+    if (typeof answer === "object") {
+      if ("value" in answer) return renderAnswerText(answer.value);
+      if ("answer" in answer) return renderAnswerText(answer.answer);
+      return "";
+    }
+    return "";
+  };
 
   function getActivityFeedback(activityId, itemId, index) {
     if (!itemId) {
@@ -1029,7 +1054,9 @@ function Week5({ enrollmentId, setWeekFiveData }) {
         >
           Answers:
         </p>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity5.id)}</p>
+        <p className="fs-md-5 flex-grow-1">
+          {renderAnswerText(getActivityAnswer(activity5.id))}
+        </p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity5.id)
             ?.feedback && (

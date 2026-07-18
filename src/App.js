@@ -249,6 +249,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/dashboard/feedback/self-awareness"
+            element={
+              <ProtectedRoute>
+                <SelfAwarenessFeedback />
+              </ProtectedRoute>
+            }
+          />
         </Route>
 
         <Route
@@ -262,10 +270,6 @@ function App() {
           <Route index element={<IndividualOverview />} />
           <Route path="/dashboard/profile" element={<IndividualProfile />} />
           <Route path="/dashboard/support" element={<Support />} />
-          <Route
-            path="/dashboard/feedback/self-awareness"
-            element={<SelfAwarenessFeedback />}
-          />
           <Route
             path="/dashboard/payment-history"
             element={<PayementHistory />}

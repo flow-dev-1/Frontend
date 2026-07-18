@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
 import ProgressionButtons from '../components/ProgressionButtons'
 
 export default function QuestionAboutPeople({ onBack, onNext, formData, activityIndex }) {
@@ -13,6 +12,7 @@ export default function QuestionAboutPeople({ onBack, onNext, formData, activity
 		];
 
 	const [currentIndex, setCurrentIndex] = useState(1);
+	const [errorMessage, setErrorMessage] = useState('');
 	const [answers, setAnswers] = useState([
 		{ q1: '', q2: '', q3: '' },
 		{ q1: '', q2: '', q3: '' },
@@ -37,6 +37,7 @@ export default function QuestionAboutPeople({ onBack, onNext, formData, activity
 	// Handle input change for the text areas
 	const handleInputChange = (e, questionIndex) => {
 		const { name, value } = e.target;
+		setErrorMessage('');
 		setAnswers((prevAnswers) => {
 			const updatedAnswers = [...prevAnswers];
 			updatedAnswers[questionIndex][name] = value;
@@ -53,7 +54,7 @@ export default function QuestionAboutPeople({ onBack, onNext, formData, activity
 	// Handle "Next" button click
 	const handleNextStepClick = () => {
 		if (!isCurrentQuestionAnswered()) {
-			toast.error('Please answer all questions before proceeding.');
+			setErrorMessage('Please answer all questions before proceeding.');
 			return;
 		}
 		if (currentIndex < 3) {
@@ -228,6 +229,7 @@ export default function QuestionAboutPeople({ onBack, onNext, formData, activity
 					))}
 				</ul>
 			</div>
+			{errorMessage && <div className="text-danger">{errorMessage}</div>}
 			<div className="mt-3">
 				<ProgressionButtons
 					onClickPrev={handlePreviousStepClick}

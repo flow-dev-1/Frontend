@@ -122,6 +122,22 @@
   background: #329bd6;
 }
 
+.tot-week6-activity5-card-slot {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: 220px;
+  width: 100%;
+}
+
+.tot-week6-activity5-hidden-placeholder {
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  width: 0;
+}
+
 @media (max-width: 575.98px) {
   .drag-flex-basis {
     grid-template-columns: 1fr 1fr;

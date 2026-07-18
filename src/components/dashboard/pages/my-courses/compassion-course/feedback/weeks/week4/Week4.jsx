@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer.js";
 import Modal from "../../components/Modal.jsx";
 import { useMutation } from "@tanstack/react-query";
+import "../../feedback-layout.css";
 
 function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
   const { pages } = getWeekContentExcludingVideos(4);
@@ -30,7 +31,7 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
 
   const { questions: assessments } = getWeekAssessment(4);
   // toDo: Fetch User assessment and Activity Data
-  const { data, isPending, status, isError } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ["dashboard/compassion-feedback-4", enrollmentId, 4],
     queryFn: () => {
       if (isAdmin) return adminService.getUserCourseData(enrollmentId, 4, code);
@@ -74,7 +75,7 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
     setWeekFourData(true);
 
     return () => { };
-  }, [data]);
+  }, [data, setWeekFourData]);
 
   const handleModalOpen = () => {
     setShowModal(true);
@@ -96,25 +97,28 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
   }
 
   function drag1(type) {
-    if (!activityData || !activityData[1] || !activityData[1].answer) return [];
+    const answer = activityData?.find(
+      (activity) => Number(activity.page) === Number(activity2.id)
+    )?.answer;
+    if (!answer) return [];
 
-    const indices =
-      type === "inner"
-        ? activityData[1].answer.inner
-        : activityData[1].answer.outer;
+    const indices = type === "inner" ? answer.inner : answer.outer;
     return indices?.map((index) => activity2?.options[index]) || [];
   }
 
   function drag2(type) {
-    if (!activityData || !activityData[2] || !activityData[2].answer) return [];
+    const answer = activityData?.find(
+      (activity) => Number(activity.page) === Number(activity3.id)
+    )?.answer;
+    if (!answer) return [];
 
     const indices =
       type === "green"
-        ? activityData[2].answer.green
+        ? answer.green
         : type === "orange"
-          ? activityData[2].answer.orange
+          ? answer.orange
           : type === "red"
-            ? activityData[2].answer.red
+            ? answer.red
             : [];
     return indices?.map((index) => activity3?.images[index]) || [];
   }
@@ -161,7 +165,7 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
   };
 
   return (
-    <>
+    <div className="course-feedback-layout">
       {/* Activity 1 */}
       <p className="bg-yellow py-1 px-2 py-md-3 px-md-5 text-gray d-inline-block rounded-5 fs-md-4">
         Activity 1
@@ -324,7 +328,7 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
               Both
             </h2>
             <div className="py-md-3 py-2">
-              {drag2("orange")?.map((item, idx) => (
+              {drag2("red")?.map((item, idx) => (
                 <p className="fs-md-4">
                   {idx + 1}. {item}
                 </p>
@@ -336,7 +340,7 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
               Outer Circle
             </h2>
             <div className="py-md-3 py-2">
-              {drag2("red")?.map((item, idx) => (
+              {drag2("orange")?.map((item, idx) => (
                 <p className="fs-md-4">
                   {idx + 1}. {item}
                 </p>
@@ -476,7 +480,7 @@ function Week4({ enrollmentId, setWeekFourData, isSchool, studentId }) {
           handleSubmit={submitFeedback}
         />
       </div>
-    </>
+    </div>
   );
 }
 

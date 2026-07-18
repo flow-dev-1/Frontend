@@ -10,6 +10,11 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function WeekTwoPage2() {
   const dispatch = useDispatch();
@@ -24,10 +29,11 @@ function WeekTwoPage2() {
     const response = userAnswers?.activities?.find(
       (item) => item.page === pageData.id
     );
-    const answerCopy = response?.answer ? response.answer : "";
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    const answerCopy = response?.answer || draftAnswer || "";
     setMyAnswer(answerCopy);
     return () => {};
-  }, [userAnswers]);
+  }, [pageData.id, userAnswers]);
 
   const saveUserInput = () => {
     if (!adminDatas.isAdmin && !myAnswer) {
@@ -45,12 +51,15 @@ function WeekTwoPage2() {
         answer: myAnswer,
       })
     );
+    clearActivityDraft(userAnswers, pageData.id);
     return true;
   };
 
   const handleInputChange = (e) => {
     setErrorMessage("");
-    setMyAnswer(e.target.value);
+    const nextAnswer = e.target.value;
+    setMyAnswer(nextAnswer);
+    saveActivityDraft(userAnswers, pageData.id, nextAnswer);
   };
 
   return (
@@ -58,7 +67,7 @@ function WeekTwoPage2() {
       <QuestionBox>
         <div className="d-flex align-center-lg-custom gap-2 flex-column flex-md-row">
           <h2 className="text-blue fs-1">Question: </h2>
-          <h2 className="text-gray fs-1">
+          <h2 className="text-gray fs-1 compassion-definition-question">
             {pageData.question.substring(0, 34)}{" "}
             {pageData.hasImage && (
               <img
@@ -66,7 +75,8 @@ function WeekTwoPage2() {
                 alt="self-compassion"
                 className="question-image"
               />
-            )}
+            )}{" "}
+            ?
           </h2>
         </div>
         <BigTextBox handleChange={handleInputChange} value={myAnswer} />

@@ -14,6 +14,10 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import Frame from "./components/Frame";
 
@@ -67,9 +71,20 @@ function WeekFourPage4() {
       (item) => item.page === pageData.id,
     );
 
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setAnswers(
+      Array.isArray(response?.answer)
+        ? response.answer
+        : Array.isArray(draftAnswer)
+          ? draftAnswer
+          : [],
+    );
   }, [userAnswers]);
 
+  useEffect(() => {
+    if (!userAnswers || !pageData?.id) return;
+    saveActivityDraft(userAnswers, pageData.id, answers);
+  }, [answers, pageData?.id, userAnswers]);
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
     if (currentStep === 1) return true;

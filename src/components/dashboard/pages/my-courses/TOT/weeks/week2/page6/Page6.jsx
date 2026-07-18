@@ -13,6 +13,10 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 
 const InternalStepIndicator = ({ totalSteps, currentStep }) => {
@@ -60,9 +64,20 @@ function WeekTwoPage6() {
       (item) => item.page === pageData.id
     );
 
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
-  }, [userAnswers]);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setAnswers(
+      Array.isArray(response?.answer)
+        ? response.answer
+        : Array.isArray(draftAnswer)
+          ? draftAnswer
+          : [],
+    );
+  }, [userAnswers, pageData.id]);
 
+  useEffect(() => {
+    if (!userAnswers || !pageData?.id) return;
+    saveActivityDraft(userAnswers, pageData.id, answers);
+  }, [answers, pageData?.id, userAnswers]);
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
     if (currentStep === 1) return true;
@@ -157,7 +172,7 @@ function WeekTwoPage6() {
         <div className="text-danger">{errorMessage}</div>
       )}{" "}
       {/* Display error message */}
-      <div className="d-flex justify-content-center align-items-cente gap-2">
+      <div className="d-flex justify-content-center align-items-center gap-2">
         <StepIndicator totalSteps={totalSteps} />
         <InternalStepIndicator
           totalSteps={dragDropImageLength}

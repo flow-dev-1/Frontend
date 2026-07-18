@@ -22,7 +22,7 @@ function Week5({ enrollmentId, setWeekFiveData, isSchool, studentId }) {
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState("");
 
-  const [activity1, activity2, activity3, activity4, activity5] = pages;
+  const [activity1, activity2, activity3, activity4] = pages;
 
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([]);
@@ -32,7 +32,7 @@ function Week5({ enrollmentId, setWeekFiveData, isSchool, studentId }) {
   const { questions: assessments } = getWeekAssessment(5);
 
   // toDo: Fetch User assessment and Activity Data
-  const { data, isPending, status, isError } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ["dashboard/transition2-feedback-5", enrollmentId, 5],
     queryFn: () => {
       if (isAdmin) return adminService.getUserCourseData(enrollmentId, 5, code);
@@ -66,14 +66,12 @@ function Week5({ enrollmentId, setWeekFiveData, isSchool, studentId }) {
   useEffect(() => {
     if (!data) return;
 
-    console.log(data.activity?.activities);
-
     setActivityData(data.activity?.activities);
     setAssessmentData(data.assessment?.assessments);
     setWeekFiveData(true);
 
     return () => { };
-  }, [data]);
+  }, [data, setWeekFiveData]);
 
   function getActivityAnswer(activityId) {
     return activityData?.find((activity) => activity.page === activityId)
@@ -89,7 +87,7 @@ function Week5({ enrollmentId, setWeekFiveData, isSchool, studentId }) {
       )?.feedback;
       const answerObject = answersList?.find(
         (activity) => activity.stepId === itemId
-      ).value;
+      )?.value;
 
       // return answerObject ? answerObject[index] : null;
       return answerObject ? answerObject : null;
@@ -116,6 +114,38 @@ function Week5({ enrollmentId, setWeekFiveData, isSchool, studentId }) {
       color: colors[idx],
     }));
   }
+
+  const renderStepFeedback = (activityId, stepId) => {
+    const feedback = getActivityFeedback(activityId, stepId);
+    if (!isAdmin && !feedback) return null;
+
+    return (
+      <div className="d-flex gap-3 justify-content-end align-items-start">
+        {feedback && (
+          <>
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {feedback}
+            </p>
+          </>
+        )}
+        {isAdmin && (
+          <Icon
+            onClick={() => {
+              setModalData(feedback || "");
+              setActivityFeedbackId({ activityId, itemId: stepId });
+              handleModalOpen();
+            }}
+            style={{ color: feedback ? "#275DAD" : "#D6D6D6" }}
+            width={35}
+            icon={feedback ? "lucide:edit" : "tabler:message-2"}
+          />
+        )}
+      </div>
+    );
+  };
 
   if (isPending) {
     return <div>Loading...</div>;
@@ -365,46 +395,8 @@ function Week5({ enrollmentId, setWeekFiveData, isSchool, studentId }) {
         <p className="fs-md-5 flex-grow-1">
           {getActivityAnswer(activity4.id)?.[0]?.value || ""}
         </p>
-        {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity4.id)
-            ?.feedback && (
-            <Icon
-              onClick={() => {
-                setActivityFeedbackId({ activityId: activity4.id });
-                handleModalOpen();
-              }}
-              style={{ color: "#D6D6D6" }}
-              width={35}
-              icon="tabler:message-2"
-            />
-          )}
       </div>
-      {
-        // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity4.id)
-          ?.feedback && (
-          <div className="d-flex gap-3">
-            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
-              Feedback
-            </p>
-            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity4.id)}
-            </p>
-            {isAdmin && (
-              <Icon
-                onClick={() => {
-                  setModalData(getActivityFeedback(activity4.id));
-                  setActivityFeedbackId({ activityId: activity4.id });
-                  handleModalOpen();
-                }}
-                style={{ color: "#275DAD" }}
-                width={35}
-                icon="lucide:edit"
-              />
-            )}
-          </div>
-        )
-      }
+      {renderStepFeedback(activity4.id, 1)}
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-md-1">Questions:</h2>
         <p className="text-blue fs-md-4">{activity4.steps[1].question}</p>
@@ -430,46 +422,8 @@ function Week5({ enrollmentId, setWeekFiveData, isSchool, studentId }) {
             )
           )}
         </ul>
-        {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity4.id)
-            ?.feedback && (
-            <Icon
-              onClick={() => {
-                setActivityFeedbackId({ activityId: activity4.id });
-                handleModalOpen();
-              }}
-              style={{ color: "#D6D6D6" }}
-              width={35}
-              icon="tabler:message-2"
-            />
-          )}
       </div>
-      {
-        // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity4.id)
-          ?.feedback && (
-          <div className="d-flex gap-3">
-            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
-              Feedback
-            </p>
-            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity4.id)}
-            </p>
-            {isAdmin && (
-              <Icon
-                onClick={() => {
-                  setModalData(getActivityFeedback(activity4.id));
-                  setActivityFeedbackId({ activityId: activity4.id });
-                  handleModalOpen();
-                }}
-                style={{ color: "#275DAD" }}
-                width={35}
-                icon="lucide:edit"
-              />
-            )}
-          </div>
-        )
-      }
+      {renderStepFeedback(activity4.id, 2)}
       <hr />
 
       {/* Assesment 1 */}

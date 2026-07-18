@@ -10,13 +10,13 @@ import emojiEnvy from '../../../../../../assets/selfawareness-images/emocom-imag
 import emojiFear from '../../../../../../assets/selfawareness-images/emocom-images/fear.png';
 import emojiJoy from '../../../../../../assets/selfawareness-images/emocom-images/joy.png';
 import emojiNostalgia from '../../../../../../assets/selfawareness-images/emocom-images/nostalgia.png';
-import { toast } from 'react-toastify';
 
 import ProgressionButtons from '../components/ProgressionButtons';
 
 export default function EmojiEmotionMatch({ onBack, onNext, activityIndex, formData }) {
 	const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
 	const [selectedOptions, setSelectedOptions] = useState({});
+	const [errorMessage, setErrorMessage] = useState('');
 	const dropdownRefs = useRef([]);
 
 	const emojis = [
@@ -68,15 +68,17 @@ export default function EmojiEmotionMatch({ onBack, onNext, activityIndex, formD
 			...prev,
 			[index]: option,
 		}));
+		setErrorMessage('');
 		setOpenDropdownIndex(null); // Close dropdown after selection
 	};
 
 	const handleSubmit = () => {
 		if (Object.keys(selectedOptions).length === emojis.length) {
 			const answerArray = emojis.map((_, i) => selectedOptions[i]);
-			onNext(answerArray); // Trigger the onComplete callback with selected options
+			return onNext(answerArray); // Trigger the onComplete callback with selected options
 		} else {
-			toast.error('Please match all emojis with the correct emotions before proceeding.');
+			setErrorMessage('Please match all emojis with the correct emotions before proceeding.');
+			return false;
 		}
 	};
 
@@ -149,6 +151,7 @@ export default function EmojiEmotionMatch({ onBack, onNext, activityIndex, formD
 					))}
 				</div>
 			</div>
+			{errorMessage && <div className="text-danger">{errorMessage}</div>}
 			<div className="mt-3">
 				<ProgressionButtons
 					variant={'both'}

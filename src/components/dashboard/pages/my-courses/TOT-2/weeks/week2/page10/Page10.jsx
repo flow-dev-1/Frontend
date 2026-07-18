@@ -16,6 +16,10 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function WeekTwoPage10() {
   const dispatch = useDispatch();
@@ -46,9 +50,12 @@ function WeekTwoPage10() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id,
     );
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
     const existingAnswers = Array.isArray(response?.answer)
       ? response.answer
-      : [];
+      : Array.isArray(draftAnswer)
+        ? draftAnswer
+        : [];
     setAnswers(existingAnswers);
 
     // Sync myAnswer for reflection step
@@ -57,6 +64,11 @@ function WeekTwoPage10() {
       setMyAnswer(stepAnswer ? stepAnswer.value : "");
     }
   }, [userAnswers, pageData.id, currentStep, step?.type]);
+
+  useEffect(() => {
+    if (!userAnswers || !pageData?.id) return;
+    saveActivityDraft(userAnswers, pageData.id, answers);
+  }, [answers, pageData?.id, userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;
@@ -159,7 +171,21 @@ function WeekTwoPage10() {
               <BigTextBox
                 handleChange={(e) => {
                   setErrorMessage("");
-                  setMyAnswer(e.target.value);
+                  const value = e.target.value;
+                  setMyAnswer(value);
+                  const updatedAnswers = [...answers];
+                  const existingStepIndex = updatedAnswers.findIndex(
+                    (a) => a.stepId === currentStep,
+                  );
+                  if (existingStepIndex !== -1) {
+                    updatedAnswers[existingStepIndex] = {
+                      ...updatedAnswers[existingStepIndex],
+                      value,
+                    };
+                  } else {
+                    updatedAnswers.push({ stepId: currentStep, value });
+                  }
+                  setAnswers(updatedAnswers);
                 }}
                 value={myAnswer}
               />

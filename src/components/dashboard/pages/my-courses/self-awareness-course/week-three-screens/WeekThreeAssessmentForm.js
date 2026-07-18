@@ -8,8 +8,9 @@ import { userAnswer, updateData } from '../../../../../../redux/reducers/userAns
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { RotatingLines } from 'react-loader-spinner';
+import { writeSelfAwarenessStorage } from '../utils/storage';
 
-export default function WeekThreeAssessmentForm({ onNext, onBack, course, activityData, isCompleted }) {
+export default function WeekThreeAssessmentForm({ onNext, onBack, course, activityData, savedAssessment, isCompleted }) {
   const dispatch = useDispatch();
   const userAnswers = useSelector(userAnswer);
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -17,6 +18,7 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
   const [assessment, setAssessment] = useState([]);
   const [disableButton, setDisableButton] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const questionsArray = [
     {
@@ -120,7 +122,15 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
   ];
 
   useEffect(() => {
-    // Load saved answers from localStorage on component mount
+    const backendAnswers =
+      savedAssessment?.assessments?.[0]?.answers ||
+      savedAssessment?.assessments?.answers;
+
+    if (backendAnswers) {
+      setSelectedAnswers(backendAnswers);
+      return;
+    }
+
     const savedAnswers = localStorage.getItem('weekThreeAssessmentData');
 
     if (savedAnswers) {
@@ -131,12 +141,12 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
         setSelectedAnswers(JSON.parse(savedAnswers));
       }
     }
-  }, []);
+  }, [savedAssessment]);
 
   useEffect(() => {
-    // Save answers to localStorage whenever selectedAnswers changes
-    localStorage.setItem('weekThreeAssessmentData', JSON.stringify(selectedAnswers));
-  }, [selectedAnswers]);
+    if (isCompleted || savedAssessment) return;
+    writeSelfAwarenessStorage('weekThreeAssessmentData', selectedAnswers);
+  }, [isCompleted, savedAssessment, selectedAnswers]);
   const queryClient = useQueryClient();
   // Mutation for saving user data
   const mutation = useMutation({
@@ -164,7 +174,7 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
     onError: (error) => {
       console.log(error, 'errorrrr');
       toast.dismiss();
-      toast.error(error?.message || error?.error || 'Error saving answers'); // Show error toast
+      setErrorMessage(error?.message || error?.error || 'Error saving answers');
     },
   });
 
@@ -173,7 +183,7 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
     const isAnswered = selectedAnswers[currentIndex - 1] !== undefined;
 
     if (!isCompleted && !isAnswered) {
-      toast.error('Please select an answer before proceeding.');
+      setErrorMessage('Please select an answer before proceeding.');
       return;
     }
 
@@ -203,9 +213,10 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
 
   const handleQuestionCheck = (questionIndex, optionIndex) => {
     if (isCompleted || selectedAnswers[questionIndex] !== undefined) {
-      toast.error('You cannot change your answer once it is saved.');
+      setErrorMessage('You cannot change your answer once it is saved.');
       return;
     }
+    setErrorMessage('');
     setSelectedAnswers((prevState) => ({
       ...prevState,
       [questionIndex]: optionIndex,
@@ -216,14 +227,14 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
     if (disableButton || isCompleted) return
 
     if (!activityData?.activities || activityData?.activities?.length !== 7) {
-      toast.error("Please complete all activities before submitting the assessment.")
+      setErrorMessage("Please complete all activities before submitting the assessment.")
       return
     }
 
     // Final check for all 10 assessment answers
     const answersArray = Object.values(selectedAnswers);
     if (answersArray.length !== 10 || answersArray.some(ans => ans === undefined)) {
-      toast.error('Please ensure all 10 assessment questions are answered.');
+      setErrorMessage('Please ensure all 10 assessment questions are answered.');
       return;
     }
     try {
@@ -260,7 +271,7 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
     } catch (error) {
       console.log(error)
       setIsLoading(false)
-      toast.error('Something went wrong. Please contact flow admin for support!');
+      setErrorMessage('Something went wrong. Please contact flow admin for support!');
     }
   }
 
@@ -322,6 +333,8 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
           ))}
         </ul>
       </div>
+
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}
 
       <div className="progression-btns">
         <button

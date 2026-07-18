@@ -5,6 +5,30 @@
 	flex-direction: column;
 }
 
+.self-awareness-course-loading {
+	width: 100%;
+	min-height: calc(100vh - 70px);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 14px;
+	color: #5b616a;
+	font-family: "ABeeZee", sans-serif;
+	text-align: center;
+	padding: 32px;
+}
+
+.self-awareness-course-loading p {
+	margin: 0;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.self-awareness-course-loading-inline {
+	min-height: calc(100vh - 170px);
+}
+
 .self-awareness .back-to-course-list {
 	cursor: pointer;
 	color: #5b616a;
@@ -99,6 +123,102 @@
 	color: #1f60c1;
 }
 
+.self-awareness .self-awareness-accordion {
+	max-height: calc(100vh - 280px);
+	overflow-y: auto;
+	padding-right: 4px;
+}
+
+.self-awareness .self-awareness-accordion::-webkit-scrollbar {
+	width: 6px;
+}
+
+.self-awareness .self-awareness-accordion::-webkit-scrollbar-thumb {
+	background-color: rgba(39, 93, 173, 0.35);
+	border-radius: 999px;
+}
+
+.self-awareness .self-awareness-week-group {
+	background-color: rgba(255, 255, 255, 0.03);
+}
+
+.self-awareness .self-awareness-week-header {
+	justify-content: space-between;
+}
+
+.self-awareness .self-awareness-week-header > div:nth-child(2) {
+	flex: 1;
+	min-width: 0;
+}
+
+.self-awareness .self-awareness-week-header p {
+	margin: 0;
+	line-height: 1.15;
+}
+
+.self-awareness .self-awareness-week-header p:first-child {
+	font-weight: 700;
+}
+
+.self-awareness .self-awareness-week-header p:last-child {
+	font-weight: 500;
+	white-space: normal;
+}
+
+.self-awareness .self-awareness-week-chevron {
+	flex: 0 0 auto;
+	font-size: 18px;
+	transition: transform 0.2s ease;
+}
+
+.self-awareness .self-awareness-week-chevron.open {
+	transform: rotate(180deg);
+}
+
+.self-awareness .self-awareness-week-items {
+	background-color: #f5f5f5;
+	border-top: 1px solid rgba(0, 0, 0, 0.06);
+	overflow: hidden;
+}
+
+.self-awareness .self-awareness-week-item {
+	width: 100%;
+	min-height: 40px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px 12px 10px 32px;
+	border: 0;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+	background: #f7f7f7;
+	color: #5b616a;
+	font-size: 12px;
+	text-align: left;
+	cursor: pointer;
+	transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.self-awareness .self-awareness-week-item:hover:not(:disabled),
+.self-awareness .self-awareness-week-item.active {
+	background-color: #ecedf0;
+	color: #1f60c1;
+}
+
+.self-awareness .self-awareness-week-item:disabled {
+	color: #aeb4bf;
+	cursor: not-allowed;
+}
+
+.self-awareness .self-awareness-week-item-icon {
+	flex: 0 0 auto;
+	font-size: 18px;
+	color: #d3d8df;
+}
+
+.self-awareness .self-awareness-week-item:not(:disabled) .self-awareness-week-item-icon {
+	color: #50aa50;
+}
+
 .self-awareness .video-div {
 	background-color: transparent;
 	padding: 0;
@@ -153,6 +273,37 @@
 .self-awareness .btn.progress-btn.btn-dark {
 	background-color: #329bd6;
 	color: #ffffff;
+}
+
+.self-awareness .progression-btns .btn:disabled {
+	opacity: 0.65;
+	cursor: not-allowed;
+}
+
+.review-popup.modal-content {
+	width: min(620px, calc(100vw - 32px));
+	max-height: calc(100vh - 48px);
+	overflow-y: auto;
+	padding: 30px 24px 24px;
+	border-radius: 8px;
+	box-sizing: border-box;
+}
+
+.review-popup .review-buttons {
+	width: min(350px, 100%);
+	margin: 1rem auto;
+	justify-content: center;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.review-popup .review-buttons .btn {
+	min-width: 88px;
+}
+
+.review-popup .review-buttons img {
+	max-width: 64px;
+	height: auto;
 }
 
 .self-awareness .pause-play-btn {
@@ -390,6 +541,25 @@
 	/* margin: 1rem auto; */
 }
 
+.self-awareness .self-awareness-dnd-refresh {
+	color: #6b7280;
+	font-size: 20px;
+	line-height: 1;
+	width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.self-awareness .self-awareness-dnd-refresh svg {
+	width: 18px;
+	height: 18px;
+}
+
+.self-awareness .self-awareness-dnd-refresh span {
+	font-size: 20px;
+	font-weight: 400;
+}
+
 .self-awareness .slider-indicator ul li {
 	width: 10px;
 	height: 8px;
@@ -414,13 +584,8 @@
 	/* Smooth transition */
 }
 
-.card-item.dragging .slider-img-card {
-	transform: scale(0.3);
-	/* Adjust size while dragging */
-}
-
-.card-item.dragging {
-	transition: transform 0.2s ease-out !important;
+.card-item {
+	transform-origin: center center;
 }
 /* .card-item.dragging  {
   transition: transform 0.37s cubic-bezier(0.2, 1, 0.1, 1), opacity 0.37s cubic-bezier(0.2, 1, 0.1, 1);

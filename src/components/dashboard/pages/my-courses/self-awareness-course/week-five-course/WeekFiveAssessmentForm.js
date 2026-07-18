@@ -9,6 +9,7 @@ import { userAnswer, updateData } from '../../../../../../redux/reducers/userAns
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { RotatingLines } from 'react-loader-spinner';
+import { writeSelfAwarenessStorage } from '../utils/storage';
 
 export default function NewAssessmentForm({
 	onNext,
@@ -16,12 +17,14 @@ export default function NewAssessmentForm({
 	course,
 	handleActivitySubmit,
 	activityData,
+	savedAssessment,
 	isCompleted,
 }) {
 	const dispatch = useDispatch();
 	const userAnswers = useSelector(userAnswer);
 	const [disableButton, setDisableButton] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [errorMessage, setErrorMessage] = useState('');
 
 	const questionsArray = [
 		{
@@ -132,7 +135,14 @@ export default function NewAssessmentForm({
 	});
 
 	useEffect(() => {
-		// Load saved answers from localStorage on component mount
+		const backendAssessment =
+			savedAssessment?.assessments?.[0] || savedAssessment?.assessments;
+
+		if (backendAssessment?.answers) {
+			setAnswers(backendAssessment.answers);
+			return;
+		}
+
 		const savedAnswers = localStorage.getItem('weekFiveAssessmentData');
 		if (savedAnswers) {
 			const parsedAnswers = JSON.parse(savedAnswers);
@@ -141,25 +151,32 @@ export default function NewAssessmentForm({
 				setAnswers(assessmentData?.answers || []);
 			}
 		}
-	}, []);
+	}, [savedAssessment]);
 
 	const [isSubmitted, setIsSubmitted] = useState(() => {
 		const storedData = localStorage.getItem('weekFiveAssessmentData');
 		return storedData ? JSON.parse(storedData).submitted || false : false;
 	});
 
+	useEffect(() => {
+		if (savedAssessment) {
+			setIsSubmitted(true);
+		}
+	}, [savedAssessment]);
+
 	const handleQuestionCheck = (optionIndex) => {
 		if (isCompleted || isSubmitted) {
-			toast.error('You cannot change your answers after submission.');
+			setErrorMessage('You cannot change your answers after submission.');
 			return;
 		}
 
 		// Check if the answer has already been persisted
 		if (answers[currentIndex] !== undefined && answers[currentIndex] !== optionIndex) {
-			toast.error('You cannot change this answer.');
+			setErrorMessage('You cannot change this answer.');
 			return;
 		}
 
+		setErrorMessage('');
 		setAnswers((prevState) => {
 			const newAnswers = [...prevState];
 			newAnswers[currentIndex] = optionIndex;
@@ -172,7 +189,7 @@ export default function NewAssessmentForm({
 		const isAnswered = answers[currentIndex] !== undefined;
 
 		if (!isCompleted && !isAnswered) {
-			toast.error('Please select an answer before proceeding.');
+			setErrorMessage('Please select an answer before proceeding.');
 			return;
 		}
 
@@ -213,7 +230,7 @@ export default function NewAssessmentForm({
 		onError: (error) => {
 			console.log(error, 'errorrrr');
 			toast.dismiss();
-			toast.error(error?.message || error?.error || 'Error saving answers'); // Show error toast
+			setErrorMessage(error?.message || error?.error || 'Error saving answers');
 		},
 	});
 
@@ -223,13 +240,13 @@ export default function NewAssessmentForm({
 
 		try {
 			if (!activityData?.activities || activityData?.activities?.length !== 9) {
-				toast.error("Please complete all activities before submitting the assessment.");
+				setErrorMessage("Please complete all activities before submitting the assessment.");
 				return
 			}
 
 			// Final check for all 10 assessment answers
 			if (answers.length !== 10 || answers.some(ans => ans === undefined)) {
-				toast.error('Please ensure all 10 assessment questions are answered.');
+				setErrorMessage('Please ensure all 10 assessment questions are answered.');
 				return;
 			}
 
@@ -257,20 +274,21 @@ export default function NewAssessmentForm({
 		} catch (error) {
 			console.log(error)
 			setIsLoading(false)
-			toast.error('Something went wrong. Please contact flow admin for support!');
+			setErrorMessage('Something went wrong. Please contact flow admin for support!');
 		}
 
 
 	}
 
 	useEffect(() => {
+		if (isCompleted || savedAssessment) return;
 		const assessmentData = {
 			week: 5,
 			assessment: { answers },
 			submitted: isSubmitted,
 		}
-		localStorage.setItem('weekFiveAssessmentData', JSON.stringify(assessmentData))
-	}, [answers, isSubmitted])
+		writeSelfAwarenessStorage('weekFiveAssessmentData', assessmentData)
+	}, [answers, isCompleted, isSubmitted, savedAssessment])
 
 	const renderQuestion = () => {
 		const question = questionsArray[currentIndex]
@@ -341,6 +359,8 @@ export default function NewAssessmentForm({
 					))}
 				</ul>
 			</div>
+
+			{errorMessage && <div className='text-danger'>{errorMessage}</div>}
 
 			<div className='d-flex align-items-center justify-content-around mx-auto mt-5'>
 				<button

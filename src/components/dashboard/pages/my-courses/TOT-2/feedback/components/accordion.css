@@ -16,6 +16,31 @@
   border: 1px solid #ecedf0;
 }
 
+.feedback-locked {
+  opacity: 0.58;
+}
+
+.feedback-locked .text-gray,
+.feedback-locked .text-muted {
+  color: #9ca3af !important;
+}
+
+.feedback-locked .accordion-content {
+  display: none;
+}
+
+.compassion-list li.locked-week {
+  opacity: 0.58;
+}
+
+.compassion-list li.locked-week .icon {
+  border-color: #cbd5e1;
+}
+
+.compassion-list li.locked-week .course-list-icon {
+  color: #94a3b8;
+}
+
 .bg-yellow {
   background: #ffeebb;
 }

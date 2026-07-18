@@ -20,25 +20,41 @@ import {
 
 import ProgressionButtons from '../components/ProgressionButtons.jsx';
 import VideoComponent from '../components/VideoComponent.jsx';
+import {
+  getLegacySelfAwarenessActivityDataKey,
+  getLegacySelfAwarenessActivityProgressKey,
+  getSelfAwarenessActivityDataKey,
+  getSelfAwarenessActivityProgressKey,
+  mergeSelfAwarenessActivityDrafts,
+  readSelfAwarenessStorage,
+  writeSelfAwarenessStorage,
+} from '../utils/storage';
 
 export default function WeekFiveLearning({
   course,
   courseId,
   onClose,
   currentWeekIndex,
+  requestedActivity,
+  onActivityChange,
 }) {
   const dispatch = useDispatch();
   const [showPopup, setShowPopup] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const [formData, setFormData] = useState(() => {
-    const savedData = localStorage.getItem(`week-5-activityData`);
-    return savedData ? JSON.parse(savedData) : { week: 5, activities: [] };
+    return readSelfAwarenessStorage(
+      getSelfAwarenessActivityDataKey(courseId, 5),
+      getLegacySelfAwarenessActivityDataKey(5),
+      { week: 5, activities: [] }
+    );
   });
 
   const [currentActivity, setCurrentActivity] = useState(() => {
-    const savedState = localStorage.getItem(
-      `week-${currentWeekIndex}-currentActivity`
+    return readSelfAwarenessStorage(
+      getSelfAwarenessActivityProgressKey(courseId, currentWeekIndex),
+      getLegacySelfAwarenessActivityProgressKey(currentWeekIndex),
+      1
     )
-    return savedState ? JSON.parse(savedState) : 1
   })
   const week = 5;
 
@@ -63,14 +79,13 @@ export default function WeekFiveLearning({
         setCurrentActivity(courseData.activity.lastActivityIndex);
       }
 
-      // Robust Merge: Only use remote activities if they are more comprehensive or if local is empty
       setFormData((prevData) => {
-        const localActivities = prevData?.activities || [];
-        if (localActivities.length > 0 && activities.length <= localActivities.length) {
-          // Keep local data as it might be fresher
-          return prevData;
-        }
-        return { ...prevData, activities: activities };
+        const draftActivities = prevData?.activities || [];
+        return {
+          ...prevData,
+          week,
+          activities: mergeSelfAwarenessActivityDrafts(activities, draftActivities),
+        };
       });
 
       dispatch(
@@ -95,9 +110,9 @@ export default function WeekFiveLearning({
         personalityColor: courseData.assessment.personalityColor || 'Yellow',
       };
 
-      localStorage.setItem(
+      writeSelfAwarenessStorage(
         'weekFiveAssessmentData',
-        JSON.stringify({ formattedData: assessment_data })
+        { formattedData: assessment_data }
       );
     }
   }, [courseData]);
@@ -107,19 +122,44 @@ export default function WeekFiveLearning({
   const navigate = useNavigate();
 
   useEffect(() => {
-    localStorage.setItem(
-      `week-${currentWeekIndex}-currentActivity`,
-      JSON.stringify(currentActivity)
+    writeSelfAwarenessStorage(
+      getSelfAwarenessActivityProgressKey(courseId, currentWeekIndex),
+      currentActivity
     );
-  }, [currentActivity, currentWeekIndex]);
+    onActivityChange?.(currentWeekIndex, currentActivity);
+  }, [courseId, currentActivity, currentWeekIndex, onActivityChange]);
 
   useEffect(() => {
-    localStorage.setItem(`week-5-activityData`, JSON.stringify(formData));
-  }, [formData]);
+    if (requestedActivity?.week !== currentWeekIndex) return;
+    if (!requestedActivity?.activity) return;
+    setCurrentActivity(requestedActivity.activity);
+  }, [currentWeekIndex, requestedActivity]);
+
+  useEffect(() => {
+    writeSelfAwarenessStorage(
+      getSelfAwarenessActivityDataKey(courseId, 5),
+      formData
+    );
+  }, [courseId, formData]);
 
   const isCompleted = !!courseData?.assessment;
 
   const queryClient = useQueryClient();
+
+  const onLocalUpdate = useCallback((incomingData) => {
+    setFormData((prevData) => {
+      const currentActivities = prevData?.activities || courseData?.activity?.activities || [];
+      const updatedActivities = currentActivities.map((item) =>
+        item.activity === currentActivity ? { ...item, ...incomingData } : item
+      );
+
+      if (!updatedActivities.find((item) => item.activity === currentActivity)) {
+        updatedActivities.push({ activity: currentActivity, ...incomingData });
+      }
+
+      return { ...prevData, activities: updatedActivities };
+    });
+  }, [currentActivity, courseData?.activity?.activities]);
 
   const handleNext = useCallback(async (incomingData = {}) => {
     const currentActivities = formData?.activities || courseData?.activity?.activities || [];
@@ -134,26 +174,35 @@ export default function WeekFiveLearning({
     setFormData((prevData) => ({ ...prevData, activities: updatedActivities }));
 
     const nextActivity = currentActivity + 1;
-    setCurrentActivity(nextActivity);
 
     if (!isCompleted && !isLoading) {
-      // Fire and Forget: Save progress to background
       const payload = {
         week: week,
         activities: updatedActivities,
         lastActivityIndex: nextActivity // Save where they are going
       };
 
-      userService.postMyActivity(courseId, payload)
-        .then(() => {
-          // Invalidate enrollment query to reflect any backend updates
-          queryClient.invalidateQueries(['enrollment', courseId]);
-        })
-        .catch(err => {
-          console.error("Failed to auto-save activity:", err);
-        });
+      try {
+        const result = await userService.postMyActivity(courseId, payload);
+        queryClient.setQueryData(
+          ['self-awareness-course-5', courseId, week],
+          (previousData) => ({
+            ...(previousData || {}),
+            activity: result?.newActivity || {
+              ...(previousData?.activity || {}),
+              ...payload,
+            },
+          })
+        );
+        await queryClient.invalidateQueries({ queryKey: ['enrollment', courseId] });
+      } catch (err) {
+        console.error("Failed to auto-save activity:", err);
+        return false;
+      }
     }
-  }, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted, isLoading]);
+    setCurrentActivity(nextActivity);
+    return true;
+  }, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted, isLoading, queryClient]);
 
 
   const handlePrevious = () => {
@@ -183,15 +232,17 @@ export default function WeekFiveLearning({
       const response = await userService.postMyActivity(courseId, stringifiedFormData);
 
       if (response.success) {
+        setErrorMessage('')
         toast.success(response?.message);
         console.log("Submission successful:", response);
         return { success: true, message: "Submission successful" };
       } else {
-        toast.error("Activity submission failed. Please contact flow admin for support!");
+        setErrorMessage("Activity submission failed. Please contact flow admin for support!");
         console.error("Submission failed with response:", response);
         return { success: false, message: "Submission failed" };
       }
     } catch (error) {
+      setErrorMessage("Activity submission failed. Please contact flow admin for support!");
       console.error('Submission failed:', error)
       return { success: false, message: "Submission failed" };
     }
@@ -222,6 +273,7 @@ export default function WeekFiveLearning({
             formData={formData}
             altText='?'
             onBack={handlePrevious}
+            onUpdate={onLocalUpdate}
             onNext={(answers) => handleNext({ answers })}
           />
         )
@@ -332,7 +384,8 @@ export default function WeekFiveLearning({
             onNext={handleNext}
             course={course}
             handleActivitySubmit={handleSubmit}
-            activityData={formData}
+            activityData={courseData?.activity || formData}
+            savedAssessment={courseData?.assessment}
             isCompleted={isCompleted}
           />
         )
@@ -350,6 +403,7 @@ export default function WeekFiveLearning({
   return (
     <div className='week-learning'>
       <ToastContainer />
+      {errorMessage && <div className="text-danger">{errorMessage}</div>}
       <div className='content-container'>{renderActivityContent()}</div>
     </div>
   )

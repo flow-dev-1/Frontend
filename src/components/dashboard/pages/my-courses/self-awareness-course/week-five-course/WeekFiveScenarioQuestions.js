@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Icon } from '@iconify/react';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 import ProgressionButtons from '../components/ProgressionButtons';
 
@@ -10,6 +8,7 @@ export default function WeekFiveScenarioQuestions({ onNext, onBack, formData, ac
 	const [answers, setAnswers] = useState({ IWill: [], IWillNot: [] });
 	const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
 	const [openNoDropdownIndex, setOpenNoDropdownIndex] = useState(null);
+	const [errorMessage, setErrorMessage] = useState('');
 	const dropdownRefs = useRef([]);
 	const noDropdownRefs = useRef([]);
 
@@ -80,11 +79,13 @@ export default function WeekFiveScenarioQuestions({ onNext, onBack, formData, ac
 		if (answers.IWill[currentIndex - 1] && answers.IWillNot[currentIndex - 1]) {
 			if (currentIndex < questionsArray.length) {
 				setCurrentIndex(currentIndex + 1);
+				return true;
 			} else {
-				onNext(answers); // Pass the answers to onSubmit
+				return onNext(answers); // Pass the answers to onSubmit
 			}
 		} else {
-			toast.error('Please select both "I will" and "I will not" options.');
+			setErrorMessage('Please select both "I will" and "I will not" options.');
+			return false;
 		}
 	};
 
@@ -105,6 +106,7 @@ export default function WeekFiveScenarioQuestions({ onNext, onBack, formData, ac
 	};
 
 	const handleOptionClick = (index, option) => {
+		setErrorMessage('');
 		setAnswers((prev) => {
 			const newIWill = [...prev.IWill];
 			newIWill[index - 1] = option;
@@ -114,6 +116,7 @@ export default function WeekFiveScenarioQuestions({ onNext, onBack, formData, ac
 	};
 
 	const handleNoOptionClick = (index, option) => {
+		setErrorMessage('');
 		setAnswers((prev) => {
 			const newIWillNot = [...prev.IWillNot];
 			newIWillNot[index - 1] = option;
@@ -168,13 +171,13 @@ export default function WeekFiveScenarioQuestions({ onNext, onBack, formData, ac
 							key={`${currentIndex}-option`}
 							style={{ width: '100%' }}
 							ref={(el) => (dropdownRefs.current[currentIndex] = el)}
-							className="two"
+							className="dropdown-select text-body"
 						>
 							<div
-								className="d-flex align-items-start w-100"
+								className="d-flex align-items-start justify-content-between w-100 gap-2"
 								onClick={() => handleDropdownClick(currentIndex)}
 							>
-								<div>
+								<div className="flex-grow-1">
 									I will{' '}
 									<span className="selected-option">
 										{answers.IWill[currentIndex - 1] || ''}
@@ -207,14 +210,14 @@ export default function WeekFiveScenarioQuestions({ onNext, onBack, formData, ac
 						<div
 							key={`${currentIndex}-no-option`}
 							ref={(el) => (noDropdownRefs.current[currentIndex] = el)}
-							className="dropdown-container mt-3"
+							className="dropdown-select text-body"
 							style={{ width: '100%' }}
 						>
 							<div
-								className="d-flex align-items-start w-100"
+								className="d-flex align-items-start justify-content-between w-100 gap-2"
 								onClick={() => handleNoDropdownClick(currentIndex)}
 							>
-								<div>
+								<div className="flex-grow-1">
 									I will not{' '}
 									<span className="selected-option">
 										{answers.IWillNot[currentIndex - 1] || ''}
@@ -224,9 +227,9 @@ export default function WeekFiveScenarioQuestions({ onNext, onBack, formData, ac
 									icon={
 										openNoDropdownIndex === currentIndex
 											? 'iconamoon:arrow-up-2-thin'
-											: 'iconamoon:arrow-down-2-thin'
+										: 'iconamoon:arrow-down-2-thin'
 									}
-									className="fs-2 w-full"
+									className="fs-2 flex-shrink-0"
 								/>
 							</div>
 
@@ -266,6 +269,7 @@ export default function WeekFiveScenarioQuestions({ onNext, onBack, formData, ac
 					))}
 				</ul>
 			</div>
+			{errorMessage && <div className="text-danger">{errorMessage}</div>}
 
 			<div className="mt-3">
 				<ProgressionButtons
@@ -275,7 +279,6 @@ export default function WeekFiveScenarioQuestions({ onNext, onBack, formData, ac
 				/>
 			</div>
 
-			<ToastContainer />
 		</>
 	);
 }

@@ -25,3 +25,17 @@
     no-repeat;
   background-size: 100% 100%;
 } */
+
+.feedback-week-locked {
+  opacity: 0.72;
+}
+
+.feedback-week-locked-note {
+  color: #8b95a1;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.feedback-week-lock-icon {
+  color: #8b95a1;
+}

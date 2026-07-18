@@ -4,6 +4,7 @@ import QuestionBox from "../../../components/QuestionBox";
 import AssessmentQuestion from "../../../components/AssessmentQuestion";
 import Button from "../../../components/Button";
 import {
+  navigateNext,
   selectCurrentStep,
   selectCurrentWeek,
 } from "../../../../../../../../redux/reducers/navigationSlice";
@@ -16,6 +17,10 @@ import {
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
+import {
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 
 function TOT2PreAssesment() {
   const pageData = useSelector(selectPageData);
@@ -35,9 +40,21 @@ function TOT2PreAssesment() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id,
     );
-    setAnswers(Array.isArray(response?.answer) ? response.answer : []);
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setAnswers(
+      Array.isArray(response?.answer)
+        ? response.answer
+        : Array.isArray(draftAnswer)
+          ? draftAnswer
+          : [],
+    );
     return () => {};
-  }, [userAnswers]);
+  }, [userAnswers, pageData.id]);
+
+  useEffect(() => {
+    if (!userAnswers || !pageData?.id) return;
+    saveActivityDraft(userAnswers, pageData.id, answers);
+  }, [answers, pageData?.id, userAnswers]);
 
   const handleOptionSelect = (optionKey) => {
     setErrorMessage("");
@@ -81,6 +98,17 @@ function TOT2PreAssesment() {
     return true;
   };
 
+  const handleDraftNext = () => {
+    const stepData = answers.find((item) => item.id === currentStep);
+    if (!stepData) {
+      setErrorMessage("Oops! Please choose an option to proceed.");
+      return;
+    }
+
+    setErrorMessage("");
+    dispatch(navigateNext());
+  };
+
   const renderStep = () => {
     if (!assessmentData) return <div>Loading assessment...</div>;
 
@@ -110,7 +138,7 @@ function TOT2PreAssesment() {
   // If we're on the last question and user has made a selection,
   // show the review popup instead of the next button
 
-  const hasCurrentSelection = !!answers[currentStep];
+  const isLastQuestion = currentStep === totalSteps;
 
   return (
     <>
@@ -124,7 +152,18 @@ function TOT2PreAssesment() {
       <StepIndicator totalSteps={totalSteps} />
       <div className="d-flex justify-content-center gap-96px mt-4 gap-4">
         <Button text="Prev" />
-        <Button text="Next" customOnClick={saveUserInput} />
+        {isLastQuestion ? (
+          <Button text="Next" customOnClick={saveUserInput} />
+        ) : (
+          <button
+            className="transition-course-action btn fs-5 rounded w-200px h-40px d-flex align-items-center justify-content-center bg-button text-white border-0 hover-prev"
+            onClick={handleDraftNext}
+            type="button"
+          >
+            Next
+            <span className="ms-2">{">>>"}</span>
+          </button>
+        )}
       </div>
     </>
   );

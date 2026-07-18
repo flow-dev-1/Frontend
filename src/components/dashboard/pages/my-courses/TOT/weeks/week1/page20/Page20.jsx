@@ -11,9 +11,12 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer";
 import QuestionBox from "../../../components/QuestionBox";
-import ColoredTextField from "../../../components/ColoredTextField";
 import "./page20.css";
 import BigTextBox from "../../../components/BigTextBox";
 
@@ -35,14 +38,22 @@ function Page20() {
     const response = userAnswers.activities?.find(
       (item) => item.page === pageData.id,
     );
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
     const answerCopy = adminDatas.isAdmin
       ? []
       : response?.answer
         ? [...response.answer]
+        : Array.isArray(draftAnswer)
+          ? draftAnswer
         : [];
     setAnswers(answerCopy);
     return () => {};
-  }, [userAnswers]);
+  }, [userAnswers, pageData.id, adminDatas.isAdmin]);
+
+  useEffect(() => {
+    if (!userAnswers || !pageData?.id) return;
+    saveActivityDraft(userAnswers, pageData.id, answers);
+  }, [answers, pageData?.id, userAnswers]);
 
   const saveUserInput = () => {
     if (adminDatas.isAdmin) return true;

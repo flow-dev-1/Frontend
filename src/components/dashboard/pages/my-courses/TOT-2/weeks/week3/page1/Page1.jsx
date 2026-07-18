@@ -12,6 +12,11 @@ import {
   userAnswer,
   saveActivity,
 } from "../../../../../../../../redux/reducers/userAnswersReducer";
+import {
+  clearActivityDraft,
+  getActivityDraft,
+  saveActivityDraft,
+} from "../../../utils/activityDrafts";
 import checkedImage from "../../../../../../../../assets/checkedbox.png";
 import uncheckedImage from "../../../../../../../../assets/uncheckedBox.png";
 
@@ -39,13 +44,13 @@ function WeekThreePage1() {
       (item) => item.page === pageData.id,
     );
 
-    if (saved?.answer) {
-      setSelectedOption(saved.answer);
-    }
+    const draftAnswer = getActivityDraft(userAnswers, pageData.id);
+    setSelectedOption(saved?.answer ?? draftAnswer ?? "");
   }, [userAnswers, pageData?.id]);
 
   const handleOptionClick = (optionKey) => {
     setSelectedOption(optionKey);
+    saveActivityDraft(userAnswers, pageData.id, optionKey);
     setErrorMessage("");
   };
 
@@ -63,6 +68,7 @@ function WeekThreePage1() {
         answer: selectedOption,
       }),
     );
+    clearActivityDraft(userAnswers, pageData.id);
 
     // Show feedback modal instead of navigating immediately
     setShowFeedback(true);
