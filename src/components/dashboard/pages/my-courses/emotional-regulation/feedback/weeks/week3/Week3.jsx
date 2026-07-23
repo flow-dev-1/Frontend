@@ -46,8 +46,8 @@ function Week3({ enrollmentId, setWeekThreeData }) {
   useEffect(() => {
     if (!data) return;
 
-    setActivityData(data.activity?.activities);
-    setAssessmentData(data.assessment?.assessments);
+    setActivityData(data.activity?.activities || []);
+    setAssessmentData(data.assessment?.assessments || []);
     setWeekThreeData(true);
 
     return () => { };
@@ -55,7 +55,7 @@ function Week3({ enrollmentId, setWeekThreeData }) {
 
 
 
-  function getActivityFeedback(activityId, itemId, index) {
+  function getActivityFeedback(activityId, itemId) {
     if (!itemId) {
       return activityData?.find((activity) => activity.page === activityId)
         ?.feedback;
@@ -63,12 +63,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       const answersList = activityData?.find(
         (activity) => activity.page === activityId
       )?.feedback;
-      const answerObject = answersList?.find(
-        (activity) => activity.stepId === itemId
-      ).value;
-
-      // return answerObject ? answerObject[index] : null;
-      return answerObject ? answerObject : null;
+      if (!Array.isArray(answersList)) return "";
+      return answersList.find(
+        (activity) => Number(activity.stepId) === Number(itemId)
+      )?.value || "";
     }
   }
 
@@ -114,12 +112,12 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         (item) => item.page === activityFeedbackId.activityId
       );
 
-      if (!answerData.feedback) {
+      if (!Array.isArray(answerData.feedback)) {
         answerData.feedback = [];
       }
 
       const existingFeedbackIndex = answerData.feedback.findIndex(
-        (item) => item.stepId === activityFeedbackId.itemId
+        (item) => Number(item.stepId) === Number(activityFeedbackId.itemId)
       );
 
       if (existingFeedbackIndex >= 0) {
@@ -142,7 +140,9 @@ function Week3({ enrollmentId, setWeekThreeData }) {
     return questions.map((question, index) => {
 
       // Get answer from activityData
-      const answer = activityData[stepId]?.answer?.[question.key] || '';
+      const answer = activityData.find(
+        (activity) => Number(activity.page) === Number(activityId)
+      )?.answer?.[question.key] || '';
 
       return (
         <div key={index}>
@@ -158,6 +158,49 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         </div>
       );
     });
+  }
+
+  function renderScenarioFeedback(activityId, stepId) {
+    const feedback = getActivityFeedback(activityId, stepId);
+    return (
+      <>
+        {feedback && (
+          <div className="d-flex gap-3">
+            <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
+              Feedback
+            </p>
+            <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
+              {feedback}
+            </p>
+            {isAdmin && (
+              <Icon
+                onClick={() => {
+                  setModalData(feedback);
+                  setActivityFeedbackId({ activityId, itemId: stepId });
+                  handleModalOpen();
+                }}
+                style={{ color: "#275DAD" }}
+                width={35}
+                icon="lucide:edit"
+              />
+            )}
+          </div>
+        )}
+        {isAdmin && !feedback && (
+          <div className="d-flex justify-content-end">
+            <Icon
+              onClick={() => {
+                setActivityFeedbackId({ activityId, itemId: stepId });
+                handleModalOpen();
+              }}
+              style={{ color: "#D6D6D6" }}
+              width={35}
+              icon="tabler:message-2"
+            />
+          </div>
+        )}
+      </>
+    );
   }
 
   if (isPending) {
@@ -182,50 +225,17 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-md-1">Scenario 1:</h2>
-        <p className="text-blue fs-md-4">You feel really mad because someone cut in line at lunch.</p>
+        <p className="text-blue fs-md-4">{q1.scenario.text}</p>
       </div>
       {renderQuestions(activity1.id, q1.letters, 0)}
+      {renderScenarioFeedback(activity1.id, q1.stepId)}
       <hr />
       <div className="d-flex gap-3">
         <h2 className="text-blue fs-md-1">Scenario 2:</h2>
-        <p className="text-blue fs-md-4">You feel super excited and can’t sit still during a fun class project.</p>
+        <p className="text-blue fs-md-4">{q2.scenario.text}</p>
       </div>
       {renderQuestions(activity1.id, q2.letters, 0)}
-      {getActivityFeedback(activity1.id) && (
-        <div className="d-flex gap-3">
-          <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
-            Feedback
-          </p>
-          <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-            {getActivityFeedback(activity1.id)}
-          </p>
-          {isAdmin && (
-            <Icon
-              onClick={() => {
-                setModalData(getActivityFeedback(activity1.id));
-                setActivityFeedbackId({ activityId: activity1.id });
-                handleModalOpen();
-              }}
-              style={{ color: "#275DAD" }}
-              width={35}
-              icon="lucide:edit"
-            />
-          )}
-        </div>
-      )}
-      {isAdmin && !getActivityFeedback(activity1.id) && (
-        <div className="d-flex justify-content-end">
-          <Icon
-            onClick={() => {
-              setActivityFeedbackId({ activityId: activity1.id });
-              handleModalOpen();
-            }}
-            style={{ color: "#D6D6D6" }}
-            width={35}
-            icon="tabler:message-2"
-          />
-        </div>
-      )}
+      {renderScenarioFeedback(activity1.id, q2.stepId)}
       <hr />
 
       {/* Assesment 1 */}

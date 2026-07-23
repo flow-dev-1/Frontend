@@ -489,7 +489,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
       </div>
 
 
-      {/* {
+      {
         // Show this only id theres a feedback
         activityData?.find((activity) => activity.page === activity2.id)
           ?.feedback && (
@@ -514,7 +514,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
             )}
           </div>
         )
-      } */}
+      }
       <hr />
 
       {/* Activity 3  */}
