@@ -8,6 +8,8 @@ import {
 import { store } from "../../../../../../redux/store";
 import userService from "../../../../../../services/api/user";
 import { queryClient } from "../../../../../../queryClient";
+import SystemFeedbackModal from "../../systemFeedback/SystemFeedbackModal";
+import { getCompassionSystemFeedback } from "../systemFeedback/feedbackContent";
 
 const getCompassionCourseDataQueryKey = (enrollmentId, week) => [
   "dashboard-compassion-course",
@@ -138,11 +140,25 @@ const persistCurrentResumePosition = async () => {
 const Button = ({ loading, text, customOnClick }) => {
   const dispatch = useDispatch();
   const [isSaving, setIsSaving] = useState(false);
+  const [systemFeedback, setSystemFeedback] = useState(null);
   const [isAnyButtonSaving, setIsAnyButtonSaving] = useState(
     compassionButtonSaving
   );
 
   useEffect(() => subscribeToCompassionButtonSaving(setIsAnyButtonSaving), []);
+
+  const continueAfterFeedback = async () => {
+    if (isSaving || isAnyButtonSaving) return;
+
+    setSystemFeedback(null);
+    dispatch(navigateNext());
+
+    try {
+      await persistCurrentResumePosition();
+    } catch (error) {
+      console.error("Failed to sync Compassion resume position", error);
+    }
+  };
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -158,9 +174,30 @@ const Button = ({ loading, text, customOnClick }) => {
       setIsSaving(true);
       setCompassionButtonSaving(true);
       try {
+        const stateBeforeNavigation = store.getState();
+        const navigationState = selectNavigationState(stateBeforeNavigation);
+        const feedback = customOnClick
+          ? getCompassionSystemFeedback(
+              stateBeforeNavigation.navigation.currentWeek,
+              stateBeforeNavigation.navigation.currentPage
+            )
+          : null;
+        const shouldShowFeedback =
+          feedback &&
+          !stateBeforeNavigation.admin?.isAdmin &&
+          (navigationState.totalSteps === 0 || navigationState.isLastStep);
         const activitySync = customOnClick
           ? persistCurrentActivityProgress()
           : Promise.resolve(true);
+
+        if (shouldShowFeedback) {
+          const isSynced = await activitySync;
+          if (!isSynced) {
+            console.error("Compassion progress save failed before feedback");
+          }
+          setSystemFeedback(feedback);
+          return;
+        }
 
         dispatch(navigateNext());
 
@@ -193,34 +230,43 @@ const Button = ({ loading, text, customOnClick }) => {
   const isVisuallyBusy = buttonBusy && isNextButton;
 
   return (
-    <button
-      className={`transition-course-action btn fs-5 rounded w-200px h-40px d-flex align-items-center justify-content-center ${
-        buttonBusy ? "transition-course-action--busy" : ""
-      } ${isVisuallyBusy ? "transition-course-action--saving" : ""} ${
-        isNextButton || customOnClick
-          ? "bg-button text-white border-0 hover-prev"
-          : isPrevButton
-          ? "bg-transparent text-button-blue border border-blue hover-next"
-          : ""
-      }`}
-      onClick={handleClick}
-      type="button"
-      aria-disabled={buttonBusy}
-      tabIndex={buttonBusy ? -1 : 0}
-    >
-      {isVisuallyBusy ? (
-        <span className="transition-course-action__saving-content">
-          <span className="transition-course-action__spinner" aria-hidden="true" />
-          <span>Saving...</span>
-        </span>
-      ) : (
-        <>
-          {isPrevButton && <span className="me-2">{"<<<"}</span>}
-          {text}
-          {isNextButton && <span className="ms-2">{">>>"}</span>}
-        </>
-      )}
-    </button>
+    <>
+      <button
+        className={`transition-course-action btn fs-5 rounded w-200px h-40px d-flex align-items-center justify-content-center ${
+          buttonBusy ? "transition-course-action--busy" : ""
+        } ${isVisuallyBusy ? "transition-course-action--saving" : ""} ${
+          isNextButton || customOnClick
+            ? "bg-button text-white border-0 hover-prev"
+            : isPrevButton
+            ? "bg-transparent text-button-blue border border-blue hover-next"
+            : ""
+        }`}
+        onClick={handleClick}
+        type="button"
+        aria-disabled={buttonBusy}
+        tabIndex={buttonBusy ? -1 : 0}
+      >
+        {isVisuallyBusy ? (
+          <span className="transition-course-action__saving-content">
+            <span
+              className="transition-course-action__spinner"
+              aria-hidden="true"
+            />
+            <span>Saving...</span>
+          </span>
+        ) : (
+          <>
+            {isPrevButton && <span className="me-2">{"<<<"}</span>}
+            {text}
+            {isNextButton && <span className="ms-2">{">>>"}</span>}
+          </>
+        )}
+      </button>
+      <SystemFeedbackModal
+        feedback={systemFeedback}
+        onContinue={continueAfterFeedback}
+      />
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import QuestionComponent from './QuestionComponent';
@@ -18,11 +18,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import WeekOneAssessmentForm from './WeekOneAssessmentForm';
 import userService from '../../../../../../services/api/user.js';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateData } from '../../../../../../redux/reducers/userAnswersReducer.js';
+import { adminData } from '../../../../../../redux/reducers/adminReducer.js';
 
 import ProgressionButtons from '../components/ProgressionButtons.jsx';
 import VideoComponent from '../components/VideoComponent.jsx';
+import SystemFeedbackModal from '../../systemFeedback/SystemFeedbackModal.jsx';
+import { getSelfAwarenessSystemFeedback } from '../systemFeedback/feedbackContent.js';
 import {
 	getLegacySelfAwarenessActivityDataKey,
 	getLegacySelfAwarenessActivityProgressKey,
@@ -67,7 +70,11 @@ export default function WeekOneLearning({
 	onActivityChange,
 }) {
 	const dispatch = useDispatch();
+	const hasRestoredRemoteActivity = useRef(false);
+	const adminDatas = useSelector(adminData);
 	const [showPopup, setShowPopup] = useState(false);
+	const [systemFeedback, setSystemFeedback] = useState(null);
+	const [pendingNextActivity, setPendingNextActivity] = useState(null);
 	const [currentActivity, setCurrentActivity] = useState(() => {
 		return normalizeWeekOneActivity(readSelfAwarenessStorage(
 			getSelfAwarenessActivityProgressKey(courseId, currentWeekIndex),
@@ -99,9 +106,10 @@ export default function WeekOneLearning({
 			const activities = courseData.activity.activities || [];
 
 			// Remote State Restoration: Jump to last saved page if it exists and week is NOT completed
-			if (courseData.activity.lastActivityIndex && !isCompleted) {
+			if (!hasRestoredRemoteActivity.current && courseData.activity.lastActivityIndex && !isCompleted) {
 				setCurrentActivity(normalizeWeekOneActivity(courseData.activity.lastActivityIndex));
 			}
+			hasRestoredRemoteActivity.current = true;
 
 			setFormData((prevData) => {
 				const draftActivities = prevData?.activities || [];
@@ -243,9 +251,27 @@ export default function WeekOneLearning({
 				return false;
 			}
 		}
+		const feedback = adminDatas.isAdmin
+			? null
+			: getSelfAwarenessSystemFeedback(week, currentActivity);
+
+		if (feedback) {
+			setPendingNextActivity(nextActivity);
+			setSystemFeedback(feedback);
+			return true;
+		}
+
 		setCurrentActivity(nextActivity);
 		return true;
-	}, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted, isLoading, queryClient]);
+	}, [adminDatas.isAdmin, formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted, isLoading, queryClient]);
+
+	const continueAfterSystemFeedback = useCallback(() => {
+		if (!pendingNextActivity) return;
+
+		setSystemFeedback(null);
+		setCurrentActivity(pendingNextActivity);
+		setPendingNextActivity(null);
+	}, [pendingNextActivity]);
 
 	const handlePrevious = () => {
 		const prevActivity = getPreviousWeekOneActivity(currentActivity);
@@ -502,6 +528,10 @@ export default function WeekOneLearning({
 			<ToastContainer />
 			<div className="content-container">
 				{renderActivityContent()}
+				<SystemFeedbackModal
+					feedback={systemFeedback}
+					onContinue={continueAfterSystemFeedback}
+				/>
 				<ModalComponent
 					reviewPopUp={reviewPopUp}
 					closeReviewPopUp={closeReviewPopUp}

@@ -3,8 +3,9 @@ import checkedImage from '../../../../../../assets/selfawareness-images/checked.
 import unCheckedImage from '../../../../../../assets/selfawareness-images/not-checked.png';
 import strengthImg from '../../../../../../assets/selfawareness-images/strength.png';
 import weeknessImg from '../../../../../../assets/selfawareness-images/weakness.png';
+import SystemFeedbackModal from '../../systemFeedback/SystemFeedbackModal.jsx';
 
-export default function ScenarioQuestions({ onBack, onNext, formData, activityIndex }) {
+export default function ScenarioQuestions({ onBack, onNext, formData, activityIndex, systemFeedback = [] }) {
 	const questionsArray = [
 		{
 			title: 'A friend is feeling sad and needs someone to talk to because they just failed a test. They come to you for support. How would you help?',
@@ -91,6 +92,7 @@ export default function ScenarioQuestions({ onBack, onNext, formData, activityIn
 	const [currentIndex, setCurrentIndex] = useState(1);
 	const [reviewPopUp, setReviewPopUp] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
+	const [pendingScenarioFeedback, setPendingScenarioFeedback] = useState(null);
 
 	const handleQuestionCheck = (questionIndex, optionIndex, isStrength) => {
 		setErrorMessage('');
@@ -135,7 +137,11 @@ export default function ScenarioQuestions({ onBack, onNext, formData, activityIn
 
 		setErrorMessage('');
 		if (currentIndex < questionsArray.length) {
-			setCurrentIndex(currentIndex + 1);
+			if (systemFeedback[currentIndex - 1]) {
+				setPendingScenarioFeedback(systemFeedback[currentIndex - 1]);
+			} else {
+				setCurrentIndex(currentIndex + 1);
+			}
 		} else {
 			// Prepare data for submission
 			const data = questionsArray.reduce((acc, _, index) => {
@@ -148,9 +154,31 @@ export default function ScenarioQuestions({ onBack, onNext, formData, activityIn
 				return acc;
 			}, {});
 
-			onNext(data);
-			console.log(data);
+			if (systemFeedback[currentIndex - 1]) {
+				setPendingScenarioFeedback(systemFeedback[currentIndex - 1]);
+			} else {
+				onNext(data);
+			}
 		}
+	};
+
+	const continueAfterScenarioFeedback = () => {
+		setPendingScenarioFeedback(null);
+		if (currentIndex < questionsArray.length) {
+			setCurrentIndex((index) => index + 1);
+			return;
+		}
+
+		const data = questionsArray.reduce((acc, _, index) => {
+			acc[`strengthsQ${index + 1}`] = (strengthChecked[index] || []).map(
+				(optionIndex) => questionsArray[index].questionList[optionIndex]
+			);
+			acc[`weaknessesQ${index + 1}`] = (weaknessChecked[index] || []).map(
+				(optionIndex) => questionsArray[index].questionListNegative[optionIndex]
+			);
+			return acc;
+		}, {});
+		onNext(data);
 	};
 
 	const handlePreviousStepClick = () => {
@@ -233,6 +261,7 @@ export default function ScenarioQuestions({ onBack, onNext, formData, activityIn
 	return (
 		<div>
 			{renderQuestion()}
+			<SystemFeedbackModal feedback={pendingScenarioFeedback} onContinue={continueAfterScenarioFeedback} />
 			{errorMessage && <div className="text-danger mt-3">{errorMessage}</div>}
 
 			<div className="slider-indicator">
