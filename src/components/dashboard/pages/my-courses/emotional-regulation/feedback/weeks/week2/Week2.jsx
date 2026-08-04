@@ -489,7 +489,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
       </div>
 
 
-      {/* {
+      {
         // Show this only id theres a feedback
         activityData?.find((activity) => activity.page === activity2.id)
           ?.feedback && (
@@ -514,7 +514,7 @@ function Week2({ enrollmentId, setWeekTwoData }) {
             )}
           </div>
         )
-      } */}
+      }
       <hr />
 
       {/* Activity 3  */}
@@ -522,8 +522,8 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         Activity 3
       </p>
       <hr />
-      {renderActivity4QuestionSection(q1.question, a1, activity1.id, helperProps, 1)}
-      {renderActivity4QuestionSection(q2.question, a2, activity1.id, helperProps, 2)}
+      {renderActivity4QuestionSection(q1.question, a1, activity3.id, helperProps, 1)}
+      {renderActivity4QuestionSection(q2.question, a2, activity3.id, helperProps, 2)}
 
 
       {/* Activity 3  */}
@@ -531,14 +531,14 @@ function Week2({ enrollmentId, setWeekTwoData }) {
         Activity 4
       </p>
       <hr />
-      {renderActivity4QuestionSection(Q1.question, A1, activity1.id, helperProps, 1)}
-      {renderActivity4QuestionSection(Q2.question, A2, activity1.id, helperProps, 2)}
-      {renderActivity4QuestionSection(Q3.question, A3, activity1.id, helperProps, 3)}
-      {renderActivity4QuestionSection(Q4.question, A4, activity1.id, helperProps, 4)}
-      {renderActivity4QuestionSection(Q5.question, A5, activity1.id, helperProps, 5)}
-      {renderActivity4QuestionSection(Q6.question, A6, activity1.id, helperProps, 6)}
-      {renderActivity4QuestionSection(Q7.question, A7, activity1.id, helperProps, 7)}
-      {renderActivity4QuestionSection(Q8.question, A8, activity1.id, helperProps, 8)}
+      {renderActivity4QuestionSection(Q1.question, A1, activity4.id, helperProps, 1)}
+      {renderActivity4QuestionSection(Q2.question, A2, activity4.id, helperProps, 2)}
+      {renderActivity4QuestionSection(Q3.question, A3, activity4.id, helperProps, 3)}
+      {renderActivity4QuestionSection(Q4.question, A4, activity4.id, helperProps, 4)}
+      {renderActivity4QuestionSection(Q5.question, A5, activity4.id, helperProps, 5)}
+      {renderActivity4QuestionSection(Q6.question, A6, activity4.id, helperProps, 6)}
+      {renderActivity4QuestionSection(Q7.question, A7, activity4.id, helperProps, 7)}
+      {renderActivity4QuestionSection(Q8.question, A8, activity4.id, helperProps, 8)}
 
       {/* Assesment 1 */}
       <p className="bg-yellow py-md-3 px-md-5 py-1 px-2 text-gray d-inline-block rounded-5 fs-md-4">

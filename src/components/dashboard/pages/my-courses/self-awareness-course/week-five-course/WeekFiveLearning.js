@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
 import { Icon } from '@iconify/react'
 import { useNavigate } from 'react-router-dom'
 import MyFireWorks from '../Fireworks'
@@ -20,6 +20,8 @@ import {
 
 import ProgressionButtons from '../components/ProgressionButtons.jsx';
 import VideoComponent from '../components/VideoComponent.jsx';
+import SystemFeedbackModal from '../../systemFeedback/SystemFeedbackModal.jsx';
+import useSelfAwarenessSystemFeedback from '../systemFeedback/useSelfAwarenessSystemFeedback.js';
 import {
   getLegacySelfAwarenessActivityDataKey,
   getLegacySelfAwarenessActivityProgressKey,
@@ -39,6 +41,7 @@ export default function WeekFiveLearning({
   onActivityChange,
 }) {
   const dispatch = useDispatch();
+  const hasRestoredRemoteActivity = useRef(false);
   const [showPopup, setShowPopup] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [formData, setFormData] = useState(() => {
@@ -57,6 +60,8 @@ export default function WeekFiveLearning({
     )
   })
   const week = 5;
+  const { advanceAfterSave, continueAfterFeedback, feedback: systemFeedback } =
+    useSelfAwarenessSystemFeedback(week, setCurrentActivity);
 
   const { data: courseData, isLoading, status, isError } = useQuery({
     queryKey: ["self-awareness-course-5", courseId, week],
@@ -75,9 +80,10 @@ export default function WeekFiveLearning({
       const activities = courseData.activity.activities || [];
 
       // Remote State Restoration: Jump to last saved page if it exists and week is NOT completed
-      if (courseData.activity.lastActivityIndex && !isCompleted) {
+      if (!hasRestoredRemoteActivity.current && courseData.activity.lastActivityIndex && !isCompleted) {
         setCurrentActivity(courseData.activity.lastActivityIndex);
       }
+      hasRestoredRemoteActivity.current = true;
 
       setFormData((prevData) => {
         const draftActivities = prevData?.activities || [];
@@ -200,9 +206,9 @@ export default function WeekFiveLearning({
         return false;
       }
     }
-    setCurrentActivity(nextActivity);
+    advanceAfterSave(currentActivity, nextActivity);
     return true;
-  }, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted, isLoading, queryClient]);
+  }, [advanceAfterSave, formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted, isLoading, queryClient]);
 
 
   const handlePrevious = () => {
@@ -384,7 +390,7 @@ export default function WeekFiveLearning({
             onNext={handleNext}
             course={course}
             handleActivitySubmit={handleSubmit}
-            activityData={courseData?.activity || formData}
+            activityData={formData}
             savedAssessment={courseData?.assessment}
             isCompleted={isCompleted}
           />
@@ -404,7 +410,10 @@ export default function WeekFiveLearning({
     <div className='week-learning'>
       <ToastContainer />
       {errorMessage && <div className="text-danger">{errorMessage}</div>}
-      <div className='content-container'>{renderActivityContent()}</div>
+      <div className='content-container'>
+        {renderActivityContent()}
+        <SystemFeedbackModal feedback={systemFeedback} onContinue={continueAfterFeedback} />
+      </div>
     </div>
   )
 }

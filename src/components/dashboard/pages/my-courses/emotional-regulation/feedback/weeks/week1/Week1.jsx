@@ -16,7 +16,6 @@ import { useSelector } from "react-redux";
 import { adminData } from "../../../../../../../../redux/reducers/adminReducer.js";
 import Modal from "../../components/Modal.jsx";
 import { useMutation } from "@tanstack/react-query";
-import { act } from "react";
 
 function Week1({ enrollmentId, setWeekOneData }) {
   const [showModal, setShowModal] = useState(false);
@@ -39,7 +38,6 @@ function Week1({ enrollmentId, setWeekOneData }) {
   const [assessmentData, setAssessmentData] = useState([]);
   const { isAdmin, code } = useSelector(adminData);
 
-  const [F1, F2] = activityData?.[3]?.feedback?.map((a) => a.value) || [];
   const { questions: assessments } = getWeekAssessment(1);
   // toDo: Fetch User assessment and Activity Data
   const { data, isPending, status, isError } = useQuery({
@@ -111,6 +109,11 @@ function Week1({ enrollmentId, setWeekOneData }) {
       return answerObject ? answerObject : "";
     }
   }
+
+  const getSelectedOptionText = (activity) => {
+    const selected = getActivityAnswer(activity.id);
+    return activity.options?.find((option) => option.id === selected)?.text || selected;
+  };
 
   function getActivityFeedback(activityId, itemId, index) {
     if (!itemId) {
@@ -218,7 +221,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
       </div>
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity1.id)}</p>
+        <p className="fs-md-5 flex-grow-1">{getSelectedOptionText(activity1)}</p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity1.id)
             ?.feedback && (
@@ -651,7 +654,7 @@ function Week1({ enrollmentId, setWeekOneData }) {
 
       <div className="d-flex gap-3">
         <h2 className="text-gray fs-md-1 text-gray">Answers:</h2>
-        <p className="fs-md-5 flex-grow-1">{getActivityAnswer(activity8.id)}</p>
+        <p className="fs-md-5 flex-grow-1">{getSelectedOptionText(activity8)}</p>
         {isAdmin &&
           !activityData?.find((activity) => activity.page === activity8.id)
             ?.feedback && (

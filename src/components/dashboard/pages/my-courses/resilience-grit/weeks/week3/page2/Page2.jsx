@@ -67,7 +67,7 @@ function WeekThreePage2() {
           <h2 className="text-blue fs-1 mb-0 flex-shrink-0 question-text">Question:</h2>
 
           <div className="d-flex align-items-center flex-grow-1 min-w-0">
-            <h2 className="text-gray fs-1 mb-0 flex-grow-1 md:text-truncate">
+            <h2 className="text-gray fs-1 mb-0 flex-grow-1 resilience-inline-question">
               {pageData.question}
               {pageData.hasImage && (
                 <>
@@ -77,6 +77,7 @@ function WeekThreePage2() {
                     alt="self-compassion"
                     className="ms-2 d-none d-md-inline-block question-image resilience-question-image img-fluid"
                   />
+                  <span className="ms-1 d-none d-md-inline">?</span>
 
                   {/* Show inline (not block) on mobile with ? following immediately */}
                   <span className="d-inline-block d-md-none">

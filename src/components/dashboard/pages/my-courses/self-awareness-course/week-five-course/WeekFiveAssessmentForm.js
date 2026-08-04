@@ -9,7 +9,10 @@ import { userAnswer, updateData } from '../../../../../../redux/reducers/userAns
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { RotatingLines } from 'react-loader-spinner';
+import { hasRequiredActivityIds } from '../utils/activityCompletion';
 import { writeSelfAwarenessStorage } from '../utils/storage';
+
+const REQUIRED_WEEK_FIVE_ACTIVITY_IDS = [2, 4, 6, 8];
 
 export default function NewAssessmentForm({
 	onNext,
@@ -239,7 +242,7 @@ export default function NewAssessmentForm({
 		if (disableButton || isCompleted) return
 
 		try {
-			if (!activityData?.activities || activityData?.activities?.length !== 9) {
+			if (!hasRequiredActivityIds(activityData?.activities, REQUIRED_WEEK_FIVE_ACTIVITY_IDS)) {
 				setErrorMessage("Please complete all activities before submitting the assessment.");
 				return
 			}

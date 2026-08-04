@@ -103,7 +103,7 @@
 .self-awareness-feedback-content {
   flex: 1 1 70vw;
   border-radius: 10px;
-  margin: 40px 100px 0 40px;
+  margin: 40px 5px 0 5px;
   min-width: 0;
 }
 
@@ -246,7 +246,7 @@ h2 {
 
 .accordion-content {
   width: 100%;
-  padding: 30px 80px;
+  padding: 30px 5px;
   border-top: 1px solid #ecedf0;
   background: #fff;
 }

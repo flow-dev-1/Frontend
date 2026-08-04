@@ -19,7 +19,11 @@ import Modal from "../../components/Modal.jsx";
 
 function Week3({ enrollmentId, setWeekThreeData }) {
   const { pages } = getWeekContentExcludingVideos(3);
-  const [_, activity2, activity3, activity4, activity5, activity6] = pages;
+  const activity2 = pages.find((page) => page.id === 4);
+  const activity3 = pages.find((page) => page.id === 6);
+  const activity4 = pages.find((page) => page.id === 8);
+  const activity5 = pages.find((page) => page.id === 10);
+  const activity6 = pages.find((page) => page.id === 12);
   const [activityData, setActivityData] = useState([]);
   const [assessmentData, setAssessmentData] = useState([]);
   const [preAssessmentData, setPreAssessmentData] = useState([]);
@@ -72,8 +76,8 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         (activity) => activity.page === activityId
       )?.feedback;
       const answerObject = answersList?.find(
-        (activity) => activity.stepId === itemId
-      ).value;
+        (activity) => Number(activity.stepId) === Number(itemId)
+      )?.value;
 
       // return answerObject ? answerObject[index] : null;
       return answerObject ? answerObject : null;
@@ -369,11 +373,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         </p>
 
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity2.id)
-            ?.feedback && (
+          !getActivityFeedback(activity2.id, 1) && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity2.id });
+                setActivityFeedbackId({ activityId: activity2.id, itemId: 1 });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -384,20 +387,19 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity2.id)
-          ?.feedback && (
+        getActivityFeedback(activity2.id, 1) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity2.id)}
+              {getActivityFeedback(activity2.id, 1)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity2.id));
-                  setActivityFeedbackId({ activityId: activity2.id });
+                  setModalData(getActivityFeedback(activity2.id, 1));
+                  setActivityFeedbackId({ activityId: activity2.id, itemId: 1 });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -442,11 +444,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
         </p>
 
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity2.id)
-            ?.feedback && (
+          !getActivityFeedback(activity2.id, 2) && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity2.id });
+                setActivityFeedbackId({ activityId: activity2.id, itemId: 2 });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -457,20 +458,19 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity2.id)
-          ?.feedback && (
+        getActivityFeedback(activity2.id, 2) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity2.id)}
+              {getActivityFeedback(activity2.id, 2)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity2.id));
-                  setActivityFeedbackId({ activityId: activity2.id });
+                  setModalData(getActivityFeedback(activity2.id, 2));
+                  setActivityFeedbackId({ activityId: activity2.id, itemId: 2 });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -546,11 +546,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           );
         })()}
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity3.id)
-            ?.feedback && (
+          !getActivityFeedback(activity3.id, 2) && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity3.id });
+                setActivityFeedbackId({ activityId: activity3.id, itemId: 2 });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -561,20 +560,19 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity3.id)
-          ?.feedback && (
+        getActivityFeedback(activity3.id, 2) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity3.id)}
+              {getActivityFeedback(activity3.id, 2)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity3.id));
-                  setActivityFeedbackId({ activityId: activity3.id });
+                  setModalData(getActivityFeedback(activity3.id, 2));
+                  setActivityFeedbackId({ activityId: activity3.id, itemId: 2 });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -632,11 +630,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           );
         })()}
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity3.id)
-            ?.feedback && (
+          !getActivityFeedback(activity3.id, 3) && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity3.id });
+                setActivityFeedbackId({ activityId: activity3.id, itemId: 3 });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -647,20 +644,19 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity3.id)
-          ?.feedback && (
+        getActivityFeedback(activity3.id, 3) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity3.id)}
+              {getActivityFeedback(activity3.id, 3)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity3.id));
-                  setActivityFeedbackId({ activityId: activity3.id });
+                  setModalData(getActivityFeedback(activity3.id, 3));
+                  setActivityFeedbackId({ activityId: activity3.id, itemId: 3 });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -718,11 +714,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           );
         })()}
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity3.id)
-            ?.feedback && (
+          !getActivityFeedback(activity3.id, 4) && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity3.id });
+                setActivityFeedbackId({ activityId: activity3.id, itemId: 4 });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -733,20 +728,19 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity3.id)
-          ?.feedback && (
+        getActivityFeedback(activity3.id, 4) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity3.id)}
+              {getActivityFeedback(activity3.id, 4)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity3.id));
-                  setActivityFeedbackId({ activityId: activity3.id });
+                  setModalData(getActivityFeedback(activity3.id, 4));
+                  setActivityFeedbackId({ activityId: activity3.id, itemId: 4 });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -804,11 +798,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           );
         })()}
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity3.id)
-            ?.feedback && (
+          !getActivityFeedback(activity3.id, 5) && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity3.id });
+                setActivityFeedbackId({ activityId: activity3.id, itemId: 5 });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -819,20 +812,19 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity3.id)
-          ?.feedback && (
+        getActivityFeedback(activity3.id, 5) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity3.id)}
+              {getActivityFeedback(activity3.id, 5)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity3.id));
-                  setActivityFeedbackId({ activityId: activity3.id });
+                  setModalData(getActivityFeedback(activity3.id, 5));
+                  setActivityFeedbackId({ activityId: activity3.id, itemId: 5 });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -890,11 +882,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           );
         })()}
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity3.id)
-            ?.feedback && (
+          !getActivityFeedback(activity3.id, 6) && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity3.id });
+                setActivityFeedbackId({ activityId: activity3.id, itemId: 6 });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -905,20 +896,19 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity3.id)
-          ?.feedback && (
+        getActivityFeedback(activity3.id, 6) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity3.id)}
+              {getActivityFeedback(activity3.id, 6)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity3.id));
-                  setActivityFeedbackId({ activityId: activity3.id });
+                  setModalData(getActivityFeedback(activity3.id, 6));
+                  setActivityFeedbackId({ activityId: activity3.id, itemId: 6 });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -968,11 +958,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           })()}
         </p>
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity4.id)
-            ?.feedback && (
+          !getActivityFeedback(activity4.id, 1) && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity4.id });
+                setActivityFeedbackId({ activityId: activity4.id, itemId: 1 });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -983,20 +972,19 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity4.id)
-          ?.feedback && (
+        getActivityFeedback(activity4.id, 1) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity4.id)}
+              {getActivityFeedback(activity4.id, 1)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity4.id));
-                  setActivityFeedbackId({ activityId: activity4.id });
+                  setModalData(getActivityFeedback(activity4.id, 1));
+                  setActivityFeedbackId({ activityId: activity4.id, itemId: 1 });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -1040,11 +1028,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           })()}
         </p>
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity4.id)
-            ?.feedback && (
+          !getActivityFeedback(activity4.id, 2) && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity4.id });
+                setActivityFeedbackId({ activityId: activity4.id, itemId: 2 });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -1055,20 +1042,19 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity4.id)
-          ?.feedback && (
+        getActivityFeedback(activity4.id, 2) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity4.id)}
+              {getActivityFeedback(activity4.id, 2)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity4.id));
-                  setActivityFeedbackId({ activityId: activity4.id });
+                  setModalData(getActivityFeedback(activity4.id, 2));
+                  setActivityFeedbackId({ activityId: activity4.id, itemId: 2 });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -1192,11 +1178,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           })()}
         </p>
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity5.id)
-            ?.feedback && (
+          !getActivityFeedback(activity5.id, 3) && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity5.id });
+                setActivityFeedbackId({ activityId: activity5.id, itemId: 3 });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -1207,20 +1192,19 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity5.id)
-          ?.feedback && (
+        getActivityFeedback(activity5.id, 3) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity5.id)}
+              {getActivityFeedback(activity5.id, 3)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity5.id));
-                  setActivityFeedbackId({ activityId: activity5.id });
+                  setModalData(getActivityFeedback(activity5.id, 3));
+                  setActivityFeedbackId({ activityId: activity5.id, itemId: 3 });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -1286,11 +1270,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           })()}
         </p>
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity5.id)
-            ?.feedback && (
+          !getActivityFeedback(activity5.id, 4) && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity5.id });
+                setActivityFeedbackId({ activityId: activity5.id, itemId: 4 });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -1301,20 +1284,19 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity5.id)
-          ?.feedback && (
+        getActivityFeedback(activity5.id, 4) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity5.id)}
+              {getActivityFeedback(activity5.id, 4)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity5.id));
-                  setActivityFeedbackId({ activityId: activity5.id });
+                  setModalData(getActivityFeedback(activity5.id, 4));
+                  setActivityFeedbackId({ activityId: activity5.id, itemId: 4 });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -1383,11 +1365,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           })()}
         </p>
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity6.id)
-            ?.feedback && (
+          !getActivityFeedback(activity6.id, 1) && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity6.id });
+                setActivityFeedbackId({ activityId: activity6.id, itemId: 1 });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -1398,20 +1379,19 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity6.id)
-          ?.feedback && (
+        getActivityFeedback(activity6.id, 1) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity6.id)}
+              {getActivityFeedback(activity6.id, 1)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity6.id));
-                  setActivityFeedbackId({ activityId: activity6.id });
+                  setModalData(getActivityFeedback(activity6.id, 1));
+                  setActivityFeedbackId({ activityId: activity6.id, itemId: 1 });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -1447,11 +1427,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           })()}
         </p>
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity6.id)
-            ?.feedback && (
+          !getActivityFeedback(activity6.id, 2) && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity6.id });
+                setActivityFeedbackId({ activityId: activity6.id, itemId: 2 });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -1462,20 +1441,19 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity6.id)
-          ?.feedback && (
+        getActivityFeedback(activity6.id, 2) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity6.id)}
+              {getActivityFeedback(activity6.id, 2)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity6.id));
-                  setActivityFeedbackId({ activityId: activity6.id });
+                  setModalData(getActivityFeedback(activity6.id, 2));
+                  setActivityFeedbackId({ activityId: activity6.id, itemId: 2 });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -1515,11 +1493,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           })()}
         </p>
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity6.id)
-            ?.feedback && (
+          !getActivityFeedback(activity6.id, 3) && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity6.id });
+                setActivityFeedbackId({ activityId: activity6.id, itemId: 3 });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -1530,20 +1507,19 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity6.id)
-          ?.feedback && (
+        getActivityFeedback(activity6.id, 3) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity6.id)}
+              {getActivityFeedback(activity6.id, 3)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity6.id));
-                  setActivityFeedbackId({ activityId: activity6.id });
+                  setModalData(getActivityFeedback(activity6.id, 3));
+                  setActivityFeedbackId({ activityId: activity6.id, itemId: 3 });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -1595,11 +1571,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           })()}
         </p>
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity6.id)
-            ?.feedback && (
+          !getActivityFeedback(activity6.id, 4) && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity6.id });
+                setActivityFeedbackId({ activityId: activity6.id, itemId: 4 });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -1610,20 +1585,19 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity6.id)
-          ?.feedback && (
+        getActivityFeedback(activity6.id, 4) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity6.id)}
+              {getActivityFeedback(activity6.id, 4)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity6.id));
-                  setActivityFeedbackId({ activityId: activity6.id });
+                  setModalData(getActivityFeedback(activity6.id, 4));
+                  setActivityFeedbackId({ activityId: activity6.id, itemId: 4 });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -1659,11 +1633,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           })()}
         </p>
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity6.id)
-            ?.feedback && (
+          !getActivityFeedback(activity6.id, 5) && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity6.id });
+                setActivityFeedbackId({ activityId: activity6.id, itemId: 5 });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -1674,20 +1647,19 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity6.id)
-          ?.feedback && (
+        getActivityFeedback(activity6.id, 5) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity6.id)}
+              {getActivityFeedback(activity6.id, 5)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity6.id));
-                  setActivityFeedbackId({ activityId: activity6.id });
+                  setModalData(getActivityFeedback(activity6.id, 5));
+                  setActivityFeedbackId({ activityId: activity6.id, itemId: 5 });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}
@@ -1727,11 +1699,10 @@ function Week3({ enrollmentId, setWeekThreeData }) {
           })()}
         </p>
         {isAdmin &&
-          !activityData?.find((activity) => activity.page === activity6.id)
-            ?.feedback && (
+          !getActivityFeedback(activity6.id, 6) && (
             <Icon
               onClick={() => {
-                setActivityFeedbackId({ activityId: activity6.id });
+                setActivityFeedbackId({ activityId: activity6.id, itemId: 6 });
                 handleModalOpen();
               }}
               style={{ color: "#D6D6D6" }}
@@ -1742,20 +1713,19 @@ function Week3({ enrollmentId, setWeekThreeData }) {
       </div>
       {
         // Show this only id theres a feedback
-        activityData?.find((activity) => activity.page === activity6.id)
-          ?.feedback && (
+        getActivityFeedback(activity6.id, 6) && (
           <div className="d-flex gap-3">
             <p className="text-bg-secondary rounded-4 px-1 px-md-3 fs-md-5 align-self-start">
               Feedback
             </p>
             <p className="bg-step-active text-gray fs-md-5 flex-grow-1 p-md-2 p-1 rounded">
-              {getActivityFeedback(activity6.id)}
+              {getActivityFeedback(activity6.id, 6)}
             </p>
             {isAdmin && (
               <Icon
                 onClick={() => {
-                  setModalData(getActivityFeedback(activity6.id));
-                  setActivityFeedbackId({ activityId: activity6.id });
+                  setModalData(getActivityFeedback(activity6.id, 6));
+                  setActivityFeedbackId({ activityId: activity6.id, itemId: 6 });
                   handleModalOpen();
                 }}
                 style={{ color: "#275DAD" }}

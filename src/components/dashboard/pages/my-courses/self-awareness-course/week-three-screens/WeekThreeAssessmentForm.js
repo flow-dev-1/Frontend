@@ -8,7 +8,10 @@ import { userAnswer, updateData } from '../../../../../../redux/reducers/userAns
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { RotatingLines } from 'react-loader-spinner';
+import { hasRequiredActivityIds } from '../utils/activityCompletion';
 import { writeSelfAwarenessStorage } from '../utils/storage';
+
+const REQUIRED_WEEK_THREE_ACTIVITY_IDS = [2, 4, 6];
 
 export default function WeekThreeAssessmentForm({ onNext, onBack, course, activityData, savedAssessment, isCompleted }) {
   const dispatch = useDispatch();
@@ -226,7 +229,7 @@ export default function WeekThreeAssessmentForm({ onNext, onBack, course, activi
   const saveWeekThreeAssessment = async (result) => {
     if (disableButton || isCompleted) return
 
-    if (!activityData?.activities || activityData?.activities?.length !== 7) {
+    if (!hasRequiredActivityIds(activityData?.activities, REQUIRED_WEEK_THREE_ACTIVITY_IDS)) {
       setErrorMessage("Please complete all activities before submitting the assessment.")
       return
     }

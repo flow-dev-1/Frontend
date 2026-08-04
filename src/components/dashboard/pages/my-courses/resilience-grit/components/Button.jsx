@@ -8,6 +8,8 @@ import {
 import { store } from "../../../../../../redux/store";
 import userService from "../../../../../../services/api/user";
 import { queryClient } from "../../../../../../queryClient";
+import SystemFeedbackModal from "../../systemFeedback/SystemFeedbackModal";
+import { getResilienceGritSystemFeedback } from "../systemFeedback/feedbackContent";
 
 const getResilienceCourseDataQueryKey = (enrollmentId, week) => [
   "dashboard-resilience-course",
@@ -138,11 +140,25 @@ const persistCurrentResumePosition = async () => {
 const Button = ({ loading, text, customOnClick }) => {
   const dispatch = useDispatch();
   const [isSaving, setIsSaving] = useState(false);
+  const [systemFeedback, setSystemFeedback] = useState(null);
   const [isAnyButtonSaving, setIsAnyButtonSaving] = useState(
     resilienceButtonSaving
   );
 
   useEffect(() => subscribeToResilienceButtonSaving(setIsAnyButtonSaving), []);
+
+  const continueAfterFeedback = async () => {
+    if (isSaving || isAnyButtonSaving) return;
+
+    setSystemFeedback(null);
+    dispatch(navigateNext());
+
+    try {
+      await persistCurrentResumePosition();
+    } catch (error) {
+      console.error("Failed to sync Resilience resume position", error);
+    }
+  };
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -158,9 +174,28 @@ const Button = ({ loading, text, customOnClick }) => {
       setIsSaving(true);
       setResilienceButtonSaving(true);
       try {
+        const stateBeforeNavigation = store.getState();
+        const navigationState = selectNavigationState(stateBeforeNavigation);
+        const feedback = getResilienceGritSystemFeedback(
+          stateBeforeNavigation.navigation.currentWeek,
+          stateBeforeNavigation.navigation.currentPage
+        );
+        const shouldShowFeedback =
+          feedback &&
+          !stateBeforeNavigation.admin?.isAdmin &&
+          (navigationState.totalSteps === 0 || navigationState.isLastStep);
         const activitySync = customOnClick
           ? persistCurrentActivityProgress()
           : Promise.resolve(true);
+
+        if (shouldShowFeedback) {
+          const isSynced = await activitySync;
+          if (!isSynced) {
+            console.error("Resilience progress save failed before feedback");
+          }
+          setSystemFeedback(feedback);
+          return;
+        }
 
         dispatch(navigateNext());
 
@@ -193,7 +228,8 @@ const Button = ({ loading, text, customOnClick }) => {
   const isVisuallyBusy = buttonBusy && isNextButton;
 
   return (
-    <button
+    <>
+      <button
       className={`transition-course-action btn fs-5 rounded w-200px h-40px d-flex align-items-center justify-content-center ${
         buttonBusy ? "transition-course-action--busy" : ""
       } ${
@@ -222,7 +258,12 @@ const Button = ({ loading, text, customOnClick }) => {
           {isNextButton && <span className="ms-2">{">>>"}</span>}
         </>
       )}
-    </button>
+      </button>
+      <SystemFeedbackModal
+        feedback={systemFeedback}
+        onContinue={continueAfterFeedback}
+      />
+    </>
   );
 };
 

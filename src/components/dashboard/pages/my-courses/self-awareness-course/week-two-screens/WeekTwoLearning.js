@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import strengthweakness from '../../../../../../assets/selfawareness-images/strengthweakness.png';
 import StrengthIdentification from './StrengthIdentification';
@@ -14,6 +14,9 @@ import { updateData } from '../../../../../../redux/reducers/userAnswersReducer.
 
 import ProgressionButtons from '../components/ProgressionButtons.jsx';
 import VideoComponent from '../components/VideoComponent.jsx';
+import SystemFeedbackModal from '../../systemFeedback/SystemFeedbackModal.jsx';
+import useSelfAwarenessSystemFeedback from '../systemFeedback/useSelfAwarenessSystemFeedback.js';
+import { selfAwarenessWeekTwoScenarioFeedback } from '../systemFeedback/feedbackContent.js';
 import {
 	getLegacySelfAwarenessActivityDataKey,
 	getLegacySelfAwarenessActivityProgressKey,
@@ -34,6 +37,7 @@ export default function WeekTwoLearning({
 	onActivityChange,
 }) {
 	const dispatch = useDispatch();
+	const hasRestoredRemoteActivity = useRef(false);
 	const [currentActivity, setCurrentActivity] = useState(() => {
 		return readSelfAwarenessStorage(
 			getSelfAwarenessActivityProgressKey(courseId, currentWeekIndex),
@@ -49,6 +53,12 @@ export default function WeekTwoLearning({
 		);
 	});
 	const week = 2;
+	const {
+		advanceAfterSave,
+		continueAfterFeedback,
+		feedback: systemFeedback,
+		isAdmin,
+	} = useSelfAwarenessSystemFeedback(week, setCurrentActivity);
 
 	const { data: courseData, isLoading, status, isError } = useQuery({
 		queryKey: ['self-awareness-course-2', courseId, week],
@@ -65,9 +75,10 @@ export default function WeekTwoLearning({
 			const activities = courseData.activity.activities || [];
 
 			// Remote State Restoration: Jump to last saved page if it exists and week is NOT completed
-			if (courseData.activity.lastActivityIndex && !isCompleted) {
+			if (!hasRestoredRemoteActivity.current && courseData.activity.lastActivityIndex && !isCompleted) {
 				setCurrentActivity(courseData.activity.lastActivityIndex);
 			}
+			hasRestoredRemoteActivity.current = true;
 
 
 			setFormData((prevData) => {
@@ -191,9 +202,9 @@ export default function WeekTwoLearning({
 				return false;
 			}
 		}
-		setCurrentActivity(nextActivity);
+		advanceAfterSave(currentActivity, nextActivity);
 		return true;
-	}, [formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted, isLoading, queryClient]);
+	}, [advanceAfterSave, formData?.activities, courseData?.activity?.activities, currentActivity, courseId, isCompleted, isLoading, queryClient]);
 
 	const handlePrevious = () => {
 		setCurrentActivity((prev) => prev - 1);
@@ -230,10 +241,10 @@ export default function WeekTwoLearning({
 				return (
 					<QuestionComponent
 						activityIndex={currentActivity}
-						questionText={'What do you understand'}
+						questionText={'What do you understand by'}
 						imageSrc={strengthweakness}
 						formData={formData}
-						altText="by?"
+						altText="?"
 						onBack={handlePrevious}
 						onUpdate={onLocalUpdate}
 						onNext={(answers) =>
@@ -300,6 +311,7 @@ export default function WeekTwoLearning({
 					<ScenarioQuestions
 						activityIndex={currentActivity}
 						formData={formData}
+						systemFeedback={isAdmin ? [] : selfAwarenessWeekTwoScenarioFeedback}
 						onBack={handlePrevious}
 						onNext={(answers) =>
 							handleNext({
@@ -329,7 +341,7 @@ export default function WeekTwoLearning({
 						handleNextWeekCourse={handleNextWeekCourse}
 						onNext={handleNext}
 						course={course}
-						activityData={courseData?.activity || formData}
+						activityData={formData}
 						savedAssessment={courseData?.assessment}
 						isCompleted={isCompleted}
 					/>
@@ -349,7 +361,10 @@ export default function WeekTwoLearning({
 
 	return (
 		<div className='week-learning'>
-			<div className="content-container">{renderActivityContent()}</div>
+			<div className="content-container">
+				{renderActivityContent()}
+				<SystemFeedbackModal feedback={systemFeedback} onContinue={continueAfterFeedback} />
+			</div>
 		</div>
 	);
 }
